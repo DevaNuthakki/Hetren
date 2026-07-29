@@ -308,6 +308,12 @@ These tests validate:
 
 The integration-test fixture refuses to run unless the configured database is exactly `ovrin_test`.
 
+## Secure runner operations
+
+Phase 3 runner registration, job coordination, lease recovery, and
+administrative CLI instructions are documented in
+`docs/OVRIN_RUNNER_OPERATIONS.md`.
+
 ## Validation data
 
 ### Phase 1 validation
