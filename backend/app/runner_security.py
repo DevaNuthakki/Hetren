@@ -5,6 +5,7 @@ import secrets
 
 REGISTRATION_TOKEN_PREFIX = "ovrin_reg_"
 RUNNER_CREDENTIAL_PREFIX = "ovrin_runner_"
+JOB_CLAIM_TOKEN_PREFIX = "ovrin_claim_"
 SECRET_ENTROPY_BYTES = 32
 
 
@@ -62,4 +63,23 @@ def verify_runner_credential(
         return False
 
     actual_hash = hash_runner_credential(credential)
+    return hmac.compare_digest(actual_hash, expected_hash)
+
+
+def generate_job_claim_token() -> str:
+    return _generate_secret(JOB_CLAIM_TOKEN_PREFIX)
+
+
+def hash_job_claim_token(token: str) -> str:
+    return _hash_secret(token, purpose="runner-job-claim")
+
+
+def verify_job_claim_token(
+    token: str,
+    expected_hash: str,
+) -> bool:
+    if not token or not expected_hash:
+        return False
+
+    actual_hash = hash_job_claim_token(token)
     return hmac.compare_digest(actual_hash, expected_hash)
