@@ -10,12 +10,15 @@ from app import models
 from app.database import Base
 from app.runner_job_service import (
     DEFAULT_JOB_LEASE_DURATION,
+    MAX_EXPIRED_JOB_RECOVERY_BATCH,
     MAX_JOB_LEASE_DURATION,
     RunnerJobClaimUnavailableError,
     RunnerJobTransitionUnavailableError,
     claim_next_job,
     complete_job,
     fail_job,
+    recover_expired_jobs,
+    renew_job_lease,
     start_job,
     verify_job_claim_ownership,
 )
@@ -1118,4 +1121,371 @@ def test_fail_job_rejects_empty_error_message(
             ),
             claim_token="ovrin_claim_test-token",
             error_message=error_message,
+        )
+
+
+def test_renew_job_lease_extends_claim_without_rotating_token(
+    db: Session,
+):
+    project = create_project(db, "Lease renewal project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Lease renewal runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        23,
+        0,
+        tzinfo=UTC,
+    )
+    renewal_time = claim_time + timedelta(minutes=2)
+
+    create_job(
+        db,
+        project=project,
+        name="Lease renewal job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    original_claim_hash = claimed.job.claim_token_hash
+
+    renewed = renew_job_lease(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        lease_duration=timedelta(minutes=10),
+        now=renewal_time,
+    )
+
+    assert renewed.status == "claimed"
+    assert renewed.claim_token_hash == original_claim_hash
+    assert renewed.lease_expires_at is not None
+    assert renewed.lease_expires_at.replace(
+        tzinfo=UTC
+    ) == renewal_time + timedelta(minutes=10)
+
+
+def test_renew_job_lease_never_shortens_existing_lease(
+    db: Session,
+):
+    project = create_project(db, "Lease preservation project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Lease preservation runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        23,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Long lease job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=30),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    original_expiry = claimed.job.lease_expires_at
+
+    renewed = renew_job_lease(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        lease_duration=timedelta(minutes=5),
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    assert renewed.lease_expires_at == original_expiry
+
+
+def test_renew_job_lease_rejects_expired_claim(
+    db: Session,
+):
+    project = create_project(db, "Expired renewal project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Expired renewal runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        0,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Expired renewal job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=1),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        renew_job_lease(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            now=claim_time + timedelta(minutes=1),
+        )
+
+
+def test_recover_expired_jobs_requeues_retryable_job(
+    db: Session,
+):
+    project = create_project(db, "Retry recovery project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Retry recovery runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        0,
+        30,
+        tzinfo=UTC,
+    )
+    recovery_time = claim_time + timedelta(minutes=2)
+
+    job = create_job(
+        db,
+        project=project,
+        name="Retryable expired job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+        attempt_count=0,
+        max_attempts=3,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=1),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    summary = recover_expired_jobs(
+        db,
+        now=recovery_time,
+    )
+
+    assert summary.requeued_count == 1
+    assert summary.failed_count == 0
+    assert summary.recovered_count == 1
+
+    recovered = db.get(models.RunnerJob, job.id)
+    assert recovered is not None
+
+    assert recovered.status == "queued"
+    assert recovered.attempt_count == 1
+    assert recovered.assigned_runner_id is None
+    assert recovered.claimed_at is None
+    assert recovered.started_at is None
+    assert recovered.lease_expires_at is None
+    assert recovered.claim_token_hash is None
+    assert recovered.error_message is None
+    assert recovered.available_at.replace(
+        tzinfo=UTC
+    ) == recovery_time
+
+
+def test_recover_expired_jobs_fails_exhausted_running_job(
+    db: Session,
+):
+    project = create_project(db, "Exhausted recovery project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Exhausted recovery runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        1,
+        0,
+        tzinfo=UTC,
+    )
+    start_time = claim_time + timedelta(seconds=10)
+    recovery_time = claim_time + timedelta(minutes=2)
+
+    job = create_job(
+        db,
+        project=project,
+        name="Exhausted expired job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+        attempt_count=2,
+        max_attempts=3,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=1),
+        now=claim_time,
+    )
+    assert claimed is not None
+    assert claimed.job.attempt_count == 3
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=start_time,
+    )
+
+    summary = recover_expired_jobs(
+        db,
+        now=recovery_time,
+    )
+
+    assert summary.requeued_count == 0
+    assert summary.failed_count == 1
+    assert summary.recovered_count == 1
+
+    recovered = db.get(models.RunnerJob, job.id)
+    assert recovered is not None
+
+    assert recovered.status == "failed"
+    assert recovered.assigned_runner_id == (
+        registered.runner.id
+    )
+    assert recovered.claimed_at is not None
+    assert recovered.started_at is not None
+    assert recovered.failed_at is not None
+    assert recovered.failed_at.replace(
+        tzinfo=UTC
+    ) == recovery_time
+    assert recovered.lease_expires_at is None
+    assert recovered.claim_token_hash is None
+    assert recovered.error_message == (
+        "Runner job lease expired after maximum attempts."
+    )
+
+
+def test_recover_expired_jobs_ignores_unexpired_job(
+    db: Session,
+):
+    project = create_project(db, "Unexpired recovery project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Unexpired recovery runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        1,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Unexpired claimed job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=10),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    summary = recover_expired_jobs(
+        db,
+        now=claim_time + timedelta(minutes=5),
+    )
+
+    assert summary.recovered_count == 0
+
+    persisted = db.get(
+        models.RunnerJob,
+        claimed.job.id,
+    )
+    assert persisted is not None
+    assert persisted.status == "claimed"
+    assert persisted.claim_token_hash is not None
+
+
+@pytest.mark.parametrize(
+    "limit",
+    [
+        0,
+        -1,
+        MAX_EXPIRED_JOB_RECOVERY_BATCH + 1,
+    ],
+)
+def test_recover_expired_jobs_rejects_invalid_limit(
+    db: Session,
+    limit: int,
+):
+    with pytest.raises(ValueError):
+        recover_expired_jobs(
+            db,
+            limit=limit,
         )

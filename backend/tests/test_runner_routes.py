@@ -689,3 +689,175 @@ def test_runner_job_fail_maps_invalid_error_to_422(
     assert error.value.detail == (
         "Runner job error message must not be empty."
     )
+
+
+def test_runner_job_renew_route_is_included_in_app():
+    openapi_paths = app.openapi()["paths"]
+
+    route = "/runners/jobs/{job_public_id}/renew"
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_job_renew_returns_renewed_job(
+    monkeypatch,
+):
+    claimed = build_claimed_runner_job()
+
+    def fake_renew_job_lease(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": claimed.job.public_id,
+            "claim_token": "ovrin_claim_test-token",
+            "lease_duration": timedelta(seconds=600),
+        }
+        return claimed.job
+
+    monkeypatch.setattr(
+        runner_routes,
+        "renew_job_lease",
+        fake_renew_job_lease,
+    )
+
+    response = runner_routes.runner_job_renew_endpoint(
+        job_public_id=claimed.job.public_id,
+        request=runner_routes.RunnerJobRenewRequest(
+            claim_token="ovrin_claim_test-token",
+            lease_seconds=600,
+        ),
+        credential="ovrin_runner_test-credential",
+        db=object(),
+    )
+
+    assert response["status"] == "renewed"
+    assert response["job"] is claimed.job
+
+
+def test_runner_job_renew_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_renewal(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "renew_job_lease",
+        reject_renewal,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_renew_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobRenewRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="invalid",
+            db=object(),
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+
+
+def test_runner_job_renew_hides_invalid_claim_state(
+    monkeypatch,
+):
+    def reject_renewal(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "renew_job_lease",
+        reject_renewal,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_renew_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobRenewRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim state" not in error.value.detail
+
+
+def test_runner_job_renew_maps_transition_failure_to_409(
+    monkeypatch,
+):
+    def reject_renewal(_db, **_kwargs):
+        raise runner_routes.RunnerJobTransitionUnavailableError(
+            "Specific internal transition state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "renew_job_lease",
+        reject_renewal,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_renew_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobRenewRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job transition is invalid or unavailable."
+    )
+
+
+def test_runner_job_renew_maps_invalid_duration_to_422(
+    monkeypatch,
+):
+    def reject_renewal(_db, **_kwargs):
+        raise ValueError(
+            "Runner job lease duration is invalid."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "renew_job_lease",
+        reject_renewal,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_renew_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobRenewRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 422
+    assert error.value.detail == (
+        "Runner job lease duration is invalid."
+    )

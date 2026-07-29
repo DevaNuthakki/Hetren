@@ -15,6 +15,8 @@ from app.runner_schemas import (
     RunnerJobClaimResponse,
     RunnerJobCompleteRequest,
     RunnerJobFailRequest,
+    RunnerJobLeaseRenewalResponse,
+    RunnerJobRenewRequest,
     RunnerJobStartRequest,
     RunnerJobTransitionResponse,
     RunnerRegisterRequest,
@@ -27,6 +29,7 @@ from app.runner_job_service import (
     claim_next_job,
     complete_job,
     fail_job,
+    renew_job_lease,
     start_job,
 )
 from app.runner_service import (
@@ -344,5 +347,57 @@ def runner_job_fail_endpoint(
 
     return {
         "status": "failed",
+        "job": job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/renew",
+    response_model=RunnerJobLeaseRenewalResponse,
+)
+def runner_job_renew_endpoint(
+    job_public_id: str,
+    request: RunnerJobRenewRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Renew an active job lease owned by the runner."""
+    try:
+        job = renew_job_lease(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            lease_duration=timedelta(
+                seconds=request.lease_seconds
+            ),
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except RunnerJobTransitionUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job transition is invalid or "
+                "unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "renewed",
         "job": job,
     }

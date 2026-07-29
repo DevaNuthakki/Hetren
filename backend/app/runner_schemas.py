@@ -179,3 +179,17 @@ class RunnerJobFailRequest(BaseModel):
 class RunnerJobTransitionResponse(BaseModel):
     status: Literal["running", "completed", "failed"]
     job: RunnerJobRead
+
+
+class RunnerJobRenewRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    lease_seconds: int = Field(
+        default=300,
+        ge=1,
+        le=3600,
+    )
+
+
+class RunnerJobLeaseRenewalResponse(BaseModel):
+    status: Literal["renewed"]
+    job: RunnerJobRead

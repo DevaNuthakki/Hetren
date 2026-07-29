@@ -18,6 +18,7 @@ from app.runner_service import RunnerAuthenticationError
 DEFAULT_JOB_LEASE_DURATION = timedelta(minutes=5)
 MAX_JOB_LEASE_DURATION = timedelta(hours=1)
 MAX_JOB_CLAIM_CANDIDATES = 50
+MAX_EXPIRED_JOB_RECOVERY_BATCH = 1000
 
 
 class RunnerJobServiceError(Exception):
@@ -43,6 +44,17 @@ class RunnerJobTransitionUnavailableError(
 class ClaimedRunnerJob:
     claim_token: str
     job: models.RunnerJob
+
+
+
+@dataclass(frozen=True)
+class RunnerJobRecoverySummary:
+    requeued_count: int
+    failed_count: int
+
+    @property
+    def recovered_count(self) -> int:
+        return self.requeued_count + self.failed_count
 
 
 def _utc_now() -> datetime:
@@ -77,6 +89,26 @@ def _validate_lease_duration(
         )
 
     return lease_duration
+
+
+
+def _validate_recovery_limit(limit: int) -> int:
+    if isinstance(limit, bool) or not isinstance(limit, int):
+        raise ValueError(
+            "Runner job recovery limit must be an integer."
+        )
+
+    if limit < 1:
+        raise ValueError(
+            "Runner job recovery limit must be at least one."
+        )
+
+    if limit > MAX_EXPIRED_JOB_RECOVERY_BATCH:
+        raise ValueError(
+            "Runner job recovery limit must not exceed 1000."
+        )
+
+    return limit
 
 
 def _capability_set(
@@ -527,4 +559,132 @@ def fail_job(
     return _commit_job_transition(
         db,
         job=job,
+    )
+
+
+def renew_job_lease(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    lease_duration: timedelta = DEFAULT_JOB_LEASE_DURATION,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Renew an active claimed or running job lease.
+
+    Renewing early never shortens an existing lease. The current claim
+    token remains valid and is not rotated.
+    """
+    validated_duration = _validate_lease_duration(
+        lease_duration
+    )
+    renewal_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=renewal_time,
+    )
+
+    requested_expiry = renewal_time + validated_duration
+    current_expiry = _as_utc(job.lease_expires_at)
+
+    job.lease_expires_at = max(
+        current_expiry,
+        requested_expiry,
+    )
+
+    return _commit_job_transition(
+        db,
+        job=job,
+    )
+
+
+def recover_expired_jobs(
+    db: Session,
+    *,
+    now: datetime | None = None,
+    limit: int = 100,
+) -> RunnerJobRecoverySummary:
+    """
+    Recover jobs whose runner lease has expired.
+
+    Jobs with attempts remaining return to the queue. Jobs that have
+    exhausted their attempts become failed. SKIP LOCKED allows multiple
+    recovery workers to run safely without processing the same rows.
+    """
+    validated_limit = _validate_recovery_limit(limit)
+    recovery_time = _resolve_now(now)
+
+    expired_jobs = (
+        db.query(models.RunnerJob)
+        .filter(
+            models.RunnerJob.status.in_(
+                ["claimed", "running"]
+            ),
+            models.RunnerJob.lease_expires_at.is_not(None),
+            models.RunnerJob.lease_expires_at
+            <= recovery_time,
+        )
+        .order_by(
+            models.RunnerJob.lease_expires_at.asc(),
+            models.RunnerJob.id.asc(),
+        )
+        .with_for_update(skip_locked=True)
+        .limit(validated_limit)
+        .all()
+    )
+
+    if not expired_jobs:
+        db.rollback()
+        return RunnerJobRecoverySummary(
+            requeued_count=0,
+            failed_count=0,
+        )
+
+    requeued_count = 0
+    failed_count = 0
+
+    for job in expired_jobs:
+        job.lease_expires_at = None
+        job.claim_token_hash = None
+        job.result_payload = None
+
+        if job.attempt_count < job.max_attempts:
+            job.status = "queued"
+            job.assigned_runner_id = None
+            job.claimed_at = None
+            job.started_at = None
+            job.completed_at = None
+            job.failed_at = None
+            job.cancelled_at = None
+            job.error_message = None
+            job.available_at = recovery_time
+            requeued_count += 1
+        else:
+            job.status = "failed"
+            job.completed_at = None
+            job.failed_at = recovery_time
+            job.cancelled_at = None
+            job.error_message = (
+                "Runner job lease expired after maximum "
+                "attempts."
+            )
+            failed_count += 1
+
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobTransitionUnavailableError(
+            "Expired runner jobs could not be recovered."
+        ) from exc
+
+    return RunnerJobRecoverySummary(
+        requeued_count=requeued_count,
+        failed_count=failed_count,
     )
