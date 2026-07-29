@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from uuid import uuid4
 
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
@@ -20,6 +21,17 @@ MAX_JOB_LEASE_DURATION = timedelta(hours=1)
 MAX_JOB_CLAIM_CANDIDATES = 50
 MAX_EXPIRED_JOB_RECOVERY_BATCH = 1000
 
+SUPPORTED_RUNNER_JOB_TYPES = frozenset(
+    {
+        "asr_evaluation",
+    }
+)
+MIN_RUNNER_JOB_PRIORITY = -1000
+MAX_RUNNER_JOB_PRIORITY = 1000
+MAX_RUNNER_JOB_ATTEMPTS = 100
+MAX_RUNNER_JOB_CAPABILITIES = 50
+MAX_RUNNER_JOB_INPUT_BYTES = 262_144
+
 
 class RunnerJobServiceError(Exception):
     """Base exception for runner-job coordination operations."""
@@ -38,6 +50,25 @@ class RunnerJobTransitionUnavailableError(
     RunnerJobServiceError
 ):
     """Raised when a job cannot perform a requested transition."""
+
+
+
+class RunnerJobProjectNotFoundError(RunnerJobServiceError):
+    """Raised when a runner job references a missing project."""
+
+
+class RunnerJobNotFoundError(RunnerJobServiceError):
+    """Raised when an administrative job lookup fails."""
+
+
+class RunnerJobEnqueueConflictError(RunnerJobServiceError):
+    """Raised when a runner job cannot be enqueued."""
+
+
+class RunnerJobCancellationUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when a runner job cannot be cancelled."""
 
 
 @dataclass(frozen=True)
@@ -688,3 +719,311 @@ def recover_expired_jobs(
         requeued_count=requeued_count,
         failed_count=failed_count,
     )
+
+
+def _normalize_job_text(
+    value: str,
+    *,
+    field_name: str,
+    max_length: int,
+) -> str:
+    if not isinstance(value, str):
+        raise ValueError(f"{field_name} must be text.")
+
+    normalized = value.strip()
+
+    if not normalized:
+        raise ValueError(f"{field_name} must not be empty.")
+
+    if len(normalized) > max_length:
+        raise ValueError(
+            f"{field_name} must be at most "
+            f"{max_length} characters."
+        )
+
+    return normalized
+
+
+def _normalize_job_type(job_type: str) -> str:
+    normalized = _normalize_job_text(
+        job_type,
+        field_name="Runner job type",
+        max_length=100,
+    ).lower()
+
+    if normalized not in SUPPORTED_RUNNER_JOB_TYPES:
+        supported_types = ", ".join(
+            sorted(SUPPORTED_RUNNER_JOB_TYPES)
+        )
+        raise ValueError(
+            "Unsupported runner job type. "
+            f"Supported types: {supported_types}."
+        )
+
+    return normalized
+
+
+def _normalize_required_capabilities(
+    capabilities: list[str] | None,
+) -> list[str]:
+    if capabilities is None:
+        return []
+
+    if not isinstance(capabilities, list):
+        raise ValueError(
+            "Runner job capabilities must be a list."
+        )
+
+    if len(capabilities) > MAX_RUNNER_JOB_CAPABILITIES:
+        raise ValueError(
+            "Runner job capabilities must contain at most "
+            "50 values."
+        )
+
+    normalized: list[str] = []
+
+    for capability in capabilities:
+        capability_name = _normalize_job_text(
+            capability,
+            field_name="Runner job capability",
+            max_length=100,
+        )
+
+        if capability_name not in normalized:
+            normalized.append(capability_name)
+
+    return normalized
+
+
+def _normalize_input_payload(
+    input_payload: dict[str, object] | None,
+) -> dict[str, object]:
+    if input_payload is None:
+        return {}
+
+    if not isinstance(input_payload, dict):
+        raise ValueError(
+            "Runner job input payload must be a JSON object."
+        )
+
+    try:
+        serialized = json.dumps(
+            input_payload,
+            separators=(",", ":"),
+            sort_keys=True,
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "Runner job input payload must contain "
+            "JSON-serializable values."
+        ) from exc
+
+    if len(serialized.encode("utf-8")) > MAX_RUNNER_JOB_INPUT_BYTES:
+        raise ValueError(
+            "Runner job input payload must not exceed "
+            "262144 bytes."
+        )
+
+    return dict(input_payload)
+
+
+def _validate_job_priority(priority: int) -> int:
+    if isinstance(priority, bool) or not isinstance(priority, int):
+        raise ValueError(
+            "Runner job priority must be an integer."
+        )
+
+    if not (
+        MIN_RUNNER_JOB_PRIORITY
+        <= priority
+        <= MAX_RUNNER_JOB_PRIORITY
+    ):
+        raise ValueError(
+            "Runner job priority must be between "
+            "-1000 and 1000."
+        )
+
+    return priority
+
+
+def _validate_max_attempts(max_attempts: int) -> int:
+    if (
+        isinstance(max_attempts, bool)
+        or not isinstance(max_attempts, int)
+    ):
+        raise ValueError(
+            "Runner job maximum attempts must be an integer."
+        )
+
+    if not 1 <= max_attempts <= MAX_RUNNER_JOB_ATTEMPTS:
+        raise ValueError(
+            "Runner job maximum attempts must be between "
+            "1 and 100."
+        )
+
+    return max_attempts
+
+
+def enqueue_job(
+    db: Session,
+    *,
+    project_id: int,
+    name: str,
+    job_type: str,
+    required_capabilities: list[str] | None = None,
+    input_payload: dict[str, object] | None = None,
+    priority: int = 0,
+    available_at: datetime | None = None,
+    max_attempts: int = 3,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Create a validated project-scoped runner job.
+
+    Job types are explicitly allowlisted. Input payloads are stored as
+    inert structured data; this operation does not execute commands,
+    shell content, or user-provided code.
+    """
+    if (
+        isinstance(project_id, bool)
+        or not isinstance(project_id, int)
+        or project_id < 1
+    ):
+        raise ValueError(
+            "Runner job project ID must be a positive integer."
+        )
+
+    normalized_name = _normalize_job_text(
+        name,
+        field_name="Runner job name",
+        max_length=200,
+    )
+    normalized_job_type = _normalize_job_type(job_type)
+    normalized_capabilities = (
+        _normalize_required_capabilities(
+            required_capabilities
+        )
+    )
+    normalized_input = _normalize_input_payload(
+        input_payload
+    )
+    validated_priority = _validate_job_priority(priority)
+    validated_max_attempts = _validate_max_attempts(
+        max_attempts
+    )
+
+    enqueued_at = _resolve_now(now)
+    availability_time = (
+        enqueued_at
+        if available_at is None
+        else _as_utc(available_at)
+    )
+
+    project_exists = (
+        db.query(models.Project.id)
+        .filter(models.Project.id == project_id)
+        .first()
+    )
+
+    if project_exists is None:
+        db.rollback()
+        raise RunnerJobProjectNotFoundError(
+            f"Project {project_id} was not found."
+        )
+
+    job = models.RunnerJob(
+        public_id=str(uuid4()),
+        project_id=project_id,
+        name=normalized_name,
+        job_type=normalized_job_type,
+        status="queued",
+        priority=validated_priority,
+        required_capabilities=normalized_capabilities,
+        input_payload=normalized_input,
+        attempt_count=0,
+        max_attempts=validated_max_attempts,
+        available_at=availability_time,
+    )
+
+    db.add(job)
+
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobEnqueueConflictError(
+            "Runner job could not be enqueued."
+        ) from exc
+
+    db.refresh(job)
+    return job
+
+
+def cancel_job(
+    db: Session,
+    *,
+    job_public_id: str,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Administratively cancel a queued, claimed, or running job.
+
+    Cancellation invalidates an active claim token and lease. Existing
+    runner assignment and start timestamps are preserved for audit
+    history when the job had already been claimed.
+    """
+    normalized_public_id = _normalize_job_text(
+        job_public_id,
+        field_name="Runner job public ID",
+        max_length=36,
+    )
+    cancellation_time = _resolve_now(now)
+
+    job = (
+        db.query(models.RunnerJob)
+        .filter(
+            models.RunnerJob.public_id
+            == normalized_public_id
+        )
+        .with_for_update()
+        .first()
+    )
+
+    if job is None:
+        db.rollback()
+        raise RunnerJobNotFoundError(
+            f"Runner job {normalized_public_id!r} "
+            "was not found."
+        )
+
+    if job.status == "cancelled":
+        db.commit()
+        db.refresh(job)
+        return job
+
+    if job.status in {"completed", "failed"}:
+        db.rollback()
+        raise RunnerJobCancellationUnavailableError(
+            "Runner job cannot be cancelled from its "
+            "current state."
+        )
+
+    job.status = "cancelled"
+    job.cancelled_at = cancellation_time
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+    job.completed_at = None
+    job.failed_at = None
+    job.result_payload = None
+    job.error_message = None
+
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobCancellationUnavailableError(
+            "Runner job could not be cancelled."
+        ) from exc
+
+    db.refresh(job)
+    return job

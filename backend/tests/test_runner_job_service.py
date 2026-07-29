@@ -12,10 +12,15 @@ from app.runner_job_service import (
     DEFAULT_JOB_LEASE_DURATION,
     MAX_EXPIRED_JOB_RECOVERY_BATCH,
     MAX_JOB_LEASE_DURATION,
+    RunnerJobCancellationUnavailableError,
     RunnerJobClaimUnavailableError,
+    RunnerJobNotFoundError,
+    RunnerJobProjectNotFoundError,
     RunnerJobTransitionUnavailableError,
+    cancel_job,
     claim_next_job,
     complete_job,
+    enqueue_job,
     fail_job,
     recover_expired_jobs,
     renew_job_lease,
@@ -1488,4 +1493,427 @@ def test_recover_expired_jobs_rejects_invalid_limit(
         recover_expired_jobs(
             db,
             limit=limit,
+        )
+
+
+def test_enqueue_job_creates_valid_queued_job(
+    db: Session,
+):
+    project = create_project(db, "Enqueue project")
+    available_at = datetime(
+        2026,
+        7,
+        30,
+        2,
+        0,
+        tzinfo=UTC,
+    )
+
+    job = enqueue_job(
+        db,
+        project_id=project.id,
+        name="  ASR regression evaluation  ",
+        job_type="ASR_EVALUATION",
+        required_capabilities=["asr", "cpu", "asr"],
+        input_payload={
+            "evaluation_run_id": 42,
+            "dataset_id": 7,
+        },
+        priority=25,
+        available_at=available_at,
+        max_attempts=5,
+    )
+
+    assert job.project_id == project.id
+    assert job.name == "ASR regression evaluation"
+    assert job.job_type == "asr_evaluation"
+    assert job.status == "queued"
+    assert job.priority == 25
+    assert job.required_capabilities == ["asr", "cpu"]
+    assert job.input_payload == {
+        "evaluation_run_id": 42,
+        "dataset_id": 7,
+    }
+    assert job.attempt_count == 0
+    assert job.max_attempts == 5
+    assert job.available_at.replace(
+        tzinfo=UTC
+    ) == available_at
+
+    assert job.assigned_runner_id is None
+    assert job.claimed_at is None
+    assert job.lease_expires_at is None
+    assert job.claim_token_hash is None
+
+
+def test_enqueue_job_uses_safe_defaults(
+    db: Session,
+):
+    project = create_project(db, "Enqueue defaults project")
+    enqueued_at = datetime(
+        2026,
+        7,
+        30,
+        2,
+        30,
+        tzinfo=UTC,
+    )
+
+    job = enqueue_job(
+        db,
+        project_id=project.id,
+        name="Default ASR job",
+        job_type="asr_evaluation",
+        now=enqueued_at,
+    )
+
+    assert job.priority == 0
+    assert job.required_capabilities == []
+    assert job.input_payload == {}
+    assert job.max_attempts == 3
+    assert job.available_at.replace(
+        tzinfo=UTC
+    ) == enqueued_at
+
+
+def test_enqueue_job_rejects_missing_project(
+    db: Session,
+):
+    with pytest.raises(
+        RunnerJobProjectNotFoundError,
+        match="was not found",
+    ):
+        enqueue_job(
+            db,
+            project_id=2_147_483_647,
+            name="Missing project job",
+            job_type="asr_evaluation",
+        )
+
+
+def test_enqueue_job_rejects_unsupported_type(
+    db: Session,
+):
+    project = create_project(db, "Unsupported type project")
+
+    with pytest.raises(
+        ValueError,
+        match="Unsupported runner job type",
+    ):
+        enqueue_job(
+            db,
+            project_id=project.id,
+            name="Unsafe command job",
+            job_type="shell_command",
+            input_payload={
+                "command": "arbitrary command",
+            },
+        )
+
+    assert db.query(models.RunnerJob).count() == 0
+
+
+def test_enqueue_job_rejects_non_json_input(
+    db: Session,
+):
+    project = create_project(db, "Invalid input project")
+
+    with pytest.raises(
+        ValueError,
+        match="JSON-serializable",
+    ):
+        enqueue_job(
+            db,
+            project_id=project.id,
+            name="Invalid input job",
+            job_type="asr_evaluation",
+            input_payload={"invalid": object()},
+        )
+
+
+@pytest.mark.parametrize(
+    ("priority", "max_attempts"),
+    [
+        (-1001, 3),
+        (1001, 3),
+        (0, 0),
+        (0, 101),
+    ],
+)
+def test_enqueue_job_rejects_invalid_limits(
+    db: Session,
+    priority: int,
+    max_attempts: int,
+):
+    project = create_project(
+        db,
+        f"Invalid limits {priority} {max_attempts}",
+    )
+
+    with pytest.raises(ValueError):
+        enqueue_job(
+            db,
+            project_id=project.id,
+            name="Invalid limits job",
+            job_type="asr_evaluation",
+            priority=priority,
+            max_attempts=max_attempts,
+        )
+
+
+def test_cancel_job_cancels_queued_job(
+    db: Session,
+):
+    project = create_project(db, "Queued cancellation project")
+    cancellation_time = datetime(
+        2026,
+        7,
+        30,
+        3,
+        0,
+        tzinfo=UTC,
+    )
+
+    job = enqueue_job(
+        db,
+        project_id=project.id,
+        name="Queued cancellation job",
+        job_type="asr_evaluation",
+    )
+
+    cancelled = cancel_job(
+        db,
+        job_public_id=job.public_id,
+        now=cancellation_time,
+    )
+
+    assert cancelled.status == "cancelled"
+    assert cancelled.cancelled_at is not None
+    assert cancelled.cancelled_at.replace(
+        tzinfo=UTC
+    ) == cancellation_time
+    assert cancelled.assigned_runner_id is None
+    assert cancelled.claimed_at is None
+    assert cancelled.started_at is None
+    assert cancelled.claim_token_hash is None
+    assert cancelled.lease_expires_at is None
+
+
+def test_cancel_job_invalidates_claimed_job_token(
+    db: Session,
+):
+    project = create_project(db, "Claimed cancellation project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Claimed cancellation runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        3,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Claimed cancellation job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    cancelled = cancel_job(
+        db,
+        job_public_id=claimed.job.public_id,
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    assert cancelled.status == "cancelled"
+    assert cancelled.assigned_runner_id == (
+        registered.runner.id
+    )
+    assert cancelled.claimed_at is not None
+    assert cancelled.claim_token_hash is None
+    assert cancelled.lease_expires_at is None
+
+    with pytest.raises(RunnerJobClaimUnavailableError):
+        verify_job_claim_ownership(
+            db,
+            credential=registered.credential,
+            job_public_id=cancelled.public_id,
+            claim_token=claimed.claim_token,
+            now=claim_time + timedelta(minutes=2),
+        )
+
+
+def test_cancel_job_preserves_running_history(
+    db: Session,
+):
+    project = create_project(db, "Running cancellation project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Running cancellation runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        4,
+        0,
+        tzinfo=UTC,
+    )
+    start_time = claim_time + timedelta(seconds=10)
+
+    create_job(
+        db,
+        project=project,
+        name="Running cancellation job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=start_time,
+    )
+
+    cancelled = cancel_job(
+        db,
+        job_public_id=claimed.job.public_id,
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    assert cancelled.status == "cancelled"
+    assert cancelled.assigned_runner_id == (
+        registered.runner.id
+    )
+    assert cancelled.claimed_at is not None
+    assert cancelled.started_at is not None
+    assert cancelled.started_at.replace(
+        tzinfo=UTC
+    ) == start_time
+
+
+def test_cancel_job_is_idempotent(
+    db: Session,
+):
+    project = create_project(db, "Idempotent cancellation project")
+    job = enqueue_job(
+        db,
+        project_id=project.id,
+        name="Idempotent cancellation job",
+        job_type="asr_evaluation",
+    )
+
+    first = cancel_job(
+        db,
+        job_public_id=job.public_id,
+    )
+    original_cancelled_at = first.cancelled_at
+
+    second = cancel_job(
+        db,
+        job_public_id=job.public_id,
+        now=datetime.now(UTC) + timedelta(hours=1),
+    )
+
+    assert second.status == "cancelled"
+    assert second.cancelled_at == original_cancelled_at
+
+
+def test_cancel_job_rejects_completed_job(
+    db: Session,
+):
+    project = create_project(db, "Completed cancellation project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Completed cancellation runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        4,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Completed cancellation job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=claim_time + timedelta(seconds=10),
+    )
+    complete_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        result_payload={"status": "success"},
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    with pytest.raises(
+        RunnerJobCancellationUnavailableError,
+        match="current state",
+    ):
+        cancel_job(
+            db,
+            job_public_id=claimed.job.public_id,
+        )
+
+
+def test_cancel_job_rejects_unknown_public_id(
+    db: Session,
+):
+    with pytest.raises(
+        RunnerJobNotFoundError,
+        match="was not found",
+    ):
+        cancel_job(
+            db,
+            job_public_id=(
+                "00000000-0000-0000-0000-000000000000"
+            ),
         )
