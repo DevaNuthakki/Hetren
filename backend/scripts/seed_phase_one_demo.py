@@ -94,14 +94,46 @@ def reset_existing_demo_project(db) -> None:
             .all()
         ]
 
+    comparison_ids = []
+
     if run_ids:
-        db.query(models.RunComparison).filter(
-            or_(
-                models.RunComparison.baseline_run_id.in_(run_ids),
-                models.RunComparison.current_run_id.in_(run_ids),
+        comparison_ids = [
+            comparison_id
+            for (comparison_id,) in db.query(models.RunComparison.id)
+            .filter(
+                or_(
+                    models.RunComparison.baseline_run_id.in_(run_ids),
+                    models.RunComparison.current_run_id.in_(run_ids),
+                )
             )
+            .all()
+        ]
+
+    db.query(models.ReleaseReport).filter(
+        models.ReleaseReport.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    if comparison_ids:
+        db.query(models.ReleaseReport).filter(
+            models.ReleaseReport.comparison_id.in_(comparison_ids)
         ).delete(synchronize_session=False)
 
+    db.query(models.ReleasePolicy).filter(
+        models.ReleasePolicy.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    # Debug cases must be removed before their linked runs, results,
+    # test cases, or comparisons are deleted.
+    db.query(models.DebugCase).filter(
+        models.DebugCase.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    if comparison_ids:
+        db.query(models.RunComparison).filter(
+            models.RunComparison.id.in_(comparison_ids)
+        ).delete(synchronize_session=False)
+
+    if run_ids:
         db.query(models.EvaluationResult).filter(
             models.EvaluationResult.run_id.in_(run_ids)
         ).delete(synchronize_session=False)
@@ -110,10 +142,6 @@ def reset_existing_demo_project(db) -> None:
         db.query(models.EvaluationResult).filter(
             models.EvaluationResult.test_case_id.in_(test_case_ids)
         ).delete(synchronize_session=False)
-
-    db.query(models.DebugCase).filter(
-        models.DebugCase.project_id == existing_project.id
-    ).delete(synchronize_session=False)
 
     if dataset_ids:
         db.query(models.TestCase).filter(

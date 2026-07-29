@@ -1,22 +1,27 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, JSON, String, Text
+from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, JSON, String, Text, func
 from sqlalchemy.orm import relationship
 
 from app.database import Base
 
 
 def utc_now() -> datetime:
-    return datetime.now(UTC).replace(tzinfo=None)
+    return datetime.now(UTC)
 
 
 class Project(Base):
     __tablename__ = "projects"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     datasets = relationship(
         "Dataset",
@@ -52,13 +57,18 @@ class Project(Base):
 class Dataset(Base):
     __tablename__ = "datasets"
 
-    id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     name = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     project = relationship("Project", back_populates="datasets")
 
@@ -72,15 +82,20 @@ class Dataset(Base):
 class TestCase(Base):
     __tablename__ = "test_cases"
 
-    id = Column(Integer, primary_key=True, index=True)
-    dataset_id = Column(Integer, ForeignKey("datasets.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    dataset_id = Column(Integer, ForeignKey("datasets.id"), nullable=False, index=True)
 
     title = Column(String(300), nullable=False)
     audio_file_path = Column(String(500), nullable=True)
     reference_file_path = Column(String(500), nullable=True)
     reference_transcript = Column(Text, nullable=False)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     dataset = relationship("Dataset", back_populates="test_cases")
 
@@ -94,12 +109,12 @@ class TestCase(Base):
 class EvaluationRun(Base):
     __tablename__ = "evaluation_runs"
 
-    id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     run_name = Column(String(200), nullable=False)
-    model_name = Column(String(100), default="not_configured")
-    status = Column(String(50), default="created")
+    model_name = Column(String(100), nullable=False, default="not_configured")
+    status = Column(String(50), nullable=False, default="created")
 
     audio_file_path = Column(String(500), nullable=True)
     reference_transcript = Column(Text, nullable=True)
@@ -112,7 +127,12 @@ class EvaluationRun(Base):
 
     latency_seconds = Column(Float, nullable=True)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     project = relationship("Project", back_populates="runs")
 
@@ -126,9 +146,9 @@ class EvaluationRun(Base):
 class EvaluationResult(Base):
     __tablename__ = "evaluation_results"
 
-    id = Column(Integer, primary_key=True, index=True)
-    run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False)
-    test_case_id = Column(Integer, ForeignKey("test_cases.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False, index=True)
+    test_case_id = Column(Integer, ForeignKey("test_cases.id"), nullable=False, index=True)
 
     generated_transcript = Column(Text, nullable=False)
     generated_file_path = Column(String(500), nullable=True)
@@ -138,7 +158,12 @@ class EvaluationResult(Base):
     quality_label = Column(String(50), nullable=True)
     error_summary = Column(Text, nullable=True)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     run = relationship("EvaluationRun", back_populates="evaluation_results")
     test_case = relationship("TestCase", back_populates="evaluation_results")
@@ -147,10 +172,10 @@ class EvaluationResult(Base):
 class RunComparison(Base):
     __tablename__ = "run_comparisons"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True)
 
-    baseline_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False)
-    current_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False)
+    baseline_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False, index=True)
+    current_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False, index=True)
 
     baseline_average_wer = Column(Float, nullable=True)
     current_average_wer = Column(Float, nullable=True)
@@ -163,7 +188,12 @@ class RunComparison(Base):
     comparison_status = Column(String(50), nullable=False)
     summary = Column(Text, nullable=True)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     release_report = relationship(
         "ReleaseReport",
@@ -176,26 +206,31 @@ class RunComparison(Base):
 class DebugCase(Base):
     __tablename__ = "debug_cases"
 
-    id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     title = Column(String(300), nullable=False)
-    status = Column(String(50), default="open")
-    severity = Column(String(50), default="medium")
-    failure_type = Column(String(100), default="asr_regression")
+    status = Column(String(50), nullable=False, default="open")
+    severity = Column(String(50), nullable=False, default="medium")
+    failure_type = Column(String(100), nullable=False, default="asr_regression")
 
-    baseline_run_id = Column(Integer, nullable=True)
-    current_run_id = Column(Integer, nullable=True)
+    baseline_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=True, index=True)
+    current_run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=True, index=True)
 
-    test_case_id = Column(Integer, ForeignKey("test_cases.id"), nullable=True)
-    baseline_result_id = Column(Integer, ForeignKey("evaluation_results.id"), nullable=True)
-    current_result_id = Column(Integer, ForeignKey("evaluation_results.id"), nullable=True)
+    test_case_id = Column(Integer, ForeignKey("test_cases.id"), nullable=True, index=True)
+    baseline_result_id = Column(Integer, ForeignKey("evaluation_results.id"), nullable=True, index=True)
+    current_result_id = Column(Integer, ForeignKey("evaluation_results.id"), nullable=True, index=True)
 
     summary = Column(Text, nullable=True)
     engineer_notes = Column(Text, nullable=True)
     ai_suggestion = Column(Text, nullable=True)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
 
     project = relationship("Project", back_populates="debug_cases")
 
@@ -203,8 +238,8 @@ class DebugCase(Base):
 class ReleasePolicy(Base):
     __tablename__ = "release_policies"
 
-    id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     name = Column(String(200), nullable=False, default="Default release policy")
     version = Column(Integer, nullable=False, default=1)
@@ -222,11 +257,18 @@ class ReleasePolicy(Base):
     warn_cer_delta = Column(Float, nullable=False, default=0.005)
     fail_cer_delta = Column(Float, nullable=False, default=0.02)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
     updated_at = Column(
-        DateTime,
+        DateTime(timezone=True),
+        nullable=False,
         default=utc_now,
         onupdate=utc_now,
+        server_default=func.now(),
     )
 
     project = relationship("Project", back_populates="release_policies")
@@ -239,8 +281,8 @@ class ReleasePolicy(Base):
 class ReleaseReport(Base):
     __tablename__ = "release_reports"
 
-    id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    id = Column(Integer, primary_key=True)
+    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
     comparison_id = Column(
         Integer,
         ForeignKey("run_comparisons.id"),
@@ -251,6 +293,7 @@ class ReleaseReport(Base):
         Integer,
         ForeignKey("release_policies.id"),
         nullable=True,
+        index=True,
     )
 
     status = Column(String(50), nullable=False)
@@ -263,11 +306,18 @@ class ReleaseReport(Base):
     policy_snapshot = Column(JSON, nullable=False)
     checks = Column(JSON, nullable=False)
 
-    created_at = Column(DateTime, default=utc_now)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
     updated_at = Column(
-        DateTime,
+        DateTime(timezone=True),
+        nullable=False,
         default=utc_now,
         onupdate=utc_now,
+        server_default=func.now(),
     )
 
     project = relationship("Project", back_populates="release_reports")

@@ -4,10 +4,11 @@ from pathlib import Path
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from jiwer import cer as calculate_cer
 from jiwer import process_words
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
-from app.database import get_db
+from app.database import check_database_connection, get_db
 from app.release_safety import (
     ReleasePolicyThresholds,
     evaluate_release_safety,
@@ -460,9 +461,38 @@ def decode_transcript_file(file_content: bytes, label: str) -> str:
 
 @router.get("/health")
 def health_check():
+    """Backward-compatible API health endpoint."""
     return {
         "status": "ok",
         "service": "ovrin-api",
+    }
+
+
+@router.get("/health/live")
+def liveness_check():
+    """Confirm that the FastAPI process is running."""
+    return {
+        "status": "ok",
+        "service": "ovrin-api",
+        "check": "liveness",
+    }
+
+
+@router.get("/health/ready")
+def readiness_check():
+    """Confirm that the API can communicate with PostgreSQL."""
+    try:
+        check_database_connection()
+    except SQLAlchemyError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="Database is unavailable",
+        ) from exc
+
+    return {
+        "status": "ready",
+        "service": "ovrin-api",
+        "database": "reachable",
     }
 
 

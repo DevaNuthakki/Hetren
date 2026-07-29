@@ -3,7 +3,6 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
-.env
 
 # Node / Next.js
 node_modules/
@@ -20,7 +19,9 @@ uploads/
 *.db
 
 # Secrets
-.env.local
+.env
+.env.*
+!.env.example
 
 # Local API upload test files
 backend/test-upload/
