@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -31,6 +32,19 @@ MAX_RUNNER_JOB_PRIORITY = 1000
 MAX_RUNNER_JOB_ATTEMPTS = 100
 MAX_RUNNER_JOB_CAPABILITIES = 50
 MAX_RUNNER_JOB_INPUT_BYTES = 262_144
+
+MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
+MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH = 10_000
+MAX_RUNNER_JOB_LOG_EVENT_TYPE_LENGTH = 100
+MAX_RUNNER_JOB_LOG_CONTEXT_BYTES = 65_536
+SUPPORTED_RUNNER_JOB_LOG_LEVELS = frozenset(
+    {
+        "debug",
+        "info",
+        "warning",
+        "error",
+    }
+)
 
 
 class RunnerJobServiceError(Exception):
@@ -69,6 +83,10 @@ class RunnerJobCancellationUnavailableError(
     RunnerJobServiceError
 ):
     """Raised when a runner job cannot be cancelled."""
+
+
+class RunnerJobLogConflictError(RunnerJobServiceError):
+    """Raised when structured logs cannot be persisted."""
 
 
 @dataclass(frozen=True)
@@ -357,6 +375,143 @@ def _normalize_error_message(error_message: str) -> str:
     return normalized
 
 
+def _normalize_job_log_entries(
+    entries: object,
+) -> list[dict[str, object]]:
+    if not isinstance(entries, list):
+        raise ValueError(
+            "Runner job log entries must be a list."
+        )
+
+    if not entries:
+        raise ValueError(
+            "Runner job log batch must contain at least one entry."
+        )
+
+    if len(entries) > MAX_RUNNER_JOB_LOG_BATCH_SIZE:
+        raise ValueError(
+            "Runner job log batch must contain at most 100 entries."
+        )
+
+    normalized_entries: list[dict[str, object]] = []
+    allowed_fields = {
+        "level",
+        "event_type",
+        "message",
+        "context_payload",
+    }
+
+    for position, entry in enumerate(entries, start=1):
+        if not isinstance(entry, dict):
+            raise ValueError(
+                "Each runner job log entry must be a JSON object."
+            )
+
+        unknown_fields = set(entry) - allowed_fields
+
+        if unknown_fields:
+            raise ValueError(
+                "Runner job log entries contain unsupported fields."
+            )
+
+        level_value = entry.get("level")
+        level = (
+            level_value.strip().lower()
+            if isinstance(level_value, str)
+            else ""
+        )
+
+        if level not in SUPPORTED_RUNNER_JOB_LOG_LEVELS:
+            raise ValueError(
+                f"Runner job log entry {position} has an "
+                "unsupported level."
+            )
+
+        event_type_value = entry.get("event_type")
+        event_type = (
+            event_type_value.strip()
+            if isinstance(event_type_value, str)
+            else ""
+        )
+
+        if not event_type:
+            raise ValueError(
+                f"Runner job log entry {position} event type "
+                "must not be empty."
+            )
+
+        if (
+            len(event_type)
+            > MAX_RUNNER_JOB_LOG_EVENT_TYPE_LENGTH
+        ):
+            raise ValueError(
+                f"Runner job log entry {position} event type "
+                "must be at most 100 characters."
+            )
+
+        message_value = entry.get("message")
+        message = (
+            message_value.strip()
+            if isinstance(message_value, str)
+            else ""
+        )
+
+        if not message:
+            raise ValueError(
+                f"Runner job log entry {position} message "
+                "must not be empty."
+            )
+
+        if len(message) > MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH:
+            raise ValueError(
+                f"Runner job log entry {position} message "
+                "must be at most 10000 characters."
+            )
+
+        context_payload = entry.get("context_payload", {})
+
+        if not isinstance(context_payload, dict):
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must be a JSON object."
+            )
+
+        try:
+            serialized_context = json.dumps(
+                context_payload,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must contain JSON-serializable values."
+            ) from exc
+
+        context_size = len(
+            serialized_context.encode("utf-8")
+        )
+
+        if context_size > MAX_RUNNER_JOB_LOG_CONTEXT_BYTES:
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must not exceed 65536 bytes."
+            )
+
+        normalized_entries.append(
+            {
+                "level": level,
+                "event_type": event_type,
+                "message": message,
+                "context_payload": json.loads(
+                    serialized_context
+                ),
+            }
+        )
+
+    return normalized_entries
+
+
 def _get_owned_job_claim_for_update(
     db: Session,
     *,
@@ -633,6 +788,84 @@ def renew_job_lease(
         db,
         job=job,
     )
+
+
+def append_job_logs(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    entries: list[dict[str, object]],
+    now: datetime | None = None,
+) -> list[models.RunnerJobLog]:
+    """
+    Atomically append structured logs to an owned active job.
+
+    The server assigns sequence and attempt numbers. Locking the job
+    serializes concurrent batches for the same job and prevents duplicate
+    sequence allocation.
+    """
+    normalized_entries = _normalize_job_log_entries(
+        entries
+    )
+    append_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=append_time,
+    )
+
+    current_sequence = (
+        db.query(
+            func.max(
+                models.RunnerJobLog.sequence_number
+            )
+        )
+        .filter(
+            models.RunnerJobLog.job_id == job.id
+        )
+        .scalar()
+        or 0
+    )
+
+    logs = [
+        models.RunnerJobLog(
+            public_id=str(uuid4()),
+            project_id=job.project_id,
+            job_id=job.id,
+            runner_id=job.assigned_runner_id,
+            sequence_number=current_sequence + position,
+            attempt_number=job.attempt_count,
+            level=entry["level"],
+            event_type=entry["event_type"],
+            message=entry["message"],
+            context_payload=entry["context_payload"],
+            created_at=append_time,
+        )
+        for position, entry in enumerate(
+            normalized_entries,
+            start=1,
+        )
+    ]
+
+    db.add_all(logs)
+
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobLogConflictError(
+            "Runner job logs could not be appended."
+        ) from exc
+
+    for job_log in logs:
+        db.refresh(job_log)
+
+    return logs
 
 
 def recover_expired_jobs(

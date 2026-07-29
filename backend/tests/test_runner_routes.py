@@ -861,3 +861,275 @@ def test_runner_job_renew_maps_invalid_duration_to_422(
     assert error.value.detail == (
         "Runner job lease duration is invalid."
     )
+
+
+def test_runner_job_log_route_is_included_in_app():
+    openapi_paths = app.openapi()["paths"]
+    route = "/runners/jobs/{job_public_id}/logs"
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_job_log_append_returns_persisted_logs(
+    monkeypatch,
+):
+    now = datetime.now(UTC)
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+
+    persisted_logs = [
+        SimpleNamespace(
+            public_id=(
+                "20000000-0000-0000-0000-000000000001"
+            ),
+            sequence_number=1,
+            attempt_number=2,
+            level="info",
+            event_type="asr.started",
+            message="Transcription started.",
+            context_payload={"audio_count": 3},
+            created_at=now,
+        ),
+        SimpleNamespace(
+            public_id=(
+                "20000000-0000-0000-0000-000000000002"
+            ),
+            sequence_number=2,
+            attempt_number=2,
+            level="warning",
+            event_type="asr.slow",
+            message="Processing is slower than expected.",
+            context_payload={"elapsed_seconds": 12.5},
+            created_at=now,
+        ),
+    ]
+
+    def fake_append_job_logs(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+            "claim_token": "ovrin_claim_test-token",
+            "entries": [
+                {
+                    "level": "info",
+                    "event_type": "asr.started",
+                    "message": "Transcription started.",
+                    "context_payload": {
+                        "audio_count": 3,
+                    },
+                },
+                {
+                    "level": "warning",
+                    "event_type": "asr.slow",
+                    "message": (
+                        "Processing is slower than expected."
+                    ),
+                    "context_payload": {
+                        "elapsed_seconds": 12.5,
+                    },
+                },
+            ],
+        }
+        return persisted_logs
+
+    monkeypatch.setattr(
+        runner_routes,
+        "append_job_logs",
+        fake_append_job_logs,
+    )
+
+    response = (
+        runner_routes.runner_job_log_append_endpoint(
+            job_public_id=job_public_id,
+            request=runner_routes.RunnerJobLogAppendRequest(
+                claim_token="ovrin_claim_test-token",
+                entries=[
+                    {
+                        "level": "info",
+                        "event_type": "asr.started",
+                        "message": "Transcription started.",
+                        "context_payload": {
+                            "audio_count": 3,
+                        },
+                    },
+                    {
+                        "level": "warning",
+                        "event_type": "asr.slow",
+                        "message": (
+                            "Processing is slower than expected."
+                        ),
+                        "context_payload": {
+                            "elapsed_seconds": 12.5,
+                        },
+                    },
+                ],
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+    )
+
+    assert response["status"] == "appended"
+    assert response["logs"] is persisted_logs
+
+
+def test_runner_job_log_append_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_append(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "append_job_logs",
+        reject_append,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_append_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogAppendRequest(
+                claim_token="ovrin_claim_test-token",
+                entries=[
+                    {
+                        "level": "info",
+                        "event_type": "job.progress",
+                        "message": "Job is progressing.",
+                    },
+                ],
+            ),
+            credential="invalid",
+            db=object(),
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer"
+    }
+
+
+def test_runner_job_log_append_hides_invalid_claim_state(
+    monkeypatch,
+):
+    def reject_append(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim ownership state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "append_job_logs",
+        reject_append,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_append_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogAppendRequest(
+                claim_token="ovrin_claim_test-token",
+                entries=[
+                    {
+                        "level": "info",
+                        "event_type": "job.progress",
+                        "message": "Job is progressing.",
+                    },
+                ],
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim" not in error.value.detail
+
+
+def test_runner_job_log_append_maps_conflict_to_409(
+    monkeypatch,
+):
+    def reject_append(_db, **_kwargs):
+        raise runner_routes.RunnerJobLogConflictError(
+            "Specific database uniqueness state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "append_job_logs",
+        reject_append,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_append_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogAppendRequest(
+                claim_token="ovrin_claim_test-token",
+                entries=[
+                    {
+                        "level": "info",
+                        "event_type": "job.progress",
+                        "message": "Job is progressing.",
+                    },
+                ],
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job logs could not be appended."
+    )
+
+
+def test_runner_job_log_append_maps_service_validation_to_422(
+    monkeypatch,
+):
+    def reject_append(_db, **_kwargs):
+        raise ValueError(
+            "Runner job log context exceeds the allowed size."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "append_job_logs",
+        reject_append,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_append_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogAppendRequest(
+                claim_token="ovrin_claim_test-token",
+                entries=[
+                    {
+                        "level": "info",
+                        "event_type": "job.progress",
+                        "message": "Job is progressing.",
+                    },
+                ],
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 422
+    assert error.value.detail == (
+        "Runner job log context exceeds the allowed size."
+    )

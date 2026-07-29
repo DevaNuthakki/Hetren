@@ -66,6 +66,25 @@ RunnerJobErrorMessage = Annotated[
 ]
 
 
+RunnerJobLogEventType = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=100,
+    ),
+]
+
+RunnerJobLogMessage = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=10_000,
+    ),
+]
+
+
 class RunnerRegisterRequest(BaseModel):
     registration_token: RegistrationToken
     name: RunnerName
@@ -193,3 +212,48 @@ class RunnerJobRenewRequest(BaseModel):
 class RunnerJobLeaseRenewalResponse(BaseModel):
     status: Literal["renewed"]
     job: RunnerJobRead
+
+
+
+class RunnerJobLogEntryRequest(BaseModel):
+    level: Literal[
+        "debug",
+        "info",
+        "warning",
+        "error",
+    ]
+    event_type: RunnerJobLogEventType
+    message: RunnerJobLogMessage
+    context_payload: dict[str, Any] = Field(
+        default_factory=dict,
+    )
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RunnerJobLogAppendRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    entries: list[RunnerJobLogEntryRequest] = Field(
+        min_length=1,
+        max_length=100,
+    )
+
+
+class RunnerJobLogRead(BaseModel):
+    public_id: str
+    sequence_number: int
+    attempt_number: int
+
+    level: str
+    event_type: str
+    message: str
+    context_payload: dict[str, Any]
+
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerJobLogAppendResponse(BaseModel):
+    status: Literal["appended"]
+    logs: list[RunnerJobLogRead]

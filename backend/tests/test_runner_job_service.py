@@ -12,11 +12,13 @@ from app.runner_job_service import (
     DEFAULT_JOB_LEASE_DURATION,
     MAX_EXPIRED_JOB_RECOVERY_BATCH,
     MAX_JOB_LEASE_DURATION,
+    MAX_RUNNER_JOB_LOG_BATCH_SIZE,
     RunnerJobCancellationUnavailableError,
     RunnerJobClaimUnavailableError,
     RunnerJobNotFoundError,
     RunnerJobProjectNotFoundError,
     RunnerJobTransitionUnavailableError,
+    append_job_logs,
     cancel_job,
     claim_next_job,
     complete_job,
@@ -1917,3 +1919,367 @@ def test_cancel_job_rejects_unknown_public_id(
                 "00000000-0000-0000-0000-000000000000"
             ),
         )
+
+
+def test_append_job_logs_assigns_server_sequence_and_attempt(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Structured log append project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Structured log runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        22,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Structured log job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+
+    assert claimed is not None
+
+    logs = append_job_logs(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        entries=[
+            {
+                "level": "info",
+                "event_type": "asr.started",
+                "message": "Transcription started.",
+                "context_payload": {
+                    "audio_count": 3,
+                },
+            },
+            {
+                "level": "warning",
+                "event_type": "asr.slow",
+                "message": "Processing is slower than expected.",
+                "context_payload": {
+                    "elapsed_seconds": 12.5,
+                },
+            },
+        ],
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    assert [log.sequence_number for log in logs] == [1, 2]
+    assert [log.attempt_number for log in logs] == [1, 1]
+    assert all(log.job_id == claimed.job.id for log in logs)
+    assert all(
+        log.runner_id == registered.runner.id
+        for log in logs
+    )
+    assert logs[0].context_payload == {
+        "audio_count": 3,
+    }
+
+
+def test_append_job_logs_continues_existing_sequence(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Structured log sequence project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Sequence log runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        22,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Sequence log job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    first_batch = append_job_logs(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        entries=[
+            {
+                "level": "info",
+                "event_type": "job.first",
+                "message": "First entry.",
+            },
+        ],
+        now=claim_time + timedelta(seconds=10),
+    )
+
+    second_batch = append_job_logs(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        entries=[
+            {
+                "level": "debug",
+                "event_type": "job.second",
+                "message": "Second entry.",
+            },
+        ],
+        now=claim_time + timedelta(seconds=20),
+    )
+
+    assert first_batch[0].sequence_number == 1
+    assert second_batch[0].sequence_number == 2
+
+
+def test_append_job_logs_accepts_running_job(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Running structured log project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Running log runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        23,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Running structured log job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=claim_time + timedelta(seconds=10),
+    )
+
+    logs = append_job_logs(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        entries=[
+            {
+                "level": "info",
+                "event_type": "job.running",
+                "message": "Job is running.",
+            },
+        ],
+        now=claim_time + timedelta(seconds=20),
+    )
+
+    assert len(logs) == 1
+    assert logs[0].attempt_number == 1
+
+
+def test_append_job_logs_rejects_invalid_claim_without_writes(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Invalid structured log claim project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Invalid claim log runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        23,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Invalid claim structured log job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        append_job_logs(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token="ovrin_claim_wrong-token",
+            entries=[
+                {
+                    "level": "info",
+                    "event_type": "job.invalid",
+                    "message": "This must not persist.",
+                },
+            ],
+            now=claim_time + timedelta(minutes=1),
+        )
+
+    assert db.query(models.RunnerJobLog).count() == 0
+
+
+def test_append_job_logs_validates_batch_atomically(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Atomic structured log project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Atomic log runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        30,
+        0,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Atomic structured log job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        ValueError,
+        match="unsupported level",
+    ):
+        append_job_logs(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            entries=[
+                {
+                    "level": "info",
+                    "event_type": "job.valid",
+                    "message": "Valid first entry.",
+                },
+                {
+                    "level": "critical",
+                    "event_type": "job.invalid",
+                    "message": "Invalid second entry.",
+                },
+            ],
+            now=claim_time + timedelta(minutes=1),
+        )
+
+    assert db.query(models.RunnerJobLog).count() == 0
+
+
+def test_append_job_logs_rejects_oversized_batch(
+    db: Session,
+):
+    entries = [
+        {
+            "level": "info",
+            "event_type": "job.progress",
+            "message": f"Progress entry {index}.",
+        }
+        for index in range(
+            MAX_RUNNER_JOB_LOG_BATCH_SIZE + 1
+        )
+    ]
+
+    with pytest.raises(
+        ValueError,
+        match="at most 100 entries",
+    ):
+        append_job_logs(
+            db,
+            credential="unused",
+            job_public_id="unused",
+            claim_token="unused",
+            entries=entries,
+        )
+
+    assert db.query(models.RunnerJobLog).count() == 0
