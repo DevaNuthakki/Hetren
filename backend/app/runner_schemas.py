@@ -46,6 +46,26 @@ RunnerCapability = Annotated[
 ]
 
 
+
+RunnerJobClaimToken = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=200,
+    ),
+]
+
+RunnerJobErrorMessage = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=10_000,
+    ),
+]
+
+
 class RunnerRegisterRequest(BaseModel):
     registration_token: RegistrationToken
     name: RunnerName
@@ -120,6 +140,14 @@ class RunnerJobRead(BaseModel):
     available_at: datetime
     claimed_at: datetime | None
     lease_expires_at: datetime | None
+    started_at: datetime | None
+    completed_at: datetime | None
+    failed_at: datetime | None
+    cancelled_at: datetime | None
+
+    result_payload: dict[str, Any] | None
+    error_message: str | None
+
     created_at: datetime
     updated_at: datetime
 
@@ -130,3 +158,24 @@ class RunnerJobClaimResponse(BaseModel):
     status: Literal["claimed", "idle"]
     claim_token: str | None = None
     job: RunnerJobRead | None = None
+
+
+class RunnerJobStartRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+
+
+class RunnerJobCompleteRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    result_payload: dict[str, Any] = Field(
+        default_factory=dict,
+    )
+
+
+class RunnerJobFailRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    error_message: RunnerJobErrorMessage
+
+
+class RunnerJobTransitionResponse(BaseModel):
+    status: Literal["running", "completed", "failed"]
+    job: RunnerJobRead

@@ -1,3 +1,4 @@
+import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
@@ -29,6 +30,13 @@ class RunnerJobClaimConflictError(RunnerJobServiceError):
 
 class RunnerJobClaimUnavailableError(RunnerJobServiceError):
     """Raised when claim ownership cannot be verified."""
+
+
+
+class RunnerJobTransitionUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when a job cannot perform a requested transition."""
 
 
 @dataclass(frozen=True)
@@ -242,29 +250,68 @@ def claim_next_job(
     )
 
 
-def verify_job_claim_ownership(
+def _normalize_result_payload(
+    result_payload: dict[str, object] | None,
+) -> dict[str, object]:
+    if result_payload is None:
+        return {}
+
+    if not isinstance(result_payload, dict):
+        raise ValueError(
+            "Runner job result payload must be a JSON object."
+        )
+
+    try:
+        json.dumps(result_payload)
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "Runner job result payload must contain "
+            "JSON-serializable values."
+        ) from exc
+
+    return dict(result_payload)
+
+
+def _normalize_error_message(error_message: str) -> str:
+    if not isinstance(error_message, str):
+        raise ValueError(
+            "Runner job error message must be text."
+        )
+
+    normalized = error_message.strip()
+
+    if not normalized:
+        raise ValueError(
+            "Runner job error message must not be empty."
+        )
+
+    if len(normalized) > 10_000:
+        raise ValueError(
+            "Runner job error message must be at most "
+            "10000 characters."
+        )
+
+    return normalized
+
+
+def _get_owned_job_claim_for_update(
     db: Session,
     *,
     credential: str,
     job_public_id: str,
     claim_token: str,
-    now: datetime | None = None,
+    now: datetime,
 ) -> models.RunnerJob:
-    """
-    Verify that an active runner owns a valid, unexpired job claim.
-
-    Errors intentionally use one generic message so callers cannot inspect
-    whether the job, runner assignment, claim token, or lease was invalid.
-    This operation owns its database transaction.
-    """
-    verification_time = _resolve_now(now)
-
     runner = _get_active_runner_for_update(
         db,
         credential=credential,
     )
 
-    normalized_public_id = job_public_id.strip()
+    normalized_public_id = (
+        job_public_id.strip()
+        if isinstance(job_public_id, str)
+        else ""
+    )
 
     if (
         not normalized_public_id
@@ -293,8 +340,7 @@ def verify_job_claim_ownership(
         or job.assigned_runner_id != runner.id
         or job.status not in {"claimed", "running"}
         or job.lease_expires_at is None
-        or _as_utc(job.lease_expires_at)
-        <= verification_time
+        or _as_utc(job.lease_expires_at) <= now
         or job.claim_token_hash is None
         or not verify_job_claim_token(
             claim_token,
@@ -308,7 +354,177 @@ def verify_job_claim_ownership(
             "Runner job claim is invalid or unavailable."
         )
 
+    return job
+
+
+def _commit_job_transition(
+    db: Session,
+    *,
+    job: models.RunnerJob,
+) -> models.RunnerJob:
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobTransitionUnavailableError(
+            "Runner job transition is invalid or unavailable."
+        ) from exc
+
+    db.refresh(job)
+    return job
+
+
+def verify_job_claim_ownership(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Verify that an active runner owns a valid, unexpired job claim.
+
+    Errors intentionally use one generic message so callers cannot inspect
+    whether the job, assignment, claim token, or lease was invalid.
+    """
+    verification_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=verification_time,
+    )
+
     db.commit()
     db.refresh(job)
-
     return job
+
+
+def start_job(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Transition an owned job from claimed to running.
+
+    The same claim token remains valid until the job reaches a terminal
+    state or its lease expires.
+    """
+    start_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=start_time,
+    )
+
+    if job.status != "claimed":
+        db.rollback()
+        raise RunnerJobTransitionUnavailableError(
+            "Runner job transition is invalid or unavailable."
+        )
+
+    job.status = "running"
+    job.started_at = start_time
+
+    return _commit_job_transition(
+        db,
+        job=job,
+    )
+
+
+def complete_job(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    result_payload: dict[str, object] | None = None,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Transition an owned running job to completed.
+
+    Terminal transitions remove the stored claim digest and lease so the
+    old claim token cannot be reused.
+    """
+    normalized_result = _normalize_result_payload(
+        result_payload
+    )
+    completion_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=completion_time,
+    )
+
+    if job.status != "running":
+        db.rollback()
+        raise RunnerJobTransitionUnavailableError(
+            "Runner job transition is invalid or unavailable."
+        )
+
+    job.status = "completed"
+    job.completed_at = completion_time
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+    job.result_payload = normalized_result
+    job.error_message = None
+
+    return _commit_job_transition(
+        db,
+        job=job,
+    )
+
+
+def fail_job(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    error_message: str,
+    now: datetime | None = None,
+) -> models.RunnerJob:
+    """
+    Transition an owned claimed or running job to failed.
+
+    A job may fail before start when runner setup or input preparation
+    cannot begin.
+    """
+    normalized_error = _normalize_error_message(
+        error_message
+    )
+    failure_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=failure_time,
+    )
+
+    job.status = "failed"
+    job.failed_at = failure_time
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+    job.result_payload = None
+    job.error_message = normalized_error
+
+    return _commit_job_transition(
+        db,
+        job=job,
+    )

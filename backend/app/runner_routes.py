@@ -13,12 +13,21 @@ from app.runner_schemas import (
     RunnerHeartbeatResponse,
     RunnerJobClaimRequest,
     RunnerJobClaimResponse,
+    RunnerJobCompleteRequest,
+    RunnerJobFailRequest,
+    RunnerJobStartRequest,
+    RunnerJobTransitionResponse,
     RunnerRegisterRequest,
     RunnerRegistrationResponse,
 )
 from app.runner_job_service import (
     RunnerJobClaimConflictError,
+    RunnerJobClaimUnavailableError,
+    RunnerJobTransitionUnavailableError,
     claim_next_job,
+    complete_job,
+    fail_job,
+    start_job,
 )
 from app.runner_service import (
     RegistrationTokenUnavailableError,
@@ -187,4 +196,153 @@ def runner_job_claim_endpoint(
         "status": "claimed",
         "claim_token": claimed.claim_token,
         "job": claimed.job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/start",
+    response_model=RunnerJobTransitionResponse,
+)
+def runner_job_start_endpoint(
+    job_public_id: str,
+    request: RunnerJobStartRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Start a job owned by the authenticated runner."""
+    try:
+        job = start_job(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except RunnerJobTransitionUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job transition is invalid or "
+                "unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "running",
+        "job": job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/complete",
+    response_model=RunnerJobTransitionResponse,
+)
+def runner_job_complete_endpoint(
+    job_public_id: str,
+    request: RunnerJobCompleteRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Complete a running job owned by the authenticated runner."""
+    try:
+        job = complete_job(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            result_payload=request.result_payload,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except RunnerJobTransitionUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job transition is invalid or "
+                "unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "completed",
+        "job": job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/fail",
+    response_model=RunnerJobTransitionResponse,
+)
+def runner_job_fail_endpoint(
+    job_public_id: str,
+    request: RunnerJobFailRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Fail a claimed or running job owned by the runner."""
+    try:
+        job = fail_job(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            error_message=request.error_message,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except RunnerJobTransitionUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job transition is invalid or "
+                "unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "failed",
+        "job": job,
     }

@@ -12,7 +12,11 @@ from app.runner_job_service import (
     DEFAULT_JOB_LEASE_DURATION,
     MAX_JOB_LEASE_DURATION,
     RunnerJobClaimUnavailableError,
+    RunnerJobTransitionUnavailableError,
     claim_next_job,
+    complete_job,
+    fail_job,
+    start_job,
     verify_job_claim_ownership,
 )
 from app.runner_security import (
@@ -641,4 +645,477 @@ def test_verify_job_claim_ownership_rejects_expired_lease(
             job_public_id=claimed.job.public_id,
             claim_token=claimed.claim_token,
             now=claim_time + timedelta(minutes=2),
+        )
+
+
+def test_start_job_transitions_claimed_job_to_running(
+    db: Session,
+):
+    project = create_project(db, "Start job project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Start job runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        19,
+        0,
+        tzinfo=UTC,
+    )
+    start_time = claim_time + timedelta(minutes=1)
+
+    create_job(
+        db,
+        project=project,
+        name="Start transition job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+
+    assert claimed is not None
+    original_claim_hash = claimed.job.claim_token_hash
+    original_lease = claimed.job.lease_expires_at
+
+    started = start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=start_time,
+    )
+
+    assert started.status == "running"
+    assert started.started_at is not None
+    assert started.started_at.replace(tzinfo=UTC) == start_time
+    assert started.claim_token_hash == original_claim_hash
+    assert started.lease_expires_at == original_lease
+
+
+def test_start_job_rejects_already_running_job(
+    db: Session,
+):
+    project = create_project(db, "Duplicate start project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Duplicate start runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        19,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Duplicate start job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=claim_time + timedelta(seconds=10),
+    )
+
+    with pytest.raises(
+        RunnerJobTransitionUnavailableError,
+        match="invalid or unavailable",
+    ):
+        start_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            now=claim_time + timedelta(seconds=20),
+        )
+
+
+def test_complete_job_transitions_running_job_to_completed(
+    db: Session,
+):
+    project = create_project(db, "Complete job project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Complete job runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        20,
+        0,
+        tzinfo=UTC,
+    )
+    start_time = claim_time + timedelta(seconds=10)
+    completion_time = claim_time + timedelta(minutes=1)
+
+    create_job(
+        db,
+        project=project,
+        name="Complete transition job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=start_time,
+    )
+
+    completed = complete_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        result_payload={
+            "evaluation_run_id": 42,
+            "status": "success",
+        },
+        now=completion_time,
+    )
+
+    assert completed.status == "completed"
+    assert completed.completed_at is not None
+    assert completed.completed_at.replace(
+        tzinfo=UTC
+    ) == completion_time
+
+    assert completed.result_payload == {
+        "evaluation_run_id": 42,
+        "status": "success",
+    }
+    assert completed.error_message is None
+    assert completed.lease_expires_at is None
+    assert completed.claim_token_hash is None
+
+
+def test_complete_job_rejects_job_that_has_not_started(
+    db: Session,
+):
+    project = create_project(db, "Premature complete project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Premature complete runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        20,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Premature complete job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobTransitionUnavailableError,
+        match="invalid or unavailable",
+    ):
+        complete_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            result_payload={"status": "success"},
+            now=claim_time + timedelta(minutes=1),
+        )
+
+
+def test_fail_job_allows_failure_before_start(
+    db: Session,
+):
+    project = create_project(db, "Pre-start failure project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Pre-start failure runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        21,
+        0,
+        tzinfo=UTC,
+    )
+    failure_time = claim_time + timedelta(seconds=30)
+
+    create_job(
+        db,
+        project=project,
+        name="Pre-start failure job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    failed = fail_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        error_message="  Model files could not be loaded.  ",
+        now=failure_time,
+    )
+
+    assert failed.status == "failed"
+    assert failed.started_at is None
+    assert failed.failed_at is not None
+    assert failed.failed_at.replace(tzinfo=UTC) == failure_time
+    assert failed.error_message == (
+        "Model files could not be loaded."
+    )
+    assert failed.lease_expires_at is None
+    assert failed.claim_token_hash is None
+
+
+def test_fail_job_allows_running_job_failure(
+    db: Session,
+):
+    project = create_project(db, "Running failure project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Running failure runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        21,
+        30,
+        tzinfo=UTC,
+    )
+    start_time = claim_time + timedelta(seconds=10)
+    failure_time = claim_time + timedelta(minutes=1)
+
+    create_job(
+        db,
+        project=project,
+        name="Running failure job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=start_time,
+    )
+
+    failed = fail_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        error_message="ASR process exited with code 1.",
+        now=failure_time,
+    )
+
+    assert failed.status == "failed"
+    assert failed.started_at is not None
+    assert failed.error_message == (
+        "ASR process exited with code 1."
+    )
+
+
+def test_terminal_transition_invalidates_claim_token(
+    db: Session,
+):
+    project = create_project(db, "Terminal claim project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Terminal claim runner",
+        capabilities=["asr"],
+    )
+
+    claim_time = datetime(
+        2026,
+        7,
+        29,
+        22,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Terminal claim job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=claim_time + timedelta(seconds=10),
+    )
+
+    complete_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        result_payload={"status": "success"},
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        verify_job_claim_ownership(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            now=claim_time + timedelta(minutes=2),
+        )
+
+
+def test_complete_job_rejects_non_json_result_payload(
+    db: Session,
+):
+    project = create_project(db, "Invalid result project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Invalid result runner",
+        capabilities=["asr"],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="JSON-serializable",
+    ):
+        complete_job(
+            db,
+            credential=registered.credential,
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            claim_token="ovrin_claim_test-token",
+            result_payload={"invalid": object()},
+        )
+
+
+@pytest.mark.parametrize(
+    "error_message",
+    [
+        "",
+        "   ",
+    ],
+)
+def test_fail_job_rejects_empty_error_message(
+    db: Session,
+    error_message: str,
+):
+    project = create_project(db, "Empty failure project")
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name=f"Empty failure runner {len(error_message)}",
+        capabilities=["asr"],
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="must not be empty",
+    ):
+        fail_job(
+            db,
+            credential=registered.credential,
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            claim_token="ovrin_claim_test-token",
+            error_message=error_message,
         )
