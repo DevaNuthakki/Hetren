@@ -1,6 +1,20 @@
 from datetime import UTC, datetime
 
-from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, JSON, String, Text, func
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    Column,
+    DateTime,
+    Float,
+    ForeignKey,
+    ForeignKeyConstraint,
+    Integer,
+    JSON,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -49,6 +63,18 @@ class Project(Base):
 
     release_reports = relationship(
         "ReleaseReport",
+        back_populates="project",
+        cascade="all, delete-orphan",
+    )
+
+    runner_registration_tokens = relationship(
+        "RunnerRegistrationToken",
+        back_populates="project",
+        cascade="all, delete-orphan",
+    )
+
+    runners = relationship(
+        "Runner",
         back_populates="project",
         cascade="all, delete-orphan",
     )
@@ -328,4 +354,177 @@ class ReleaseReport(Base):
     policy = relationship(
         "ReleasePolicy",
         back_populates="release_reports",
+    )
+
+
+class RunnerRegistrationToken(Base):
+    __tablename__ = "runner_registration_tokens"
+    __table_args__ = (
+        UniqueConstraint(
+            "id",
+            "project_id",
+            name="uq_runner_registration_tokens_id_project_id",
+        ),
+        CheckConstraint(
+            "expires_at > created_at",
+            name="ck_runner_registration_tokens_expiry_after_creation",
+        ),
+        CheckConstraint(
+            "NOT (consumed_at IS NOT NULL AND revoked_at IS NOT NULL)",
+            name="ck_runner_registration_tokens_lifecycle",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    project_id = Column(
+        Integer,
+        ForeignKey("projects.id"),
+        nullable=False,
+        index=True,
+    )
+
+    label = Column(
+        String(200),
+        nullable=False,
+        default="Runner registration token",
+    )
+    token_hash = Column(
+        String(64),
+        nullable=False,
+        unique=True,
+    )
+
+    expires_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+    )
+    consumed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    revoked_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    project = relationship(
+        "Project",
+        back_populates="runner_registration_tokens",
+    )
+    runner = relationship(
+        "Runner",
+        back_populates="registration_token",
+        uselist=False,
+        foreign_keys="Runner.registration_token_id",
+    )
+
+
+class Runner(Base):
+    __tablename__ = "runners"
+    __table_args__ = (
+        UniqueConstraint(
+            "project_id",
+            "name",
+            name="uq_runners_project_name",
+        ),
+        ForeignKeyConstraint(
+            ["registration_token_id", "project_id"],
+            [
+                "runner_registration_tokens.id",
+                "runner_registration_tokens.project_id",
+            ],
+            name="fk_runners_registration_token_project",
+        ),
+        CheckConstraint(
+            "(status = 'active' AND revoked_at IS NULL) OR "
+            "(status = 'revoked' AND revoked_at IS NOT NULL)",
+            name="ck_runners_status_matches_revocation",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    project_id = Column(
+        Integer,
+        ForeignKey("projects.id"),
+        nullable=False,
+        index=True,
+    )
+    registration_token_id = Column(
+        Integer,
+        nullable=False,
+        unique=True,
+    )
+
+    public_id = Column(
+        String(36),
+        nullable=False,
+        unique=True,
+    )
+    name = Column(
+        String(200),
+        nullable=False,
+    )
+    status = Column(
+        String(50),
+        nullable=False,
+        default="active",
+    )
+
+    runner_version = Column(
+        String(100),
+        nullable=True,
+    )
+    capabilities = Column(
+        JSON,
+        nullable=False,
+        default=list,
+    )
+    system_info = Column(
+        JSON,
+        nullable=False,
+        default=dict,
+    )
+
+    credential_hash = Column(
+        String(64),
+        nullable=False,
+        unique=True,
+    )
+
+    last_seen_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    revoked_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        onupdate=utc_now,
+        server_default=func.now(),
+    )
+
+    project = relationship(
+        "Project",
+        back_populates="runners",
+    )
+    registration_token = relationship(
+        "RunnerRegistrationToken",
+        back_populates="runner",
+        foreign_keys=[registration_token_id],
     )

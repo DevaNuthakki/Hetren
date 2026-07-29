@@ -397,6 +397,185 @@ python -m alembic check
 
 Generated migrations should include a safe downgrade whenever practical.
 
+## Secure runner registration
+
+Phase 3.1 provides the secure identity foundation for local and CI runners.
+
+It currently supports:
+
+- Project-scoped runner identities
+- High-entropy, one-time registration tokens
+- Short registration-token expiration
+- Hashed registration-token storage
+- Hashed runner-credential storage
+- Atomic token consumption and runner creation
+- Authenticated heartbeat updates
+- Runner capability and system metadata
+- Administrative runner revocation
+- PostgreSQL lifecycle and project-isolation constraints
+
+Job polling, execution, log upload, and GitHub Actions integration are implemented in later Phase 3 work.
+
+### Security model
+
+An administrator creates a short-lived registration token through a local CLI command.
+
+The plaintext registration token is displayed once. Ovrin stores only its SHA-256 digest.
+
+A runner exchanges the token using:
+
+```text
+POST /runners/register
+```
+
+A successful registration returns a separate runner credential once. Ovrin stores only the credential digest.
+
+The runner uses that credential as an HTTP Bearer token when calling:
+
+```text
+POST /runners/heartbeat
+```
+
+Registration-token issuance and runner revocation are intentionally CLI-only. They are not exposed through unauthenticated administrative API endpoints.
+
+Registration succeeds only when the submitted token:
+
+- Has not expired
+- Has not already been consumed
+- Has not been revoked
+- Belongs to the correct project
+- Matches the stored token digest
+
+Invalid, expired, consumed, and revoked tokens return the same generic authentication response.
+
+### Issue a registration token
+
+From `backend`:
+
+```bash
+python scripts/issue_runner_registration_token.py \
+  --project-id 1 \
+  --label "Local ASR runner" \
+  --ttl-minutes 30
+```
+
+The command displays a token beginning with:
+
+```text
+ovrin_reg_
+```
+
+Store it securely. The plaintext token is not stored by Ovrin and cannot be displayed again.
+
+### Register a runner
+
+With the backend running:
+
+```bash
+curl -X POST \
+  http://127.0.0.1:8000/runners/register \
+  -H "Content-Type: application/json" \
+  --data '{
+    "registration_token": "ovrin_reg_REPLACE_ME",
+    "name": "Local ASR Runner",
+    "runner_version": "0.1.0",
+    "capabilities": ["asr", "cpu"],
+    "system_info": {
+      "platform": "darwin",
+      "architecture": "arm64"
+    }
+  }'
+```
+
+A successful request returns HTTP `201` with:
+
+- The runner public ID
+- Runner status and metadata
+- A plaintext credential beginning with `ovrin_runner_`
+
+The plaintext credential is returned only during registration and must be stored securely.
+
+The response does not expose:
+
+- Database runner ID
+- Registration-token ID
+- Registration-token hash
+- Runner-credential hash
+
+### Send a runner heartbeat
+
+```bash
+curl -X POST \
+  http://127.0.0.1:8000/runners/heartbeat \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ovrin_runner_REPLACE_ME" \
+  --data '{
+    "runner_version": "0.1.1",
+    "capabilities": ["asr", "cpu", "local"],
+    "system_info": {
+      "platform": "darwin",
+      "architecture": "arm64"
+    }
+  }'
+```
+
+A successful heartbeat returns HTTP `200` and updates:
+
+- `last_seen_at`
+- Runner version, when supplied
+- Capabilities, when supplied
+- System information, when supplied
+
+Omitted optional metadata remains unchanged.
+
+### Revoke a runner
+
+Use the public ID returned during registration:
+
+```bash
+python scripts/revoke_runner.py \
+  --runner-public-id "REPLACE_WITH_RUNNER_PUBLIC_ID"
+```
+
+Revocation is idempotent and preserves the original revocation timestamp.
+
+After revocation:
+
+- Runner status becomes `revoked`
+- `revoked_at` is recorded
+- The runner credential can no longer authenticate
+- Heartbeat requests return HTTP `401`
+
+### Runner database guarantees
+
+PostgreSQL enforces:
+
+- Unique registration-token hashes
+- Unique runner-credential hashes
+- Unique runner public IDs
+- One runner per registration token
+- Unique runner names within a project
+- Registration token and runner project matching
+- Token expiration after token creation
+- Mutually exclusive token consumption and revocation
+- Active runners having no revocation timestamp
+- Revoked runners having a revocation timestamp
+
+### Production requirements
+
+Production runner communication must additionally use:
+
+- HTTPS only
+- Secure secret delivery and storage
+- API rate limiting
+- Authentication-failure monitoring
+- Audit logging without plaintext secrets
+- Credential rotation procedures
+- Restricted administrative access
+- Separate credentials for every runner
+- No plaintext tokens or credentials in source control, logs, or configuration files
+
+
 ## Production database expectations
 
 A client-facing Ovrin deployment should use:
