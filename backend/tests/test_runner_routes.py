@@ -1,4 +1,4 @@
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from types import SimpleNamespace
 
 import pytest
@@ -254,3 +254,180 @@ def test_runner_heartbeat_maps_authentication_failure_to_401(
     assert error.value.headers == {
         "WWW-Authenticate": "Bearer"
     }
+
+
+def build_claimed_runner_job():
+    from app.runner_job_service import ClaimedRunnerJob
+
+    now = datetime.now(UTC)
+
+    job = SimpleNamespace(
+        public_id="10000000-0000-0000-0000-000000000001",
+        project_id=7,
+        name="ASR evaluation job",
+        job_type="asr_evaluation",
+        status="claimed",
+        priority=10,
+        required_capabilities=["asr"],
+        input_payload={"run_id": 42},
+        attempt_count=1,
+        max_attempts=3,
+        available_at=now,
+        claimed_at=now,
+        lease_expires_at=now + timedelta(minutes=10),
+        created_at=now,
+        updated_at=now,
+    )
+
+    return ClaimedRunnerJob(
+        claim_token="ovrin_claim_test-token",
+        job=job,
+    )
+
+
+def test_runner_job_claim_route_is_included_in_app():
+    openapi_paths = app.openapi()["paths"]
+
+    assert "/runners/jobs/claim" in openapi_paths
+    assert "post" in openapi_paths["/runners/jobs/claim"]
+
+
+def test_runner_job_claim_returns_claimed_job(
+    monkeypatch,
+):
+    claimed = build_claimed_runner_job()
+
+    def fake_claim_next_job(_db, **kwargs):
+        assert kwargs["credential"] == (
+            "ovrin_runner_test-credential"
+        )
+        assert kwargs["lease_duration"] == timedelta(
+            seconds=600
+        )
+        return claimed
+
+    monkeypatch.setattr(
+        runner_routes,
+        "claim_next_job",
+        fake_claim_next_job,
+    )
+
+    request = runner_routes.RunnerJobClaimRequest(
+        lease_seconds=600,
+    )
+
+    response = runner_routes.runner_job_claim_endpoint(
+        request=request,
+        credential="ovrin_runner_test-credential",
+        db=object(),
+    )
+
+    assert response["status"] == "claimed"
+    assert response["claim_token"] == claimed.claim_token
+    assert response["job"] is claimed.job
+
+
+def test_runner_job_claim_returns_idle_when_queue_is_empty(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        runner_routes,
+        "claim_next_job",
+        lambda _db, **_kwargs: None,
+    )
+
+    response = runner_routes.runner_job_claim_endpoint(
+        request=runner_routes.RunnerJobClaimRequest(),
+        credential="ovrin_runner_test-credential",
+        db=object(),
+    )
+
+    assert response == {
+        "status": "idle",
+        "claim_token": None,
+        "job": None,
+    }
+
+
+def test_runner_job_claim_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_claim(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "claim_next_job",
+        reject_claim,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_claim_endpoint(
+            request=runner_routes.RunnerJobClaimRequest(),
+            credential="invalid",
+            db=object(),
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer"
+    }
+
+
+def test_runner_job_claim_maps_conflict_to_409(
+    monkeypatch,
+):
+    def reject_claim(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimConflictError(
+            "Internal database conflict."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "claim_next_job",
+        reject_claim,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_claim_endpoint(
+            request=runner_routes.RunnerJobClaimRequest(),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job could not be claimed."
+    )
+
+
+def test_runner_job_claim_maps_invalid_lease_to_422(
+    monkeypatch,
+):
+    def reject_claim(_db, **_kwargs):
+        raise ValueError(
+            "Runner job lease duration is invalid."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "claim_next_job",
+        reject_claim,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_claim_endpoint(
+            request=runner_routes.RunnerJobClaimRequest(),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 422
+    assert error.value.detail == (
+        "Runner job lease duration is invalid."
+    )

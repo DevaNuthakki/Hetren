@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import (
     HTTPAuthorizationCredentials,
@@ -9,8 +11,14 @@ from app.database import get_db
 from app.runner_schemas import (
     RunnerHeartbeatRequest,
     RunnerHeartbeatResponse,
+    RunnerJobClaimRequest,
+    RunnerJobClaimResponse,
     RunnerRegisterRequest,
     RunnerRegistrationResponse,
+)
+from app.runner_job_service import (
+    RunnerJobClaimConflictError,
+    claim_next_job,
 )
 from app.runner_service import (
     RegistrationTokenUnavailableError,
@@ -130,4 +138,53 @@ def runner_heartbeat_endpoint(
     return {
         "status": "ok",
         "runner": runner,
+    }
+
+
+@router.post(
+    "/jobs/claim",
+    response_model=RunnerJobClaimResponse,
+)
+def runner_job_claim_endpoint(
+    request: RunnerJobClaimRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Claim the next compatible queued job for a runner."""
+    try:
+        claimed = claim_next_job(
+            db,
+            credential=credential,
+            lease_duration=timedelta(
+                seconds=request.lease_seconds
+            ),
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimConflictError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job could not be claimed.",
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    if claimed is None:
+        return {
+            "status": "idle",
+            "claim_token": None,
+            "job": None,
+        }
+
+    return {
+        "status": "claimed",
+        "claim_token": claimed.claim_token,
+        "job": claimed.job,
     }

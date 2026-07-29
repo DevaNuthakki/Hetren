@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from pydantic import (
     BaseModel,
@@ -92,3 +92,41 @@ class RunnerHeartbeatRequest(BaseModel):
 class RunnerHeartbeatResponse(BaseModel):
     status: str
     runner: RunnerRead
+
+
+class RunnerJobClaimRequest(BaseModel):
+    lease_seconds: int = Field(
+        default=300,
+        ge=1,
+        le=3600,
+    )
+
+
+class RunnerJobRead(BaseModel):
+    public_id: str
+    project_id: int
+
+    name: str
+    job_type: str
+    status: str
+    priority: int
+
+    required_capabilities: list[str]
+    input_payload: dict[str, Any]
+
+    attempt_count: int
+    max_attempts: int
+
+    available_at: datetime
+    claimed_at: datetime | None
+    lease_expires_at: datetime | None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerJobClaimResponse(BaseModel):
+    status: Literal["claimed", "idle"]
+    claim_token: str | None = None
+    job: RunnerJobRead | None = None
