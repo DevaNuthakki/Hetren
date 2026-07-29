@@ -53,6 +53,7 @@ def test_postgres_schema_is_at_alembic_head(
         "release_reports",
         "runner_registration_tokens",
         "runners",
+        "runner_jobs",
     }
 
     actual_tables = set(
@@ -213,7 +214,7 @@ def _build_test_runner(
     return models.Runner(
         project_id=project_id,
         registration_token_id=registration_token_id,
-        public_id=f"runner-{suffix}",
+        public_id=f"runner-{_test_digest(suffix)[:29]}",
         name=name or f"Runner {suffix}",
         status=status,
         runner_version="0.1.0-test",
@@ -221,6 +222,47 @@ def _build_test_runner(
         system_info={"platform": "pytest"},
         credential_hash=_test_digest(f"credential:{suffix}"),
         revoked_at=revoked_at,
+    )
+
+
+def _build_test_runner_job(
+    project_id: int,
+    suffix: str,
+    *,
+    assigned_runner_id: int | None = None,
+    status: str = "queued",
+    attempt_count: int = 0,
+    max_attempts: int = 3,
+    claimed_at: datetime | None = None,
+    lease_expires_at: datetime | None = None,
+    claim_token_hash: str | None = None,
+    started_at: datetime | None = None,
+    completed_at: datetime | None = None,
+    failed_at: datetime | None = None,
+    cancelled_at: datetime | None = None,
+    result_payload: dict[str, object] | None = None,
+    error_message: str | None = None,
+) -> models.RunnerJob:
+    return models.RunnerJob(
+        public_id=f"job-{_test_digest(suffix)[:24]}",
+        project_id=project_id,
+        assigned_runner_id=assigned_runner_id,
+        name=f"Runner job {suffix}",
+        job_type="asr_evaluation",
+        status=status,
+        required_capabilities=["asr"],
+        input_payload={"source": "pytest"},
+        attempt_count=attempt_count,
+        max_attempts=max_attempts,
+        claimed_at=claimed_at,
+        lease_expires_at=lease_expires_at,
+        claim_token_hash=claim_token_hash,
+        started_at=started_at,
+        completed_at=completed_at,
+        failed_at=failed_at,
+        cancelled_at=cancelled_at,
+        result_payload=result_payload,
+        error_message=error_message,
     )
 
 
@@ -500,6 +542,346 @@ def test_postgres_enforces_runner_revocation_consistency(
         revoked_at=revoked_at,
     )
     postgres_session.add(runner)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+def test_postgres_runner_job_defaults_and_timestamps(
+    postgres_session: Session,
+):
+    project = _create_test_project(
+        postgres_session,
+        "job-defaults",
+    )
+
+    job = models.RunnerJob(
+        public_id="job-defaults",
+        project_id=project.id,
+        name="Runner job defaults",
+        job_type="asr_evaluation",
+    )
+
+    postgres_session.add(job)
+    postgres_session.flush()
+    postgres_session.refresh(job)
+
+    assert job.status == "queued"
+    assert job.priority == 0
+    assert job.required_capabilities == []
+    assert job.input_payload == {}
+    assert job.result_payload is None
+    assert job.error_message is None
+
+    assert job.attempt_count == 0
+    assert job.max_attempts == 3
+
+    assert job.assigned_runner_id is None
+    assert job.claimed_at is None
+    assert job.lease_expires_at is None
+    assert job.claim_token_hash is None
+    assert job.started_at is None
+    assert job.completed_at is None
+    assert job.failed_at is None
+    assert job.cancelled_at is None
+
+    assert job.available_at.tzinfo is not None
+    assert job.available_at.utcoffset() is not None
+    assert job.created_at.tzinfo is not None
+    assert job.created_at.utcoffset() is not None
+    assert job.updated_at.tzinfo is not None
+    assert job.updated_at.utcoffset() is not None
+
+
+def test_postgres_enforces_runner_job_project_match(
+    postgres_session: Session,
+):
+    runner_project = _create_test_project(
+        postgres_session,
+        "job-runner-owner",
+    )
+    job_project = _create_test_project(
+        postgres_session,
+        "job-owner",
+    )
+    token = _create_test_registration_token(
+        postgres_session,
+        runner_project.id,
+        "job-cross-project",
+    )
+
+    runner = _build_test_runner(
+        project_id=runner_project.id,
+        registration_token_id=token.id,
+        suffix="job-cross-project",
+    )
+
+    postgres_session.add(runner)
+    postgres_session.flush()
+
+    claimed_at = datetime.now(UTC)
+
+    job = _build_test_runner_job(
+        project_id=job_project.id,
+        assigned_runner_id=runner.id,
+        suffix="cross-project",
+        status="claimed",
+        attempt_count=1,
+        claimed_at=claimed_at,
+        lease_expires_at=claimed_at + timedelta(minutes=5),
+        claim_token_hash=_test_digest(
+            "job-claim:cross-project"
+        ),
+    )
+
+    postgres_session.add(job)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+@pytest.mark.parametrize(
+    ("attempt_count", "max_attempts"),
+    [
+        (-1, 3),
+        (0, 0),
+        (4, 3),
+    ],
+)
+def test_postgres_enforces_runner_job_attempt_counts(
+    postgres_session: Session,
+    attempt_count: int,
+    max_attempts: int,
+):
+    project = _create_test_project(
+        postgres_session,
+        f"attempts-{attempt_count}-{max_attempts}",
+    )
+
+    job = _build_test_runner_job(
+        project_id=project.id,
+        suffix=f"attempts-{attempt_count}-{max_attempts}",
+        attempt_count=attempt_count,
+        max_attempts=max_attempts,
+    )
+
+    postgres_session.add(job)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+def test_postgres_rejects_unknown_runner_job_status(
+    postgres_session: Session,
+):
+    project = _create_test_project(
+        postgres_session,
+        "unknown-job-status",
+    )
+
+    job = _build_test_runner_job(
+        project_id=project.id,
+        suffix="unknown-status",
+        status="unknown",
+    )
+
+    postgres_session.add(job)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+@pytest.mark.parametrize(
+    "job_status",
+    [
+        "claimed",
+        "running",
+        "completed",
+        "failed",
+        "cancelled",
+    ],
+)
+def test_postgres_accepts_valid_runner_job_lifecycle(
+    postgres_session: Session,
+    job_status: str,
+):
+    project = _create_test_project(
+        postgres_session,
+        f"valid-job-{job_status}",
+    )
+    token = _create_test_registration_token(
+        postgres_session,
+        project.id,
+        f"valid-job-{job_status}",
+    )
+    runner = _build_test_runner(
+        project_id=project.id,
+        registration_token_id=token.id,
+        suffix=f"valid-job-{job_status}",
+    )
+
+    postgres_session.add(runner)
+    postgres_session.flush()
+
+    lifecycle_time = datetime.now(UTC)
+
+    job_arguments: dict[str, object] = {
+        "assigned_runner_id": runner.id,
+        "status": job_status,
+        "attempt_count": 1,
+        "claimed_at": lifecycle_time,
+    }
+
+    if job_status in {"claimed", "running"}:
+        job_arguments["lease_expires_at"] = (
+            lifecycle_time + timedelta(minutes=5)
+        )
+        job_arguments["claim_token_hash"] = _test_digest(
+            f"job-claim:valid-{job_status}"
+        )
+
+    if job_status in {
+        "running",
+        "completed",
+        "failed",
+        "cancelled",
+    }:
+        job_arguments["started_at"] = lifecycle_time
+
+    if job_status == "completed":
+        job_arguments["completed_at"] = lifecycle_time
+        job_arguments["result_payload"] = {
+            "status": "completed"
+        }
+
+    if job_status == "failed":
+        job_arguments["failed_at"] = lifecycle_time
+        job_arguments["error_message"] = (
+            "Simulated runner failure."
+        )
+
+    if job_status == "cancelled":
+        job_arguments["cancelled_at"] = lifecycle_time
+
+    job = _build_test_runner_job(
+        project_id=project.id,
+        suffix=f"valid-{job_status}",
+        **job_arguments,
+    )
+
+    postgres_session.add(job)
+    postgres_session.flush()
+    postgres_session.refresh(job)
+
+    assert job.status == job_status
+
+
+@pytest.mark.parametrize(
+    "invalid_case",
+    [
+        "queued-with-assignment",
+        "claimed-without-lease",
+        "running-without-start",
+        "completed-without-start",
+        "failed-without-error",
+        "cancelled-without-timestamp",
+    ],
+)
+def test_postgres_enforces_runner_job_lifecycle(
+    postgres_session: Session,
+    invalid_case: str,
+):
+    project = _create_test_project(
+        postgres_session,
+        f"invalid-job-{invalid_case}",
+    )
+    token = _create_test_registration_token(
+        postgres_session,
+        project.id,
+        f"invalid-job-{invalid_case}",
+    )
+    runner = _build_test_runner(
+        project_id=project.id,
+        registration_token_id=token.id,
+        suffix=f"invalid-job-{invalid_case}",
+    )
+
+    postgres_session.add(runner)
+    postgres_session.flush()
+
+    lifecycle_time = datetime.now(UTC)
+    job_arguments: dict[str, object]
+
+    if invalid_case == "queued-with-assignment":
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "queued",
+        }
+    elif invalid_case == "claimed-without-lease":
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "claimed",
+            "attempt_count": 1,
+            "claimed_at": lifecycle_time,
+            "claim_token_hash": _test_digest(
+                "job-claim:missing-lease"
+            ),
+        }
+    elif invalid_case == "running-without-start":
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "running",
+            "attempt_count": 1,
+            "claimed_at": lifecycle_time,
+            "lease_expires_at": (
+                lifecycle_time + timedelta(minutes=5)
+            ),
+            "claim_token_hash": _test_digest(
+                "job-claim:missing-start"
+            ),
+        }
+    elif invalid_case == "completed-without-start":
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "completed",
+            "attempt_count": 1,
+            "claimed_at": lifecycle_time,
+            "completed_at": lifecycle_time,
+            "result_payload": {"status": "completed"},
+        }
+    elif invalid_case == "failed-without-error":
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "failed",
+            "attempt_count": 1,
+            "claimed_at": lifecycle_time,
+            "started_at": lifecycle_time,
+            "failed_at": lifecycle_time,
+        }
+    else:
+        job_arguments = {
+            "assigned_runner_id": runner.id,
+            "status": "cancelled",
+            "attempt_count": 1,
+            "claimed_at": lifecycle_time,
+            "started_at": lifecycle_time,
+        }
+
+    job = _build_test_runner_job(
+        project_id=project.id,
+        suffix=invalid_case,
+        **job_arguments,
+    )
+
+    postgres_session.add(job)
 
     with pytest.raises(IntegrityError):
         postgres_session.flush()

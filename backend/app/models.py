@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     ForeignKeyConstraint,
     Integer,
+    Index,
     JSON,
     String,
     Text,
@@ -75,6 +76,12 @@ class Project(Base):
 
     runners = relationship(
         "Runner",
+        back_populates="project",
+        cascade="all, delete-orphan",
+    )
+
+    runner_jobs = relationship(
+        "RunnerJob",
         back_populates="project",
         cascade="all, delete-orphan",
     )
@@ -429,6 +436,11 @@ class Runner(Base):
     __tablename__ = "runners"
     __table_args__ = (
         UniqueConstraint(
+            "id",
+            "project_id",
+            name="uq_runners_id_project_id",
+        ),
+        UniqueConstraint(
             "project_id",
             "name",
             name="uq_runners_project_name",
@@ -527,4 +539,254 @@ class Runner(Base):
         "RunnerRegistrationToken",
         back_populates="runner",
         foreign_keys=[registration_token_id],
+    )
+
+    assigned_jobs = relationship(
+        "RunnerJob",
+        back_populates="assigned_runner",
+        foreign_keys="RunnerJob.assigned_runner_id",
+    )
+
+
+class RunnerJob(Base):
+    __tablename__ = "runner_jobs"
+    __table_args__ = (
+        ForeignKeyConstraint(
+            ["assigned_runner_id", "project_id"],
+            ["runners.id", "runners.project_id"],
+            name="fk_runner_jobs_assigned_runner_project",
+        ),
+        CheckConstraint(
+            "status IN ("
+            "'queued', "
+            "'claimed', "
+            "'running', "
+            "'completed', "
+            "'failed', "
+            "'cancelled'"
+            ")",
+            name="ck_runner_jobs_valid_status",
+        ),
+        CheckConstraint(
+            "attempt_count >= 0 "
+            "AND max_attempts >= 1 "
+            "AND attempt_count <= max_attempts",
+            name="ck_runner_jobs_valid_attempt_counts",
+        ),
+        CheckConstraint(
+            "("
+            "status = 'queued' "
+            "AND assigned_runner_id IS NULL "
+            "AND claimed_at IS NULL "
+            "AND lease_expires_at IS NULL "
+            "AND claim_token_hash IS NULL "
+            "AND started_at IS NULL "
+            "AND completed_at IS NULL "
+            "AND failed_at IS NULL "
+            "AND cancelled_at IS NULL "
+            "AND result_payload IS NULL "
+            "AND error_message IS NULL"
+            ") OR ("
+            "status = 'claimed' "
+            "AND assigned_runner_id IS NOT NULL "
+            "AND claimed_at IS NOT NULL "
+            "AND lease_expires_at IS NOT NULL "
+            "AND claim_token_hash IS NOT NULL "
+            "AND started_at IS NULL "
+            "AND completed_at IS NULL "
+            "AND failed_at IS NULL "
+            "AND cancelled_at IS NULL "
+            "AND result_payload IS NULL "
+            "AND error_message IS NULL"
+            ") OR ("
+            "status = 'running' "
+            "AND assigned_runner_id IS NOT NULL "
+            "AND claimed_at IS NOT NULL "
+            "AND lease_expires_at IS NOT NULL "
+            "AND claim_token_hash IS NOT NULL "
+            "AND started_at IS NOT NULL "
+            "AND completed_at IS NULL "
+            "AND failed_at IS NULL "
+            "AND cancelled_at IS NULL "
+            "AND result_payload IS NULL "
+            "AND error_message IS NULL"
+            ") OR ("
+            "status = 'completed' "
+            "AND assigned_runner_id IS NOT NULL "
+            "AND claimed_at IS NOT NULL "
+            "AND lease_expires_at IS NULL "
+            "AND claim_token_hash IS NULL "
+            "AND started_at IS NOT NULL "
+            "AND completed_at IS NOT NULL "
+            "AND failed_at IS NULL "
+            "AND cancelled_at IS NULL "
+            "AND error_message IS NULL"
+            ") OR ("
+            "status = 'failed' "
+            "AND assigned_runner_id IS NOT NULL "
+            "AND claimed_at IS NOT NULL "
+            "AND lease_expires_at IS NULL "
+            "AND claim_token_hash IS NULL "
+            "AND completed_at IS NULL "
+            "AND failed_at IS NOT NULL "
+            "AND cancelled_at IS NULL "
+            "AND error_message IS NOT NULL"
+            ") OR ("
+            "status = 'cancelled' "
+            "AND lease_expires_at IS NULL "
+            "AND claim_token_hash IS NULL "
+            "AND completed_at IS NULL "
+            "AND failed_at IS NULL "
+            "AND cancelled_at IS NOT NULL "
+            "AND ("
+            "("
+            "assigned_runner_id IS NULL "
+            "AND claimed_at IS NULL "
+            "AND started_at IS NULL"
+            ") OR ("
+            "assigned_runner_id IS NOT NULL "
+            "AND claimed_at IS NOT NULL"
+            ")"
+            ")"
+            ")",
+            name="ck_runner_jobs_lifecycle",
+        ),
+        Index(
+            "ix_runner_jobs_queue_poll",
+            "project_id",
+            "status",
+            "available_at",
+            "priority",
+        ),
+        Index(
+            "ix_runner_jobs_assigned_status",
+            "assigned_runner_id",
+            "status",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    public_id = Column(
+        String(36),
+        nullable=False,
+        unique=True,
+    )
+    project_id = Column(
+        Integer,
+        ForeignKey("projects.id"),
+        nullable=False,
+    )
+    assigned_runner_id = Column(
+        Integer,
+        nullable=True,
+    )
+
+    name = Column(
+        String(200),
+        nullable=False,
+    )
+    job_type = Column(
+        String(100),
+        nullable=False,
+    )
+    status = Column(
+        String(50),
+        nullable=False,
+        default="queued",
+    )
+    priority = Column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+
+    required_capabilities = Column(
+        JSON,
+        nullable=False,
+        default=list,
+    )
+    input_payload = Column(
+        JSON,
+        nullable=False,
+        default=dict,
+    )
+    result_payload = Column(
+        JSON(none_as_null=True),
+        nullable=True,
+    )
+    error_message = Column(
+        Text,
+        nullable=True,
+    )
+
+    attempt_count = Column(
+        Integer,
+        nullable=False,
+        default=0,
+    )
+    max_attempts = Column(
+        Integer,
+        nullable=False,
+        default=3,
+    )
+
+    claim_token_hash = Column(
+        String(64),
+        nullable=True,
+        unique=True,
+    )
+
+    available_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+    claimed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    lease_expires_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    started_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    completed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    failed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    cancelled_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        onupdate=utc_now,
+        server_default=func.now(),
+    )
+
+    project = relationship(
+        "Project",
+        back_populates="runner_jobs",
+    )
+    assigned_runner = relationship(
+        "Runner",
+        back_populates="assigned_jobs",
+        foreign_keys=[assigned_runner_id],
     )
