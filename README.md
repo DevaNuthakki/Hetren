@@ -310,9 +310,9 @@ The integration-test fixture refuses to run unless the configured database is ex
 
 ## Secure runner operations
 
-Phase 3 runner registration, job coordination, lease recovery, and
-administrative CLI instructions are documented in
-`docs/OVRIN_RUNNER_OPERATIONS.md`.
+Phase 3 runner registration, secure job coordination, lease recovery,
+structured execution logging, and administrative CLI instructions are
+documented in `docs/OVRIN_RUNNER_OPERATIONS.md`.
 
 ## Validation data
 
@@ -420,7 +420,7 @@ It currently supports:
 - Administrative runner revocation
 - PostgreSQL lifecycle and project-isolation constraints
 
-Job polling, execution, log upload, and GitHub Actions integration are implemented in later Phase 3 work.
+Secure job claiming, lifecycle transitions, lease recovery, and structured log upload and retrieval are now implemented. The local polling and execution loop and GitHub Actions integration remain later Phase 3 work.
 
 ### Security model
 
