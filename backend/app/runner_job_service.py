@@ -37,6 +37,8 @@ MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
 MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH = 10_000
 MAX_RUNNER_JOB_LOG_EVENT_TYPE_LENGTH = 100
 MAX_RUNNER_JOB_LOG_CONTEXT_BYTES = 65_536
+DEFAULT_RUNNER_JOB_LOG_QUERY_LIMIT = 100
+MAX_RUNNER_JOB_LOG_QUERY_LIMIT = 200
 SUPPORTED_RUNNER_JOB_LOG_LEVELS = frozenset(
     {
         "debug",
@@ -104,6 +106,13 @@ class RunnerJobRecoverySummary:
     @property
     def recovered_count(self) -> int:
         return self.requeued_count + self.failed_count
+
+
+@dataclass(frozen=True)
+class RunnerJobLogPage:
+    logs: list[models.RunnerJobLog]
+    next_after_sequence: int | None
+    has_more: bool
 
 
 def _utc_now() -> datetime:
@@ -202,6 +211,48 @@ def _runner_supports_job(
     return required_capabilities.issubset(
         runner_capabilities
     )
+
+
+def _get_active_runner(
+    db: Session,
+    *,
+    credential: str,
+) -> models.Runner:
+    """
+    Authenticate an active runner without taking a database row lock.
+
+    This helper is intended only for read operations.
+    """
+    if not credential:
+        db.rollback()
+        raise RunnerAuthenticationError(
+            "Runner credential is invalid or unavailable."
+        )
+
+    credential_hash = hash_runner_credential(credential)
+
+    runner = (
+        db.query(models.Runner)
+        .filter(
+            models.Runner.credential_hash
+            == credential_hash
+        )
+        .first()
+    )
+
+    runner_is_unavailable = (
+        runner is None
+        or runner.status != "active"
+        or runner.revoked_at is not None
+    )
+
+    if runner_is_unavailable:
+        db.rollback()
+        raise RunnerAuthenticationError(
+            "Runner credential is invalid or unavailable."
+        )
+
+    return runner
 
 
 def _get_active_runner_for_update(
@@ -512,6 +563,74 @@ def _normalize_job_log_entries(
     return normalized_entries
 
 
+def _get_owned_job_claim_for_read(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime,
+) -> models.RunnerJob:
+    """
+    Verify active claim ownership without taking runner or job locks.
+
+    This helper is intended only for read operations. Claim mutations and
+    state transitions must continue using the for-update helper.
+    """
+    runner = _get_active_runner(
+        db,
+        credential=credential,
+    )
+
+    normalized_public_id = (
+        job_public_id.strip()
+        if isinstance(job_public_id, str)
+        else ""
+    )
+
+    if (
+        not normalized_public_id
+        or len(normalized_public_id) > 36
+        or not claim_token
+    ):
+        db.rollback()
+        raise RunnerJobClaimUnavailableError(
+            "Runner job claim is invalid or unavailable."
+        )
+
+    job = (
+        db.query(models.RunnerJob)
+        .filter(
+            models.RunnerJob.public_id
+            == normalized_public_id,
+            models.RunnerJob.project_id
+            == runner.project_id,
+        )
+        .first()
+    )
+
+    claim_is_unavailable = (
+        job is None
+        or job.assigned_runner_id != runner.id
+        or job.status not in {"claimed", "running"}
+        or job.lease_expires_at is None
+        or _as_utc(job.lease_expires_at) <= now
+        or job.claim_token_hash is None
+        or not verify_job_claim_token(
+            claim_token,
+            job.claim_token_hash,
+        )
+    )
+
+    if claim_is_unavailable:
+        db.rollback()
+        raise RunnerJobClaimUnavailableError(
+            "Runner job claim is invalid or unavailable."
+        )
+
+    return job
+
+
 def _get_owned_job_claim_for_update(
     db: Session,
     *,
@@ -790,6 +909,89 @@ def renew_job_lease(
     )
 
 
+def _validate_job_log_query_limit(
+    limit: int,
+) -> int:
+    if isinstance(limit, bool) or not isinstance(limit, int):
+        raise ValueError(
+            "Runner job log query limit must be an integer."
+        )
+
+    if limit < 1:
+        raise ValueError(
+            "Runner job log query limit must be at least one."
+        )
+
+    if limit > MAX_RUNNER_JOB_LOG_QUERY_LIMIT:
+        raise ValueError(
+            "Runner job log query limit must not exceed 200."
+        )
+
+    return limit
+
+
+def _validate_job_log_after_sequence(
+    after_sequence: int,
+) -> int:
+    if (
+        isinstance(after_sequence, bool)
+        or not isinstance(after_sequence, int)
+    ):
+        raise ValueError(
+            "Runner job log cursor must be an integer."
+        )
+
+    if after_sequence < 0:
+        raise ValueError(
+            "Runner job log cursor must not be negative."
+        )
+
+    return after_sequence
+
+
+def _validate_job_log_attempt_filter(
+    attempt_number: int | None,
+) -> int | None:
+    if attempt_number is None:
+        return None
+
+    if (
+        isinstance(attempt_number, bool)
+        or not isinstance(attempt_number, int)
+    ):
+        raise ValueError(
+            "Runner job log attempt filter must be an integer."
+        )
+
+    if attempt_number < 1:
+        raise ValueError(
+            "Runner job log attempt filter must be at least one."
+        )
+
+    return attempt_number
+
+
+def _normalize_job_log_level_filter(
+    level: str | None,
+) -> str | None:
+    if level is None:
+        return None
+
+    if not isinstance(level, str):
+        raise ValueError(
+            "Runner job log level filter must be text."
+        )
+
+    normalized = level.strip().lower()
+
+    if normalized not in SUPPORTED_RUNNER_JOB_LOG_LEVELS:
+        raise ValueError(
+            "Runner job log level filter is unsupported."
+        )
+
+    return normalized
+
+
 def append_job_logs(
     db: Session,
     *,
@@ -866,6 +1068,88 @@ def append_job_logs(
         db.refresh(job_log)
 
     return logs
+
+
+def query_job_logs(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    after_sequence: int = 0,
+    limit: int = DEFAULT_RUNNER_JOB_LOG_QUERY_LIMIT,
+    attempt_number: int | None = None,
+    level: str | None = None,
+    now: datetime | None = None,
+) -> RunnerJobLogPage:
+    """
+    Read ordered structured logs for an owned active runner job.
+
+    The active runner credential and claim token are verified before
+    reading. Sequence-based pagination remains stable while new logs are
+    appended.
+    """
+    validated_cursor = _validate_job_log_after_sequence(
+        after_sequence
+    )
+    validated_limit = _validate_job_log_query_limit(limit)
+    validated_attempt = _validate_job_log_attempt_filter(
+        attempt_number
+    )
+    normalized_level = _normalize_job_log_level_filter(
+        level
+    )
+    query_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=query_time,
+    )
+
+    query = db.query(models.RunnerJobLog).filter(
+        models.RunnerJobLog.job_id == job.id,
+        models.RunnerJobLog.sequence_number
+        > validated_cursor,
+    )
+
+    if validated_attempt is not None:
+        query = query.filter(
+            models.RunnerJobLog.attempt_number
+            == validated_attempt
+        )
+
+    if normalized_level is not None:
+        query = query.filter(
+            models.RunnerJobLog.level == normalized_level
+        )
+
+    rows = (
+        query.order_by(
+            models.RunnerJobLog.sequence_number.asc()
+        )
+        .limit(validated_limit + 1)
+        .all()
+    )
+
+    has_more = len(rows) > validated_limit
+    logs = rows[:validated_limit]
+
+    next_after_sequence = (
+        logs[-1].sequence_number
+        if logs
+        else None
+    )
+
+    db.commit()
+
+    return RunnerJobLogPage(
+        logs=logs,
+        next_after_sequence=next_after_sequence,
+        has_more=has_more,
+    )
 
 
 def recover_expired_jobs(

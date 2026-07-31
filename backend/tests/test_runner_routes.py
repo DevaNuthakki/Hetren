@@ -1133,3 +1133,190 @@ def test_runner_job_log_append_maps_service_validation_to_422(
     assert error.value.detail == (
         "Runner job log context exceeds the allowed size."
     )
+
+
+def test_runner_job_log_query_route_is_included_in_app():
+    openapi_paths = app.openapi()["paths"]
+    route = "/runners/jobs/{job_public_id}/logs/query"
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_job_log_query_returns_ordered_page(
+    monkeypatch,
+):
+    now = datetime.now(UTC)
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+
+    persisted_logs = [
+        SimpleNamespace(
+            public_id=(
+                "20000000-0000-0000-0000-000000000006"
+            ),
+            sequence_number=6,
+            attempt_number=2,
+            level="error",
+            event_type="asr.input.error",
+            message="Audio input failed.",
+            context_payload={"test_case_id": 42},
+            created_at=now,
+        ),
+        SimpleNamespace(
+            public_id=(
+                "20000000-0000-0000-0000-000000000007"
+            ),
+            sequence_number=7,
+            attempt_number=2,
+            level="error",
+            event_type="asr.retry.error",
+            message="Retry failed.",
+            context_payload={"retry_count": 1},
+            created_at=now,
+        ),
+    ]
+
+    page = SimpleNamespace(
+        logs=persisted_logs,
+        has_more=True,
+        next_after_sequence=7,
+    )
+
+    def fake_query_job_logs(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+            "claim_token": "ovrin_claim_test-token",
+            "after_sequence": 5,
+            "limit": 2,
+            "attempt_number": 2,
+            "level": "error",
+        }
+        return page
+
+    monkeypatch.setattr(
+        runner_routes,
+        "query_job_logs",
+        fake_query_job_logs,
+    )
+
+    response = (
+        runner_routes.runner_job_log_query_endpoint(
+            job_public_id=job_public_id,
+            request=runner_routes.RunnerJobLogQueryRequest(
+                claim_token="ovrin_claim_test-token",
+                after_sequence=5,
+                limit=2,
+                attempt_number=2,
+                level="error",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+    )
+
+    assert response["logs"] is persisted_logs
+    assert response["has_more"] is True
+    assert response["next_after_sequence"] == 7
+
+
+def test_runner_job_log_query_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_query(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "query_job_logs",
+        reject_query,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_query_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogQueryRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="invalid",
+            db=object(),
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer"
+    }
+
+
+def test_runner_job_log_query_hides_invalid_claim_state(
+    monkeypatch,
+):
+    def reject_query(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim ownership state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "query_job_logs",
+        reject_query,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_query_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogQueryRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim" not in error.value.detail
+
+
+def test_runner_job_log_query_maps_service_validation_to_422(
+    monkeypatch,
+):
+    def reject_query(_db, **_kwargs):
+        raise ValueError(
+            "Runner job log query could not be validated."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "query_job_logs",
+        reject_query,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_log_query_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            request=runner_routes.RunnerJobLogQueryRequest(
+                claim_token="ovrin_claim_test-token",
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 422
+    assert error.value.detail == (
+        "Runner job log query could not be validated."
+    )

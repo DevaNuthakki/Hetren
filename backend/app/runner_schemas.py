@@ -257,3 +257,34 @@ class RunnerJobLogRead(BaseModel):
 class RunnerJobLogAppendResponse(BaseModel):
     status: Literal["appended"]
     logs: list[RunnerJobLogRead]
+
+
+class RunnerJobLogQueryRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    after_sequence: int = Field(
+        default=0,
+        ge=0,
+    )
+    limit: int = Field(
+        default=100,
+        ge=1,
+        le=200,
+    )
+    attempt_number: int | None = Field(
+        default=None,
+        ge=1,
+    )
+    level: Literal[
+        "debug",
+        "info",
+        "warning",
+        "error",
+    ] | None = None
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RunnerJobLogQueryResponse(BaseModel):
+    logs: list[RunnerJobLogRead]
+    has_more: bool
+    next_after_sequence: int | None
