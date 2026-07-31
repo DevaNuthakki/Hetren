@@ -7,6 +7,7 @@ from app.local_runner_client import (
     LocalRunnerAPIError,
     LocalRunnerAuthenticationError,
     LocalRunnerClient,
+    LocalRunnerInputError,
     LocalRunnerProtocolError,
     LocalRunnerRequestError,
     build_local_runner_client,
@@ -332,3 +333,289 @@ def test_build_local_runner_client_uses_settings():
         )
 
     assert response.status == "idle"
+
+
+def test_local_runner_client_starts_claimed_job():
+    job_payload = build_job_payload()
+    job_payload["status"] = "running"
+    job_payload["started_at"] = NOW
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.url.path == (
+            "/runners/jobs/"
+            "20000000-0000-0000-0000-000000000001/start"
+        )
+        assert request.method == "POST"
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token"}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "running",
+                "job": job_payload,
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.start_job(
+            job_public_id=str(
+                build_job_payload()["public_id"]
+            ),
+            claim_token="ovrin_claim_test-token",
+        )
+
+    assert response.status == "running"
+    assert response.job.status == "running"
+
+
+def test_local_runner_client_renews_job_lease():
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.url.path.endswith("/renew")
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token",'
+            b'"lease_seconds":600}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "renewed",
+                "job": build_job_payload(),
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.renew_job_lease(
+            job_public_id=str(
+                build_job_payload()["public_id"]
+            ),
+            claim_token="ovrin_claim_test-token",
+            lease_seconds=600,
+        )
+
+    assert response.status == "renewed"
+
+
+def test_local_runner_client_appends_structured_logs():
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.url.path.endswith("/logs")
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token",'
+            b'"entries":[{"level":"info",'
+            b'"event_type":"execution_started",'
+            b'"message":"Runner execution started.",'
+            b'"context_payload":{"executor":"placeholder"}}]}'
+        )
+
+        return httpx.Response(
+            201,
+            json={
+                "status": "appended",
+                "logs": [
+                    {
+                        "public_id": (
+                            "30000000-0000-0000-0000-"
+                            "000000000001"
+                        ),
+                        "sequence_number": 1,
+                        "attempt_number": 1,
+                        "level": "info",
+                        "event_type": "execution_started",
+                        "message": (
+                            "Runner execution started."
+                        ),
+                        "context_payload": {
+                            "executor": "placeholder",
+                        },
+                        "created_at": NOW,
+                    }
+                ],
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.append_job_logs(
+            job_public_id=str(
+                build_job_payload()["public_id"]
+            ),
+            claim_token="ovrin_claim_test-token",
+            entries=[
+                {
+                    "level": "info",
+                    "event_type": "execution_started",
+                    "message": (
+                        "Runner execution started."
+                    ),
+                    "context_payload": {
+                        "executor": "placeholder",
+                    },
+                }
+            ],
+        )
+
+    assert response.status == "appended"
+    assert response.logs[0].sequence_number == 1
+
+
+def test_local_runner_client_completes_job():
+    job_payload = build_job_payload()
+    job_payload["status"] = "completed"
+    job_payload["completed_at"] = NOW
+    job_payload["lease_expires_at"] = None
+    job_payload["result_payload"] = {
+        "execution_mode": "placeholder",
+    }
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.url.path.endswith("/complete")
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token",'
+            b'"result_payload":'
+            b'{"execution_mode":"placeholder"}}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "completed",
+                "job": job_payload,
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.complete_job(
+            job_public_id=str(
+                build_job_payload()["public_id"]
+            ),
+            claim_token="ovrin_claim_test-token",
+            result_payload={
+                "execution_mode": "placeholder",
+            },
+        )
+
+    assert response.status == "completed"
+    assert response.job.status == "completed"
+
+
+def test_local_runner_client_fails_job():
+    job_payload = build_job_payload()
+    job_payload["status"] = "failed"
+    job_payload["failed_at"] = NOW
+    job_payload["lease_expires_at"] = None
+    job_payload["error_message"] = (
+        "Placeholder execution failed."
+    )
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.url.path.endswith("/fail")
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token",'
+            b'"error_message":'
+            b'"Placeholder execution failed."}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "failed",
+                "job": job_payload,
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.fail_job(
+            job_public_id=str(
+                build_job_payload()["public_id"]
+            ),
+            claim_token="ovrin_claim_test-token",
+            error_message=(
+                "Placeholder execution failed."
+            ),
+        )
+
+    assert response.status == "failed"
+    assert response.job.status == "failed"
+
+
+@pytest.mark.parametrize(
+    "job_public_id",
+    [
+        "",
+        "   ",
+        "../another-job",
+        "job/another-job",
+    ],
+)
+def test_local_runner_client_rejects_unsafe_job_id(
+    job_public_id: str,
+):
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(
+            LocalRunnerInputError,
+        ):
+            client.start_job(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+            )
+
+
+def test_local_runner_client_rejects_invalid_log_batch():
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(
+            LocalRunnerInputError,
+        ):
+            client.append_job_logs(
+                job_public_id=str(
+                    build_job_payload()["public_id"]
+                ),
+                claim_token="ovrin_claim_test-token",
+                entries=[],
+            )
