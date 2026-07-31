@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
+from sqlalchemy import func
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
@@ -31,6 +32,21 @@ MAX_RUNNER_JOB_PRIORITY = 1000
 MAX_RUNNER_JOB_ATTEMPTS = 100
 MAX_RUNNER_JOB_CAPABILITIES = 50
 MAX_RUNNER_JOB_INPUT_BYTES = 262_144
+
+MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
+MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH = 10_000
+MAX_RUNNER_JOB_LOG_EVENT_TYPE_LENGTH = 100
+MAX_RUNNER_JOB_LOG_CONTEXT_BYTES = 65_536
+DEFAULT_RUNNER_JOB_LOG_QUERY_LIMIT = 100
+MAX_RUNNER_JOB_LOG_QUERY_LIMIT = 200
+SUPPORTED_RUNNER_JOB_LOG_LEVELS = frozenset(
+    {
+        "debug",
+        "info",
+        "warning",
+        "error",
+    }
+)
 
 
 class RunnerJobServiceError(Exception):
@@ -71,6 +87,10 @@ class RunnerJobCancellationUnavailableError(
     """Raised when a runner job cannot be cancelled."""
 
 
+class RunnerJobLogConflictError(RunnerJobServiceError):
+    """Raised when structured logs cannot be persisted."""
+
+
 @dataclass(frozen=True)
 class ClaimedRunnerJob:
     claim_token: str
@@ -86,6 +106,13 @@ class RunnerJobRecoverySummary:
     @property
     def recovered_count(self) -> int:
         return self.requeued_count + self.failed_count
+
+
+@dataclass(frozen=True)
+class RunnerJobLogPage:
+    logs: list[models.RunnerJobLog]
+    next_after_sequence: int | None
+    has_more: bool
 
 
 def _utc_now() -> datetime:
@@ -184,6 +211,48 @@ def _runner_supports_job(
     return required_capabilities.issubset(
         runner_capabilities
     )
+
+
+def _get_active_runner(
+    db: Session,
+    *,
+    credential: str,
+) -> models.Runner:
+    """
+    Authenticate an active runner without taking a database row lock.
+
+    This helper is intended only for read operations.
+    """
+    if not credential:
+        db.rollback()
+        raise RunnerAuthenticationError(
+            "Runner credential is invalid or unavailable."
+        )
+
+    credential_hash = hash_runner_credential(credential)
+
+    runner = (
+        db.query(models.Runner)
+        .filter(
+            models.Runner.credential_hash
+            == credential_hash
+        )
+        .first()
+    )
+
+    runner_is_unavailable = (
+        runner is None
+        or runner.status != "active"
+        or runner.revoked_at is not None
+    )
+
+    if runner_is_unavailable:
+        db.rollback()
+        raise RunnerAuthenticationError(
+            "Runner credential is invalid or unavailable."
+        )
+
+    return runner
 
 
 def _get_active_runner_for_update(
@@ -355,6 +424,211 @@ def _normalize_error_message(error_message: str) -> str:
         )
 
     return normalized
+
+
+def _normalize_job_log_entries(
+    entries: object,
+) -> list[dict[str, object]]:
+    if not isinstance(entries, list):
+        raise ValueError(
+            "Runner job log entries must be a list."
+        )
+
+    if not entries:
+        raise ValueError(
+            "Runner job log batch must contain at least one entry."
+        )
+
+    if len(entries) > MAX_RUNNER_JOB_LOG_BATCH_SIZE:
+        raise ValueError(
+            "Runner job log batch must contain at most 100 entries."
+        )
+
+    normalized_entries: list[dict[str, object]] = []
+    allowed_fields = {
+        "level",
+        "event_type",
+        "message",
+        "context_payload",
+    }
+
+    for position, entry in enumerate(entries, start=1):
+        if not isinstance(entry, dict):
+            raise ValueError(
+                "Each runner job log entry must be a JSON object."
+            )
+
+        unknown_fields = set(entry) - allowed_fields
+
+        if unknown_fields:
+            raise ValueError(
+                "Runner job log entries contain unsupported fields."
+            )
+
+        level_value = entry.get("level")
+        level = (
+            level_value.strip().lower()
+            if isinstance(level_value, str)
+            else ""
+        )
+
+        if level not in SUPPORTED_RUNNER_JOB_LOG_LEVELS:
+            raise ValueError(
+                f"Runner job log entry {position} has an "
+                "unsupported level."
+            )
+
+        event_type_value = entry.get("event_type")
+        event_type = (
+            event_type_value.strip()
+            if isinstance(event_type_value, str)
+            else ""
+        )
+
+        if not event_type:
+            raise ValueError(
+                f"Runner job log entry {position} event type "
+                "must not be empty."
+            )
+
+        if (
+            len(event_type)
+            > MAX_RUNNER_JOB_LOG_EVENT_TYPE_LENGTH
+        ):
+            raise ValueError(
+                f"Runner job log entry {position} event type "
+                "must be at most 100 characters."
+            )
+
+        message_value = entry.get("message")
+        message = (
+            message_value.strip()
+            if isinstance(message_value, str)
+            else ""
+        )
+
+        if not message:
+            raise ValueError(
+                f"Runner job log entry {position} message "
+                "must not be empty."
+            )
+
+        if len(message) > MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH:
+            raise ValueError(
+                f"Runner job log entry {position} message "
+                "must be at most 10000 characters."
+            )
+
+        context_payload = entry.get("context_payload", {})
+
+        if not isinstance(context_payload, dict):
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must be a JSON object."
+            )
+
+        try:
+            serialized_context = json.dumps(
+                context_payload,
+                ensure_ascii=False,
+                separators=(",", ":"),
+            )
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must contain JSON-serializable values."
+            ) from exc
+
+        context_size = len(
+            serialized_context.encode("utf-8")
+        )
+
+        if context_size > MAX_RUNNER_JOB_LOG_CONTEXT_BYTES:
+            raise ValueError(
+                f"Runner job log entry {position} context "
+                "must not exceed 65536 bytes."
+            )
+
+        normalized_entries.append(
+            {
+                "level": level,
+                "event_type": event_type,
+                "message": message,
+                "context_payload": json.loads(
+                    serialized_context
+                ),
+            }
+        )
+
+    return normalized_entries
+
+
+def _get_owned_job_claim_for_read(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime,
+) -> models.RunnerJob:
+    """
+    Verify active claim ownership without taking runner or job locks.
+
+    This helper is intended only for read operations. Claim mutations and
+    state transitions must continue using the for-update helper.
+    """
+    runner = _get_active_runner(
+        db,
+        credential=credential,
+    )
+
+    normalized_public_id = (
+        job_public_id.strip()
+        if isinstance(job_public_id, str)
+        else ""
+    )
+
+    if (
+        not normalized_public_id
+        or len(normalized_public_id) > 36
+        or not claim_token
+    ):
+        db.rollback()
+        raise RunnerJobClaimUnavailableError(
+            "Runner job claim is invalid or unavailable."
+        )
+
+    job = (
+        db.query(models.RunnerJob)
+        .filter(
+            models.RunnerJob.public_id
+            == normalized_public_id,
+            models.RunnerJob.project_id
+            == runner.project_id,
+        )
+        .first()
+    )
+
+    claim_is_unavailable = (
+        job is None
+        or job.assigned_runner_id != runner.id
+        or job.status not in {"claimed", "running"}
+        or job.lease_expires_at is None
+        or _as_utc(job.lease_expires_at) <= now
+        or job.claim_token_hash is None
+        or not verify_job_claim_token(
+            claim_token,
+            job.claim_token_hash,
+        )
+    )
+
+    if claim_is_unavailable:
+        db.rollback()
+        raise RunnerJobClaimUnavailableError(
+            "Runner job claim is invalid or unavailable."
+        )
+
+    return job
 
 
 def _get_owned_job_claim_for_update(
@@ -632,6 +906,249 @@ def renew_job_lease(
     return _commit_job_transition(
         db,
         job=job,
+    )
+
+
+def _validate_job_log_query_limit(
+    limit: int,
+) -> int:
+    if isinstance(limit, bool) or not isinstance(limit, int):
+        raise ValueError(
+            "Runner job log query limit must be an integer."
+        )
+
+    if limit < 1:
+        raise ValueError(
+            "Runner job log query limit must be at least one."
+        )
+
+    if limit > MAX_RUNNER_JOB_LOG_QUERY_LIMIT:
+        raise ValueError(
+            "Runner job log query limit must not exceed 200."
+        )
+
+    return limit
+
+
+def _validate_job_log_after_sequence(
+    after_sequence: int,
+) -> int:
+    if (
+        isinstance(after_sequence, bool)
+        or not isinstance(after_sequence, int)
+    ):
+        raise ValueError(
+            "Runner job log cursor must be an integer."
+        )
+
+    if after_sequence < 0:
+        raise ValueError(
+            "Runner job log cursor must not be negative."
+        )
+
+    return after_sequence
+
+
+def _validate_job_log_attempt_filter(
+    attempt_number: int | None,
+) -> int | None:
+    if attempt_number is None:
+        return None
+
+    if (
+        isinstance(attempt_number, bool)
+        or not isinstance(attempt_number, int)
+    ):
+        raise ValueError(
+            "Runner job log attempt filter must be an integer."
+        )
+
+    if attempt_number < 1:
+        raise ValueError(
+            "Runner job log attempt filter must be at least one."
+        )
+
+    return attempt_number
+
+
+def _normalize_job_log_level_filter(
+    level: str | None,
+) -> str | None:
+    if level is None:
+        return None
+
+    if not isinstance(level, str):
+        raise ValueError(
+            "Runner job log level filter must be text."
+        )
+
+    normalized = level.strip().lower()
+
+    if normalized not in SUPPORTED_RUNNER_JOB_LOG_LEVELS:
+        raise ValueError(
+            "Runner job log level filter is unsupported."
+        )
+
+    return normalized
+
+
+def append_job_logs(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    entries: list[dict[str, object]],
+    now: datetime | None = None,
+) -> list[models.RunnerJobLog]:
+    """
+    Atomically append structured logs to an owned active job.
+
+    The server assigns sequence and attempt numbers. Locking the job
+    serializes concurrent batches for the same job and prevents duplicate
+    sequence allocation.
+    """
+    normalized_entries = _normalize_job_log_entries(
+        entries
+    )
+    append_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=append_time,
+    )
+
+    current_sequence = (
+        db.query(
+            func.max(
+                models.RunnerJobLog.sequence_number
+            )
+        )
+        .filter(
+            models.RunnerJobLog.job_id == job.id
+        )
+        .scalar()
+        or 0
+    )
+
+    logs = [
+        models.RunnerJobLog(
+            public_id=str(uuid4()),
+            project_id=job.project_id,
+            job_id=job.id,
+            runner_id=job.assigned_runner_id,
+            sequence_number=current_sequence + position,
+            attempt_number=job.attempt_count,
+            level=entry["level"],
+            event_type=entry["event_type"],
+            message=entry["message"],
+            context_payload=entry["context_payload"],
+            created_at=append_time,
+        )
+        for position, entry in enumerate(
+            normalized_entries,
+            start=1,
+        )
+    ]
+
+    db.add_all(logs)
+
+    try:
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobLogConflictError(
+            "Runner job logs could not be appended."
+        ) from exc
+
+    for job_log in logs:
+        db.refresh(job_log)
+
+    return logs
+
+
+def query_job_logs(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    after_sequence: int = 0,
+    limit: int = DEFAULT_RUNNER_JOB_LOG_QUERY_LIMIT,
+    attempt_number: int | None = None,
+    level: str | None = None,
+    now: datetime | None = None,
+) -> RunnerJobLogPage:
+    """
+    Read ordered structured logs for an owned active runner job.
+
+    The active runner credential and claim token are verified before
+    reading. Sequence-based pagination remains stable while new logs are
+    appended.
+    """
+    validated_cursor = _validate_job_log_after_sequence(
+        after_sequence
+    )
+    validated_limit = _validate_job_log_query_limit(limit)
+    validated_attempt = _validate_job_log_attempt_filter(
+        attempt_number
+    )
+    normalized_level = _normalize_job_log_level_filter(
+        level
+    )
+    query_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=query_time,
+    )
+
+    query = db.query(models.RunnerJobLog).filter(
+        models.RunnerJobLog.job_id == job.id,
+        models.RunnerJobLog.sequence_number
+        > validated_cursor,
+    )
+
+    if validated_attempt is not None:
+        query = query.filter(
+            models.RunnerJobLog.attempt_number
+            == validated_attempt
+        )
+
+    if normalized_level is not None:
+        query = query.filter(
+            models.RunnerJobLog.level == normalized_level
+        )
+
+    rows = (
+        query.order_by(
+            models.RunnerJobLog.sequence_number.asc()
+        )
+        .limit(validated_limit + 1)
+        .all()
+    )
+
+    has_more = len(rows) > validated_limit
+    logs = rows[:validated_limit]
+
+    next_after_sequence = (
+        logs[-1].sequence_number
+        if logs
+        else None
+    )
+
+    db.commit()
+
+    return RunnerJobLogPage(
+        logs=logs,
+        next_after_sequence=next_after_sequence,
+        has_more=has_more,
     )
 
 

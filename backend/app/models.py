@@ -547,10 +547,21 @@ class Runner(Base):
         foreign_keys="RunnerJob.assigned_runner_id",
     )
 
+    job_logs = relationship(
+        "RunnerJobLog",
+        back_populates="runner",
+        foreign_keys="RunnerJobLog.runner_id",
+    )
+
 
 class RunnerJob(Base):
     __tablename__ = "runner_jobs"
     __table_args__ = (
+        UniqueConstraint(
+            "id",
+            "project_id",
+            name="uq_runner_jobs_id_project_id",
+        ),
         ForeignKeyConstraint(
             ["assigned_runner_id", "project_id"],
             ["runners.id", "runners.project_id"],
@@ -789,4 +800,127 @@ class RunnerJob(Base):
         "Runner",
         back_populates="assigned_jobs",
         foreign_keys=[assigned_runner_id],
+    )
+
+    logs = relationship(
+        "RunnerJobLog",
+        back_populates="job",
+        foreign_keys="RunnerJobLog.job_id",
+        cascade="all, delete-orphan",
+        order_by="RunnerJobLog.sequence_number",
+    )
+
+
+class RunnerJobLog(Base):
+    __tablename__ = "runner_job_logs"
+    __table_args__ = (
+        UniqueConstraint(
+            "job_id",
+            "sequence_number",
+            name="uq_runner_job_logs_job_sequence",
+        ),
+        ForeignKeyConstraint(
+            ["job_id", "project_id"],
+            ["runner_jobs.id", "runner_jobs.project_id"],
+            name="fk_runner_job_logs_job_project",
+            ondelete="CASCADE",
+        ),
+        ForeignKeyConstraint(
+            ["runner_id", "project_id"],
+            ["runners.id", "runners.project_id"],
+            name="fk_runner_job_logs_runner_project",
+        ),
+        CheckConstraint(
+            "sequence_number >= 1",
+            name="ck_runner_job_logs_positive_sequence",
+        ),
+        CheckConstraint(
+            "attempt_number >= 1",
+            name="ck_runner_job_logs_positive_attempt",
+        ),
+        CheckConstraint(
+            "level IN ("
+            "'debug', "
+            "'info', "
+            "'warning', "
+            "'error'"
+            ")",
+            name="ck_runner_job_logs_valid_level",
+        ),
+        CheckConstraint(
+            "length(message) >= 1 "
+            "AND length(message) <= 10000",
+            name="ck_runner_job_logs_valid_message_length",
+        ),
+        Index(
+            "ix_runner_job_logs_project_created",
+            "project_id",
+            "created_at",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    public_id = Column(
+        String(36),
+        nullable=False,
+        unique=True,
+    )
+
+    project_id = Column(
+        Integer,
+        ForeignKey("projects.id"),
+        nullable=False,
+    )
+    job_id = Column(
+        Integer,
+        nullable=False,
+    )
+    runner_id = Column(
+        Integer,
+        nullable=False,
+    )
+
+    sequence_number = Column(
+        Integer,
+        nullable=False,
+    )
+    attempt_number = Column(
+        Integer,
+        nullable=False,
+    )
+
+    level = Column(
+        String(20),
+        nullable=False,
+    )
+    event_type = Column(
+        String(100),
+        nullable=False,
+    )
+    message = Column(
+        Text,
+        nullable=False,
+    )
+    context_payload = Column(
+        JSON,
+        nullable=False,
+        default=dict,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    job = relationship(
+        "RunnerJob",
+        back_populates="logs",
+        foreign_keys=[job_id],
+    )
+    runner = relationship(
+        "Runner",
+        back_populates="job_logs",
+        foreign_keys=[runner_id],
     )

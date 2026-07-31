@@ -16,6 +16,10 @@ from app.runner_schemas import (
     RunnerJobCompleteRequest,
     RunnerJobFailRequest,
     RunnerJobLeaseRenewalResponse,
+    RunnerJobLogAppendRequest,
+    RunnerJobLogAppendResponse,
+    RunnerJobLogQueryRequest,
+    RunnerJobLogQueryResponse,
     RunnerJobRenewRequest,
     RunnerJobStartRequest,
     RunnerJobTransitionResponse,
@@ -25,10 +29,13 @@ from app.runner_schemas import (
 from app.runner_job_service import (
     RunnerJobClaimConflictError,
     RunnerJobClaimUnavailableError,
+    RunnerJobLogConflictError,
     RunnerJobTransitionUnavailableError,
+    append_job_logs,
     claim_next_job,
     complete_job,
     fail_job,
+    query_job_logs,
     renew_job_lease,
     start_job,
 )
@@ -400,4 +407,106 @@ def runner_job_renew_endpoint(
     return {
         "status": "renewed",
         "job": job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/logs",
+    response_model=RunnerJobLogAppendResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def runner_job_log_append_endpoint(
+    job_public_id: str,
+    request: RunnerJobLogAppendRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """Append structured logs to an owned active runner job."""
+    try:
+        logs = append_job_logs(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            entries=[
+                entry.model_dump()
+                for entry in request.entries
+            ],
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except RunnerJobLogConflictError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job logs could not be appended.",
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "appended",
+        "logs": logs,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/logs/query",
+    response_model=RunnerJobLogQueryResponse,
+)
+def runner_job_log_query_endpoint(
+    job_public_id: str,
+    request: RunnerJobLogQueryRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Retrieve ordered structured logs for an owned active runner job.
+
+    The claim token remains in the request body instead of being exposed
+    through URL query parameters.
+    """
+    try:
+        page = query_job_logs(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            after_sequence=request.after_sequence,
+            limit=request.limit,
+            attempt_number=request.attempt_number,
+            level=request.level,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Runner job claim is invalid or unavailable.",
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "logs": page.logs,
+        "has_more": page.has_more,
+        "next_after_sequence": page.next_after_sequence,
     }

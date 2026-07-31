@@ -1,6 +1,7 @@
 import hashlib
 import os
 from datetime import UTC, datetime, timedelta
+from uuid import uuid4
 
 import pytest
 from alembic.config import Config
@@ -54,6 +55,7 @@ def test_postgres_schema_is_at_alembic_head(
         "runner_registration_tokens",
         "runners",
         "runner_jobs",
+        "runner_job_logs",
     }
 
     actual_tables = set(
@@ -887,3 +889,431 @@ def test_postgres_enforces_runner_job_lifecycle(
         postgres_session.flush()
 
     postgres_session.rollback()
+
+
+def _create_log_test_job(
+    postgres_session: Session,
+    *,
+    project_id: int,
+    runner_id: int,
+    suffix: str,
+) -> models.RunnerJob:
+    lifecycle_time = datetime.now(UTC)
+
+    job = models.RunnerJob(
+        public_id=str(uuid4()),
+        project_id=project_id,
+        assigned_runner_id=runner_id,
+        name=f"Structured log job {suffix}",
+        job_type="asr_evaluation",
+        status="running",
+        required_capabilities=["asr"],
+        input_payload={"source": "postgres-log-test"},
+        attempt_count=1,
+        max_attempts=3,
+        claimed_at=lifecycle_time,
+        lease_expires_at=(
+            lifecycle_time + timedelta(minutes=5)
+        ),
+        claim_token_hash=_test_digest(
+            f"structured-log-claim:{suffix}"
+        ),
+        started_at=lifecycle_time,
+    )
+
+    postgres_session.add(job)
+    postgres_session.flush()
+    return job
+
+
+def _create_runner_job_log_context(
+    postgres_session: Session,
+    suffix: str,
+) -> tuple[
+    models.Project,
+    models.Runner,
+    models.RunnerJob,
+]:
+    project = _create_test_project(
+        postgres_session,
+        f"log-{suffix}",
+    )
+    token = _create_test_registration_token(
+        postgres_session,
+        project.id,
+        f"log-{suffix}",
+    )
+
+    runner = models.Runner(
+        project_id=project.id,
+        registration_token_id=token.id,
+        public_id=str(uuid4()),
+        name=f"Structured log runner {suffix}",
+        runner_version="0.1.0-test",
+        capabilities=["asr"],
+        system_info={"platform": "pytest"},
+        credential_hash=_test_digest(
+            f"structured-log-credential:{suffix}"
+        ),
+    )
+
+    postgres_session.add(runner)
+    postgres_session.flush()
+
+    job = _create_log_test_job(
+        postgres_session,
+        project_id=project.id,
+        runner_id=runner.id,
+        suffix=suffix,
+    )
+
+    return project, runner, job
+
+
+def _build_test_runner_job_log(
+    *,
+    project: models.Project,
+    runner: models.Runner,
+    job: models.RunnerJob,
+    sequence_number: int = 1,
+    attempt_number: int = 1,
+    level: str = "info",
+    event_type: str = "job.progress",
+    message: str = "Runner job is progressing.",
+    context_payload: dict[str, object] | None = None,
+) -> models.RunnerJobLog:
+    return models.RunnerJobLog(
+        public_id=str(uuid4()),
+        project_id=project.id,
+        job_id=job.id,
+        runner_id=runner.id,
+        sequence_number=sequence_number,
+        attempt_number=attempt_number,
+        level=level,
+        event_type=event_type,
+        message=message,
+        context_payload=(
+            {}
+            if context_payload is None
+            else context_payload
+        ),
+    )
+
+
+def test_postgres_persists_structured_runner_job_log(
+    postgres_session: Session,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "persistence",
+        )
+    )
+
+    job_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        sequence_number=1,
+        attempt_number=1,
+        level="info",
+        event_type="asr.transcription.started",
+        message="ASR transcription started.",
+        context_payload={
+            "audio_count": 5,
+            "model": "mock-local",
+        },
+    )
+
+    postgres_session.add(job_log)
+    postgres_session.flush()
+    postgres_session.refresh(job_log)
+
+    assert job_log.project_id == project.id
+    assert job_log.job_id == job.id
+    assert job_log.runner_id == runner.id
+    assert job_log.sequence_number == 1
+    assert job_log.attempt_number == 1
+    assert job_log.level == "info"
+    assert job_log.event_type == (
+        "asr.transcription.started"
+    )
+    assert job_log.message == "ASR transcription started."
+    assert job_log.context_payload == {
+        "audio_count": 5,
+        "model": "mock-local",
+    }
+
+    assert job_log.created_at.tzinfo is not None
+    assert job_log.created_at.utcoffset() is not None
+
+
+def test_postgres_allows_same_log_sequence_for_different_jobs(
+    postgres_session: Session,
+):
+    project, runner, first_job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "sequence-per-job",
+        )
+    )
+
+    second_job = _create_log_test_job(
+        postgres_session,
+        project_id=project.id,
+        runner_id=runner.id,
+        suffix="sequence-second-job",
+    )
+
+    postgres_session.add_all(
+        [
+            _build_test_runner_job_log(
+                project=project,
+                runner=runner,
+                job=first_job,
+                sequence_number=1,
+            ),
+            _build_test_runner_job_log(
+                project=project,
+                runner=runner,
+                job=second_job,
+                sequence_number=1,
+            ),
+        ]
+    )
+
+    postgres_session.flush()
+
+
+def test_postgres_rejects_duplicate_log_sequence_per_job(
+    postgres_session: Session,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "duplicate-sequence",
+        )
+    )
+
+    first_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        sequence_number=1,
+    )
+    duplicate_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        sequence_number=1,
+        message="Duplicate sequence.",
+    )
+
+    postgres_session.add(first_log)
+    postgres_session.flush()
+
+    postgres_session.add(duplicate_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+def test_postgres_enforces_log_job_project_ownership(
+    postgres_session: Session,
+):
+    first_project, _, first_job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "job-project-owner",
+        )
+    )
+    second_project, second_runner, _ = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "job-project-other",
+        )
+    )
+
+    invalid_log = _build_test_runner_job_log(
+        project=second_project,
+        runner=second_runner,
+        job=first_job,
+    )
+
+    postgres_session.add(invalid_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+    assert first_project.id != second_project.id
+
+
+def test_postgres_enforces_log_runner_project_ownership(
+    postgres_session: Session,
+):
+    first_project, _, first_job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "runner-project-owner",
+        )
+    )
+    _, second_runner, _ = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "runner-project-other",
+        )
+    )
+
+    invalid_log = models.RunnerJobLog(
+        public_id=str(uuid4()),
+        project_id=first_project.id,
+        job_id=first_job.id,
+        runner_id=second_runner.id,
+        sequence_number=1,
+        attempt_number=1,
+        level="info",
+        event_type="job.progress",
+        message="Invalid cross-project runner.",
+        context_payload={},
+    )
+
+    postgres_session.add(invalid_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+@pytest.mark.parametrize(
+    ("sequence_number", "attempt_number"),
+    [
+        (0, 1),
+        (1, 0),
+    ],
+)
+def test_postgres_enforces_positive_log_numbers(
+    postgres_session: Session,
+    sequence_number: int,
+    attempt_number: int,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            f"positive-{sequence_number}-{attempt_number}",
+        )
+    )
+
+    invalid_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        sequence_number=sequence_number,
+        attempt_number=attempt_number,
+    )
+
+    postgres_session.add(invalid_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+def test_postgres_rejects_unknown_runner_job_log_level(
+    postgres_session: Session,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "invalid-level",
+        )
+    )
+
+    invalid_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        level="critical",
+    )
+
+    postgres_session.add(invalid_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+@pytest.mark.parametrize(
+    "message",
+    [
+        "",
+        "x" * 10_001,
+    ],
+)
+def test_postgres_enforces_runner_job_log_message_length(
+    postgres_session: Session,
+    message: str,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            f"message-{len(message)}",
+        )
+    )
+
+    invalid_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+        message=message,
+    )
+
+    postgres_session.add(invalid_log)
+
+    with pytest.raises(IntegrityError):
+        postgres_session.flush()
+
+    postgres_session.rollback()
+
+
+def test_runner_job_log_is_deleted_with_parent_job(
+    postgres_session: Session,
+):
+    project, runner, job = (
+        _create_runner_job_log_context(
+            postgres_session,
+            "job-delete-cascade",
+        )
+    )
+
+    job_log = _build_test_runner_job_log(
+        project=project,
+        runner=runner,
+        job=job,
+    )
+
+    postgres_session.add(job_log)
+    postgres_session.flush()
+
+    log_id = job_log.id
+
+    postgres_session.execute(
+        text(
+            "DELETE FROM runner_jobs "
+            "WHERE id = :job_id"
+        ),
+        {"job_id": job.id},
+    )
+    postgres_session.flush()
+    postgres_session.expire_all()
+
+    assert (
+        postgres_session.get(models.RunnerJobLog, log_id)
+        is None
+    )
