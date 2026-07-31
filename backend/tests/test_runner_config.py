@@ -11,6 +11,8 @@ RUNNER_ENVIRONMENT_KEYS = (
     "OVRIN_RUNNER_CAPABILITIES",
     "OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS",
     "OVRIN_RUNNER_LEASE_SECONDS",
+    "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+    "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
 )
 
 
@@ -48,6 +50,14 @@ def test_local_runner_settings_load_environment(
         "OVRIN_RUNNER_LEASE_SECONDS",
         "600",
     )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+        "7.5",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+        "120",
+    )
 
     settings = LocalRunnerSettings(_env_file=None)
 
@@ -66,6 +76,11 @@ def test_local_runner_settings_load_environment(
     ]
     assert settings.request_timeout_seconds == 45
     assert settings.lease_seconds == 600
+    assert settings.poll_interval_seconds == 7.5
+    assert (
+        settings.lease_renewal_interval_seconds
+        == 120
+    )
 
 
 def test_local_runner_settings_require_credential(
@@ -115,6 +130,22 @@ def test_local_runner_settings_hide_credential(
             "OVRIN_RUNNER_LEASE_SECONDS",
             "3601",
         ),
+        (
+            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+            "0",
+        ),
+        (
+            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+            "301",
+        ),
+        (
+            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+            "0",
+        ),
+        (
+            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+            "1801",
+        ),
     ],
 )
 def test_local_runner_settings_reject_invalid_limits(
@@ -131,6 +162,27 @@ def test_local_runner_settings_reject_invalid_limits(
     monkeypatch.setenv(
         environment_key,
         environment_value,
+    )
+
+    with pytest.raises(ValidationError):
+        LocalRunnerSettings(_env_file=None)
+
+def test_local_runner_settings_require_renewal_before_expiry(
+    monkeypatch,
+):
+    clear_runner_environment(monkeypatch)
+
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_CREDENTIAL",
+        "ovrin_runner_test-credential",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_LEASE_SECONDS",
+        "60",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+        "60",
     )
 
     with pytest.raises(ValidationError):

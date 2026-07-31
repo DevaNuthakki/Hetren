@@ -1,10 +1,12 @@
 from functools import lru_cache
+from typing import Self
 
 from pydantic import (
     Field,
     HttpUrl,
     SecretStr,
     field_validator,
+    model_validator,
 )
 from pydantic_settings import (
     BaseSettings,
@@ -60,6 +62,24 @@ class LocalRunnerSettings(BaseSettings):
         ge=1,
         le=3600,
         validation_alias="OVRIN_RUNNER_LEASE_SECONDS",
+    )
+
+    poll_interval_seconds: float = Field(
+        default=5.0,
+        gt=0,
+        le=300,
+        validation_alias=(
+            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS"
+        ),
+    )
+
+    lease_renewal_interval_seconds: float = Field(
+        default=60.0,
+        gt=0,
+        le=1800,
+        validation_alias=(
+            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS"
+        ),
     )
 
     model_config = SettingsConfigDict(
@@ -122,6 +142,19 @@ class LocalRunnerSettings(BaseSettings):
             )
 
         return normalized
+
+    @model_validator(mode="after")
+    def validate_lease_renewal_interval(self) -> Self:
+        if (
+            self.lease_renewal_interval_seconds
+            >= self.lease_seconds
+        ):
+            raise ValueError(
+                "Runner lease-renewal interval must be "
+                "shorter than the job lease duration."
+            )
+
+        return self
 
     @property
     def api_base_url(self) -> str:
