@@ -7,6 +7,9 @@ import pytest
 
 from app.local_runner_execution import (
     GENERIC_EXECUTION_ERROR,
+    GENERIC_EXECUTION_TIMEOUT_ERROR,
+    ExecutionControl,
+    JobControlWorker,
     LeaseRenewalWorker,
     LocalRunnerCycleResult,
     PlaceholderRunnerJobExecutor,
@@ -16,6 +19,7 @@ from app.local_runner_execution import (
 from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import (
     RunnerJobClaimResponse,
+    RunnerJobControlStatusResponse,
     RunnerJobRead,
 )
 
@@ -30,21 +34,28 @@ NOW = datetime(
 )
 
 
-def build_settings() -> LocalRunnerSettings:
-    return LocalRunnerSettings(
-        _env_file=None,
-        OVRIN_RUNNER_API_URL=(
+def build_settings(
+    **overrides,
+) -> LocalRunnerSettings:
+    values = {
+        "OVRIN_RUNNER_API_URL": (
             "https://ovrin.example.com"
         ),
-        OVRIN_RUNNER_CREDENTIAL=(
+        "OVRIN_RUNNER_CREDENTIAL": (
             "ovrin_runner_test-credential"
         ),
-        OVRIN_RUNNER_VERSION="0.2.0",
-        OVRIN_RUNNER_CAPABILITIES=[
+        "OVRIN_RUNNER_VERSION": "0.2.0",
+        "OVRIN_RUNNER_CAPABILITIES": [
             "asr",
             "cpu",
         ],
-        OVRIN_RUNNER_LEASE_SECONDS=600,
+        "OVRIN_RUNNER_LEASE_SECONDS": 600,
+    }
+    values.update(overrides)
+
+    return LocalRunnerSettings(
+        _env_file=None,
+        **values,
     )
 
 
@@ -89,8 +100,13 @@ class RecordingClient:
     def __init__(
         self,
         claim_response: RunnerJobClaimResponse,
+        *,
+        control_status: str = "active",
+        control_error: Exception | None = None,
     ):
         self.claim_response = claim_response
+        self.control_status = control_status
+        self.control_error = control_error
         self.calls: list[tuple] = []
 
     def heartbeat(self, **kwargs):
@@ -116,6 +132,21 @@ class RecordingClient:
                 "start",
                 kwargs,
             )
+        )
+
+    def get_job_control_status(self, **kwargs):
+        self.calls.append(
+            (
+                "control",
+                kwargs,
+            )
+        )
+
+        if self.control_error is not None:
+            raise self.control_error
+
+        return RunnerJobControlStatusResponse(
+            status=self.control_status,
         )
 
     def append_job_logs(self, **kwargs):
@@ -157,7 +188,9 @@ class RecordingExecutor:
     def execute(
         self,
         job: RunnerJobRead,
+        control: ExecutionControl,
     ) -> dict[str, object]:
+        control.raise_if_stopped()
         self.calls.append(
             (
                 "execute",
@@ -175,6 +208,7 @@ class FailingExecutor:
     def execute(
         self,
         _job: RunnerJobRead,
+        _control: ExecutionControl,
     ) -> dict[str, object]:
         raise RuntimeError(
             "Sensitive executor failure details."
@@ -239,11 +273,12 @@ def test_run_one_cycle_completes_claimed_job_in_order():
         "start",
         "log",
         "execute",
+        "control",
         "log",
         "complete",
     ]
     assert client.calls[3][1] == "execution_started"
-    assert client.calls[5][1] == (
+    assert client.calls[6][1] == (
         "execution_completed"
     )
 
@@ -252,7 +287,8 @@ def test_placeholder_executor_returns_controlled_result():
     job = build_job()
 
     result = PlaceholderRunnerJobExecutor().execute(
-        job
+        job,
+        ExecutionControl(),
     )
 
     assert result == {
@@ -293,18 +329,19 @@ def test_run_one_cycle_reports_executor_failure():
         "claim",
         "start",
         "log",
+        "control",
         "log",
         "fail",
     ]
 
-    failure_log = client.calls[4][2]["entries"][0]
+    failure_log = client.calls[5][2]["entries"][0]
     assert failure_log["context_payload"] == {
         "job_type": "asr_evaluation",
         "error_type": "RuntimeError",
         "lease_renewal_failed": False,
     }
 
-    fail_request = client.calls[5][1]
+    fail_request = client.calls[6][1]
     assert fail_request["error_message"] == (
         GENERIC_EXECUTION_ERROR
     )
@@ -396,6 +433,7 @@ def test_lease_renewal_worker_renews_active_claim():
         claim_token="ovrin_claim_test-token",
         lease_seconds=60,
         interval_seconds=0.01,
+        execution_control=ExecutionControl(),
     )
 
     worker.start()
@@ -422,6 +460,7 @@ def test_lease_renewal_worker_records_failure():
     client = RenewalRecordingClient(
         failure=sensitive_failure,
     )
+    execution_control = ExecutionControl()
 
     worker = LeaseRenewalWorker(
         client=client,
@@ -431,15 +470,21 @@ def test_lease_renewal_worker_records_failure():
         claim_token="ovrin_claim_test-token",
         lease_seconds=60,
         interval_seconds=0.01,
+        execution_control=execution_control,
     )
 
     worker.start()
 
     assert client.renewal_called.wait(timeout=1)
+    assert execution_control.wait(timeout=1)
 
     worker.stop()
 
     assert worker.failure is sensitive_failure
+    assert (
+        execution_control.reason
+        == "lease_renewal_failed"
+    )
 
 
 def test_run_one_cycle_does_not_complete_after_renewal_failure():
@@ -464,6 +509,10 @@ def test_run_one_cycle_does_not_complete_after_renewal_failure():
         )
         assert kwargs["lease_seconds"] == 600
         assert kwargs["interval_seconds"] == 60
+        assert isinstance(
+            kwargs["execution_control"],
+            ExecutionControl,
+        )
 
         return RecordingRenewalWorker(
             client.calls,
@@ -496,12 +545,13 @@ def test_run_one_cycle_does_not_complete_after_renewal_failure():
         "renewal_start",
         "execute",
         "renewal_stop",
+        "control",
         "log",
         "fail",
     ]
     assert "complete" not in call_names
 
-    failure_log = client.calls[7][2]["entries"][0]
+    failure_log = client.calls[8][2]["entries"][0]
 
     assert failure_log["event_type"] == (
         "lease_renewal_failed"
@@ -588,6 +638,8 @@ def test_local_runner_loop_counts_bounded_cycles():
     assert summary.completed_count == 1
     assert summary.idle_count == 1
     assert summary.failed_count == 1
+    assert summary.cancelled_count == 0
+    assert summary.timed_out_count == 0
     assert summary.stopped is False
 
     assert len(cycle_calls) == 3
@@ -620,6 +672,8 @@ def test_local_runner_loop_stops_before_first_cycle():
     assert summary.idle_count == 0
     assert summary.completed_count == 0
     assert summary.failed_count == 0
+    assert summary.cancelled_count == 0
+    assert summary.timed_out_count == 0
     assert summary.stopped is True
 
 
@@ -667,3 +721,415 @@ def test_local_runner_loop_rejects_invalid_max_cycles(
             settings=build_settings(),
             max_cycles=max_cycles,
         )
+
+
+
+class CooperativeBlockingExecutor:
+    def __init__(
+        self,
+        *,
+        runner_stop_event: Event | None = None,
+    ):
+        self.runner_stop_event = runner_stop_event
+
+    def execute(
+        self,
+        _job: RunnerJobRead,
+        control: ExecutionControl,
+    ) -> dict[str, object]:
+        if self.runner_stop_event is not None:
+            self.runner_stop_event.set()
+
+        if not control.wait(timeout=2):
+            raise AssertionError(
+                "Execution control signal was not received."
+            )
+
+        control.raise_if_stopped()
+
+        raise AssertionError(
+            "Stopped execution must not continue."
+        )
+
+
+class JobControlRecordingClient:
+    def __init__(
+        self,
+        *,
+        status: str = "active",
+        failure: Exception | None = None,
+    ):
+        self.status = status
+        self.failure = failure
+        self.checked = Event()
+
+    def get_job_control_status(self, **_kwargs):
+        self.checked.set()
+
+        if self.failure is not None:
+            raise self.failure
+
+        return RunnerJobControlStatusResponse(
+            status=self.status,
+        )
+
+
+def test_job_control_worker_requests_remote_cancellation():
+    control = ExecutionControl()
+    client = JobControlRecordingClient(
+        status="cancelled",
+    )
+
+    worker = JobControlWorker(
+        client=client,
+        job_public_id=(
+            "20000000-0000-0000-0000-000000000001"
+        ),
+        execution_control=control,
+        poll_interval_seconds=0.01,
+        execution_timeout_seconds=1,
+    )
+
+    worker.start()
+
+    assert control.wait(timeout=1)
+
+    worker.stop()
+
+    assert control.reason == "cancelled"
+    assert worker.failure is None
+    assert client.checked.is_set()
+
+
+def test_job_control_worker_enforces_execution_timeout():
+    control = ExecutionControl()
+    client = JobControlRecordingClient()
+
+    worker = JobControlWorker(
+        client=client,
+        job_public_id=(
+            "20000000-0000-0000-0000-000000000001"
+        ),
+        execution_control=control,
+        poll_interval_seconds=1,
+        execution_timeout_seconds=0.01,
+    )
+
+    worker.start()
+
+    assert control.wait(timeout=1)
+
+    worker.stop()
+
+    assert control.reason == "timed_out"
+    assert worker.failure is None
+
+
+def test_job_control_worker_records_api_failure():
+    control = ExecutionControl()
+    sensitive_failure = RuntimeError(
+        "Sensitive control API failure."
+    )
+    client = JobControlRecordingClient(
+        failure=sensitive_failure,
+    )
+
+    worker = JobControlWorker(
+        client=client,
+        job_public_id=(
+            "20000000-0000-0000-0000-000000000001"
+        ),
+        execution_control=control,
+        poll_interval_seconds=0.01,
+        execution_timeout_seconds=1,
+    )
+
+    worker.start()
+
+    assert control.wait(timeout=1)
+
+    worker.stop()
+
+    assert control.reason == "control_failed"
+    assert worker.failure is sensitive_failure
+
+
+def test_run_one_cycle_stops_after_remote_cancellation():
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        ),
+        control_status="cancelled",
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+                0.01
+            ),
+            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
+        ),
+        executor=CooperativeBlockingExecutor(),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "cancelled"
+    assert result.job_public_id == job.public_id
+
+    call_names = [call[0] for call in client.calls]
+
+    assert "control" in call_names
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+    assert [
+        call[1]
+        for call in client.calls
+        if call[0] == "log"
+    ] == [
+        "execution_started",
+    ]
+
+
+def test_run_one_cycle_fails_timed_out_execution():
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+                0.01
+            ),
+            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=0.02,
+        ),
+        executor=CooperativeBlockingExecutor(),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "failed"
+    assert result.timed_out is True
+    assert result.error_message == (
+        GENERIC_EXECUTION_TIMEOUT_ERROR
+    )
+
+    call_names = [call[0] for call in client.calls]
+
+    assert "complete" not in call_names
+    assert call_names[-1] == "fail"
+    assert client.calls[-1][1]["error_message"] == (
+        GENERIC_EXECUTION_TIMEOUT_ERROR
+    )
+
+    event_types = [
+        call[1]
+        for call in client.calls
+        if call[0] == "log"
+    ]
+
+    assert event_types == [
+        "execution_started",
+        "execution_timed_out",
+    ]
+
+
+def test_run_one_cycle_stops_active_execution_on_shutdown():
+    job = build_job()
+    runner_stop_event = Event()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+                0.01
+            ),
+            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
+        ),
+        executor=CooperativeBlockingExecutor(
+            runner_stop_event=runner_stop_event,
+        ),
+        system_info={"platform": "test"},
+        stop_event=runner_stop_event,
+    )
+
+    assert result.status == "stopped"
+    assert runner_stop_event.is_set()
+
+    call_names = [call[0] for call in client.calls]
+
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+
+def test_local_runner_loop_counts_cancelled_and_timed_out_jobs():
+    cycle_results = iter(
+        [
+            LocalRunnerCycleResult(
+                status="cancelled",
+                job_public_id="job-cancelled",
+            ),
+            LocalRunnerCycleResult(
+                status="failed",
+                job_public_id="job-timeout",
+                error_message=(
+                    GENERIC_EXECUTION_TIMEOUT_ERROR
+                ),
+                timed_out=True,
+            ),
+        ]
+    )
+
+    summary = run_local_runner_loop(
+        client=object(),
+        settings=build_settings(),
+        stop_event=RecordingStopEvent(),
+        max_cycles=2,
+        cycle_runner=lambda **_kwargs: next(
+            cycle_results
+        ),
+    )
+
+    assert summary.cycle_count == 2
+    assert summary.cancelled_count == 1
+    assert summary.failed_count == 1
+    assert summary.timed_out_count == 1
+
+
+
+class ReturningAfterStopExecutor:
+    def __init__(
+        self,
+        stop_event: Event,
+    ):
+        self.stop_event = stop_event
+
+    def execute(
+        self,
+        _job: RunnerJobRead,
+        control: ExecutionControl,
+    ) -> dict[str, object]:
+        control.raise_if_stopped()
+        self.stop_event.set()
+
+        return {
+            "execution_mode": "test",
+        }
+
+
+def test_run_one_cycle_does_not_complete_after_late_shutdown():
+    job = build_job()
+    runner_stop_event = Event()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        executor=ReturningAfterStopExecutor(
+            runner_stop_event
+        ),
+        system_info={"platform": "test"},
+        stop_event=runner_stop_event,
+    )
+
+    assert result.status == "stopped"
+
+    call_names = [
+        call[0]
+        for call in client.calls
+    ]
+
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+
+class SignallingRenewalWorker:
+    def __init__(
+        self,
+        execution_control: ExecutionControl,
+        failure: Exception,
+    ):
+        self.execution_control = execution_control
+        self._failure = failure
+
+    @property
+    def failure(self) -> Exception | None:
+        return self._failure
+
+    def start(self) -> None:
+        self.execution_control.request_stop(
+            "lease_renewal_failed"
+        )
+
+    def stop(self) -> None:
+        return None
+
+
+def test_run_one_cycle_classifies_signalled_renewal_failure():
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+    renewal_failure = RuntimeError(
+        "Sensitive renewal failure."
+    )
+
+    def build_signalling_worker(**kwargs):
+        return SignallingRenewalWorker(
+            kwargs["execution_control"],
+            renewal_failure,
+        )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        executor=RecordingExecutor(
+            client.calls
+        ),
+        system_info={"platform": "test"},
+        renewal_worker_factory=(
+            build_signalling_worker
+        ),
+    )
+
+    assert result.status == "failed"
+
+    failure_logs = [
+        call
+        for call in client.calls
+        if (
+            call[0] == "log"
+            and call[1] == "lease_renewal_failed"
+        )
+    ]
+
+    assert len(failure_logs) == 1
+    assert "Sensitive renewal" not in str(
+        client.calls
+    )

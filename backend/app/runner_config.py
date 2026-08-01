@@ -82,6 +82,24 @@ class LocalRunnerSettings(BaseSettings):
         ),
     )
 
+    control_poll_interval_seconds: float = Field(
+        default=2.0,
+        gt=0,
+        le=300,
+        validation_alias=(
+            "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS"
+        ),
+    )
+
+    execution_timeout_seconds: float = Field(
+        default=3600.0,
+        gt=0,
+        le=86400,
+        validation_alias=(
+            "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS"
+        ),
+    )
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",
@@ -144,7 +162,7 @@ class LocalRunnerSettings(BaseSettings):
         return normalized
 
     @model_validator(mode="after")
-    def validate_lease_renewal_interval(self) -> Self:
+    def validate_runner_intervals(self) -> Self:
         if (
             self.lease_renewal_interval_seconds
             >= self.lease_seconds
@@ -152,6 +170,15 @@ class LocalRunnerSettings(BaseSettings):
             raise ValueError(
                 "Runner lease-renewal interval must be "
                 "shorter than the job lease duration."
+            )
+
+        if (
+            self.control_poll_interval_seconds
+            >= self.lease_renewal_interval_seconds
+        ):
+            raise ValueError(
+                "Runner control polling must be faster "
+                "than lease renewal."
             )
 
         return self

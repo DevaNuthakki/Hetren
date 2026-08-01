@@ -209,6 +209,14 @@ def run_cli(
         file=output,
     )
     print(
+        f"Cancelled jobs: {summary.cancelled_count}",
+        file=output,
+    )
+    print(
+        f"Timed-out jobs: {summary.timed_out_count}",
+        file=output,
+    )
+    print(
         "Stop requested: "
         + ("yes" if summary.stopped else "no"),
         file=output,
