@@ -14,6 +14,7 @@ from app.runner_job_service import (
     MAX_JOB_LEASE_DURATION,
     MAX_RUNNER_JOB_LOG_BATCH_SIZE,
     RunnerJobCancellationUnavailableError,
+    RunnerJobASRContextUnavailableError,
     RunnerJobClaimUnavailableError,
     RunnerJobControlUnavailableError,
     RunnerJobNotFoundError,
@@ -25,6 +26,7 @@ from app.runner_job_service import (
     complete_job,
     enqueue_job,
     fail_job,
+    get_asr_evaluation_context,
     get_job_control_status,
     query_job_logs,
     recover_expired_jobs,
@@ -3235,4 +3237,218 @@ def test_get_job_control_status_rejects_terminal_job(
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
             now=claim_time + timedelta(minutes=2),
+        )
+
+
+
+def create_asr_evaluation_resources(
+    db: Session,
+    *,
+    project: models.Project,
+) -> tuple[
+    models.EvaluationRun,
+    models.TestCase,
+]:
+    dataset = models.Dataset(
+        project_id=project.id,
+        name="Runner ASR dataset",
+    )
+    db.add(dataset)
+    db.flush()
+
+    test_case = models.TestCase(
+        dataset_id=dataset.id,
+        title="Customer support sample",
+        audio_file_path=(
+            "uploads/datasets/1/test-cases/audio/"
+            "support-call.wav"
+        ),
+        reference_transcript="thank you for calling",
+    )
+    evaluation_run = models.EvaluationRun(
+        project_id=project.id,
+        run_name="Candidate model evaluation",
+        model_name="large-v3-turbo",
+    )
+
+    db.add_all([test_case, evaluation_run])
+    db.commit()
+    db.refresh(test_case)
+    db.refresh(evaluation_run)
+
+    return evaluation_run, test_case
+
+
+def test_get_asr_evaluation_context_returns_safe_metadata(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Runner ASR context project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Runner ASR context runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+
+    job = create_job(
+        db,
+        project=project,
+        name="Runner ASR context job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    context = get_asr_evaluation_context(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+    )
+
+    assert context.project_id == project.id
+    assert context.evaluation_run_id == evaluation_run.id
+    assert context.test_case_id == test_case.id
+    assert context.run_name == (
+        "Candidate model evaluation"
+    )
+    assert context.model_name == "large-v3-turbo"
+    assert context.test_case_title == (
+        "Customer support sample"
+    )
+    assert context.audio_file_name == "support-call.wav"
+    assert not hasattr(context, "audio_file_path")
+    assert not hasattr(context, "reference_transcript")
+
+
+@pytest.mark.parametrize(
+    "input_payload",
+    [
+        {},
+        {"evaluation_run_id": 1},
+        {
+            "evaluation_run_id": 1,
+            "test_case_id": 2,
+            "unexpected": True,
+        },
+        {
+            "evaluation_run_id": True,
+            "test_case_id": 2,
+        },
+        {
+            "evaluation_run_id": 1,
+            "test_case_id": 0,
+        },
+    ],
+)
+def test_get_asr_evaluation_context_rejects_invalid_payload(
+    db: Session,
+    input_payload: dict[str, object],
+):
+    project = create_project(
+        db,
+        "Invalid ASR context project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Invalid ASR context runner",
+        capabilities=["asr"],
+    )
+    job = create_job(
+        db,
+        project=project,
+        name="Invalid ASR context job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = input_payload
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    with pytest.raises(ValueError):
+        get_asr_evaluation_context(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+        )
+
+
+def test_get_asr_evaluation_context_hides_cross_project_data(
+    db: Session,
+):
+    runner_project = create_project(
+        db,
+        "Runner-owned ASR project",
+    )
+    other_project = create_project(
+        db,
+        "Unrelated ASR project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=runner_project,
+        name="Cross-project ASR runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=other_project,
+        )
+    )
+
+    job = create_job(
+        db,
+        project=runner_project,
+        name="Cross-project ASR context job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobASRContextUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_context(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
         )

@@ -212,6 +212,23 @@ class RunnerJobControlStatusResponse(BaseModel):
     ]
 
 
+class RunnerASREvaluationContextRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RunnerASREvaluationContextResponse(BaseModel):
+    project_id: int
+    evaluation_run_id: int
+    test_case_id: int
+
+    run_name: str
+    model_name: str
+    test_case_title: str
+    audio_file_name: str
+
+
 class RunnerJobStartRequest(BaseModel):
     claim_token: RunnerJobClaimToken
 

@@ -1452,3 +1452,257 @@ def test_runner_job_control_route_has_no_request_body():
     ]["post"]
 
     assert "requestBody" not in operation
+
+
+
+def test_runner_asr_context_route_is_included_in_app():
+    route = (
+        "/runners/jobs/{job_public_id}/asr/context"
+    )
+    openapi_paths = app.openapi()["paths"]
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_asr_context_returns_safe_metadata(
+    monkeypatch,
+):
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+
+    context = SimpleNamespace(
+        project_id=7,
+        evaluation_run_id=42,
+        test_case_id=9,
+        run_name="Candidate evaluation",
+        model_name="large-v3-turbo",
+        test_case_title="Support call",
+        audio_file_name="support-call.wav",
+    )
+
+    def fake_get_context(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+            "claim_token": "ovrin_claim_test-token",
+        }
+        return context
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_context",
+        fake_get_context,
+    )
+
+    response = (
+        runner_routes
+        .runner_asr_evaluation_context_endpoint(
+            job_public_id=job_public_id,
+            request=(
+                runner_routes
+                .RunnerASREvaluationContextRequest(
+                    claim_token="ovrin_claim_test-token",
+                )
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+    )
+
+    assert response == {
+        "project_id": 7,
+        "evaluation_run_id": 42,
+        "test_case_id": 9,
+        "run_name": "Candidate evaluation",
+        "model_name": "large-v3-turbo",
+        "test_case_title": "Support call",
+        "audio_file_name": "support-call.wav",
+    }
+    assert "audio_file_path" not in response
+    assert "reference_transcript" not in response
+
+
+def test_runner_asr_context_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_context(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_context",
+        reject_context,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_context_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential="invalid",
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer",
+    }
+    assert "internal authentication" not in (
+        error.value.detail
+    )
+
+
+def test_runner_asr_context_hides_invalid_claim(
+    monkeypatch,
+):
+    def reject_context(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_context",
+        reject_context,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_context_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim" not in error.value.detail
+
+
+def test_runner_asr_context_hides_unavailable_context(
+    monkeypatch,
+):
+    def reject_context(_db, **_kwargs):
+        raise (
+            runner_routes
+            .RunnerJobASRContextUnavailableError(
+                "Specific internal ASR context state."
+            )
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_context",
+        reject_context,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_context_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner ASR evaluation context is invalid "
+        "or unavailable."
+    )
+    assert "internal ASR context" not in (
+        error.value.detail
+    )
+
+
+def test_runner_asr_context_maps_invalid_payload_to_422(
+    monkeypatch,
+):
+    def reject_context(_db, **_kwargs):
+        raise ValueError(
+            "ASR evaluation input must contain exactly "
+            "evaluation_run_id and test_case_id."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_context",
+        reject_context,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_context_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 422
+    assert "evaluation_run_id" in error.value.detail
+    assert "test_case_id" in error.value.detail

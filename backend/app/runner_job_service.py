@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from uuid import uuid4
 
 from sqlalchemy import func
@@ -73,6 +74,11 @@ class RunnerJobTransitionUnavailableError(
     """Raised when a job cannot perform a requested transition."""
 
 
+class RunnerJobASRContextUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when executable ASR context is unavailable."""
+
 
 class RunnerJobProjectNotFoundError(RunnerJobServiceError):
     """Raised when a runner job references a missing project."""
@@ -101,6 +107,16 @@ class ClaimedRunnerJob:
     claim_token: str
     job: models.RunnerJob
 
+
+@dataclass(frozen=True)
+class ASREvaluationContext:
+    project_id: int
+    evaluation_run_id: int
+    test_case_id: int
+    run_name: str
+    model_name: str
+    test_case_title: str
+    audio_file_name: str
 
 
 @dataclass(frozen=True)
@@ -634,6 +650,148 @@ def _get_owned_job_claim_for_read(
         )
 
     return job
+
+
+def _validate_asr_evaluation_payload(
+    input_payload: object,
+) -> tuple[int, int]:
+    required_fields = {
+        "evaluation_run_id",
+        "test_case_id",
+    }
+
+    if (
+        not isinstance(input_payload, dict)
+        or set(input_payload) != required_fields
+    ):
+        raise ValueError(
+            "ASR evaluation input must contain exactly "
+            "evaluation_run_id and test_case_id."
+        )
+
+    evaluation_run_id = input_payload[
+        "evaluation_run_id"
+    ]
+    test_case_id = input_payload["test_case_id"]
+
+    for field_name, value in (
+        ("evaluation_run_id", evaluation_run_id),
+        ("test_case_id", test_case_id),
+    ):
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int)
+            or value < 1
+        ):
+            raise ValueError(
+                f"ASR evaluation {field_name} must be a "
+                "positive integer."
+            )
+
+    return evaluation_run_id, test_case_id
+
+
+def get_asr_evaluation_context(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime | None = None,
+) -> ASREvaluationContext:
+    """
+    Return controlled metadata for an owned ASR evaluation job.
+
+    Server-local audio paths, reference transcripts, and unrelated
+    project data are intentionally excluded.
+    """
+    verification_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=verification_time,
+    )
+
+    if job.job_type != "asr_evaluation":
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    try:
+        evaluation_run_id, test_case_id = (
+            _validate_asr_evaluation_payload(
+                job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    evaluation_run = (
+        db.query(models.EvaluationRun)
+        .filter(
+            models.EvaluationRun.id
+            == evaluation_run_id,
+            models.EvaluationRun.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == test_case_id,
+            models.Dataset.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    if (
+        evaluation_run is None
+        or test_case is None
+        or not test_case.audio_file_path
+    ):
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    audio_file_name = Path(
+        test_case.audio_file_path
+    ).name.strip()
+
+    if not audio_file_name:
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    context = ASREvaluationContext(
+        project_id=job.project_id,
+        evaluation_run_id=evaluation_run.id,
+        test_case_id=test_case.id,
+        run_name=evaluation_run.run_name,
+        model_name=evaluation_run.model_name,
+        test_case_title=test_case.title,
+        audio_file_name=audio_file_name,
+    )
+
+    db.rollback()
+    return context
 
 
 def _get_owned_job_claim_for_update(

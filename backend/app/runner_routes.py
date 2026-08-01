@@ -9,6 +9,8 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.runner_schemas import (
+    RunnerASREvaluationContextRequest,
+    RunnerASREvaluationContextResponse,
     RunnerHeartbeatRequest,
     RunnerHeartbeatResponse,
     RunnerJobClaimRequest,
@@ -28,6 +30,7 @@ from app.runner_schemas import (
     RunnerRegistrationResponse,
 )
 from app.runner_job_service import (
+    RunnerJobASRContextUnavailableError,
     RunnerJobClaimConflictError,
     RunnerJobClaimUnavailableError,
     RunnerJobControlUnavailableError,
@@ -37,6 +40,7 @@ from app.runner_job_service import (
     claim_next_job,
     complete_job,
     fail_job,
+    get_asr_evaluation_context,
     get_job_control_status,
     query_job_logs,
     renew_job_lease,
@@ -399,6 +403,68 @@ def runner_job_control_endpoint(
 
     return {
         "status": control_status,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/asr/context",
+    response_model=RunnerASREvaluationContextResponse,
+)
+def runner_asr_evaluation_context_endpoint(
+    job_public_id: str,
+    request: RunnerASREvaluationContextRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Return controlled metadata for an owned ASR evaluation job.
+
+    Server-local paths and reference transcripts are never returned.
+    """
+    try:
+        context = get_asr_evaluation_context(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Runner credential is invalid or unavailable."
+            ),
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job claim is invalid or unavailable."
+            ),
+        ) from exc
+    except RunnerJobASRContextUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner ASR evaluation context is invalid "
+                "or unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "project_id": context.project_id,
+        "evaluation_run_id": context.evaluation_run_id,
+        "test_case_id": context.test_case_id,
+        "run_name": context.run_name,
+        "model_name": context.model_name,
+        "test_case_title": context.test_case_title,
+        "audio_file_name": context.audio_file_name,
     }
 
 
