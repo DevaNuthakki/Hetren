@@ -27,6 +27,11 @@ The runner platform supports:
 - Server-assigned sequence and attempt numbers
 - Cursor-based structured-log retrieval
 - Log filtering by execution attempt and severity level
+- Standalone HTTP runner client without direct database access
+- Continuous local polling with controlled idle waiting
+- Background lease renewal during active execution
+- Cooperative SIGINT and SIGTERM shutdown
+- Controlled placeholder execution for allowlisted jobs
 - CLI administration for enqueue, cancellation, recovery, and revocation
 
 ## Security rules
@@ -61,6 +66,129 @@ Registration tokens cannot be reused.
       --runner-public-id "<runner-public-id>"
 
 Revocation prevents the runner credential from authenticating again.
+
+## Configure the standalone local runner
+
+The standalone runner communicates with Ovrin only through the HTTP API.
+It does not require direct PostgreSQL access.
+
+Supply the runner credential through the process environment or an approved
+secret-injection mechanism. Do not commit the credential to source control or
+include it in job payloads or logs.
+
+Example local configuration:
+
+    export OVRIN_RUNNER_API_URL="http://127.0.0.1:8000"
+    export OVRIN_RUNNER_CREDENTIAL="ovrin_runner_REPLACE_ME"
+    export OVRIN_RUNNER_VERSION="0.1.0"
+    export OVRIN_RUNNER_CAPABILITIES='["asr","cpu"]'
+    export OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS=30
+    export OVRIN_RUNNER_LEASE_SECONDS=300
+    export OVRIN_RUNNER_POLL_INTERVAL_SECONDS=5
+    export OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60
+
+Configuration rules include:
+
+- At least one capability is required
+- Request timeout must be greater than `0` and no more than `300` seconds
+- Job lease must be between `1` and `3600` seconds
+- Poll interval must be greater than `0` and no more than `300` seconds
+- Lease-renewal interval must be greater than `0` and no more than `1800` seconds
+- Lease-renewal interval must be shorter than the configured job lease
+
+The credential is represented as a secret by the runner settings model and is
+not included in normal settings representations.
+
+## Run the standalone local runner
+
+From the `backend` directory:
+
+    python scripts/run_local_runner.py
+
+For a bounded validation run:
+
+    python scripts/run_local_runner.py --max-cycles 1
+
+Each polling cycle:
+
+1. Sends an authenticated heartbeat
+2. Attempts to claim one compatible queued job
+3. Starts the claimed job
+4. Uploads a structured execution-started log
+5. Executes the controlled job executor
+6. Uploads a completion or failure log
+7. Completes or fails the job through the authenticated API
+
+The runner waits for the configured polling interval only when the queue is
+idle. After a completed or failed job, it immediately begins the next cycle
+instead of sleeping unnecessarily.
+
+During active execution, a background worker renews the job lease. The renewal
+worker is stopped before the runner sends a terminal completion or failure
+transition. A lease-renewal failure prevents the runner from reporting a false
+successful completion and causes a controlled failure attempt.
+
+`SIGINT` and `SIGTERM` request cooperative shutdown. The runner does not
+forcefully terminate an executor that is already active. It stops between
+cycles or while waiting after an idle cycle.
+
+The command prints a final summary containing:
+
+- Total cycles
+- Idle cycles
+- Completed jobs
+- Failed jobs
+- Whether a stop was requested
+
+## Run multiple runners
+
+A project can operate multiple runners concurrently.
+
+Every runner process should have:
+
+- Its own registered runner identity
+- Its own runner name
+- Its own runner credential
+- Capabilities matching the jobs it should execute
+
+Each runner process currently executes one job at a time. Therefore, five
+independently registered runner processes can execute up to five jobs
+concurrently.
+
+PostgreSQL row locking and atomic claims prevent compatible runners from
+claiming the same queued job. Runners that find no compatible work receive an
+idle response.
+
+Do not intentionally share one runner credential across multiple processes.
+Separate identities make authentication, heartbeats, leases, logs, revocation,
+and operational auditing unambiguous.
+
+Runner processes do not share live process memory. They coordinate through
+persisted Ovrin jobs, structured logs, results, debug evidence, and future
+artifact records.
+
+## Current local execution boundary
+
+The current executor is intentionally a controlled placeholder.
+
+It:
+
+- Accepts only the allowlisted `asr_evaluation` job type
+- Does not execute arbitrary shell commands
+- Does not access arbitrary filesystem paths
+- Does not invoke the real ASR pipeline
+- Returns a controlled placeholder result
+- Reports generic failure messages without exposing sensitive exceptions
+
+Real audio processing, model execution, evaluation-result upload, and artifact
+upload remain later Phase 3 work.
+
+The administrative cancellation command invalidates queued, claimed, or
+running jobs immediately on the server. The current local runner does not yet
+interrupt an executor that is already running. Active cancellation checks and
+execution timeouts remain separate work.
+
+GitHub Actions and CI runner mode are also not implemented yet.
 
 ## Enqueue a runner job
 

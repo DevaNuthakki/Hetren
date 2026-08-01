@@ -1,11 +1,12 @@
 from datetime import datetime
-from typing import Annotated, Any, Literal
+from typing import Annotated, Any, Literal, Self
 
 from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
     StringConstraints,
+    model_validator,
 )
 
 
@@ -175,8 +176,33 @@ class RunnerJobRead(BaseModel):
 
 class RunnerJobClaimResponse(BaseModel):
     status: Literal["claimed", "idle"]
-    claim_token: str | None = None
+    claim_token: RunnerJobClaimToken | None = None
     job: RunnerJobRead | None = None
+
+    @model_validator(mode="after")
+    def validate_claim_state(self) -> Self:
+        if self.status == "claimed":
+            if (
+                self.claim_token is None
+                or self.job is None
+            ):
+                raise ValueError(
+                    "Claimed responses require both a "
+                    "claim token and a job."
+                )
+
+            return self
+
+        if (
+            self.claim_token is not None
+            or self.job is not None
+        ):
+            raise ValueError(
+                "Idle responses must not contain a "
+                "claim token or job."
+            )
+
+        return self
 
 
 class RunnerJobStartRequest(BaseModel):
