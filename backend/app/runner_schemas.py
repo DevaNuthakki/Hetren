@@ -205,6 +205,13 @@ class RunnerJobClaimResponse(BaseModel):
         return self
 
 
+class RunnerJobControlStatusResponse(BaseModel):
+    status: Literal[
+        "active",
+        "cancelled",
+    ]
+
+
 class RunnerJobStartRequest(BaseModel):
     claim_token: RunnerJobClaimToken
 

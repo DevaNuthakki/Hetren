@@ -15,6 +15,7 @@ from app.runner_job_service import (
     MAX_RUNNER_JOB_LOG_BATCH_SIZE,
     RunnerJobCancellationUnavailableError,
     RunnerJobClaimUnavailableError,
+    RunnerJobControlUnavailableError,
     RunnerJobNotFoundError,
     RunnerJobProjectNotFoundError,
     RunnerJobTransitionUnavailableError,
@@ -24,6 +25,7 @@ from app.runner_job_service import (
     complete_job,
     enqueue_job,
     fail_job,
+    get_job_control_status,
     query_job_logs,
     recover_expired_jobs,
     renew_job_lease,
@@ -2859,3 +2861,378 @@ def test_query_job_logs_returns_empty_page_without_cursor(
     assert page.logs == []
     assert page.has_more is False
     assert page.next_after_sequence is None
+
+
+@pytest.mark.parametrize(
+    "start_before_check",
+    [
+        False,
+        True,
+    ],
+)
+def test_get_job_control_status_returns_active_for_owned_job(
+    db: Session,
+    start_before_check: bool,
+):
+    project = create_project(
+        db,
+        f"Control active project {start_before_check}",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name=f"Control active runner {start_before_check}",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        31,
+        20,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Control active job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=10),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    if start_before_check:
+        start_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            now=claim_time + timedelta(seconds=10),
+        )
+
+    control_status = get_job_control_status(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    assert control_status == "active"
+
+
+def test_get_job_control_status_returns_cancelled_for_assigned_runner(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Control cancelled project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Control cancelled runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        31,
+        20,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Control cancelled job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    cancel_job(
+        db,
+        job_public_id=claimed.job.public_id,
+        now=claim_time + timedelta(minutes=1),
+    )
+
+    control_status = get_job_control_status(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        now=claim_time + timedelta(minutes=2),
+    )
+
+    assert control_status == "cancelled"
+
+
+def test_get_job_control_status_rejects_different_runner(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Control ownership project",
+    )
+    assigned_runner = create_registered_runner(
+        db,
+        project=project,
+        name="Assigned control runner",
+        capabilities=["asr"],
+    )
+    other_runner = create_registered_runner(
+        db,
+        project=project,
+        name="Other control runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        31,
+        21,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Owned control job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=assigned_runner.credential,
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobControlUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_job_control_status(
+            db,
+            credential=other_runner.credential,
+            job_public_id=claimed.job.public_id,
+            now=claim_time + timedelta(minutes=1),
+        )
+
+
+def test_get_job_control_status_rejects_expired_claim(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Control expired project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Control expired runner",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        31,
+        21,
+        30,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name="Expired control job",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=1),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    with pytest.raises(
+        RunnerJobControlUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_job_control_status(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            now=claim_time + timedelta(minutes=1),
+        )
+
+
+
+def test_get_job_control_status_rejects_unassigned_job(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Unassigned control project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Unassigned control runner",
+        capabilities=["asr"],
+    )
+    job = create_job(
+        db,
+        project=project,
+        name="Unassigned control job",
+        required_capabilities=["asr"],
+    )
+
+    with pytest.raises(
+        RunnerJobControlUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_job_control_status(
+            db,
+            credential=registered.credential,
+            job_public_id=job.public_id,
+        )
+
+
+def test_get_job_control_status_rejects_other_project(
+    db: Session,
+):
+    runner_project = create_project(
+        db,
+        "Control runner project",
+    )
+    other_project = create_project(
+        db,
+        "Control other project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=runner_project,
+        name="Project-isolated control runner",
+        capabilities=["asr"],
+    )
+    other_job = create_job(
+        db,
+        project=other_project,
+        name="Other-project control job",
+        required_capabilities=["asr"],
+    )
+
+    with pytest.raises(
+        RunnerJobControlUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_job_control_status(
+            db,
+            credential=registered.credential,
+            job_public_id=other_job.public_id,
+        )
+
+
+@pytest.mark.parametrize(
+    "terminal_status",
+    [
+        "completed",
+        "failed",
+    ],
+)
+def test_get_job_control_status_rejects_terminal_job(
+    db: Session,
+    terminal_status: str,
+):
+    project = create_project(
+        db,
+        f"Terminal control project {terminal_status}",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name=f"Terminal control runner {terminal_status}",
+        capabilities=["asr"],
+    )
+    claim_time = datetime(
+        2026,
+        7,
+        31,
+        22,
+        0,
+        tzinfo=UTC,
+    )
+
+    create_job(
+        db,
+        project=project,
+        name=f"Terminal control job {terminal_status}",
+        required_capabilities=["asr"],
+        available_at=claim_time,
+    )
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+        lease_duration=timedelta(minutes=10),
+        now=claim_time,
+    )
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        now=claim_time + timedelta(seconds=10),
+    )
+
+    if terminal_status == "completed":
+        complete_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            result_payload={"status": "success"},
+            now=claim_time + timedelta(minutes=1),
+        )
+    else:
+        fail_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            error_message="Controlled test failure.",
+            now=claim_time + timedelta(minutes=1),
+        )
+
+    with pytest.raises(
+        RunnerJobControlUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_job_control_status(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            now=claim_time + timedelta(minutes=2),
+        )

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import platform
 from collections.abc import Callable
+from time import monotonic
 from dataclasses import dataclass
 from threading import Event, Lock, Thread
 from typing import Literal, Protocol
@@ -17,6 +18,9 @@ from app.runner_schemas import RunnerJobRead
 GENERIC_EXECUTION_ERROR = (
     "Local runner execution failed."
 )
+GENERIC_EXECUTION_TIMEOUT_ERROR = (
+    "Local runner execution timed out."
+)
 
 
 class LocalRunnerExecutionError(Exception):
@@ -29,10 +33,103 @@ class UnsupportedRunnerJobError(
     """Raised when no local executor supports a job type."""
 
 
+class RunnerJobCancelledError(
+    LocalRunnerExecutionError
+):
+    """Raised when remote cancellation stops execution."""
+
+
+class RunnerJobTimedOutError(
+    LocalRunnerExecutionError
+):
+    """Raised when the configured deadline is reached."""
+
+
+class RunnerShutdownRequestedError(
+    LocalRunnerExecutionError
+):
+    """Raised when process shutdown stops active execution."""
+
+
+ExecutionStopReason = Literal[
+    "cancelled",
+    "timed_out",
+    "shutdown",
+    "control_failed",
+    "lease_renewal_failed",
+]
+
+
+class ExecutionControl:
+    """
+    Thread-safe cooperative stop signal for an active executor.
+
+    Executors must call raise_if_stopped(), is_set(), or wait() at
+    safe checkpoints. Python threads are never forcibly terminated.
+    """
+
+    def __init__(self):
+        self._stop_event = Event()
+        self._reason_lock = Lock()
+        self._reason: ExecutionStopReason | None = None
+
+    @property
+    def reason(self) -> ExecutionStopReason | None:
+        with self._reason_lock:
+            return self._reason
+
+    def request_stop(
+        self,
+        reason: ExecutionStopReason,
+    ) -> bool:
+        with self._reason_lock:
+            if self._reason is not None:
+                return False
+
+            self._reason = reason
+            self._stop_event.set()
+            return True
+
+    def is_set(self) -> bool:
+        return self._stop_event.is_set()
+
+    def wait(
+        self,
+        timeout: float | None = None,
+    ) -> bool:
+        return self._stop_event.wait(timeout)
+
+    def raise_if_stopped(self) -> None:
+        reason = self.reason
+
+        if reason is None:
+            return
+
+        if reason == "cancelled":
+            raise RunnerJobCancelledError(
+                "Runner job was cancelled."
+            )
+
+        if reason == "timed_out":
+            raise RunnerJobTimedOutError(
+                "Runner job execution timed out."
+            )
+
+        if reason == "shutdown":
+            raise RunnerShutdownRequestedError(
+                "Runner shutdown was requested."
+            )
+
+        raise LocalRunnerExecutionError(
+            "Runner execution control became unavailable."
+        )
+
+
 class RunnerJobExecutor(Protocol):
     def execute(
         self,
         job: RunnerJobRead,
+        control: ExecutionControl,
     ) -> dict[str, object]:
         ...
 
@@ -58,7 +155,34 @@ class LeaseRenewalWorkerFactory(Protocol):
         claim_token: str,
         lease_seconds: int,
         interval_seconds: float,
+        execution_control: ExecutionControl,
     ) -> LeaseRenewalWorkerProtocol:
+        ...
+
+
+class JobControlWorkerProtocol(Protocol):
+    @property
+    def failure(self) -> Exception | None:
+        ...
+
+    def start(self) -> None:
+        ...
+
+    def stop(self) -> None:
+        ...
+
+
+class JobControlWorkerFactory(Protocol):
+    def __call__(
+        self,
+        *,
+        client: LocalRunnerClient,
+        job_public_id: str,
+        execution_control: ExecutionControl,
+        poll_interval_seconds: float,
+        execution_timeout_seconds: float,
+        runner_stop_event: RunnerStopEvent | None,
+    ) -> JobControlWorkerProtocol:
         ...
 
 
@@ -79,10 +203,13 @@ class LocalRunnerCycleResult:
         "idle",
         "completed",
         "failed",
+        "cancelled",
+        "stopped",
     ]
     job_public_id: str | None = None
     result_payload: dict[str, object] | None = None
     error_message: str | None = None
+    timed_out: bool = False
 
 
 @dataclass(frozen=True)
@@ -92,6 +219,8 @@ class LocalRunnerLoopSummary:
     completed_count: int
     failed_count: int
     stopped: bool
+    cancelled_count: int = 0
+    timed_out_count: int = 0
 
 
 LocalRunnerCycleRunner = Callable[
@@ -117,19 +246,25 @@ class PlaceholderRunnerJobExecutor:
     def execute(
         self,
         job: RunnerJobRead,
+        control: ExecutionControl,
     ) -> dict[str, object]:
+        control.raise_if_stopped()
+
         if job.job_type not in self.supported_job_types:
             raise UnsupportedRunnerJobError(
                 "Runner job type is not supported."
             )
 
-        return {
+        result = {
             "execution_mode": "placeholder",
             "job_type": job.job_type,
             "accepted_input_keys": sorted(
                 job.input_payload.keys()
             ),
         }
+
+        control.raise_if_stopped()
+        return result
 
 
 class LeaseRenewalWorker:
@@ -148,6 +283,7 @@ class LeaseRenewalWorker:
         claim_token: str,
         lease_seconds: int,
         interval_seconds: float,
+        execution_control: ExecutionControl,
     ):
         if lease_seconds <= 0:
             raise ValueError(
@@ -170,6 +306,7 @@ class LeaseRenewalWorker:
         self._claim_token = claim_token
         self._lease_seconds = lease_seconds
         self._interval_seconds = interval_seconds
+        self._execution_control = execution_control
 
         self._stop_event = Event()
         self._failure_lock = Lock()
@@ -215,6 +352,9 @@ class LeaseRenewalWorker:
                 with self._failure_lock:
                     self._failure = exc
 
+                self._execution_control.request_stop(
+                    "lease_renewal_failed"
+                )
                 self._stop_event.set()
                 return
 
@@ -226,6 +366,7 @@ def build_lease_renewal_worker(
     claim_token: str,
     lease_seconds: int,
     interval_seconds: float,
+    execution_control: ExecutionControl,
 ) -> LeaseRenewalWorker:
     return LeaseRenewalWorker(
         client=client,
@@ -233,6 +374,166 @@ def build_lease_renewal_worker(
         claim_token=claim_token,
         lease_seconds=lease_seconds,
         interval_seconds=interval_seconds,
+        execution_control=execution_control,
+    )
+
+
+class JobControlWorker:
+    """
+    Poll assigned-runner control state and enforce a local deadline.
+
+    Remote cancellation, timeout, process shutdown, or control API
+    failure sets the shared cooperative execution signal.
+    """
+
+    def __init__(
+        self,
+        *,
+        client: LocalRunnerClient,
+        job_public_id: str,
+        execution_control: ExecutionControl,
+        poll_interval_seconds: float,
+        execution_timeout_seconds: float,
+        runner_stop_event: RunnerStopEvent | None = None,
+    ):
+        if poll_interval_seconds <= 0:
+            raise ValueError(
+                "Control polling interval must be positive."
+            )
+
+        if execution_timeout_seconds <= 0:
+            raise ValueError(
+                "Execution timeout must be positive."
+            )
+
+        self._client = client
+        self._job_public_id = job_public_id
+        self._execution_control = execution_control
+        self._poll_interval_seconds = (
+            poll_interval_seconds
+        )
+        self._execution_timeout_seconds = (
+            execution_timeout_seconds
+        )
+        self._runner_stop_event = runner_stop_event
+
+        self._stop_event = Event()
+        self._failure_lock = Lock()
+        self._failure: Exception | None = None
+        self._thread: Thread | None = None
+
+    @property
+    def failure(self) -> Exception | None:
+        with self._failure_lock:
+            return self._failure
+
+    def start(self) -> None:
+        if self._thread is not None:
+            raise LocalRunnerExecutionError(
+                "Job-control worker has already started."
+            )
+
+        thread = Thread(
+            target=self._run,
+            name="ovrin-runner-job-control",
+            daemon=True,
+        )
+        self._thread = thread
+        thread.start()
+
+    def stop(self) -> None:
+        self._stop_event.set()
+
+        if self._thread is not None:
+            self._thread.join()
+
+    def _run(self) -> None:
+        deadline = (
+            monotonic()
+            + self._execution_timeout_seconds
+        )
+
+        while not self._stop_event.is_set():
+            if (
+                self._runner_stop_event is not None
+                and self._runner_stop_event.is_set()
+            ):
+                self._execution_control.request_stop(
+                    "shutdown"
+                )
+                return
+
+            remaining_seconds = deadline - monotonic()
+
+            if remaining_seconds <= 0:
+                self._execution_control.request_stop(
+                    "timed_out"
+                )
+                return
+
+            wait_seconds = min(
+                self._poll_interval_seconds,
+                remaining_seconds,
+            )
+
+            if self._stop_event.wait(wait_seconds):
+                return
+
+            if (
+                self._runner_stop_event is not None
+                and self._runner_stop_event.is_set()
+            ):
+                self._execution_control.request_stop(
+                    "shutdown"
+                )
+                return
+
+            if monotonic() >= deadline:
+                self._execution_control.request_stop(
+                    "timed_out"
+                )
+                return
+
+            try:
+                response = (
+                    self._client.get_job_control_status(
+                        job_public_id=self._job_public_id,
+                    )
+                )
+            except Exception as exc:
+                with self._failure_lock:
+                    self._failure = exc
+
+                self._execution_control.request_stop(
+                    "control_failed"
+                )
+                return
+
+            if response.status == "cancelled":
+                self._execution_control.request_stop(
+                    "cancelled"
+                )
+                return
+
+
+def build_job_control_worker(
+    *,
+    client: LocalRunnerClient,
+    job_public_id: str,
+    execution_control: ExecutionControl,
+    poll_interval_seconds: float,
+    execution_timeout_seconds: float,
+    runner_stop_event: RunnerStopEvent | None,
+) -> JobControlWorker:
+    return JobControlWorker(
+        client=client,
+        job_public_id=job_public_id,
+        execution_control=execution_control,
+        poll_interval_seconds=poll_interval_seconds,
+        execution_timeout_seconds=(
+            execution_timeout_seconds
+        ),
+        runner_stop_event=runner_stop_event,
     )
 
 
@@ -257,20 +558,24 @@ def run_one_local_runner_cycle(
     settings: LocalRunnerSettings,
     executor: RunnerJobExecutor | None = None,
     system_info: dict[str, object] | None = None,
+    stop_event: RunnerStopEvent | None = None,
     renewal_worker_factory: LeaseRenewalWorkerFactory = (
         build_lease_renewal_worker
+    ),
+    control_worker_factory: JobControlWorkerFactory = (
+        build_job_control_worker
     ),
 ) -> LocalRunnerCycleResult:
     """
     Heartbeat, claim, and execute at most one runner job.
 
-    The active claim is renewed in the background while execution is
-    running. A renewal failure prevents successful job completion.
+    Active execution is cooperative. A background worker observes
+    administrative cancellation, process shutdown, and the configured
+    execution deadline. The lease remains renewed while work runs.
 
-    API or protocol failures are allowed to propagate because the runner
-    may not safely know the remote job state after such failures.
+    API or protocol failures propagate when remote state cannot be
+    determined safely.
     """
-
     selected_executor = (
         executor or PlaceholderRunnerJobExecutor()
     )
@@ -330,6 +635,8 @@ def run_one_local_runner_cycle(
         ],
     )
 
+    execution_control = ExecutionControl()
+
     renewal_worker = renewal_worker_factory(
         client=client,
         job_public_id=job.public_id,
@@ -338,16 +645,32 @@ def run_one_local_runner_cycle(
         interval_seconds=(
             settings.lease_renewal_interval_seconds
         ),
+        execution_control=execution_control,
+    )
+
+    control_worker = control_worker_factory(
+        client=client,
+        job_public_id=job.public_id,
+        execution_control=execution_control,
+        poll_interval_seconds=(
+            settings.control_poll_interval_seconds
+        ),
+        execution_timeout_seconds=(
+            settings.execution_timeout_seconds
+        ),
+        runner_stop_event=stop_event,
     )
 
     execution_error: Exception | None = None
     result_payload: dict[str, object] | None = None
 
     renewal_worker.start()
+    control_worker.start()
 
     try:
         result_payload = selected_executor.execute(
-            job
+            job,
+            execution_control,
         )
 
         if not isinstance(result_payload, dict):
@@ -357,21 +680,107 @@ def run_one_local_runner_cycle(
     except Exception as exc:
         execution_error = exc
     finally:
+        control_worker.stop()
         renewal_worker.stop()
 
+    # Close the narrow race where process shutdown is requested while
+    # the executor is returning, before the control worker observes it.
+    if (
+        stop_event is not None
+        and stop_event.is_set()
+    ):
+        execution_control.request_stop(
+            "shutdown"
+        )
+
+    control_reason = execution_control.reason
+    control_error = control_worker.failure
     renewal_error = renewal_worker.failure
+
+    if control_reason == "cancelled":
+        return LocalRunnerCycleResult(
+            status="cancelled",
+            job_public_id=job.public_id,
+        )
+
+    if control_reason == "shutdown":
+        return LocalRunnerCycleResult(
+            status="stopped",
+            job_public_id=job.public_id,
+        )
+
+    if (
+        control_reason == "control_failed"
+        or control_error is not None
+    ):
+        raise LocalRunnerExecutionError(
+            "Runner job control monitoring failed."
+        ) from control_error
+
+    final_control = client.get_job_control_status(
+        job_public_id=job.public_id,
+    )
+
+    if final_control.status == "cancelled":
+        return LocalRunnerCycleResult(
+            status="cancelled",
+            job_public_id=job.public_id,
+        )
+
+    if control_reason == "timed_out":
+        try:
+            client.append_job_logs(
+                job_public_id=job.public_id,
+                claim_token=claim_token,
+                entries=[
+                    {
+                        "level": "error",
+                        "event_type": "execution_timed_out",
+                        "message": (
+                            GENERIC_EXECUTION_TIMEOUT_ERROR
+                        ),
+                        "context_payload": {
+                            "job_type": job.job_type,
+                            "timeout_seconds": (
+                                settings.execution_timeout_seconds
+                            ),
+                        },
+                    }
+                ],
+            )
+        except LocalRunnerClientError:
+            pass
+
+        client.fail_job(
+            job_public_id=job.public_id,
+            claim_token=claim_token,
+            error_message=(
+                GENERIC_EXECUTION_TIMEOUT_ERROR
+            ),
+        )
+
+        return LocalRunnerCycleResult(
+            status="failed",
+            job_public_id=job.public_id,
+            error_message=(
+                GENERIC_EXECUTION_TIMEOUT_ERROR
+            ),
+            timed_out=True,
+        )
 
     if (
         execution_error is not None
         or renewal_error is not None
     ):
-        failure = execution_error or renewal_error
-
-        event_type = (
-            "execution_failed"
-            if execution_error is not None
-            else "lease_renewal_failed"
-        )
+        # Renewal failure takes precedence because it can also cause a
+        # cooperative executor to raise after receiving the stop signal.
+        if renewal_error is not None:
+            failure = renewal_error
+            event_type = "lease_renewal_failed"
+        else:
+            assert execution_error is not None
+            failure = execution_error
+            event_type = "execution_failed"
 
         failure_context = {
             "job_type": job.job_type,
@@ -389,18 +798,12 @@ def run_one_local_runner_cycle(
                     {
                         "level": "error",
                         "event_type": event_type,
-                        "message": (
-                            GENERIC_EXECUTION_ERROR
-                        ),
-                        "context_payload": (
-                            failure_context
-                        ),
+                        "message": GENERIC_EXECUTION_ERROR,
+                        "context_payload": failure_context,
                     }
                 ],
             )
         except LocalRunnerClientError:
-            # The terminal failure transition is still attempted when
-            # optional structured-log upload is unavailable.
             pass
 
         client.fail_job(
@@ -464,6 +867,9 @@ def run_local_runner_loop(
     renewal_worker_factory: LeaseRenewalWorkerFactory = (
         build_lease_renewal_worker
     ),
+    control_worker_factory: JobControlWorkerFactory = (
+        build_job_control_worker
+    ),
     cycle_runner: LocalRunnerCycleRunner = (
         run_one_local_runner_cycle
     ),
@@ -471,15 +877,10 @@ def run_local_runner_loop(
     """
     Continuously poll for and execute runner jobs.
 
-    The polling interval is applied only after an idle queue response.
-    Successful or failed jobs are followed immediately by another
-    heartbeat and claim attempt.
-
-    The stop event is cooperative. It stops the runner between cycles
-    or during idle waiting, but it does not interrupt an active
-    executor. Active interruption and cancellation are separate work.
+    The shared stop event now reaches active cooperative executors.
+    Administrative cancellation is counted separately. Timed-out jobs
+    remain failed jobs and are also counted as timed out.
     """
-
     if max_cycles is not None:
         if (
             isinstance(max_cycles, bool)
@@ -502,6 +903,8 @@ def run_local_runner_loop(
     idle_count = 0
     completed_count = 0
     failed_count = 0
+    cancelled_count = 0
+    timed_out_count = 0
 
     while not selected_stop_event.is_set():
         cycle_result = cycle_runner(
@@ -509,8 +912,12 @@ def run_local_runner_loop(
             settings=settings,
             executor=executor,
             system_info=resolved_system_info,
+            stop_event=selected_stop_event,
             renewal_worker_factory=(
                 renewal_worker_factory
+            ),
+            control_worker_factory=(
+                control_worker_factory
             ),
         )
 
@@ -522,6 +929,13 @@ def run_local_runner_loop(
             completed_count += 1
         elif cycle_result.status == "failed":
             failed_count += 1
+
+            if cycle_result.timed_out:
+                timed_out_count += 1
+        elif cycle_result.status == "cancelled":
+            cancelled_count += 1
+        elif cycle_result.status == "stopped":
+            break
         else:
             raise LocalRunnerExecutionError(
                 "Local runner cycle returned an "
@@ -548,4 +962,6 @@ def run_local_runner_loop(
         completed_count=completed_count,
         failed_count=failed_count,
         stopped=selected_stop_event.is_set(),
+        cancelled_count=cancelled_count,
+        timed_out_count=timed_out_count,
     )

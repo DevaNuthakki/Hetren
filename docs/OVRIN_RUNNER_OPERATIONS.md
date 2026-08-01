@@ -22,6 +22,9 @@ The runner platform supports:
 - Controlled retries and maximum attempts
 - Claim-protected lifecycle transitions
 - Cancellation with immediate claim invalidation
+- Assigned-runner control-status authorization
+- Active administrative-cancellation polling
+- Configurable cooperative execution deadlines
 - Structured job-log persistence
 - Authenticated atomic log ingestion
 - Server-assigned sequence and attempt numbers
@@ -30,7 +33,9 @@ The runner platform supports:
 - Standalone HTTP runner client without direct database access
 - Continuous local polling with controlled idle waiting
 - Background lease renewal during active execution
-- Cooperative SIGINT and SIGTERM shutdown
+- Background job-control monitoring during active execution
+- Cooperative interruption for cancellation, timeout, and shutdown
+- Final control-status verification before successful completion
 - Controlled placeholder execution for allowlisted jobs
 - CLI administration for enqueue, cancellation, recovery, and revocation
 
@@ -86,6 +91,8 @@ Example local configuration:
     export OVRIN_RUNNER_LEASE_SECONDS=300
     export OVRIN_RUNNER_POLL_INTERVAL_SECONDS=5
     export OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60
+    export OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=2
+    export OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=3600
 
 Configuration rules include:
 
@@ -95,6 +102,9 @@ Configuration rules include:
 - Poll interval must be greater than `0` and no more than `300` seconds
 - Lease-renewal interval must be greater than `0` and no more than `1800` seconds
 - Lease-renewal interval must be shorter than the configured job lease
+- Control-poll interval must be greater than `0` and no more than `300` seconds
+- Control-poll interval must be shorter than the lease-renewal interval
+- Execution timeout must be greater than `0` and no more than `86400` seconds
 
 The credential is represented as a secret by the runner settings model and is
 not included in normal settings representations.
@@ -115,22 +125,52 @@ Each polling cycle:
 2. Attempts to claim one compatible queued job
 3. Starts the claimed job
 4. Uploads a structured execution-started log
-5. Executes the controlled job executor
-6. Uploads a completion or failure log
-7. Completes or fails the job through the authenticated API
+5. Starts background lease-renewal and job-control workers
+6. Executes the job through the cooperative executor contract
+7. Stops both background workers before terminal handling
+8. Performs a final assigned-runner control-status check
+9. Completes, fails, cancels, or stops according to the observed state
 
 The runner waits for the configured polling interval only when the queue is
 idle. After a completed or failed job, it immediately begins the next cycle
 instead of sleeping unnecessarily.
 
-During active execution, a background worker renews the job lease. The renewal
-worker is stopped before the runner sends a terminal completion or failure
-transition. A lease-renewal failure prevents the runner from reporting a false
-successful completion and causes a controlled failure attempt.
+During active execution, one background worker renews the job lease while a
+second worker monitors assigned-runner control state, the configured execution
+deadline, and process shutdown requests.
 
-`SIGINT` and `SIGTERM` request cooperative shutdown. The runner does not
-forcefully terminate an executor that is already active. It stops between
-cycles or while waiting after an idle cycle.
+The control worker calls:
+
+    POST /runners/jobs/{job_public_id}/control
+
+The endpoint authenticates the runner credential and verifies that the job is
+assigned to that exact runner. It intentionally does not accept the claim token,
+because administrative cancellation immediately removes the stored claim-token
+hash.
+
+Executors receive an `ExecutionControl` object. A real executor must inspect it
+regularly at safe checkpoints by using `raise_if_stopped()`, `is_set()`, or
+`wait()`. Python execution threads are not forcefully terminated.
+
+Before reporting success, the runner stops its background workers and performs
+one final control-status check. This closes the race where cancellation occurs
+as the executor is returning.
+
+Observed outcomes are handled as follows:
+
+- Administrative cancellation stops the executor cooperatively. The runner
+  does not append another claim-protected log and does not call complete or
+  fail, because the server has already cancelled the job and invalidated its
+  claim token.
+- Execution timeout appends an `execution_timed_out` log when possible and
+  transitions the active job to `failed`.
+- `SIGINT` or `SIGTERM` sets the shared shutdown event and stops an active
+  cooperative executor. The runner does not report false success or failure.
+  The unfinished claim is later handled through lease expiry and recovery.
+- Lease-renewal failure prevents successful completion and causes a controlled
+  failure attempt.
+- Control-status API failure stops the runner because it cannot safely
+  determine the remote job state.
 
 The command prints a final summary containing:
 
@@ -138,7 +178,12 @@ The command prints a final summary containing:
 - Idle cycles
 - Completed jobs
 - Failed jobs
+- Cancelled jobs
+- Timed-out jobs
 - Whether a stop was requested
+
+Timed-out jobs are included in the failed-job count and are also reported
+separately.
 
 ## Run multiple runners
 
@@ -177,16 +222,18 @@ It:
 - Does not execute arbitrary shell commands
 - Does not access arbitrary filesystem paths
 - Does not invoke the real ASR pipeline
+- Checks cooperative execution control before and after its bounded operation
 - Returns a controlled placeholder result
 - Reports generic failure messages without exposing sensitive exceptions
 
-Real audio processing, model execution, evaluation-result upload, and artifact
-upload remain later Phase 3 work.
+The runner now supports the execution-control contract required by future real
+executors. Real audio processing, model execution, evaluation-result upload,
+and artifact upload remain later Phase 3 work.
 
-The administrative cancellation command invalidates queued, claimed, or
-running jobs immediately on the server. The current local runner does not yet
-interrupt an executor that is already running. Active cancellation checks and
-execution timeouts remain separate work.
+A future ASR executor must divide long operations into safe checkpoints and
+inspect `ExecutionControl` regularly. The runner cannot safely terminate an
+arbitrary Python thread or external model process that ignores cooperative stop
+signals.
 
 GitHub Actions and CI runner mode are also not implemented yet.
 
@@ -248,6 +295,11 @@ Cancellation:
 - Clears the active lease
 - Removes the stored claim-token hash
 - Prevents the previous claim token from being reused
+- Preserves the assigned runner and start history for claimed or running jobs
+- Becomes visible to the exact assigned runner through the control-status API
+
+The local runner observes cancellation during active cooperative execution and
+does not attempt to reuse the invalidated claim token.
 
 Completed and failed jobs cannot be cancelled.
 
@@ -272,6 +324,7 @@ The job lifecycle uses:
 
     POST /runners/jobs/claim
     POST /runners/jobs/{job_public_id}/start
+    POST /runners/jobs/{job_public_id}/control
     POST /runners/jobs/{job_public_id}/renew
     POST /runners/jobs/{job_public_id}/complete
     POST /runners/jobs/{job_public_id}/fail
@@ -280,7 +333,15 @@ The job lifecycle uses:
 
 A successful claim returns a plaintext claim token once.
 
-The runner must provide that claim token when starting, renewing, completing, failing, appending logs, or retrieving logs for the job. Ovrin stores only its hash.
+The runner must provide that claim token when starting, renewing, completing,
+failing, appending logs, or retrieving logs for the job. Ovrin stores only its
+hash.
+
+The control-status endpoint is different. It accepts only the authenticated
+runner credential and job public ID. It returns `active` or `cancelled` only
+when the job belongs to the same project and is assigned to that exact runner.
+Unknown jobs, other projects, other runners, expired claims, queued jobs, and
+completed or failed jobs return one generic unavailable response.
 
 ## Job lifecycle
 

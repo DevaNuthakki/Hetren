@@ -619,3 +619,91 @@ def test_local_runner_client_rejects_invalid_log_batch():
                 claim_token="ovrin_claim_test-token",
                 entries=[],
             )
+
+
+def test_local_runner_client_gets_active_job_control_status():
+    job_public_id = (
+        "20000000-0000-0000-0000-000000000001"
+    )
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.method == "POST"
+        assert request.url.path == (
+            f"/runners/jobs/{job_public_id}/control"
+        )
+        assert request.headers["authorization"] == (
+            "Bearer ovrin_runner_test-credential"
+        )
+        assert request.read() == b"{}"
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "active",
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = client.get_job_control_status(
+            job_public_id=job_public_id,
+        )
+
+    assert response.status == "active"
+
+
+def test_local_runner_client_gets_cancelled_job_control_status():
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            json={
+                "status": "cancelled",
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        response = client.get_job_control_status(
+            job_public_id=(
+                "20000000-0000-0000-0000-000000000001"
+            ),
+        )
+
+    assert response.status == "cancelled"
+
+
+
+@pytest.mark.parametrize(
+    "job_public_id",
+    [
+        "",
+        "   ",
+        "../another-job",
+        "job/another-job",
+    ],
+)
+def test_local_runner_client_rejects_unsafe_control_job_id(
+    job_public_id: str,
+):
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(LocalRunnerInputError):
+            client.get_job_control_status(
+                job_public_id=job_public_id,
+            )

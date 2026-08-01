@@ -64,15 +64,17 @@ def test_run_cli_runs_bounded_loop_and_reports_summary():
         captured.update(kwargs)
 
         return LocalRunnerLoopSummary(
-            cycle_count=3,
+            cycle_count=4,
             idle_count=1,
             completed_count=1,
             failed_count=1,
             stopped=False,
+            cancelled_count=1,
+            timed_out_count=1,
         )
 
     exit_code = run_cli(
-        ["--max-cycles", "3"],
+        ["--max-cycles", "4"],
         settings_factory=build_settings,
         client_factory=lambda _settings: FakeClient(),
         loop_runner=loop_runner,
@@ -82,15 +84,17 @@ def test_run_cli_runs_bounded_loop_and_reports_summary():
     )
 
     assert exit_code == 0
-    assert captured["max_cycles"] == 3
+    assert captured["max_cycles"] == 4
     assert isinstance(captured["stop_event"], Event)
 
     assert output.getvalue() == (
         "Local runner stopped.\n"
-        "Cycles: 3\n"
+        "Cycles: 4\n"
         "Idle cycles: 1\n"
         "Completed jobs: 1\n"
         "Failed jobs: 1\n"
+        "Cancelled jobs: 1\n"
+        "Timed-out jobs: 1\n"
         "Stop requested: no\n"
     )
     assert error_output.getvalue() == ""
