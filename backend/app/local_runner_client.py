@@ -10,6 +10,7 @@ from app.runner_schemas import (
     RunnerHeartbeatResponse,
     RunnerJobClaimResponse,
     RunnerJobCompleteRequest,
+    RunnerJobControlStatusResponse,
     RunnerJobFailRequest,
     RunnerJobLeaseRenewalResponse,
     RunnerJobLogAppendRequest,
@@ -247,6 +248,23 @@ class LocalRunnerClient:
             ),
             payload=payload,
             response_model=RunnerJobTransitionResponse,
+        )
+
+    def get_job_control_status(
+        self,
+        *,
+        job_public_id: str,
+    ) -> RunnerJobControlStatusResponse:
+        normalized_job_id = self._validate_job_public_id(
+            job_public_id
+        )
+
+        return self._post(
+            path=(
+                f"/runners/jobs/{normalized_job_id}/control"
+            ),
+            payload={},
+            response_model=RunnerJobControlStatusResponse,
         )
 
     def renew_job_lease(

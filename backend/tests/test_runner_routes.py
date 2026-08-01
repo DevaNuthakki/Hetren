@@ -1320,3 +1320,135 @@ def test_runner_job_log_query_maps_service_validation_to_422(
     assert error.value.detail == (
         "Runner job log query could not be validated."
     )
+
+
+def test_runner_job_control_route_is_included_in_app():
+    openapi_paths = app.openapi()["paths"]
+    route = "/runners/jobs/{job_public_id}/control"
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_job_control_returns_active_status(
+    monkeypatch,
+):
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+
+    def fake_get_job_control_status(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+        }
+        return "active"
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_job_control_status",
+        fake_get_job_control_status,
+    )
+
+    response = runner_routes.runner_job_control_endpoint(
+        job_public_id=job_public_id,
+        credential="ovrin_runner_test-credential",
+        db=object(),
+    )
+
+    assert response == {
+        "status": "active",
+    }
+
+
+def test_runner_job_control_returns_cancelled_status(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        runner_routes,
+        "get_job_control_status",
+        lambda _db, **_kwargs: "cancelled",
+    )
+
+    response = runner_routes.runner_job_control_endpoint(
+        job_public_id=(
+            "10000000-0000-0000-0000-000000000001"
+        ),
+        credential="ovrin_runner_test-credential",
+        db=object(),
+    )
+
+    assert response == {
+        "status": "cancelled",
+    }
+
+
+def test_runner_job_control_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_control(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_job_control_status",
+        reject_control,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_control_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            credential="invalid",
+            db=object(),
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer",
+    }
+
+
+def test_runner_job_control_hides_unavailable_state(
+    monkeypatch,
+):
+    def reject_control(_db, **_kwargs):
+        raise runner_routes.RunnerJobControlUnavailableError(
+            "Specific internal control state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_job_control_status",
+        reject_control,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        runner_routes.runner_job_control_endpoint(
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job control status is invalid or unavailable."
+    )
+    assert "internal control" not in error.value.detail
+
+
+
+def test_runner_job_control_route_has_no_request_body():
+    operation = app.openapi()["paths"][
+        "/runners/jobs/{job_public_id}/control"
+    ]["post"]
+
+    assert "requestBody" not in operation

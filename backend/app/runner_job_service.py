@@ -61,6 +61,11 @@ class RunnerJobClaimUnavailableError(RunnerJobServiceError):
     """Raised when claim ownership cannot be verified."""
 
 
+class RunnerJobControlUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when runner job control state is unavailable."""
+
 
 class RunnerJobTransitionUnavailableError(
     RunnerJobServiceError
@@ -709,6 +714,90 @@ def _commit_job_transition(
 
     db.refresh(job)
     return job
+
+
+def get_job_control_status(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    now: datetime | None = None,
+) -> str:
+    """
+    Return the control state of a job assigned to an exact runner.
+
+    This check intentionally uses only the active runner credential.
+    Administrative cancellation destroys the claim token immediately,
+    so a cancelled job cannot require that invalidated secret.
+
+    Errors use one generic response so callers cannot distinguish
+    unknown jobs, other projects, other runners, expired claims, or
+    unsupported lifecycle states.
+    """
+    control_time = _resolve_now(now)
+
+    runner = _get_active_runner(
+        db,
+        credential=credential,
+    )
+
+    normalized_public_id = (
+        job_public_id.strip()
+        if isinstance(job_public_id, str)
+        else ""
+    )
+
+    if (
+        not normalized_public_id
+        or len(normalized_public_id) > 36
+    ):
+        db.rollback()
+        raise RunnerJobControlUnavailableError(
+            "Runner job control status is invalid or "
+            "unavailable."
+        )
+
+    job = (
+        db.query(models.RunnerJob)
+        .filter(
+            models.RunnerJob.public_id
+            == normalized_public_id,
+            models.RunnerJob.project_id
+            == runner.project_id,
+        )
+        .first()
+    )
+
+    if (
+        job is None
+        or job.assigned_runner_id != runner.id
+    ):
+        db.rollback()
+        raise RunnerJobControlUnavailableError(
+            "Runner job control status is invalid or "
+            "unavailable."
+        )
+
+    if (
+        job.status == "cancelled"
+        and job.cancelled_at is not None
+    ):
+        return "cancelled"
+
+    claim_is_active = (
+        job.status in {"claimed", "running"}
+        and job.lease_expires_at is not None
+        and _as_utc(job.lease_expires_at) > control_time
+        and job.claim_token_hash is not None
+    )
+
+    if claim_is_active:
+        return "active"
+
+    db.rollback()
+    raise RunnerJobControlUnavailableError(
+        "Runner job control status is invalid or unavailable."
+    )
 
 
 def verify_job_claim_ownership(

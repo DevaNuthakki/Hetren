@@ -14,6 +14,7 @@ from app.runner_schemas import (
     RunnerJobClaimRequest,
     RunnerJobClaimResponse,
     RunnerJobCompleteRequest,
+    RunnerJobControlStatusResponse,
     RunnerJobFailRequest,
     RunnerJobLeaseRenewalResponse,
     RunnerJobLogAppendRequest,
@@ -29,12 +30,14 @@ from app.runner_schemas import (
 from app.runner_job_service import (
     RunnerJobClaimConflictError,
     RunnerJobClaimUnavailableError,
+    RunnerJobControlUnavailableError,
     RunnerJobLogConflictError,
     RunnerJobTransitionUnavailableError,
     append_job_logs,
     claim_next_job,
     complete_job,
     fail_job,
+    get_job_control_status,
     query_job_logs,
     renew_job_lease,
     start_job,
@@ -355,6 +358,47 @@ def runner_job_fail_endpoint(
     return {
         "status": "failed",
         "job": job,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/control",
+    response_model=RunnerJobControlStatusResponse,
+)
+def runner_job_control_endpoint(
+    job_public_id: str,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Return active or cancelled state for an assigned runner job.
+
+    No claim token is accepted because cancellation invalidates that
+    token immediately.
+    """
+    try:
+        control_status = get_job_control_status(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Runner credential is invalid or unavailable.",
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobControlUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job control status is invalid or "
+                "unavailable."
+            ),
+        ) from exc
+
+    return {
+        "status": control_status,
     }
 
 
