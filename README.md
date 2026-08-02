@@ -314,6 +314,16 @@ These tests validate:
 
 The integration-test fixture refuses to run unless the configured database is exactly `ovrin_test`.
 
+## Continuous integration
+
+The repository workflow is defined in `.github/workflows/ci.yml`.
+
+It runs for pull requests targeting `main`, pushes to `main`, and manual workflow dispatches.
+
+The backend job starts PostgreSQL 18, creates separate development and test databases, applies and checks Alembic migrations, compiles the backend, and runs both backend test suites.
+
+The frontend job installs dependencies from the committed lockfile, runs linting, and creates the production build.
+
 ## Secure runner operations
 
 Phase 3 runner registration, secure job coordination, local polling and
@@ -427,7 +437,7 @@ It currently supports:
 - Administrative runner revocation
 - PostgreSQL lifecycle and project-isolation constraints
 
-Secure job claiming, lifecycle transitions, lease recovery, structured log upload and retrieval, active cooperative cancellation, real ASR execution, atomic evaluation-result submission, and one-shot CI runner mode are implemented. A repository-specific GitHub Actions workflow remains later Phase 3 work.
+Secure job claiming, lifecycle transitions, lease recovery, structured log upload and retrieval, active cooperative cancellation, real ASR execution, atomic evaluation-result submission, one-shot CI runner mode, and repository-level GitHub Actions validation are implemented.
 
 ### Security model
 

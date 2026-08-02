@@ -263,8 +263,16 @@ Long model operations must inspect `ExecutionControl` at safe checkpoints.
 Python threads cannot be forcibly terminated safely when a provider ignores
 cooperative stop signals.
 
-One-shot CI runner mode is available through `--ci`. A repository-specific
-GitHub Actions workflow has not yet been added.
+One-shot CI runner mode is available through `--ci`.
+
+The repository workflow at `.github/workflows/ci.yml` validates Python
+compilation, Alembic migration state, the fast backend suite, the complete
+PostgreSQL-enabled suite, frontend linting, and the frontend production build.
+
+The repository validation workflow does not require a persistent runner
+credential. External deployment workflows can run
+`python scripts/run_local_runner.py --ci` with a securely injected registered
+runner credential when one queued Ovrin job should be executed.
 
 ## Enqueue a runner job
 
