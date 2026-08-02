@@ -1951,3 +1951,359 @@ def test_runner_asr_audio_maps_invalid_payload_to_422(
     assert error.value.status_code == 422
     assert "evaluation_run_id" in error.value.detail
     assert "test_case_id" in error.value.detail
+
+
+
+def test_runner_asr_result_route_is_included_in_app():
+    route = "/runners/jobs/{job_public_id}/asr/result"
+    openapi_paths = app.openapi()["paths"]
+
+    assert route in openapi_paths
+    assert "post" in openapi_paths[route]
+
+
+def test_runner_asr_result_returns_completed_submission(
+    monkeypatch,
+):
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+    job = build_claimed_runner_job().job
+    job.status = "completed"
+    job.completed_at = datetime.now(UTC)
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+
+    result = SimpleNamespace(
+        id=81,
+        run_id=42,
+        test_case_id=9,
+        generated_transcript="thank you for calling",
+        wer=0.0,
+        cer=0.0,
+        quality_label="excellent",
+        error_summary=(
+            "WER=0.000, CER=0.000. "
+            "Substitutions=0, insertions=0, deletions=0."
+        ),
+        created_at=datetime.now(UTC),
+    )
+
+    submission = SimpleNamespace(
+        result=result,
+        job=job,
+        provider="faster-whisper",
+        provider_metadata={
+            "device": "cpu",
+            "language": "en",
+        },
+    )
+
+    def fake_submit_result(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+            "claim_token": "ovrin_claim_test-token",
+            "generated_transcript": (
+                "thank you for calling"
+            ),
+            "provider": "faster-whisper",
+            "provider_metadata": {
+                "device": "cpu",
+                "language": "en",
+            },
+        }
+        return submission
+
+    monkeypatch.setattr(
+        runner_routes,
+        "submit_asr_evaluation_result",
+        fake_submit_result,
+    )
+
+    response = (
+        runner_routes
+        .runner_asr_evaluation_result_endpoint(
+            job_public_id=job_public_id,
+            request=(
+                runner_routes
+                .RunnerASREvaluationResultRequest(
+                    claim_token="ovrin_claim_test-token",
+                    generated_transcript=(
+                        "thank you for calling"
+                    ),
+                    provider="faster-whisper",
+                    provider_metadata={
+                        "device": "cpu",
+                        "language": "en",
+                    },
+                )
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+    )
+
+    assert response == {
+        "status": "completed",
+        "result": result,
+        "job": job,
+        "provider": "faster-whisper",
+        "provider_metadata": {
+            "device": "cpu",
+            "language": "en",
+        },
+    }
+
+    assert "reference_transcript" not in response
+    assert "audio_file_path" not in response
+    assert "generated_file_path" not in response
+
+
+def test_runner_asr_result_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_submission(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "submit_asr_evaluation_result",
+        reject_submission,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_result_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationResultRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                        generated_transcript=(
+                            "thank you for calling"
+                        ),
+                        provider="faster-whisper",
+                    )
+                ),
+                credential="invalid",
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer",
+    }
+    assert "internal authentication" not in (
+        error.value.detail
+    )
+
+
+def test_runner_asr_result_hides_invalid_claim(
+    monkeypatch,
+):
+    def reject_submission(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "submit_asr_evaluation_result",
+        reject_submission,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_result_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationResultRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                        generated_transcript=(
+                            "thank you for calling"
+                        ),
+                        provider="faster-whisper",
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim" not in error.value.detail
+
+
+def test_runner_asr_result_hides_unavailable_result(
+    monkeypatch,
+):
+    def reject_submission(_db, **_kwargs):
+        raise (
+            runner_routes
+            .RunnerJobASRResultUnavailableError(
+                "Specific internal result state."
+            )
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "submit_asr_evaluation_result",
+        reject_submission,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_result_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationResultRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                        generated_transcript=(
+                            "thank you for calling"
+                        ),
+                        provider="faster-whisper",
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner ASR result is invalid or unavailable."
+    )
+    assert "internal result" not in error.value.detail
+
+
+def test_runner_asr_result_maps_invalid_output_to_422(
+    monkeypatch,
+):
+    def reject_submission(_db, **_kwargs):
+        raise ValueError(
+            "ASR provider metadata must not exceed "
+            "65536 bytes."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "submit_asr_evaluation_result",
+        reject_submission,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_result_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationResultRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                        generated_transcript=(
+                            "thank you for calling"
+                        ),
+                        provider="faster-whisper",
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 422
+    assert error.value.detail == (
+        "ASR provider metadata must not exceed "
+        "65536 bytes."
+    )
+
+
+def test_runner_asr_result_request_forbids_runner_metrics():
+    with pytest.raises(ValueError):
+        (
+            runner_routes
+            .RunnerASREvaluationResultRequest
+            .model_validate(
+                {
+                    "claim_token": (
+                        "ovrin_claim_test-token"
+                    ),
+                    "generated_transcript": (
+                        "thank you for calling"
+                    ),
+                    "provider": "faster-whisper",
+                    "wer": 0.0,
+                    "cer": 0.0,
+                    "quality_label": "excellent",
+                }
+            )
+        )
+
+
+@pytest.mark.parametrize(
+    ("field_name", "value"),
+    [
+        ("generated_transcript", "   "),
+        ("provider", "   "),
+    ],
+)
+def test_runner_asr_result_request_rejects_empty_text(
+    field_name: str,
+    value: str,
+):
+    payload = {
+        "claim_token": "ovrin_claim_test-token",
+        "generated_transcript": (
+            "thank you for calling"
+        ),
+        "provider": "faster-whisper",
+    }
+    payload[field_name] = value
+
+    with pytest.raises(ValueError):
+        (
+            runner_routes
+            .RunnerASREvaluationResultRequest
+            .model_validate(payload)
+        )
