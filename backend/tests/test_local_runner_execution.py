@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Event
+from types import SimpleNamespace
 
 import pytest
 
@@ -166,6 +167,32 @@ class RecordingClient:
                 event_type,
                 kwargs,
             )
+        )
+
+    def submit_asr_evaluation_result(
+        self,
+        **kwargs,
+    ):
+        self.calls.append(
+            (
+                "submit_asr_result",
+                kwargs,
+            )
+        )
+
+        return SimpleNamespace(
+            result=SimpleNamespace(
+                id=81,
+                run_id=42,
+                test_case_id=9,
+                wer=0.0,
+                cer=0.0,
+                quality_label="excellent",
+            ),
+            provider=kwargs["provider"],
+            provider_metadata=dict(
+                kwargs["provider_metadata"]
+            ),
         )
 
     def complete_job(self, **kwargs):
@@ -1397,3 +1424,103 @@ def test_asr_executor_rejects_empty_claim_token():
             claim_token="   ",
             provider=RecordingASRProvider(),
         )
+
+
+
+class RecordingASRResultExecutor:
+    def __init__(
+        self,
+        calls: list[tuple],
+    ):
+        self.calls = calls
+
+    def execute(
+        self,
+        job: RunnerJobRead,
+        control: ExecutionControl,
+    ) -> ASRRunnerExecutionResult:
+        control.raise_if_stopped()
+        self.calls.append(
+            (
+                "execute_asr",
+                job.public_id,
+            )
+        )
+
+        return ASRRunnerExecutionResult(
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster_whisper",
+            provider_metadata={
+                "model_name": "large-v3-turbo",
+            },
+        )
+
+
+def test_run_one_cycle_submits_asr_result_atomically():
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        executor=RecordingASRResultExecutor(
+            client.calls
+        ),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "completed"
+    assert result.job_public_id == job.public_id
+    assert result.result_payload == {
+        "evaluation_result_id": 81,
+        "evaluation_run_id": 42,
+        "test_case_id": 9,
+        "provider": "faster_whisper",
+        "provider_metadata": {
+            "model_name": "large-v3-turbo",
+        },
+        "wer": 0.0,
+        "cer": 0.0,
+        "quality_label": "excellent",
+    }
+
+    call_names = [
+        call[0]
+        for call in client.calls
+    ]
+
+    assert call_names == [
+        "heartbeat",
+        "claim",
+        "start",
+        "log",
+        "execute_asr",
+        "control",
+        "log",
+        "submit_asr_result",
+    ]
+
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+    submission = client.calls[-1][1]
+
+    assert submission == {
+        "job_public_id": job.public_id,
+        "claim_token": "ovrin_claim_test-token",
+        "generated_transcript": (
+            "thank you for calling"
+        ),
+        "provider": "faster_whisper",
+        "provider_metadata": {
+            "model_name": "large-v3-turbo",
+        },
+    }

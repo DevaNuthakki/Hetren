@@ -813,18 +813,24 @@ def run_one_local_runner_cycle(
     )
 
     execution_error: Exception | None = None
-    result_payload: dict[str, object] | None = None
+    execution_result: RunnerExecutionResult | None = None
 
     renewal_worker.start()
     control_worker.start()
 
     try:
-        result_payload = selected_executor.execute(
+        execution_result = selected_executor.execute(
             job,
             execution_control,
         )
 
-        if not isinstance(result_payload, dict):
+        if not isinstance(
+            execution_result,
+            (
+                dict,
+                ASRRunnerExecutionResult,
+            ),
+        ):
             raise LocalRunnerExecutionError(
                 "Runner executor returned an invalid result."
             )
@@ -969,7 +975,7 @@ def run_one_local_runner_cycle(
             error_message=GENERIC_EXECUTION_ERROR,
         )
 
-    if result_payload is None:
+    if execution_result is None:
         raise LocalRunnerExecutionError(
             "Runner execution result was unavailable."
         )
@@ -994,16 +1000,57 @@ def run_one_local_runner_cycle(
         ],
     )
 
-    client.complete_job(
-        job_public_id=job.public_id,
-        claim_token=claim_token,
-        result_payload=result_payload,
-    )
+    if isinstance(
+        execution_result,
+        ASRRunnerExecutionResult,
+    ):
+        submission = (
+            client.submit_asr_evaluation_result(
+                job_public_id=job.public_id,
+                claim_token=claim_token,
+                generated_transcript=(
+                    execution_result.generated_transcript
+                ),
+                provider=execution_result.provider,
+                provider_metadata=(
+                    execution_result.provider_metadata
+                ),
+            )
+        )
+
+        result_payload = {
+            "evaluation_result_id": (
+                submission.result.id
+            ),
+            "evaluation_run_id": (
+                submission.result.run_id
+            ),
+            "test_case_id": (
+                submission.result.test_case_id
+            ),
+            "provider": submission.provider,
+            "provider_metadata": dict(
+                submission.provider_metadata
+            ),
+            "wer": submission.result.wer,
+            "cer": submission.result.cer,
+            "quality_label": (
+                submission.result.quality_label
+            ),
+        }
+    else:
+        result_payload = dict(execution_result)
+
+        client.complete_job(
+            job_public_id=job.public_id,
+            claim_token=claim_token,
+            result_payload=result_payload,
+        )
 
     return LocalRunnerCycleResult(
         status="completed",
         job_public_id=job.public_id,
-        result_payload=dict(result_payload),
+        result_payload=result_payload,
     )
 
 
