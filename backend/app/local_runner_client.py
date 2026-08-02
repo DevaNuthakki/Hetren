@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import TypeVar
 
 import httpx
@@ -7,6 +9,8 @@ from pydantic import BaseModel, ValidationError
 
 from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import (
+    RunnerASREvaluationContextRequest,
+    RunnerASREvaluationContextResponse,
     RunnerHeartbeatResponse,
     RunnerJobClaimResponse,
     RunnerJobCompleteRequest,
@@ -196,6 +200,125 @@ class LocalRunnerClient:
                 "Ovrin runner API returned an invalid response."
             ) from exc
 
+    def _post_to_file(
+        self,
+        *,
+        path: str,
+        payload: dict[str, object],
+        destination: str | Path,
+    ) -> Path:
+        """
+        Stream an authenticated API response to a local file.
+
+        A temporary file in the destination directory prevents partial
+        downloads from replacing a previously complete file.
+        """
+        try:
+            destination_path = Path(destination)
+        except (TypeError, ValueError) as exc:
+            raise LocalRunnerInputError(
+                "Runner audio destination is invalid."
+            ) from exc
+
+        if not destination_path.name:
+            raise LocalRunnerInputError(
+                "Runner audio destination is invalid."
+            )
+
+        try:
+            destination_path.parent.mkdir(
+                parents=True,
+                exist_ok=True,
+            )
+        except OSError as exc:
+            raise LocalRunnerInputError(
+                "Runner audio destination is unavailable."
+            ) from exc
+
+        if (
+            destination_path.exists()
+            and not destination_path.is_file()
+        ):
+            raise LocalRunnerInputError(
+                "Runner audio destination is invalid."
+            )
+
+        temporary_path: Path | None = None
+
+        try:
+            with self._client.stream(
+                "POST",
+                path,
+                json=payload,
+                headers={
+                    "Accept": "audio/*",
+                },
+            ) as response:
+                if response.status_code == 401:
+                    raise LocalRunnerAuthenticationError(
+                        "Runner credential is invalid or "
+                        "unavailable."
+                    )
+
+                if response.is_error:
+                    raise LocalRunnerAPIError(
+                        response.status_code
+                    )
+
+                media_type = (
+                    response.headers
+                    .get("content-type", "")
+                    .split(";", 1)[0]
+                    .strip()
+                    .lower()
+                )
+
+                if not media_type.startswith("audio/"):
+                    raise LocalRunnerProtocolError(
+                        "Ovrin runner API returned an "
+                        "invalid audio response."
+                    )
+
+                with NamedTemporaryFile(
+                    mode="wb",
+                    dir=destination_path.parent,
+                    prefix=f".{destination_path.name}.",
+                    suffix=".part",
+                    delete=False,
+                ) as output_file:
+                    temporary_path = Path(
+                        output_file.name
+                    )
+
+                    for chunk in response.iter_bytes():
+                        output_file.write(chunk)
+
+            temporary_path.replace(destination_path)
+
+        except httpx.TimeoutException as exc:
+            raise LocalRunnerRequestError(
+                "Ovrin runner API request timed out."
+            ) from exc
+        except httpx.RequestError as exc:
+            raise LocalRunnerRequestError(
+                "Ovrin runner API could not be reached."
+            ) from exc
+        except OSError as exc:
+            raise LocalRunnerInputError(
+                "Runner audio destination is unavailable."
+            ) from exc
+        finally:
+            if (
+                temporary_path is not None
+                and temporary_path.exists()
+            ):
+                try:
+                    temporary_path.unlink()
+                except OSError:
+                    pass
+
+        return destination_path
+
     def heartbeat(
         self,
         *,
@@ -265,6 +388,59 @@ class LocalRunnerClient:
             ),
             payload={},
             response_model=RunnerJobControlStatusResponse,
+        )
+
+    def get_asr_evaluation_context(
+        self,
+        *,
+        job_public_id: str,
+        claim_token: str,
+    ) -> RunnerASREvaluationContextResponse:
+        normalized_job_id = self._validate_job_public_id(
+            job_public_id
+        )
+        payload = self._validate_request_payload(
+            request_model=RunnerASREvaluationContextRequest,
+            payload={
+                "claim_token": claim_token,
+            },
+        )
+
+        return self._post(
+            path=(
+                f"/runners/jobs/{normalized_job_id}"
+                "/asr/context"
+            ),
+            payload=payload,
+            response_model=(
+                RunnerASREvaluationContextResponse
+            ),
+        )
+
+    def download_asr_evaluation_audio(
+        self,
+        *,
+        job_public_id: str,
+        claim_token: str,
+        destination: str | Path,
+    ) -> Path:
+        normalized_job_id = self._validate_job_public_id(
+            job_public_id
+        )
+        payload = self._validate_request_payload(
+            request_model=RunnerASREvaluationContextRequest,
+            payload={
+                "claim_token": claim_token,
+            },
+        )
+
+        return self._post_to_file(
+            path=(
+                f"/runners/jobs/{normalized_job_id}"
+                "/asr/audio"
+            ),
+            payload=payload,
+            destination=destination,
         )
 
     def renew_job_lease(

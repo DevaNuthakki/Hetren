@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from pathlib import Path
 
 import httpx
 import pytest
@@ -706,4 +707,432 @@ def test_local_runner_client_rejects_unsafe_control_job_id(
         with pytest.raises(LocalRunnerInputError):
             client.get_job_control_status(
                 job_public_id=job_public_id,
+            )
+
+
+
+def test_local_runner_client_gets_asr_evaluation_context():
+    job_public_id = (
+        "20000000-0000-0000-0000-000000000001"
+    )
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.method == "POST"
+        assert request.url.path == (
+            f"/runners/jobs/{job_public_id}/asr/context"
+        )
+        assert request.headers["authorization"] == (
+            "Bearer ovrin_runner_test-credential"
+        )
+        assert request.headers["accept"] == (
+            "application/json"
+        )
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token"}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "project_id": 7,
+                "evaluation_run_id": 42,
+                "test_case_id": 9,
+                "run_name": "Candidate evaluation",
+                "model_name": "large-v3-turbo",
+                "test_case_title": "Support call",
+                "audio_file_name": "support-call.wav",
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        context = client.get_asr_evaluation_context(
+            job_public_id=job_public_id,
+            claim_token="ovrin_claim_test-token",
+        )
+
+    assert context.project_id == 7
+    assert context.evaluation_run_id == 42
+    assert context.test_case_id == 9
+    assert context.run_name == "Candidate evaluation"
+    assert context.model_name == "large-v3-turbo"
+    assert context.test_case_title == "Support call"
+    assert context.audio_file_name == "support-call.wav"
+
+
+def test_local_runner_client_rejects_invalid_asr_context_response():
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            json={
+                "project_id": 7,
+                "evaluation_run_id": 42,
+                "test_case_id": 9,
+                "run_name": "Candidate evaluation",
+                "model_name": "large-v3-turbo",
+                "test_case_title": "Support call",
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        with pytest.raises(LocalRunnerProtocolError):
+            client.get_asr_evaluation_context(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+            )
+
+
+def test_local_runner_client_downloads_asr_audio_atomically(
+    tmp_path: Path,
+):
+    job_public_id = (
+        "20000000-0000-0000-0000-000000000001"
+    )
+    destination = (
+        tmp_path
+        / "runner-work"
+        / job_public_id
+        / "support-call.wav"
+    )
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.method == "POST"
+        assert request.url.path == (
+            f"/runners/jobs/{job_public_id}/asr/audio"
+        )
+        assert request.headers["authorization"] == (
+            "Bearer ovrin_runner_test-credential"
+        )
+        assert request.headers["accept"] == "audio/*"
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token"}'
+        )
+
+        return httpx.Response(
+            200,
+            content=b"complete-runner-audio",
+            headers={
+                "content-type": "audio/wav",
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        downloaded_path = (
+            client.download_asr_evaluation_audio(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+        )
+
+    assert downloaded_path == destination
+    assert destination.read_bytes() == (
+        b"complete-runner-audio"
+    )
+    assert list(
+        destination.parent.glob(
+            f".{destination.name}.*.part"
+        )
+    ) == []
+
+
+def test_local_runner_audio_download_replaces_complete_file(
+    tmp_path: Path,
+):
+    destination = tmp_path / "support-call.mp3"
+    destination.write_bytes(b"previous-complete-audio")
+
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            content=b"new-complete-audio",
+            headers={
+                "content-type": (
+                    "audio/mpeg; charset=binary"
+                ),
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        client.download_asr_evaluation_audio(
+            job_public_id=(
+                "20000000-0000-0000-0000-"
+                "000000000001"
+            ),
+            claim_token="ovrin_claim_test-token",
+            destination=destination,
+        )
+
+    assert destination.read_bytes() == (
+        b"new-complete-audio"
+    )
+    assert list(
+        destination.parent.glob(
+            f".{destination.name}.*.part"
+        )
+    ) == []
+
+
+def test_local_runner_audio_download_rejects_non_audio_response(
+    tmp_path: Path,
+):
+    destination = tmp_path / "support-call.wav"
+    destination.write_bytes(b"previous-complete-audio")
+
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            content=b'{"detail":"unexpected response"}',
+            headers={
+                "content-type": "application/json",
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        with pytest.raises(LocalRunnerProtocolError):
+            client.download_asr_evaluation_audio(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+
+    assert destination.read_bytes() == (
+        b"previous-complete-audio"
+    )
+    assert list(
+        destination.parent.glob(
+            f".{destination.name}.*.part"
+        )
+    ) == []
+
+
+def test_local_runner_audio_download_preserves_file_on_interruption(
+    tmp_path: Path,
+):
+    destination = tmp_path / "support-call.wav"
+    destination.write_bytes(b"previous-complete-audio")
+
+    class InterruptedAudioStream(httpx.SyncByteStream):
+        def __init__(
+            self,
+            request: httpx.Request,
+        ):
+            self._request = request
+
+        def __iter__(self):
+            yield b"partial-audio"
+            raise httpx.ReadError(
+                "Audio stream was interrupted.",
+                request=self._request,
+            )
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        return httpx.Response(
+            200,
+            headers={
+                "content-type": "audio/wav",
+            },
+            stream=InterruptedAudioStream(request),
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        with pytest.raises(LocalRunnerRequestError):
+            client.download_asr_evaluation_audio(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+
+    assert destination.read_bytes() == (
+        b"previous-complete-audio"
+    )
+    assert list(
+        destination.parent.glob(
+            f".{destination.name}.*.part"
+        )
+    ) == []
+
+
+def test_local_runner_audio_download_maps_authentication_failure(
+    tmp_path: Path,
+):
+    destination = tmp_path / "support-call.wav"
+
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            401,
+            json={
+                "detail": (
+                    "Runner credential is invalid "
+                    "or unavailable."
+                ),
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_secret-value",
+        transport=transport,
+    ) as client:
+        with pytest.raises(
+            LocalRunnerAuthenticationError,
+        ) as error:
+            client.download_asr_evaluation_audio(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+
+    assert not destination.exists()
+    assert "ovrin_runner_secret-value" not in str(
+        error.value
+    )
+
+
+def test_local_runner_audio_download_maps_api_failure(
+    tmp_path: Path,
+):
+    destination = tmp_path / "support-call.wav"
+
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            409,
+            json={
+                "detail": (
+                    "Internal audio state must remain hidden."
+                ),
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        with pytest.raises(
+            LocalRunnerAPIError,
+        ) as error:
+            client.download_asr_evaluation_audio(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+
+    assert error.value.status_code == 409
+    assert "Internal audio state" not in str(
+        error.value
+    )
+    assert not destination.exists()
+
+
+def test_local_runner_audio_download_rejects_directory_destination(
+    tmp_path: Path,
+):
+    destination = tmp_path / "audio-directory"
+    destination.mkdir()
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(LocalRunnerInputError):
+            client.download_asr_evaluation_audio(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                destination=destination,
+            )
+
+
+@pytest.mark.parametrize(
+    "job_public_id",
+    [
+        "",
+        "   ",
+        "../another-job",
+        "job/another-job",
+    ],
+)
+def test_local_runner_asr_methods_reject_unsafe_job_id(
+    job_public_id: str,
+    tmp_path: Path,
+):
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(LocalRunnerInputError):
+            client.get_asr_evaluation_context(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+            )
+
+        with pytest.raises(LocalRunnerInputError):
+            client.download_asr_evaluation_audio(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+                destination=(
+                    tmp_path / "support-call.wav"
+                ),
             )
