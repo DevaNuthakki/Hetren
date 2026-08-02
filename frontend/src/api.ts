@@ -340,3 +340,100 @@ export async function transcribeAndEvaluateTestCaseForRun(
     },
   );
 }
+
+
+export type RunnerOperationsRunner = {
+  project_id: number;
+  public_id: string;
+  name: string;
+  status: string;
+  runner_version: string | null;
+  capabilities: string[];
+  last_seen_at: string | null;
+  revoked_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RunnerOperationsJob = {
+  project_id: number;
+  public_id: string;
+  name: string;
+  job_type: string;
+  status: string;
+  priority: number;
+  required_capabilities: string[];
+
+  assigned_runner_public_id: string | null;
+  assigned_runner_name: string | null;
+
+  attempt_count: number;
+  max_attempts: number;
+  error_message: string | null;
+
+  available_at: string;
+  claimed_at: string | null;
+  lease_expires_at: string | null;
+  started_at: string | null;
+  completed_at: string | null;
+  failed_at: string | null;
+  cancelled_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type RunnerOperationsSnapshot = {
+  project_id: number;
+  runners: RunnerOperationsRunner[];
+  jobs: RunnerOperationsJob[];
+};
+
+export type RunnerOperationsLog = {
+  public_id: string;
+  sequence_number: number;
+  attempt_number: number;
+  level: string;
+  event_type: string;
+  message: string;
+  created_at: string;
+};
+
+export type RunnerOperationsLogPage = {
+  project_id: number;
+  job_public_id: string;
+  logs: RunnerOperationsLog[];
+  has_more: boolean;
+  next_after_sequence: number | null;
+};
+
+export async function getProjectRunnerOperations(
+  projectId: number,
+  jobLimit = 100,
+) {
+  const query = new URLSearchParams({
+    job_limit: String(jobLimit),
+  });
+
+  return fetchJson<RunnerOperationsSnapshot>(
+    `/projects/${projectId}/runner-operations?${query.toString()}`,
+  );
+}
+
+export async function getProjectRunnerJobLogs(
+  projectId: number,
+  jobPublicId: string,
+  options?: {
+    afterSequence?: number;
+    limit?: number;
+  },
+) {
+  const query = new URLSearchParams({
+    after_sequence: String(options?.afterSequence ?? 0),
+    limit: String(options?.limit ?? 100),
+  });
+
+  return fetchJson<RunnerOperationsLogPage>(
+    `/projects/${projectId}/runner-jobs/` +
+      `${encodeURIComponent(jobPublicId)}/logs?${query.toString()}`,
+  );
+}

@@ -28,7 +28,7 @@ Ovrin currently supports:
 - Atomic backend evaluation-result persistence
 - One-shot CI runner execution with meaningful exit codes
 
-Phase 3 is building the secure local and CI runner platform.
+Phase 3 implements the secure local and CI runner platform, including project-scoped runner operations visibility in the frontend.
 
 ## Technology stack
 
@@ -327,9 +327,9 @@ The frontend job installs dependencies from the committed lockfile, runs linting
 ## Secure runner operations
 
 Phase 3 runner registration, secure job coordination, local polling and
-execution, lease recovery, structured execution logging, and administrative
-CLI instructions are documented in
-`docs/OVRIN_RUNNER_OPERATIONS.md`.
+execution, lease recovery, structured execution logging, read-only
+project-scoped runner operations APIs and UI, and administrative CLI
+instructions are documented in `docs/OVRIN_RUNNER_OPERATIONS.md`.
 
 ## Validation data
 

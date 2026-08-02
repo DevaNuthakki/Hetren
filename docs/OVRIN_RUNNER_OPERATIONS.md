@@ -516,3 +516,44 @@ Retrieval is allowed only when:
 Invalid job IDs, assignments, claim tokens, leases, and terminal job states return the same generic claim-unavailable response so internal ownership state is not exposed.
 
 Read-only log retrieval does not take runner-job transition locks. This allows polling without unnecessarily blocking log ingestion, lease renewal, completion, or failure transitions.
+
+
+## Read-only runner operations UI
+
+The project workspace includes a read-only runner operations section for
+engineers inspecting secure execution infrastructure.
+
+It displays:
+
+- Registered runner count
+- Active runner count
+- Active and failed job counts
+- Runner status, version, capabilities, and last heartbeat
+- Recent project-scoped runner jobs
+- Assigned runner and execution-attempt information
+- Controlled job failure messages
+- Ordered safe structured logs
+
+The frontend uses these project-scoped endpoints:
+
+    GET /projects/{project_id}/runner-operations
+    GET /projects/{project_id}/runner-jobs/{job_public_id}/logs
+
+The runner operations responses intentionally exclude:
+
+- Runner credentials and credential hashes
+- Registration tokens and token hashes
+- Job claim tokens and claim-token hashes
+- Runner system information
+- Raw job input and result payloads
+- Private audio or filesystem paths
+- Structured-log context payloads
+
+Job-log retrieval supports cursor-based pagination through
+`after_sequence` and `limit`. Logs are returned in ascending sequence order.
+
+Runner revocation and job cancellation remain administrative CLI operations.
+They are not exposed as browser write actions because Ovrin does not yet have
+a separate authenticated human-administrator identity layer. This preserves
+the existing security boundary while still providing useful operational
+visibility.
