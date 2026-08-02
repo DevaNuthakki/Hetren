@@ -16,6 +16,7 @@ from app import models
 from app.database import get_db
 from app.local_runner_client import LocalRunnerClient
 from app.local_runner_execution import (
+    GENERIC_EXECUTION_ERROR,
     run_one_local_runner_cycle,
 )
 from app.main import app
@@ -641,6 +642,238 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 "execution_started",
                 "execution_completed",
             ]
+        finally:
+            db.close()
+    finally:
+        cleanup_case(
+            runner_http_harness,
+            case,
+        )
+
+
+def test_postgres_runner_hides_asr_provider_failure(
+    runner_http_harness: RunnerHTTPHarness,
+    tmp_path: Path,
+    monkeypatch,
+):
+    monkeypatch.chdir(tmp_path)
+
+    uploads_root = tmp_path / "uploads"
+    case = create_case(
+        runner_http_harness,
+        uploads_root=uploads_root,
+    )
+
+    sensitive_failure = (
+        "Sensitive provider failure from "
+        "/private/customer/model.bin with "
+        "credential secret-provider-token."
+    )
+    temporary_audio_paths: list[Path] = []
+
+    def fail_transcription(
+        self,
+        audio_path: str | Path,
+        model_name: str | None = None,
+    ):
+        del self
+        del model_name
+
+        temporary_audio_path = Path(audio_path)
+
+        assert temporary_audio_path.exists()
+        assert temporary_audio_path.name == "input.wav"
+        assert temporary_audio_path.read_bytes() == (
+            b"ovrin-runner-asr-end-to-end-audio"
+        )
+
+        temporary_audio_paths.append(
+            temporary_audio_path,
+        )
+
+        raise RuntimeError(sensitive_failure)
+
+    monkeypatch.setattr(
+        MockASRProvider,
+        "transcribe",
+        fail_transcription,
+    )
+
+    try:
+        with LocalRunnerClient(
+            api_base_url="http://testserver",
+            credential=case.credential,
+            timeout_seconds=5,
+            transport=runner_http_harness.transport,
+        ) as client:
+            cycle_result = run_one_local_runner_cycle(
+                client=client,
+                settings=build_settings(case),
+                system_info={
+                    "platform": (
+                        "postgres-asr-integration"
+                    ),
+                },
+            )
+
+        assert cycle_result.status == "failed"
+        assert cycle_result.job_public_id == (
+            case.job_public_id
+        )
+        assert cycle_result.error_message == (
+            GENERIC_EXECUTION_ERROR
+        )
+        assert cycle_result.result_payload is None
+        assert cycle_result.timed_out is False
+
+        assert sensitive_failure not in str(
+            cycle_result
+        )
+
+        assert len(temporary_audio_paths) == 1
+        assert not temporary_audio_paths[0].exists()
+
+        # The backend-owned source audio remains available.
+        assert case.source_audio_path.exists()
+
+        request_paths = [
+            path
+            for _method, path
+            in runner_http_harness.transport.requests
+        ]
+
+        context_path = (
+            f"/runners/jobs/{case.job_public_id}"
+            "/asr/context"
+        )
+        audio_path = (
+            f"/runners/jobs/{case.job_public_id}"
+            "/asr/audio"
+        )
+        result_path = (
+            f"/runners/jobs/{case.job_public_id}"
+            "/asr/result"
+        )
+        failure_path = (
+            f"/runners/jobs/{case.job_public_id}"
+            "/fail"
+        )
+
+        assert context_path in request_paths
+        assert audio_path in request_paths
+        assert failure_path in request_paths
+        assert result_path not in request_paths
+
+        assert request_paths.index(
+            context_path
+        ) < request_paths.index(
+            audio_path
+        ) < request_paths.index(
+            failure_path
+        )
+
+        db = runner_http_harness.session_factory()
+
+        try:
+            job = db.get(
+                models.RunnerJob,
+                case.job_id,
+            )
+            evaluation_run = db.get(
+                models.EvaluationRun,
+                case.evaluation_run_id,
+            )
+
+            assert job is not None
+            assert evaluation_run is not None
+
+            persisted_results = (
+                db.query(models.EvaluationResult)
+                .filter(
+                    models.EvaluationResult.run_id
+                    == case.evaluation_run_id,
+                    models.EvaluationResult.test_case_id
+                    == case.test_case_id,
+                )
+                .all()
+            )
+
+            logs = (
+                db.query(models.RunnerJobLog)
+                .filter(
+                    models.RunnerJobLog.job_id
+                    == case.job_id
+                )
+                .order_by(
+                    models.RunnerJobLog.sequence_number
+                )
+                .all()
+            )
+
+            assert persisted_results == []
+
+            assert job.status == "failed"
+            assert job.assigned_runner_id == case.runner_id
+            assert job.attempt_count == 1
+            assert job.claimed_at is not None
+            assert job.started_at is not None
+            assert job.failed_at is not None
+            assert job.completed_at is None
+            assert job.cancelled_at is None
+            assert job.lease_expires_at is None
+            assert job.claim_token_hash is None
+            assert job.result_payload is None
+            assert job.error_message == (
+                GENERIC_EXECUTION_ERROR
+            )
+
+            assert evaluation_run.generated_transcript is None
+            assert evaluation_run.wer is None
+            assert evaluation_run.cer is None
+
+            assert [
+                log.event_type
+                for log in logs
+            ] == [
+                "execution_started",
+                "execution_failed",
+            ]
+
+            failure_log = logs[1]
+
+            assert failure_log.level == "error"
+            assert failure_log.message == (
+                GENERIC_EXECUTION_ERROR
+            )
+            assert failure_log.attempt_number == 1
+            assert failure_log.context_payload == {
+                "job_type": "asr_evaluation",
+                "error_type": "RuntimeError",
+                "lease_renewal_failed": False,
+            }
+
+            persisted_failure_state = str(
+                {
+                    "job_error": job.error_message,
+                    "logs": [
+                        {
+                            "message": log.message,
+                            "context": log.context_payload,
+                        }
+                        for log in logs
+                    ],
+                }
+            )
+
+            assert sensitive_failure not in (
+                persisted_failure_state
+            )
+            assert "secret-provider-token" not in (
+                persisted_failure_state
+            )
+            assert "/private/customer" not in (
+                persisted_failure_state
+            )
         finally:
             db.close()
     finally:
