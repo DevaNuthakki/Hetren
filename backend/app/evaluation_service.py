@@ -41,13 +41,19 @@ def build_error_summary(
     return wer_score, cer_score, summary
 
 
-def persist_evaluation_result(
+def stage_evaluation_result(
     db: Session,
     db_run: models.EvaluationRun,
     db_test_case: models.TestCase,
     generated_text: str,
     generated_file_path: str | None = None,
 ) -> models.EvaluationResult:
+    """
+    Stage an evaluation result without committing the transaction.
+
+    Callers that coordinate additional state changes can commit all
+    related updates atomically.
+    """
     reference_text = db_test_case.reference_transcript
 
     wer_score, cer_score, error_summary = (
@@ -78,6 +84,27 @@ def persist_evaluation_result(
     db_run.quality_label = quality_label
     db_run.error_summary = error_summary
     db_run.status = "evaluated"
+
+    return db_result
+
+
+def persist_evaluation_result(
+    db: Session,
+    db_run: models.EvaluationRun,
+    db_test_case: models.TestCase,
+    generated_text: str,
+    generated_file_path: str | None = None,
+) -> models.EvaluationResult:
+    """
+    Persist an evaluation result for existing synchronous API flows.
+    """
+    db_result = stage_evaluation_result(
+        db=db,
+        db_run=db_run,
+        db_test_case=db_test_case,
+        generated_text=generated_text,
+        generated_file_path=generated_file_path,
+    )
 
     db.commit()
     db.refresh(db_result)
