@@ -28,6 +28,13 @@ SUPPORTED_RUNNER_JOB_TYPES = frozenset(
         "asr_evaluation",
     }
 )
+
+SUPPORTED_ASR_AUDIO_MEDIA_TYPES = {
+    ".wav": "audio/wav",
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+}
+
 MIN_RUNNER_JOB_PRIORITY = -1000
 MAX_RUNNER_JOB_PRIORITY = 1000
 MAX_RUNNER_JOB_ATTEMPTS = 100
@@ -80,6 +87,12 @@ class RunnerJobASRContextUnavailableError(
     """Raised when executable ASR context is unavailable."""
 
 
+class RunnerJobASRAudioUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when executable ASR audio is unavailable."""
+
+
 class RunnerJobProjectNotFoundError(RunnerJobServiceError):
     """Raised when a runner job references a missing project."""
 
@@ -117,6 +130,13 @@ class ASREvaluationContext:
     model_name: str
     test_case_title: str
     audio_file_name: str
+
+
+@dataclass(frozen=True)
+class ASREvaluationAudio:
+    path: Path
+    file_name: str
+    media_type: str
 
 
 @dataclass(frozen=True)
@@ -792,6 +812,103 @@ def get_asr_evaluation_context(
 
     db.rollback()
     return context
+
+
+def get_asr_evaluation_audio(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    uploads_root: str | Path = "uploads",
+    now: datetime | None = None,
+) -> ASREvaluationAudio:
+    """
+    Resolve claim-protected ASR audio for a standalone runner.
+
+    The selected file must be a supported regular audio file contained
+    inside the configured uploads directory. Filesystem paths are never
+    returned through the HTTP API.
+    """
+    try:
+        context = get_asr_evaluation_context(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=claim_token,
+            now=now,
+        )
+    except RunnerJobASRContextUnavailableError as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == context.test_case_id,
+            models.Dataset.project_id
+            == context.project_id,
+        )
+        .first()
+    )
+
+    if (
+        test_case is None
+        or not test_case.audio_file_path
+    ):
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    try:
+        uploads_path = Path(
+            uploads_root
+        ).resolve(strict=True)
+
+        audio_path = Path(
+            test_case.audio_file_path
+        ).resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
+    media_type = SUPPORTED_ASR_AUDIO_MEDIA_TYPES.get(
+        audio_path.suffix.lower()
+    )
+    file_name = audio_path.name.strip()
+
+    audio_is_unavailable = (
+        not uploads_path.is_dir()
+        or not audio_path.is_relative_to(uploads_path)
+        or not audio_path.is_file()
+        or media_type is None
+        or not file_name
+    )
+
+    if audio_is_unavailable:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    audio = ASREvaluationAudio(
+        path=audio_path,
+        file_name=file_name,
+        media_type=media_type,
+    )
+
+    db.rollback()
+    return audio
 
 
 def _get_owned_job_claim_for_update(

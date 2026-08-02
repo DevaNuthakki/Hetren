@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
@@ -30,6 +31,7 @@ from app.runner_schemas import (
     RunnerRegistrationResponse,
 )
 from app.runner_job_service import (
+    RunnerJobASRAudioUnavailableError,
     RunnerJobASRContextUnavailableError,
     RunnerJobClaimConflictError,
     RunnerJobClaimUnavailableError,
@@ -40,6 +42,7 @@ from app.runner_job_service import (
     claim_next_job,
     complete_job,
     fail_job,
+    get_asr_evaluation_audio,
     get_asr_evaluation_context,
     get_job_control_status,
     query_job_logs,
@@ -466,6 +469,63 @@ def runner_asr_evaluation_context_endpoint(
         "test_case_title": context.test_case_title,
         "audio_file_name": context.audio_file_name,
     }
+
+
+@router.post(
+    "/jobs/{job_public_id}/asr/audio",
+    response_class=FileResponse,
+)
+def runner_asr_evaluation_audio_endpoint(
+    job_public_id: str,
+    request: RunnerASREvaluationContextRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Return claim-protected audio for an owned ASR evaluation job.
+
+    The backend filesystem path is never included in the response.
+    """
+    try:
+        audio = get_asr_evaluation_audio(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Runner credential is invalid or unavailable."
+            ),
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job claim is invalid or unavailable."
+            ),
+        ) from exc
+    except RunnerJobASRAudioUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner ASR audio is invalid or unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return FileResponse(
+        path=audio.path,
+        media_type=audio.media_type,
+        filename=audio.file_name,
+    )
 
 
 @router.post(

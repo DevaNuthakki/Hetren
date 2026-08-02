@@ -1,4 +1,5 @@
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from uuid import uuid4
 
 import pytest
@@ -14,6 +15,7 @@ from app.runner_job_service import (
     MAX_JOB_LEASE_DURATION,
     MAX_RUNNER_JOB_LOG_BATCH_SIZE,
     RunnerJobCancellationUnavailableError,
+    RunnerJobASRAudioUnavailableError,
     RunnerJobASRContextUnavailableError,
     RunnerJobClaimUnavailableError,
     RunnerJobControlUnavailableError,
@@ -26,6 +28,7 @@ from app.runner_job_service import (
     complete_job,
     enqueue_job,
     fail_job,
+    get_asr_evaluation_audio,
     get_asr_evaluation_context,
     get_job_control_status,
     query_job_logs,
@@ -3451,4 +3454,268 @@ def test_get_asr_evaluation_context_hides_cross_project_data(
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
             claim_token=claimed.claim_token,
+        )
+
+
+
+def create_claimed_asr_audio_job(
+    db: Session,
+    *,
+    audio_file_path: str | None,
+):
+    project = create_project(
+        db,
+        "Runner ASR audio project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Runner ASR audio runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+
+    test_case.audio_file_path = audio_file_path
+    db.commit()
+
+    job = create_job(
+        db,
+        project=project,
+        name="Runner ASR audio job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    return registered, claimed
+
+
+@pytest.mark.parametrize(
+    ("extension", "expected_media_type"),
+    [
+        (".wav", "audio/wav"),
+        (".mp3", "audio/mpeg"),
+        (".m4a", "audio/mp4"),
+    ],
+)
+def test_get_asr_evaluation_audio_returns_supported_file(
+    db: Session,
+    tmp_path: Path,
+    extension: str,
+    expected_media_type: str,
+):
+    uploads_root = tmp_path / "uploads"
+    audio_path = (
+        uploads_root
+        / "datasets"
+        / "1"
+        / "test-cases"
+        / "audio"
+        / f"support-call{extension}"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(b"runner-audio-test")
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(audio_path),
+    )
+
+    audio = get_asr_evaluation_audio(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        uploads_root=uploads_root,
+    )
+
+    assert audio.path == audio_path.resolve()
+    assert audio.file_name == f"support-call{extension}"
+    assert audio.media_type == expected_media_type
+
+
+def test_get_asr_evaluation_audio_rejects_path_outside_uploads(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    uploads_root.mkdir()
+
+    outside_audio = tmp_path / "private-audio.wav"
+    outside_audio.write_bytes(b"private-audio")
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(outside_audio),
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+
+def test_get_asr_evaluation_audio_rejects_unsupported_extension(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    audio_path = uploads_root / "support-call.txt"
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(b"not-supported-audio")
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(audio_path),
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+
+def test_get_asr_evaluation_audio_rejects_missing_file(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    uploads_root.mkdir()
+
+    missing_audio = uploads_root / "missing.wav"
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(missing_audio),
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+
+def test_get_asr_evaluation_audio_rejects_directory(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    directory_path = uploads_root / "directory.wav"
+    directory_path.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(directory_path),
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+
+def test_get_asr_evaluation_audio_maps_missing_context(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    uploads_root.mkdir()
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=None,
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+
+def test_get_asr_evaluation_audio_preserves_claim_failure(
+    db: Session,
+    tmp_path: Path,
+):
+    uploads_root = tmp_path / "uploads"
+    audio_path = uploads_root / "support-call.wav"
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(b"runner-audio-test")
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(audio_path),
+    )
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token="ovrin_claim_invalid-token",
+            uploads_root=uploads_root,
         )

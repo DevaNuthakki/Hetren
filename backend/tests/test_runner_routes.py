@@ -1706,3 +1706,248 @@ def test_runner_asr_context_maps_invalid_payload_to_422(
     assert error.value.status_code == 422
     assert "evaluation_run_id" in error.value.detail
     assert "test_case_id" in error.value.detail
+
+
+
+def test_runner_asr_audio_route_is_included_in_app():
+    route = "/runners/jobs/{job_public_id}/asr/audio"
+    operation = app.openapi()["paths"][route]
+
+    assert "post" in operation
+
+
+def test_runner_asr_audio_returns_file_response(
+    monkeypatch,
+    tmp_path,
+):
+    job_public_id = (
+        "10000000-0000-0000-0000-000000000001"
+    )
+    audio_path = tmp_path / "support-call.wav"
+    audio_path.write_bytes(b"runner-audio-test")
+
+    audio = SimpleNamespace(
+        path=audio_path,
+        file_name="support-call.wav",
+        media_type="audio/wav",
+    )
+
+    def fake_get_audio(_db, **kwargs):
+        assert kwargs == {
+            "credential": "ovrin_runner_test-credential",
+            "job_public_id": job_public_id,
+            "claim_token": "ovrin_claim_test-token",
+        }
+        return audio
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_audio",
+        fake_get_audio,
+    )
+
+    response = (
+        runner_routes
+        .runner_asr_evaluation_audio_endpoint(
+            job_public_id=job_public_id,
+            request=(
+                runner_routes
+                .RunnerASREvaluationContextRequest(
+                    claim_token="ovrin_claim_test-token",
+                )
+            ),
+            credential="ovrin_runner_test-credential",
+            db=object(),
+        )
+    )
+
+    assert isinstance(
+        response,
+        runner_routes.FileResponse,
+    )
+    assert str(response.path) == str(audio_path)
+    assert response.media_type == "audio/wav"
+    assert "support-call.wav" in (
+        response.headers["content-disposition"]
+    )
+
+
+def test_runner_asr_audio_maps_authentication_failure_to_401(
+    monkeypatch,
+):
+    def reject_audio(_db, **_kwargs):
+        raise runner_routes.RunnerAuthenticationError(
+            "Specific internal authentication state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_audio",
+        reject_audio,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_audio_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential="invalid",
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 401
+    assert error.value.detail == (
+        "Runner credential is invalid or unavailable."
+    )
+    assert error.value.headers == {
+        "WWW-Authenticate": "Bearer",
+    }
+    assert "internal authentication" not in (
+        error.value.detail
+    )
+
+
+def test_runner_asr_audio_hides_invalid_claim(
+    monkeypatch,
+):
+    def reject_audio(_db, **_kwargs):
+        raise runner_routes.RunnerJobClaimUnavailableError(
+            "Specific internal claim state."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_audio",
+        reject_audio,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_audio_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner job claim is invalid or unavailable."
+    )
+    assert "internal claim" not in error.value.detail
+
+
+def test_runner_asr_audio_hides_unavailable_audio(
+    monkeypatch,
+):
+    def reject_audio(_db, **_kwargs):
+        raise (
+            runner_routes
+            .RunnerJobASRAudioUnavailableError(
+                "Specific internal audio state."
+            )
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_audio",
+        reject_audio,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_audio_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 409
+    assert error.value.detail == (
+        "Runner ASR audio is invalid or unavailable."
+    )
+    assert "internal audio" not in error.value.detail
+
+
+def test_runner_asr_audio_maps_invalid_payload_to_422(
+    monkeypatch,
+):
+    def reject_audio(_db, **_kwargs):
+        raise ValueError(
+            "ASR evaluation input must contain exactly "
+            "evaluation_run_id and test_case_id."
+        )
+
+    monkeypatch.setattr(
+        runner_routes,
+        "get_asr_evaluation_audio",
+        reject_audio,
+    )
+
+    with pytest.raises(HTTPException) as error:
+        (
+            runner_routes
+            .runner_asr_evaluation_audio_endpoint(
+                job_public_id=(
+                    "10000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                request=(
+                    runner_routes
+                    .RunnerASREvaluationContextRequest(
+                        claim_token=(
+                            "ovrin_claim_test-token"
+                        ),
+                    )
+                ),
+                credential=(
+                    "ovrin_runner_test-credential"
+                ),
+                db=object(),
+            )
+        )
+
+    assert error.value.status_code == 422
+    assert "evaluation_run_id" in error.value.detail
+    assert "test_case_id" in error.value.detail
