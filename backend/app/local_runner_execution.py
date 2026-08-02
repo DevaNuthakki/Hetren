@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import platform
 from collections.abc import Callable
-from time import monotonic
 from dataclasses import dataclass
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from threading import Event, Lock, Thread
+from time import monotonic
 from typing import Literal, Protocol
 
 from app.local_runner_client import (
@@ -13,6 +15,7 @@ from app.local_runner_client import (
 )
 from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import RunnerJobRead
+from app.speech import ASRProvider, get_asr_provider
 
 
 GENERIC_EXECUTION_ERROR = (
@@ -125,12 +128,25 @@ class ExecutionControl:
         )
 
 
+@dataclass(frozen=True)
+class ASRRunnerExecutionResult:
+    generated_transcript: str
+    provider: str
+    provider_metadata: dict[str, object]
+
+
+RunnerExecutionResult = (
+    dict[str, object]
+    | ASRRunnerExecutionResult
+)
+
+
 class RunnerJobExecutor(Protocol):
     def execute(
         self,
         job: RunnerJobRead,
         control: ExecutionControl,
-    ) -> dict[str, object]:
+    ) -> RunnerExecutionResult:
         ...
 
 
@@ -227,6 +243,141 @@ LocalRunnerCycleRunner = Callable[
     ...,
     LocalRunnerCycleResult,
 ]
+
+
+class ASRRunnerJobExecutor:
+    """
+    Execute one claimed ASR evaluation in an isolated workspace.
+
+    The executor receives only the safe evaluation context and audio
+    stream exposed by the runner API. Backend paths and reference
+    transcripts are never available to the local runner.
+    """
+
+    supported_job_types = frozenset(
+        {
+            "asr_evaluation",
+        }
+    )
+    supported_audio_suffixes = frozenset(
+        {
+            ".wav",
+            ".mp3",
+            ".m4a",
+        }
+    )
+
+    def __init__(
+        self,
+        *,
+        client: LocalRunnerClient,
+        claim_token: str,
+        provider: ASRProvider,
+    ):
+        normalized_claim_token = claim_token.strip()
+
+        if not normalized_claim_token:
+            raise ValueError(
+                "Runner claim token must not be empty."
+            )
+
+        self._client = client
+        self._claim_token = normalized_claim_token
+        self._provider = provider
+
+    def execute(
+        self,
+        job: RunnerJobRead,
+        control: ExecutionControl,
+    ) -> ASRRunnerExecutionResult:
+        control.raise_if_stopped()
+
+        if job.job_type not in self.supported_job_types:
+            raise UnsupportedRunnerJobError(
+                "Runner job type is not supported."
+            )
+
+        context = (
+            self._client.get_asr_evaluation_context(
+                job_public_id=job.public_id,
+                claim_token=self._claim_token,
+            )
+        )
+
+        control.raise_if_stopped()
+
+        audio_suffix = Path(
+            context.audio_file_name
+        ).suffix.lower()
+
+        if (
+            audio_suffix
+            not in self.supported_audio_suffixes
+        ):
+            raise LocalRunnerExecutionError(
+                "Runner ASR audio format is unsupported."
+            )
+
+        with TemporaryDirectory(
+            prefix="ovrin-runner-asr-",
+        ) as workspace:
+            audio_destination = (
+                Path(workspace)
+                / f"input{audio_suffix}"
+            )
+
+            audio_path = (
+                self._client
+                .download_asr_evaluation_audio(
+                    job_public_id=job.public_id,
+                    claim_token=self._claim_token,
+                    destination=audio_destination,
+                )
+            )
+
+            if Path(audio_path) != audio_destination:
+                raise LocalRunnerExecutionError(
+                    "Runner ASR audio destination "
+                    "was invalid."
+                )
+
+            control.raise_if_stopped()
+
+            transcription = self._provider.transcribe(
+                audio_path,
+                model_name=context.model_name,
+            )
+
+            control.raise_if_stopped()
+
+        generated_transcript = (
+            transcription.transcript.strip()
+        )
+        provider_name = transcription.provider.strip()
+        model_name = transcription.model_name.strip()
+
+        if not generated_transcript:
+            raise LocalRunnerExecutionError(
+                "ASR provider returned an empty transcript."
+            )
+
+        if not provider_name:
+            raise LocalRunnerExecutionError(
+                "ASR provider name was unavailable."
+            )
+
+        if not model_name:
+            raise LocalRunnerExecutionError(
+                "ASR model name was unavailable."
+            )
+
+        return ASRRunnerExecutionResult(
+            generated_transcript=generated_transcript,
+            provider=provider_name,
+            provider_metadata={
+                "model_name": model_name,
+            },
+        )
 
 
 class PlaceholderRunnerJobExecutor:
@@ -537,6 +688,37 @@ def build_job_control_worker(
     )
 
 
+def build_default_runner_job_executor(
+    *,
+    client: LocalRunnerClient,
+    settings: LocalRunnerSettings,
+    job: RunnerJobRead,
+    claim_token: str,
+) -> RunnerJobExecutor:
+    """
+    Build the allowlisted executor for one claimed runner job.
+
+    ASR providers are resolved only after a job is successfully
+    claimed. Unsupported job types retain the controlled placeholder
+    executor so the existing safe failure path remains active.
+    """
+    if job.job_type == "asr_evaluation":
+        return ASRRunnerJobExecutor(
+            client=client,
+            claim_token=claim_token,
+            provider=get_asr_provider(
+                settings.asr_provider,
+                model_name=settings.asr_model,
+                device=settings.asr_device,
+                compute_type=(
+                    settings.asr_compute_type
+                ),
+            ),
+        )
+
+    return PlaceholderRunnerJobExecutor()
+
+
 def collect_runner_system_info() -> dict[str, object]:
     """
     Return non-sensitive runner environment information.
@@ -576,10 +758,6 @@ def run_one_local_runner_cycle(
     API or protocol failures propagate when remote state cannot be
     determined safely.
     """
-    selected_executor = (
-        executor or PlaceholderRunnerJobExecutor()
-    )
-
     client.heartbeat(
         runner_version=settings.runner_version,
         capabilities=settings.capabilities,
@@ -609,6 +787,18 @@ def run_one_local_runner_cycle(
 
     job = claimed.job
     claim_token = claimed.claim_token
+
+    selected_executor = executor
+
+    if selected_executor is None:
+        selected_executor = (
+            build_default_runner_job_executor(
+                client=client,
+                settings=settings,
+                job=job,
+                claim_token=claim_token,
+            )
+        )
 
     client.start_job(
         job_public_id=job.public_id,
@@ -662,18 +852,24 @@ def run_one_local_runner_cycle(
     )
 
     execution_error: Exception | None = None
-    result_payload: dict[str, object] | None = None
+    execution_result: RunnerExecutionResult | None = None
 
     renewal_worker.start()
     control_worker.start()
 
     try:
-        result_payload = selected_executor.execute(
+        execution_result = selected_executor.execute(
             job,
             execution_control,
         )
 
-        if not isinstance(result_payload, dict):
+        if not isinstance(
+            execution_result,
+            (
+                dict,
+                ASRRunnerExecutionResult,
+            ),
+        ):
             raise LocalRunnerExecutionError(
                 "Runner executor returned an invalid result."
             )
@@ -818,7 +1014,7 @@ def run_one_local_runner_cycle(
             error_message=GENERIC_EXECUTION_ERROR,
         )
 
-    if result_payload is None:
+    if execution_result is None:
         raise LocalRunnerExecutionError(
             "Runner execution result was unavailable."
         )
@@ -843,16 +1039,57 @@ def run_one_local_runner_cycle(
         ],
     )
 
-    client.complete_job(
-        job_public_id=job.public_id,
-        claim_token=claim_token,
-        result_payload=result_payload,
-    )
+    if isinstance(
+        execution_result,
+        ASRRunnerExecutionResult,
+    ):
+        submission = (
+            client.submit_asr_evaluation_result(
+                job_public_id=job.public_id,
+                claim_token=claim_token,
+                generated_transcript=(
+                    execution_result.generated_transcript
+                ),
+                provider=execution_result.provider,
+                provider_metadata=(
+                    execution_result.provider_metadata
+                ),
+            )
+        )
+
+        result_payload = {
+            "evaluation_result_id": (
+                submission.result.id
+            ),
+            "evaluation_run_id": (
+                submission.result.run_id
+            ),
+            "test_case_id": (
+                submission.result.test_case_id
+            ),
+            "provider": submission.provider,
+            "provider_metadata": dict(
+                submission.provider_metadata
+            ),
+            "wer": submission.result.wer,
+            "cer": submission.result.cer,
+            "quality_label": (
+                submission.result.quality_label
+            ),
+        }
+    else:
+        result_payload = dict(execution_result)
+
+        client.complete_job(
+            job_public_id=job.public_id,
+            claim_token=claim_token,
+            result_payload=result_payload,
+        )
 
     return LocalRunnerCycleResult(
         status="completed",
         job_public_id=job.public_id,
-        result_payload=dict(result_payload),
+        result_payload=result_payload,
     )
 
 

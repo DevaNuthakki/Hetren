@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from fastapi.security import (
     HTTPAuthorizationCredentials,
     HTTPBearer,
@@ -9,6 +10,10 @@ from sqlalchemy.orm import Session
 
 from app.database import get_db
 from app.runner_schemas import (
+    RunnerASREvaluationContextRequest,
+    RunnerASREvaluationContextResponse,
+    RunnerASREvaluationResultRequest,
+    RunnerASREvaluationResultResponse,
     RunnerHeartbeatRequest,
     RunnerHeartbeatResponse,
     RunnerJobClaimRequest,
@@ -28,6 +33,9 @@ from app.runner_schemas import (
     RunnerRegistrationResponse,
 )
 from app.runner_job_service import (
+    RunnerJobASRAudioUnavailableError,
+    RunnerJobASRContextUnavailableError,
+    RunnerJobASRResultUnavailableError,
     RunnerJobClaimConflictError,
     RunnerJobClaimUnavailableError,
     RunnerJobControlUnavailableError,
@@ -37,10 +45,13 @@ from app.runner_job_service import (
     claim_next_job,
     complete_job,
     fail_job,
+    get_asr_evaluation_audio,
+    get_asr_evaluation_context,
     get_job_control_status,
     query_job_logs,
     renew_job_lease,
     start_job,
+    submit_asr_evaluation_result,
 )
 from app.runner_service import (
     RegistrationTokenUnavailableError,
@@ -399,6 +410,193 @@ def runner_job_control_endpoint(
 
     return {
         "status": control_status,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/asr/context",
+    response_model=RunnerASREvaluationContextResponse,
+)
+def runner_asr_evaluation_context_endpoint(
+    job_public_id: str,
+    request: RunnerASREvaluationContextRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Return controlled metadata for an owned ASR evaluation job.
+
+    Server-local paths and reference transcripts are never returned.
+    """
+    try:
+        context = get_asr_evaluation_context(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Runner credential is invalid or unavailable."
+            ),
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job claim is invalid or unavailable."
+            ),
+        ) from exc
+    except RunnerJobASRContextUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner ASR evaluation context is invalid "
+                "or unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "project_id": context.project_id,
+        "evaluation_run_id": context.evaluation_run_id,
+        "test_case_id": context.test_case_id,
+        "run_name": context.run_name,
+        "model_name": context.model_name,
+        "test_case_title": context.test_case_title,
+        "audio_file_name": context.audio_file_name,
+    }
+
+
+@router.post(
+    "/jobs/{job_public_id}/asr/audio",
+    response_class=FileResponse,
+)
+def runner_asr_evaluation_audio_endpoint(
+    job_public_id: str,
+    request: RunnerASREvaluationContextRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Return claim-protected audio for an owned ASR evaluation job.
+
+    The backend filesystem path is never included in the response.
+    """
+    try:
+        audio = get_asr_evaluation_audio(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Runner credential is invalid or unavailable."
+            ),
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job claim is invalid or unavailable."
+            ),
+        ) from exc
+    except RunnerJobASRAudioUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner ASR audio is invalid or unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return FileResponse(
+        path=audio.path,
+        media_type=audio.media_type,
+        filename=audio.file_name,
+    )
+
+
+@router.post(
+    "/jobs/{job_public_id}/asr/result",
+    response_model=RunnerASREvaluationResultResponse,
+)
+def runner_asr_evaluation_result_endpoint(
+    job_public_id: str,
+    request: RunnerASREvaluationResultRequest,
+    credential: str = Depends(get_runner_credential),
+    db: Session = Depends(get_db),
+):
+    """
+    Persist an ASR transcript and complete its runner job atomically.
+
+    Evaluation metrics are calculated by the backend from the stored
+    reference transcript. Runner-supplied metrics and paths are not
+    accepted.
+    """
+    try:
+        submission = submit_asr_evaluation_result(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=request.claim_token,
+            generated_transcript=(
+                request.generated_transcript
+            ),
+            provider=request.provider,
+            provider_metadata=request.provider_metadata,
+        )
+    except RunnerAuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=(
+                "Runner credential is invalid or unavailable."
+            ),
+            headers={"WWW-Authenticate": "Bearer"},
+        ) from exc
+    except RunnerJobClaimUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner job claim is invalid or unavailable."
+            ),
+        ) from exc
+    except RunnerJobASRResultUnavailableError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=(
+                "Runner ASR result is invalid or unavailable."
+            ),
+        ) from exc
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT,
+            detail=str(exc),
+        ) from exc
+
+    return {
+        "status": "completed",
+        "result": submission.result,
+        "job": submission.job,
+        "provider": submission.provider,
+        "provider_metadata": (
+            submission.provider_metadata
+        ),
     }
 
 

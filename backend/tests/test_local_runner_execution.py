@@ -1,27 +1,36 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime
+from pathlib import Path
 from threading import Event
+from types import SimpleNamespace
 
 import pytest
 
+import app.local_runner_execution as local_runner_execution
 from app.local_runner_execution import (
     GENERIC_EXECUTION_ERROR,
     GENERIC_EXECUTION_TIMEOUT_ERROR,
+    ASRRunnerExecutionResult,
+    ASRRunnerJobExecutor,
     ExecutionControl,
     JobControlWorker,
     LeaseRenewalWorker,
     LocalRunnerCycleResult,
+    LocalRunnerExecutionError,
     PlaceholderRunnerJobExecutor,
+    RunnerJobCancelledError,
     run_local_runner_loop,
     run_one_local_runner_cycle,
 )
 from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import (
+    RunnerASREvaluationContextResponse,
     RunnerJobClaimResponse,
     RunnerJobControlStatusResponse,
     RunnerJobRead,
 )
+from app.speech.base import TranscriptionResult
 
 
 NOW = datetime(
@@ -159,6 +168,32 @@ class RecordingClient:
                 event_type,
                 kwargs,
             )
+        )
+
+    def submit_asr_evaluation_result(
+        self,
+        **kwargs,
+    ):
+        self.calls.append(
+            (
+                "submit_asr_result",
+                kwargs,
+            )
+        )
+
+        return SimpleNamespace(
+            result=SimpleNamespace(
+                id=81,
+                run_id=42,
+                test_case_id=9,
+                wer=0.0,
+                cer=0.0,
+                quality_label="excellent",
+            ),
+            provider=kwargs["provider"],
+            provider_metadata=dict(
+                kwargs["provider_metadata"]
+            ),
         )
 
     def complete_job(self, **kwargs):
@@ -1133,3 +1168,626 @@ def test_run_one_cycle_classifies_signalled_renewal_failure():
     assert "Sensitive renewal" not in str(
         client.calls
     )
+
+
+
+class ASRExecutorRecordingClient:
+    def __init__(
+        self,
+        *,
+        audio_file_name: str = "support-call.wav",
+    ):
+        self.audio_file_name = audio_file_name
+        self.calls: list[tuple] = []
+        self.downloaded_path: Path | None = None
+
+    def get_asr_evaluation_context(
+        self,
+        **kwargs,
+    ) -> RunnerASREvaluationContextResponse:
+        self.calls.append(
+            (
+                "context",
+                kwargs,
+            )
+        )
+
+        return RunnerASREvaluationContextResponse(
+            project_id=7,
+            evaluation_run_id=42,
+            test_case_id=9,
+            run_name="Candidate evaluation",
+            model_name="large-v3-turbo",
+            test_case_title="Support call",
+            audio_file_name=self.audio_file_name,
+        )
+
+    def download_asr_evaluation_audio(
+        self,
+        **kwargs,
+    ) -> Path:
+        destination = Path(kwargs["destination"])
+        destination.write_bytes(
+            b"runner-asr-audio"
+        )
+        self.downloaded_path = destination
+
+        self.calls.append(
+            (
+                "download",
+                kwargs,
+            )
+        )
+
+        return destination
+
+
+class RecordingASRProvider:
+    provider_name = "test_provider"
+
+    def __init__(
+        self,
+        *,
+        failure: Exception | None = None,
+    ):
+        self.failure = failure
+        self.calls: list[dict[str, object]] = []
+        self.audio_path: Path | None = None
+
+    def transcribe(
+        self,
+        audio_path: str | Path,
+        model_name: str | None = None,
+    ) -> TranscriptionResult:
+        self.audio_path = Path(audio_path)
+        self.calls.append(
+            {
+                "audio_path": self.audio_path,
+                "model_name": model_name,
+            }
+        )
+
+        assert self.audio_path.exists()
+        assert self.audio_path.read_bytes() == (
+            b"runner-asr-audio"
+        )
+
+        if self.failure is not None:
+            raise self.failure
+
+        return TranscriptionResult(
+            transcript="  thank you for calling  ",
+            provider="test_provider",
+            model_name=model_name or "test-model",
+        )
+
+
+def test_asr_executor_transcribes_downloaded_audio():
+    job = build_job()
+    client = ASRExecutorRecordingClient()
+    provider = RecordingASRProvider()
+
+    result = ASRRunnerJobExecutor(
+        client=client,
+        claim_token="ovrin_claim_test-token",
+        provider=provider,
+    ).execute(
+        job,
+        ExecutionControl(),
+    )
+
+    assert result == ASRRunnerExecutionResult(
+        generated_transcript=(
+            "thank you for calling"
+        ),
+        provider="test_provider",
+        provider_metadata={
+            "model_name": "large-v3-turbo",
+        },
+    )
+
+    assert [
+        call[0]
+        for call in client.calls
+    ] == [
+        "context",
+        "download",
+    ]
+
+    assert client.calls[0][1] == {
+        "job_public_id": job.public_id,
+        "claim_token": "ovrin_claim_test-token",
+    }
+
+    assert client.calls[1][1][
+        "job_public_id"
+    ] == job.public_id
+    assert client.calls[1][1][
+        "claim_token"
+    ] == "ovrin_claim_test-token"
+
+    assert provider.calls[0][
+        "model_name"
+    ] == "large-v3-turbo"
+
+    assert provider.audio_path is not None
+    assert not provider.audio_path.exists()
+    assert client.downloaded_path is not None
+    assert not client.downloaded_path.exists()
+
+
+def test_asr_executor_removes_audio_after_provider_failure():
+    client = ASRExecutorRecordingClient()
+    provider = RecordingASRProvider(
+        failure=RuntimeError(
+            "Sensitive provider failure details."
+        )
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match="Sensitive provider failure",
+    ):
+        ASRRunnerJobExecutor(
+            client=client,
+            claim_token="ovrin_claim_test-token",
+            provider=provider,
+        ).execute(
+            build_job(),
+            ExecutionControl(),
+        )
+
+    assert provider.audio_path is not None
+    assert not provider.audio_path.exists()
+    assert client.downloaded_path is not None
+    assert not client.downloaded_path.exists()
+
+
+def test_asr_executor_rejects_unsupported_job_type():
+    client = ASRExecutorRecordingClient()
+    provider = RecordingASRProvider()
+
+    with pytest.raises(
+        LocalRunnerExecutionError,
+    ):
+        ASRRunnerJobExecutor(
+            client=client,
+            claim_token="ovrin_claim_test-token",
+            provider=provider,
+        ).execute(
+            build_job(
+                job_type="unsupported_job",
+            ),
+            ExecutionControl(),
+        )
+
+    assert client.calls == []
+    assert provider.calls == []
+
+
+def test_asr_executor_rejects_unsupported_audio_format():
+    client = ASRExecutorRecordingClient(
+        audio_file_name="support-call.flac",
+    )
+    provider = RecordingASRProvider()
+
+    with pytest.raises(
+        LocalRunnerExecutionError,
+        match="audio format",
+    ):
+        ASRRunnerJobExecutor(
+            client=client,
+            claim_token="ovrin_claim_test-token",
+            provider=provider,
+        ).execute(
+            build_job(),
+            ExecutionControl(),
+        )
+
+    assert [
+        call[0]
+        for call in client.calls
+    ] == [
+        "context",
+    ]
+    assert provider.calls == []
+
+
+def test_asr_executor_checks_control_before_api_access():
+    client = ASRExecutorRecordingClient()
+    provider = RecordingASRProvider()
+    control = ExecutionControl()
+    control.request_stop("cancelled")
+
+    with pytest.raises(
+        RunnerJobCancelledError,
+    ):
+        ASRRunnerJobExecutor(
+            client=client,
+            claim_token="ovrin_claim_test-token",
+            provider=provider,
+        ).execute(
+            build_job(),
+            control,
+        )
+
+    assert client.calls == []
+    assert provider.calls == []
+
+
+def test_asr_executor_rejects_empty_claim_token():
+    with pytest.raises(
+        ValueError,
+        match="claim token",
+    ):
+        ASRRunnerJobExecutor(
+            client=ASRExecutorRecordingClient(),
+            claim_token="   ",
+            provider=RecordingASRProvider(),
+        )
+
+
+
+class RecordingASRResultExecutor:
+    def __init__(
+        self,
+        calls: list[tuple],
+    ):
+        self.calls = calls
+
+    def execute(
+        self,
+        job: RunnerJobRead,
+        control: ExecutionControl,
+    ) -> ASRRunnerExecutionResult:
+        control.raise_if_stopped()
+        self.calls.append(
+            (
+                "execute_asr",
+                job.public_id,
+            )
+        )
+
+        return ASRRunnerExecutionResult(
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster_whisper",
+            provider_metadata={
+                "model_name": "large-v3-turbo",
+            },
+        )
+
+
+def test_run_one_cycle_submits_asr_result_atomically():
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        executor=RecordingASRResultExecutor(
+            client.calls
+        ),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "completed"
+    assert result.job_public_id == job.public_id
+    assert result.result_payload == {
+        "evaluation_result_id": 81,
+        "evaluation_run_id": 42,
+        "test_case_id": 9,
+        "provider": "faster_whisper",
+        "provider_metadata": {
+            "model_name": "large-v3-turbo",
+        },
+        "wer": 0.0,
+        "cer": 0.0,
+        "quality_label": "excellent",
+    }
+
+    call_names = [
+        call[0]
+        for call in client.calls
+    ]
+
+    assert call_names == [
+        "heartbeat",
+        "claim",
+        "start",
+        "log",
+        "execute_asr",
+        "control",
+        "log",
+        "submit_asr_result",
+    ]
+
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+    submission = client.calls[-1][1]
+
+    assert submission == {
+        "job_public_id": job.public_id,
+        "claim_token": "ovrin_claim_test-token",
+        "generated_transcript": (
+            "thank you for calling"
+        ),
+        "provider": "faster_whisper",
+        "provider_metadata": {
+            "model_name": "large-v3-turbo",
+        },
+    }
+
+
+
+class DefaultASRRecordingClient(RecordingClient):
+    def __init__(
+        self,
+        claim_response: RunnerJobClaimResponse,
+    ):
+        super().__init__(claim_response)
+        self.downloaded_path: Path | None = None
+
+    def get_asr_evaluation_context(
+        self,
+        **kwargs,
+    ) -> RunnerASREvaluationContextResponse:
+        self.calls.append(
+            (
+                "context",
+                kwargs,
+            )
+        )
+
+        return RunnerASREvaluationContextResponse(
+            project_id=7,
+            evaluation_run_id=42,
+            test_case_id=9,
+            run_name="Candidate evaluation",
+            model_name="large-v3-turbo",
+            test_case_title="Support call",
+            audio_file_name="support-call.wav",
+        )
+
+    def download_asr_evaluation_audio(
+        self,
+        **kwargs,
+    ) -> Path:
+        destination = Path(kwargs["destination"])
+        destination.write_bytes(
+            b"default-runner-asr-audio"
+        )
+        self.downloaded_path = destination
+
+        self.calls.append(
+            (
+                "download",
+                kwargs,
+            )
+        )
+
+        return destination
+
+
+class DefaultRecordingASRProvider:
+    provider_name = "mock_local"
+
+    def __init__(self):
+        self.calls: list[dict[str, object]] = []
+        self.audio_path: Path | None = None
+
+    def transcribe(
+        self,
+        audio_path: str | Path,
+        model_name: str | None = None,
+    ) -> TranscriptionResult:
+        self.audio_path = Path(audio_path)
+
+        assert self.audio_path.exists()
+        assert self.audio_path.read_bytes() == (
+            b"default-runner-asr-audio"
+        )
+
+        self.calls.append(
+            {
+                "audio_path": self.audio_path,
+                "model_name": model_name,
+            }
+        )
+
+        return TranscriptionResult(
+            transcript="default runner transcript",
+            provider=self.provider_name,
+            model_name=model_name or "mock-model",
+        )
+
+
+def test_run_one_cycle_uses_real_asr_executor_by_default(
+    monkeypatch,
+):
+    job = build_job()
+    client = DefaultASRRecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+    provider = DefaultRecordingASRProvider()
+
+    provider_factory_calls: list[
+        dict[str, object]
+    ] = []
+
+    def build_provider(
+        provider_name: str,
+        *,
+        model_name: str,
+        device: str,
+        compute_type: str,
+    ):
+        provider_factory_calls.append(
+            {
+                "provider_name": provider_name,
+                "model_name": model_name,
+                "device": device,
+                "compute_type": compute_type,
+            }
+        )
+        return provider
+
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        build_provider,
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "completed"
+    assert result.job_public_id == job.public_id
+    assert result.result_payload == {
+        "evaluation_result_id": 81,
+        "evaluation_run_id": 42,
+        "test_case_id": 9,
+        "provider": "mock_local",
+        "provider_metadata": {
+            "model_name": "large-v3-turbo",
+        },
+        "wer": 0.0,
+        "cer": 0.0,
+        "quality_label": "excellent",
+    }
+
+    call_names = [
+        call[0]
+        for call in client.calls
+    ]
+
+    assert call_names == [
+        "heartbeat",
+        "claim",
+        "start",
+        "log",
+        "context",
+        "download",
+        "control",
+        "log",
+        "submit_asr_result",
+    ]
+
+    assert "complete" not in call_names
+    assert "fail" not in call_names
+
+    assert provider_factory_calls == [
+        {
+            "provider_name": "mock_local",
+            "model_name": "mock-asr-foundation",
+            "device": "cpu",
+            "compute_type": "int8",
+        }
+    ]
+
+    assert provider.calls == [
+        {
+            "audio_path": provider.audio_path,
+            "model_name": "large-v3-turbo",
+        }
+    ]
+
+    assert provider.audio_path is not None
+    assert not provider.audio_path.exists()
+    assert client.downloaded_path is not None
+    assert not client.downloaded_path.exists()
+
+    start_log = client.calls[3][2]["entries"][0]
+    assert start_log["context_payload"]["executor"] == (
+        "ASRRunnerJobExecutor"
+    )
+
+
+def test_idle_cycle_does_not_initialize_asr_provider(
+    monkeypatch,
+):
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="idle",
+            claim_token=None,
+            job=None,
+        )
+    )
+
+    def reject_provider_initialization():
+        raise AssertionError(
+            "ASR provider must not initialize for an idle queue."
+        )
+
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        reject_provider_initialization,
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "idle"
+    assert [
+        call[0]
+        for call in client.calls
+    ] == [
+        "heartbeat",
+        "claim",
+    ]
+
+
+def test_explicit_executor_skips_default_provider_factory(
+    monkeypatch,
+):
+    job = build_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    def reject_provider_initialization():
+        raise AssertionError(
+            "Explicit executor must bypass provider factory."
+        )
+
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        reject_provider_initialization,
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(),
+        executor=RecordingExecutor(client.calls),
+        system_info={"platform": "test"},
+    )
+
+    assert result.status == "completed"
+    assert result.result_payload == {
+        "execution_mode": "test",
+        "evaluation_run_id": 42,
+    }

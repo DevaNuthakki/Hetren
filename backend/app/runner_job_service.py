@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from uuid import uuid4
 
 from sqlalchemy import func
@@ -8,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models
+from app.evaluation_service import stage_evaluation_result
 from app.runner_security import (
     generate_job_claim_token,
     hash_job_claim_token,
@@ -27,11 +29,22 @@ SUPPORTED_RUNNER_JOB_TYPES = frozenset(
         "asr_evaluation",
     }
 )
+
+SUPPORTED_ASR_AUDIO_MEDIA_TYPES = {
+    ".wav": "audio/wav",
+    ".mp3": "audio/mpeg",
+    ".m4a": "audio/mp4",
+}
+
 MIN_RUNNER_JOB_PRIORITY = -1000
 MAX_RUNNER_JOB_PRIORITY = 1000
 MAX_RUNNER_JOB_ATTEMPTS = 100
 MAX_RUNNER_JOB_CAPABILITIES = 50
 MAX_RUNNER_JOB_INPUT_BYTES = 262_144
+
+MAX_ASR_GENERATED_TRANSCRIPT_LENGTH = 1_000_000
+MAX_ASR_PROVIDER_LENGTH = 100
+MAX_ASR_PROVIDER_METADATA_BYTES = 65_536
 
 MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
 MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH = 10_000
@@ -73,6 +86,23 @@ class RunnerJobTransitionUnavailableError(
     """Raised when a job cannot perform a requested transition."""
 
 
+class RunnerJobASRContextUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when executable ASR context is unavailable."""
+
+
+class RunnerJobASRAudioUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when executable ASR audio is unavailable."""
+
+
+class RunnerJobASRResultUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when an ASR result cannot be submitted."""
+
 
 class RunnerJobProjectNotFoundError(RunnerJobServiceError):
     """Raised when a runner job references a missing project."""
@@ -101,6 +131,31 @@ class ClaimedRunnerJob:
     claim_token: str
     job: models.RunnerJob
 
+
+@dataclass(frozen=True)
+class ASREvaluationContext:
+    project_id: int
+    evaluation_run_id: int
+    test_case_id: int
+    run_name: str
+    model_name: str
+    test_case_title: str
+    audio_file_name: str
+
+
+@dataclass(frozen=True)
+class ASREvaluationAudio:
+    path: Path
+    file_name: str
+    media_type: str
+
+
+@dataclass(frozen=True)
+class ASREvaluationSubmission:
+    result: models.EvaluationResult
+    job: models.RunnerJob
+    provider: str
+    provider_metadata: dict[str, object]
 
 
 @dataclass(frozen=True)
@@ -634,6 +689,501 @@ def _get_owned_job_claim_for_read(
         )
 
     return job
+
+
+def _validate_asr_evaluation_payload(
+    input_payload: object,
+) -> tuple[int, int]:
+    required_fields = {
+        "evaluation_run_id",
+        "test_case_id",
+    }
+
+    if (
+        not isinstance(input_payload, dict)
+        or set(input_payload) != required_fields
+    ):
+        raise ValueError(
+            "ASR evaluation input must contain exactly "
+            "evaluation_run_id and test_case_id."
+        )
+
+    evaluation_run_id = input_payload[
+        "evaluation_run_id"
+    ]
+    test_case_id = input_payload["test_case_id"]
+
+    for field_name, value in (
+        ("evaluation_run_id", evaluation_run_id),
+        ("test_case_id", test_case_id),
+    ):
+        if (
+            isinstance(value, bool)
+            or not isinstance(value, int)
+            or value < 1
+        ):
+            raise ValueError(
+                f"ASR evaluation {field_name} must be a "
+                "positive integer."
+            )
+
+    return evaluation_run_id, test_case_id
+
+
+def _normalize_asr_generated_transcript(
+    generated_transcript: str,
+) -> str:
+    if not isinstance(generated_transcript, str):
+        raise ValueError(
+            "Generated transcript must be text."
+        )
+
+    normalized = generated_transcript.strip()
+
+    if not normalized:
+        raise ValueError(
+            "Generated transcript must not be empty."
+        )
+
+    if (
+        len(normalized)
+        > MAX_ASR_GENERATED_TRANSCRIPT_LENGTH
+    ):
+        raise ValueError(
+            "Generated transcript must not exceed "
+            "1000000 characters."
+        )
+
+    return normalized
+
+
+def _normalize_asr_provider(
+    provider: str,
+) -> str:
+    if not isinstance(provider, str):
+        raise ValueError(
+            "ASR provider must be text."
+        )
+
+    normalized = provider.strip()
+
+    if not normalized:
+        raise ValueError(
+            "ASR provider must not be empty."
+        )
+
+    if len(normalized) > MAX_ASR_PROVIDER_LENGTH:
+        raise ValueError(
+            "ASR provider must not exceed 100 characters."
+        )
+
+    return normalized
+
+
+def _normalize_asr_provider_metadata(
+    provider_metadata: dict[str, object] | None,
+) -> dict[str, object]:
+    if provider_metadata is None:
+        return {}
+
+    if not isinstance(provider_metadata, dict):
+        raise ValueError(
+            "ASR provider metadata must be a JSON object."
+        )
+
+    try:
+        serialized = json.dumps(
+            provider_metadata,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "ASR provider metadata must contain "
+            "JSON-serializable values."
+        ) from exc
+
+    if (
+        len(serialized.encode("utf-8"))
+        > MAX_ASR_PROVIDER_METADATA_BYTES
+    ):
+        raise ValueError(
+            "ASR provider metadata must not exceed "
+            "65536 bytes."
+        )
+
+    normalized = json.loads(serialized)
+
+    if not isinstance(normalized, dict):
+        raise ValueError(
+            "ASR provider metadata must be a JSON object."
+        )
+
+    return normalized
+
+
+def get_asr_evaluation_context(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    now: datetime | None = None,
+) -> ASREvaluationContext:
+    """
+    Return controlled metadata for an owned ASR evaluation job.
+
+    Server-local audio paths, reference transcripts, and unrelated
+    project data are intentionally excluded.
+    """
+    verification_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=verification_time,
+    )
+
+    if job.job_type != "asr_evaluation":
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    try:
+        evaluation_run_id, test_case_id = (
+            _validate_asr_evaluation_payload(
+                job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    evaluation_run = (
+        db.query(models.EvaluationRun)
+        .filter(
+            models.EvaluationRun.id
+            == evaluation_run_id,
+            models.EvaluationRun.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == test_case_id,
+            models.Dataset.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    if (
+        evaluation_run is None
+        or test_case is None
+        or not test_case.audio_file_path
+    ):
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    audio_file_name = Path(
+        test_case.audio_file_path
+    ).name.strip()
+
+    if not audio_file_name:
+        db.rollback()
+        raise RunnerJobASRContextUnavailableError(
+            "Runner ASR evaluation context is invalid or "
+            "unavailable."
+        )
+
+    context = ASREvaluationContext(
+        project_id=job.project_id,
+        evaluation_run_id=evaluation_run.id,
+        test_case_id=test_case.id,
+        run_name=evaluation_run.run_name,
+        model_name=evaluation_run.model_name,
+        test_case_title=test_case.title,
+        audio_file_name=audio_file_name,
+    )
+
+    db.rollback()
+    return context
+
+
+def get_asr_evaluation_audio(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    uploads_root: str | Path = "uploads",
+    now: datetime | None = None,
+) -> ASREvaluationAudio:
+    """
+    Resolve claim-protected ASR audio for a standalone runner.
+
+    The selected file must be a supported regular audio file contained
+    inside the configured uploads directory. Filesystem paths are never
+    returned through the HTTP API.
+    """
+    try:
+        context = get_asr_evaluation_context(
+            db,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=claim_token,
+            now=now,
+        )
+    except RunnerJobASRContextUnavailableError as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == context.test_case_id,
+            models.Dataset.project_id
+            == context.project_id,
+        )
+        .first()
+    )
+
+    if (
+        test_case is None
+        or not test_case.audio_file_path
+    ):
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    try:
+        uploads_path = Path(
+            uploads_root
+        ).resolve(strict=True)
+
+        audio_path = Path(
+            test_case.audio_file_path
+        ).resolve(strict=True)
+    except (OSError, RuntimeError) as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
+    media_type = SUPPORTED_ASR_AUDIO_MEDIA_TYPES.get(
+        audio_path.suffix.lower()
+    )
+    file_name = audio_path.name.strip()
+
+    audio_is_unavailable = (
+        not uploads_path.is_dir()
+        or not audio_path.is_relative_to(uploads_path)
+        or not audio_path.is_file()
+        or media_type is None
+        or not file_name
+    )
+
+    if audio_is_unavailable:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    audio = ASREvaluationAudio(
+        path=audio_path,
+        file_name=file_name,
+        media_type=media_type,
+    )
+
+    db.rollback()
+    return audio
+
+
+def submit_asr_evaluation_result(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    generated_transcript: str,
+    provider: str,
+    provider_metadata: dict[str, object] | None = None,
+    now: datetime | None = None,
+) -> ASREvaluationSubmission:
+    """
+    Persist one ASR evaluation and complete its runner job atomically.
+
+    The backend calculates all evaluation metrics from its stored
+    reference transcript. The runner cannot supply WER, CER, quality
+    labels, internal file paths, or lifecycle state.
+    """
+    normalized_transcript = (
+        _normalize_asr_generated_transcript(
+            generated_transcript
+        )
+    )
+    normalized_provider = _normalize_asr_provider(
+        provider
+    )
+    normalized_metadata = (
+        _normalize_asr_provider_metadata(
+            provider_metadata
+        )
+    )
+    completion_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=completion_time,
+    )
+
+    if (
+        job.status != "running"
+        or job.job_type != "asr_evaluation"
+    ):
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    try:
+        evaluation_run_id, test_case_id = (
+            _validate_asr_evaluation_payload(
+                job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    evaluation_run = (
+        db.query(models.EvaluationRun)
+        .filter(
+            models.EvaluationRun.id
+            == evaluation_run_id,
+            models.EvaluationRun.project_id
+            == job.project_id,
+        )
+        .with_for_update()
+        .first()
+    )
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == test_case_id,
+            models.Dataset.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    resources_unavailable = (
+        evaluation_run is None
+        or test_case is None
+        or not test_case.reference_transcript
+        or not test_case.reference_transcript.strip()
+    )
+
+    if resources_unavailable:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    existing_result = (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .first()
+    )
+
+    if existing_result is not None:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    result = stage_evaluation_result(
+        db=db,
+        db_run=evaluation_run,
+        db_test_case=test_case,
+        generated_text=normalized_transcript,
+        generated_file_path=None,
+    )
+
+    job.status = "completed"
+    job.completed_at = completion_time
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+    job.error_message = None
+
+    try:
+        db.flush()
+
+        job.result_payload = {
+            "evaluation_result_id": result.id,
+            "evaluation_run_id": result.run_id,
+            "test_case_id": result.test_case_id,
+            "provider": normalized_provider,
+            "provider_metadata": normalized_metadata,
+            "wer": result.wer,
+            "cer": result.cer,
+            "quality_label": result.quality_label,
+        }
+
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        ) from exc
+
+    db.refresh(result)
+    db.refresh(job)
+
+    return ASREvaluationSubmission(
+        result=result,
+        job=job,
+        provider=normalized_provider,
+        provider_metadata=normalized_metadata,
+    )
 
 
 def _get_owned_job_claim_for_update(

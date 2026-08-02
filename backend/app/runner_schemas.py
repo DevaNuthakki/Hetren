@@ -66,6 +66,24 @@ RunnerJobErrorMessage = Annotated[
     ),
 ]
 
+RunnerASRGeneratedTranscript = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=1_000_000,
+    ),
+]
+
+RunnerASRProvider = Annotated[
+    str,
+    StringConstraints(
+        strip_whitespace=True,
+        min_length=1,
+        max_length=100,
+    ),
+]
+
 
 RunnerJobLogEventType = Annotated[
     str,
@@ -210,6 +228,58 @@ class RunnerJobControlStatusResponse(BaseModel):
         "active",
         "cancelled",
     ]
+
+
+class RunnerASREvaluationContextRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RunnerASREvaluationContextResponse(BaseModel):
+    project_id: int
+    evaluation_run_id: int
+    test_case_id: int
+
+    run_name: str
+    model_name: str
+    test_case_title: str
+    audio_file_name: str
+
+
+class RunnerASREvaluationResultRequest(BaseModel):
+    claim_token: RunnerJobClaimToken
+    generated_transcript: RunnerASRGeneratedTranscript
+    provider: RunnerASRProvider
+    provider_metadata: dict[str, Any] = Field(
+        default_factory=dict,
+    )
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class RunnerASREvaluationResultRead(BaseModel):
+    id: int
+    run_id: int
+    test_case_id: int
+
+    generated_transcript: str
+    wer: float | None
+    cer: float | None
+    quality_label: str | None
+    error_summary: str | None
+
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerASREvaluationResultResponse(BaseModel):
+    status: Literal["completed"]
+    result: RunnerASREvaluationResultRead
+    job: RunnerJobRead
+    provider: str
+    provider_metadata: dict[str, Any]
 
 
 class RunnerJobStartRequest(BaseModel):

@@ -178,6 +178,13 @@ class EvaluationRun(Base):
 
 class EvaluationResult(Base):
     __tablename__ = "evaluation_results"
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            "test_case_id",
+            name="uq_evaluation_results_run_test_case",
+        ),
+    )
 
     id = Column(Integer, primary_key=True)
     run_id = Column(Integer, ForeignKey("evaluation_runs.id"), nullable=False, index=True)
