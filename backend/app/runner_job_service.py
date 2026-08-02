@@ -9,6 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models
+from app.evaluation_service import stage_evaluation_result
 from app.runner_security import (
     generate_job_claim_token,
     hash_job_claim_token,
@@ -40,6 +41,10 @@ MAX_RUNNER_JOB_PRIORITY = 1000
 MAX_RUNNER_JOB_ATTEMPTS = 100
 MAX_RUNNER_JOB_CAPABILITIES = 50
 MAX_RUNNER_JOB_INPUT_BYTES = 262_144
+
+MAX_ASR_GENERATED_TRANSCRIPT_LENGTH = 1_000_000
+MAX_ASR_PROVIDER_LENGTH = 100
+MAX_ASR_PROVIDER_METADATA_BYTES = 65_536
 
 MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
 MAX_RUNNER_JOB_LOG_MESSAGE_LENGTH = 10_000
@@ -93,6 +98,12 @@ class RunnerJobASRAudioUnavailableError(
     """Raised when executable ASR audio is unavailable."""
 
 
+class RunnerJobASRResultUnavailableError(
+    RunnerJobServiceError
+):
+    """Raised when an ASR result cannot be submitted."""
+
+
 class RunnerJobProjectNotFoundError(RunnerJobServiceError):
     """Raised when a runner job references a missing project."""
 
@@ -137,6 +148,14 @@ class ASREvaluationAudio:
     path: Path
     file_name: str
     media_type: str
+
+
+@dataclass(frozen=True)
+class ASREvaluationSubmission:
+    result: models.EvaluationResult
+    job: models.RunnerJob
+    provider: str
+    provider_metadata: dict[str, object]
 
 
 @dataclass(frozen=True)
@@ -711,6 +730,99 @@ def _validate_asr_evaluation_payload(
     return evaluation_run_id, test_case_id
 
 
+def _normalize_asr_generated_transcript(
+    generated_transcript: str,
+) -> str:
+    if not isinstance(generated_transcript, str):
+        raise ValueError(
+            "Generated transcript must be text."
+        )
+
+    normalized = generated_transcript.strip()
+
+    if not normalized:
+        raise ValueError(
+            "Generated transcript must not be empty."
+        )
+
+    if (
+        len(normalized)
+        > MAX_ASR_GENERATED_TRANSCRIPT_LENGTH
+    ):
+        raise ValueError(
+            "Generated transcript must not exceed "
+            "1000000 characters."
+        )
+
+    return normalized
+
+
+def _normalize_asr_provider(
+    provider: str,
+) -> str:
+    if not isinstance(provider, str):
+        raise ValueError(
+            "ASR provider must be text."
+        )
+
+    normalized = provider.strip()
+
+    if not normalized:
+        raise ValueError(
+            "ASR provider must not be empty."
+        )
+
+    if len(normalized) > MAX_ASR_PROVIDER_LENGTH:
+        raise ValueError(
+            "ASR provider must not exceed 100 characters."
+        )
+
+    return normalized
+
+
+def _normalize_asr_provider_metadata(
+    provider_metadata: dict[str, object] | None,
+) -> dict[str, object]:
+    if provider_metadata is None:
+        return {}
+
+    if not isinstance(provider_metadata, dict):
+        raise ValueError(
+            "ASR provider metadata must be a JSON object."
+        )
+
+    try:
+        serialized = json.dumps(
+            provider_metadata,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "ASR provider metadata must contain "
+            "JSON-serializable values."
+        ) from exc
+
+    if (
+        len(serialized.encode("utf-8"))
+        > MAX_ASR_PROVIDER_METADATA_BYTES
+    ):
+        raise ValueError(
+            "ASR provider metadata must not exceed "
+            "65536 bytes."
+        )
+
+    normalized = json.loads(serialized)
+
+    if not isinstance(normalized, dict):
+        raise ValueError(
+            "ASR provider metadata must be a JSON object."
+        )
+
+    return normalized
+
+
 def get_asr_evaluation_context(
     db: Session,
     *,
@@ -909,6 +1021,169 @@ def get_asr_evaluation_audio(
 
     db.rollback()
     return audio
+
+
+def submit_asr_evaluation_result(
+    db: Session,
+    *,
+    credential: str,
+    job_public_id: str,
+    claim_token: str,
+    generated_transcript: str,
+    provider: str,
+    provider_metadata: dict[str, object] | None = None,
+    now: datetime | None = None,
+) -> ASREvaluationSubmission:
+    """
+    Persist one ASR evaluation and complete its runner job atomically.
+
+    The backend calculates all evaluation metrics from its stored
+    reference transcript. The runner cannot supply WER, CER, quality
+    labels, internal file paths, or lifecycle state.
+    """
+    normalized_transcript = (
+        _normalize_asr_generated_transcript(
+            generated_transcript
+        )
+    )
+    normalized_provider = _normalize_asr_provider(
+        provider
+    )
+    normalized_metadata = (
+        _normalize_asr_provider_metadata(
+            provider_metadata
+        )
+    )
+    completion_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_update(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=completion_time,
+    )
+
+    if (
+        job.status != "running"
+        or job.job_type != "asr_evaluation"
+    ):
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    try:
+        evaluation_run_id, test_case_id = (
+            _validate_asr_evaluation_payload(
+                job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    evaluation_run = (
+        db.query(models.EvaluationRun)
+        .filter(
+            models.EvaluationRun.id
+            == evaluation_run_id,
+            models.EvaluationRun.project_id
+            == job.project_id,
+        )
+        .with_for_update()
+        .first()
+    )
+
+    test_case = (
+        db.query(models.TestCase)
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .filter(
+            models.TestCase.id == test_case_id,
+            models.Dataset.project_id
+            == job.project_id,
+        )
+        .first()
+    )
+
+    resources_unavailable = (
+        evaluation_run is None
+        or test_case is None
+        or not test_case.reference_transcript
+        or not test_case.reference_transcript.strip()
+    )
+
+    if resources_unavailable:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    existing_result = (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .first()
+    )
+
+    if existing_result is not None:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    result = stage_evaluation_result(
+        db=db,
+        db_run=evaluation_run,
+        db_test_case=test_case,
+        generated_text=normalized_transcript,
+        generated_file_path=None,
+    )
+
+    job.status = "completed"
+    job.completed_at = completion_time
+    job.lease_expires_at = None
+    job.claim_token_hash = None
+    job.error_message = None
+
+    try:
+        db.flush()
+
+        job.result_payload = {
+            "evaluation_result_id": result.id,
+            "evaluation_run_id": result.run_id,
+            "test_case_id": result.test_case_id,
+            "provider": normalized_provider,
+            "provider_metadata": normalized_metadata,
+            "wer": result.wer,
+            "cer": result.cer,
+            "quality_label": result.quality_label,
+        }
+
+        db.commit()
+    except IntegrityError as exc:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        ) from exc
+
+    db.refresh(result)
+    db.refresh(job)
+
+    return ASREvaluationSubmission(
+        result=result,
+        job=job,
+        provider=normalized_provider,
+        provider_metadata=normalized_metadata,
+    )
 
 
 def _get_owned_job_claim_for_update(

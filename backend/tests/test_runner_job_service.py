@@ -17,6 +17,7 @@ from app.runner_job_service import (
     RunnerJobCancellationUnavailableError,
     RunnerJobASRAudioUnavailableError,
     RunnerJobASRContextUnavailableError,
+    RunnerJobASRResultUnavailableError,
     RunnerJobClaimUnavailableError,
     RunnerJobControlUnavailableError,
     RunnerJobNotFoundError,
@@ -35,6 +36,7 @@ from app.runner_job_service import (
     recover_expired_jobs,
     renew_job_lease,
     start_job,
+    submit_asr_evaluation_result,
     verify_job_claim_ownership,
 )
 from app.runner_security import (
@@ -3718,4 +3720,500 @@ def test_get_asr_evaluation_audio_preserves_claim_failure(
             job_public_id=claimed.job.public_id,
             claim_token="ovrin_claim_invalid-token",
             uploads_root=uploads_root,
+        )
+
+
+
+def create_running_asr_evaluation_job(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Runner ASR result project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Runner ASR result runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+
+    job = create_job(
+        db,
+        project=project,
+        name="Runner ASR result job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    running_job = start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+    )
+
+    assert running_job.status == "running"
+
+    return (
+        project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    )
+
+
+def test_submit_asr_evaluation_result_completes_atomically(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    completion_time = datetime(
+        2026,
+        8,
+        1,
+        20,
+        15,
+        tzinfo=UTC,
+    )
+
+    submission = submit_asr_evaluation_result(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+        generated_transcript=(
+            "  thank you for calling  "
+        ),
+        provider="  faster-whisper  ",
+        provider_metadata={
+            "device": "cpu",
+            "language": "en",
+            "timings": {
+                "transcription_seconds": 1.25,
+            },
+        },
+        now=completion_time,
+    )
+
+    assert submission.provider == "faster-whisper"
+    assert submission.provider_metadata == {
+        "device": "cpu",
+        "language": "en",
+        "timings": {
+            "transcription_seconds": 1.25,
+        },
+    }
+
+    result = submission.result
+    job = submission.job
+
+    assert result.run_id == evaluation_run.id
+    assert result.test_case_id == test_case.id
+    assert result.generated_transcript == (
+        "thank you for calling"
+    )
+    assert result.generated_file_path is None
+    assert result.wer == pytest.approx(0.0)
+    assert result.cer == pytest.approx(0.0)
+    assert result.quality_label == "excellent"
+    assert "Substitutions=0" in result.error_summary
+    assert "insertions=0" in result.error_summary
+    assert "deletions=0" in result.error_summary
+
+    assert job.status == "completed"
+    assert job.completed_at is not None
+    assert (
+        job.completed_at.replace(tzinfo=UTC)
+        == completion_time
+    )
+    assert job.lease_expires_at is None
+    assert job.claim_token_hash is None
+    assert job.error_message is None
+    assert job.result_payload == {
+        "evaluation_result_id": result.id,
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+        "provider": "faster-whisper",
+        "provider_metadata": {
+            "device": "cpu",
+            "language": "en",
+            "timings": {
+                "transcription_seconds": 1.25,
+            },
+        },
+        "wer": pytest.approx(0.0),
+        "cer": pytest.approx(0.0),
+        "quality_label": "excellent",
+    }
+
+    db.refresh(evaluation_run)
+
+    assert evaluation_run.status == "evaluated"
+    assert evaluation_run.reference_transcript == (
+        "thank you for calling"
+    )
+    assert evaluation_run.generated_transcript == (
+        "thank you for calling"
+    )
+    assert evaluation_run.wer == pytest.approx(0.0)
+    assert evaluation_run.cer == pytest.approx(0.0)
+    assert evaluation_run.quality_label == "excellent"
+
+    persisted_results = (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .all()
+    )
+
+    assert len(persisted_results) == 1
+
+
+def test_submit_asr_evaluation_result_requires_running_job(
+    db: Session,
+):
+    project = create_project(
+        db,
+        "Claimed ASR result project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=project,
+        name="Claimed ASR result runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+    job = create_job(
+        db,
+        project=project,
+        name="Claimed ASR result job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+    assert claimed.job.status == "claimed"
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript="thank you for calling",
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "claimed"
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+
+def test_submit_asr_evaluation_result_rejects_duplicate(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    existing_result = models.EvaluationResult(
+        run_id=evaluation_run.id,
+        test_case_id=test_case.id,
+        generated_transcript="existing transcript",
+        wer=0.25,
+        cer=0.15,
+        quality_label="needs_review",
+        error_summary="Existing evaluation result.",
+    )
+    db.add(existing_result)
+    db.commit()
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript="replacement transcript",
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+
+    persisted_results = (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .all()
+    )
+
+    assert len(persisted_results) == 1
+    assert persisted_results[0].generated_transcript == (
+        "existing transcript"
+    )
+
+
+def test_submit_asr_evaluation_result_hides_cross_project_data(
+    db: Session,
+):
+    runner_project = create_project(
+        db,
+        "Runner-owned ASR result project",
+    )
+    other_project = create_project(
+        db,
+        "Unrelated ASR result project",
+    )
+    registered = create_registered_runner(
+        db,
+        project=runner_project,
+        name="Cross-project ASR result runner",
+        capabilities=["asr"],
+    )
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=other_project,
+        )
+    )
+
+    job = create_job(
+        db,
+        project=runner_project,
+        name="Cross-project ASR result job",
+        required_capabilities=["asr"],
+    )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
+
+    claimed = claim_next_job(
+        db,
+        credential=registered.credential,
+    )
+
+    assert claimed is not None
+
+    start_job(
+        db,
+        credential=registered.credential,
+        job_public_id=claimed.job.public_id,
+        claim_token=claimed.claim_token,
+    )
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript="thank you for calling",
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+
+def test_submit_asr_evaluation_result_preserves_claim_failure(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token="ovrin_claim_wrong-token",
+            generated_transcript="thank you for calling",
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+
+@pytest.mark.parametrize(
+    (
+        "generated_transcript",
+        "provider",
+        "provider_metadata",
+        "expected_message",
+    ),
+    [
+        (
+            "   ",
+            "faster-whisper",
+            {},
+            "Generated transcript must not be empty.",
+        ),
+        (
+            "valid transcript",
+            "   ",
+            {},
+            "ASR provider must not be empty.",
+        ),
+        (
+            "valid transcript",
+            "faster-whisper",
+            {"invalid": {1, 2}},
+            (
+                "ASR provider metadata must contain "
+                "JSON-serializable values."
+            ),
+        ),
+    ],
+)
+def test_submit_asr_evaluation_result_validates_runner_output(
+    db: Session,
+    generated_transcript,
+    provider,
+    provider_metadata,
+    expected_message: str,
+):
+    with pytest.raises(
+        ValueError,
+        match=expected_message,
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential="unused-credential",
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            claim_token="unused-claim",
+            generated_transcript=generated_transcript,
+            provider=provider,
+            provider_metadata=provider_metadata,
+        )
+
+
+def test_submit_asr_evaluation_result_rejects_large_metadata(
+    db: Session,
+):
+    with pytest.raises(
+        ValueError,
+        match="must not exceed 65536 bytes",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential="unused-credential",
+            job_public_id=(
+                "10000000-0000-0000-0000-000000000001"
+            ),
+            claim_token="unused-claim",
+            generated_transcript="valid transcript",
+            provider="faster-whisper",
+            provider_metadata={
+                "large_value": "x" * 65_536,
+            },
         )
