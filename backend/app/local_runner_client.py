@@ -11,6 +11,8 @@ from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import (
     RunnerASREvaluationContextRequest,
     RunnerASREvaluationContextResponse,
+    RunnerASREvaluationResultRequest,
+    RunnerASREvaluationResultResponse,
     RunnerHeartbeatResponse,
     RunnerJobClaimResponse,
     RunnerJobCompleteRequest,
@@ -441,6 +443,43 @@ class LocalRunnerClient:
             ),
             payload=payload,
             destination=destination,
+        )
+
+    def submit_asr_evaluation_result(
+        self,
+        *,
+        job_public_id: str,
+        claim_token: str,
+        generated_transcript: str,
+        provider: str,
+        provider_metadata: dict[str, object] | None = None,
+    ) -> RunnerASREvaluationResultResponse:
+        normalized_job_id = self._validate_job_public_id(
+            job_public_id
+        )
+        payload = self._validate_request_payload(
+            request_model=RunnerASREvaluationResultRequest,
+            payload={
+                "claim_token": claim_token,
+                "generated_transcript": (
+                    generated_transcript
+                ),
+                "provider": provider,
+                "provider_metadata": dict(
+                    provider_metadata or {}
+                ),
+            },
+        )
+
+        return self._post(
+            path=(
+                f"/runners/jobs/{normalized_job_id}"
+                "/asr/result"
+            ),
+            payload=payload,
+            response_model=(
+                RunnerASREvaluationResultResponse
+            ),
         )
 
     def renew_job_lease(

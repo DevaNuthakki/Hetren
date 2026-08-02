@@ -1136,3 +1136,259 @@ def test_local_runner_asr_methods_reject_unsafe_job_id(
                     tmp_path / "support-call.wav"
                 ),
             )
+
+
+
+def test_local_runner_client_submits_asr_evaluation_result():
+    job_public_id = (
+        "20000000-0000-0000-0000-000000000001"
+    )
+    job_payload = build_job_payload()
+    job_payload["status"] = "completed"
+    job_payload["completed_at"] = NOW
+    job_payload["lease_expires_at"] = None
+    job_payload["result_payload"] = {
+        "evaluation_result_id": 81,
+        "evaluation_run_id": 42,
+        "test_case_id": 9,
+        "provider": "faster-whisper",
+        "provider_metadata": {
+            "device": "cpu",
+            "language": "en",
+        },
+        "wer": 0.0,
+        "cer": 0.0,
+        "quality_label": "excellent",
+    }
+
+    def handler(
+        request: httpx.Request,
+    ) -> httpx.Response:
+        assert request.method == "POST"
+        assert request.url.path == (
+            f"/runners/jobs/{job_public_id}/asr/result"
+        )
+        assert request.headers["authorization"] == (
+            "Bearer ovrin_runner_test-credential"
+        )
+        assert request.headers["accept"] == (
+            "application/json"
+        )
+        assert request.read() == (
+            b'{"claim_token":"ovrin_claim_test-token",'
+            b'"generated_transcript":'
+            b'"thank you for calling",'
+            b'"provider":"faster-whisper",'
+            b'"provider_metadata":'
+            b'{"device":"cpu","language":"en"}}'
+        )
+
+        return httpx.Response(
+            200,
+            json={
+                "status": "completed",
+                "result": {
+                    "id": 81,
+                    "run_id": 42,
+                    "test_case_id": 9,
+                    "generated_transcript": (
+                        "thank you for calling"
+                    ),
+                    "wer": 0.0,
+                    "cer": 0.0,
+                    "quality_label": "excellent",
+                    "error_summary": (
+                        "WER=0.000, CER=0.000. "
+                        "Substitutions=0, insertions=0, "
+                        "deletions=0."
+                    ),
+                    "created_at": NOW,
+                },
+                "job": job_payload,
+                "provider": "faster-whisper",
+                "provider_metadata": {
+                    "device": "cpu",
+                    "language": "en",
+                },
+            },
+        )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(handler),
+    ) as client:
+        response = (
+            client.submit_asr_evaluation_result(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+                generated_transcript=(
+                    "thank you for calling"
+                ),
+                provider="faster-whisper",
+                provider_metadata={
+                    "device": "cpu",
+                    "language": "en",
+                },
+            )
+        )
+
+    assert response.status == "completed"
+    assert response.result.id == 81
+    assert response.result.run_id == 42
+    assert response.result.test_case_id == 9
+    assert response.result.generated_transcript == (
+        "thank you for calling"
+    )
+    assert response.result.wer == pytest.approx(0.0)
+    assert response.result.cer == pytest.approx(0.0)
+    assert response.result.quality_label == "excellent"
+    assert response.job.status == "completed"
+    assert response.provider == "faster-whisper"
+    assert response.provider_metadata == {
+        "device": "cpu",
+        "language": "en",
+    }
+
+
+@pytest.mark.parametrize(
+    (
+        "generated_transcript",
+        "provider",
+    ),
+    [
+        ("   ", "faster-whisper"),
+        ("thank you for calling", "   "),
+    ],
+)
+def test_local_runner_client_rejects_invalid_asr_result_input(
+    generated_transcript: str,
+    provider: str,
+):
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(LocalRunnerInputError):
+            client.submit_asr_evaluation_result(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                generated_transcript=generated_transcript,
+                provider=provider,
+            )
+
+
+def test_local_runner_client_rejects_invalid_asr_result_response():
+    job_payload = build_job_payload()
+    job_payload["status"] = "completed"
+    job_payload["completed_at"] = NOW
+    job_payload["lease_expires_at"] = None
+
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            200,
+            json={
+                "status": "completed",
+                "job": job_payload,
+                "provider": "faster-whisper",
+                "provider_metadata": {},
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        with pytest.raises(LocalRunnerProtocolError):
+            client.submit_asr_evaluation_result(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                generated_transcript=(
+                    "thank you for calling"
+                ),
+                provider="faster-whisper",
+            )
+
+
+def test_local_runner_asr_result_maps_api_failure():
+    transport = httpx.MockTransport(
+        lambda _request: httpx.Response(
+            409,
+            json={
+                "detail": (
+                    "Internal ASR result state must remain "
+                    "hidden."
+                ),
+            },
+        )
+    )
+
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=transport,
+    ) as client:
+        with pytest.raises(
+            LocalRunnerAPIError,
+        ) as error:
+            client.submit_asr_evaluation_result(
+                job_public_id=(
+                    "20000000-0000-0000-0000-"
+                    "000000000001"
+                ),
+                claim_token="ovrin_claim_test-token",
+                generated_transcript=(
+                    "thank you for calling"
+                ),
+                provider="faster-whisper",
+            )
+
+    assert error.value.status_code == 409
+    assert "Internal ASR result state" not in str(
+        error.value
+    )
+
+
+@pytest.mark.parametrize(
+    "job_public_id",
+    [
+        "",
+        "   ",
+        "../another-job",
+        "job/another-job",
+    ],
+)
+def test_local_runner_asr_result_rejects_unsafe_job_id(
+    job_public_id: str,
+):
+    with LocalRunnerClient(
+        api_base_url="https://ovrin.example.com",
+        credential="ovrin_runner_test-credential",
+        transport=httpx.MockTransport(
+            lambda _request: pytest.fail(
+                "HTTP request must not be sent."
+            )
+        ),
+    ) as client:
+        with pytest.raises(LocalRunnerInputError):
+            client.submit_asr_evaluation_result(
+                job_public_id=job_public_id,
+                claim_token="ovrin_claim_test-token",
+                generated_transcript=(
+                    "thank you for calling"
+                ),
+                provider="faster-whisper",
+            )
