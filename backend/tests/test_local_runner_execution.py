@@ -1623,10 +1623,31 @@ def test_run_one_cycle_uses_real_asr_executor_by_default(
     )
     provider = DefaultRecordingASRProvider()
 
+    provider_factory_calls: list[
+        dict[str, object]
+    ] = []
+
+    def build_provider(
+        provider_name: str,
+        *,
+        model_name: str,
+        device: str,
+        compute_type: str,
+    ):
+        provider_factory_calls.append(
+            {
+                "provider_name": provider_name,
+                "model_name": model_name,
+                "device": device,
+                "compute_type": compute_type,
+            }
+        )
+        return provider
+
     monkeypatch.setattr(
         local_runner_execution,
         "get_asr_provider",
-        lambda: provider,
+        build_provider,
     )
 
     result = run_one_local_runner_cycle(
@@ -1669,6 +1690,15 @@ def test_run_one_cycle_uses_real_asr_executor_by_default(
 
     assert "complete" not in call_names
     assert "fail" not in call_names
+
+    assert provider_factory_calls == [
+        {
+            "provider_name": "mock_local",
+            "model_name": "mock-asr-foundation",
+            "device": "cpu",
+            "compute_type": "int8",
+        }
+    ]
 
     assert provider.calls == [
         {

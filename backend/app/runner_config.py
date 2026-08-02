@@ -1,5 +1,5 @@
 from functools import lru_cache
-from typing import Self
+from typing import Literal, Self
 
 from pydantic import (
     Field,
@@ -100,12 +100,100 @@ class LocalRunnerSettings(BaseSettings):
         ),
     )
 
+    asr_provider: Literal[
+        "mock_local",
+        "faster_whisper",
+    ] = Field(
+        default="mock_local",
+        validation_alias="OVRIN_RUNNER_ASR_PROVIDER",
+    )
+
+    asr_model: str = Field(
+        default="mock-asr-foundation",
+        min_length=1,
+        max_length=200,
+        validation_alias="OVRIN_RUNNER_ASR_MODEL",
+    )
+
+    asr_device: str = Field(
+        default="cpu",
+        min_length=1,
+        max_length=100,
+        validation_alias="OVRIN_RUNNER_ASR_DEVICE",
+    )
+
+    asr_compute_type: str = Field(
+        default="int8",
+        min_length=1,
+        max_length=100,
+        validation_alias=(
+            "OVRIN_RUNNER_ASR_COMPUTE_TYPE"
+        ),
+    )
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
     )
+
+    @field_validator(
+        "asr_provider",
+        mode="before",
+    )
+    @classmethod
+    def normalize_asr_provider(
+        cls,
+        value,
+    ):
+        if not isinstance(value, str):
+            return value
+
+        normalized = (
+            value.strip()
+            .lower()
+            .replace("-", "_")
+        )
+
+        if normalized == "mock":
+            return "mock_local"
+
+        return normalized
+
+    @field_validator("asr_model")
+    @classmethod
+    def normalize_asr_model(
+        cls,
+        value: str,
+    ) -> str:
+        normalized = value.strip()
+
+        if not normalized:
+            raise ValueError(
+                "Runner ASR model must not be empty."
+            )
+
+        return normalized
+
+    @field_validator(
+        "asr_device",
+        "asr_compute_type",
+    )
+    @classmethod
+    def normalize_asr_runtime_value(
+        cls,
+        value: str,
+    ) -> str:
+        normalized = value.strip().lower()
+
+        if not normalized:
+            raise ValueError(
+                "Runner ASR runtime settings must "
+                "not be empty."
+            )
+
+        return normalized
 
     @field_validator("runner_version")
     @classmethod

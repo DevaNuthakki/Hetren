@@ -15,6 +15,10 @@ RUNNER_ENVIRONMENT_KEYS = (
     "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
     "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
     "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
+    "OVRIN_RUNNER_ASR_PROVIDER",
+    "OVRIN_RUNNER_ASR_MODEL",
+    "OVRIN_RUNNER_ASR_DEVICE",
+    "OVRIN_RUNNER_ASR_COMPUTE_TYPE",
 )
 
 
@@ -68,6 +72,22 @@ def test_local_runner_settings_load_environment(
         "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
         "1800",
     )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_ASR_PROVIDER",
+        " faster-whisper ",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_ASR_MODEL",
+        " small.en ",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_ASR_DEVICE",
+        " CUDA ",
+    )
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_ASR_COMPUTE_TYPE",
+        " FLOAT16 ",
+    )
 
     settings = LocalRunnerSettings(_env_file=None)
 
@@ -93,6 +113,10 @@ def test_local_runner_settings_load_environment(
     )
     assert settings.control_poll_interval_seconds == 3
     assert settings.execution_timeout_seconds == 1800
+    assert settings.asr_provider == "faster_whisper"
+    assert settings.asr_model == "small.en"
+    assert settings.asr_device == "cuda"
+    assert settings.asr_compute_type == "float16"
 
 
 def test_local_runner_settings_require_credential(
@@ -238,6 +262,54 @@ def test_local_runner_settings_require_control_polling_before_renewal(
     monkeypatch.setenv(
         "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
         "30",
+    )
+
+    with pytest.raises(ValidationError):
+        LocalRunnerSettings(_env_file=None)
+
+
+
+def test_local_runner_settings_use_safe_asr_defaults(
+    monkeypatch,
+):
+    clear_runner_environment(monkeypatch)
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_CREDENTIAL",
+        "ovrin_runner_test-credential",
+    )
+
+    settings = LocalRunnerSettings(_env_file=None)
+
+    assert settings.asr_provider == "mock_local"
+    assert settings.asr_model == (
+        "mock-asr-foundation"
+    )
+    assert settings.asr_device == "cpu"
+    assert settings.asr_compute_type == "int8"
+
+
+@pytest.mark.parametrize(
+    ("environment_key", "environment_value"),
+    [
+        ("OVRIN_RUNNER_ASR_PROVIDER", "unknown"),
+        ("OVRIN_RUNNER_ASR_MODEL", "   "),
+        ("OVRIN_RUNNER_ASR_DEVICE", "   "),
+        ("OVRIN_RUNNER_ASR_COMPUTE_TYPE", "   "),
+    ],
+)
+def test_local_runner_settings_reject_invalid_asr_configuration(
+    monkeypatch,
+    environment_key: str,
+    environment_value: str,
+):
+    clear_runner_environment(monkeypatch)
+    monkeypatch.setenv(
+        "OVRIN_RUNNER_CREDENTIAL",
+        "ovrin_runner_test-credential",
+    )
+    monkeypatch.setenv(
+        environment_key,
+        environment_value,
     )
 
     with pytest.raises(ValidationError):

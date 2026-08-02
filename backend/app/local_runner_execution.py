@@ -691,6 +691,7 @@ def build_job_control_worker(
 def build_default_runner_job_executor(
     *,
     client: LocalRunnerClient,
+    settings: LocalRunnerSettings,
     job: RunnerJobRead,
     claim_token: str,
 ) -> RunnerJobExecutor:
@@ -705,7 +706,14 @@ def build_default_runner_job_executor(
         return ASRRunnerJobExecutor(
             client=client,
             claim_token=claim_token,
-            provider=get_asr_provider(),
+            provider=get_asr_provider(
+                settings.asr_provider,
+                model_name=settings.asr_model,
+                device=settings.asr_device,
+                compute_type=(
+                    settings.asr_compute_type
+                ),
+            ),
         )
 
     return PlaceholderRunnerJobExecutor()
@@ -786,6 +794,7 @@ def run_one_local_runner_cycle(
         selected_executor = (
             build_default_runner_job_executor(
                 client=client,
+                settings=settings,
                 job=job,
                 claim_token=claim_token,
             )
