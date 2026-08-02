@@ -21,6 +21,12 @@ Ovrin currently supports:
 - Alembic database migrations
 - API liveness and database-readiness checks
 - Isolated PostgreSQL integration testing
+- Secure project-scoped runner registration and credentials
+- Atomic runner-job claiming and lifecycle transitions
+- Lease renewal, recovery, cancellation, and structured logs
+- Real local ASR job execution through authenticated APIs
+- Atomic backend evaluation-result persistence
+- One-shot CI runner execution with meaningful exit codes
 
 Phase 3 is building the secure local and CI runner platform.
 
@@ -421,7 +427,7 @@ It currently supports:
 - Administrative runner revocation
 - PostgreSQL lifecycle and project-isolation constraints
 
-Secure job claiming, lifecycle transitions, lease recovery, structured log upload and retrieval, and the standalone local polling and execution loop are now implemented. Real ASR execution, active mid-execution cancellation, and GitHub Actions integration remain later Phase 3 work.
+Secure job claiming, lifecycle transitions, lease recovery, structured log upload and retrieval, active cooperative cancellation, real ASR execution, atomic evaluation-result submission, and one-shot CI runner mode are implemented. A repository-specific GitHub Actions workflow remains later Phase 3 work.
 
 ### Security model
 

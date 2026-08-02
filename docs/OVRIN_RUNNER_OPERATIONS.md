@@ -93,6 +93,10 @@ Example local configuration:
     export OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60
     export OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=2
     export OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=3600
+    export OVRIN_RUNNER_ASR_PROVIDER="mock_local"
+    export OVRIN_RUNNER_ASR_MODEL="mock-asr-foundation"
+    export OVRIN_RUNNER_ASR_DEVICE="cpu"
+    export OVRIN_RUNNER_ASR_COMPUTE_TYPE="int8"
 
 Configuration rules include:
 
@@ -105,6 +109,8 @@ Configuration rules include:
 - Control-poll interval must be greater than `0` and no more than `300` seconds
 - Control-poll interval must be shorter than the lease-renewal interval
 - Execution timeout must be greater than `0` and no more than `86400` seconds
+- ASR provider must be `mock_local` or `faster_whisper`
+- ASR model, device, and compute type must be non-empty
 
 The credential is represented as a secret by the runner settings model and is
 not included in normal settings representations.
@@ -118,6 +124,24 @@ From the `backend` directory:
 For a bounded validation run:
 
     python scripts/run_local_runner.py --max-cycles 1
+
+For one-shot CI execution:
+
+    python scripts/run_local_runner.py --ci
+
+CI mode always runs exactly one polling cycle. It succeeds only when one job
+completes. Its process exit codes are:
+
+- `0`: one job completed
+- `3`: no compatible job was available
+- `4`: the job failed or timed out
+- `5`: the job was cancelled
+- `6`: the runner stopped before completing a job
+- `1`: runner API, protocol, or execution coordination failed
+- `2`: runner configuration was invalid
+- `130`: the process was interrupted
+
+`--ci` and `--max-cycles` cannot be used together.
 
 Each polling cycle:
 
@@ -214,28 +238,33 @@ artifact records.
 
 ## Current local execution boundary
 
-The current executor is intentionally a controlled placeholder.
+The default executor handles only the allowlisted `asr_evaluation` job type.
 
-It:
+For each claimed ASR evaluation job, it:
 
-- Accepts only the allowlisted `asr_evaluation` job type
-- Does not execute arbitrary shell commands
-- Does not access arbitrary filesystem paths
-- Does not invoke the real ASR pipeline
-- Checks cooperative execution control before and after its bounded operation
-- Returns a controlled placeholder result
-- Reports generic failure messages without exposing sensitive exceptions
+- Retrieves project-scoped evaluation context through the authenticated API
+- Downloads only the claim-protected allowlisted audio file
+- Stores audio inside a temporary runner-owned directory
+- Supports `.wav`, `.mp3`, and `.m4a` input
+- Resolves the configured `mock_local` or `faster_whisper` provider
+- Uses the evaluation run's stored model name
+- Checks cooperative execution control before and after remote access and model execution
+- Submits only the generated transcript and controlled provider metadata
+- Lets the backend calculate WER, CER, quality label, and error summary
+- Completes the job and persists one evaluation result atomically
+- Deletes temporary downloaded audio after success or failure
+- Reports generic failures without persisting sensitive provider exceptions
 
-The runner now supports the execution-control contract required by future real
-executors. Real audio processing, model execution, evaluation-result upload,
-and artifact upload remain later Phase 3 work.
+The executor does not accept arbitrary shell commands, arbitrary code, backend
+filesystem paths, runner-supplied metrics, or runner-controlled lifecycle
+state.
 
-A future ASR executor must divide long operations into safe checkpoints and
-inspect `ExecutionControl` regularly. The runner cannot safely terminate an
-arbitrary Python thread or external model process that ignores cooperative stop
-signals.
+Long model operations must inspect `ExecutionControl` at safe checkpoints.
+Python threads cannot be forcibly terminated safely when a provider ignores
+cooperative stop signals.
 
-GitHub Actions and CI runner mode are also not implemented yet.
+One-shot CI runner mode is available through `--ci`. A repository-specific
+GitHub Actions workflow has not yet been added.
 
 ## Enqueue a runner job
 
@@ -330,6 +359,9 @@ The job lifecycle uses:
     POST /runners/jobs/{job_public_id}/fail
     POST /runners/jobs/{job_public_id}/logs
     POST /runners/jobs/{job_public_id}/logs/query
+    POST /runners/jobs/{job_public_id}/asr/context
+    POST /runners/jobs/{job_public_id}/asr/audio
+    POST /runners/jobs/{job_public_id}/asr/result
 
 A successful claim returns a plaintext claim token once.
 
