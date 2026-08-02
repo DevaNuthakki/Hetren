@@ -391,3 +391,77 @@ class RunnerJobLogQueryResponse(BaseModel):
     logs: list[RunnerJobLogRead]
     has_more: bool
     next_after_sequence: int | None
+
+
+class RunnerOperationsRunnerRead(BaseModel):
+    project_id: int
+    public_id: str
+    name: str
+    status: str
+    runner_version: str | None
+    capabilities: list[str]
+    last_seen_at: datetime | None
+    revoked_at: datetime | None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerOperationsJobRead(BaseModel):
+    project_id: int
+    public_id: str
+    name: str
+    job_type: str
+    status: str
+    priority: int
+    required_capabilities: list[str]
+
+    assigned_runner_public_id: str | None
+    assigned_runner_name: str | None
+
+    attempt_count: int
+    max_attempts: int
+    error_message: str | None
+
+    available_at: datetime
+    claimed_at: datetime | None
+    lease_expires_at: datetime | None
+    started_at: datetime | None
+    completed_at: datetime | None
+    failed_at: datetime | None
+    cancelled_at: datetime | None
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerOperationsSnapshotResponse(BaseModel):
+    project_id: int
+    runners: list[RunnerOperationsRunnerRead]
+    jobs: list[RunnerOperationsJobRead]
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerOperationsLogRead(BaseModel):
+    public_id: str
+    sequence_number: int
+    attempt_number: int
+    level: str
+    event_type: str
+    message: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RunnerOperationsLogPageResponse(BaseModel):
+    project_id: int
+    job_public_id: str
+    logs: list[RunnerOperationsLogRead]
+    has_more: bool
+    next_after_sequence: int | None
+
+    model_config = ConfigDict(from_attributes=True)

@@ -33,6 +33,7 @@ import {
   type StructuredTranscriptDiff,
   type TestCase,
 } from "./api";
+import { RunnerOperationsPanel } from "./RunnerOperationsPanel";
 
 type MetricCard = {
   label: string;
@@ -1818,6 +1819,17 @@ function App() {
                 </article>
               ))}
             </section>
+
+            {selectedProjectId !== null && (
+              <section
+                className="panel full-width-panel"
+                id="runner-operations"
+              >
+                <RunnerOperationsPanel
+                  projectId={selectedProjectId}
+                />
+              </section>
+            )}
 
             <section className="workspace-grid">
               <article className="panel">
