@@ -15,7 +15,7 @@ from app.local_runner_client import (
 )
 from app.runner_config import LocalRunnerSettings
 from app.runner_schemas import RunnerJobRead
-from app.speech.base import ASRProvider
+from app.speech import ASRProvider, get_asr_provider
 
 
 GENERIC_EXECUTION_ERROR = (
@@ -688,6 +688,29 @@ def build_job_control_worker(
     )
 
 
+def build_default_runner_job_executor(
+    *,
+    client: LocalRunnerClient,
+    job: RunnerJobRead,
+    claim_token: str,
+) -> RunnerJobExecutor:
+    """
+    Build the allowlisted executor for one claimed runner job.
+
+    ASR providers are resolved only after a job is successfully
+    claimed. Unsupported job types retain the controlled placeholder
+    executor so the existing safe failure path remains active.
+    """
+    if job.job_type == "asr_evaluation":
+        return ASRRunnerJobExecutor(
+            client=client,
+            claim_token=claim_token,
+            provider=get_asr_provider(),
+        )
+
+    return PlaceholderRunnerJobExecutor()
+
+
 def collect_runner_system_info() -> dict[str, object]:
     """
     Return non-sensitive runner environment information.
@@ -727,10 +750,6 @@ def run_one_local_runner_cycle(
     API or protocol failures propagate when remote state cannot be
     determined safely.
     """
-    selected_executor = (
-        executor or PlaceholderRunnerJobExecutor()
-    )
-
     client.heartbeat(
         runner_version=settings.runner_version,
         capabilities=settings.capabilities,
@@ -760,6 +779,17 @@ def run_one_local_runner_cycle(
 
     job = claimed.job
     claim_token = claimed.claim_token
+
+    selected_executor = executor
+
+    if selected_executor is None:
+        selected_executor = (
+            build_default_runner_job_executor(
+                client=client,
+                job=job,
+                claim_token=claim_token,
+            )
+        )
 
     client.start_job(
         job_public_id=job.public_id,
