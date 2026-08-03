@@ -1,4 +1,4 @@
-name: Ovrin CI
+name: Hetren CI
 
 on:
   push:
@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ovrin-ci-${{ github.workflow }}-${{ github.ref }}
+  group: hetren-ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 20
 
     env:
-      OVRIN_ENV: test
+      HETREN_ENV: test
       DATABASE_URL: postgresql+psycopg://ovrin:ovrin_ci_only@127.0.0.1:5432/ovrin
       TEST_DATABASE_URL: postgresql+psycopg://ovrin:ovrin_ci_only@127.0.0.1:5432/ovrin_test
       DATABASE_ECHO: "false"

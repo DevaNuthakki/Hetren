@@ -1,12 +1,12 @@
-# Ovrin
+# Hetren
 
-Ovrin is a speech AI regression-debugging platform focused initially on automatic speech recognition (ASR/STT).
+Hetren is a speech AI regression-debugging platform focused initially on automatic speech recognition (ASR/STT).
 
 It helps engineering teams organise evaluation datasets, execute speech-model evaluations, compare baseline and candidate runs, identify regressions, create debug cases, and make release-safety decisions.
 
 ## Current capabilities
 
-Ovrin currently supports:
+Hetren currently supports:
 
 - Projects, datasets, and test cases
 - Audio and reference-transcript workflows
@@ -57,7 +57,7 @@ Phase 3 implements the secure local and CI runner platform, including project-sc
 ## Repository structure
 
 ```text
-ovrin/
+hetren/
 ├── backend/
 │   ├── alembic/
 │   ├── app/
@@ -329,7 +329,7 @@ The frontend job installs dependencies from the committed lockfile, runs linting
 Phase 3 runner registration, secure job coordination, local polling and
 execution, lease recovery, structured execution logging, read-only
 project-scoped runner operations APIs and UI, and administrative CLI
-instructions are documented in `docs/OVRIN_RUNNER_OPERATIONS.md`.
+instructions are documented in `docs/HETREN_RUNNER_OPERATIONS.md`.
 
 ## Validation data
 
@@ -375,7 +375,7 @@ docker compose up -d postgres
 
 ### Destructive local reset
 
-The following command deletes the PostgreSQL volume and all local Ovrin development and test data:
+The following command deletes the PostgreSQL volume and all local Hetren development and test data:
 
 ```bash
 docker compose down -v
@@ -443,7 +443,7 @@ Secure job claiming, lifecycle transitions, lease recovery, structured log uploa
 
 An administrator creates a short-lived registration token through a local CLI command.
 
-The plaintext registration token is displayed once. Ovrin stores only its SHA-256 digest.
+The plaintext registration token is displayed once. Hetren stores only its SHA-256 digest.
 
 A runner exchanges the token using:
 
@@ -451,7 +451,7 @@ A runner exchanges the token using:
 POST /runners/register
 ```
 
-A successful registration returns a separate runner credential once. Ovrin stores only the credential digest.
+A successful registration returns a separate runner credential once. Hetren stores only the credential digest.
 
 The runner uses that credential as an HTTP Bearer token when calling:
 
@@ -485,10 +485,10 @@ python scripts/issue_runner_registration_token.py \
 The command displays a token beginning with:
 
 ```text
-ovrin_reg_
+hetren_reg_
 ```
 
-Store it securely. The plaintext token is not stored by Ovrin and cannot be displayed again.
+Store it securely. The plaintext token is not stored by Hetren and cannot be displayed again.
 
 ### Register a runner
 
@@ -499,7 +499,7 @@ curl -X POST \
   http://127.0.0.1:8000/runners/register \
   -H "Content-Type: application/json" \
   --data '{
-    "registration_token": "ovrin_reg_REPLACE_ME",
+    "registration_token": "hetren_reg_REPLACE_ME",
     "name": "Local ASR Runner",
     "runner_version": "0.1.0",
     "capabilities": ["asr", "cpu"],
@@ -514,7 +514,7 @@ A successful request returns HTTP `201` with:
 
 - The runner public ID
 - Runner status and metadata
-- A plaintext credential beginning with `ovrin_runner_`
+- A plaintext credential beginning with `hetren_runner_`
 
 The plaintext credential is returned only during registration and must be stored securely.
 
@@ -531,7 +531,7 @@ The response does not expose:
 curl -X POST \
   http://127.0.0.1:8000/runners/heartbeat \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer ovrin_runner_REPLACE_ME" \
+  -H "Authorization: Bearer hetren_runner_REPLACE_ME" \
   --data '{
     "runner_version": "0.1.1",
     "capabilities": ["asr", "cpu", "local"],
@@ -601,7 +601,7 @@ Production runner communication must additionally use:
 
 ## Production database expectations
 
-A client-facing Ovrin deployment should use:
+A client-facing Hetren deployment should use:
 
 - Managed PostgreSQL
 - Separate development, test, staging, and production databases
