@@ -41,7 +41,7 @@ class DemoSpec:
 
 DEMO_SPECS = (
     DemoSpec(
-        project_name="Ovrin Phase 2 PASS Demo",
+        project_name="Hetren Phase 2 PASS Demo",
         description=(
             "Phase 2 validation project demonstrating a release candidate "
             "that passes every configured release-safety threshold."
@@ -60,7 +60,7 @@ DEMO_SPECS = (
         ),
     ),
     DemoSpec(
-        project_name="Ovrin Phase 2 WARN Demo",
+        project_name="Hetren Phase 2 WARN Demo",
         description=(
             "Phase 2 validation project demonstrating a release candidate "
             "that requires review before approval."
@@ -79,7 +79,7 @@ DEMO_SPECS = (
         ),
     ),
     DemoSpec(
-        project_name="Ovrin Phase 2 FAIL Demo",
+        project_name="Hetren Phase 2 FAIL Demo",
         description=(
             "Phase 2 validation project demonstrating a release candidate "
             "that is blocked by critical ASR regressions."
@@ -99,6 +99,12 @@ DEMO_SPECS = (
     ),
 )
 
+
+LEGACY_PROJECT_NAMES = (
+    "Ovrin Phase 2 PASS Demo",
+    "Ovrin Phase 2 WARN Demo",
+    "Ovrin Phase 2 FAIL Demo",
+)
 
 REFERENCE_TRANSCRIPT = (
     "the customer requested an account balance and payment review "
@@ -167,7 +173,13 @@ def build_comparison_summary(
 
 
 def reset_existing_demo_projects(db: Session) -> None:
-    project_names = [spec.project_name for spec in DEMO_SPECS]
+    current_project_names = [
+        spec.project_name for spec in DEMO_SPECS
+    ]
+    project_names = [
+        *current_project_names,
+        *LEGACY_PROJECT_NAMES,
+    ]
 
     existing_projects = (
         db.query(models.Project)
@@ -218,6 +230,24 @@ def reset_existing_demo_projects(db: Session) -> None:
                 )
                 .all()
             ]
+
+        # Runner records must be removed in dependency order before
+        # deleting their project.
+        db.query(models.RunnerJobLog).filter(
+            models.RunnerJobLog.project_id == project.id
+        ).delete(synchronize_session=False)
+
+        db.query(models.RunnerJob).filter(
+            models.RunnerJob.project_id == project.id
+        ).delete(synchronize_session=False)
+
+        db.query(models.Runner).filter(
+            models.Runner.project_id == project.id
+        ).delete(synchronize_session=False)
+
+        db.query(models.RunnerRegistrationToken).filter(
+            models.RunnerRegistrationToken.project_id == project.id
+        ).delete(synchronize_session=False)
 
         db.query(models.ReleaseReport).filter(
             models.ReleaseReport.project_id == project.id
@@ -301,7 +331,7 @@ def write_demo_artifacts(
     current_path = result_dir / "current-generated.txt"
 
     audio_path.write_bytes(
-        b"mock local audio bytes for Ovrin Phase 2 validation\n"
+        b"mock local audio bytes for Hetren Phase 2 validation\n"
     )
     reference_path.write_text(
         REFERENCE_TRANSCRIPT,

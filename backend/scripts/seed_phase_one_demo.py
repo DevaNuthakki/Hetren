@@ -13,7 +13,8 @@ from app import models
 from app.database import SessionLocal
 
 
-PROJECT_NAME = "Ovrin Phase 1 Validation Demo"
+PROJECT_NAME = "Hetren Phase 1 Validation Demo"
+LEGACY_PROJECT_NAME = "Ovrin Phase 1 Validation Demo"
 UPLOAD_ROOT = Path("uploads") / "phase-one-validation"
 
 
@@ -61,10 +62,10 @@ def slugify(value: str) -> str:
     )
 
 
-def reset_existing_demo_project(db) -> None:
+def reset_existing_demo_project(db, project_name: str) -> None:
     existing_project = (
         db.query(models.Project)
-        .filter(models.Project.name == PROJECT_NAME)
+        .filter(models.Project.name == project_name)
         .first()
     )
 
@@ -108,6 +109,24 @@ def reset_existing_demo_project(db) -> None:
             )
             .all()
         ]
+
+    # Runner records must be removed in dependency order before
+    # deleting their project.
+    db.query(models.RunnerJobLog).filter(
+        models.RunnerJobLog.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    db.query(models.RunnerJob).filter(
+        models.RunnerJob.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    db.query(models.Runner).filter(
+        models.Runner.project_id == existing_project.id
+    ).delete(synchronize_session=False)
+
+    db.query(models.RunnerRegistrationToken).filter(
+        models.RunnerRegistrationToken.project_id == existing_project.id
+    ).delete(synchronize_session=False)
 
     db.query(models.ReleaseReport).filter(
         models.ReleaseReport.project_id == existing_project.id
@@ -177,7 +196,7 @@ def write_test_case_artifacts(dataset_name: str, title: str, reference_text: str
     reference_path = reference_dir / f"{safe_title}.txt"
 
     # The mock ASR provider only requires a non-empty local audio file path.
-    audio_path.write_bytes(b"mock local audio bytes for Ovrin phase one validation\n")
+    audio_path.write_bytes(b"mock local audio bytes for Hetren phase one validation\n")
     reference_path.write_text(reference_text, encoding="utf-8")
 
     return str(audio_path), str(reference_path)
@@ -230,7 +249,8 @@ def main() -> None:
     db = SessionLocal()
 
     try:
-        reset_existing_demo_project(db)
+        reset_existing_demo_project(db, LEGACY_PROJECT_NAME)
+        reset_existing_demo_project(db, PROJECT_NAME)
 
         project = models.Project(
             name=PROJECT_NAME,
