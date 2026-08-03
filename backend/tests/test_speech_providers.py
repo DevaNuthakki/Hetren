@@ -167,3 +167,51 @@ def test_registry_rejects_unsupported_provider():
         match="Unsupported ASR provider",
     ):
         get_asr_provider("unknown-provider")
+
+
+def test_registry_loads_hetren_environment(
+    monkeypatch,
+    tmp_path: Path,
+):
+    monkeypatch.delenv("OVRIN_ASR_PROVIDER", raising=False)
+    monkeypatch.delenv("OVRIN_ASR_MODEL", raising=False)
+    monkeypatch.setenv("HETREN_ASR_PROVIDER", "mock")
+    monkeypatch.setenv("HETREN_ASR_MODEL", "hetren-env-model")
+
+    provider = get_asr_provider()
+    result = provider.transcribe(build_audio_file(tmp_path))
+
+    assert isinstance(provider, MockASRProvider)
+    assert result.model_name == "hetren-env-model"
+
+
+def test_registry_accepts_legacy_ovrin_environment(
+    monkeypatch,
+    tmp_path: Path,
+):
+    monkeypatch.delenv("HETREN_ASR_PROVIDER", raising=False)
+    monkeypatch.delenv("HETREN_ASR_MODEL", raising=False)
+    monkeypatch.setenv("OVRIN_ASR_PROVIDER", "mock")
+    monkeypatch.setenv("OVRIN_ASR_MODEL", "legacy-env-model")
+
+    provider = get_asr_provider()
+    result = provider.transcribe(build_audio_file(tmp_path))
+
+    assert isinstance(provider, MockASRProvider)
+    assert result.model_name == "legacy-env-model"
+
+
+def test_hetren_asr_environment_takes_precedence(
+    monkeypatch,
+    tmp_path: Path,
+):
+    monkeypatch.setenv("HETREN_ASR_PROVIDER", "mock")
+    monkeypatch.setenv("OVRIN_ASR_PROVIDER", "unknown")
+    monkeypatch.setenv("HETREN_ASR_MODEL", "hetren-primary-model")
+    monkeypatch.setenv("OVRIN_ASR_MODEL", "legacy-model")
+
+    provider = get_asr_provider()
+    result = provider.transcribe(build_audio_file(tmp_path))
+
+    assert isinstance(provider, MockASRProvider)
+    assert result.model_name == "hetren-primary-model"

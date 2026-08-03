@@ -7,6 +7,21 @@ from app.speech.faster_whisper_provider import (
 from app.speech.mock_provider import MockASRProvider
 
 
+def _get_product_environment_value(
+    setting_name: str,
+    default: str,
+) -> str:
+    hetren_value = os.getenv(f"HETREN_{setting_name}")
+
+    if hetren_value is not None:
+        return hetren_value
+
+    return os.getenv(
+        f"OVRIN_{setting_name}",
+        default,
+    )
+
+
 def get_asr_provider(
     provider_name: str | None = None,
     *,
@@ -24,8 +39,8 @@ def get_asr_provider(
     raw_provider_name = (
         provider_name
         if provider_name is not None
-        else os.getenv(
-            "OVRIN_ASR_PROVIDER",
+        else _get_product_environment_value(
+            "ASR_PROVIDER",
             "mock_local",
         )
     )
@@ -42,8 +57,8 @@ def get_asr_provider(
         model_name.strip()
         if model_name is not None
         and model_name.strip()
-        else os.getenv(
-            "OVRIN_ASR_MODEL",
+        else _get_product_environment_value(
+            "ASR_MODEL",
             "",
         ).strip()
     )
