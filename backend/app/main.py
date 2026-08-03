@@ -8,7 +8,7 @@ from app.runner_operations_routes import (
 from app.runner_routes import router as runner_router
 
 app = FastAPI(
-    title="Ovrin API",
+    title="Hetren API",
     description="GitHub-native speech AI regression debugging API for ASR evaluation.",
     version="0.1.0",
 )
@@ -32,6 +32,6 @@ app.include_router(runner_operations_router)
 @app.get("/")
 def root():
     return {
-        "message": "Ovrin backend is running",
+        "message": "Hetren backend is running",
         "version": "0.1.0",
     }

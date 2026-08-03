@@ -87,7 +87,7 @@ def timezone_aware_datetime(value: str) -> datetime:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Enqueue a controlled project-scoped Ovrin runner job. "
+            "Enqueue a controlled project-scoped Hetren runner job. "
             "Only allowlisted job types are accepted."
         ),
     )
@@ -96,7 +96,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--project-id",
         required=True,
         type=positive_integer,
-        help="Ovrin project ID that will own the job.",
+        help="Hetren project ID that will own the job.",
     )
     parser.add_argument(
         "--name",

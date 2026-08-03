@@ -399,7 +399,7 @@ def health_check():
     """Backward-compatible API health endpoint."""
     return {
         "status": "ok",
-        "service": "ovrin-api",
+        "service": "hetren-api",
     }
 
 
@@ -408,7 +408,7 @@ def liveness_check():
     """Confirm that the FastAPI process is running."""
     return {
         "status": "ok",
-        "service": "ovrin-api",
+        "service": "hetren-api",
         "check": "liveness",
     }
 
@@ -426,7 +426,7 @@ def readiness_check():
 
     return {
         "status": "ready",
-        "service": "ovrin-api",
+        "service": "hetren-api",
         "database": "reachable",
     }
 

@@ -380,7 +380,7 @@ function App() {
         const message =
           error instanceof Error
             ? error.message
-            : "Unable to load Ovrin dashboard data.";
+            : "Unable to load Hetren dashboard data.";
 
         setErrorMessage(message);
       } finally {
@@ -1112,7 +1112,7 @@ function App() {
 
         {isLoading && (
           <section className="state-banner" role="status" aria-live="polite">
-            Loading Ovrin dashboard data from the backend API...
+            Loading Hetren dashboard data from the backend API...
           </section>
         )}
 
@@ -1319,7 +1319,7 @@ function App() {
             </div>
           </div>
 
-          <ol className="pipeline-list" aria-label="Ovrin evaluation pipeline">
+          <ol className="pipeline-list" aria-label="Hetren evaluation pipeline">
             <li>Project</li>
             <li>Dataset</li>
             <li>Test case</li>
@@ -1992,7 +1992,7 @@ function App() {
                 {workspaceTestCases.length === 0 ? (
                   <div className="empty-state">
                     No test cases yet. Upload one audio file and one reference
-                    transcript so Ovrin can evaluate ASR output against expected text.
+                    transcript so Hetren can evaluate ASR output against expected text.
                   </div>
                 ) : (
                   <div className="item-list">
@@ -2153,7 +2153,7 @@ function App() {
                       <strong>Manual evaluate</strong>
                       <span>
                         Use when you already have a generated transcript file and
-                        want Ovrin to calculate WER/CER.
+                        want Hetren to calculate WER/CER.
                       </span>
                     </div>
                     <div className="evaluation-mode-card">
@@ -2574,15 +2574,15 @@ function App() {
       <aside className="sidebar" aria-label="Primary navigation">
         <div className="brand-block">
           <div className="brand-mark" aria-hidden="true">
-            O
+            H
           </div>
           <div>
-            <p className="eyebrow">Ovrin</p>
+            <p className="eyebrow">Hetren</p>
             <h1>Speech AI Debugger</h1>
           </div>
         </div>
 
-        <nav className="nav-list" aria-label="Ovrin sections">
+        <nav className="nav-list" aria-label="Hetren sections">
           <button
             className={`nav-link nav-button ${!selectedProjectId ? "active" : ""}`}
             type="button"

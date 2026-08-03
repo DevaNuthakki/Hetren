@@ -102,7 +102,7 @@ def positive_integer(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Run the standalone Ovrin local runner polling loop."
+            "Run the standalone Hetren local runner polling loop."
         ),
     )
 
