@@ -1,6 +1,6 @@
-# Ovrin Secure Runner Operations
+# Hetren Secure Runner Operations
 
-Ovrin's Phase 3 runner platform coordinates speech evaluation jobs on trusted local or CI infrastructure.
+Hetren's Phase 3 runner platform coordinates speech evaluation jobs on trusted local or CI infrastructure.
 
 This design allows private audio, transcripts, model files, and repository data to remain inside infrastructure controlled by the operator.
 
@@ -50,7 +50,7 @@ Plaintext tokens must not be:
 - Stored inside runner-job input payloads
 - Shared through insecure communication channels
 
-Ovrin stores hashes of runner credentials and claim tokens instead of their plaintext values.
+Hetren stores hashes of runner credentials and claim tokens instead of their plaintext values.
 
 ## Issue a registration token
 
@@ -74,7 +74,7 @@ Revocation prevents the runner credential from authenticating again.
 
 ## Configure the standalone local runner
 
-The standalone runner communicates with Ovrin only through the HTTP API.
+The standalone runner communicates with Hetren only through the HTTP API.
 It does not require direct PostgreSQL access.
 
 Supply the runner credential through the process environment or an approved
@@ -83,20 +83,20 @@ include it in job payloads or logs.
 
 Example local configuration:
 
-    export OVRIN_RUNNER_API_URL="http://127.0.0.1:8000"
-    export OVRIN_RUNNER_CREDENTIAL="ovrin_runner_REPLACE_ME"
-    export OVRIN_RUNNER_VERSION="0.1.0"
-    export OVRIN_RUNNER_CAPABILITIES='["asr","cpu"]'
-    export OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS=30
-    export OVRIN_RUNNER_LEASE_SECONDS=300
-    export OVRIN_RUNNER_POLL_INTERVAL_SECONDS=5
-    export OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60
-    export OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=2
-    export OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=3600
-    export OVRIN_RUNNER_ASR_PROVIDER="mock_local"
-    export OVRIN_RUNNER_ASR_MODEL="mock-asr-foundation"
-    export OVRIN_RUNNER_ASR_DEVICE="cpu"
-    export OVRIN_RUNNER_ASR_COMPUTE_TYPE="int8"
+    export HETREN_RUNNER_API_URL="http://127.0.0.1:8000"
+    export HETREN_RUNNER_CREDENTIAL="hetren_runner_REPLACE_ME"
+    export HETREN_RUNNER_VERSION="0.1.0"
+    export HETREN_RUNNER_CAPABILITIES='["asr","cpu"]'
+    export HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS=30
+    export HETREN_RUNNER_LEASE_SECONDS=300
+    export HETREN_RUNNER_POLL_INTERVAL_SECONDS=5
+    export HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60
+    export HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=2
+    export HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=3600
+    export HETREN_RUNNER_ASR_PROVIDER="mock_local"
+    export HETREN_RUNNER_ASR_MODEL="mock-asr-foundation"
+    export HETREN_RUNNER_ASR_DEVICE="cpu"
+    export HETREN_RUNNER_ASR_COMPUTE_TYPE="int8"
 
 Configuration rules include:
 
@@ -233,7 +233,7 @@ Separate identities make authentication, heartbeats, leases, logs, revocation,
 and operational auditing unambiguous.
 
 Runner processes do not share live process memory. They coordinate through
-persisted Ovrin jobs, structured logs, results, debug evidence, and future
+persisted Hetren jobs, structured logs, results, debug evidence, and future
 artifact records.
 
 ## Current local execution boundary
@@ -272,7 +272,7 @@ PostgreSQL-enabled suite, frontend linting, and the frontend production build.
 The repository validation workflow does not require a persistent runner
 credential. External deployment workflows can run
 `python scripts/run_local_runner.py --ci` with a securely injected registered
-runner credential when one queued Ovrin job should be executed.
+runner credential when one queued Hetren job should be executed.
 
 ## Enqueue a runner job
 
@@ -293,7 +293,7 @@ Example:
       --priority 10 \
       --max-attempts 3
 
-Job input is validated and stored as structured JSON. Ovrin does not execute arbitrary shell commands or code from the input payload.
+Job input is validated and stored as structured JSON. Hetren does not execute arbitrary shell commands or code from the input payload.
 
 ### Required capabilities
 
@@ -374,7 +374,7 @@ The job lifecycle uses:
 A successful claim returns a plaintext claim token once.
 
 The runner must provide that claim token when starting, renewing, completing,
-failing, appending logs, or retrieving logs for the job. Ovrin stores only its
+failing, appending logs, or retrieving logs for the job. Hetren stores only its
 hash.
 
 The control-status endpoint is different. It accepts only the authenticated
@@ -415,7 +415,7 @@ The runner credential is supplied through the Bearer authorization header. The c
 Example request:
 
     {
-      "claim_token": "ovrin_claim_REPLACE_ME",
+      "claim_token": "hetren_claim_REPLACE_ME",
       "entries": [
         {
           "level": "info",
@@ -445,7 +445,7 @@ Supported log levels are:
 
 Each request can contain between `1` and `100` entries.
 
-Ovrin validates the complete batch before writing anything. If one entry is invalid, the entire batch is rejected and no entries are persisted.
+Hetren validates the complete batch before writing anything. If one entry is invalid, the entire batch is rejected and no entries are persisted.
 
 The server assigns:
 
@@ -476,7 +476,7 @@ A POST endpoint is used so the claim token remains in the request body instead o
 Example request:
 
     {
-      "claim_token": "ovrin_claim_REPLACE_ME",
+      "claim_token": "hetren_claim_REPLACE_ME",
       "after_sequence": 0,
       "limit": 100,
       "attempt_number": null,
@@ -553,7 +553,7 @@ Job-log retrieval supports cursor-based pagination through
 `after_sequence` and `limit`. Logs are returned in ascending sequence order.
 
 Runner revocation and job cancellation remain administrative CLI operations.
-They are not exposed as browser write actions because Ovrin does not yet have
+They are not exposed as browser write actions because Hetren does not yet have
 a separate authenticated human-administrator identity layer. This preserves
 the existing security boundary while still providing useful operational
 visibility.

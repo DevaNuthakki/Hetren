@@ -2,6 +2,7 @@ from functools import lru_cache
 from typing import Literal, Self
 
 from pydantic import (
+    AliasChoices,
     Field,
     HttpUrl,
     SecretStr,
@@ -16,36 +17,45 @@ from pydantic_settings import (
 from app.config import PROJECT_ROOT
 
 
+def _runner_environment_alias(
+    setting_name: str,
+) -> AliasChoices:
+    return AliasChoices(
+        f"HETREN_RUNNER_{setting_name}",
+        f"OVRIN_RUNNER_{setting_name}",
+    )
+
+
 class LocalRunnerSettings(BaseSettings):
     """
     Configuration for the standalone local or CI runner process.
 
-    The runner communicates with Ovrin exclusively through the HTTP API
+    The runner communicates with Hetren exclusively through the HTTP API
     and does not require direct database access.
     """
 
     api_url: HttpUrl = Field(
         default="http://127.0.0.1:8000",
-        validation_alias="OVRIN_RUNNER_API_URL",
+        validation_alias=_runner_environment_alias("API_URL"),
     )
 
     credential: SecretStr = Field(
         min_length=1,
-        validation_alias="OVRIN_RUNNER_CREDENTIAL",
+        validation_alias=_runner_environment_alias("CREDENTIAL"),
     )
 
     runner_version: str = Field(
         default="0.1.0",
         min_length=1,
         max_length=100,
-        validation_alias="OVRIN_RUNNER_VERSION",
+        validation_alias=_runner_environment_alias("VERSION"),
     )
 
     capabilities: list[str] = Field(
         default_factory=lambda: ["asr"],
         min_length=1,
         max_length=50,
-        validation_alias="OVRIN_RUNNER_CAPABILITIES",
+        validation_alias=_runner_environment_alias("CAPABILITIES"),
     )
 
     request_timeout_seconds: float = Field(
@@ -53,7 +63,7 @@ class LocalRunnerSettings(BaseSettings):
         gt=0,
         le=300,
         validation_alias=(
-            "OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS"
+            _runner_environment_alias("REQUEST_TIMEOUT_SECONDS")
         ),
     )
 
@@ -61,7 +71,7 @@ class LocalRunnerSettings(BaseSettings):
         default=300,
         ge=1,
         le=3600,
-        validation_alias="OVRIN_RUNNER_LEASE_SECONDS",
+        validation_alias=_runner_environment_alias("LEASE_SECONDS"),
     )
 
     poll_interval_seconds: float = Field(
@@ -69,7 +79,7 @@ class LocalRunnerSettings(BaseSettings):
         gt=0,
         le=300,
         validation_alias=(
-            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS"
+            _runner_environment_alias("POLL_INTERVAL_SECONDS")
         ),
     )
 
@@ -78,7 +88,7 @@ class LocalRunnerSettings(BaseSettings):
         gt=0,
         le=1800,
         validation_alias=(
-            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS"
+            _runner_environment_alias("LEASE_RENEWAL_INTERVAL_SECONDS")
         ),
     )
 
@@ -87,7 +97,7 @@ class LocalRunnerSettings(BaseSettings):
         gt=0,
         le=300,
         validation_alias=(
-            "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS"
+            _runner_environment_alias("CONTROL_POLL_INTERVAL_SECONDS")
         ),
     )
 
@@ -96,7 +106,7 @@ class LocalRunnerSettings(BaseSettings):
         gt=0,
         le=86400,
         validation_alias=(
-            "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS"
+            _runner_environment_alias("EXECUTION_TIMEOUT_SECONDS")
         ),
     )
 
@@ -105,21 +115,21 @@ class LocalRunnerSettings(BaseSettings):
         "faster_whisper",
     ] = Field(
         default="mock_local",
-        validation_alias="OVRIN_RUNNER_ASR_PROVIDER",
+        validation_alias=_runner_environment_alias("ASR_PROVIDER"),
     )
 
     asr_model: str = Field(
         default="mock-asr-foundation",
         min_length=1,
         max_length=200,
-        validation_alias="OVRIN_RUNNER_ASR_MODEL",
+        validation_alias=_runner_environment_alias("ASR_MODEL"),
     )
 
     asr_device: str = Field(
         default="cpu",
         min_length=1,
         max_length=100,
-        validation_alias="OVRIN_RUNNER_ASR_DEVICE",
+        validation_alias=_runner_environment_alias("ASR_DEVICE"),
     )
 
     asr_compute_type: str = Field(
@@ -127,7 +137,7 @@ class LocalRunnerSettings(BaseSettings):
         min_length=1,
         max_length=100,
         validation_alias=(
-            "OVRIN_RUNNER_ASR_COMPUTE_TYPE"
+            _runner_environment_alias("ASR_COMPUTE_TYPE")
         ),
     )
 

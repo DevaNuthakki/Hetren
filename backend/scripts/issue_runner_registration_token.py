@@ -40,7 +40,7 @@ def positive_integer(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Issue a one-time Ovrin runner registration token. "
+            "Issue a one-time Hetren runner registration token. "
             "The plaintext token is displayed only once."
         ),
     )
@@ -49,7 +49,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--project-id",
         required=True,
         type=positive_integer,
-        help="Ovrin project ID that will own the runner.",
+        help="Hetren project ID that will own the runner.",
     )
     parser.add_argument(
         "--label",

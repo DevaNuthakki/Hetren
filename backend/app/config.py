@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, field_validator
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,7 +17,10 @@ class Settings(BaseSettings):
         "production",
     ] = Field(
         default="development",
-        validation_alias="OVRIN_ENV",
+        validation_alias=AliasChoices(
+            "HETREN_ENV",
+            "OVRIN_ENV",
+        ),
     )
 
     database_url: str = Field(
@@ -48,7 +51,7 @@ class Settings(BaseSettings):
             return value
 
         # Some managed PostgreSQL providers return one of these shorter
-        # schemes. Ovrin uses psycopg 3 as its SQLAlchemy driver.
+        # schemes. Hetren uses psycopg 3 as its SQLAlchemy driver.
         if value.startswith("postgres://"):
             return value.replace(
                 "postgres://",

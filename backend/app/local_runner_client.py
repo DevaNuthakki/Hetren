@@ -44,22 +44,22 @@ class LocalRunnerAuthenticationError(
 
 
 class LocalRunnerAPIError(LocalRunnerClientError):
-    """Raised when the Ovrin API rejects a runner request."""
+    """Raised when the Hetren API rejects a runner request."""
 
     def __init__(self, status_code: int):
         self.status_code = status_code
         super().__init__(
-            "Ovrin runner API request failed with "
+            "Hetren runner API request failed with "
             f"HTTP {status_code}."
         )
 
 
 class LocalRunnerRequestError(LocalRunnerClientError):
-    """Raised when the Ovrin API cannot be reached."""
+    """Raised when the Hetren API cannot be reached."""
 
 
 class LocalRunnerProtocolError(LocalRunnerClientError):
-    """Raised when the Ovrin API returns an invalid response."""
+    """Raised when the Hetren API returns an invalid response."""
 
 
 class LocalRunnerInputError(LocalRunnerClientError):
@@ -175,11 +175,11 @@ class LocalRunnerClient:
             )
         except httpx.TimeoutException as exc:
             raise LocalRunnerRequestError(
-                "Ovrin runner API request timed out."
+                "Hetren runner API request timed out."
             ) from exc
         except httpx.RequestError as exc:
             raise LocalRunnerRequestError(
-                "Ovrin runner API could not be reached."
+                "Hetren runner API could not be reached."
             ) from exc
 
         if response.status_code == 401:
@@ -199,7 +199,7 @@ class LocalRunnerClient:
             )
         except (ValueError, ValidationError) as exc:
             raise LocalRunnerProtocolError(
-                "Ovrin runner API returned an invalid response."
+                "Hetren runner API returned an invalid response."
             ) from exc
 
     def _post_to_file(
@@ -277,7 +277,7 @@ class LocalRunnerClient:
 
                 if not media_type.startswith("audio/"):
                     raise LocalRunnerProtocolError(
-                        "Ovrin runner API returned an "
+                        "Hetren runner API returned an "
                         "invalid audio response."
                     )
 
@@ -299,11 +299,11 @@ class LocalRunnerClient:
 
         except httpx.TimeoutException as exc:
             raise LocalRunnerRequestError(
-                "Ovrin runner API request timed out."
+                "Hetren runner API request timed out."
             ) from exc
         except httpx.RequestError as exc:
             raise LocalRunnerRequestError(
-                "Ovrin runner API could not be reached."
+                "Hetren runner API could not be reached."
             ) from exc
         except OSError as exc:
             raise LocalRunnerInputError(

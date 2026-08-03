@@ -29,7 +29,7 @@ SessionFactory = Callable[[], Session]
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Cancel an Ovrin runner job and invalidate "
+            "Cancel an Hetren runner job and invalidate "
             "any active claim."
         ),
     )

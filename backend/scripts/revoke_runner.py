@@ -28,7 +28,7 @@ SessionFactory = Callable[[], Session]
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Revoke an Ovrin runner and invalidate its credential."
+            "Revoke an Hetren runner and invalidate its credential."
         ),
     )
 

@@ -50,7 +50,7 @@ def recovery_limit(value: str) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Recover Ovrin runner jobs whose claim leases "
+            "Recover Hetren runner jobs whose claim leases "
             "have expired."
         ),
     )

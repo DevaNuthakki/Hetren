@@ -1,7 +1,12 @@
+import hashlib
+
 import pytest
 
 from app.runner_security import (
     JOB_CLAIM_TOKEN_PREFIX,
+    LEGACY_JOB_CLAIM_TOKEN_PREFIX,
+    LEGACY_REGISTRATION_TOKEN_PREFIX,
+    LEGACY_RUNNER_CREDENTIAL_PREFIX,
     REGISTRATION_TOKEN_PREFIX,
     RUNNER_CREDENTIAL_PREFIX,
     generate_job_claim_token,
@@ -14,6 +19,12 @@ from app.runner_security import (
     verify_registration_token,
     verify_runner_credential,
 )
+
+
+def test_new_secret_prefixes_use_hetren_product_name():
+    assert REGISTRATION_TOKEN_PREFIX == "hetren_reg_"
+    assert RUNNER_CREDENTIAL_PREFIX == "hetren_runner_"
+    assert JOB_CLAIM_TOKEN_PREFIX == "hetren_claim_"
 
 
 def test_registration_tokens_are_prefixed_and_unique():
@@ -32,7 +43,6 @@ def test_runner_credentials_are_prefixed_and_unique():
     assert first_credential.startswith(RUNNER_CREDENTIAL_PREFIX)
     assert second_credential.startswith(RUNNER_CREDENTIAL_PREFIX)
     assert first_credential != second_credential
-
 
 
 def test_job_claim_tokens_are_prefixed_and_unique():
@@ -64,7 +74,6 @@ def test_runner_credential_hash_is_deterministic_and_not_plaintext():
     assert first_hash == second_hash
     assert first_hash != credential
     assert len(first_hash) == 64
-
 
 
 def test_job_claim_hash_is_deterministic_and_not_plaintext():
@@ -106,7 +115,6 @@ def test_runner_credential_verification_rejects_wrong_credential():
     )
 
 
-
 def test_job_claim_verification_rejects_wrong_token():
     token = generate_job_claim_token()
     token_hash = hash_job_claim_token(token)
@@ -131,6 +139,90 @@ def test_runner_secret_hashes_are_domain_separated():
     assert registration_hash != credential_hash
     assert registration_hash != claim_hash
     assert credential_hash != claim_hash
+
+
+@pytest.mark.parametrize(
+    (
+        "hash_function",
+        "verify_function",
+        "secret",
+        "purpose",
+    ),
+    [
+        (
+            hash_registration_token,
+            verify_registration_token,
+            "hetren_reg_test-token",
+            "runner-registration",
+        ),
+        (
+            hash_runner_credential,
+            verify_runner_credential,
+            "hetren_runner_test-credential",
+            "runner-credential",
+        ),
+        (
+            hash_job_claim_token,
+            verify_job_claim_token,
+            "hetren_claim_test-token",
+            "runner-job-claim",
+        ),
+    ],
+)
+def test_new_secrets_use_hetren_hash_namespace(
+    hash_function,
+    verify_function,
+    secret,
+    purpose,
+):
+    expected_hash = hashlib.sha256(
+        f"hetren:{purpose}:{secret}".encode("utf-8"),
+    ).hexdigest()
+
+    assert hash_function(secret) == expected_hash
+    assert verify_function(secret, expected_hash) is True
+
+
+@pytest.mark.parametrize(
+    (
+        "hash_function",
+        "verify_function",
+        "secret",
+        "purpose",
+    ),
+    [
+        (
+            hash_registration_token,
+            verify_registration_token,
+            f"{LEGACY_REGISTRATION_TOKEN_PREFIX}test-token",
+            "runner-registration",
+        ),
+        (
+            hash_runner_credential,
+            verify_runner_credential,
+            f"{LEGACY_RUNNER_CREDENTIAL_PREFIX}test-credential",
+            "runner-credential",
+        ),
+        (
+            hash_job_claim_token,
+            verify_job_claim_token,
+            f"{LEGACY_JOB_CLAIM_TOKEN_PREFIX}test-token",
+            "runner-job-claim",
+        ),
+    ],
+)
+def test_legacy_secrets_keep_ovrin_hash_namespace(
+    hash_function,
+    verify_function,
+    secret,
+    purpose,
+):
+    expected_hash = hashlib.sha256(
+        f"ovrin:{purpose}:{secret}".encode("utf-8"),
+    ).hexdigest()
+
+    assert hash_function(secret) == expected_hash
+    assert verify_function(secret, expected_hash) is True
 
 
 @pytest.mark.parametrize(
