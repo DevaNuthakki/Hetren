@@ -319,7 +319,7 @@ class ASRRunnerJobExecutor:
             )
 
         with TemporaryDirectory(
-            prefix="ovrin-runner-asr-",
+            prefix="hetren-runner-asr-",
         ) as workspace:
             audio_destination = (
                 Path(workspace)
@@ -477,7 +477,7 @@ class LeaseRenewalWorker:
 
         thread = Thread(
             target=self._run,
-            name="ovrin-runner-lease-renewal",
+            name="hetren-runner-lease-renewal",
             daemon=True,
         )
         self._thread = thread
@@ -586,7 +586,7 @@ class JobControlWorker:
 
         thread = Thread(
             target=self._run,
-            name="ovrin-runner-job-control",
+            name="hetren-runner-job-control",
             daemon=True,
         )
         self._thread = thread
