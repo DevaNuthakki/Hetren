@@ -377,9 +377,19 @@ def record_runner_heartbeat(
         )
 
     if capabilities is not None:
-        runner.capabilities = _normalize_capabilities(
+        normalized_capabilities = _normalize_capabilities(
             capabilities
         )
+
+        if not set(normalized_capabilities).issubset(
+            set(runner.capabilities or [])
+        ):
+            db.rollback()
+            raise ValueError(
+                "Runner heartbeat cannot grant new capabilities."
+            )
+
+        runner.capabilities = normalized_capabilities
 
     if system_info is not None:
         runner.system_info = _normalize_system_info(

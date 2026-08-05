@@ -351,7 +351,7 @@ def test_heartbeat_authenticates_runner_and_updates_last_seen(
         registration_token=issued.token,
         name="Heartbeat runner",
         runner_version="0.1.0",
-        capabilities=["asr"],
+        capabilities=["asr", "cpu"],
         system_info={"platform": "darwin"},
     )
 
@@ -412,6 +412,46 @@ def test_heartbeat_preserves_metadata_when_not_supplied(
     assert runner.capabilities == ["asr"]
     assert runner.system_info == {"platform": "darwin"}
     assert runner.last_seen_at is not None
+
+
+def test_heartbeat_rejects_new_capabilities_without_writes(
+    db: Session,
+):
+    project = create_project(db)
+    issued = issue_registration_token(
+        db,
+        project_id=project.id,
+    )
+    registered = register_runner(
+        db,
+        registration_token=issued.token,
+        name="Capability boundary runner",
+        runner_version="0.1.0",
+        capabilities=["asr"],
+        system_info={"platform": "darwin"},
+    )
+    original_last_seen_at = registered.runner.last_seen_at
+
+    with pytest.raises(
+        ValueError,
+        match="cannot grant new capabilities",
+    ):
+        record_runner_heartbeat(
+            db,
+            credential=registered.credential,
+            runner_version="0.2.0",
+            capabilities=["asr", "gpu"],
+            system_info={"platform": "linux"},
+        )
+
+    db.refresh(registered.runner)
+
+    assert registered.runner.runner_version == "0.1.0"
+    assert registered.runner.capabilities == ["asr"]
+    assert registered.runner.system_info == {
+        "platform": "darwin"
+    }
+    assert registered.runner.last_seen_at == original_last_seen_at
 
 
 def test_heartbeat_rejects_invalid_credential(
