@@ -30,6 +30,12 @@ SUPPORTED_RUNNER_JOB_TYPES = frozenset(
     }
 )
 
+DEDICATED_RESULT_JOB_TYPES = frozenset(
+    {
+        "asr_evaluation",
+    }
+)
+
 SUPPORTED_ASR_AUDIO_MEDIA_TYPES = {
     ".wav": "audio/wav",
     ".mp3": "audio/mpeg",
@@ -1447,6 +1453,12 @@ def complete_job(
     )
 
     if job.status != "running":
+        db.rollback()
+        raise RunnerJobTransitionUnavailableError(
+            "Runner job transition is invalid or unavailable."
+        )
+
+    if job.job_type in DEDICATED_RESULT_JOB_TYPES:
         db.rollback()
         raise RunnerJobTransitionUnavailableError(
             "Runner job transition is invalid or unavailable."

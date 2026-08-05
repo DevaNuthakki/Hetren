@@ -778,76 +778,6 @@ def test_start_job_rejects_already_running_job(
         )
 
 
-def test_complete_job_transitions_running_job_to_completed(
-    db: Session,
-):
-    project = create_project(db, "Complete job project")
-    registered = create_registered_runner(
-        db,
-        project=project,
-        name="Complete job runner",
-        capabilities=["asr"],
-    )
-
-    claim_time = datetime(
-        2026,
-        7,
-        29,
-        20,
-        0,
-        tzinfo=UTC,
-    )
-    start_time = claim_time + timedelta(seconds=10)
-    completion_time = claim_time + timedelta(minutes=1)
-
-    create_job(
-        db,
-        project=project,
-        name="Complete transition job",
-        required_capabilities=["asr"],
-        available_at=claim_time,
-    )
-
-    claimed = claim_next_job(
-        db,
-        credential=registered.credential,
-        now=claim_time,
-    )
-    assert claimed is not None
-
-    start_job(
-        db,
-        credential=registered.credential,
-        job_public_id=claimed.job.public_id,
-        claim_token=claimed.claim_token,
-        now=start_time,
-    )
-
-    completed = complete_job(
-        db,
-        credential=registered.credential,
-        job_public_id=claimed.job.public_id,
-        claim_token=claimed.claim_token,
-        result_payload={
-            "evaluation_run_id": 42,
-            "status": "success",
-        },
-        now=completion_time,
-    )
-
-    assert completed.status == "completed"
-    assert completed.completed_at is not None
-    assert completed.completed_at.replace(
-        tzinfo=UTC
-    ) == completion_time
-
-    assert completed.result_payload == {
-        "evaluation_run_id": 42,
-        "status": "success",
-    }
-    assert completed.error_message is None
-    assert completed.lease_expires_at is None
-    assert completed.claim_token_hash is None
 
 
 def test_complete_job_rejects_job_that_has_not_started(
@@ -1036,13 +966,24 @@ def test_terminal_transition_invalidates_claim_token(
         tzinfo=UTC,
     )
 
-    create_job(
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+    job = create_job(
         db,
         project=project,
         name="Terminal claim job",
         required_capabilities=["asr"],
         available_at=claim_time,
     )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
 
     claimed = claim_next_job(
         db,
@@ -1059,12 +1000,13 @@ def test_terminal_transition_invalidates_claim_token(
         now=claim_time + timedelta(seconds=10),
     )
 
-    complete_job(
+    submit_asr_evaluation_result(
         db,
         credential=registered.credential,
         job_public_id=claimed.job.public_id,
         claim_token=claimed.claim_token,
-        result_payload={"status": "success"},
+        generated_transcript="thank you for calling",
+        provider="faster-whisper",
         now=claim_time + timedelta(minutes=1),
     )
 
@@ -1875,13 +1817,24 @@ def test_cancel_job_rejects_completed_job(
         tzinfo=UTC,
     )
 
-    create_job(
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+    job = create_job(
         db,
         project=project,
         name="Completed cancellation job",
         required_capabilities=["asr"],
         available_at=claim_time,
     )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
 
     claimed = claim_next_job(
         db,
@@ -1897,12 +1850,13 @@ def test_cancel_job_rejects_completed_job(
         claim_token=claimed.claim_token,
         now=claim_time + timedelta(seconds=10),
     )
-    complete_job(
+    submit_asr_evaluation_result(
         db,
         credential=registered.credential,
         job_public_id=claimed.job.public_id,
         claim_token=claimed.claim_token,
-        result_payload={"status": "success"},
+        generated_transcript="thank you for calling",
+        provider="faster-whisper",
         now=claim_time + timedelta(minutes=1),
     )
 
@@ -2661,13 +2615,24 @@ def test_query_job_logs_rejects_terminal_job(
         tzinfo=UTC,
     )
 
-    create_job(
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+    job = create_job(
         db,
         project=project,
         name="Structured log terminal-query job",
         required_capabilities=["asr"],
         available_at=claim_time,
     )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
 
     claimed = claim_next_job(
         db,
@@ -2684,12 +2649,13 @@ def test_query_job_logs_rejects_terminal_job(
         now=claim_time + timedelta(seconds=10),
     )
 
-    complete_job(
+    submit_asr_evaluation_result(
         db,
         credential=registered.credential,
         job_public_id=claimed.job.public_id,
         claim_token=claimed.claim_token,
-        result_payload={"status": "completed"},
+        generated_transcript="thank you for calling",
+        provider="faster-whisper",
         now=claim_time + timedelta(seconds=20),
     )
 
@@ -3190,13 +3156,24 @@ def test_get_job_control_status_rejects_terminal_job(
         tzinfo=UTC,
     )
 
-    create_job(
+    evaluation_run, test_case = (
+        create_asr_evaluation_resources(
+            db,
+            project=project,
+        )
+    )
+    job = create_job(
         db,
         project=project,
         name=f"Terminal control job {terminal_status}",
         required_capabilities=["asr"],
         available_at=claim_time,
     )
+    job.input_payload = {
+        "evaluation_run_id": evaluation_run.id,
+        "test_case_id": test_case.id,
+    }
+    db.commit()
 
     claimed = claim_next_job(
         db,
@@ -3215,12 +3192,13 @@ def test_get_job_control_status_rejects_terminal_job(
     )
 
     if terminal_status == "completed":
-        complete_job(
+        submit_asr_evaluation_result(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
             claim_token=claimed.claim_token,
-            result_payload={"status": "success"},
+            generated_transcript="thank you for calling",
+            provider="faster-whisper",
             now=claim_time + timedelta(minutes=1),
         )
     else:
@@ -3896,6 +3874,49 @@ def test_submit_asr_evaluation_result_completes_atomically(
     )
 
     assert len(persisted_results) == 1
+
+
+def test_generic_completion_rejects_asr_evaluation_job(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+    original_claim_token_hash = claimed.job.claim_token_hash
+    original_lease_expires_at = claimed.job.lease_expires_at
+
+    with pytest.raises(
+        RunnerJobTransitionUnavailableError,
+        match="invalid or unavailable",
+    ):
+        complete_job(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            result_payload={"status": "success"},
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+    assert claimed.job.completed_at is None
+    assert claimed.job.result_payload is None
+    assert claimed.job.claim_token_hash == original_claim_token_hash
+    assert claimed.job.lease_expires_at == original_lease_expires_at
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id == evaluation_run.id,
+            models.EvaluationResult.test_case_id == test_case.id,
+        )
+        .count()
+        == 0
+    )
 
 
 def test_submit_asr_evaluation_result_requires_running_job(
