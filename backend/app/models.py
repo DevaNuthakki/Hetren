@@ -1,5 +1,7 @@
 from datetime import UTC, datetime
 
+import sqlalchemy as sa
+
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
@@ -25,8 +27,149 @@ def utc_now() -> datetime:
     return datetime.now(UTC)
 
 
+class Organization(Base):
+    __tablename__ = "organizations"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(200), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    memberships = relationship(
+        "OrganizationMembership",
+        back_populates="organization",
+        cascade="all, delete-orphan",
+    )
+    projects = relationship(
+        "Project",
+        back_populates="organization",
+        passive_deletes="all",
+    )
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    __table_args__ = (
+        sa.UniqueConstraint(
+            "email",
+            name="uq_users_email",
+        ),
+        sa.CheckConstraint(
+            "email = lower(trim(email))",
+            name="ck_users_email_normalized",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String(320), nullable=False)
+    display_name = Column(String(200), nullable=True)
+    is_active = Column(
+        sa.Boolean,
+        nullable=False,
+        default=True,
+        server_default="true",
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    memberships = relationship(
+        "OrganizationMembership",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+
+class OrganizationMembership(Base):
+    __tablename__ = "organization_memberships"
+
+    __table_args__ = (
+        sa.UniqueConstraint(
+            "organization_id",
+            "user_id",
+            name=(
+                "uq_organization_memberships_"
+                "organization_id_user_id"
+            ),
+        ),
+        sa.CheckConstraint(
+            (
+                "role IN ("
+                "'owner', "
+                "'admin', "
+                "'engineer', "
+                "'viewer', "
+                "'billing_admin'"
+                ")"
+            ),
+            name="ck_organization_memberships_role",
+        ),
+        sa.Index(
+            "ix_organization_memberships_user_id",
+            "user_id",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    organization_id = Column(
+        Integer,
+        ForeignKey(
+            "organizations.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+    user_id = Column(
+        Integer,
+        ForeignKey(
+            "users.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+    role = Column(String(32), nullable=False)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    organization = relationship(
+        "Organization",
+        back_populates="memberships",
+    )
+    user = relationship(
+        "User",
+        back_populates="memberships",
+    )
+
+
 class Project(Base):
     __tablename__ = "projects"
+
+
+    organization_id = Column(
+        Integer,
+        ForeignKey(
+            "organizations.id",
+            ondelete="RESTRICT",
+        ),
+        nullable=True,
+        index=True,
+    )
+    organization = relationship(
+        "Organization",
+        back_populates="projects",
+    )
 
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False)
