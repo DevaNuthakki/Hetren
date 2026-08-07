@@ -1156,6 +1156,7 @@ async def evaluate_test_case_for_run(
         db_test_case=db_test_case,
         generated_text=generated_text,
         generated_file_path=str(generated_path),
+        execution_mode="uploaded_transcript",
     )
 
 
@@ -1221,6 +1222,11 @@ def transcribe_and_evaluate_test_case_for_run(
         db_test_case=db_test_case,
         generated_text=transcription.transcript,
         generated_file_path=str(generated_path),
+        execution_mode="server_asr",
+        server_observed={
+            "provider": transcription.provider,
+            "model_name": transcription.model_name,
+        },
     )
 
     return {

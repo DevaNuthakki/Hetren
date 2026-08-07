@@ -12,6 +12,10 @@ from sqlalchemy.pool import StaticPool
 from app import models
 from app.auth.dependencies import get_current_user
 from app.database import Base, get_db
+from app.evaluation_provenance import (
+    stage_evaluation_run_manifest,
+    verify_evaluation_result_provenance,
+)
 from app.main import app
 
 
@@ -691,6 +695,12 @@ def test_authorized_evaluation_writes_result_only_after_checks(
     db_session.delete(existing_result)
     db_session.flush()
 
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
     response = _request(
         db_session,
         "POST",
@@ -712,6 +722,44 @@ def test_authorized_evaluation_writes_result_only_after_checks(
     )
 
     assert result.generated_transcript == "hello there"
+
+    assert result.provenance is not None
+
+    uploaded_execution = (
+        result.provenance.provenance_payload[
+            "execution"
+        ]
+    )
+
+    assert (
+        result.provenance.execution_mode
+        == "uploaded_transcript"
+    )
+    assert (
+        uploaded_execution["mode"]
+        == "uploaded_transcript"
+    )
+    assert (
+        uploaded_execution["requested_model"]
+        == run.model_name
+    )
+    assert (
+        uploaded_execution["server_observed"]
+        == {}
+    )
+    assert (
+        uploaded_execution["external_reported"]
+        == {}
+    )
+    assert (
+        result.provenance.provenance_payload[
+            "run_manifest"
+        ]["status"]
+        == "sealed"
+    )
+    assert verify_evaluation_result_provenance(
+        result.provenance
+    )
 
     generated_path = (
         tmp_path
@@ -1020,6 +1068,12 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
     db_session.delete(existing_result)
     db_session.flush()
 
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
     class FakeProvider:
         def transcribe(
             self,
@@ -1069,6 +1123,41 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
     )
 
     assert result.generated_transcript == "hello there"
+
+    assert result.provenance is not None
+
+    server_execution = (
+        result.provenance.provenance_payload[
+            "execution"
+        ]
+    )
+
+    assert (
+        result.provenance.execution_mode
+        == "server_asr"
+    )
+    assert server_execution["mode"] == "server_asr"
+    assert (
+        server_execution["requested_model"]
+        == run.model_name
+    )
+    assert server_execution["server_observed"] == {
+        "provider": "mock",
+        "model_name": run.model_name,
+    }
+    assert (
+        server_execution["external_reported"]
+        == {}
+    )
+    assert (
+        result.provenance.provenance_payload[
+            "run_manifest"
+        ]["status"]
+        == "sealed"
+    )
+    assert verify_evaluation_result_provenance(
+        result.provenance
+    )
 
 
 def test_result_with_cross_project_test_case_fails_closed(
