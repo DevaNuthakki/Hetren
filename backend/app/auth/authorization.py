@@ -62,6 +62,23 @@ class TestCaseAccess:
     membership: models.OrganizationMembership
 
 
+@dataclass(frozen=True)
+class EvaluationRunAccess:
+    run: models.EvaluationRun
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
+@dataclass(frozen=True)
+class EvaluationResultAccess:
+    result: models.EvaluationResult
+    run: models.EvaluationRun
+    test_case: models.TestCase
+    dataset: models.Dataset
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
 class OrganizationNotAccessibleError(LookupError):
     """
     Raised when an organization must not be disclosed to the user.
@@ -107,6 +124,30 @@ class TestCaseNotAccessibleError(LookupError):
 class TestCasePermissionDeniedError(PermissionError):
     """
     Raised when the user belongs to the tenant but lacks test-case permission.
+    """
+
+
+class EvaluationRunNotAccessibleError(LookupError):
+    """
+    Raised when an evaluation run must not be disclosed to the user.
+    """
+
+
+class EvaluationRunPermissionDeniedError(PermissionError):
+    """
+    Raised when the user belongs to the tenant but lacks run permission.
+    """
+
+
+class EvaluationResultNotAccessibleError(LookupError):
+    """
+    Raised when an evaluation result must not be disclosed to the user.
+    """
+
+
+class EvaluationResultPermissionDeniedError(PermissionError):
+    """
+    Raised when the user belongs to the tenant but lacks result permission.
     """
 
 
@@ -351,6 +392,154 @@ def authorize_test_case(
         )
 
     return TestCaseAccess(
+        test_case=test_case,
+        dataset=dataset,
+        project=project,
+        membership=membership,
+    )
+
+
+
+def authorize_evaluation_run(
+    db: Session,
+    *,
+    user_id: int,
+    run_id: int,
+    required_roles: Collection[str],
+) -> EvaluationRunAccess:
+    """
+    Resolve an evaluation run through its project tenant boundary.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    row = db.execute(
+        select(
+            models.EvaluationRun,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .select_from(models.EvaluationRun)
+        .join(
+            models.Project,
+            models.Project.id
+            == models.EvaluationRun.project_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.EvaluationRun.id == run_id,
+            models.Project.organization_id.is_not(None),
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise EvaluationRunNotAccessibleError(
+            "Evaluation run is not accessible."
+        )
+
+    run, project, membership = row
+
+    if membership.role not in roles:
+        raise EvaluationRunPermissionDeniedError(
+            "Evaluation run permission is denied."
+        )
+
+    return EvaluationRunAccess(
+        run=run,
+        project=project,
+        membership=membership,
+    )
+
+
+def authorize_evaluation_result(
+    db: Session,
+    *,
+    user_id: int,
+    result_id: int,
+    required_roles: Collection[str],
+) -> EvaluationResultAccess:
+    """
+    Resolve an evaluation result through run and project ownership.
+
+    The linked test case must also belong to the same project. This
+    makes inconsistent or legacy cross-project result relationships
+    fail closed rather than exposing data through transcript views.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    row = db.execute(
+        select(
+            models.EvaluationResult,
+            models.EvaluationRun,
+            models.TestCase,
+            models.Dataset,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .select_from(models.EvaluationResult)
+        .join(
+            models.EvaluationRun,
+            models.EvaluationRun.id
+            == models.EvaluationResult.run_id,
+        )
+        .join(
+            models.Project,
+            models.Project.id
+            == models.EvaluationRun.project_id,
+        )
+        .join(
+            models.TestCase,
+            models.TestCase.id
+            == models.EvaluationResult.test_case_id,
+        )
+        .join(
+            models.Dataset,
+            models.Dataset.id
+            == models.TestCase.dataset_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.EvaluationResult.id == result_id,
+            models.Project.organization_id.is_not(None),
+            models.Dataset.project_id == models.Project.id,
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise EvaluationResultNotAccessibleError(
+            "Evaluation result is not accessible."
+        )
+
+    (
+        result,
+        run,
+        test_case,
+        dataset,
+        project,
+        membership,
+    ) = row
+
+    if membership.role not in roles:
+        raise EvaluationResultPermissionDeniedError(
+            "Evaluation result permission is denied."
+        )
+
+    return EvaluationResultAccess(
+        result=result,
+        run=run,
         test_case=test_case,
         dataset=dataset,
         project=project,

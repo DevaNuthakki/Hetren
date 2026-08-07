@@ -13,6 +13,12 @@ from app.auth.authorization import (
     DatasetAccess,
     DatasetNotAccessibleError,
     DatasetPermissionDeniedError,
+    EvaluationResultAccess,
+    EvaluationResultNotAccessibleError,
+    EvaluationResultPermissionDeniedError,
+    EvaluationRunAccess,
+    EvaluationRunNotAccessibleError,
+    EvaluationRunPermissionDeniedError,
     OrganizationAccess,
     OrganizationNotAccessibleError,
     OrganizationPermissionDeniedError,
@@ -23,6 +29,8 @@ from app.auth.authorization import (
     TestCaseNotAccessibleError,
     TestCasePermissionDeniedError,
     authorize_dataset,
+    authorize_evaluation_result,
+    authorize_evaluation_run,
     authorize_organization,
     authorize_project,
     authorize_test_case,
@@ -145,6 +153,58 @@ def _authorize_test_case_for_request(
         raise HTTPException(
             status_code=403,
             detail="Test case permission denied",
+        ) from exc
+
+
+def _authorize_evaluation_run_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    run_id: int,
+    required_roles: Collection[str],
+) -> EvaluationRunAccess:
+    try:
+        return authorize_evaluation_run(
+            db,
+            user_id=current_user.id,
+            run_id=run_id,
+            required_roles=required_roles,
+        )
+    except EvaluationRunNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Evaluation run not found",
+        ) from exc
+    except EvaluationRunPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Evaluation run permission denied",
+        ) from exc
+
+
+def _authorize_evaluation_result_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    result_id: int,
+    required_roles: Collection[str],
+) -> EvaluationResultAccess:
+    try:
+        return authorize_evaluation_result(
+            db,
+            user_id=current_user.id,
+            result_id=result_id,
+            required_roles=required_roles,
+        )
+    except EvaluationResultNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Evaluation result not found",
+        ) from exc
+    except EvaluationResultPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Evaluation result permission denied",
         ) from exc
 
 
@@ -908,15 +968,18 @@ def get_test_case(
 def create_evaluation_run(
     project_id: int,
     run: schemas.EvaluationRunCreate,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
 
     db_run = models.EvaluationRun(
-        project_id=project_id,
+        project_id=access.project.id,
         run_name=run.run_name,
         model_name=run.model_name or "not_configured",
         status="created",
@@ -935,12 +998,15 @@ def create_evaluation_run(
 )
 def list_project_runs(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     return (
         db.query(models.EvaluationRun)
@@ -956,14 +1022,17 @@ def list_project_runs(
 )
 def get_evaluation_run(
     run_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_run = db.query(models.EvaluationRun).filter(models.EvaluationRun.id == run_id).first()
+    access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=run_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
-    if db_run is None:
-        raise HTTPException(status_code=404, detail="Evaluation run not found")
-
-    return db_run
+    return access.run
 
 
 @router.post(
@@ -974,28 +1043,30 @@ async def evaluate_test_case_for_run(
     run_id: int,
     test_case_id: int,
     generated_file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_run = db.query(models.EvaluationRun).filter(models.EvaluationRun.id == run_id).first()
+    run_access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=run_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
+    test_case_access = _authorize_test_case_for_request(
+        db,
+        current_user=current_user,
+        test_case_id=test_case_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
 
-    if db_run is None:
-        raise HTTPException(status_code=404, detail="Evaluation run not found")
-
-    db_test_case = db.query(models.TestCase).filter(models.TestCase.id == test_case_id).first()
-
-    if db_test_case is None:
-        raise HTTPException(status_code=404, detail="Test case not found")
-
-    db_dataset = db.query(models.Dataset).filter(models.Dataset.id == db_test_case.dataset_id).first()
-
-    if db_dataset is None:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-
-    if db_dataset.project_id != db_run.project_id:
+    if test_case_access.project.id != run_access.project.id:
         raise HTTPException(
             status_code=400,
             detail="Test case dataset does not belong to the same project as this run",
         )
+
+    db_run = run_access.run
+    db_test_case = test_case_access.test_case
 
     if not generated_file.filename:
         raise HTTPException(status_code=400, detail="Generated transcript file is required")
@@ -1032,28 +1103,30 @@ async def evaluate_test_case_for_run(
 def transcribe_and_evaluate_test_case_for_run(
     run_id: int,
     test_case_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_run = db.query(models.EvaluationRun).filter(models.EvaluationRun.id == run_id).first()
+    run_access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=run_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
+    test_case_access = _authorize_test_case_for_request(
+        db,
+        current_user=current_user,
+        test_case_id=test_case_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
 
-    if db_run is None:
-        raise HTTPException(status_code=404, detail="Evaluation run not found")
-
-    db_test_case = db.query(models.TestCase).filter(models.TestCase.id == test_case_id).first()
-
-    if db_test_case is None:
-        raise HTTPException(status_code=404, detail="Test case not found")
-
-    db_dataset = db.query(models.Dataset).filter(models.Dataset.id == db_test_case.dataset_id).first()
-
-    if db_dataset is None:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-
-    if db_dataset.project_id != db_run.project_id:
+    if test_case_access.project.id != run_access.project.id:
         raise HTTPException(
             status_code=400,
             detail="Test case dataset does not belong to the same project as this run",
         )
+
+    db_run = run_access.run
+    db_test_case = test_case_access.test_case
 
     if not db_test_case.audio_file_path:
         raise HTTPException(
@@ -1101,12 +1174,15 @@ def transcribe_and_evaluate_test_case_for_run(
 )
 def list_run_results(
     run_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_run = db.query(models.EvaluationRun).filter(models.EvaluationRun.id == run_id).first()
-
-    if db_run is None:
-        raise HTTPException(status_code=404, detail="Evaluation run not found")
+    _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=run_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     return (
         db.query(models.EvaluationResult)
@@ -1122,18 +1198,17 @@ def list_run_results(
 )
 def get_evaluation_result(
     result_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_result = (
-        db.query(models.EvaluationResult)
-        .filter(models.EvaluationResult.id == result_id)
-        .first()
+    access = _authorize_evaluation_result_for_request(
+        db,
+        current_user=current_user,
+        result_id=result_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
 
-    if db_result is None:
-        raise HTTPException(status_code=404, detail="Evaluation result not found")
-
-    return db_result
+    return access.result
 
 
 @router.get(
@@ -1142,33 +1217,23 @@ def get_evaluation_result(
 )
 def get_result_transcript_diff(
     result_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_result = (
-        db.query(models.EvaluationResult)
-        .filter(models.EvaluationResult.id == result_id)
-        .first()
+    access = _authorize_evaluation_result_for_request(
+        db,
+        current_user=current_user,
+        result_id=result_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
-
-    if db_result is None:
-        raise HTTPException(status_code=404, detail="Evaluation result not found")
-
-    db_test_case = (
-        db.query(models.TestCase)
-        .filter(models.TestCase.id == db_result.test_case_id)
-        .first()
-    )
-
-    if db_test_case is None:
-        raise HTTPException(status_code=404, detail="Linked test case not found")
 
     return build_structured_transcript_diff(
-        reference_text=db_test_case.reference_transcript,
-        generated_text=db_result.generated_transcript,
-        result_id=db_result.id,
-        test_case_id=db_result.test_case_id,
-        wer_score=db_result.wer,
-        cer_score=db_result.cer,
+        reference_text=access.test_case.reference_transcript,
+        generated_text=access.result.generated_transcript,
+        result_id=access.result.id,
+        test_case_id=access.result.test_case_id,
+        wer_score=access.result.wer,
+        cer_score=access.result.cer,
     )
 
 
@@ -1796,12 +1861,16 @@ async def upload_run_artifacts(
     audio_file: UploadFile = File(...),
     reference_file: UploadFile = File(...),
     generated_file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_run = db.query(models.EvaluationRun).filter(models.EvaluationRun.id == run_id).first()
-
-    if db_run is None:
-        raise HTTPException(status_code=404, detail="Evaluation run not found")
+    access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=run_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
+    db_run = access.run
 
     if not audio_file.filename:
         raise HTTPException(status_code=400, detail="Audio file is required")
