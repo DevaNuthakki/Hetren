@@ -18,6 +18,11 @@ import {
   getProjectRuns,
   getProjectWorkflowSummary,
   getProjects,
+  loginUser,
+  logoutUser,
+  restoreSession,
+  setAuthenticationLostHandler,
+  type AuthenticatedUser,
   getReleaseReport,
   getResultTranscriptDiff,
   transcribeAndEvaluateTestCaseForRun,
@@ -294,6 +299,18 @@ function getDebugLabels(
 }
 
 function App() {
+  const [authStatus, setAuthStatus] = useState<
+    "checking" | "signed_out" | "signed_in"
+  >("checking");
+  const [currentUser, setCurrentUser] =
+    useState<AuthenticatedUser | null>(null);
+  const [loginEmail, setLoginEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [authError, setAuthError] =
+    useState<string | null>(null);
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isSigningOut, setIsSigningOut] = useState(false);
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [comparison, setComparison] = useState<RunComparison | null>(null);
   const [debugCases, setDebugCases] = useState<DebugCase[]>([]);
@@ -354,6 +371,67 @@ function App() {
     workspaceData?.comparisons[0]?.id ?? null;
 
   useEffect(() => {
+    let isCancelled = false;
+
+    setAuthenticationLostHandler(() => {
+      if (isCancelled) {
+        return;
+      }
+
+      setCurrentUser(null);
+      setAuthStatus("signed_out");
+      setAuthError(
+        "Your session expired. Sign in again to continue.",
+      );
+      clearAuthenticatedData();
+    });
+
+    async function bootstrapAuthentication() {
+      try {
+        setAuthError(null);
+
+        const user = await restoreSession();
+
+        if (isCancelled) {
+          return;
+        }
+
+        if (user) {
+          setCurrentUser(user);
+          setAuthStatus("signed_in");
+        } else {
+          setCurrentUser(null);
+          setAuthStatus("signed_out");
+        }
+      } catch (error) {
+        if (isCancelled) {
+          return;
+        }
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Unable to restore the browser session.";
+
+        setCurrentUser(null);
+        setAuthStatus("signed_out");
+        setAuthError(message);
+      }
+    }
+
+    void bootstrapAuthentication();
+
+    return () => {
+      isCancelled = true;
+      setAuthenticationLostHandler(null);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (authStatus !== "signed_in") {
+      return;
+    }
+
     async function loadDashboardData() {
       try {
         setIsLoading(true);
@@ -389,7 +467,7 @@ function App() {
     }
 
     loadDashboardData();
-  }, []);
+  }, [authStatus]);
 
   useEffect(() => {
     async function loadWorkspace(projectId: number) {
@@ -700,6 +778,99 @@ function App() {
     setSelectedTranscriptDiff(null);
     setTranscriptDiffError(null);
     setIsTranscriptDiffLoading(false);
+  }
+
+  function clearAuthenticatedData() {
+    closeWorkspace();
+
+    setProjects([]);
+    setComparison(null);
+    setDebugCases([]);
+    setErrorMessage(null);
+    setReleaseReport(null);
+    setReleaseReportMessage(null);
+
+    setIsLoading(false);
+    setIsWorkspaceLoading(false);
+    setIsReleaseReportLoading(false);
+    setIsDebugDetailsLoading(false);
+
+    setIsCreatingDataset(false);
+    setIsCreatingTestCase(false);
+    setIsCreatingRun(false);
+    setIsEvaluating(false);
+    setIsTranscribing(false);
+    setIsComparingRuns(false);
+    setIsCreatingDebugCase(false);
+  }
+
+  async function handleLogin(
+    event: FormEvent<HTMLFormElement>,
+  ) {
+    event.preventDefault();
+
+    if (isSigningIn) {
+      return;
+    }
+
+    const email = loginEmail.trim();
+
+    if (!email || !loginPassword) {
+      setAuthError(
+        "Enter your email address and password.",
+      );
+      return;
+    }
+
+    try {
+      setIsSigningIn(true);
+      setAuthError(null);
+
+      const user = await loginUser(
+        email,
+        loginPassword,
+      );
+
+      setCurrentUser(user);
+      setLoginPassword("");
+      setAuthStatus("signed_in");
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to sign in.";
+
+      setAuthError(message);
+    } finally {
+      setIsSigningIn(false);
+    }
+  }
+
+  async function handleLogout() {
+    if (isSigningOut) {
+      return;
+    }
+
+    try {
+      setIsSigningOut(true);
+      setAuthError(null);
+
+      await logoutUser();
+
+      clearAuthenticatedData();
+      setCurrentUser(null);
+      setLoginPassword("");
+      setAuthStatus("signed_out");
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to sign out.";
+
+      setAuthError(message);
+    } finally {
+      setIsSigningOut(false);
+    }
   }
 
   async function handleCreateDataset(event: FormEvent<HTMLFormElement>) {
@@ -2569,6 +2740,119 @@ function App() {
     );
   }
 
+  if (authStatus === "checking") {
+    return (
+      <main className="auth-shell">
+        <section
+          className="auth-card"
+          role="status"
+          aria-live="polite"
+        >
+          <div className="auth-brand">
+            <div className="brand-mark" aria-hidden="true">
+              H
+            </div>
+            <div>
+              <p className="eyebrow">Hetren</p>
+              <h1>Speech AI Debugger</h1>
+            </div>
+          </div>
+
+          <h2>Restoring your session</h2>
+          <p className="auth-description">
+            Verifying your secure browser session before
+            loading organization data.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
+  if (
+    authStatus === "signed_out" ||
+    currentUser === null
+  ) {
+    return (
+      <main className="auth-shell">
+        <section className="auth-card">
+          <div className="auth-brand">
+            <div className="brand-mark" aria-hidden="true">
+              H
+            </div>
+            <div>
+              <p className="eyebrow">Hetren</p>
+              <h1>Speech AI Debugger</h1>
+            </div>
+          </div>
+
+          <div className="auth-heading">
+            <h2>Sign in</h2>
+            <p className="auth-description">
+              Access your organization's evaluation,
+              release-safety, debugging, and runner
+              operations workspace.
+            </p>
+          </div>
+
+          {authError && (
+            <div className="auth-error" role="alert">
+              {authError}
+            </div>
+          )}
+
+          <form
+            className="auth-form"
+            onSubmit={handleLogin}
+          >
+            <label className="auth-field">
+              <span>Email</span>
+              <input
+                type="email"
+                value={loginEmail}
+                onChange={(event) =>
+                  setLoginEmail(event.target.value)
+                }
+                autoComplete="email"
+                disabled={isSigningIn}
+                required
+              />
+            </label>
+
+            <label className="auth-field">
+              <span>Password</span>
+              <input
+                type="password"
+                value={loginPassword}
+                onChange={(event) =>
+                  setLoginPassword(event.target.value)
+                }
+                autoComplete="current-password"
+                disabled={isSigningIn}
+                required
+              />
+            </label>
+
+            <button
+              className="primary-button auth-submit"
+              type="submit"
+              disabled={isSigningIn}
+            >
+              {isSigningIn
+                ? "Signing in..."
+                : "Sign in"}
+            </button>
+          </form>
+
+          <p className="auth-security-note">
+            Hetren keeps the access token only in browser
+            memory. The refresh credential remains in a
+            protected HttpOnly cookie.
+          </p>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="app-shell">
       <aside className="sidebar" aria-label="Primary navigation">
@@ -2613,6 +2897,39 @@ function App() {
               ? selectedProject.name
               : "Evaluate runs, compare baseline vs current, detect regressions, and create debug cases for engineers."}
           </p>
+        </section>
+
+        <section
+          className="sidebar-account"
+          aria-label="Signed in user"
+        >
+          <p className="eyebrow">Signed in</p>
+
+          <strong>
+            {currentUser.display_name ??
+              currentUser.email}
+          </strong>
+
+          {currentUser.display_name && (
+            <span>{currentUser.email}</span>
+          )}
+
+          {authError && (
+            <span className="sidebar-account-error">
+              {authError}
+            </span>
+          )}
+
+          <button
+            className="secondary-button"
+            type="button"
+            onClick={() => void handleLogout()}
+            disabled={isSigningOut}
+          >
+            {isSigningOut
+              ? "Signing out..."
+              : "Sign out"}
+          </button>
         </section>
       </aside>
 
