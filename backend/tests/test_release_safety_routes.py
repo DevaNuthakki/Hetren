@@ -19,12 +19,33 @@ def build_test_database():
 
 
 def seed_comparison(db):
+    organization = models.Organization(
+        name="Release safety organization",
+    )
+    user = models.User(
+        email="release-owner@example.com",
+    )
+    membership = models.OrganizationMembership(
+        organization=organization,
+        user=user,
+        role="owner",
+    )
     project = models.Project(
         name="Release safety test project",
         description="Tests policy-based release decisions.",
+        organization=organization,
     )
-    db.add(project)
+
+    db.add_all(
+        [
+            organization,
+            user,
+            membership,
+            project,
+        ]
+    )
     db.commit()
+    db.refresh(user)
     db.refresh(project)
 
     baseline_run = models.EvaluationRun(
@@ -62,17 +83,18 @@ def seed_comparison(db):
     db.commit()
     db.refresh(comparison)
 
-    return project, comparison
+    return user, project, comparison
 
 
 def test_release_report_creates_default_policy():
     db, engine = build_test_database()
 
     try:
-        project, comparison = seed_comparison(db)
+        user, project, comparison = seed_comparison(db)
 
         report = routes.create_release_report(
             comparison_id=comparison.id,
+            current_user=user,
             db=db,
         )
 
@@ -83,6 +105,7 @@ def test_release_report_creates_default_policy():
 
         policy = routes.get_release_policy(
             project_id=project.id,
+            current_user=user,
             db=db,
         )
 
@@ -98,10 +121,11 @@ def test_policy_update_refreshes_existing_release_report():
     db, engine = build_test_database()
 
     try:
-        project, comparison = seed_comparison(db)
+        user, project, comparison = seed_comparison(db)
 
         initial_report = routes.create_release_report(
             comparison_id=comparison.id,
+            current_user=user,
             db=db,
         )
 
@@ -118,16 +142,19 @@ def test_policy_update_refreshes_existing_release_report():
                 warn_cer_delta=0.10,
                 fail_cer_delta=0.20,
             ),
+            current_user=user,
             db=db,
         )
 
         refreshed_report = routes.create_release_report(
             comparison_id=comparison.id,
+            current_user=user,
             db=db,
         )
 
         stored_report = routes.get_release_report(
             comparison_id=comparison.id,
+            current_user=user,
             db=db,
         )
 

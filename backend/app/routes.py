@@ -13,6 +13,9 @@ from app.auth.authorization import (
     DatasetAccess,
     DatasetNotAccessibleError,
     DatasetPermissionDeniedError,
+    DebugCaseAccess,
+    DebugCaseNotAccessibleError,
+    DebugCasePermissionDeniedError,
     EvaluationResultAccess,
     EvaluationResultNotAccessibleError,
     EvaluationResultPermissionDeniedError,
@@ -25,14 +28,19 @@ from app.auth.authorization import (
     ProjectAccess,
     ProjectNotAccessibleError,
     ProjectPermissionDeniedError,
+    RunComparisonAccess,
+    RunComparisonNotAccessibleError,
+    RunComparisonPermissionDeniedError,
     TestCaseAccess,
     TestCaseNotAccessibleError,
     TestCasePermissionDeniedError,
     authorize_dataset,
+    authorize_debug_case,
     authorize_evaluation_result,
     authorize_evaluation_run,
     authorize_organization,
     authorize_project,
+    authorize_run_comparison,
     authorize_test_case,
     list_accessible_projects,
 )
@@ -205,6 +213,58 @@ def _authorize_evaluation_result_for_request(
         raise HTTPException(
             status_code=403,
             detail="Evaluation result permission denied",
+        ) from exc
+
+
+def _authorize_run_comparison_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    comparison_id: int,
+    required_roles: Collection[str],
+) -> RunComparisonAccess:
+    try:
+        return authorize_run_comparison(
+            db,
+            user_id=current_user.id,
+            comparison_id=comparison_id,
+            required_roles=required_roles,
+        )
+    except RunComparisonNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Run comparison not found",
+        ) from exc
+    except RunComparisonPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Run comparison permission denied",
+        ) from exc
+
+
+def _authorize_debug_case_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    debug_case_id: int,
+    required_roles: Collection[str],
+) -> DebugCaseAccess:
+    try:
+        return authorize_debug_case(
+            db,
+            user_id=current_user.id,
+            debug_case_id=debug_case_id,
+            required_roles=required_roles,
+        )
+    except DebugCaseNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Debug case not found",
+        ) from exc
+    except DebugCasePermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Debug case permission denied",
         ) from exc
 
 
@@ -1243,26 +1303,26 @@ def get_result_transcript_diff(
 )
 def compare_runs(
     comparison: schemas.RunComparisonCreate,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    baseline_run = (
-        db.query(models.EvaluationRun)
-        .filter(models.EvaluationRun.id == comparison.baseline_run_id)
-        .first()
+    baseline_access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=comparison.baseline_run_id,
+        required_roles=PRODUCT_WRITE_ROLES,
     )
-    current_run = (
-        db.query(models.EvaluationRun)
-        .filter(models.EvaluationRun.id == comparison.current_run_id)
-        .first()
+    current_access = _authorize_evaluation_run_for_request(
+        db,
+        current_user=current_user,
+        run_id=comparison.current_run_id,
+        required_roles=PRODUCT_WRITE_ROLES,
     )
 
-    if baseline_run is None:
-        raise HTTPException(status_code=404, detail="Baseline run not found")
+    baseline_run = baseline_access.run
+    current_run = current_access.run
 
-    if current_run is None:
-        raise HTTPException(status_code=404, detail="Current run not found")
-
-    if baseline_run.project_id != current_run.project_id:
+    if baseline_access.project.id != current_access.project.id:
         raise HTTPException(
             status_code=400,
             detail="Runs must belong to the same project",
@@ -1340,18 +1400,17 @@ def compare_runs(
 )
 def get_run_comparison(
     comparison_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_comparison = (
-        db.query(models.RunComparison)
-        .filter(models.RunComparison.id == comparison_id)
-        .first()
+    access = _authorize_run_comparison_for_request(
+        db,
+        current_user=current_user,
+        comparison_id=comparison_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
 
-    if db_comparison is None:
-        raise HTTPException(status_code=404, detail="Run comparison not found")
-
-    return db_comparison
+    return access.comparison
 
 
 @router.get(
@@ -1360,12 +1419,15 @@ def get_run_comparison(
 )
 def list_project_comparisons(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     project_run_ids = [
         run.id
@@ -1392,16 +1454,15 @@ def list_project_comparisons(
 )
 def get_release_policy(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = (
-        db.query(models.Project)
-        .filter(models.Project.id == project_id)
-        .first()
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
 
     db_policy = find_active_release_policy(
         db=db,
@@ -1424,16 +1485,15 @@ def get_release_policy(
 def upsert_release_policy(
     project_id: int,
     policy_update: schemas.ReleasePolicyUpsert,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = (
-        db.query(models.Project)
-        .filter(models.Project.id == project_id)
-        .first()
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_WRITE_ROLES,
     )
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
 
     db_policy = find_active_release_policy(
         db=db,
@@ -1468,48 +1528,19 @@ def upsert_release_policy(
 )
 def create_release_report(
     comparison_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_comparison = (
-        db.query(models.RunComparison)
-        .filter(models.RunComparison.id == comparison_id)
-        .first()
+    comparison_access = _authorize_run_comparison_for_request(
+        db,
+        current_user=current_user,
+        comparison_id=comparison_id,
+        required_roles=PRODUCT_WRITE_ROLES,
     )
 
-    if db_comparison is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Run comparison not found",
-        )
-
-    baseline_run = (
-        db.query(models.EvaluationRun)
-        .filter(
-            models.EvaluationRun.id
-            == db_comparison.baseline_run_id
-        )
-        .first()
-    )
-    current_run = (
-        db.query(models.EvaluationRun)
-        .filter(
-            models.EvaluationRun.id
-            == db_comparison.current_run_id
-        )
-        .first()
-    )
-
-    if baseline_run is None or current_run is None:
-        raise HTTPException(
-            status_code=400,
-            detail="Comparison contains a missing evaluation run",
-        )
-
-    if baseline_run.project_id != current_run.project_id:
-        raise HTTPException(
-            status_code=400,
-            detail="Comparison runs must belong to the same project",
-        )
+    db_comparison = comparison_access.comparison
+    baseline_run = comparison_access.baseline_run
+    current_run = comparison_access.current_run
 
     required_metrics = {
         "current_average_wer": db_comparison.current_average_wer,
@@ -1532,7 +1563,7 @@ def create_release_report(
             ),
         )
 
-    project_id = baseline_run.project_id
+    project_id = comparison_access.project.id
     db_policy = find_active_release_policy(
         db=db,
         project_id=project_id,
@@ -1587,6 +1618,27 @@ def create_release_report(
         db_report = models.ReleaseReport(**report_values)
         db.add(db_report)
     else:
+        if db_report.project_id != project_id:
+            raise HTTPException(
+                status_code=404,
+                detail="Release report not found",
+            )
+
+        if db_report.policy_id is not None:
+            existing_policy = db.get(
+                models.ReleasePolicy,
+                db_report.policy_id,
+            )
+
+            if (
+                existing_policy is None
+                or existing_policy.project_id != project_id
+            ):
+                raise HTTPException(
+                    status_code=404,
+                    detail="Release report not found",
+                )
+
         for field_name, field_value in report_values.items():
             setattr(db_report, field_name, field_value)
 
@@ -1602,8 +1654,16 @@ def create_release_report(
 )
 def get_release_report(
     comparison_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    comparison_access = _authorize_run_comparison_for_request(
+        db,
+        current_user=current_user,
+        comparison_id=comparison_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
+
     db_report = (
         db.query(models.ReleaseReport)
         .filter(
@@ -1619,6 +1679,28 @@ def get_release_report(
             detail="Release report not found",
         )
 
+    if db_report.project_id != comparison_access.project.id:
+        raise HTTPException(
+            status_code=404,
+            detail="Release report not found",
+        )
+
+    if db_report.policy_id is not None:
+        db_policy = db.get(
+            models.ReleasePolicy,
+            db_report.policy_id,
+        )
+
+        if (
+            db_policy is None
+            or db_policy.project_id
+            != comparison_access.project.id
+        ):
+            raise HTTPException(
+                status_code=404,
+                detail="Release report not found",
+            )
+
     return db_report
 
 
@@ -1628,33 +1710,19 @@ def get_release_report(
 )
 def create_debug_case_from_comparison(
     comparison_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_comparison = (
-        db.query(models.RunComparison)
-        .filter(models.RunComparison.id == comparison_id)
-        .first()
+    comparison_access = _authorize_run_comparison_for_request(
+        db,
+        current_user=current_user,
+        comparison_id=comparison_id,
+        required_roles=PRODUCT_WRITE_ROLES,
     )
 
-    if db_comparison is None:
-        raise HTTPException(status_code=404, detail="Run comparison not found")
-
-    baseline_run = (
-        db.query(models.EvaluationRun)
-        .filter(models.EvaluationRun.id == db_comparison.baseline_run_id)
-        .first()
-    )
-    current_run = (
-        db.query(models.EvaluationRun)
-        .filter(models.EvaluationRun.id == db_comparison.current_run_id)
-        .first()
-    )
-
-    if baseline_run is None:
-        raise HTTPException(status_code=404, detail="Baseline run not found")
-
-    if current_run is None:
-        raise HTTPException(status_code=404, detail="Current run not found")
+    db_comparison = comparison_access.comparison
+    baseline_run = comparison_access.baseline_run
+    current_run = comparison_access.current_run
 
     if db_comparison.comparison_status != "regression":
         raise HTTPException(
@@ -1676,6 +1744,15 @@ def create_debug_case_from_comparison(
     )
 
     if existing_debug_case is not None:
+        if (
+            existing_debug_case.project_id
+            != comparison_access.project.id
+        ):
+            raise HTTPException(
+                status_code=404,
+                detail="Debug case not found",
+            )
+
         updated_existing_case = False
 
         if existing_debug_case.test_case_id is None and db_test_case is not None:
@@ -1714,7 +1791,7 @@ def create_debug_case_from_comparison(
         title = f"Regression detected: {baseline_run.run_name} vs {current_run.run_name}"
 
     db_debug_case = models.DebugCase(
-        project_id=baseline_run.project_id,
+        project_id=comparison_access.project.id,
         title=title,
         status="open",
         severity=severity,
@@ -1745,19 +1822,41 @@ def create_debug_case_from_comparison(
 )
 def list_project_debug_cases(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
-
-    return (
+    debug_cases = (
         db.query(models.DebugCase)
         .filter(models.DebugCase.project_id == project_id)
         .order_by(models.DebugCase.created_at.desc())
         .all()
     )
+
+    accessible_debug_cases: list[models.DebugCase] = []
+
+    for debug_case in debug_cases:
+        try:
+            access = authorize_debug_case(
+                db,
+                user_id=current_user.id,
+                debug_case_id=debug_case.id,
+                required_roles=PRODUCT_READ_ROLES,
+            )
+        except DebugCaseNotAccessibleError:
+            continue
+
+        accessible_debug_cases.append(
+            access.debug_case
+        )
+
+    return accessible_debug_cases
 
 
 @router.get(
@@ -1766,18 +1865,17 @@ def list_project_debug_cases(
 )
 def get_debug_case(
     debug_case_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_debug_case = (
-        db.query(models.DebugCase)
-        .filter(models.DebugCase.id == debug_case_id)
-        .first()
+    access = _authorize_debug_case_for_request(
+        db,
+        current_user=current_user,
+        debug_case_id=debug_case_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
 
-    if db_debug_case is None:
-        raise HTTPException(status_code=404, detail="Debug case not found")
-
-    return db_debug_case
+    return access.debug_case
 
 
 @router.get(
@@ -1786,61 +1884,155 @@ def get_debug_case(
 )
 def get_debug_case_details(
     debug_case_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_debug_case = (
-        db.query(models.DebugCase)
-        .filter(models.DebugCase.id == debug_case_id)
-        .first()
+    debug_access = _authorize_debug_case_for_request(
+        db,
+        current_user=current_user,
+        debug_case_id=debug_case_id,
+        required_roles=PRODUCT_READ_ROLES,
     )
 
-    if db_debug_case is None:
-        raise HTTPException(status_code=404, detail="Debug case not found")
+    db_debug_case = debug_access.debug_case
+    project_id = debug_access.project.id
 
-    baseline_run = get_optional_by_id(
-        db=db,
-        model=models.EvaluationRun,
-        object_id=db_debug_case.baseline_run_id,
-    )
-    current_run = get_optional_by_id(
-        db=db,
-        model=models.EvaluationRun,
-        object_id=db_debug_case.current_run_id,
-    )
+    def fail_integrity() -> None:
+        raise HTTPException(
+            status_code=404,
+            detail="Debug case not found",
+        )
 
-    baseline_result = get_optional_by_id(
-        db=db,
-        model=models.EvaluationResult,
-        object_id=db_debug_case.baseline_result_id,
-    )
-    current_result = get_optional_by_id(
-        db=db,
-        model=models.EvaluationResult,
-        object_id=db_debug_case.current_result_id,
-    )
+    def resolve_run(
+        run_id: int | None,
+    ) -> models.EvaluationRun | None:
+        if run_id is None:
+            return None
 
-    test_case = get_optional_by_id(
-        db=db,
-        model=models.TestCase,
-        object_id=db_debug_case.test_case_id,
+        try:
+            access = authorize_evaluation_run(
+                db,
+                user_id=current_user.id,
+                run_id=run_id,
+                required_roles=PRODUCT_READ_ROLES,
+            )
+        except (
+            EvaluationRunNotAccessibleError,
+            EvaluationRunPermissionDeniedError,
+        ):
+            fail_integrity()
+
+        if access.project.id != project_id:
+            fail_integrity()
+
+        return access.run
+
+    def resolve_result(
+        result_id: int | None,
+    ) -> models.EvaluationResult | None:
+        if result_id is None:
+            return None
+
+        try:
+            access = authorize_evaluation_result(
+                db,
+                user_id=current_user.id,
+                result_id=result_id,
+                required_roles=PRODUCT_READ_ROLES,
+            )
+        except (
+            EvaluationResultNotAccessibleError,
+            EvaluationResultPermissionDeniedError,
+        ):
+            fail_integrity()
+
+        if access.project.id != project_id:
+            fail_integrity()
+
+        return access.result
+
+    def resolve_test_case(
+        test_case_id: int | None,
+    ) -> models.TestCase | None:
+        if test_case_id is None:
+            return None
+
+        try:
+            access = authorize_test_case(
+                db,
+                user_id=current_user.id,
+                test_case_id=test_case_id,
+                required_roles=PRODUCT_READ_ROLES,
+            )
+        except (
+            TestCaseNotAccessibleError,
+            TestCasePermissionDeniedError,
+        ):
+            fail_integrity()
+
+        if access.project.id != project_id:
+            fail_integrity()
+
+        return access.test_case
+
+    baseline_run = resolve_run(
+        db_debug_case.baseline_run_id
+    )
+    current_run = resolve_run(
+        db_debug_case.current_run_id
+    )
+    baseline_result = resolve_result(
+        db_debug_case.baseline_result_id
+    )
+    current_result = resolve_result(
+        db_debug_case.current_result_id
+    )
+    test_case = resolve_test_case(
+        db_debug_case.test_case_id
     )
 
     if (
-        (baseline_result is None or current_result is None or test_case is None)
-        and db_debug_case.baseline_run_id is not None
-        and db_debug_case.current_run_id is not None
+        (
+            baseline_result is None
+            or current_result is None
+            or test_case is None
+        )
+        and baseline_run is not None
+        and current_run is not None
     ):
-        fallback_baseline_result, fallback_current_result, fallback_test_case = (
-            find_worst_debug_result_pair(
-                db=db,
-                baseline_run_id=db_debug_case.baseline_run_id,
-                current_run_id=db_debug_case.current_run_id,
-            )
+        (
+            fallback_baseline_result,
+            fallback_current_result,
+            fallback_test_case,
+        ) = find_worst_debug_result_pair(
+            db=db,
+            baseline_run_id=baseline_run.id,
+            current_run_id=current_run.id,
         )
 
-        baseline_result = baseline_result or fallback_baseline_result
-        current_result = current_result or fallback_current_result
-        test_case = test_case or fallback_test_case
+        if (
+            baseline_result is None
+            and fallback_baseline_result is not None
+        ):
+            baseline_result = resolve_result(
+                fallback_baseline_result.id
+            )
+
+        if (
+            current_result is None
+            and fallback_current_result is not None
+        ):
+            current_result = resolve_result(
+                fallback_current_result.id
+            )
+
+        if (
+            test_case is None
+            and fallback_test_case is not None
+        ):
+            test_case = resolve_test_case(
+                fallback_test_case.id
+            )
 
     return {
         "debug_case": db_debug_case,

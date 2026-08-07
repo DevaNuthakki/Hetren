@@ -2,7 +2,7 @@ from collections.abc import Collection
 from dataclasses import dataclass
 
 from sqlalchemy import select
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from app import models
 
@@ -79,6 +79,22 @@ class EvaluationResultAccess:
     membership: models.OrganizationMembership
 
 
+@dataclass(frozen=True)
+class RunComparisonAccess:
+    comparison: models.RunComparison
+    baseline_run: models.EvaluationRun
+    current_run: models.EvaluationRun
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
+@dataclass(frozen=True)
+class DebugCaseAccess:
+    debug_case: models.DebugCase
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
 class OrganizationNotAccessibleError(LookupError):
     """
     Raised when an organization must not be disclosed to the user.
@@ -148,6 +164,30 @@ class EvaluationResultNotAccessibleError(LookupError):
 class EvaluationResultPermissionDeniedError(PermissionError):
     """
     Raised when the user belongs to the tenant but lacks result permission.
+    """
+
+
+class RunComparisonNotAccessibleError(LookupError):
+    """
+    Raised when a run comparison must not be disclosed.
+    """
+
+
+class RunComparisonPermissionDeniedError(PermissionError):
+    """
+    Raised when the user lacks permission for a comparison.
+    """
+
+
+class DebugCaseNotAccessibleError(LookupError):
+    """
+    Raised when a debug case must not be disclosed.
+    """
+
+
+class DebugCasePermissionDeniedError(PermissionError):
+    """
+    Raised when the user lacks permission for a debug case.
     """
 
 
@@ -542,6 +582,317 @@ def authorize_evaluation_result(
         run=run,
         test_case=test_case,
         dataset=dataset,
+        project=project,
+        membership=membership,
+    )
+
+
+
+def authorize_run_comparison(
+    db: Session,
+    *,
+    user_id: int,
+    comparison_id: int,
+    required_roles: Collection[str],
+) -> RunComparisonAccess:
+    """
+    Resolve a comparison only when both runs exist in one tenant project.
+
+    Corrupt comparisons that link runs from different projects fail closed.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    baseline_run = aliased(models.EvaluationRun)
+    current_run = aliased(models.EvaluationRun)
+
+    row = db.execute(
+        select(
+            models.RunComparison,
+            baseline_run,
+            current_run,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .select_from(models.RunComparison)
+        .join(
+            baseline_run,
+            baseline_run.id
+            == models.RunComparison.baseline_run_id,
+        )
+        .join(
+            current_run,
+            current_run.id
+            == models.RunComparison.current_run_id,
+        )
+        .join(
+            models.Project,
+            models.Project.id == baseline_run.project_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.RunComparison.id == comparison_id,
+            models.Project.organization_id.is_not(None),
+            current_run.project_id == models.Project.id,
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise RunComparisonNotAccessibleError(
+            "Run comparison is not accessible."
+        )
+
+    (
+        comparison,
+        baseline,
+        current,
+        project,
+        membership,
+    ) = row
+
+    if membership.role not in roles:
+        raise RunComparisonPermissionDeniedError(
+            "Run comparison permission is denied."
+        )
+
+    return RunComparisonAccess(
+        comparison=comparison,
+        baseline_run=baseline,
+        current_run=current,
+        project=project,
+        membership=membership,
+    )
+
+
+
+def _debug_case_links_are_project_scoped(
+    db: Session,
+    *,
+    debug_case: models.DebugCase,
+    project_id: int,
+) -> bool:
+    """
+    Verify every optional debug-case link belongs to the owning project.
+
+    Result links are also checked against their run and test-case
+    relationships so same-tenant but logically inconsistent references
+    fail closed.
+    """
+
+    def resolve_run(
+        run_id: int | None,
+    ) -> models.EvaluationRun | None:
+        if run_id is None:
+            return None
+
+        return db.execute(
+            select(models.EvaluationRun)
+            .where(
+                models.EvaluationRun.id == run_id,
+                models.EvaluationRun.project_id == project_id,
+            )
+        ).scalar_one_or_none()
+
+    def resolve_test_case(
+        test_case_id: int | None,
+    ) -> models.TestCase | None:
+        if test_case_id is None:
+            return None
+
+        return db.execute(
+            select(models.TestCase)
+            .join(
+                models.Dataset,
+                models.Dataset.id
+                == models.TestCase.dataset_id,
+            )
+            .where(
+                models.TestCase.id == test_case_id,
+                models.Dataset.project_id == project_id,
+            )
+        ).scalar_one_or_none()
+
+    def resolve_result(
+        result_id: int | None,
+    ) -> models.EvaluationResult | None:
+        if result_id is None:
+            return None
+
+        return db.execute(
+            select(models.EvaluationResult)
+            .join(
+                models.EvaluationRun,
+                models.EvaluationRun.id
+                == models.EvaluationResult.run_id,
+            )
+            .join(
+                models.TestCase,
+                models.TestCase.id
+                == models.EvaluationResult.test_case_id,
+            )
+            .join(
+                models.Dataset,
+                models.Dataset.id
+                == models.TestCase.dataset_id,
+            )
+            .where(
+                models.EvaluationResult.id == result_id,
+                models.EvaluationRun.project_id == project_id,
+                models.Dataset.project_id == project_id,
+            )
+        ).scalar_one_or_none()
+
+    baseline_run = resolve_run(
+        debug_case.baseline_run_id
+    )
+    current_run = resolve_run(
+        debug_case.current_run_id
+    )
+    test_case = resolve_test_case(
+        debug_case.test_case_id
+    )
+    baseline_result = resolve_result(
+        debug_case.baseline_result_id
+    )
+    current_result = resolve_result(
+        debug_case.current_result_id
+    )
+
+    if (
+        debug_case.baseline_run_id is not None
+        and baseline_run is None
+    ):
+        return False
+
+    if (
+        debug_case.current_run_id is not None
+        and current_run is None
+    ):
+        return False
+
+    if (
+        debug_case.test_case_id is not None
+        and test_case is None
+    ):
+        return False
+
+    if (
+        debug_case.baseline_result_id is not None
+        and baseline_result is None
+    ):
+        return False
+
+    if (
+        debug_case.current_result_id is not None
+        and current_result is None
+    ):
+        return False
+
+    if (
+        baseline_result is not None
+        and baseline_run is not None
+        and baseline_result.run_id != baseline_run.id
+    ):
+        return False
+
+    if (
+        current_result is not None
+        and current_run is not None
+        and current_result.run_id != current_run.id
+    ):
+        return False
+
+    if (
+        test_case is not None
+        and baseline_result is not None
+        and baseline_result.test_case_id != test_case.id
+    ):
+        return False
+
+    if (
+        test_case is not None
+        and current_result is not None
+        and current_result.test_case_id != test_case.id
+    ):
+        return False
+
+    if (
+        baseline_result is not None
+        and current_result is not None
+        and baseline_result.test_case_id
+        != current_result.test_case_id
+    ):
+        return False
+
+    return True
+
+
+def authorize_debug_case(
+    db: Session,
+    *,
+    user_id: int,
+    debug_case_id: int,
+    required_roles: Collection[str],
+) -> DebugCaseAccess:
+    """
+    Resolve a debug case through its owning project and tenant membership.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    row = db.execute(
+        select(
+            models.DebugCase,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .select_from(models.DebugCase)
+        .join(
+            models.Project,
+            models.Project.id == models.DebugCase.project_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.DebugCase.id == debug_case_id,
+            models.Project.organization_id.is_not(None),
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise DebugCaseNotAccessibleError(
+            "Debug case is not accessible."
+        )
+
+    debug_case, project, membership = row
+
+    if membership.role not in roles:
+        raise DebugCasePermissionDeniedError(
+            "Debug case permission is denied."
+        )
+
+    if not _debug_case_links_are_project_scoped(
+        db,
+        debug_case=debug_case,
+        project_id=project.id,
+    ):
+        raise DebugCaseNotAccessibleError(
+            "Debug case is not accessible."
+        )
+
+    return DebugCaseAccess(
+        debug_case=debug_case,
         project=project,
         membership=membership,
     )
