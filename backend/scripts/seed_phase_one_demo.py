@@ -11,6 +11,9 @@ from sqlalchemy import or_
 
 from app import models
 from app.database import SessionLocal
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
 
 
 PROJECT_NAME = "Hetren Phase 1 Validation Demo"
@@ -309,21 +312,26 @@ def main() -> None:
 
         db.flush()
 
-        baseline_run = models.EvaluationRun(
-            project_id=project.id,
-            run_name="Phase 1 baseline run",
-            model_name="mock-baseline-asr",
-            status="created",
+        baseline_run = (
+            stage_evaluation_run_with_manifest(
+                db,
+                project_id=project.id,
+                run_name="Phase 1 baseline run",
+                model_name="mock-baseline-asr",
+                status="created",
+            )
         )
-        current_run = models.EvaluationRun(
-            project_id=project.id,
-            run_name="Phase 1 current regression run",
-            model_name="mock-current-asr",
-            status="created",
+        current_run = (
+            stage_evaluation_run_with_manifest(
+                db,
+                project_id=project.id,
+                run_name=(
+                    "Phase 1 current regression run"
+                ),
+                model_name="mock-current-asr",
+                status="created",
+            )
         )
-
-        db.add_all([baseline_run, current_run])
-        db.flush()
 
         baseline_outputs = [
             "hello i need to check my account balance today",

@@ -14,6 +14,9 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.database import Base, SessionLocal, engine
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
 from app.release_safety import (
     ReleasePolicyThresholds,
     evaluate_release_safety,
@@ -432,20 +435,24 @@ def create_demo_project(
     db.add(test_case)
     db.flush()
 
-    baseline_run = models.EvaluationRun(
+    baseline_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=project.id,
-        run_name=f"{spec.expected_status.upper()} baseline run",
+        run_name=(
+            f"{spec.expected_status.upper()} baseline run"
+        ),
         model_name="mock-baseline-asr",
         status="created",
     )
-    current_run = models.EvaluationRun(
+    current_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=project.id,
-        run_name=f"{spec.expected_status.upper()} candidate run",
+        run_name=(
+            f"{spec.expected_status.upper()} candidate run"
+        ),
         model_name="mock-candidate-asr",
         status="created",
     )
-    db.add_all([baseline_run, current_run])
-    db.flush()
 
     baseline_result = create_evaluation_result(
         db=db,

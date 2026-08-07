@@ -411,6 +411,80 @@ class EvaluationRun(Base):
         cascade="all, delete-orphan",
     )
 
+    manifest = relationship(
+        "EvaluationRunManifest",
+        back_populates="run",
+        cascade="all, delete-orphan",
+        uselist=False,
+        single_parent=True,
+    )
+
+
+class EvaluationRunManifest(Base):
+    __tablename__ = "evaluation_run_manifests"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            name="uq_evaluation_run_manifests_run_id",
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_run_manifests_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "length(manifest_sha256) = 64",
+            name=(
+                "ck_evaluation_run_manifests_"
+                "sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    manifest_payload = Column(
+        JSON,
+        nullable=False,
+    )
+    manifest_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    run = relationship(
+        "EvaluationRun",
+        back_populates="manifest",
+    )
+
 
 class EvaluationResult(Base):
     __tablename__ = "evaluation_results"

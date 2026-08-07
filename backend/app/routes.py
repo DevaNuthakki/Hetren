@@ -46,6 +46,9 @@ from app.auth.authorization import (
 )
 from app.auth.dependencies import get_current_user
 from app.database import check_database_connection, get_db
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
 from app.evaluation_service import (
     build_error_summary,
     build_quality_label,
@@ -1038,14 +1041,14 @@ def create_evaluation_run(
         required_roles=PRODUCT_WRITE_ROLES,
     )
 
-    db_run = models.EvaluationRun(
+    db_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=access.project.id,
         run_name=run.run_name,
         model_name=run.model_name or "not_configured",
         status="created",
     )
 
-    db.add(db_run)
     db.commit()
     db.refresh(db_run)
 
