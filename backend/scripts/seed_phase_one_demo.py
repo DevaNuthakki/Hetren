@@ -14,6 +14,9 @@ from app.database import SessionLocal
 from app.evaluation_provenance import (
     stage_evaluation_run_with_manifest,
 )
+from scripts.seed_support import (
+    resolve_seed_organization_id,
+)
 
 
 PROJECT_NAME = "Hetren Phase 1 Validation Demo"
@@ -252,10 +255,19 @@ def main() -> None:
     db = SessionLocal()
 
     try:
+        organization_id = resolve_seed_organization_id(
+            db,
+            project_names=[
+                LEGACY_PROJECT_NAME,
+                PROJECT_NAME,
+            ],
+        )
+
         reset_existing_demo_project(db, LEGACY_PROJECT_NAME)
         reset_existing_demo_project(db, PROJECT_NAME)
 
         project = models.Project(
+            organization_id=organization_id,
             name=PROJECT_NAME,
             description=(
                 "Local Phase 1 validation project showing datasets, test cases, "

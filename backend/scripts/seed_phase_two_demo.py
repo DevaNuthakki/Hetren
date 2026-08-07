@@ -17,6 +17,9 @@ from app.database import Base, SessionLocal, engine
 from app.evaluation_provenance import (
     stage_evaluation_run_with_manifest,
 )
+from scripts.seed_support import (
+    resolve_seed_organization_id,
+)
 from app.release_safety import (
     ReleasePolicyThresholds,
     evaluate_release_safety,
@@ -400,6 +403,8 @@ def create_evaluation_result(
 def create_demo_project(
     db: Session,
     spec: DemoSpec,
+    *,
+    organization_id: int,
 ) -> dict[str, object]:
     artifacts = write_demo_artifacts(
         project_name=spec.project_name,
@@ -408,6 +413,7 @@ def create_demo_project(
     )
 
     project = models.Project(
+        organization_id=organization_id,
         name=spec.project_name,
         description=spec.description,
     )
@@ -605,12 +611,24 @@ def main() -> None:
     db = SessionLocal()
 
     try:
+        organization_id = resolve_seed_organization_id(
+            db,
+            project_names=[
+                spec.project_name
+                for spec in DEMO_SPECS
+            ],
+        )
+
         reset_existing_demo_projects(db)
 
         created_projects = [
             (
                 spec,
-                create_demo_project(db, spec),
+                create_demo_project(
+                    db,
+                    spec,
+                    organization_id=organization_id,
+                ),
             )
             for spec in DEMO_SPECS
         ]
