@@ -186,3 +186,271 @@ def verify_evaluation_run_manifest(
         calculate_manifest_sha256(payload)
         == manifest.manifest_sha256
     )
+
+
+EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION = 1
+
+SUPPORTED_RESULT_EXECUTION_MODES = frozenset(
+    {
+        "uploaded_transcript",
+        "server_asr",
+        "runner_asr",
+        "seed_fixture",
+    }
+)
+
+
+def calculate_text_sha256(value: str) -> str:
+    if not isinstance(value, str):
+        raise ValueError(
+            "Evidence text must be a string."
+        )
+
+    return hashlib.sha256(
+        value.encode("utf-8")
+    ).hexdigest()
+
+
+def _build_run_manifest_evidence(
+    evaluation_run: models.EvaluationRun,
+) -> dict[str, object]:
+    manifest = evaluation_run.manifest
+
+    if manifest is None:
+        return {
+            "status": "legacy_unsealed",
+            "schema_version": None,
+            "sha256": None,
+        }
+
+    if (
+        manifest.run_id != evaluation_run.id
+        or not verify_evaluation_run_manifest(
+            manifest
+        )
+    ):
+        raise ValueError(
+            "Evaluation run manifest is invalid."
+        )
+
+    return {
+        "status": "sealed",
+        "schema_version": (
+            manifest.schema_version
+        ),
+        "sha256": manifest.manifest_sha256,
+    }
+
+
+def build_evaluation_result_provenance_payload(
+    *,
+    result: models.EvaluationResult,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    execution_mode: str,
+    server_observed: dict[str, object] | None = None,
+    external_reported: dict[str, object] | None = None,
+) -> dict[str, object]:
+    normalized_mode = (
+        execution_mode.strip()
+        if isinstance(execution_mode, str)
+        else ""
+    )
+
+    if (
+        normalized_mode
+        not in SUPPORTED_RESULT_EXECUTION_MODES
+    ):
+        raise ValueError(
+            "Unsupported evaluation execution mode."
+        )
+
+    if result.id is None:
+        raise ValueError(
+            "Evaluation result must be flushed "
+            "before provenance is built."
+        )
+
+    if (
+        result.run_id != evaluation_run.id
+        or result.test_case_id != test_case.id
+    ):
+        raise ValueError(
+            "Evaluation result provenance resources "
+            "do not match."
+        )
+
+    reference_text = test_case.reference_transcript
+    generated_text = result.generated_transcript
+
+    if not isinstance(reference_text, str):
+        raise ValueError(
+            "Reference transcript is unavailable."
+        )
+
+    if not isinstance(generated_text, str):
+        raise ValueError(
+            "Generated transcript is unavailable."
+        )
+
+    reference_bytes = reference_text.encode(
+        "utf-8"
+    )
+    generated_bytes = generated_text.encode(
+        "utf-8"
+    )
+
+    payload: dict[str, object] = {
+        "schema_version": (
+            EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        ),
+        "evaluation_type": ASR_EVALUATION_TYPE,
+        "result": {
+            "id": result.id,
+            "run_id": result.run_id,
+            "test_case_id": result.test_case_id,
+        },
+        "run_manifest": (
+            _build_run_manifest_evidence(
+                evaluation_run
+            )
+        ),
+        "evidence": {
+            "reference_transcript": {
+                "sha256": calculate_text_sha256(
+                    reference_text
+                ),
+                "utf8_bytes": len(
+                    reference_bytes
+                ),
+            },
+            "generated_transcript": {
+                "sha256": calculate_text_sha256(
+                    generated_text
+                ),
+                "utf8_bytes": len(
+                    generated_bytes
+                ),
+            },
+        },
+        "evaluation": {
+            "engine": HETREN_EVALUATOR_ENGINE,
+            "contract_version": (
+                ASR_EVALUATOR_CONTRACT_VERSION
+            ),
+            "wer": result.wer,
+            "cer": result.cer,
+            "quality_label": (
+                result.quality_label
+            ),
+        },
+        "execution": {
+            "mode": normalized_mode,
+            "requested_model": (
+                evaluation_run.model_name
+            ),
+            "server_observed": dict(
+                server_observed or {}
+            ),
+            "external_reported": dict(
+                external_reported or {}
+            ),
+        },
+    }
+
+    # Validate that the complete evidence payload is
+    # deterministic JSON before it can be persisted.
+    canonicalize_json(payload)
+
+    return payload
+
+
+def stage_evaluation_result_provenance(
+    db: Session,
+    *,
+    result: models.EvaluationResult,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    execution_mode: str,
+    server_observed: dict[str, object] | None = None,
+    external_reported: dict[str, object] | None = None,
+) -> models.EvaluationResultProvenance:
+    if result.id is None:
+        db.flush()
+
+    if result.provenance is not None:
+        raise ValueError(
+            "Evaluation result provenance already exists."
+        )
+
+    payload = (
+        build_evaluation_result_provenance_payload(
+            result=result,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+            execution_mode=execution_mode,
+            server_observed=server_observed,
+            external_reported=external_reported,
+        )
+    )
+
+    provenance = models.EvaluationResultProvenance(
+        result_id=result.id,
+        schema_version=(
+            EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        ),
+        evaluation_type=ASR_EVALUATION_TYPE,
+        execution_mode=execution_mode.strip(),
+        provenance_payload=payload,
+        provenance_sha256=(
+            calculate_manifest_sha256(payload)
+        ),
+    )
+
+    db.add(provenance)
+
+    return provenance
+
+
+def verify_evaluation_result_provenance(
+    provenance: models.EvaluationResultProvenance,
+) -> bool:
+    payload = provenance.provenance_payload
+
+    if not isinstance(payload, dict):
+        return False
+
+    if (
+        provenance.schema_version
+        != EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        or provenance.evaluation_type
+        != ASR_EVALUATION_TYPE
+        or payload.get("schema_version")
+        != provenance.schema_version
+        or payload.get("evaluation_type")
+        != provenance.evaluation_type
+    ):
+        return False
+
+    execution = payload.get("execution")
+
+    if (
+        not isinstance(execution, dict)
+        or execution.get("mode")
+        != provenance.execution_mode
+    ):
+        return False
+
+    try:
+        expected_sha256 = (
+            calculate_manifest_sha256(
+                payload
+            )
+        )
+    except ValueError:
+        return False
+
+    return (
+        provenance.provenance_sha256
+        == expected_sha256
+    )

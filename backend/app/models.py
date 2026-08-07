@@ -518,6 +518,83 @@ class EvaluationResult(Base):
     run = relationship("EvaluationRun", back_populates="evaluation_results")
     test_case = relationship("TestCase", back_populates="evaluation_results")
 
+    provenance = relationship(
+        "EvaluationResultProvenance",
+        back_populates="result",
+        cascade="all, delete-orphan",
+        uselist=False,
+        single_parent=True,
+    )
+
+
+class EvaluationResultProvenance(Base):
+    __tablename__ = "evaluation_result_provenances"
+    __table_args__ = (
+        UniqueConstraint(
+            "result_id",
+            name="uq_evaluation_result_provenances_result_id",
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_result_provenances_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "length(provenance_sha256) = 64",
+            name=(
+                "ck_evaluation_result_provenances_"
+                "sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    result_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_results.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+    execution_mode = Column(
+        String(50),
+        nullable=False,
+    )
+
+    provenance_payload = Column(
+        JSON,
+        nullable=False,
+    )
+    provenance_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    result = relationship(
+        "EvaluationResult",
+        back_populates="provenance",
+    )
+
 
 class RunComparison(Base):
     __tablename__ = "run_comparisons"
