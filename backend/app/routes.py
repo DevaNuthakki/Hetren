@@ -1,3 +1,4 @@
+from collections.abc import Collection
 from dataclasses import asdict
 from pathlib import Path
 
@@ -6,6 +7,20 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
+from app.auth.authorization import (
+    PRODUCT_READ_ROLES,
+    PRODUCT_WRITE_ROLES,
+    OrganizationAccess,
+    OrganizationNotAccessibleError,
+    OrganizationPermissionDeniedError,
+    ProjectAccess,
+    ProjectNotAccessibleError,
+    ProjectPermissionDeniedError,
+    authorize_organization,
+    authorize_project,
+    list_accessible_projects,
+)
+from app.auth.dependencies import get_current_user
 from app.database import check_database_connection, get_db
 from app.evaluation_service import (
     build_error_summary,
@@ -19,6 +34,58 @@ from app.release_safety import (
 from app.speech import TranscriptionError, get_asr_provider
 
 router = APIRouter()
+
+
+def _authorize_organization_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    organization_id: int,
+    required_roles: Collection[str],
+) -> OrganizationAccess:
+    try:
+        return authorize_organization(
+            db,
+            user_id=current_user.id,
+            organization_id=organization_id,
+            required_roles=required_roles,
+        )
+    except OrganizationNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Organization not found",
+        ) from exc
+    except OrganizationPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Organization permission denied",
+        ) from exc
+
+
+def _authorize_project_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    project_id: int,
+    required_roles: Collection[str],
+) -> ProjectAccess:
+    try:
+        return authorize_project(
+            db,
+            user_id=current_user.id,
+            project_id=project_id,
+            required_roles=required_roles,
+        )
+    except ProjectNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Project not found",
+        ) from exc
+    except ProjectPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Project permission denied",
+        ) from exc
 
 
 def build_comparison_status(wer_delta: float, cer_delta: float) -> str:
@@ -434,9 +501,18 @@ def readiness_check():
 @router.post("/projects", response_model=schemas.ProjectRead)
 def create_project(
     project: schemas.ProjectCreate,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    organization_access = _authorize_organization_for_request(
+        db,
+        current_user=current_user,
+        organization_id=project.organization_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
+
     db_project = models.Project(
+        organization_id=organization_access.organization.id,
         name=project.name,
         description=project.description,
     )
@@ -447,21 +523,30 @@ def create_project(
 
 
 @router.get("/projects", response_model=list[schemas.ProjectRead])
-def list_projects(db: Session = Depends(get_db)):
-    return db.query(models.Project).order_by(models.Project.created_at.desc()).all()
+def list_projects(
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    return list_accessible_projects(
+        db,
+        user_id=current_user.id,
+    )
 
 
 @router.get("/projects/{project_id}", response_model=schemas.ProjectRead)
 def get_project(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
-
-    return db_project
+    return access.project
 
 
 @router.get(

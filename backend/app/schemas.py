@@ -7,12 +7,14 @@ from app.release_safety import ReleasePolicyThresholds
 
 
 class ProjectCreate(BaseModel):
+    organization_id: int = Field(gt=0)
     name: str
     description: Optional[str] = None
 
 
 class ProjectRead(BaseModel):
     id: int
+    organization_id: Optional[int]
     name: str
     description: Optional[str]
     created_at: datetime
