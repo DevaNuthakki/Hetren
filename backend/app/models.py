@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from uuid import uuid4
 
 import sqlalchemy as sa
 
@@ -68,6 +69,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     email = Column(String(320), nullable=False)
     display_name = Column(String(200), nullable=True)
+    password_hash = Column(String(255), nullable=True)
     is_active = Column(
         sa.Boolean,
         nullable=False,
@@ -85,6 +87,97 @@ class User(Base):
         "OrganizationMembership",
         back_populates="user",
         cascade="all, delete-orphan",
+    )
+    refresh_sessions = relationship(
+        "RefreshSession",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+
+
+class RefreshSession(Base):
+    __tablename__ = "refresh_sessions"
+
+    __table_args__ = (
+        sa.UniqueConstraint(
+            "token_hash",
+            name="uq_refresh_sessions_token_hash",
+        ),
+        sa.CheckConstraint(
+            "expires_at > created_at",
+            name="ck_refresh_sessions_expiry_after_creation",
+        ),
+        sa.CheckConstraint(
+            (
+                "replaced_by_session_id IS NULL "
+                "OR revoked_at IS NOT NULL"
+            ),
+            name="ck_refresh_sessions_replacement_requires_revocation",
+        ),
+        sa.CheckConstraint(
+            (
+                "replaced_by_session_id IS NULL "
+                "OR replaced_by_session_id != id"
+            ),
+            name="ck_refresh_sessions_cannot_replace_self",
+        ),
+        sa.Index(
+            "ix_refresh_sessions_user_id",
+            "user_id",
+        ),
+        sa.Index(
+            "ix_refresh_sessions_family_id",
+            "family_id",
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+    )
+    family_id = Column(
+        String(36),
+        nullable=False,
+        default=lambda: str(uuid4()),
+    )
+    token_hash = Column(
+        String(64),
+        nullable=False,
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+    expires_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+    )
+    revoked_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+    replaced_by_session_id = Column(
+        Integer,
+        ForeignKey(
+            "refresh_sessions.id",
+            ondelete="SET NULL",
+        ),
+        nullable=True,
+    )
+
+    user = relationship(
+        "User",
+        back_populates="refresh_sessions",
+    )
+    replaced_by_session = relationship(
+        "RefreshSession",
+        remote_side=[id],
+        foreign_keys=[replaced_by_session_id],
+        post_update=True,
     )
 
 

@@ -37,6 +37,14 @@ class Settings(BaseSettings):
         validation_alias="DATABASE_ECHO",
     )
 
+    cors_allowed_origins: list[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+        ],
+        validation_alias="HETREN_CORS_ALLOWED_ORIGINS",
+    )
+
     auth_secret_key: SecretStr = Field(
         min_length=32,
         validation_alias="HETREN_AUTH_SECRET_KEY",
@@ -60,6 +68,37 @@ class Settings(BaseSettings):
         case_sensitive=False,
         extra="ignore",
     )
+
+    @field_validator("cors_allowed_origins")
+    @classmethod
+    def validate_cors_allowed_origins(
+        cls,
+        value: list[str],
+    ) -> list[str]:
+        if not value:
+            raise ValueError(
+                "At least one CORS origin must be configured"
+            )
+
+        normalized: list[str] = []
+
+        for origin in value:
+            candidate = origin.strip().rstrip("/")
+
+            if (
+                candidate == "*"
+                or not candidate.startswith(
+                    ("http://", "https://")
+                )
+            ):
+                raise ValueError(
+                    "CORS origins must be explicit HTTP(S) origins"
+                )
+
+            if candidate not in normalized:
+                normalized.append(candidate)
+
+        return normalized
 
     @field_validator("database_url", "test_database_url", mode="before")
     @classmethod

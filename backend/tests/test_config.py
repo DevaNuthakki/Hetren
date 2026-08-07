@@ -17,6 +17,10 @@ def clear_product_environment(monkeypatch):
         "HETREN_AUTH_REFRESH_TOKEN_EXPIRE_DAYS",
         raising=False,
     )
+    monkeypatch.delenv(
+        "HETREN_CORS_ALLOWED_ORIGINS",
+        raising=False,
+    )
     monkeypatch.setenv("DATABASE_URL", "sqlite:///test.db")
     monkeypatch.setenv(
         "HETREN_AUTH_SECRET_KEY",
@@ -103,6 +107,52 @@ def test_auth_settings_reject_non_positive_expiration(
     invalid_value,
 ):
     monkeypatch.setenv(environment_name, invalid_value)
+
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
+
+
+
+def test_cors_settings_use_local_development_defaults():
+    settings = Settings(_env_file=None)
+
+    assert settings.cors_allowed_origins == [
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ]
+
+
+def test_cors_settings_load_environment_override(
+    monkeypatch,
+):
+    monkeypatch.setenv(
+        "HETREN_CORS_ALLOWED_ORIGINS",
+        '["https://app.hetren.example"]',
+    )
+
+    settings = Settings(_env_file=None)
+
+    assert settings.cors_allowed_origins == [
+        "https://app.hetren.example"
+    ]
+
+
+@pytest.mark.parametrize(
+    "origins",
+    [
+        '["*"]',
+        '["javascript:alert(1)"]',
+        '[]',
+    ],
+)
+def test_cors_settings_reject_unsafe_origins(
+    monkeypatch,
+    origins,
+):
+    monkeypatch.setenv(
+        "HETREN_CORS_ALLOWED_ORIGINS",
+        origins,
+    )
 
     with pytest.raises(ValidationError):
         Settings(_env_file=None)
