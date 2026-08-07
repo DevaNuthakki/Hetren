@@ -175,14 +175,284 @@ export type StructuredTranscriptDiff = {
   tokens: StructuredTranscriptDiffToken[];
 };
 
-async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${path}`, options);
+export type AuthenticatedUser = {
+  id: number;
+  email: string;
+  display_name: string | null;
+  is_active: boolean;
+  created_at: string;
+};
+
+type AccessTokenResponse = {
+  access_token: string;
+  token_type: "bearer";
+  access_token_expires_in_seconds: number;
+};
+
+export class ApiError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+  }
+}
+
+let accessToken: string | null = null;
+let refreshPromise: Promise<string | null> | null = null;
+let authenticationLostHandler: (() => void) | null = null;
+
+export function setAuthenticationLostHandler(
+  handler: (() => void) | null,
+) {
+  authenticationLostHandler = handler;
+}
+
+function notifyAuthenticationLost() {
+  authenticationLostHandler?.();
+}
+
+async function buildApiError(response: Response): Promise<ApiError> {
+  let detail = "";
+
+  try {
+    const payload = (await response.json()) as {
+      detail?: unknown;
+    };
+
+    if (typeof payload.detail === "string") {
+      detail = payload.detail;
+    } else if (payload.detail !== undefined) {
+      detail = JSON.stringify(payload.detail);
+    }
+  } catch {
+    // The response did not contain a JSON error body.
+  }
+
+  const statusText = response.statusText
+    ? ` ${response.statusText}`
+    : "";
+
+  const detailText = detail ? ` — ${detail}` : "";
+
+  return new ApiError(
+    response.status,
+    `API request failed: ${response.status}${statusText}${detailText}`,
+  );
+}
+
+async function requestRefreshAccessToken(): Promise<string | null> {
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  const pendingRefresh = (async () => {
+    const response = await fetch(
+      `${API_BASE_URL}/auth/refresh`,
+      {
+        method: "POST",
+        credentials: "include",
+      },
+    );
+
+    if (response.status === 401) {
+      accessToken = null;
+      return null;
+    }
+
+    if (!response.ok) {
+      throw await buildApiError(response);
+    }
+
+    const payload =
+      (await response.json()) as AccessTokenResponse;
+
+    accessToken = payload.access_token;
+
+    return accessToken;
+  })();
+
+  refreshPromise = pendingRefresh;
+
+  void pendingRefresh.then(
+    () => {
+      if (refreshPromise === pendingRefresh) {
+        refreshPromise = null;
+      }
+    },
+    () => {
+      if (refreshPromise === pendingRefresh) {
+        refreshPromise = null;
+      }
+    },
+  );
+
+  return pendingRefresh;
+}
+
+async function performApiRequest(
+  path: string,
+  options: RequestInit | undefined,
+  token: string | null,
+) {
+  const headers = new Headers(options?.headers);
+
+  if (token) {
+    headers.set(
+      "Authorization",
+      `Bearer ${token}`,
+    );
+  }
+
+  return fetch(
+    `${API_BASE_URL}${path}`,
+    {
+      ...options,
+      headers,
+      credentials: "include",
+    },
+  );
+}
+
+async function fetchJson<T>(
+  path: string,
+  options?: RequestInit,
+  allowRefresh = true,
+): Promise<T> {
+  const requestToken = accessToken;
+
+  let response = await performApiRequest(
+    path,
+    options,
+    requestToken,
+  );
+
+  if (response.status === 401 && allowRefresh) {
+    if (
+      accessToken !== null &&
+      accessToken !== requestToken
+    ) {
+      response = await performApiRequest(
+        path,
+        options,
+        accessToken,
+      );
+    } else {
+      const refreshedToken =
+        await requestRefreshAccessToken();
+
+      if (refreshedToken) {
+        response = await performApiRequest(
+          path,
+          options,
+          refreshedToken,
+        );
+      } else {
+        notifyAuthenticationLost();
+        throw await buildApiError(response);
+      }
+    }
+  }
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    if (response.status === 401) {
+      accessToken = null;
+      notifyAuthenticationLost();
+    }
+
+    throw await buildApiError(response);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function getCurrentUser() {
+  return fetchJson<AuthenticatedUser>(
+    "/auth/me",
+    undefined,
+    false,
+  );
+}
+
+export async function restoreSession():
+  Promise<AuthenticatedUser | null> {
+  const refreshedToken =
+    await requestRefreshAccessToken();
+
+  if (!refreshedToken) {
+    return null;
+  }
+
+  try {
+    return await getCurrentUser();
+  } catch (error) {
+    if (
+      error instanceof ApiError &&
+      error.status === 401
+    ) {
+      accessToken = null;
+      return null;
+    }
+
+    throw error;
+  }
+}
+
+export async function loginUser(
+  email: string,
+  password: string,
+) {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/login`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    },
+  );
+
+  if (!response.ok) {
+    throw await buildApiError(response);
+  }
+
+  const payload =
+    (await response.json()) as AccessTokenResponse;
+
+  accessToken = payload.access_token;
+
+  try {
+    return await getCurrentUser();
+  } catch (error) {
+    accessToken = null;
+    throw error;
+  }
+}
+
+export async function logoutUser() {
+  const response = await fetch(
+    `${API_BASE_URL}/auth/logout`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+
+  if (!response.ok) {
+    throw await buildApiError(response);
+  }
+
+  accessToken = null;
 }
 
 export async function getProjects() {

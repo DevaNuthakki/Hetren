@@ -10,6 +10,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app import models
+from app.auth.dependencies import get_current_user
 from app.database import Base, get_db
 from app.main import app
 from app.runner_job_service import (
@@ -111,7 +112,31 @@ def operations_http_harness() -> Generator[
         finally:
             db.close()
 
+    def override_get_current_user():
+        db = session_factory()
+
+        try:
+            user = (
+                db.query(models.User)
+                .order_by(models.User.id.asc())
+                .first()
+            )
+
+            if user is None:
+                raise RuntimeError(
+                    "Runner operations HTTP test user "
+                    "has not been seeded."
+                )
+
+            db.expunge(user)
+            return user
+        finally:
+            db.close()
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[
+        get_current_user
+    ] = override_get_current_user
 
     try:
         with httpx.Client(
@@ -122,6 +147,10 @@ def operations_http_harness() -> Generator[
     finally:
         app.dependency_overrides.pop(
             get_db,
+            None,
+        )
+        app.dependency_overrides.pop(
+            get_current_user,
             None,
         )
         Base.metadata.drop_all(engine)
@@ -137,14 +166,35 @@ def create_operations_case(
     db = session_factory()
 
     try:
+        organization = models.Organization(
+            name="Runner operations HTTP organization",
+        )
+        user = models.User(
+            email="runner-operations-owner@example.com",
+        )
+        membership = models.OrganizationMembership(
+            organization=organization,
+            user=user,
+            role="owner",
+        )
         project = models.Project(
+            organization=organization,
             name="Runner operations HTTP project",
         )
         other_project = models.Project(
+            organization=organization,
             name="Other HTTP project",
         )
 
-        db.add_all([project, other_project])
+        db.add_all(
+            [
+                organization,
+                user,
+                membership,
+                project,
+                other_project,
+            ]
+        )
         db.commit()
         db.refresh(project)
         db.refresh(other_project)
@@ -320,7 +370,18 @@ def test_runner_operations_http_enforces_project_scope(
 def test_runner_operations_http_maps_missing_project(
     operations_http_harness,
 ):
-    client, _session_factory = operations_http_harness
+    client, session_factory = operations_http_harness
+
+    db = session_factory()
+
+    try:
+        user = models.User(
+            email="runner-operations-missing-project@example.com",
+        )
+        db.add(user)
+        db.commit()
+    finally:
+        db.close()
 
     response = client.get(
         "/projects/999999/runner-operations"

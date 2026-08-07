@@ -16,6 +16,18 @@ from app.runner_operations_service import (
 )
 
 
+@pytest.fixture(autouse=True)
+def bypass_human_authorization(
+    monkeypatch,
+):
+    monkeypatch.setattr(
+        runner_operations_routes,
+        "_authorize_project_for_request",
+        lambda *_args, **_kwargs: None,
+    )
+
+
+
 def build_snapshot() -> RunnerOperationsSnapshot:
     now = datetime(
         2026,

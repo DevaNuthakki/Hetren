@@ -7,6 +7,14 @@ from fastapi import (
 )
 from sqlalchemy.orm import Session
 
+from app import models
+from app.auth.authorization import (
+    PRODUCT_READ_ROLES,
+    ProjectNotAccessibleError,
+    ProjectPermissionDeniedError,
+    authorize_project,
+)
+from app.auth.dependencies import get_current_user
 from app.database import get_db
 from app.runner_operations_service import (
     RunnerOperationsJobNotFoundError,
@@ -25,6 +33,35 @@ router = APIRouter(
 )
 
 
+
+def _authorize_project_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    project_id: int,
+) -> None:
+    """
+    Require human product-data read access before exposing operations data.
+    """
+    try:
+        authorize_project(
+            db,
+            user_id=current_user.id,
+            project_id=project_id,
+            required_roles=PRODUCT_READ_ROLES,
+        )
+    except ProjectNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found.",
+        ) from exc
+    except ProjectPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Project permission denied.",
+        ) from exc
+
+
 @router.get(
     "/projects/{project_id}/runner-operations",
     response_model=RunnerOperationsSnapshotResponse,
@@ -36,6 +73,7 @@ def get_project_runner_operations_endpoint(
         ge=1,
         le=200,
     ),
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """
@@ -44,6 +82,12 @@ def get_project_runner_operations_endpoint(
     Credentials, hashes, raw job payloads, system metadata, and log
     context are intentionally excluded.
     """
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+    )
+
     try:
         return get_project_runner_operations(
             db,
@@ -79,6 +123,7 @@ def get_project_runner_job_logs_endpoint(
         ge=1,
         le=200,
     ),
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """
@@ -86,6 +131,12 @@ def get_project_runner_job_logs_endpoint(
 
     Raw context payloads are intentionally excluded.
     """
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+    )
+
     try:
         return get_project_runner_job_logs(
             db,
