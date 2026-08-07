@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import AliasChoices, Field, field_validator
+from pydantic import AliasChoices, Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -35,6 +35,23 @@ class Settings(BaseSettings):
     database_echo: bool = Field(
         default=False,
         validation_alias="DATABASE_ECHO",
+    )
+
+    auth_secret_key: SecretStr = Field(
+        min_length=32,
+        validation_alias="HETREN_AUTH_SECRET_KEY",
+    )
+
+    auth_access_token_expire_minutes: int = Field(
+        default=15,
+        gt=0,
+        validation_alias="HETREN_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
+
+    auth_refresh_token_expire_days: int = Field(
+        default=30,
+        gt=0,
+        validation_alias="HETREN_AUTH_REFRESH_TOKEN_EXPIRE_DAYS",
     )
 
     model_config = SettingsConfigDict(
