@@ -47,6 +47,21 @@ class ProjectAccess:
     membership: models.OrganizationMembership
 
 
+@dataclass(frozen=True)
+class DatasetAccess:
+    dataset: models.Dataset
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
+@dataclass(frozen=True)
+class TestCaseAccess:
+    test_case: models.TestCase
+    dataset: models.Dataset
+    project: models.Project
+    membership: models.OrganizationMembership
+
+
 class OrganizationNotAccessibleError(LookupError):
     """
     Raised when an organization must not be disclosed to the user.
@@ -68,6 +83,30 @@ class ProjectNotAccessibleError(LookupError):
 class ProjectPermissionDeniedError(PermissionError):
     """
     Raised when the user belongs to the tenant but lacks project permission.
+    """
+
+
+class DatasetNotAccessibleError(LookupError):
+    """
+    Raised when a dataset must not be disclosed to the user.
+    """
+
+
+class DatasetPermissionDeniedError(PermissionError):
+    """
+    Raised when the user belongs to the tenant but lacks dataset permission.
+    """
+
+
+class TestCaseNotAccessibleError(LookupError):
+    """
+    Raised when a test case must not be disclosed to the user.
+    """
+
+
+class TestCasePermissionDeniedError(PermissionError):
+    """
+    Raised when the user belongs to the tenant but lacks test-case permission.
     """
 
 
@@ -191,6 +230,129 @@ def authorize_project(
         )
 
     return ProjectAccess(
+        project=project,
+        membership=membership,
+    )
+
+
+
+def authorize_dataset(
+    db: Session,
+    *,
+    user_id: int,
+    dataset_id: int,
+    required_roles: Collection[str],
+) -> DatasetAccess:
+    """
+    Resolve a dataset through its project and tenant membership.
+
+    Missing datasets, cross-tenant datasets, and datasets belonging to
+    legacy projects without organization ownership all fail closed.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    row = db.execute(
+        select(
+            models.Dataset,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .join(
+            models.Project,
+            models.Project.id == models.Dataset.project_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.Dataset.id == dataset_id,
+            models.Project.organization_id.is_not(None),
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise DatasetNotAccessibleError(
+            "Dataset is not accessible."
+        )
+
+    dataset, project, membership = row
+
+    if membership.role not in roles:
+        raise DatasetPermissionDeniedError(
+            "Dataset permission is denied."
+        )
+
+    return DatasetAccess(
+        dataset=dataset,
+        project=project,
+        membership=membership,
+    )
+
+
+def authorize_test_case(
+    db: Session,
+    *,
+    user_id: int,
+    test_case_id: int,
+    required_roles: Collection[str],
+) -> TestCaseAccess:
+    """
+    Resolve a test case through dataset, project, and tenant membership.
+
+    A direct test-case identifier never bypasses the project tenant
+    boundary.
+    """
+    roles = _validate_required_roles(required_roles)
+
+    row = db.execute(
+        select(
+            models.TestCase,
+            models.Dataset,
+            models.Project,
+            models.OrganizationMembership,
+        )
+        .join(
+            models.Dataset,
+            models.Dataset.id == models.TestCase.dataset_id,
+        )
+        .join(
+            models.Project,
+            models.Project.id == models.Dataset.project_id,
+        )
+        .join(
+            models.OrganizationMembership,
+            (
+                models.OrganizationMembership.organization_id
+                == models.Project.organization_id
+            ),
+        )
+        .where(
+            models.TestCase.id == test_case_id,
+            models.Project.organization_id.is_not(None),
+            models.OrganizationMembership.user_id == user_id,
+        )
+    ).one_or_none()
+
+    if row is None:
+        raise TestCaseNotAccessibleError(
+            "Test case is not accessible."
+        )
+
+    test_case, dataset, project, membership = row
+
+    if membership.role not in roles:
+        raise TestCasePermissionDeniedError(
+            "Test case permission is denied."
+        )
+
+    return TestCaseAccess(
+        test_case=test_case,
+        dataset=dataset,
         project=project,
         membership=membership,
     )

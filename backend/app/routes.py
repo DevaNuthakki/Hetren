@@ -10,14 +10,22 @@ from app import models, schemas
 from app.auth.authorization import (
     PRODUCT_READ_ROLES,
     PRODUCT_WRITE_ROLES,
+    DatasetAccess,
+    DatasetNotAccessibleError,
+    DatasetPermissionDeniedError,
     OrganizationAccess,
     OrganizationNotAccessibleError,
     OrganizationPermissionDeniedError,
     ProjectAccess,
     ProjectNotAccessibleError,
     ProjectPermissionDeniedError,
+    TestCaseAccess,
+    TestCaseNotAccessibleError,
+    TestCasePermissionDeniedError,
+    authorize_dataset,
     authorize_organization,
     authorize_project,
+    authorize_test_case,
     list_accessible_projects,
 )
 from app.auth.dependencies import get_current_user
@@ -85,6 +93,58 @@ def _authorize_project_for_request(
         raise HTTPException(
             status_code=403,
             detail="Project permission denied",
+        ) from exc
+
+
+def _authorize_dataset_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    dataset_id: int,
+    required_roles: Collection[str],
+) -> DatasetAccess:
+    try:
+        return authorize_dataset(
+            db,
+            user_id=current_user.id,
+            dataset_id=dataset_id,
+            required_roles=required_roles,
+        )
+    except DatasetNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Dataset not found",
+        ) from exc
+    except DatasetPermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Dataset permission denied",
+        ) from exc
+
+
+def _authorize_test_case_for_request(
+    db: Session,
+    *,
+    current_user: models.User,
+    test_case_id: int,
+    required_roles: Collection[str],
+) -> TestCaseAccess:
+    try:
+        return authorize_test_case(
+            db,
+            user_id=current_user.id,
+            test_case_id=test_case_id,
+            required_roles=required_roles,
+        )
+    except TestCaseNotAccessibleError as exc:
+        raise HTTPException(
+            status_code=404,
+            detail="Test case not found",
+        ) from exc
+    except TestCasePermissionDeniedError as exc:
+        raise HTTPException(
+            status_code=403,
+            detail="Test case permission denied",
         ) from exc
 
 
@@ -555,12 +615,15 @@ def get_project(
 )
 def get_project_workflow_summary(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     dataset_count = (
         db.query(models.Dataset)
@@ -651,15 +714,18 @@ def get_project_workflow_summary(
 def create_dataset(
     project_id: int,
     dataset: schemas.DatasetCreate,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
 
     db_dataset = models.Dataset(
-        project_id=project_id,
+        project_id=access.project.id,
         name=dataset.name,
         description=dataset.description,
     )
@@ -677,12 +743,15 @@ def create_dataset(
 )
 def list_project_datasets(
     project_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_project = db.query(models.Project).filter(models.Project.id == project_id).first()
-
-    if db_project is None:
-        raise HTTPException(status_code=404, detail="Project not found")
+    _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     return (
         db.query(models.Dataset)
@@ -698,14 +767,17 @@ def list_project_datasets(
 )
 def get_dataset(
     dataset_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_dataset = db.query(models.Dataset).filter(models.Dataset.id == dataset_id).first()
+    access = _authorize_dataset_for_request(
+        db,
+        current_user=current_user,
+        dataset_id=dataset_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
-    if db_dataset is None:
-        raise HTTPException(status_code=404, detail="Dataset not found")
-
-    return db_dataset
+    return access.dataset
 
 
 @router.post(
@@ -717,12 +789,15 @@ async def create_test_case(
     title: str = Form(...),
     audio_file: UploadFile = File(...),
     reference_file: UploadFile = File(...),
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_dataset = db.query(models.Dataset).filter(models.Dataset.id == dataset_id).first()
-
-    if db_dataset is None:
-        raise HTTPException(status_code=404, detail="Dataset not found")
+    _authorize_dataset_for_request(
+        db,
+        current_user=current_user,
+        dataset_id=dataset_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
 
     if not title.strip():
         raise HTTPException(status_code=400, detail="Test case title is required")
@@ -789,12 +864,15 @@ async def create_test_case(
 )
 def list_dataset_test_cases(
     dataset_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_dataset = db.query(models.Dataset).filter(models.Dataset.id == dataset_id).first()
-
-    if db_dataset is None:
-        raise HTTPException(status_code=404, detail="Dataset not found")
+    _authorize_dataset_for_request(
+        db,
+        current_user=current_user,
+        dataset_id=dataset_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
     return (
         db.query(models.TestCase)
@@ -810,14 +888,17 @@ def list_dataset_test_cases(
 )
 def get_test_case(
     test_case_id: int,
+    current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    db_test_case = db.query(models.TestCase).filter(models.TestCase.id == test_case_id).first()
+    access = _authorize_test_case_for_request(
+        db,
+        current_user=current_user,
+        test_case_id=test_case_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
 
-    if db_test_case is None:
-        raise HTTPException(status_code=404, detail="Test case not found")
-
-    return db_test_case
+    return access.test_case
 
 
 @router.post(
