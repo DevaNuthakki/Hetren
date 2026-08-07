@@ -2,7 +2,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Literal
 
-from pydantic import AliasChoices, Field, field_validator
+from pydantic import AliasChoices, Field, SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -37,12 +37,68 @@ class Settings(BaseSettings):
         validation_alias="DATABASE_ECHO",
     )
 
+    cors_allowed_origins: list[str] = Field(
+        default_factory=lambda: [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+        ],
+        validation_alias="HETREN_CORS_ALLOWED_ORIGINS",
+    )
+
+    auth_secret_key: SecretStr = Field(
+        min_length=32,
+        validation_alias="HETREN_AUTH_SECRET_KEY",
+    )
+
+    auth_access_token_expire_minutes: int = Field(
+        default=15,
+        gt=0,
+        validation_alias="HETREN_AUTH_ACCESS_TOKEN_EXPIRE_MINUTES",
+    )
+
+    auth_refresh_token_expire_days: int = Field(
+        default=30,
+        gt=0,
+        validation_alias="HETREN_AUTH_REFRESH_TOKEN_EXPIRE_DAYS",
+    )
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",
     )
+
+    @field_validator("cors_allowed_origins")
+    @classmethod
+    def validate_cors_allowed_origins(
+        cls,
+        value: list[str],
+    ) -> list[str]:
+        if not value:
+            raise ValueError(
+                "At least one CORS origin must be configured"
+            )
+
+        normalized: list[str] = []
+
+        for origin in value:
+            candidate = origin.strip().rstrip("/")
+
+            if (
+                candidate == "*"
+                or not candidate.startswith(
+                    ("http://", "https://")
+                )
+            ):
+                raise ValueError(
+                    "CORS origins must be explicit HTTP(S) origins"
+                )
+
+            if candidate not in normalized:
+                normalized.append(candidate)
+
+        return normalized
 
     @field_validator("database_url", "test_database_url", mode="before")
     @classmethod
