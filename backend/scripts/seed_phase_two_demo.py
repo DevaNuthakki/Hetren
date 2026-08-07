@@ -19,6 +19,7 @@ from app.evaluation_provenance import (
 )
 from scripts.seed_support import (
     resolve_seed_organization_id,
+    stage_seed_fixture_result,
 )
 from app.release_safety import (
     ReleasePolicyThresholds,
@@ -376,28 +377,18 @@ def create_evaluation_result(
         f"WER={wer_score:.3f}, CER={cer_score:.3f}."
     )
 
-    result = models.EvaluationResult(
-        run_id=run.id,
-        test_case_id=test_case.id,
-        generated_transcript=generated_text,
+    return stage_seed_fixture_result(
+        db,
+        run=run,
+        test_case=test_case,
+        generated_text=generated_text,
         generated_file_path=generated_file_path,
-        wer=wer_score,
-        cer=cer_score,
+        wer_score=wer_score,
+        cer_score=cer_score,
         quality_label=quality_label,
         error_summary=error_summary,
+        seed_source="phase_two_release_safety",
     )
-    db.add(result)
-
-    run.reference_transcript = test_case.reference_transcript
-    run.generated_transcript = generated_text
-    run.wer = wer_score
-    run.cer = cer_score
-    run.quality_label = quality_label
-    run.error_summary = error_summary
-    run.status = "evaluated"
-
-    db.flush()
-    return result
 
 
 def create_demo_project(

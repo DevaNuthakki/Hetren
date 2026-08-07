@@ -409,6 +409,13 @@ def stage_evaluation_result_provenance(
 
     db.add(provenance)
 
+    # Keep the in-memory one-to-one relationship synchronized with
+    # the provenance row staged through result_id. The relationship
+    # may already be loaded as None by the duplicate-provenance check
+    # above, so SQLAlchemy will not otherwise update it automatically
+    # until the result is expired or refreshed.
+    result.provenance = provenance
+
     return provenance
 
 
