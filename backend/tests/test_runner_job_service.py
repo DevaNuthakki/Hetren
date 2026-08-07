@@ -3876,6 +3876,137 @@ def test_submit_asr_evaluation_result_completes_atomically(
     assert len(persisted_results) == 1
 
 
+def test_submit_asr_evaluation_result_rolls_back_when_provenance_fails(
+    db: Session,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    original_claim_token_hash = (
+        claimed.job.claim_token_hash
+    )
+    original_lease_expires_at = (
+        claimed.job.lease_expires_at
+    )
+
+    original_run_state = {
+        "status": evaluation_run.status,
+        "reference_transcript": (
+            evaluation_run.reference_transcript
+        ),
+        "generated_transcript": (
+            evaluation_run.generated_transcript
+        ),
+        "wer": evaluation_run.wer,
+        "cer": evaluation_run.cer,
+        "quality_label": (
+            evaluation_run.quality_label
+        ),
+    }
+
+    def reject_provenance(*_args, **_kwargs):
+        raise ValueError(
+            "Controlled provenance staging failure."
+        )
+
+    monkeypatch.setattr(
+        "app.runner_job_service."
+        "stage_evaluation_result_provenance",
+        reject_provenance,
+    )
+
+    completion_time = datetime(
+        2026,
+        8,
+        1,
+        20,
+        30,
+        tzinfo=UTC,
+    )
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster-whisper",
+            provider_metadata={
+                "model_name": "large-v3-turbo",
+            },
+            now=completion_time,
+        )
+
+    db.refresh(claimed.job)
+    db.refresh(evaluation_run)
+
+    # The active runner claim must remain usable. A provenance
+    # persistence failure must not falsely complete the job.
+    assert claimed.job.status == "running"
+    assert claimed.job.completed_at is None
+    assert claimed.job.result_payload is None
+    assert (
+        claimed.job.claim_token_hash
+        == original_claim_token_hash
+    )
+    assert (
+        claimed.job.lease_expires_at
+        == original_lease_expires_at
+    )
+
+    # stage_evaluation_result mutates the run before provenance
+    # staging. The transaction rollback must restore every field.
+    assert evaluation_run.status == (
+        original_run_state["status"]
+    )
+    assert evaluation_run.reference_transcript == (
+        original_run_state["reference_transcript"]
+    )
+    assert evaluation_run.generated_transcript == (
+        original_run_state["generated_transcript"]
+    )
+    assert evaluation_run.wer == (
+        original_run_state["wer"]
+    )
+    assert evaluation_run.cer == (
+        original_run_state["cer"]
+    )
+    assert evaluation_run.quality_label == (
+        original_run_state["quality_label"]
+    )
+
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    assert (
+        db.query(
+            models.EvaluationResultProvenance
+        ).count()
+        == 0
+    )
+
+
 def test_generic_completion_rejects_asr_evaluation_job(
     db: Session,
 ):

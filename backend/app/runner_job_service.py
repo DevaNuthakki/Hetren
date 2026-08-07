@@ -9,6 +9,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models
+from app.evaluation_provenance import (
+    stage_evaluation_result_provenance,
+)
 from app.evaluation_service import stage_evaluation_result
 from app.runner_security import (
     generate_job_claim_token,
@@ -190,6 +193,15 @@ def _as_utc(value: datetime) -> datetime:
         return value.replace(tzinfo=UTC)
 
     return value.astimezone(UTC)
+
+
+def _serialize_evidence_datetime(
+    value: datetime | None,
+) -> str | None:
+    if value is None:
+        return None
+
+    return _as_utc(value).isoformat()
 
 
 def _resolve_now(value: datetime | None) -> datetime:
@@ -1161,6 +1173,49 @@ def submit_asr_evaluation_result(
     job.error_message = None
 
     try:
+        # Flush first so the result has its permanent database ID
+        # and the completed runner lifecycle is validated before its
+        # immutable provenance record is constructed.
+        db.flush()
+
+        stage_evaluation_result_provenance(
+            db,
+            result=result,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+            execution_mode="runner_asr",
+            server_observed={
+                "runner_id": job.assigned_runner_id,
+                "job_id": job.id,
+                "job_public_id": job.public_id,
+                "attempt_count": job.attempt_count,
+                "claimed_at": (
+                    _serialize_evidence_datetime(
+                        job.claimed_at
+                    )
+                ),
+                "started_at": (
+                    _serialize_evidence_datetime(
+                        job.started_at
+                    )
+                ),
+                "completed_at": (
+                    _serialize_evidence_datetime(
+                        completion_time
+                    )
+                ),
+            },
+            external_reported={
+                "provider": normalized_provider,
+                "provider_metadata": (
+                    normalized_metadata
+                ),
+            },
+        )
+
+        # Validate the provenance row before completing the
+        # transaction. Result, provenance, and runner-job completion
+        # must either all persist or all roll back.
         db.flush()
 
         job.result_payload = {
@@ -1175,7 +1230,7 @@ def submit_asr_evaluation_result(
         }
 
         db.commit()
-    except IntegrityError as exc:
+    except (IntegrityError, ValueError) as exc:
         db.rollback()
         raise RunnerJobASRResultUnavailableError(
             "Runner ASR result is invalid or unavailable."
