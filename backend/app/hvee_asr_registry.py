@@ -144,3 +144,70 @@ def resolve_asr_normalized_text_error_registry(
             word_alignment_evaluator
         ),
     )
+
+
+from hvee.packs.asr import (
+    EXACT_NORMALIZED_MATCH_METRIC,
+    GENERATED_EMPTY_METRIC,
+    MISSING_OUTPUT_METRIC,
+    REFERENCE_EMPTY_METRIC,
+    TRANSCRIPT_INTEGRITY_EVALUATOR,
+    UNEXPECTED_OUTPUT_METRIC,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ASRTranscriptIntegrityRegistry:
+    exact_match_metric: HveeMetricDefinition
+    reference_empty_metric: HveeMetricDefinition
+    generated_empty_metric: HveeMetricDefinition
+    unexpected_output_metric: HveeMetricDefinition
+    missing_output_metric: HveeMetricDefinition
+    evaluator: HveeEvaluatorVersion
+
+
+def resolve_asr_transcript_integrity_registry(
+    db: Session,
+) -> ASRTranscriptIntegrityRegistry:
+    """
+    Resolve the canonical normalized-basic transcript-integrity
+    metric and evaluator identities.
+
+    Registry resolution participates in the caller-owned transaction
+    and never commits independently.
+    """
+
+    exact_match_metric = resolve_metric_definition(
+        db,
+        EXACT_NORMALIZED_MATCH_METRIC,
+    )
+    reference_empty_metric = resolve_metric_definition(
+        db,
+        REFERENCE_EMPTY_METRIC,
+    )
+    generated_empty_metric = resolve_metric_definition(
+        db,
+        GENERATED_EMPTY_METRIC,
+    )
+    unexpected_output_metric = resolve_metric_definition(
+        db,
+        UNEXPECTED_OUTPUT_METRIC,
+    )
+    missing_output_metric = resolve_metric_definition(
+        db,
+        MISSING_OUTPUT_METRIC,
+    )
+
+    evaluator = resolve_evaluator_version(
+        db,
+        TRANSCRIPT_INTEGRITY_EVALUATOR,
+    )
+
+    return ASRTranscriptIntegrityRegistry(
+        exact_match_metric=exact_match_metric,
+        reference_empty_metric=reference_empty_metric,
+        generated_empty_metric=generated_empty_metric,
+        unexpected_output_metric=unexpected_output_metric,
+        missing_output_metric=missing_output_metric,
+        evaluator=evaluator,
+    )
