@@ -5,10 +5,12 @@ from app.evaluation_provenance import (
     stage_evaluation_result_provenance,
 )
 from app.hvee_asr_observation_service import (
+    stage_asr_normalized_text_error_observations,
     stage_asr_text_error_observations,
 )
 from hvee.packs.asr import (
     ASRTextEvaluation,
+    evaluate_normalized_transcript_pair,
     evaluate_transcript_pair,
 )
 
@@ -73,6 +75,13 @@ def stage_evaluation_result(
         generated_text=generated_text,
     )
 
+    normalized_evaluation = (
+        evaluate_normalized_transcript_pair(
+            reference_text=reference_text,
+            generated_text=generated_text,
+        )
+    )
+
     error_summary = _format_error_summary(
         evaluation
     )
@@ -107,6 +116,13 @@ def stage_evaluation_result(
         evaluation_run=db_run,
         test_case=db_test_case,
         evaluation=evaluation,
+    )
+
+    stage_asr_normalized_text_error_observations(
+        db,
+        evaluation_run=db_run,
+        test_case=db_test_case,
+        evaluation=normalized_evaluation,
     )
 
     return db_result
