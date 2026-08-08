@@ -14,6 +14,13 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.database import Base, SessionLocal, engine
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
+from scripts.seed_support import (
+    resolve_seed_organization_id,
+    stage_seed_fixture_result,
+)
 from app.release_safety import (
     ReleasePolicyThresholds,
     evaluate_release_safety,
@@ -370,33 +377,25 @@ def create_evaluation_result(
         f"WER={wer_score:.3f}, CER={cer_score:.3f}."
     )
 
-    result = models.EvaluationResult(
-        run_id=run.id,
-        test_case_id=test_case.id,
-        generated_transcript=generated_text,
+    return stage_seed_fixture_result(
+        db,
+        run=run,
+        test_case=test_case,
+        generated_text=generated_text,
         generated_file_path=generated_file_path,
-        wer=wer_score,
-        cer=cer_score,
+        wer_score=wer_score,
+        cer_score=cer_score,
         quality_label=quality_label,
         error_summary=error_summary,
+        seed_source="phase_two_release_safety",
     )
-    db.add(result)
-
-    run.reference_transcript = test_case.reference_transcript
-    run.generated_transcript = generated_text
-    run.wer = wer_score
-    run.cer = cer_score
-    run.quality_label = quality_label
-    run.error_summary = error_summary
-    run.status = "evaluated"
-
-    db.flush()
-    return result
 
 
 def create_demo_project(
     db: Session,
     spec: DemoSpec,
+    *,
+    organization_id: int,
 ) -> dict[str, object]:
     artifacts = write_demo_artifacts(
         project_name=spec.project_name,
@@ -405,6 +404,7 @@ def create_demo_project(
     )
 
     project = models.Project(
+        organization_id=organization_id,
         name=spec.project_name,
         description=spec.description,
     )
@@ -432,20 +432,24 @@ def create_demo_project(
     db.add(test_case)
     db.flush()
 
-    baseline_run = models.EvaluationRun(
+    baseline_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=project.id,
-        run_name=f"{spec.expected_status.upper()} baseline run",
+        run_name=(
+            f"{spec.expected_status.upper()} baseline run"
+        ),
         model_name="mock-baseline-asr",
         status="created",
     )
-    current_run = models.EvaluationRun(
+    current_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=project.id,
-        run_name=f"{spec.expected_status.upper()} candidate run",
+        run_name=(
+            f"{spec.expected_status.upper()} candidate run"
+        ),
         model_name="mock-candidate-asr",
         status="created",
     )
-    db.add_all([baseline_run, current_run])
-    db.flush()
 
     baseline_result = create_evaluation_result(
         db=db,
@@ -598,12 +602,24 @@ def main() -> None:
     db = SessionLocal()
 
     try:
+        organization_id = resolve_seed_organization_id(
+            db,
+            project_names=[
+                spec.project_name
+                for spec in DEMO_SPECS
+            ],
+        )
+
         reset_existing_demo_projects(db)
 
         created_projects = [
             (
                 spec,
-                create_demo_project(db, spec),
+                create_demo_project(
+                    db,
+                    spec,
+                    organization_id=organization_id,
+                ),
             )
             for spec in DEMO_SPECS
         ]

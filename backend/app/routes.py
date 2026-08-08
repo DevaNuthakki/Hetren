@@ -46,6 +46,16 @@ from app.auth.authorization import (
 )
 from app.auth.dependencies import get_current_user
 from app.database import check_database_connection, get_db
+from app.evaluation_artifacts import (
+    SUPPORTED_ASR_AUDIO_MEDIA_TYPES,
+    EvaluationInputArtifactSealError,
+    calculate_content_sha256,
+    ensure_evaluation_input_artifact_seal,
+    resolve_verified_sealed_artifact_path,
+)
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
 from app.evaluation_service import (
     build_error_summary,
     build_quality_label,
@@ -1038,14 +1048,14 @@ def create_evaluation_run(
         required_roles=PRODUCT_WRITE_ROLES,
     )
 
-    db_run = models.EvaluationRun(
+    db_run = stage_evaluation_run_with_manifest(
+        db,
         project_id=access.project.id,
         run_name=run.run_name,
         model_name=run.model_name or "not_configured",
         status="created",
     )
 
-    db.add(db_run)
     db.commit()
     db.refresh(db_run)
 
@@ -1153,6 +1163,7 @@ async def evaluate_test_case_for_run(
         db_test_case=db_test_case,
         generated_text=generated_text,
         generated_file_path=str(generated_path),
+        execution_mode="uploaded_transcript",
     )
 
 
@@ -1194,16 +1205,124 @@ def transcribe_and_evaluate_test_case_for_run(
             detail="Test case does not have an audio file path",
         )
 
+    uploads_root = Path("uploads")
+    artifact_storage_root = (
+        uploads_root / "evaluation-inputs"
+    )
+    source_audio_path = Path(
+        db_test_case.audio_file_path
+    )
+
+    media_type = (
+        SUPPORTED_ASR_AUDIO_MEDIA_TYPES.get(
+            source_audio_path.suffix.lower()
+        )
+    )
+
+    if media_type is None:
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Test case audio type is unsupported."
+            ),
+        )
+
+    # Preserve execution inputs before committing the
+    # artifact seal. SQLAlchemy may expire ORM state on
+    # commit, and provider inference must not hold the
+    # run-row lock used during seal creation.
+    requested_model = db_run.model_name
+
+    try:
+        input_artifact_seal = (
+            ensure_evaluation_input_artifact_seal(
+                db,
+                evaluation_run=db_run,
+                test_case=db_test_case,
+                source_path=source_audio_path,
+                source_root=uploads_root,
+                storage_root=(
+                    artifact_storage_root
+                ),
+                media_type=media_type,
+            )
+        )
+
+        sealed_audio_path = (
+            resolve_verified_sealed_artifact_path(
+                input_artifact_seal,
+                storage_root=(
+                    artifact_storage_root
+                ),
+                expected_run_manifest_sha256=(
+                    db_run.manifest.manifest_sha256
+                ),
+            )
+        )
+
+        expected_content_sha256 = (
+            input_artifact_seal.content_sha256
+        )
+        expected_byte_length = (
+            input_artifact_seal.byte_length
+        )
+
+        # Persist the exact selected input and release
+        # the database lock before provider inference.
+        db.commit()
+
+        # Verify again immediately before execution so
+        # filesystem tampering after the commit fails
+        # closed instead of reaching the provider.
+        (
+            observed_content_sha256,
+            observed_byte_length,
+        ) = calculate_content_sha256(
+            sealed_audio_path
+        )
+
+        if (
+            observed_content_sha256
+            != expected_content_sha256
+            or observed_byte_length
+            != expected_byte_length
+        ):
+            raise EvaluationInputArtifactSealError(
+                "Sealed evaluation input changed "
+                "before execution."
+            )
+
+    except (
+        EvaluationInputArtifactSealError,
+        OSError,
+        RuntimeError,
+    ) as error:
+        db.rollback()
+
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                "Evaluation input audio is invalid "
+                "or unavailable."
+            ),
+        ) from error
+
     try:
         asr_provider = get_asr_provider()
         transcription = asr_provider.transcribe(
-            audio_path=db_test_case.audio_file_path,
-            model_name=db_run.model_name,
+            audio_path=sealed_audio_path,
+            model_name=requested_model,
         )
     except TranscriptionError as error:
-        raise HTTPException(status_code=400, detail=str(error)) from error
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        ) from error
     except ValueError as error:
-        raise HTTPException(status_code=400, detail=str(error)) from error
+        raise HTTPException(
+            status_code=400,
+            detail=str(error),
+        ) from error
 
     result_upload_dir = Path("uploads") / "runs" / str(run_id) / "results" / str(test_case_id)
     generated_dir = result_upload_dir / "generated"
@@ -1218,6 +1337,14 @@ def transcribe_and_evaluate_test_case_for_run(
         db_test_case=db_test_case,
         generated_text=transcription.transcript,
         generated_file_path=str(generated_path),
+        execution_mode="server_asr",
+        server_observed={
+            "provider": transcription.provider,
+            "model_name": transcription.model_name,
+        },
+        input_artifact_seal=(
+            input_artifact_seal
+        ),
     )
 
     return {

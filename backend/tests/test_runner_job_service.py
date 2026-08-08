@@ -1,3 +1,4 @@
+import hashlib
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from uuid import uuid4
@@ -9,6 +10,15 @@ from sqlalchemy.pool import StaticPool
 
 from app import models
 from app.database import Base
+from app.evaluation_artifacts import (
+    INPUT_ARTIFACT_SEAL_SCHEMA_VERSION,
+    build_evaluation_input_artifact_seal_payload,
+    calculate_artifact_seal_sha256,
+    verify_evaluation_input_artifact_seal,
+)
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
 from app.runner_job_service import (
     DEFAULT_JOB_LEASE_DURATION,
     MAX_EXPIRED_JOB_RECOVERY_BATCH,
@@ -1000,6 +1010,11 @@ def test_terminal_transition_invalidates_claim_token(
         now=claim_time + timedelta(seconds=10),
     )
 
+    create_runner_result_input_seal(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+    )
     submit_asr_evaluation_result(
         db,
         credential=registered.credential,
@@ -1850,6 +1865,11 @@ def test_cancel_job_rejects_completed_job(
         claim_token=claimed.claim_token,
         now=claim_time + timedelta(seconds=10),
     )
+    create_runner_result_input_seal(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+    )
     submit_asr_evaluation_result(
         db,
         credential=registered.credential,
@@ -2649,6 +2669,11 @@ def test_query_job_logs_rejects_terminal_job(
         now=claim_time + timedelta(seconds=10),
     )
 
+    create_runner_result_input_seal(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+    )
     submit_asr_evaluation_result(
         db,
         credential=registered.credential,
@@ -3192,6 +3217,11 @@ def test_get_job_control_status_rejects_terminal_job(
     )
 
     if terminal_status == "completed":
+        create_runner_result_input_seal(
+            db,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+        )
         submit_asr_evaluation_result(
             db,
             credential=registered.credential,
@@ -3248,13 +3278,20 @@ def create_asr_evaluation_resources(
         ),
         reference_transcript="thank you for calling",
     )
-    evaluation_run = models.EvaluationRun(
-        project_id=project.id,
-        run_name="Candidate model evaluation",
-        model_name="large-v3-turbo",
+    db.add(test_case)
+    db.flush()
+
+    evaluation_run = (
+        stage_evaluation_run_with_manifest(
+            db,
+            project_id=project.id,
+            run_name=(
+                "Candidate model evaluation"
+            ),
+            model_name="large-v3-turbo",
+        )
     )
 
-    db.add_all([test_case, evaluation_run])
     db.commit()
     db.refresh(test_case)
     db.refresh(evaluation_run)
@@ -3527,9 +3564,54 @@ def test_get_asr_evaluation_audio_returns_supported_file(
         uploads_root=uploads_root,
     )
 
-    assert audio.path == audio_path.resolve()
-    assert audio.file_name == f"support-call{extension}"
+    assert (
+        audio.path
+        != audio_path.resolve()
+    )
+
+    assert audio.path.is_relative_to(
+        (
+            uploads_root
+            / "evaluation-inputs"
+        ).resolve()
+    )
+
+    assert (
+        audio.path.read_bytes()
+        == b"runner-audio-test"
+    )
+
+    assert (
+        audio_path.read_bytes()
+        == b"runner-audio-test"
+    )
+
+    assert audio.file_name == (
+        f"support-call{extension}"
+    )
     assert audio.media_type == expected_media_type
+
+    seals = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        ).all()
+    )
+
+    assert len(seals) == 1
+    assert seals[0].run_id == (
+        claimed.job.input_payload[
+            "evaluation_run_id"
+        ]
+    )
+    assert seals[0].test_case_id == (
+        claimed.job.input_payload[
+            "test_case_id"
+        ]
+    )
+    assert (
+        seals[0].artifact_role
+        == "input_audio"
+    )
 
 
 def test_get_asr_evaluation_audio_rejects_path_outside_uploads(
@@ -3702,8 +3784,78 @@ def test_get_asr_evaluation_audio_preserves_claim_failure(
 
 
 
+def create_runner_result_input_seal(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+) -> models.EvaluationInputArtifactSeal:
+    assert evaluation_run.manifest is not None
+
+    content = b"runner-result-sealed-audio"
+    content_sha256 = hashlib.sha256(
+        content
+    ).hexdigest()
+
+    payload = (
+        build_evaluation_input_artifact_seal_payload(
+            evaluation_run_id=evaluation_run.id,
+            test_case_id=test_case.id,
+            evaluation_type="asr",
+            artifact_role="input_audio",
+            artifact_type="audio",
+            content_sha256=content_sha256,
+            byte_length=len(content),
+            media_type="audio/wav",
+            run_manifest_sha256=(
+                evaluation_run.manifest.manifest_sha256
+            ),
+        )
+    )
+
+    seal = models.EvaluationInputArtifactSeal(
+        run_id=evaluation_run.id,
+        test_case_id=test_case.id,
+        schema_version=(
+            INPUT_ARTIFACT_SEAL_SCHEMA_VERSION
+        ),
+        evaluation_type="asr",
+        artifact_role="input_audio",
+        artifact_type="audio",
+        content_sha256=content_sha256,
+        byte_length=len(content),
+        media_type="audio/wav",
+        sealed_file_path=(
+            f"runs/{evaluation_run.id}/test-cases/"
+            f"{test_case.id}/"
+            f"input_audio-{content_sha256}.wav"
+        ),
+        seal_payload=payload,
+        seal_sha256=(
+            calculate_artifact_seal_sha256(
+                payload
+            )
+        ),
+    )
+
+    db.add(seal)
+    db.commit()
+    db.refresh(seal)
+
+    assert verify_evaluation_input_artifact_seal(
+        seal,
+        expected_run_manifest_sha256=(
+            evaluation_run.manifest.manifest_sha256
+        ),
+    )
+
+    return seal
+
+
 def create_running_asr_evaluation_job(
     db: Session,
+    *,
+    include_input_seal: bool = True,
 ):
     project = create_project(
         db,
@@ -3749,6 +3901,13 @@ def create_running_asr_evaluation_job(
     )
 
     assert running_job.status == "running"
+
+    if include_input_seal:
+        create_runner_result_input_seal(
+            db,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+        )
 
     return (
         project,
@@ -3874,6 +4033,358 @@ def test_submit_asr_evaluation_result_completes_atomically(
     )
 
     assert len(persisted_results) == 1
+
+    provenance = (
+        db.query(
+            models.EvaluationResultProvenance
+        )
+        .filter(
+            models.EvaluationResultProvenance.result_id
+            == result.id,
+        )
+        .one()
+    )
+
+    seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == evaluation_run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    assert provenance.schema_version == 2
+
+    artifact_evidence = (
+        provenance.provenance_payload[
+            "input_artifact"
+        ]
+    )
+
+    assert artifact_evidence["status"] == "sealed"
+    assert artifact_evidence["seal_id"] == seal.id
+    assert (
+        artifact_evidence["seal_sha256"]
+        == seal.seal_sha256
+    )
+    assert (
+        artifact_evidence["content_sha256"]
+        == seal.content_sha256
+    )
+
+
+def test_submit_asr_evaluation_result_requires_input_seal(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(
+        db,
+        include_input_seal=False,
+    )
+
+    original_claim_hash = (
+        claimed.job.claim_token_hash
+    )
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+    assert (
+        claimed.job.claim_token_hash
+        == original_claim_hash
+    )
+
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    assert (
+        db.query(
+            models.EvaluationResultProvenance
+        ).count()
+        == 0
+    )
+
+
+def test_submit_asr_evaluation_result_rejects_tampered_input_seal(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == evaluation_run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    seal.seal_sha256 = "0" * 64
+    db.commit()
+
+    original_claim_hash = (
+        claimed.job.claim_token_hash
+    )
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster-whisper",
+        )
+
+    db.refresh(claimed.job)
+
+    assert claimed.job.status == "running"
+    assert (
+        claimed.job.claim_token_hash
+        == original_claim_hash
+    )
+
+    assert (
+        db.query(models.EvaluationResult)
+        .count()
+        == 0
+    )
+
+    assert (
+        db.query(
+            models.EvaluationResultProvenance
+        ).count()
+        == 0
+    )
+
+
+def test_submit_asr_evaluation_result_rolls_back_when_provenance_fails(
+    db: Session,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    original_claim_token_hash = (
+        claimed.job.claim_token_hash
+    )
+    original_lease_expires_at = (
+        claimed.job.lease_expires_at
+    )
+
+    durable_input_seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == evaluation_run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    durable_input_seal_id = (
+        durable_input_seal.id
+    )
+    durable_input_seal_sha256 = (
+        durable_input_seal.seal_sha256
+    )
+
+    original_run_state = {
+        "status": evaluation_run.status,
+        "reference_transcript": (
+            evaluation_run.reference_transcript
+        ),
+        "generated_transcript": (
+            evaluation_run.generated_transcript
+        ),
+        "wer": evaluation_run.wer,
+        "cer": evaluation_run.cer,
+        "quality_label": (
+            evaluation_run.quality_label
+        ),
+    }
+
+    def reject_provenance(*_args, **_kwargs):
+        raise ValueError(
+            "Controlled provenance staging failure."
+        )
+
+    monkeypatch.setattr(
+        "app.runner_job_service."
+        "stage_evaluation_result_provenance",
+        reject_provenance,
+    )
+
+    completion_time = datetime(
+        2026,
+        8,
+        1,
+        20,
+        30,
+        tzinfo=UTC,
+    )
+
+    with pytest.raises(
+        RunnerJobASRResultUnavailableError,
+        match="invalid or unavailable",
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster-whisper",
+            provider_metadata={
+                "model_name": "large-v3-turbo",
+            },
+            now=completion_time,
+        )
+
+    db.refresh(claimed.job)
+    db.refresh(evaluation_run)
+
+    # The active runner claim must remain usable. A provenance
+    # persistence failure must not falsely complete the job.
+    assert claimed.job.status == "running"
+    assert claimed.job.completed_at is None
+    assert claimed.job.result_payload is None
+    assert (
+        claimed.job.claim_token_hash
+        == original_claim_token_hash
+    )
+    assert (
+        claimed.job.lease_expires_at
+        == original_lease_expires_at
+    )
+
+    # stage_evaluation_result mutates the run before provenance
+    # staging. The transaction rollback must restore every field.
+    assert evaluation_run.status == (
+        original_run_state["status"]
+    )
+    assert evaluation_run.reference_transcript == (
+        original_run_state["reference_transcript"]
+    )
+    assert evaluation_run.generated_transcript == (
+        original_run_state["generated_transcript"]
+    )
+    assert evaluation_run.wer == (
+        original_run_state["wer"]
+    )
+    assert evaluation_run.cer == (
+        original_run_state["cer"]
+    )
+    assert evaluation_run.quality_label == (
+        original_run_state["quality_label"]
+    )
+
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    assert (
+        db.query(
+            models.EvaluationResultProvenance
+        ).count()
+        == 0
+    )
+
+    preserved_input_seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.id
+            == durable_input_seal_id,
+        )
+        .one()
+    )
+
+    assert (
+        preserved_input_seal.seal_sha256
+        == durable_input_seal_sha256
+    )
+
+    assert verify_evaluation_input_artifact_seal(
+        preserved_input_seal,
+        expected_run_manifest_sha256=(
+            evaluation_run.manifest.manifest_sha256
+        ),
+    )
 
 
 def test_generic_completion_rejects_asr_evaluation_job(
@@ -4238,3 +4749,223 @@ def test_submit_asr_evaluation_result_rejects_large_metadata(
                 "large_value": "x" * 65_536,
             },
         )
+
+
+
+def test_get_asr_evaluation_audio_revalidates_claim_after_seal_commit(
+    db: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    uploads_root = tmp_path / "uploads"
+    audio_path = (
+        uploads_root
+        / "datasets"
+        / "claim-revalidation"
+        / "audio"
+        / "support-call.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(
+        b"claim-revalidation-audio"
+    )
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(audio_path),
+    )
+
+    from app import runner_job_service
+
+    real_claim_reader = (
+        runner_job_service._get_owned_job_claim_for_read
+    )
+
+    claim_checks = 0
+
+    def claim_reader_with_second_failure(
+        session,
+        *,
+        credential,
+        job_public_id,
+        claim_token,
+        now,
+    ):
+        nonlocal claim_checks
+
+        claim_checks += 1
+
+        if claim_checks == 2:
+            raise RunnerJobClaimUnavailableError(
+                "Runner job claim is invalid or unavailable."
+            )
+
+        return real_claim_reader(
+            session,
+            credential=credential,
+            job_public_id=job_public_id,
+            claim_token=claim_token,
+            now=now,
+        )
+
+    monkeypatch.setattr(
+        runner_job_service,
+        "_get_owned_job_claim_for_read",
+        claim_reader_with_second_failure,
+    )
+
+    with pytest.raises(
+        RunnerJobClaimUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+    assert claim_checks == 2
+
+    # The first validation was sufficient to select
+    # and persist the exact input, but the second
+    # validation prevented it from being delivered.
+    seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == claimed.job.input_payload[
+                "evaluation_run_id"
+            ],
+            models.EvaluationInputArtifactSeal.test_case_id
+            == claimed.job.input_payload[
+                "test_case_id"
+            ],
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    assert seal.id is not None
+
+    snapshot = (
+        uploads_root
+        / "evaluation-inputs"
+        / seal.sealed_file_path
+    )
+
+    assert snapshot.read_bytes() == (
+        b"claim-revalidation-audio"
+    )
+
+
+def test_get_asr_evaluation_audio_rejects_tamper_after_seal_commit(
+    db: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+):
+    uploads_root = tmp_path / "uploads"
+    audio_path = (
+        uploads_root
+        / "datasets"
+        / "post-commit-tamper"
+        / "audio"
+        / "support-call.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(
+        b"trusted-runner-audio"
+    )
+
+    registered, claimed = create_claimed_asr_audio_job(
+        db,
+        audio_file_path=str(audio_path),
+    )
+
+    real_commit = db.commit
+    commit_calls = 0
+
+    def commit_then_tamper():
+        nonlocal commit_calls
+
+        commit_calls += 1
+        real_commit()
+
+        snapshots = [
+            candidate
+            for candidate in (
+                uploads_root
+                / "evaluation-inputs"
+            ).rglob("*")
+            if candidate.is_file()
+        ]
+
+        assert len(snapshots) == 1
+
+        snapshots[0].write_bytes(
+            b"tampered-after-seal-commit"
+        )
+
+    monkeypatch.setattr(
+        db,
+        "commit",
+        commit_then_tamper,
+    )
+
+    with pytest.raises(
+        RunnerJobASRAudioUnavailableError,
+        match="invalid or unavailable",
+    ):
+        get_asr_evaluation_audio(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            uploads_root=uploads_root,
+        )
+
+    assert commit_calls == 1
+
+    seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == claimed.job.input_payload[
+                "evaluation_run_id"
+            ],
+            models.EvaluationInputArtifactSeal.test_case_id
+            == claimed.job.input_payload[
+                "test_case_id"
+            ],
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    # The seal remains durable, but the modified
+    # filesystem object cannot be served as valid
+    # evaluation input.
+    assert seal.id is not None
+
+    snapshot = (
+        uploads_root
+        / "evaluation-inputs"
+        / seal.sealed_file_path
+    )
+
+    assert snapshot.read_bytes() == (
+        b"tampered-after-seal-commit"
+    )

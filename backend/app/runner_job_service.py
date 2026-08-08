@@ -9,6 +9,18 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app import models
+from app.evaluation_artifacts import (
+    AUDIO_ARTIFACT_TYPE,
+    ASR_INPUT_AUDIO_ROLE,
+    SUPPORTED_ASR_AUDIO_MEDIA_TYPES,
+    EvaluationInputArtifactSealError,
+    ensure_evaluation_input_artifact_seal,
+    resolve_verified_sealed_artifact_path,
+    verify_evaluation_input_artifact_seal,
+)
+from app.evaluation_provenance import (
+    stage_evaluation_result_provenance,
+)
 from app.evaluation_service import stage_evaluation_result
 from app.runner_security import (
     generate_job_claim_token,
@@ -35,12 +47,6 @@ DEDICATED_RESULT_JOB_TYPES = frozenset(
         "asr_evaluation",
     }
 )
-
-SUPPORTED_ASR_AUDIO_MEDIA_TYPES = {
-    ".wav": "audio/wav",
-    ".mp3": "audio/mpeg",
-    ".m4a": "audio/mp4",
-}
 
 MIN_RUNNER_JOB_PRIORITY = -1000
 MAX_RUNNER_JOB_PRIORITY = 1000
@@ -190,6 +196,15 @@ def _as_utc(value: datetime) -> datetime:
         return value.replace(tzinfo=UTC)
 
     return value.astimezone(UTC)
+
+
+def _serialize_evidence_datetime(
+    value: datetime | None,
+) -> str | None:
+    if value is None:
+        return None
+
+    return _as_utc(value).isoformat()
 
 
 def _resolve_now(value: datetime | None) -> datetime:
@@ -942,25 +957,50 @@ def get_asr_evaluation_audio(
     now: datetime | None = None,
 ) -> ASREvaluationAudio:
     """
-    Resolve claim-protected ASR audio for a standalone runner.
+    Resolve claim-protected sealed ASR audio for a runner.
 
-    The selected file must be a supported regular audio file contained
-    inside the configured uploads directory. Filesystem paths are never
-    returned through the HTTP API.
+    The original mutable test-case file is used only as the
+    authoritative source when a seal is first created. Runners
+    receive the verified server-owned sealed snapshot.
     """
-    try:
-        context = get_asr_evaluation_context(
-            db,
-            credential=credential,
-            job_public_id=job_public_id,
-            claim_token=claim_token,
-            now=now,
-        )
-    except RunnerJobASRContextUnavailableError as exc:
+    verification_time = _resolve_now(now)
+
+    job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=verification_time,
+    )
+
+    if job.job_type != "asr_evaluation":
         db.rollback()
         raise RunnerJobASRAudioUnavailableError(
             "Runner ASR audio is invalid or unavailable."
-        ) from exc
+        )
+
+    try:
+        evaluation_run_id, test_case_id = (
+            _validate_asr_evaluation_payload(
+                job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    job_id = job.id
+
+    evaluation_run = (
+        db.query(models.EvaluationRun)
+        .filter(
+            models.EvaluationRun.id
+            == evaluation_run_id,
+            models.EvaluationRun.project_id
+            == job.project_id,
+        )
+        .first()
+    )
 
     test_case = (
         db.query(models.TestCase)
@@ -970,15 +1010,16 @@ def get_asr_evaluation_audio(
             == models.TestCase.dataset_id,
         )
         .filter(
-            models.TestCase.id == context.test_case_id,
+            models.TestCase.id == test_case_id,
             models.Dataset.project_id
-            == context.project_id,
+            == job.project_id,
         )
         .first()
     )
 
     if (
-        test_case is None
+        evaluation_run is None
+        or test_case is None
         or not test_case.audio_file_path
     ):
         db.rollback()
@@ -986,41 +1027,175 @@ def get_asr_evaluation_audio(
             "Runner ASR audio is invalid or unavailable."
         )
 
-    try:
-        uploads_path = Path(
-            uploads_root
-        ).resolve(strict=True)
-
-        audio_path = Path(
-            test_case.audio_file_path
-        ).resolve(strict=True)
-    except (OSError, RuntimeError) as exc:
-        db.rollback()
-        raise RunnerJobASRAudioUnavailableError(
-            "Runner ASR audio is invalid or unavailable."
-        ) from exc
-
-    media_type = SUPPORTED_ASR_AUDIO_MEDIA_TYPES.get(
-        audio_path.suffix.lower()
-    )
-    file_name = audio_path.name.strip()
-
-    audio_is_unavailable = (
-        not uploads_path.is_dir()
-        or not audio_path.is_relative_to(uploads_path)
-        or not audio_path.is_file()
-        or media_type is None
-        or not file_name
+    source_audio_path = Path(
+        test_case.audio_file_path
     )
 
-    if audio_is_unavailable:
+    file_name = source_audio_path.name.strip()
+
+    media_type = (
+        SUPPORTED_ASR_AUDIO_MEDIA_TYPES.get(
+            source_audio_path.suffix.lower()
+        )
+    )
+
+    if not file_name or media_type is None:
         db.rollback()
         raise RunnerJobASRAudioUnavailableError(
             "Runner ASR audio is invalid or unavailable."
         )
 
+    uploads_path = Path(uploads_root)
+
+    artifact_storage_root = (
+        uploads_path / "evaluation-inputs"
+    )
+
+    try:
+        input_artifact_seal = (
+            ensure_evaluation_input_artifact_seal(
+                db,
+                evaluation_run=evaluation_run,
+                test_case=test_case,
+                source_path=source_audio_path,
+                source_root=uploads_path,
+                storage_root=(
+                    artifact_storage_root
+                ),
+                media_type=media_type,
+            )
+        )
+
+        if (
+            evaluation_run.manifest is None
+            or not isinstance(
+                evaluation_run.manifest.manifest_sha256,
+                str,
+            )
+        ):
+            raise EvaluationInputArtifactSealError(
+                "Evaluation run manifest is unavailable."
+            )
+
+        run_manifest_sha256 = (
+            evaluation_run.manifest.manifest_sha256
+        )
+
+        sealed_audio_path = (
+            resolve_verified_sealed_artifact_path(
+                input_artifact_seal,
+                storage_root=(
+                    artifact_storage_root
+                ),
+                expected_run_manifest_sha256=(
+                    run_manifest_sha256
+                ),
+            )
+        )
+
+        seal_id = input_artifact_seal.id
+
+        if seal_id is None:
+            raise EvaluationInputArtifactSealError(
+                "Evaluation input artifact seal "
+                "was not persisted."
+            )
+
+        # Persist the exact selected input and release
+        # the run-row lock before continuing.
+        db.commit()
+
+    except (
+        EvaluationInputArtifactSealError,
+        OSError,
+        RuntimeError,
+    ) as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
+    # Revalidate claim ownership after the transaction
+    # boundary used to persist the artifact seal.
+    second_verification_time = _resolve_now(now)
+
+    second_job = _get_owned_job_claim_for_read(
+        db,
+        credential=credential,
+        job_public_id=job_public_id,
+        claim_token=claim_token,
+        now=second_verification_time,
+    )
+
+    try:
+        second_run_id, second_test_case_id = (
+            _validate_asr_evaluation_payload(
+                second_job.input_payload
+            )
+        )
+    except ValueError:
+        db.rollback()
+        raise
+
+    if (
+        second_job.id != job_id
+        or second_job.job_type
+        != "asr_evaluation"
+        or second_run_id != evaluation_run_id
+        or second_test_case_id != test_case_id
+    ):
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    persisted_seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.id
+            == seal_id,
+            models.EvaluationInputArtifactSeal.run_id
+            == evaluation_run_id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case_id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .first()
+    )
+
+    if persisted_seal is None:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        )
+
+    try:
+        sealed_audio_path = (
+            resolve_verified_sealed_artifact_path(
+                persisted_seal,
+                storage_root=(
+                    artifact_storage_root
+                ),
+                expected_run_manifest_sha256=(
+                    run_manifest_sha256
+                ),
+            )
+        )
+    except (
+        EvaluationInputArtifactSealError,
+        OSError,
+        RuntimeError,
+    ) as exc:
+        db.rollback()
+        raise RunnerJobASRAudioUnavailableError(
+            "Runner ASR audio is invalid or unavailable."
+        ) from exc
+
     audio = ASREvaluationAudio(
-        path=audio_path,
+        path=sealed_audio_path,
         file_name=file_name,
         media_type=media_type,
     )
@@ -1146,6 +1321,63 @@ def submit_asr_evaluation_result(
             "Runner ASR result is invalid or unavailable."
         )
 
+    run_manifest = evaluation_run.manifest
+
+    if (
+        run_manifest is None
+        or not isinstance(
+            run_manifest.manifest_sha256,
+            str,
+        )
+    ):
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
+    input_artifact_seal = (
+        db.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == evaluation_run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == ASR_INPUT_AUDIO_ROLE,
+        )
+        .with_for_update()
+        .first()
+    )
+
+    seal_is_unavailable = (
+        input_artifact_seal is None
+        or input_artifact_seal.evaluation_type
+        != "asr"
+        or input_artifact_seal.artifact_type
+        != AUDIO_ARTIFACT_TYPE
+        or not isinstance(
+            input_artifact_seal.media_type,
+            str,
+        )
+        or not input_artifact_seal.media_type.startswith(
+            "audio/"
+        )
+        or not verify_evaluation_input_artifact_seal(
+            input_artifact_seal,
+            expected_run_manifest_sha256=(
+                run_manifest.manifest_sha256
+            ),
+        )
+    )
+
+    if seal_is_unavailable:
+        db.rollback()
+        raise RunnerJobASRResultUnavailableError(
+            "Runner ASR result is invalid or unavailable."
+        )
+
     result = stage_evaluation_result(
         db=db,
         db_run=evaluation_run,
@@ -1161,6 +1393,52 @@ def submit_asr_evaluation_result(
     job.error_message = None
 
     try:
+        # Flush first so the result has its permanent database ID
+        # and the completed runner lifecycle is validated before its
+        # integrity-verifiable provenance record is constructed.
+        db.flush()
+
+        stage_evaluation_result_provenance(
+            db,
+            result=result,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+            execution_mode="runner_asr",
+            server_observed={
+                "runner_id": job.assigned_runner_id,
+                "job_id": job.id,
+                "job_public_id": job.public_id,
+                "attempt_count": job.attempt_count,
+                "claimed_at": (
+                    _serialize_evidence_datetime(
+                        job.claimed_at
+                    )
+                ),
+                "started_at": (
+                    _serialize_evidence_datetime(
+                        job.started_at
+                    )
+                ),
+                "completed_at": (
+                    _serialize_evidence_datetime(
+                        completion_time
+                    )
+                ),
+            },
+            external_reported={
+                "provider": normalized_provider,
+                "provider_metadata": (
+                    normalized_metadata
+                ),
+            },
+            input_artifact_seal=(
+                input_artifact_seal
+            ),
+        )
+
+        # Validate the provenance row before completing the
+        # transaction. Result, provenance, and runner-job completion
+        # must either all persist or all roll back.
         db.flush()
 
         job.result_payload = {
@@ -1175,7 +1453,7 @@ def submit_asr_evaluation_result(
         }
 
         db.commit()
-    except IntegrityError as exc:
+    except (IntegrityError, ValueError) as exc:
         db.rollback()
         raise RunnerJobASRResultUnavailableError(
             "Runner ASR result is invalid or unavailable."

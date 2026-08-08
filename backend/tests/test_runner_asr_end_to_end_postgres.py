@@ -4,6 +4,7 @@ import asyncio
 import os
 from collections.abc import Generator
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 from uuid import uuid4
 
@@ -14,6 +15,10 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from app import models
 from app.database import get_db
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+    verify_evaluation_result_provenance,
+)
 from app.local_runner_client import LocalRunnerClient
 from app.local_runner_execution import (
     GENERIC_EXECUTION_ERROR,
@@ -292,17 +297,17 @@ def create_case(
             audio_file_path=str(source_audio_path),
             reference_transcript=EXPECTED_TRANSCRIPT,
         )
-        evaluation_run = models.EvaluationRun(
-            project_id=project.id,
-            run_name="Runner ASR E2E evaluation",
-            model_name="mock-asr-integration",
+        db.add(test_case)
+
+        evaluation_run = (
+            stage_evaluation_run_with_manifest(
+                db,
+                project_id=project.id,
+                run_name="Runner ASR E2E evaluation",
+                model_name="mock-asr-integration",
+            )
         )
-        db.add_all(
-            [
-                test_case,
-                evaluation_run,
-            ]
-        )
+
         db.commit()
         db.refresh(dataset)
         db.refresh(test_case)
@@ -606,6 +611,150 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             assert evaluation_result.quality_label == (
                 "excellent"
             )
+
+            assert evaluation_result.provenance is not None
+
+            provenance = evaluation_result.provenance
+
+            assert provenance.execution_mode == "runner_asr"
+            assert verify_evaluation_result_provenance(
+                provenance
+            )
+
+            provenance_payload = (
+                provenance.provenance_payload
+            )
+            execution = provenance_payload["execution"]
+
+            assert execution["mode"] == "runner_asr"
+            assert (
+                execution["requested_model"]
+                == evaluation_run.model_name
+            )
+            assert (
+                provenance_payload["run_manifest"][
+                    "status"
+                ]
+                == "sealed"
+            )
+
+            assert provenance.schema_version == 2
+
+            input_artifact_seal = (
+                db.query(
+                    models.EvaluationInputArtifactSeal
+                )
+                .filter(
+                    models.EvaluationInputArtifactSeal.run_id
+                    == case.evaluation_run_id,
+                    models.EvaluationInputArtifactSeal.test_case_id
+                    == case.test_case_id,
+                    models.EvaluationInputArtifactSeal.artifact_role
+                    == "input_audio",
+                )
+                .one()
+            )
+
+            assert evaluation_run.manifest is not None
+
+            input_artifact = provenance_payload[
+                "input_artifact"
+            ]
+
+            assert input_artifact["status"] == "sealed"
+            assert (
+                input_artifact["seal_id"]
+                == input_artifact_seal.id
+            )
+            assert (
+                input_artifact["seal_schema_version"]
+                == input_artifact_seal.schema_version
+            )
+            assert (
+                input_artifact["seal_sha256"]
+                == input_artifact_seal.seal_sha256
+            )
+            assert (
+                input_artifact["artifact_role"]
+                == "input_audio"
+            )
+            assert (
+                input_artifact["artifact_type"]
+                == "audio"
+            )
+            assert (
+                input_artifact["content_sha256"]
+                == input_artifact_seal.content_sha256
+            )
+            assert (
+                input_artifact["byte_length"]
+                == input_artifact_seal.byte_length
+            )
+            assert (
+                input_artifact["media_type"]
+                == input_artifact_seal.media_type
+            )
+            assert (
+                input_artifact[
+                    "run_manifest_sha256"
+                ]
+                == evaluation_run.manifest.manifest_sha256
+            )
+
+            assert verify_evaluation_result_provenance(
+                provenance
+            )
+
+            assert execution["external_reported"] == {
+                "provider": "mock_local",
+                "provider_metadata": {
+                    "model_name": (
+                        "mock-asr-integration"
+                    ),
+                },
+            }
+
+            server_observed = execution[
+                "server_observed"
+            ]
+
+            assert server_observed["runner_id"] == (
+                case.runner_id
+            )
+            assert server_observed["job_id"] == (
+                case.job_id
+            )
+            assert (
+                server_observed["job_public_id"]
+                == case.job_public_id
+            )
+            assert (
+                server_observed["attempt_count"]
+                == 1
+            )
+
+            assert (
+                server_observed["claimed_at"]
+                is not None
+            )
+            assert (
+                server_observed["started_at"]
+                is not None
+            )
+            assert (
+                server_observed["completed_at"]
+                is not None
+            )
+
+            assert datetime.fromisoformat(
+                server_observed["claimed_at"]
+            ) == job.claimed_at
+            assert datetime.fromisoformat(
+                server_observed["started_at"]
+            ) == job.started_at
+            assert datetime.fromisoformat(
+                server_observed["completed_at"]
+            ) == job.completed_at
 
             assert evaluation_run.status == "evaluated"
             assert evaluation_run.reference_transcript == (

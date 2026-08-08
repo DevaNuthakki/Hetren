@@ -3,6 +3,9 @@ from jiwer import process_words
 from sqlalchemy.orm import Session
 
 from app import models
+from app.evaluation_provenance import (
+    stage_evaluation_result_provenance,
+)
 
 
 def build_quality_label(wer_score: float) -> str:
@@ -94,19 +97,50 @@ def persist_evaluation_result(
     db_test_case: models.TestCase,
     generated_text: str,
     generated_file_path: str | None = None,
+    *,
+    execution_mode: str,
+    server_observed: dict[str, object] | None = None,
+    external_reported: dict[str, object] | None = None,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal | None
+    ) = None,
 ) -> models.EvaluationResult:
     """
-    Persist an evaluation result for existing synchronous API flows.
-    """
-    db_result = stage_evaluation_result(
-        db=db,
-        db_run=db_run,
-        db_test_case=db_test_case,
-        generated_text=generated_text,
-        generated_file_path=generated_file_path,
-    )
+    Persist a synchronous evaluation result and its provenance atomically.
 
-    db.commit()
+    The transaction is rolled back if either the result or provenance
+    cannot be staged successfully.
+    """
+    try:
+        db_result = stage_evaluation_result(
+            db=db,
+            db_run=db_run,
+            db_test_case=db_test_case,
+            generated_text=generated_text,
+            generated_file_path=generated_file_path,
+        )
+
+        # The result primary key is part of its integrity-verifiable provenance.
+        db.flush()
+
+        stage_evaluation_result_provenance(
+            db,
+            result=db_result,
+            evaluation_run=db_run,
+            test_case=db_test_case,
+            execution_mode=execution_mode,
+            server_observed=server_observed,
+            external_reported=external_reported,
+            input_artifact_seal=(
+                input_artifact_seal
+            ),
+        )
+
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+
     db.refresh(db_result)
 
     return db_result

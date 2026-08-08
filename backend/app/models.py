@@ -4,6 +4,7 @@ from uuid import uuid4
 import sqlalchemy as sa
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     Column,
@@ -374,6 +375,12 @@ class TestCase(Base):
         cascade="all, delete-orphan",
     )
 
+    input_artifact_seals = relationship(
+        "EvaluationInputArtifactSeal",
+        back_populates="test_case",
+        cascade="all, delete-orphan",
+    )
+
 
 class EvaluationRun(Base):
     __tablename__ = "evaluation_runs"
@@ -411,6 +418,221 @@ class EvaluationRun(Base):
         cascade="all, delete-orphan",
     )
 
+    manifest = relationship(
+        "EvaluationRunManifest",
+        back_populates="run",
+        cascade="all, delete-orphan",
+        uselist=False,
+        single_parent=True,
+    )
+
+    input_artifact_seals = relationship(
+        "EvaluationInputArtifactSeal",
+        back_populates="run",
+        cascade="all, delete-orphan",
+    )
+
+
+class EvaluationRunManifest(Base):
+    __tablename__ = "evaluation_run_manifests"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            name="uq_evaluation_run_manifests_run_id",
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_run_manifests_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "length(manifest_sha256) = 64",
+            name=(
+                "ck_evaluation_run_manifests_"
+                "sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    manifest_payload = Column(
+        JSON,
+        nullable=False,
+    )
+    manifest_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    run = relationship(
+        "EvaluationRun",
+        back_populates="manifest",
+    )
+
+
+class EvaluationInputArtifactSeal(Base):
+    __tablename__ = "evaluation_input_artifact_seals"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            "test_case_id",
+            "artifact_role",
+            name=(
+                "uq_evaluation_input_artifact_seals_"
+                "run_test_case_role"
+            ),
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "byte_length > 0",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "positive_byte_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(content_sha256) = 64",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "content_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(seal_sha256) = 64",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "seal_sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    test_case_id = Column(
+        Integer,
+        ForeignKey(
+            "test_cases.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    artifact_role = Column(
+        String(50),
+        nullable=False,
+    )
+
+    artifact_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    content_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    byte_length = Column(
+        BigInteger,
+        nullable=False,
+    )
+
+    media_type = Column(
+        String(100),
+        nullable=False,
+    )
+
+    # Internal storage information is deliberately separate
+    # from the cryptographic evidence payload.
+    sealed_file_path = Column(
+        String(1000),
+        nullable=False,
+    )
+
+    seal_payload = Column(
+        JSON,
+        nullable=False,
+    )
+
+    seal_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    run = relationship(
+        "EvaluationRun",
+        back_populates="input_artifact_seals",
+    )
+
+    test_case = relationship(
+        "TestCase",
+        back_populates="input_artifact_seals",
+    )
+
 
 class EvaluationResult(Base):
     __tablename__ = "evaluation_results"
@@ -443,6 +665,83 @@ class EvaluationResult(Base):
 
     run = relationship("EvaluationRun", back_populates="evaluation_results")
     test_case = relationship("TestCase", back_populates="evaluation_results")
+
+    provenance = relationship(
+        "EvaluationResultProvenance",
+        back_populates="result",
+        cascade="all, delete-orphan",
+        uselist=False,
+        single_parent=True,
+    )
+
+
+class EvaluationResultProvenance(Base):
+    __tablename__ = "evaluation_result_provenances"
+    __table_args__ = (
+        UniqueConstraint(
+            "result_id",
+            name="uq_evaluation_result_provenances_result_id",
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_result_provenances_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "length(provenance_sha256) = 64",
+            name=(
+                "ck_evaluation_result_provenances_"
+                "sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    result_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_results.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+    execution_mode = Column(
+        String(50),
+        nullable=False,
+    )
+
+    provenance_payload = Column(
+        JSON,
+        nullable=False,
+    )
+    provenance_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    result = relationship(
+        "EvaluationResult",
+        back_populates="provenance",
+    )
 
 
 class RunComparison(Base):

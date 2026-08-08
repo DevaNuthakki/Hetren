@@ -11,6 +11,13 @@ from sqlalchemy import or_
 
 from app import models
 from app.database import SessionLocal
+from app.evaluation_provenance import (
+    stage_evaluation_run_with_manifest,
+)
+from scripts.seed_support import (
+    resolve_seed_organization_id,
+    stage_seed_fixture_result,
+)
 
 
 PROJECT_NAME = "Hetren Phase 1 Validation Demo"
@@ -216,29 +223,18 @@ def create_result(db, run, test_case, generated_text: str) -> models.EvaluationR
     generated_path = result_dir / f"test-case-{test_case.id}-generated.txt"
     generated_path.write_text(generated_text, encoding="utf-8")
 
-    result = models.EvaluationResult(
-        run_id=run.id,
-        test_case_id=test_case.id,
-        generated_transcript=generated_text,
+    return stage_seed_fixture_result(
+        db,
+        run=run,
+        test_case=test_case,
+        generated_text=generated_text,
         generated_file_path=str(generated_path),
-        wer=wer_score,
-        cer=cer_score,
+        wer_score=wer_score,
+        cer_score=cer_score,
         quality_label=quality_label,
         error_summary=error_summary,
+        seed_source="phase_one_validation",
     )
-
-    db.add(result)
-
-    run.reference_transcript = test_case.reference_transcript
-    run.generated_transcript = generated_text
-    run.wer = wer_score
-    run.cer = cer_score
-    run.quality_label = quality_label
-    run.error_summary = error_summary
-    run.status = "evaluated"
-
-    db.flush()
-    return result
 
 
 def average(values: list[float]) -> float:
@@ -249,10 +245,19 @@ def main() -> None:
     db = SessionLocal()
 
     try:
+        organization_id = resolve_seed_organization_id(
+            db,
+            project_names=[
+                LEGACY_PROJECT_NAME,
+                PROJECT_NAME,
+            ],
+        )
+
         reset_existing_demo_project(db, LEGACY_PROJECT_NAME)
         reset_existing_demo_project(db, PROJECT_NAME)
 
         project = models.Project(
+            organization_id=organization_id,
             name=PROJECT_NAME,
             description=(
                 "Local Phase 1 validation project showing datasets, test cases, "
@@ -309,21 +314,26 @@ def main() -> None:
 
         db.flush()
 
-        baseline_run = models.EvaluationRun(
-            project_id=project.id,
-            run_name="Phase 1 baseline run",
-            model_name="mock-baseline-asr",
-            status="created",
+        baseline_run = (
+            stage_evaluation_run_with_manifest(
+                db,
+                project_id=project.id,
+                run_name="Phase 1 baseline run",
+                model_name="mock-baseline-asr",
+                status="created",
+            )
         )
-        current_run = models.EvaluationRun(
-            project_id=project.id,
-            run_name="Phase 1 current regression run",
-            model_name="mock-current-asr",
-            status="created",
+        current_run = (
+            stage_evaluation_run_with_manifest(
+                db,
+                project_id=project.id,
+                run_name=(
+                    "Phase 1 current regression run"
+                ),
+                model_name="mock-current-asr",
+                status="created",
+            )
         )
-
-        db.add_all([baseline_run, current_run])
-        db.flush()
 
         baseline_outputs = [
             "hello i need to check my account balance today",
