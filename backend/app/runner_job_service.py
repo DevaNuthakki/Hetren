@@ -1512,21 +1512,21 @@ def submit_asr_evaluation_result(
             "Runner ASR result is invalid or unavailable."
         )
 
-    result = stage_evaluation_result(
-        db=db,
-        db_run=evaluation_run,
-        db_test_case=test_case,
-        generated_text=normalized_transcript,
-        generated_file_path=None,
-    )
-
-    job.status = "completed"
-    job.completed_at = completion_time
-    job.lease_expires_at = None
-    job.claim_token_hash = None
-    job.error_message = None
-
     try:
+        result = stage_evaluation_result(
+            db=db,
+            db_run=evaluation_run,
+            db_test_case=test_case,
+            generated_text=normalized_transcript,
+            generated_file_path=None,
+        )
+
+        job.status = "completed"
+        job.completed_at = completion_time
+        job.lease_expires_at = None
+        job.claim_token_hash = None
+        job.error_message = None
+
         # Flush first so the result has its permanent database ID
         # and the completed runner lifecycle is validated before its
         # integrity-verifiable provenance record is constructed.

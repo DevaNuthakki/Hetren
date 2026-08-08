@@ -1,10 +1,15 @@
-from jiwer import cer as calculate_cer
-from jiwer import process_words
 from sqlalchemy.orm import Session
 
 from app import models
 from app.evaluation_provenance import (
     stage_evaluation_result_provenance,
+)
+from app.hvee_asr_observation_service import (
+    stage_asr_text_error_observations,
+)
+from hvee.packs.asr import (
+    ASRTextEvaluation,
+    evaluate_transcript_pair,
 )
 
 
@@ -18,30 +23,32 @@ def build_quality_label(wer_score: float) -> str:
     return "regression"
 
 
+def _format_error_summary(
+    evaluation: ASRTextEvaluation,
+) -> str:
+    return (
+        f"WER={evaluation.wer:.3f}, "
+        f"CER={evaluation.cer:.3f}. "
+        f"Substitutions={evaluation.substitutions}, "
+        f"insertions={evaluation.insertions}, "
+        f"deletions={evaluation.deletions}."
+    )
+
+
 def build_error_summary(
     reference_text: str,
     generated_text: str,
 ) -> tuple[float, float, str]:
-    word_result = process_words(
-        reference_text,
-        generated_text,
-    )
-    wer_score = float(word_result.wer)
-    cer_score = float(
-        calculate_cer(
-            reference_text,
-            generated_text,
-        )
+    evaluation = evaluate_transcript_pair(
+        reference_text=reference_text,
+        generated_text=generated_text,
     )
 
-    summary = (
-        f"WER={wer_score:.3f}, CER={cer_score:.3f}. "
-        f"Substitutions={word_result.substitutions}, "
-        f"insertions={word_result.insertions}, "
-        f"deletions={word_result.deletions}."
+    return (
+        evaluation.wer,
+        evaluation.cer,
+        _format_error_summary(evaluation),
     )
-
-    return wer_score, cer_score, summary
 
 
 def stage_evaluation_result(
@@ -52,28 +59,35 @@ def stage_evaluation_result(
     generated_file_path: str | None = None,
 ) -> models.EvaluationResult:
     """
-    Stage an evaluation result without committing the transaction.
+    Stage one ASR result and its HVEE observations without committing.
 
-    Callers that coordinate additional state changes can commit all
-    related updates atomically.
+    Callers own the surrounding transaction so legacy result state,
+    HVEE observations, provenance, and coordinated runner state can
+    either persist together or roll back together.
     """
+
     reference_text = db_test_case.reference_transcript
 
-    wer_score, cer_score, error_summary = (
-        build_error_summary(
-            reference_text=reference_text,
-            generated_text=generated_text,
-        )
+    evaluation = evaluate_transcript_pair(
+        reference_text=reference_text,
+        generated_text=generated_text,
     )
-    quality_label = build_quality_label(wer_score)
+
+    error_summary = _format_error_summary(
+        evaluation
+    )
+
+    quality_label = build_quality_label(
+        evaluation.wer
+    )
 
     db_result = models.EvaluationResult(
         run_id=db_run.id,
         test_case_id=db_test_case.id,
         generated_transcript=generated_text,
         generated_file_path=generated_file_path,
-        wer=wer_score,
-        cer=cer_score,
+        wer=evaluation.wer,
+        cer=evaluation.cer,
         quality_label=quality_label,
         error_summary=error_summary,
     )
@@ -82,11 +96,18 @@ def stage_evaluation_result(
 
     db_run.reference_transcript = reference_text
     db_run.generated_transcript = generated_text
-    db_run.wer = wer_score
-    db_run.cer = cer_score
+    db_run.wer = evaluation.wer
+    db_run.cer = evaluation.cer
     db_run.quality_label = quality_label
     db_run.error_summary = error_summary
     db_run.status = "evaluated"
+
+    stage_asr_text_error_observations(
+        db,
+        evaluation_run=db_run,
+        test_case=db_test_case,
+        evaluation=evaluation,
+    )
 
     return db_result
 
@@ -106,11 +127,10 @@ def persist_evaluation_result(
     ) = None,
 ) -> models.EvaluationResult:
     """
-    Persist a synchronous evaluation result and its provenance atomically.
-
-    The transaction is rolled back if either the result or provenance
-    cannot be staged successfully.
+    Persist a synchronous evaluation result, HVEE observations, and
+    provenance atomically.
     """
+
     try:
         db_result = stage_evaluation_result(
             db=db,
@@ -120,7 +140,8 @@ def persist_evaluation_result(
             generated_file_path=generated_file_path,
         )
 
-        # The result primary key is part of its integrity-verifiable provenance.
+        # The result primary key is part of its integrity-verifiable
+        # provenance. The same flush also validates staged HVEE rows.
         db.flush()
 
         stage_evaluation_result_provenance(
@@ -131,12 +152,12 @@ def persist_evaluation_result(
             execution_mode=execution_mode,
             server_observed=server_observed,
             external_reported=external_reported,
-            input_artifact_seal=(
-                input_artifact_seal
-            ),
+            input_artifact_seal=input_artifact_seal,
         )
 
+        db.flush()
         db.commit()
+
     except Exception:
         db.rollback()
         raise

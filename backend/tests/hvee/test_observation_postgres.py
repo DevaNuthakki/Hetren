@@ -1,4 +1,5 @@
 import os
+from uuid import uuid4
 
 import pytest
 from sqlalchemy.exc import IntegrityError
@@ -54,21 +55,23 @@ def build_foundation(
         model_name="test-model",
     )
 
+    registry_suffix = uuid4().hex
+
     metric = HveeMetricDefinition(
-        key="asr.wer",
+        key=f"test.asr.wer.{registry_suffix}",
         version="1.0.0",
         evaluation_type="asr",
         value_type="number",
         direction="lower_is_better",
         unit="ratio",
-        description="Word error rate.",
+        description="Test-only word error rate.",
     )
 
     evaluator = HveeEvaluatorVersion(
-        key="hetren.asr.wer",
+        key=f"test.hetren.asr.wer.{registry_suffix}",
         version="1.0.0",
         evaluation_type="asr",
-        description="Deterministic WER evaluator.",
+        description="Test-only deterministic WER evaluator.",
     )
 
     postgres_session.add_all(
