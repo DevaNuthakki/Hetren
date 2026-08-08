@@ -17,6 +17,7 @@ from app.evaluation_artifacts import (
     verify_evaluation_input_artifact_seal,
 )
 from app.evaluation_provenance import (
+    EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_with_manifest,
 )
 from app.runner_job_service import (
@@ -4060,7 +4061,9 @@ def test_submit_asr_evaluation_result_completes_atomically(
         .one()
     )
 
-    assert provenance.schema_version == 2
+    assert provenance.schema_version == (
+        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+    )
 
     artifact_evidence = (
         provenance.provenance_payload[

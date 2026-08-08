@@ -8,6 +8,7 @@ from sqlalchemy.pool import StaticPool
 from app import models
 from app.database import Base
 from app.evaluation_provenance import (
+    EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_with_manifest,
     verify_evaluation_result_provenance,
 )
@@ -96,6 +97,45 @@ def test_uploaded_transcript_persists_provenance(
         result.provenance.execution_mode
         == "uploaded_transcript"
     )
+    assert result.provenance.schema_version == (
+        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+    )
+
+    payload = result.provenance.provenance_payload
+    hvee_asr = payload["hvee_asr"]
+
+    assert hvee_asr["normalization"] == {
+        "key": "hetren.asr.text.basic",
+        "version": "1.0.0",
+    }
+
+    assert (
+        hvee_asr["derived_text"]["reference"][
+            "source_sha256"
+        ]
+        == payload["evidence"][
+            "reference_transcript"
+        ]["sha256"]
+    )
+
+    assert (
+        hvee_asr["derived_text"]["generated"][
+            "source_sha256"
+        ]
+        == payload["evidence"][
+            "generated_transcript"
+        ]["sha256"]
+    )
+
+    assert (
+        "normalized_text"
+        not in hvee_asr["derived_text"]["reference"]
+    )
+    assert (
+        "normalized_text"
+        not in hvee_asr["derived_text"]["generated"]
+    )
+
     assert (
         result.provenance.provenance_payload[
             "execution"

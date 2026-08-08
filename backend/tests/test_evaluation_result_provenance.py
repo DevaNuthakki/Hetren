@@ -9,6 +9,7 @@ from app import models
 from app.database import Base
 from app.evaluation_provenance import (
     build_evaluation_result_provenance_payload,
+    calculate_manifest_sha256,
     calculate_text_sha256,
     stage_evaluation_result_provenance,
     stage_evaluation_run_with_manifest,
@@ -333,3 +334,50 @@ def test_result_provenance_rejects_unknown_execution_mode(
             test_case=test_case,
             execution_mode="unknown_mode",
         )
+
+
+def test_historical_v1_provenance_remains_verifiable(
+    db: Session,
+):
+    project, test_case = _stage_project_resources(db)
+
+    run = stage_evaluation_run_with_manifest(
+        db,
+        project_id=project.id,
+        run_name="Historical v1 run",
+        model_name="legacy-model",
+    )
+
+    result = _stage_result(
+        db,
+        run=run,
+        test_case=test_case,
+    )
+
+    payload = build_evaluation_result_provenance_payload(
+        result=result,
+        evaluation_run=run,
+        test_case=test_case,
+        execution_mode="uploaded_transcript",
+    )
+
+    payload.pop("hvee_asr", None)
+    payload["schema_version"] = 1
+
+    provenance = models.EvaluationResultProvenance(
+        result_id=result.id,
+        schema_version=1,
+        evaluation_type="asr",
+        execution_mode="uploaded_transcript",
+        provenance_payload=payload,
+        provenance_sha256=(
+            calculate_manifest_sha256(payload)
+        ),
+    )
+
+    db.add(provenance)
+    db.flush()
+
+    assert verify_evaluation_result_provenance(
+        provenance
+    )

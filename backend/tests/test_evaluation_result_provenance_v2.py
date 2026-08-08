@@ -15,8 +15,8 @@ from app.evaluation_artifacts import (
 )
 from app.evaluation_provenance import (
     EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION,
+    build_evaluation_result_provenance_payload,
     calculate_manifest_sha256,
-    stage_evaluation_result_provenance,
     stage_evaluation_run_with_manifest,
     verify_evaluation_result_provenance,
 )
@@ -140,6 +140,56 @@ def _create_sealed_resources(
     )
 
 
+def _stage_historical_v2_provenance(
+    db: Session,
+    *,
+    result: models.EvaluationResult,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    execution_mode: str,
+    server_observed: dict[str, object] | None = None,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal | None
+    ) = None,
+) -> models.EvaluationResultProvenance:
+    """
+    Reconstruct a historical schema-v2 record so backward
+    compatibility remains tested after production moves to v3.
+    """
+
+    payload = build_evaluation_result_provenance_payload(
+        result=result,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        execution_mode=execution_mode,
+        server_observed=server_observed,
+        input_artifact_seal=input_artifact_seal,
+    )
+
+    payload.pop("hvee_asr", None)
+    payload["schema_version"] = (
+        EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION
+    )
+
+    provenance = models.EvaluationResultProvenance(
+        result_id=result.id,
+        schema_version=(
+            EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION
+        ),
+        evaluation_type=evaluation_run.evaluation_type,
+        execution_mode=execution_mode.strip(),
+        provenance_payload=payload,
+        provenance_sha256=(
+            calculate_manifest_sha256(payload)
+        ),
+    )
+
+    db.add(provenance)
+    result.provenance = provenance
+
+    return provenance
+
+
 def test_v2_provenance_binds_exact_input_artifact(
     db: Session,
     tmp_path: Path,
@@ -155,7 +205,7 @@ def test_v2_provenance_binds_exact_input_artifact(
     )
 
     provenance = (
-        stage_evaluation_result_provenance(
+        _stage_historical_v2_provenance(
             db,
             result=result,
             evaluation_run=run,
@@ -220,7 +270,7 @@ def test_v2_verifier_detects_artifact_evidence_rewrite(
     )
 
     provenance = (
-        stage_evaluation_result_provenance(
+        _stage_historical_v2_provenance(
             db,
             result=result,
             evaluation_run=run,
@@ -280,7 +330,7 @@ def test_input_artifact_is_rejected_for_non_asr_execution_mode(
         ValueError,
         match="only supported for ASR",
     ):
-        stage_evaluation_result_provenance(
+        _stage_historical_v2_provenance(
             db,
             result=result,
             evaluation_run=run,
