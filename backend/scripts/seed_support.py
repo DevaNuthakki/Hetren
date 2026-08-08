@@ -99,6 +99,10 @@ def stage_seed_fixture_result(
     Seed fixtures may intentionally use controlled metrics, so this helper
     preserves the supplied values rather than recalculating them through
     the live evaluator.
+
+    Because those metrics are synthetic, the fixture deliberately does
+    not fabricate live HVEE observation evidence. Its execution metadata
+    identifies it as a seed fixture and its provenance remains schema v3.
     """
     normalized_seed_source = (
         seed_source.strip()
@@ -146,6 +150,7 @@ def stage_seed_fixture_result(
             "seed_source": normalized_seed_source,
         },
         external_reported={},
+        bind_observation_evidence=False,
     )
 
     # Surface provenance constraint failures before the outer seed

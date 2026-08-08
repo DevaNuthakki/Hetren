@@ -13,7 +13,7 @@ from app import models
 from app.auth.dependencies import get_current_user
 from app.database import Base, get_db
 from app.evaluation_provenance import (
-    EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
+    EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_manifest,
     verify_evaluation_result_provenance,
 )
@@ -760,7 +760,7 @@ def test_authorized_evaluation_writes_result_only_after_checks(
     )
 
     assert result.provenance.schema_version == (
-        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+        EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
     )
     assert (
         "input_artifact"
@@ -1893,7 +1893,7 @@ def test_server_asr_retry_reuses_same_input_seal(
     )
     assert result.provenance is not None
     assert result.provenance.schema_version == (
-        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+        EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
     )
 
     assert (
