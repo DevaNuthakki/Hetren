@@ -59,6 +59,7 @@ def test_postgres_schema_is_at_alembic_head(
         "hvee_metric_definitions",
         "hvee_evaluator_versions",
         "hvee_observations",
+        "hvee_decisions",
     }
 
     actual_tables = set(

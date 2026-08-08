@@ -104,6 +104,71 @@ def _validate_test_case_scope(
     return "test_case"
 
 
+def _lock_and_validate_unsealed_test_case_target(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase | None,
+) -> None:
+    """
+    Serialize observation staging for one test-case target.
+
+    Once result provenance exists, the test-case observation set is
+    sealed and may not be extended through the application service.
+    Run-scoped observations are intentionally unaffected because they
+    are excluded from result-level immutable provenance.
+    """
+
+    if test_case is None:
+        return
+
+    locked_test_case = (
+        db.query(models.TestCase)
+        .filter(
+            models.TestCase.id == test_case.id
+        )
+        .with_for_update()
+        .one_or_none()
+    )
+
+    if locked_test_case is None:
+        raise HveeObservationPersistenceError(
+            "test case does not exist"
+        )
+
+    existing_result = (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .one_or_none()
+    )
+
+    if existing_result is None:
+        return
+
+    provenance_exists = (
+        db.query(
+            models.EvaluationResultProvenance.id
+        )
+        .filter(
+            models.EvaluationResultProvenance.result_id
+            == existing_result.id
+        )
+        .first()
+        is not None
+    )
+
+    if provenance_exists:
+        raise HveeObservationPersistenceError(
+            "test-case observations are immutable after "
+            "result provenance is sealed"
+        )
+
+
 def _build_value_columns(
     observation: Observation,
 ) -> dict[str, object | None]:
@@ -187,6 +252,12 @@ def stage_hvee_observation(
         )
 
     scope = _validate_test_case_scope(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+    )
+
+    _lock_and_validate_unsealed_test_case_target(
         db,
         evaluation_run=evaluation_run,
         test_case=test_case,

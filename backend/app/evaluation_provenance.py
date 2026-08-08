@@ -835,6 +835,20 @@ def stage_evaluation_result_provenance(
             "Evaluation result provenance already exists."
         )
 
+    locked_test_case = (
+        db.query(models.TestCase)
+        .filter(
+            models.TestCase.id == test_case.id
+        )
+        .with_for_update()
+        .one_or_none()
+    )
+
+    if locked_test_case is None:
+        raise ValueError(
+            "Evaluation result test case does not exist."
+        )
+
     normalized_mode = (
         execution_mode.strip()
         if isinstance(execution_mode, str)
