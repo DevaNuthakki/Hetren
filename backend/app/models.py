@@ -389,7 +389,17 @@ class EvaluationRun(Base):
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False, index=True)
 
     run_name = Column(String(200), nullable=False)
-    model_name = Column(String(100), nullable=False, default="not_configured")
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+        default="asr",
+        server_default="asr",
+    )
+    model_name = Column(
+        String(100),
+        nullable=False,
+        default="not_configured",
+    )
     status = Column(String(50), nullable=False, default="created")
 
     audio_file_path = Column(String(500), nullable=True)

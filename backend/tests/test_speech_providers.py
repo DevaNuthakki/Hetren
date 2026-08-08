@@ -215,3 +215,81 @@ def test_hetren_asr_environment_takes_precedence(
 
     assert isinstance(provider, MockASRProvider)
     assert result.model_name == "hetren-primary-model"
+
+
+def test_faster_whisper_result_reports_actual_runtime_config(
+    monkeypatch,
+    tmp_path: Path,
+):
+    class FakeWhisperModel:
+        def __init__(
+            self,
+            model_name: str,
+            *,
+            device: str,
+            compute_type: str,
+        ):
+            assert model_name == "small.en"
+            assert device == "cuda"
+            assert compute_type == "float16"
+
+        def transcribe(
+            self,
+            _audio_path: str,
+            *,
+            beam_size: int,
+        ):
+            assert beam_size == 5
+
+            return (
+                [
+                    SimpleNamespace(
+                        text=" runtime evidence "
+                    )
+                ],
+                SimpleNamespace(),
+            )
+
+    monkeypatch.setitem(
+        sys.modules,
+        "faster_whisper",
+        SimpleNamespace(
+            WhisperModel=FakeWhisperModel,
+        ),
+    )
+
+    provider = FasterWhisperASRProvider(
+        default_model_name="small.en",
+        device=" CUDA ",
+        compute_type=" FLOAT16 ",
+    )
+
+    result = provider.transcribe(
+        build_audio_file(tmp_path)
+    )
+
+    assert result.provider == "faster_whisper"
+    assert result.model_name == "small.en"
+    assert result.device == "cuda"
+    assert result.compute_type == "float16"
+
+
+def test_mock_result_does_not_claim_unused_runtime_config(
+    tmp_path: Path,
+):
+    provider = MockASRProvider(
+        default_model_name="mock-runtime-test",
+    )
+
+    result = provider.transcribe(
+        build_audio_file(tmp_path)
+    )
+
+    assert result.provider == "mock_local"
+    assert result.model_name == "mock-runtime-test"
+
+    # The mock provider does not actually execute on a
+    # hardware/runtime backend, so these facts must remain
+    # unknown rather than being fabricated from defaults.
+    assert result.device is None
+    assert result.compute_type is None

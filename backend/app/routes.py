@@ -45,6 +45,7 @@ from app.auth.authorization import (
     list_accessible_projects,
 )
 from app.auth.dependencies import get_current_user
+from app.config import get_settings
 from app.database import check_database_connection, get_db
 from app.evaluation_artifacts import (
     SUPPORTED_ASR_AUDIO_MEDIA_TYPES,
@@ -66,6 +67,11 @@ from app.release_safety import (
     evaluate_release_safety,
 )
 from app.speech import TranscriptionError, get_asr_provider
+from app.upload_io import (
+    UploadTooLargeError,
+    read_upload_bytes_limited,
+    write_upload_file_limited,
+)
 
 router = APIRouter()
 
@@ -952,26 +958,72 @@ async def create_test_case(
 
     validate_text_file_extension(reference_file_name, "Reference")
 
-    test_case_upload_dir = Path("uploads") / "datasets" / str(dataset_id) / "test-cases"
+    settings = get_settings()
+
+    try:
+        reference_content = await read_upload_bytes_limited(
+            reference_file,
+            max_bytes=settings.upload_max_transcript_bytes,
+            label="Reference transcript",
+        )
+    except UploadTooLargeError as exc:
+        raise HTTPException(
+            status_code=413,
+            detail=str(exc),
+        ) from exc
+
+    reference_text = decode_transcript_file(
+        reference_content,
+        "Reference",
+    )
+
+    test_case_upload_dir = (
+        Path("uploads")
+        / "datasets"
+        / str(dataset_id)
+        / "test-cases"
+    )
     audio_dir = test_case_upload_dir / "audio"
     reference_dir = test_case_upload_dir / "reference"
-
-    audio_dir.mkdir(parents=True, exist_ok=True)
-    reference_dir.mkdir(parents=True, exist_ok=True)
 
     audio_path = audio_dir / audio_file_name
     reference_path = reference_dir / reference_file_name
 
-    audio_content = await audio_file.read()
-    reference_content = await reference_file.read()
+    try:
+        audio_byte_length = (
+            await write_upload_file_limited(
+                audio_file,
+                audio_path,
+                max_bytes=settings.upload_max_audio_bytes,
+                label="Audio file",
+            )
+        )
+    except UploadTooLargeError as exc:
+        raise HTTPException(
+            status_code=413,
+            detail=str(exc),
+        ) from exc
 
-    if not audio_content:
-        raise HTTPException(status_code=400, detail="Audio file is empty")
+    if audio_byte_length == 0:
+        audio_path.unlink(missing_ok=True)
+        raise HTTPException(
+            status_code=400,
+            detail="Audio file is empty",
+        )
 
-    reference_text = decode_transcript_file(reference_content, "Reference")
-
-    audio_path.write_bytes(audio_content)
-    reference_path.write_text(reference_text, encoding="utf-8")
+    try:
+        reference_path.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+        reference_path.write_text(
+            reference_text,
+            encoding="utf-8",
+        )
+    except Exception:
+        audio_path.unlink(missing_ok=True)
+        reference_path.unlink(missing_ok=True)
+        raise
 
     db_test_case = models.TestCase(
         dataset_id=dataset_id,
@@ -982,7 +1034,15 @@ async def create_test_case(
     )
 
     db.add(db_test_case)
-    db.commit()
+
+    try:
+        db.commit()
+    except Exception:
+        db.rollback()
+        audio_path.unlink(missing_ok=True)
+        reference_path.unlink(missing_ok=True)
+        raise
+
     db.refresh(db_test_case)
 
     return db_test_case
@@ -1052,6 +1112,7 @@ def create_evaluation_run(
         db,
         project_id=access.project.id,
         run_name=run.run_name,
+        evaluation_type=run.evaluation_type,
         model_name=run.model_name or "not_configured",
         status="created",
     )
@@ -1144,27 +1205,54 @@ async def evaluate_test_case_for_run(
     generated_file_name = Path(generated_file.filename).name
     validate_text_file_extension(generated_file_name, "Generated")
 
-    result_upload_dir = Path("uploads") / "runs" / str(run_id) / "results" / str(test_case_id)
+    settings = get_settings()
+
+    try:
+        generated_content = await read_upload_bytes_limited(
+            generated_file,
+            max_bytes=settings.upload_max_transcript_bytes,
+            label="Generated transcript",
+        )
+    except UploadTooLargeError as exc:
+        raise HTTPException(
+            status_code=413,
+            detail=str(exc),
+        ) from exc
+
+    generated_text = decode_transcript_file(
+        generated_content,
+        "Generated",
+    )
+
+    result_upload_dir = (
+        Path("uploads")
+        / "runs"
+        / str(run_id)
+        / "results"
+        / str(test_case_id)
+    )
     generated_dir = result_upload_dir / "generated"
     generated_dir.mkdir(parents=True, exist_ok=True)
 
     generated_path = generated_dir / generated_file_name
 
-    generated_content = await generated_file.read()
-    generated_text = decode_transcript_file(generated_content, "Generated")
-
-    reference_text = db_test_case.reference_transcript
-
-    generated_path.write_text(generated_text, encoding="utf-8")
-
-    return persist_evaluation_result(
-        db=db,
-        db_run=db_run,
-        db_test_case=db_test_case,
-        generated_text=generated_text,
-        generated_file_path=str(generated_path),
-        execution_mode="uploaded_transcript",
+    generated_path.write_text(
+        generated_text,
+        encoding="utf-8",
     )
+
+    try:
+        return persist_evaluation_result(
+            db=db,
+            db_run=db_run,
+            db_test_case=db_test_case,
+            generated_text=generated_text,
+            generated_file_path=str(generated_path),
+            execution_mode="uploaded_transcript",
+        )
+    except Exception:
+        generated_path.unlink(missing_ok=True)
+        raise
 
 
 @router.post(
@@ -1341,6 +1429,14 @@ def transcribe_and_evaluate_test_case_for_run(
         server_observed={
             "provider": transcription.provider,
             "model_name": transcription.model_name,
+            "execution_config": {
+                "provider": transcription.provider,
+                "model_name": transcription.model_name,
+                "device": transcription.device,
+                "compute_type": (
+                    transcription.compute_type
+                ),
+            },
         },
         input_artifact_seal=(
             input_artifact_seal
@@ -2173,93 +2269,32 @@ def get_debug_case_details(
 
 @router.post(
     "/runs/{run_id}/upload",
-    response_model=schemas.EvaluationRunRead,
+    deprecated=True,
 )
 async def upload_run_artifacts(
     run_id: int,
-    audio_file: UploadFile = File(...),
-    reference_file: UploadFile = File(...),
-    generated_file: UploadFile = File(...),
     current_user: models.User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    access = _authorize_evaluation_run_for_request(
+    """
+    Retired legacy run-level artifact upload endpoint.
+
+    Evaluation evidence must be bound to a specific test case.
+    The previous run-level upload contract could mark a run
+    evaluated without creating a test-case-bound EvaluationResult
+    or provenance record, so it is intentionally no longer accepted.
+    """
+    _authorize_evaluation_run_for_request(
         db,
         current_user=current_user,
         run_id=run_id,
         required_roles=PRODUCT_WRITE_ROLES,
     )
-    db_run = access.run
 
-    if not audio_file.filename:
-        raise HTTPException(status_code=400, detail="Audio file is required")
-
-    if not reference_file.filename:
-        raise HTTPException(status_code=400, detail="Reference transcript file is required")
-
-    if not generated_file.filename:
-        raise HTTPException(status_code=400, detail="Generated transcript file is required")
-
-    allowed_audio_extensions = {".wav", ".mp3", ".m4a"}
-    audio_file_name = Path(audio_file.filename).name
-    reference_file_name = Path(reference_file.filename).name
-    generated_file_name = Path(generated_file.filename).name
-
-    audio_extension = Path(audio_file_name).suffix.lower()
-
-    if audio_extension not in allowed_audio_extensions:
-        raise HTTPException(
-            status_code=400,
-            detail="Invalid audio file type. Allowed types: .wav, .mp3, .m4a",
-        )
-
-    validate_text_file_extension(reference_file_name, "Reference")
-    validate_text_file_extension(generated_file_name, "Generated")
-
-    run_upload_dir = Path("uploads") / "runs" / str(run_id)
-    audio_dir = run_upload_dir / "audio"
-    reference_dir = run_upload_dir / "reference"
-    generated_dir = run_upload_dir / "generated"
-
-    audio_dir.mkdir(parents=True, exist_ok=True)
-    reference_dir.mkdir(parents=True, exist_ok=True)
-    generated_dir.mkdir(parents=True, exist_ok=True)
-
-    audio_path = audio_dir / audio_file_name
-    reference_path = reference_dir / reference_file_name
-    generated_path = generated_dir / generated_file_name
-
-    audio_content = await audio_file.read()
-    reference_content = await reference_file.read()
-    generated_content = await generated_file.read()
-
-    if not audio_content:
-        raise HTTPException(status_code=400, detail="Audio file is empty")
-
-    reference_text = decode_transcript_file(reference_content, "Reference")
-    generated_text = decode_transcript_file(generated_content, "Generated")
-
-    wer_score, cer_score, error_summary = build_error_summary(
-        reference_text=reference_text,
-        generated_text=generated_text,
+    raise HTTPException(
+        status_code=410,
+        detail=(
+            "Legacy run artifact upload is retired. "
+            "Use the test-case evaluation endpoints."
+        ),
     )
-
-    quality_label = build_quality_label(wer_score)
-
-    audio_path.write_bytes(audio_content)
-    reference_path.write_text(reference_text, encoding="utf-8")
-    generated_path.write_text(generated_text, encoding="utf-8")
-
-    db_run.audio_file_path = str(audio_path)
-    db_run.reference_transcript = reference_text
-    db_run.generated_transcript = generated_text
-    db_run.wer = wer_score
-    db_run.cer = cer_score
-    db_run.quality_label = quality_label
-    db_run.error_summary = error_summary
-    db_run.status = "evaluated"
-
-    db.commit()
-    db.refresh(db_run)
-
-    return db_run

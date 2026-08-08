@@ -4969,3 +4969,85 @@ def test_get_asr_evaluation_audio_rejects_tamper_after_seal_commit(
     assert snapshot.read_bytes() == (
         b"tampered-after-seal-commit"
     )
+
+
+def test_submit_asr_result_rejects_execution_provider_mismatch_without_side_effects(
+    db: Session,
+):
+    (
+        _project,
+        registered,
+        claimed,
+        evaluation_run,
+        test_case,
+    ) = create_running_asr_evaluation_job(db)
+
+    db.refresh(claimed.job)
+
+    original_claim_token_hash = (
+        claimed.job.claim_token_hash
+    )
+    original_lease_expires_at = (
+        claimed.job.lease_expires_at
+    )
+
+    assert claimed.job.status == "running"
+    assert claimed.job.completed_at is None
+    assert claimed.job.result_payload is None
+
+    with pytest.raises(
+        ValueError,
+        match=(
+            "does not match the reported "
+            "execution config"
+        ),
+    ):
+        submit_asr_evaluation_result(
+            db,
+            credential=registered.credential,
+            job_public_id=claimed.job.public_id,
+            claim_token=claimed.claim_token,
+            generated_transcript=(
+                "thank you for calling"
+            ),
+            provider="faster_whisper",
+            provider_metadata={
+                "execution_config": {
+                    "provider": "mock_local",
+                    "model_name": (
+                        "large-v3-turbo"
+                    ),
+                    "device": "cpu",
+                    "compute_type": "int8",
+                },
+            },
+        )
+
+    db.refresh(claimed.job)
+    db.refresh(evaluation_run)
+
+    # Validation happens before any runner lifecycle or
+    # evaluation-result mutation.
+    assert claimed.job.status == "running"
+    assert claimed.job.completed_at is None
+    assert claimed.job.result_payload is None
+    assert (
+        claimed.job.claim_token_hash
+        == original_claim_token_hash
+    )
+    assert (
+        claimed.job.lease_expires_at
+        == original_lease_expires_at
+    )
+
+    assert (
+        db.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id
+            == evaluation_run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )

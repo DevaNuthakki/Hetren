@@ -51,6 +51,7 @@ class TestCaseRead(BaseModel):
 
 class EvaluationRunCreate(BaseModel):
     run_name: str
+    evaluation_type: Literal["asr"] = "asr"
     model_name: Optional[str] = "not_configured"
 
 
@@ -58,6 +59,7 @@ class EvaluationRunRead(BaseModel):
     id: int
     project_id: int
     run_name: str
+    evaluation_type: Literal["asr"]
     model_name: str
     status: str
 

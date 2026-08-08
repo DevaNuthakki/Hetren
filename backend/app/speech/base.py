@@ -8,6 +8,8 @@ class TranscriptionResult:
     transcript: str
     provider: str
     model_name: str
+    device: str | None = None
+    compute_type: str | None = None
 
 
 class TranscriptionError(Exception):

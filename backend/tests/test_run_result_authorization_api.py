@@ -1124,6 +1124,8 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
                 provider="mock",
                 model_name=model_name,
                 transcript="hello there",
+                device=None,
+                compute_type=None,
             )
 
     monkeypatch.setattr(
@@ -1180,6 +1182,12 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
     assert server_execution["server_observed"] == {
         "provider": "mock",
         "model_name": run.model_name,
+        "execution_config": {
+            "provider": "mock",
+            "model_name": run.model_name,
+            "device": None,
+            "compute_type": None,
+        },
     }
     assert (
         server_execution["external_reported"]
@@ -1256,7 +1264,7 @@ def test_result_with_cross_project_test_case_fails_closed(
         assert response.status_code == 404
 
 
-def test_authorized_run_upload_writes_files_and_updates_run(
+def test_legacy_run_upload_is_retired_without_side_effects(
     db_session: Session,
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
@@ -1277,6 +1285,21 @@ def test_authorized_run_upload_writes_files_and_updates_run(
         role="owner",
     )
 
+    original_state = {
+        "status": run.status,
+        "audio_file_path": run.audio_file_path,
+        "reference_transcript": (
+            run.reference_transcript
+        ),
+        "generated_transcript": (
+            run.generated_transcript
+        ),
+        "wer": run.wer,
+        "cer": run.cer,
+        "quality_label": run.quality_label,
+        "error_summary": run.error_summary,
+    }
+
     response = _request(
         db_session,
         "POST",
@@ -1285,15 +1308,41 @@ def test_authorized_run_upload_writes_files_and_updates_run(
         files=_run_upload_files(),
     )
 
-    assert response.status_code == 200
+    assert response.status_code == 410
+    assert response.json() == {
+        "detail": (
+            "Legacy run artifact upload is retired. "
+            "Use the test-case evaluation endpoints."
+        )
+    }
+
+    assert not (tmp_path / "uploads").exists()
 
     db_session.refresh(run)
 
-    assert run.status == "evaluated"
-    assert run.audio_file_path is not None
+    assert run.status == original_state["status"]
     assert (
-        tmp_path / run.audio_file_path
-    ).read_bytes() == b"audio-content"
+        run.audio_file_path
+        == original_state["audio_file_path"]
+    )
+    assert (
+        run.reference_transcript
+        == original_state["reference_transcript"]
+    )
+    assert (
+        run.generated_transcript
+        == original_state["generated_transcript"]
+    )
+    assert run.wer == original_state["wer"]
+    assert run.cer == original_state["cer"]
+    assert (
+        run.quality_label
+        == original_state["quality_label"]
+    )
+    assert (
+        run.error_summary
+        == original_state["error_summary"]
+    )
 
 
 @pytest.mark.parametrize(
@@ -1742,6 +1791,8 @@ def test_server_asr_retry_reuses_same_input_seal(
                 provider="mock",
                 model_name=model_name,
                 transcript="retry succeeded",
+                device=None,
+                compute_type=None,
             )
 
     provider = RetryProvider()
@@ -1850,3 +1901,172 @@ def test_server_asr_retry_reuses_same_input_seal(
     assert verify_evaluation_result_provenance(
         result.provenance
     )
+
+
+def _set_result_upload_limits(
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    transcript_bytes: int,
+) -> None:
+    class TestUploadSettings:
+        upload_max_audio_bytes = 8
+        upload_max_transcript_bytes = transcript_bytes
+
+    monkeypatch.setattr(
+        "app.routes.get_settings",
+        lambda: TestUploadSettings(),
+    )
+
+
+def test_uploaded_transcript_accepts_exact_configured_limit(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    (
+        user,
+        _organization,
+        _project,
+        _dataset,
+        test_case,
+        run,
+        existing_result,
+    ) = _create_hierarchy(
+        db_session,
+        email="generated-exact-limit@example.com",
+        role="owner",
+    )
+
+    db_session.delete(existing_result)
+    db_session.flush()
+
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
+    _set_result_upload_limits(
+        monkeypatch,
+        transcript_bytes=8,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/evaluate"
+        ),
+        current_user=user,
+        files={
+            "generated_file": (
+                "generated.txt",
+                b"12345678",
+                "text/plain",
+            )
+        },
+    )
+
+    assert response.status_code == 200
+
+    result = (
+        db_session.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id == run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .one()
+    )
+
+    assert result.generated_transcript == "12345678"
+    assert result.provenance is not None
+    assert result.generated_file_path is not None
+
+    assert (
+        tmp_path / result.generated_file_path
+    ).read_text(
+        encoding="utf-8"
+    ) == "12345678"
+
+
+def test_uploaded_transcript_rejects_oversized_file_without_side_effects(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    (
+        user,
+        _organization,
+        _project,
+        _dataset,
+        test_case,
+        run,
+        existing_result,
+    ) = _create_hierarchy(
+        db_session,
+        email="generated-oversized@example.com",
+        role="owner",
+    )
+
+    db_session.delete(existing_result)
+    db_session.flush()
+
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
+    original_status = run.status
+
+    _set_result_upload_limits(
+        monkeypatch,
+        transcript_bytes=8,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/evaluate"
+        ),
+        current_user=user,
+        files={
+            "generated_file": (
+                "generated.txt",
+                b"123456789",
+                "text/plain",
+            )
+        },
+    )
+
+    assert response.status_code == 413
+    assert response.json() == {
+        "detail": (
+            "Generated transcript exceeds "
+            "the configured upload limit."
+        )
+    }
+
+    assert (
+        db_session.query(models.EvaluationResult)
+        .filter(
+            models.EvaluationResult.run_id == run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    db_session.refresh(run)
+    assert run.status == original_status
+
+    assert not (tmp_path / "uploads").exists()

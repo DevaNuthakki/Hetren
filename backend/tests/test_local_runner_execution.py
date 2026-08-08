@@ -1283,6 +1283,12 @@ def test_asr_executor_transcribes_downloaded_audio():
         provider="test_provider",
         provider_metadata={
             "model_name": "large-v3-turbo",
+            "execution_config": {
+                "provider": "test_provider",
+                "model_name": "large-v3-turbo",
+                "device": None,
+                "compute_type": None,
+            },
         },
     )
 
@@ -1665,6 +1671,12 @@ def test_run_one_cycle_uses_real_asr_executor_by_default(
         "provider": "mock_local",
         "provider_metadata": {
             "model_name": "large-v3-turbo",
+            "execution_config": {
+                "provider": "mock_local",
+                "model_name": "large-v3-turbo",
+                "device": None,
+                "compute_type": None,
+            },
         },
         "wer": 0.0,
         "cer": 0.0,

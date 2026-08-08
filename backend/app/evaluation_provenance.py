@@ -53,6 +53,7 @@ def build_evaluation_run_manifest_payload(
     project_id: int,
     run_name: str,
     model_name: str,
+    evaluation_type: str = ASR_EVALUATION_TYPE,
 ) -> dict[str, Any]:
     """
     Build the creation-time facts known when an ASR run is created.
@@ -61,11 +62,16 @@ def build_evaluation_run_manifest_payload(
     generated outputs are intentionally excluded because they are not
     necessarily known at run-creation time.
     """
+    if evaluation_type != ASR_EVALUATION_TYPE:
+        raise ValueError(
+            "Unsupported evaluation type."
+        )
+
     return {
         "schema_version": (
             EVALUATION_MANIFEST_SCHEMA_VERSION
         ),
-        "evaluation_type": ASR_EVALUATION_TYPE,
+        "evaluation_type": evaluation_type,
         "run": {
             "id": run_id,
             "project_id": project_id,
@@ -105,6 +111,7 @@ def stage_evaluation_run_manifest(
         project_id=evaluation_run.project_id,
         run_name=evaluation_run.run_name,
         model_name=evaluation_run.model_name,
+        evaluation_type=evaluation_run.evaluation_type,
     )
 
     manifest = models.EvaluationRunManifest(
@@ -112,7 +119,7 @@ def stage_evaluation_run_manifest(
         schema_version=(
             EVALUATION_MANIFEST_SCHEMA_VERSION
         ),
-        evaluation_type=ASR_EVALUATION_TYPE,
+        evaluation_type=evaluation_run.evaluation_type,
         manifest_payload=payload,
         manifest_sha256=(
             calculate_manifest_sha256(payload)
@@ -131,6 +138,7 @@ def stage_evaluation_run_with_manifest(
     project_id: int,
     run_name: str,
     model_name: str = "not_configured",
+    evaluation_type: str = ASR_EVALUATION_TYPE,
     status: str = "created",
 ) -> models.EvaluationRun:
     """
@@ -140,9 +148,15 @@ def stage_evaluation_run_with_manifest(
     before the manifest is built, so both records can be committed
     atomically.
     """
+    if evaluation_type != ASR_EVALUATION_TYPE:
+        raise ValueError(
+            "Unsupported evaluation type."
+        )
+
     evaluation_run = models.EvaluationRun(
         project_id=project_id,
         run_name=run_name,
+        evaluation_type=evaluation_type,
         model_name=model_name,
         status=status,
     )
@@ -247,6 +261,8 @@ def _build_run_manifest_evidence(
 
     if (
         manifest.run_id != evaluation_run.id
+        or manifest.evaluation_type
+        != evaluation_run.evaluation_type
         or not verify_evaluation_run_manifest(
             manifest
         )
@@ -400,6 +416,14 @@ def build_evaluation_result_provenance_payload(
             "Unsupported evaluation execution mode."
         )
 
+    if (
+        evaluation_run.evaluation_type
+        != ASR_EVALUATION_TYPE
+    ):
+        raise ValueError(
+            "Unsupported evaluation type."
+        )
+
     if result.id is None:
         raise ValueError(
             "Evaluation result must be flushed "
@@ -469,7 +493,9 @@ def build_evaluation_result_provenance_payload(
 
     payload: dict[str, object] = {
         "schema_version": schema_version,
-        "evaluation_type": ASR_EVALUATION_TYPE,
+        "evaluation_type": (
+            evaluation_run.evaluation_type
+        ),
         "result": {
             "id": result.id,
             "run_id": result.run_id,
@@ -575,7 +601,9 @@ def stage_evaluation_result_provenance(
         schema_version=int(
             payload["schema_version"]
         ),
-        evaluation_type=ASR_EVALUATION_TYPE,
+        evaluation_type=(
+            evaluation_run.evaluation_type
+        ),
         execution_mode=execution_mode.strip(),
         provenance_payload=payload,
         provenance_sha256=(

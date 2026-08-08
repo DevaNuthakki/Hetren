@@ -106,4 +106,6 @@ class FasterWhisperASRProvider:
             transcript=transcript,
             provider=self.provider_name,
             model_name=selected_model,
+            device=self._device,
+            compute_type=self._compute_type,
         )
