@@ -757,6 +757,13 @@ def test_authorized_evaluation_writes_result_only_after_checks(
         ]["status"]
         == "sealed"
     )
+
+    assert result.provenance.schema_version == 1
+    assert (
+        "input_artifact"
+        not in result.provenance.provenance_payload
+    )
+
     assert verify_evaluation_result_provenance(
         result.provenance
     )
@@ -1047,7 +1054,18 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
 ) -> None:
     monkeypatch.chdir(tmp_path)
 
-    audio_path = tmp_path / "sample.wav"
+    audio_path = (
+        tmp_path
+        / "uploads"
+        / "datasets"
+        / "server-asr-test"
+        / "audio"
+        / "sample.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
     audio_path.write_bytes(b"audio")
 
     (
@@ -1081,7 +1099,25 @@ def test_authorized_transcribe_invokes_asr_and_persists_result(
             audio_path: str,
             model_name: str,
         ):
-            assert audio_path == test_case.audio_file_path
+            provider_path = Path(audio_path)
+
+            assert (
+                provider_path.resolve()
+                != Path(
+                    test_case.audio_file_path
+                ).resolve()
+            )
+            assert provider_path.resolve().is_relative_to(
+                (
+                    tmp_path
+                    / "uploads"
+                    / "evaluation-inputs"
+                ).resolve()
+            )
+            assert (
+                provider_path.read_bytes()
+                == b"audio"
+            )
             assert model_name == run.model_name
 
             return SimpleNamespace(
@@ -1352,3 +1388,465 @@ def test_other_tenant_run_upload_fails_before_filesystem_write(
 
     assert response.status_code == 404
     assert not (tmp_path / "uploads").exists()
+
+
+def test_server_asr_provider_failure_preserves_input_seal(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    audio_path = (
+        tmp_path
+        / "uploads"
+        / "datasets"
+        / "provider-failure"
+        / "audio"
+        / "sample.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(
+        b"provider-failure-audio"
+    )
+
+    (
+        user,
+        _organization,
+        _project,
+        _dataset,
+        test_case,
+        run,
+        existing_result,
+    ) = _create_hierarchy(
+        db_session,
+        email="provider-failure@example.com",
+        role="engineer",
+        audio_file_path=str(audio_path),
+    )
+
+    db_session.delete(existing_result)
+    db_session.flush()
+
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
+    class FailingProvider:
+        def transcribe(
+            self,
+            *,
+            audio_path,
+            model_name: str,
+        ):
+            sealed_path = Path(audio_path)
+
+            assert (
+                sealed_path.resolve()
+                != Path(
+                    test_case.audio_file_path
+                ).resolve()
+            )
+            assert (
+                sealed_path.read_bytes()
+                == b"provider-failure-audio"
+            )
+
+            raise ValueError(
+                "simulated provider failure"
+            )
+
+    monkeypatch.setattr(
+        "app.routes.get_asr_provider",
+        lambda: FailingProvider(),
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/transcribe-and-evaluate"
+        ),
+        current_user=user,
+    )
+
+    assert response.status_code == 400
+
+    assert (
+        db_session.query(
+            models.EvaluationResult
+        )
+        .filter(
+            models.EvaluationResult.run_id
+            == run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    assert (
+        db_session.query(
+            models.EvaluationResultProvenance
+        ).count()
+        == 0
+    )
+
+    seal = (
+        db_session.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    sealed_path = (
+        tmp_path
+        / "uploads"
+        / "evaluation-inputs"
+        / seal.sealed_file_path
+    )
+
+    assert sealed_path.read_bytes() == (
+        b"provider-failure-audio"
+    )
+
+
+def test_server_asr_snapshot_tamper_before_provider_fails_closed(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.evaluation_artifacts import (
+        calculate_content_sha256 as real_calculate_content_sha256,
+    )
+
+    monkeypatch.chdir(tmp_path)
+
+    audio_path = (
+        tmp_path
+        / "uploads"
+        / "datasets"
+        / "tamper-before-provider"
+        / "audio"
+        / "sample.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(
+        b"trusted-before-tamper"
+    )
+
+    (
+        user,
+        _organization,
+        _project,
+        _dataset,
+        test_case,
+        run,
+        existing_result,
+    ) = _create_hierarchy(
+        db_session,
+        email="tamper-before-provider@example.com",
+        role="engineer",
+        audio_file_path=str(audio_path),
+    )
+
+    db_session.delete(existing_result)
+    db_session.flush()
+
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
+    hash_call_count = 0
+
+    def tamper_then_hash(path):
+        nonlocal hash_call_count
+
+        hash_call_count += 1
+
+        Path(path).write_bytes(
+            b"tampered-before-provider"
+        )
+
+        return real_calculate_content_sha256(
+            Path(path)
+        )
+
+    monkeypatch.setattr(
+        "app.routes.calculate_content_sha256",
+        tamper_then_hash,
+    )
+
+    provider_called = False
+
+    def forbidden_provider():
+        nonlocal provider_called
+        provider_called = True
+
+        raise AssertionError(
+            "Provider must not run after "
+            "sealed-input tampering."
+        )
+
+    monkeypatch.setattr(
+        "app.routes.get_asr_provider",
+        forbidden_provider,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/transcribe-and-evaluate"
+        ),
+        current_user=user,
+    )
+
+    assert response.status_code == 400
+    assert hash_call_count == 1
+    assert provider_called is False
+
+    assert (
+        db_session.query(
+            models.EvaluationResult
+        )
+        .filter(
+            models.EvaluationResult.run_id
+            == run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .count()
+        == 0
+    )
+
+    seal = (
+        db_session.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    # The database seal remains as evidence of the
+    # selected input, but its tampered snapshot can
+    # no longer pass integrity verification.
+    assert seal.id is not None
+
+
+def test_server_asr_retry_reuses_same_input_seal(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    audio_path = (
+        tmp_path
+        / "uploads"
+        / "datasets"
+        / "retry"
+        / "audio"
+        / "sample.wav"
+    )
+    audio_path.parent.mkdir(
+        parents=True,
+        exist_ok=True,
+    )
+    audio_path.write_bytes(
+        b"stable-retry-audio"
+    )
+
+    (
+        user,
+        _organization,
+        _project,
+        _dataset,
+        test_case,
+        run,
+        existing_result,
+    ) = _create_hierarchy(
+        db_session,
+        email="retry@example.com",
+        role="engineer",
+        audio_file_path=str(audio_path),
+    )
+
+    db_session.delete(existing_result)
+    db_session.flush()
+
+    stage_evaluation_run_manifest(
+        db_session,
+        evaluation_run=run,
+    )
+    db_session.flush()
+
+    attempts = 0
+    provider_paths: list[Path] = []
+
+    class RetryProvider:
+        def transcribe(
+            self,
+            *,
+            audio_path,
+            model_name: str,
+        ):
+            nonlocal attempts
+
+            attempts += 1
+
+            sealed_path = Path(audio_path)
+            provider_paths.append(
+                sealed_path.resolve()
+            )
+
+            assert (
+                sealed_path.read_bytes()
+                == b"stable-retry-audio"
+            )
+
+            if attempts == 1:
+                raise ValueError(
+                    "first attempt failed"
+                )
+
+            return SimpleNamespace(
+                provider="mock",
+                model_name=model_name,
+                transcript="retry succeeded",
+            )
+
+    provider = RetryProvider()
+
+    monkeypatch.setattr(
+        "app.routes.get_asr_provider",
+        lambda: provider,
+    )
+
+    first_response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/transcribe-and-evaluate"
+        ),
+        current_user=user,
+    )
+
+    assert first_response.status_code == 400
+
+    first_seal = (
+        db_session.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    first_seal_id = first_seal.id
+    first_seal_sha256 = (
+        first_seal.seal_sha256
+    )
+
+    second_response = _request(
+        db_session,
+        "POST",
+        (
+            f"/runs/{run.id}/test-cases/"
+            f"{test_case.id}/transcribe-and-evaluate"
+        ),
+        current_user=user,
+    )
+
+    assert second_response.status_code == 200
+    assert attempts == 2
+
+    second_seal = (
+        db_session.query(
+            models.EvaluationInputArtifactSeal
+        )
+        .filter(
+            models.EvaluationInputArtifactSeal.run_id
+            == run.id,
+            models.EvaluationInputArtifactSeal.test_case_id
+            == test_case.id,
+            models.EvaluationInputArtifactSeal.artifact_role
+            == "input_audio",
+        )
+        .one()
+    )
+
+    assert second_seal.id == first_seal_id
+    assert (
+        second_seal.seal_sha256
+        == first_seal_sha256
+    )
+
+    assert len(provider_paths) == 2
+    assert provider_paths[0] == provider_paths[1]
+
+    result = (
+        db_session.query(
+            models.EvaluationResult
+        )
+        .filter(
+            models.EvaluationResult.run_id
+            == run.id,
+            models.EvaluationResult.test_case_id
+            == test_case.id,
+        )
+        .one()
+    )
+
+    assert (
+        result.generated_transcript
+        == "retry succeeded"
+    )
+    assert result.provenance is not None
+    assert result.provenance.schema_version == 2
+
+    assert (
+        result.provenance.provenance_payload[
+            "input_artifact"
+        ]["seal_id"]
+        == first_seal_id
+    )
+
+    assert verify_evaluation_result_provenance(
+        result.provenance
+    )

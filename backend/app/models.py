@@ -4,6 +4,7 @@ from uuid import uuid4
 import sqlalchemy as sa
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
     CheckConstraint,
     Column,
@@ -374,6 +375,12 @@ class TestCase(Base):
         cascade="all, delete-orphan",
     )
 
+    input_artifact_seals = relationship(
+        "EvaluationInputArtifactSeal",
+        back_populates="test_case",
+        cascade="all, delete-orphan",
+    )
+
 
 class EvaluationRun(Base):
     __tablename__ = "evaluation_runs"
@@ -417,6 +424,12 @@ class EvaluationRun(Base):
         cascade="all, delete-orphan",
         uselist=False,
         single_parent=True,
+    )
+
+    input_artifact_seals = relationship(
+        "EvaluationInputArtifactSeal",
+        back_populates="run",
+        cascade="all, delete-orphan",
     )
 
 
@@ -483,6 +496,141 @@ class EvaluationRunManifest(Base):
     run = relationship(
         "EvaluationRun",
         back_populates="manifest",
+    )
+
+
+class EvaluationInputArtifactSeal(Base):
+    __tablename__ = "evaluation_input_artifact_seals"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "run_id",
+            "test_case_id",
+            "artifact_role",
+            name=(
+                "uq_evaluation_input_artifact_seals_"
+                "run_test_case_role"
+            ),
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "byte_length > 0",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "positive_byte_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(content_sha256) = 64",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "content_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(seal_sha256) = 64",
+            name=(
+                "ck_evaluation_input_artifact_seals_"
+                "seal_sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(Integer, primary_key=True)
+
+    run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    test_case_id = Column(
+        Integer,
+        ForeignKey(
+            "test_cases.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    artifact_role = Column(
+        String(50),
+        nullable=False,
+    )
+
+    artifact_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    content_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    byte_length = Column(
+        BigInteger,
+        nullable=False,
+    )
+
+    media_type = Column(
+        String(100),
+        nullable=False,
+    )
+
+    # Internal storage information is deliberately separate
+    # from the cryptographic evidence payload.
+    sealed_file_path = Column(
+        String(1000),
+        nullable=False,
+    )
+
+    seal_payload = Column(
+        JSON,
+        nullable=False,
+    )
+
+    seal_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    run = relationship(
+        "EvaluationRun",
+        back_populates="input_artifact_seals",
+    )
+
+    test_case = relationship(
+        "TestCase",
+        back_populates="input_artifact_seals",
     )
 
 

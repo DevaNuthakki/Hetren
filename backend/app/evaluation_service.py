@@ -101,6 +101,9 @@ def persist_evaluation_result(
     execution_mode: str,
     server_observed: dict[str, object] | None = None,
     external_reported: dict[str, object] | None = None,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal | None
+    ) = None,
 ) -> models.EvaluationResult:
     """
     Persist a synchronous evaluation result and its provenance atomically.
@@ -117,7 +120,7 @@ def persist_evaluation_result(
             generated_file_path=generated_file_path,
         )
 
-        # The result primary key is part of its immutable provenance.
+        # The result primary key is part of its integrity-verifiable provenance.
         db.flush()
 
         stage_evaluation_result_provenance(
@@ -128,6 +131,9 @@ def persist_evaluation_result(
             execution_mode=execution_mode,
             server_observed=server_observed,
             external_reported=external_reported,
+            input_artifact_seal=(
+                input_artifact_seal
+            ),
         )
 
         db.commit()

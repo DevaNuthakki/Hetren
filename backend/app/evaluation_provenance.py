@@ -55,7 +55,7 @@ def build_evaluation_run_manifest_payload(
     model_name: str,
 ) -> dict[str, Any]:
     """
-    Build the immutable facts known when an ASR run is created.
+    Build the creation-time facts known when an ASR run is created.
 
     Test cases, artifacts, runner identity, provider metadata, and
     generated outputs are intentionally excluded because they are not
@@ -190,6 +190,17 @@ def verify_evaluation_run_manifest(
 
 EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION = 1
 
+EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION = 2
+
+SUPPORTED_EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSIONS = (
+    frozenset(
+        {
+            EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION,
+            EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION,
+        }
+    )
+)
+
 SUPPORTED_RESULT_EXECUTION_MODES = frozenset(
     {
         "uploaded_transcript",
@@ -209,6 +220,17 @@ def calculate_text_sha256(value: str) -> str:
     return hashlib.sha256(
         value.encode("utf-8")
     ).hexdigest()
+
+
+def _is_sha256_hex(value: object) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(
+            character in "0123456789abcdef"
+            for character in value.lower()
+        )
+    )
 
 
 def _build_run_manifest_evidence(
@@ -242,6 +264,116 @@ def _build_run_manifest_evidence(
     }
 
 
+def _build_input_artifact_evidence(
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal
+    ),
+) -> dict[str, object]:
+    from app.evaluation_artifacts import (
+        ASR_INPUT_AUDIO_ROLE,
+        AUDIO_ARTIFACT_TYPE,
+        verify_evaluation_input_artifact_seal,
+    )
+
+    if input_artifact_seal.id is None:
+        raise ValueError(
+            "Evaluation input artifact seal must "
+            "be persisted before result provenance."
+        )
+
+    if (
+        input_artifact_seal.run_id
+        != evaluation_run.id
+        or input_artifact_seal.test_case_id
+        != test_case.id
+    ):
+        raise ValueError(
+            "Evaluation input artifact seal "
+            "resources do not match."
+        )
+
+    if (
+        input_artifact_seal.evaluation_type
+        != ASR_EVALUATION_TYPE
+        or input_artifact_seal.artifact_role
+        != ASR_INPUT_AUDIO_ROLE
+        or input_artifact_seal.artifact_type
+        != AUDIO_ARTIFACT_TYPE
+    ):
+        raise ValueError(
+            "Evaluation input artifact seal "
+            "contract is invalid."
+        )
+
+    run_manifest = (
+        _build_run_manifest_evidence(
+            evaluation_run
+        )
+    )
+
+    if run_manifest["status"] != "sealed":
+        raise ValueError(
+            "Sealed input artifact requires "
+            "a sealed evaluation run manifest."
+        )
+
+    run_manifest_sha256 = (
+        run_manifest["sha256"]
+    )
+
+    if not isinstance(
+        run_manifest_sha256,
+        str,
+    ):
+        raise ValueError(
+            "Evaluation run manifest digest "
+            "is unavailable."
+        )
+
+    if not verify_evaluation_input_artifact_seal(
+        input_artifact_seal,
+        expected_run_manifest_sha256=(
+            run_manifest_sha256
+        ),
+    ):
+        raise ValueError(
+            "Evaluation input artifact seal "
+            "is invalid."
+        )
+
+    return {
+        "status": "sealed",
+        "seal_id": input_artifact_seal.id,
+        "seal_schema_version": (
+            input_artifact_seal.schema_version
+        ),
+        "seal_sha256": (
+            input_artifact_seal.seal_sha256
+        ),
+        "artifact_role": (
+            input_artifact_seal.artifact_role
+        ),
+        "artifact_type": (
+            input_artifact_seal.artifact_type
+        ),
+        "content_sha256": (
+            input_artifact_seal.content_sha256
+        ),
+        "byte_length": (
+            input_artifact_seal.byte_length
+        ),
+        "media_type": (
+            input_artifact_seal.media_type
+        ),
+        "run_manifest_sha256": (
+            run_manifest_sha256
+        ),
+    }
+
+
 def build_evaluation_result_provenance_payload(
     *,
     result: models.EvaluationResult,
@@ -250,6 +382,9 @@ def build_evaluation_result_provenance_payload(
     execution_mode: str,
     server_observed: dict[str, object] | None = None,
     external_reported: dict[str, object] | None = None,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal | None
+    ) = None,
 ) -> dict[str, object]:
     normalized_mode = (
         execution_mode.strip()
@@ -300,10 +435,40 @@ def build_evaluation_result_provenance_payload(
         "utf-8"
     )
 
+    input_artifact_evidence: (
+        dict[str, object] | None
+    ) = None
+
+    schema_version = (
+        EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+    )
+
+    if input_artifact_seal is not None:
+        if normalized_mode not in {
+            "server_asr",
+            "runner_asr",
+        }:
+            raise ValueError(
+                "Input artifact evidence is only "
+                "supported for ASR execution modes."
+            )
+
+        input_artifact_evidence = (
+            _build_input_artifact_evidence(
+                evaluation_run=evaluation_run,
+                test_case=test_case,
+                input_artifact_seal=(
+                    input_artifact_seal
+                ),
+            )
+        )
+
+        schema_version = (
+            EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION
+        )
+
     payload: dict[str, object] = {
-        "schema_version": (
-            EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
-        ),
+        "schema_version": schema_version,
         "evaluation_type": ASR_EVALUATION_TYPE,
         "result": {
             "id": result.id,
@@ -358,6 +523,11 @@ def build_evaluation_result_provenance_payload(
         },
     }
 
+    if input_artifact_evidence is not None:
+        payload["input_artifact"] = (
+            input_artifact_evidence
+        )
+
     # Validate that the complete evidence payload is
     # deterministic JSON before it can be persisted.
     canonicalize_json(payload)
@@ -374,6 +544,9 @@ def stage_evaluation_result_provenance(
     execution_mode: str,
     server_observed: dict[str, object] | None = None,
     external_reported: dict[str, object] | None = None,
+    input_artifact_seal: (
+        models.EvaluationInputArtifactSeal | None
+    ) = None,
 ) -> models.EvaluationResultProvenance:
     if result.id is None:
         db.flush()
@@ -391,13 +564,16 @@ def stage_evaluation_result_provenance(
             execution_mode=execution_mode,
             server_observed=server_observed,
             external_reported=external_reported,
+            input_artifact_seal=(
+                input_artifact_seal
+            ),
         )
     )
 
     provenance = models.EvaluationResultProvenance(
         result_id=result.id,
-        schema_version=(
-            EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        schema_version=int(
+            payload["schema_version"]
         ),
         evaluation_type=ASR_EVALUATION_TYPE,
         execution_mode=execution_mode.strip(),
@@ -419,6 +595,173 @@ def stage_evaluation_result_provenance(
     return provenance
 
 
+def _verify_v2_input_artifact_evidence(
+    *,
+    payload: dict[str, object],
+    provenance: models.EvaluationResultProvenance,
+) -> bool:
+    """
+    Verify the self-contained input-artifact evidence carried by
+    result provenance schema v2.
+
+    The seal payload can be reconstructed without exposing or reading
+    an internal filesystem path.
+    """
+    from app.evaluation_artifacts import (
+        INPUT_ARTIFACT_SEAL_SCHEMA_VERSION,
+        build_evaluation_input_artifact_seal_payload,
+        calculate_artifact_seal_sha256,
+    )
+
+    result = payload.get("result")
+    run_manifest = payload.get("run_manifest")
+    input_artifact = payload.get(
+        "input_artifact"
+    )
+    execution = payload.get("execution")
+
+    if (
+        not isinstance(result, dict)
+        or not isinstance(run_manifest, dict)
+        or not isinstance(
+            input_artifact,
+            dict,
+        )
+        or not isinstance(execution, dict)
+    ):
+        return False
+
+    run_id = result.get("run_id")
+    test_case_id = result.get(
+        "test_case_id"
+    )
+
+    if (
+        type(run_id) is not int
+        or run_id <= 0
+        or type(test_case_id) is not int
+        or test_case_id <= 0
+        or execution.get("mode")
+        not in {"server_asr", "runner_asr"}
+        or input_artifact.get("status")
+        != "sealed"
+        or input_artifact.get(
+            "artifact_role"
+        )
+        != "input_audio"
+        or input_artifact.get(
+            "artifact_type"
+        )
+        != "audio"
+        or type(
+            input_artifact.get(
+                "seal_id"
+            )
+        )
+        is not int
+        or input_artifact["seal_id"] <= 0
+        or input_artifact.get(
+            "seal_schema_version"
+        )
+        != INPUT_ARTIFACT_SEAL_SCHEMA_VERSION
+        or not _is_sha256_hex(
+            input_artifact.get(
+                "seal_sha256"
+            )
+        )
+        or not _is_sha256_hex(
+            input_artifact.get(
+                "content_sha256"
+            )
+        )
+        or type(
+            input_artifact.get(
+                "byte_length"
+            )
+        )
+        is not int
+        or input_artifact[
+            "byte_length"
+        ]
+        <= 0
+        or not isinstance(
+            input_artifact.get(
+                "media_type"
+            ),
+            str,
+        )
+        or not input_artifact[
+            "media_type"
+        ].startswith("audio/")
+        or not _is_sha256_hex(
+            input_artifact.get(
+                "run_manifest_sha256"
+            )
+        )
+        or run_manifest.get("status")
+        != "sealed"
+        or run_manifest.get("sha256")
+        != input_artifact.get(
+            "run_manifest_sha256"
+        )
+    ):
+        return False
+
+    try:
+        reconstructed_seal_payload = (
+            build_evaluation_input_artifact_seal_payload(
+                evaluation_run_id=run_id,
+                test_case_id=test_case_id,
+                evaluation_type=(
+                    provenance.evaluation_type
+                ),
+                artifact_role=(
+                    input_artifact[
+                        "artifact_role"
+                    ]
+                ),
+                artifact_type=(
+                    input_artifact[
+                        "artifact_type"
+                    ]
+                ),
+                content_sha256=(
+                    input_artifact[
+                        "content_sha256"
+                    ]
+                ),
+                byte_length=(
+                    input_artifact[
+                        "byte_length"
+                    ]
+                ),
+                media_type=(
+                    input_artifact[
+                        "media_type"
+                    ]
+                ),
+                run_manifest_sha256=(
+                    input_artifact[
+                        "run_manifest_sha256"
+                    ]
+                ),
+            )
+        )
+
+        reconstructed_seal_sha256 = (
+            calculate_artifact_seal_sha256(
+                reconstructed_seal_payload
+            )
+        )
+    except (TypeError, ValueError):
+        return False
+
+    return (
+        reconstructed_seal_sha256
+        == input_artifact["seal_sha256"]
+    )
+
+
 def verify_evaluation_result_provenance(
     provenance: models.EvaluationResultProvenance,
 ) -> bool:
@@ -429,7 +772,9 @@ def verify_evaluation_result_provenance(
 
     if (
         provenance.schema_version
-        != EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        not in (
+            SUPPORTED_EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSIONS
+        )
         or provenance.evaluation_type
         != ASR_EVALUATION_TYPE
         or payload.get("schema_version")
@@ -447,6 +792,23 @@ def verify_evaluation_result_provenance(
         != provenance.execution_mode
     ):
         return False
+
+    if (
+        provenance.schema_version
+        == EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+    ):
+        if "input_artifact" in payload:
+            return False
+
+    elif (
+        provenance.schema_version
+        == EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION
+    ):
+        if not _verify_v2_input_artifact_evidence(
+            payload=payload,
+            provenance=provenance,
+        ):
+            return False
 
     try:
         expected_sha256 = (

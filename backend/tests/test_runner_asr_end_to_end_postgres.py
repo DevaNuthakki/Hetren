@@ -638,6 +638,73 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 == "sealed"
             )
 
+            assert provenance.schema_version == 2
+
+            input_artifact_seal = (
+                db.query(
+                    models.EvaluationInputArtifactSeal
+                )
+                .filter(
+                    models.EvaluationInputArtifactSeal.run_id
+                    == case.evaluation_run_id,
+                    models.EvaluationInputArtifactSeal.test_case_id
+                    == case.test_case_id,
+                    models.EvaluationInputArtifactSeal.artifact_role
+                    == "input_audio",
+                )
+                .one()
+            )
+
+            assert evaluation_run.manifest is not None
+
+            input_artifact = provenance_payload[
+                "input_artifact"
+            ]
+
+            assert input_artifact["status"] == "sealed"
+            assert (
+                input_artifact["seal_id"]
+                == input_artifact_seal.id
+            )
+            assert (
+                input_artifact["seal_schema_version"]
+                == input_artifact_seal.schema_version
+            )
+            assert (
+                input_artifact["seal_sha256"]
+                == input_artifact_seal.seal_sha256
+            )
+            assert (
+                input_artifact["artifact_role"]
+                == "input_audio"
+            )
+            assert (
+                input_artifact["artifact_type"]
+                == "audio"
+            )
+            assert (
+                input_artifact["content_sha256"]
+                == input_artifact_seal.content_sha256
+            )
+            assert (
+                input_artifact["byte_length"]
+                == input_artifact_seal.byte_length
+            )
+            assert (
+                input_artifact["media_type"]
+                == input_artifact_seal.media_type
+            )
+            assert (
+                input_artifact[
+                    "run_manifest_sha256"
+                ]
+                == evaluation_run.manifest.manifest_sha256
+            )
+
+            assert verify_evaluation_result_provenance(
+                provenance
+            )
+
             assert execution["external_reported"] == {
                 "provider": "mock_local",
                 "provider_metadata": {
