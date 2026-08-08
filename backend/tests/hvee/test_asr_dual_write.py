@@ -1,7 +1,7 @@
 from collections.abc import Generator
 
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
@@ -22,8 +22,17 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    NORMALIZED_CER_EVALUATOR,
+    NORMALIZED_CER_METRIC,
+    NORMALIZED_DELETIONS_METRIC,
+    NORMALIZED_INSERTIONS_METRIC,
+    NORMALIZED_SUBSTITUTIONS_METRIC,
+    NORMALIZED_WER_EVALUATOR,
+    NORMALIZED_WER_METRIC,
+    NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
     WER_EVALUATOR,
     WER_METRIC,
+    evaluate_normalized_transcript_pair,
 )
 
 
@@ -36,6 +45,23 @@ def db() -> Generator[Session, None, None]:
         },
         poolclass=StaticPool,
     )
+
+    @event.listens_for(engine, "connect")
+    def configure_sqlite_connection(
+        dbapi_connection,
+        _connection_record,
+    ) -> None:
+        # Ensure nested SAVEPOINT work participates in the caller's
+        # transaction instead of SQLite legacy transaction behavior.
+        dbapi_connection.isolation_level = None
+
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
+    @event.listens_for(engine, "begin")
+    def emit_begin(connection) -> None:
+        connection.exec_driver_sql("BEGIN")
 
     Base.metadata.create_all(engine)
 
@@ -131,6 +157,11 @@ def test_synchronous_result_dual_writes_wer_and_cer(
     assert set(observations) == {
         WER_METRIC.key,
         CER_METRIC.key,
+        NORMALIZED_WER_METRIC.key,
+        NORMALIZED_CER_METRIC.key,
+        NORMALIZED_SUBSTITUTIONS_METRIC.key,
+        NORMALIZED_INSERTIONS_METRIC.key,
+        NORMALIZED_DELETIONS_METRIC.key,
     }
 
     wer = observations[WER_METRIC.key]
@@ -149,6 +180,54 @@ def test_synchronous_result_dual_writes_wer_and_cer(
     assert cer.status == "success"
     assert cer.value_type == "number"
     assert cer.number_value == result.cer
+
+    normalized_evaluation = (
+        evaluate_normalized_transcript_pair(
+            reference_text=test_case.reference_transcript,
+            generated_text="the quick fox",
+        )
+    )
+
+    normalized_wer = observations[
+        NORMALIZED_WER_METRIC.key
+    ]
+    normalized_cer = observations[
+        NORMALIZED_CER_METRIC.key
+    ]
+    substitutions = observations[
+        NORMALIZED_SUBSTITUTIONS_METRIC.key
+    ]
+    insertions = observations[
+        NORMALIZED_INSERTIONS_METRIC.key
+    ]
+    deletions = observations[
+        NORMALIZED_DELETIONS_METRIC.key
+    ]
+
+    assert normalized_wer.value_type == "number"
+    assert normalized_wer.number_value == pytest.approx(
+        normalized_evaluation.wer
+    )
+
+    assert normalized_cer.value_type == "number"
+    assert normalized_cer.number_value == pytest.approx(
+        normalized_evaluation.cer
+    )
+
+    assert substitutions.value_type == "integer"
+    assert substitutions.integer_value == (
+        normalized_evaluation.substitutions
+    )
+
+    assert insertions.value_type == "integer"
+    assert insertions.integer_value == (
+        normalized_evaluation.insertions
+    )
+
+    assert deletions.value_type == "integer"
+    assert deletions.integer_value == (
+        normalized_evaluation.deletions
+    )
 
 
 def test_dual_write_resolves_canonical_registry_once(
@@ -184,15 +263,15 @@ def test_dual_write_resolves_canonical_registry_once(
 
     assert (
         db.query(HveeMetricDefinition).count()
-        == 2
+        == 7
     )
     assert (
         db.query(HveeEvaluatorVersion).count()
-        == 2
+        == 5
     )
     assert (
         db.query(HveeObservation).count()
-        == 4
+        == 14
     )
 
     metrics = {
@@ -211,6 +290,26 @@ def test_dual_write_resolves_canonical_registry_once(
     assert metrics == {
         (WER_METRIC.key, WER_METRIC.version),
         (CER_METRIC.key, CER_METRIC.version),
+        (
+            NORMALIZED_WER_METRIC.key,
+            NORMALIZED_WER_METRIC.version,
+        ),
+        (
+            NORMALIZED_CER_METRIC.key,
+            NORMALIZED_CER_METRIC.version,
+        ),
+        (
+            NORMALIZED_SUBSTITUTIONS_METRIC.key,
+            NORMALIZED_SUBSTITUTIONS_METRIC.version,
+        ),
+        (
+            NORMALIZED_INSERTIONS_METRIC.key,
+            NORMALIZED_INSERTIONS_METRIC.version,
+        ),
+        (
+            NORMALIZED_DELETIONS_METRIC.key,
+            NORMALIZED_DELETIONS_METRIC.version,
+        ),
     }
 
     assert evaluators == {
@@ -221,6 +320,18 @@ def test_dual_write_resolves_canonical_registry_once(
         (
             CER_EVALUATOR.key,
             CER_EVALUATOR.version,
+        ),
+        (
+            NORMALIZED_WER_EVALUATOR.key,
+            NORMALIZED_WER_EVALUATOR.version,
+        ),
+        (
+            NORMALIZED_CER_EVALUATOR.key,
+            NORMALIZED_CER_EVALUATOR.version,
+        ),
+        (
+            NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key,
+            NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version,
         ),
     }
 
@@ -288,7 +399,7 @@ def test_stage_dual_write_does_not_commit(
 
     assert (
         db.query(HveeObservation).count()
-        == 2
+        == 7
     )
 
     db.rollback()

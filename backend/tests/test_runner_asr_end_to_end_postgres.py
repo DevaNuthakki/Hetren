@@ -22,8 +22,17 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    NORMALIZED_CER_EVALUATOR,
+    NORMALIZED_CER_METRIC,
+    NORMALIZED_DELETIONS_METRIC,
+    NORMALIZED_INSERTIONS_METRIC,
+    NORMALIZED_SUBSTITUTIONS_METRIC,
+    NORMALIZED_WER_EVALUATOR,
+    NORMALIZED_WER_METRIC,
+    NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
     WER_EVALUATOR,
     WER_METRIC,
+    evaluate_normalized_transcript_pair,
 )
 from app.database import get_db
 from app.evaluation_provenance import (
@@ -638,7 +647,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 .all()
             )
 
-            assert len(persisted_observations) == 2
+            assert len(persisted_observations) == 7
 
             metric_ids = [
                 observation.metric_definition_id
@@ -685,6 +694,11 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             assert set(observations_by_metric_key) == {
                 WER_METRIC.key,
                 CER_METRIC.key,
+                NORMALIZED_WER_METRIC.key,
+                NORMALIZED_CER_METRIC.key,
+                NORMALIZED_SUBSTITUTIONS_METRIC.key,
+                NORMALIZED_INSERTIONS_METRIC.key,
+                NORMALIZED_DELETIONS_METRIC.key,
             }
 
             wer_observation = observations_by_metric_key[
@@ -752,6 +766,123 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             )
             assert cer_observation.number_value == pytest.approx(
                 evaluation_result.cer
+            )
+
+            normalized_evaluation = (
+                evaluate_normalized_transcript_pair(
+                    reference_text=EXPECTED_TRANSCRIPT,
+                    generated_text=(
+                        evaluation_result.generated_transcript
+                    ),
+                )
+            )
+
+            normalized_wer_observation = (
+                observations_by_metric_key[
+                    NORMALIZED_WER_METRIC.key
+                ]
+            )
+            normalized_cer_observation = (
+                observations_by_metric_key[
+                    NORMALIZED_CER_METRIC.key
+                ]
+            )
+            substitutions_observation = (
+                observations_by_metric_key[
+                    NORMALIZED_SUBSTITUTIONS_METRIC.key
+                ]
+            )
+            insertions_observation = (
+                observations_by_metric_key[
+                    NORMALIZED_INSERTIONS_METRIC.key
+                ]
+            )
+            deletions_observation = (
+                observations_by_metric_key[
+                    NORMALIZED_DELETIONS_METRIC.key
+                ]
+            )
+
+            assert (
+                normalized_wer_observation.value_type
+                == "number"
+            )
+            assert (
+                normalized_cer_observation.value_type
+                == "number"
+            )
+
+            assert normalized_wer_observation.number_value == (
+                pytest.approx(
+                    normalized_evaluation.wer
+                )
+            )
+            assert normalized_cer_observation.number_value == (
+                pytest.approx(
+                    normalized_evaluation.cer
+                )
+            )
+
+            for observation in (
+                substitutions_observation,
+                insertions_observation,
+                deletions_observation,
+            ):
+                assert observation.scope == "test_case"
+                assert observation.status == "success"
+                assert observation.value_type == "integer"
+
+            assert substitutions_observation.integer_value == (
+                normalized_evaluation.substitutions
+            )
+            assert insertions_observation.integer_value == (
+                normalized_evaluation.insertions
+            )
+            assert deletions_observation.integer_value == (
+                normalized_evaluation.deletions
+            )
+
+            normalized_wer_evaluator = evaluators_by_id[
+                normalized_wer_observation.evaluator_version_id
+            ]
+            normalized_cer_evaluator = evaluators_by_id[
+                normalized_cer_observation.evaluator_version_id
+            ]
+            alignment_evaluator = evaluators_by_id[
+                substitutions_observation.evaluator_version_id
+            ]
+
+            assert (
+                normalized_wer_evaluator.key,
+                normalized_wer_evaluator.version,
+            ) == (
+                NORMALIZED_WER_EVALUATOR.key,
+                NORMALIZED_WER_EVALUATOR.version,
+            )
+
+            assert (
+                normalized_cer_evaluator.key,
+                normalized_cer_evaluator.version,
+            ) == (
+                NORMALIZED_CER_EVALUATOR.key,
+                NORMALIZED_CER_EVALUATOR.version,
+            )
+
+            assert (
+                alignment_evaluator.key,
+                alignment_evaluator.version,
+            ) == (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key,
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version,
+            )
+
+            assert (
+                insertions_observation.evaluator_version_id
+                == substitutions_observation.evaluator_version_id
+            )
+            assert (
+                deletions_observation.evaluator_version_id
+                == substitutions_observation.evaluator_version_id
             )
 
             assert evaluation_result.generated_transcript == (
