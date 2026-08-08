@@ -5,6 +5,20 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app import models
+from hvee.packs.asr.normalization import (
+    BASIC_TEXT_NORMALIZATION,
+    normalize_text_basic,
+)
+from hvee.packs.asr.normalized_evaluation import (
+    NORMALIZED_CER_EVALUATOR,
+    NORMALIZED_CER_METRIC,
+    NORMALIZED_DELETIONS_METRIC,
+    NORMALIZED_INSERTIONS_METRIC,
+    NORMALIZED_SUBSTITUTIONS_METRIC,
+    NORMALIZED_WER_EVALUATOR,
+    NORMALIZED_WER_METRIC,
+    NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
+)
 
 
 EVALUATION_MANIFEST_SCHEMA_VERSION = 1
@@ -206,11 +220,14 @@ EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION = 1
 
 EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION = 2
 
+EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION = 3
+
 SUPPORTED_EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSIONS = (
     frozenset(
         {
             EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION,
             EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION,
+            EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
         }
     )
 )
@@ -245,6 +262,123 @@ def _is_sha256_hex(value: object) -> bool:
             for character in value.lower()
         )
     )
+
+
+def _build_hvee_asr_observation_contracts(
+) -> list[dict[str, str]]:
+    """
+    Describe the normalized ASR observation semantics expected from
+    the current HVEE ASR evidence profile.
+
+    These identities bind provenance to immutable metric/evaluator
+    versions without relying on database-assigned registry IDs.
+    """
+
+    return [
+        {
+            "metric_key": NORMALIZED_WER_METRIC.key,
+            "metric_version": NORMALIZED_WER_METRIC.version,
+            "evaluator_key": NORMALIZED_WER_EVALUATOR.key,
+            "evaluator_version": NORMALIZED_WER_EVALUATOR.version,
+        },
+        {
+            "metric_key": NORMALIZED_CER_METRIC.key,
+            "metric_version": NORMALIZED_CER_METRIC.version,
+            "evaluator_key": NORMALIZED_CER_EVALUATOR.key,
+            "evaluator_version": NORMALIZED_CER_EVALUATOR.version,
+        },
+        {
+            "metric_key": NORMALIZED_SUBSTITUTIONS_METRIC.key,
+            "metric_version": (
+                NORMALIZED_SUBSTITUTIONS_METRIC.version
+            ),
+            "evaluator_key": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key
+            ),
+            "evaluator_version": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version
+            ),
+        },
+        {
+            "metric_key": NORMALIZED_INSERTIONS_METRIC.key,
+            "metric_version": (
+                NORMALIZED_INSERTIONS_METRIC.version
+            ),
+            "evaluator_key": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key
+            ),
+            "evaluator_version": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version
+            ),
+        },
+        {
+            "metric_key": NORMALIZED_DELETIONS_METRIC.key,
+            "metric_version": (
+                NORMALIZED_DELETIONS_METRIC.version
+            ),
+            "evaluator_key": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key
+            ),
+            "evaluator_version": (
+                NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version
+            ),
+        },
+    ]
+
+
+def build_hvee_asr_normalized_evidence(
+    *,
+    reference_text: str,
+    generated_text: str,
+) -> dict[str, object]:
+    """
+    Build privacy-conscious reproducibility evidence for normalized ASR.
+
+    Plain normalized transcripts are deliberately not persisted here.
+    Their SHA-256 digests and exact UTF-8 byte lengths bind the derived
+    representations to the versioned normalization profile.
+    """
+
+    normalized_reference = normalize_text_basic(
+        reference_text
+    )
+    normalized_generated = normalize_text_basic(
+        generated_text
+    )
+
+    return {
+        "normalization": {
+            "key": BASIC_TEXT_NORMALIZATION.key,
+            "version": BASIC_TEXT_NORMALIZATION.version,
+        },
+        "derived_text": {
+            "reference": {
+                "source_sha256": calculate_text_sha256(
+                    reference_text
+                ),
+                "normalized_sha256": calculate_text_sha256(
+                    normalized_reference
+                ),
+                "normalized_utf8_bytes": len(
+                    normalized_reference.encode("utf-8")
+                ),
+            },
+            "generated": {
+                "source_sha256": calculate_text_sha256(
+                    generated_text
+                ),
+                "normalized_sha256": calculate_text_sha256(
+                    normalized_generated
+                ),
+                "normalized_utf8_bytes": len(
+                    normalized_generated.encode("utf-8")
+                ),
+            },
+        },
+        "observation_contracts": (
+            _build_hvee_asr_observation_contracts()
+        ),
+    }
 
 
 def _build_run_manifest_evidence(
@@ -464,7 +598,7 @@ def build_evaluation_result_provenance_payload(
     ) = None
 
     schema_version = (
-        EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION
+        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
     )
 
     if input_artifact_seal is not None:
@@ -485,10 +619,6 @@ def build_evaluation_result_provenance_payload(
                     input_artifact_seal
                 ),
             )
-        )
-
-        schema_version = (
-            EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION
         )
 
     payload: dict[str, object] = {
@@ -524,6 +654,10 @@ def build_evaluation_result_provenance_payload(
                 ),
             },
         },
+        "hvee_asr": build_hvee_asr_normalized_evidence(
+            reference_text=reference_text,
+            generated_text=generated_text,
+        ),
         "evaluation": {
             "engine": HETREN_EVALUATOR_ENGINE,
             "contract_version": (
@@ -790,6 +924,138 @@ def _verify_v2_input_artifact_evidence(
     )
 
 
+def _verify_v3_hvee_asr_evidence(
+    *,
+    payload: dict[str, object],
+) -> bool:
+    """
+    Verify schema-v3 normalized ASR evidence structure and identities.
+
+    This validates internal evidence consistency and the expected
+    versioned transformation/evaluator contracts. It does not claim
+    cryptographic authenticity against an attacker able to rewrite all
+    persisted application state.
+    """
+
+    hvee_asr = payload.get("hvee_asr")
+    source_evidence = payload.get("evidence")
+
+    if (
+        not isinstance(hvee_asr, dict)
+        or not isinstance(source_evidence, dict)
+    ):
+        return False
+
+    if set(hvee_asr) != {
+        "normalization",
+        "derived_text",
+        "observation_contracts",
+    }:
+        return False
+
+    normalization = hvee_asr.get(
+        "normalization"
+    )
+
+    if normalization != {
+        "key": BASIC_TEXT_NORMALIZATION.key,
+        "version": BASIC_TEXT_NORMALIZATION.version,
+    }:
+        return False
+
+    derived_text = hvee_asr.get(
+        "derived_text"
+    )
+
+    if (
+        not isinstance(derived_text, dict)
+        or set(derived_text)
+        != {"reference", "generated"}
+    ):
+        return False
+
+    reference_source = source_evidence.get(
+        "reference_transcript"
+    )
+    generated_source = source_evidence.get(
+        "generated_transcript"
+    )
+
+    reference_derived = derived_text.get(
+        "reference"
+    )
+    generated_derived = derived_text.get(
+        "generated"
+    )
+
+    pairs = (
+        (
+            reference_source,
+            reference_derived,
+        ),
+        (
+            generated_source,
+            generated_derived,
+        ),
+    )
+
+    for source, derived in pairs:
+        if (
+            not isinstance(source, dict)
+            or not isinstance(derived, dict)
+        ):
+            return False
+
+        if set(derived) != {
+            "source_sha256",
+            "normalized_sha256",
+            "normalized_utf8_bytes",
+        }:
+            return False
+
+        source_sha256 = source.get("sha256")
+        normalized_sha256 = derived.get(
+            "normalized_sha256"
+        )
+        normalized_utf8_bytes = derived.get(
+            "normalized_utf8_bytes"
+        )
+
+        if not _is_sha256_hex(source_sha256):
+            return False
+
+        if (
+            derived.get("source_sha256")
+            != source_sha256
+        ):
+            return False
+
+        if not _is_sha256_hex(
+            normalized_sha256
+        ):
+            return False
+
+        if (
+            not isinstance(
+                normalized_utf8_bytes,
+                int,
+            )
+            or isinstance(
+                normalized_utf8_bytes,
+                bool,
+            )
+            or normalized_utf8_bytes < 0
+        ):
+            return False
+
+    return (
+        hvee_asr.get(
+            "observation_contracts"
+        )
+        == _build_hvee_asr_observation_contracts()
+    )
+
+
 def verify_evaluation_result_provenance(
     provenance: models.EvaluationResultProvenance,
 ) -> bool:
@@ -835,6 +1101,26 @@ def verify_evaluation_result_provenance(
         if not _verify_v2_input_artifact_evidence(
             payload=payload,
             provenance=provenance,
+        ):
+            return False
+
+    elif (
+        provenance.schema_version
+        == EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+    ):
+        if not _verify_v3_hvee_asr_evidence(
+            payload=payload,
+        ):
+            return False
+
+        # Schema v3 can also carry the existing sealed audio evidence.
+        # Reuse the established v2 artifact verification contract.
+        if (
+            "input_artifact" in payload
+            and not _verify_v2_input_artifact_evidence(
+                payload=payload,
+                provenance=provenance,
+            )
         ):
             return False
 

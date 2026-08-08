@@ -921,7 +921,31 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 == "sealed"
             )
 
-            assert provenance.schema_version == 2
+            assert provenance.schema_version == 3
+
+            hvee_asr = provenance_payload["hvee_asr"]
+
+            assert hvee_asr["normalization"] == {
+                "key": "hetren.asr.text.basic",
+                "version": "1.0.0",
+            }
+
+            assert (
+                hvee_asr["derived_text"]["reference"][
+                    "source_sha256"
+                ]
+                == provenance_payload["evidence"][
+                    "reference_transcript"
+                ]["sha256"]
+            )
+            assert (
+                hvee_asr["derived_text"]["generated"][
+                    "source_sha256"
+                ]
+                == provenance_payload["evidence"][
+                    "generated_transcript"
+                ]["sha256"]
+            )
 
             input_artifact_seal = (
                 db.query(
