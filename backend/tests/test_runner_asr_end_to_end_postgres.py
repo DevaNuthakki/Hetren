@@ -14,6 +14,17 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app import models
+from app.hvee_models import (
+    HveeEvaluatorVersion,
+    HveeMetricDefinition,
+    HveeObservation,
+)
+from hvee.packs.asr import (
+    CER_EVALUATOR,
+    CER_METRIC,
+    WER_EVALUATOR,
+    WER_METRIC,
+)
 from app.database import get_db
 from app.evaluation_provenance import (
     stage_evaluation_run_with_manifest,
@@ -163,6 +174,14 @@ def cleanup_case(
     db = harness.session_factory()
 
     try:
+        (
+            db.query(HveeObservation)
+            .filter(
+                HveeObservation.evaluation_run_id
+                == case.evaluation_run_id
+            )
+            .delete(synchronize_session=False)
+        )
         (
             db.query(models.RunnerJobLog)
             .filter(
@@ -608,6 +627,133 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
 
             evaluation_result = persisted_results[0]
 
+            persisted_observations = (
+                db.query(HveeObservation)
+                .filter(
+                    HveeObservation.evaluation_run_id
+                    == case.evaluation_run_id,
+                    HveeObservation.test_case_id
+                    == case.test_case_id,
+                )
+                .all()
+            )
+
+            assert len(persisted_observations) == 2
+
+            metric_ids = [
+                observation.metric_definition_id
+                for observation in persisted_observations
+            ]
+            evaluator_ids = [
+                observation.evaluator_version_id
+                for observation in persisted_observations
+            ]
+
+            metrics_by_id = {
+                metric.id: metric
+                for metric in (
+                    db.query(HveeMetricDefinition)
+                    .filter(
+                        HveeMetricDefinition.id.in_(
+                            metric_ids
+                        )
+                    )
+                    .all()
+                )
+            }
+
+            evaluators_by_id = {
+                evaluator.id: evaluator
+                for evaluator in (
+                    db.query(HveeEvaluatorVersion)
+                    .filter(
+                        HveeEvaluatorVersion.id.in_(
+                            evaluator_ids
+                        )
+                    )
+                    .all()
+                )
+            }
+
+            observations_by_metric_key = {
+                metrics_by_id[
+                    observation.metric_definition_id
+                ].key: observation
+                for observation in persisted_observations
+            }
+
+            assert set(observations_by_metric_key) == {
+                WER_METRIC.key,
+                CER_METRIC.key,
+            }
+
+            wer_observation = observations_by_metric_key[
+                WER_METRIC.key
+            ]
+            cer_observation = observations_by_metric_key[
+                CER_METRIC.key
+            ]
+
+            wer_metric = metrics_by_id[
+                wer_observation.metric_definition_id
+            ]
+            cer_metric = metrics_by_id[
+                cer_observation.metric_definition_id
+            ]
+
+            wer_evaluator = evaluators_by_id[
+                wer_observation.evaluator_version_id
+            ]
+            cer_evaluator = evaluators_by_id[
+                cer_observation.evaluator_version_id
+            ]
+
+            assert (
+                wer_metric.key,
+                wer_metric.version,
+            ) == (
+                WER_METRIC.key,
+                WER_METRIC.version,
+            )
+            assert (
+                cer_metric.key,
+                cer_metric.version,
+            ) == (
+                CER_METRIC.key,
+                CER_METRIC.version,
+            )
+
+            assert (
+                wer_evaluator.key,
+                wer_evaluator.version,
+            ) == (
+                WER_EVALUATOR.key,
+                WER_EVALUATOR.version,
+            )
+            assert (
+                cer_evaluator.key,
+                cer_evaluator.version,
+            ) == (
+                CER_EVALUATOR.key,
+                CER_EVALUATOR.version,
+            )
+
+            assert wer_observation.scope == "test_case"
+            assert cer_observation.scope == "test_case"
+
+            assert wer_observation.status == "success"
+            assert cer_observation.status == "success"
+
+            assert wer_observation.value_type == "number"
+            assert cer_observation.value_type == "number"
+
+            assert wer_observation.number_value == pytest.approx(
+                evaluation_result.wer
+            )
+            assert cer_observation.number_value == pytest.approx(
+                evaluation_result.cer
+            )
+
             assert evaluation_result.generated_transcript == (
                 EXPECTED_TRANSCRIPT
             )
@@ -982,6 +1128,17 @@ def test_postgres_runner_hides_asr_provider_failure(
             )
 
             assert persisted_results == []
+
+            persisted_observations = (
+                db.query(HveeObservation)
+                .filter(
+                    HveeObservation.evaluation_run_id
+                    == case.evaluation_run_id
+                )
+                .all()
+            )
+
+            assert persisted_observations == []
 
             assert job.status == "failed"
             assert job.assigned_runner_id == case.runner_id
