@@ -846,3 +846,233 @@ def test_other_or_missing_dataset_cannot_create_files(
         assert response.status_code == 404
 
     assert not (tmp_path / "uploads").exists()
+
+
+def _set_test_case_upload_limits(
+    monkeypatch: pytest.MonkeyPatch,
+    *,
+    audio_bytes: int,
+    transcript_bytes: int,
+) -> None:
+    class TestUploadSettings:
+        upload_max_audio_bytes = audio_bytes
+        upload_max_transcript_bytes = transcript_bytes
+
+    monkeypatch.setattr(
+        "app.routes.get_settings",
+        lambda: TestUploadSettings(),
+    )
+
+
+def test_test_case_upload_accepts_exact_configured_limits(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    (
+        user,
+        _organization,
+        _project,
+        dataset,
+        _test_case,
+    ) = _create_hierarchy(
+        db_session,
+        email="upload-exact-limit@example.com",
+        role="owner",
+    )
+
+    before_count = (
+        db_session.query(models.TestCase).count()
+    )
+
+    _set_test_case_upload_limits(
+        monkeypatch,
+        audio_bytes=8,
+        transcript_bytes=8,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        f"/datasets/{dataset.id}/test-cases",
+        current_user=user,
+        data={
+            "title": "Exact upload limits",
+        },
+        files={
+            "audio_file": (
+                "exact.wav",
+                b"12345678",
+                "audio/wav",
+            ),
+            "reference_file": (
+                "reference.txt",
+                b"12345678",
+                "text/plain",
+            ),
+        },
+    )
+
+    assert response.status_code == 200
+
+    payload = response.json()
+
+    assert payload["reference_transcript"] == "12345678"
+
+    assert (
+        db_session.query(models.TestCase).count()
+        == before_count + 1
+    )
+
+    assert (
+        tmp_path / payload["audio_file_path"]
+    ).read_bytes() == b"12345678"
+
+    assert (
+        tmp_path / payload["reference_file_path"]
+    ).read_text(
+        encoding="utf-8"
+    ) == "12345678"
+
+
+def test_test_case_upload_rejects_oversized_reference_without_side_effects(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    (
+        user,
+        _organization,
+        _project,
+        dataset,
+        _test_case,
+    ) = _create_hierarchy(
+        db_session,
+        email="oversized-reference@example.com",
+        role="owner",
+    )
+
+    before_count = (
+        db_session.query(models.TestCase).count()
+    )
+
+    _set_test_case_upload_limits(
+        monkeypatch,
+        audio_bytes=8,
+        transcript_bytes=8,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        f"/datasets/{dataset.id}/test-cases",
+        current_user=user,
+        data={
+            "title": "Oversized reference",
+        },
+        files={
+            "audio_file": (
+                "sample.wav",
+                b"12345678",
+                "audio/wav",
+            ),
+            "reference_file": (
+                "reference.txt",
+                b"123456789",
+                "text/plain",
+            ),
+        },
+    )
+
+    assert response.status_code == 413
+    assert response.json() == {
+        "detail": (
+            "Reference transcript exceeds "
+            "the configured upload limit."
+        )
+    }
+
+    assert (
+        db_session.query(models.TestCase).count()
+        == before_count
+    )
+
+    assert not (tmp_path / "uploads").exists()
+
+
+def test_test_case_upload_rejects_oversized_audio_without_file_or_row(
+    db_session: Session,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.chdir(tmp_path)
+
+    (
+        user,
+        _organization,
+        _project,
+        dataset,
+        _test_case,
+    ) = _create_hierarchy(
+        db_session,
+        email="oversized-audio@example.com",
+        role="owner",
+    )
+
+    before_count = (
+        db_session.query(models.TestCase).count()
+    )
+
+    _set_test_case_upload_limits(
+        monkeypatch,
+        audio_bytes=8,
+        transcript_bytes=8,
+    )
+
+    response = _request(
+        db_session,
+        "POST",
+        f"/datasets/{dataset.id}/test-cases",
+        current_user=user,
+        data={
+            "title": "Oversized audio",
+        },
+        files={
+            "audio_file": (
+                "sample.wav",
+                b"123456789",
+                "audio/wav",
+            ),
+            "reference_file": (
+                "reference.txt",
+                b"12345678",
+                "text/plain",
+            ),
+        },
+    )
+
+    assert response.status_code == 413
+    assert response.json() == {
+        "detail": (
+            "Audio file exceeds "
+            "the configured upload limit."
+        )
+    }
+
+    assert (
+        db_session.query(models.TestCase).count()
+        == before_count
+    )
+
+    uploads_root = tmp_path / "uploads"
+
+    if uploads_root.exists():
+        assert not [
+            path
+            for path in uploads_root.rglob("*")
+            if path.is_file()
+        ]

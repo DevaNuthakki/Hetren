@@ -21,6 +21,14 @@ def clear_product_environment(monkeypatch):
         "HETREN_CORS_ALLOWED_ORIGINS",
         raising=False,
     )
+    monkeypatch.delenv(
+        "HETREN_UPLOAD_MAX_AUDIO_BYTES",
+        raising=False,
+    )
+    monkeypatch.delenv(
+        "HETREN_UPLOAD_MAX_TRANSCRIPT_BYTES",
+        raising=False,
+    )
     monkeypatch.setenv("DATABASE_URL", "sqlite:///test.db")
     monkeypatch.setenv(
         "HETREN_AUTH_SECRET_KEY",
@@ -153,6 +161,53 @@ def test_cors_settings_reject_unsafe_origins(
         "HETREN_CORS_ALLOWED_ORIGINS",
         origins,
     )
+
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None)
+
+def test_upload_settings_use_bounded_defaults():
+    settings = Settings(_env_file=None)
+
+    assert (
+        settings.upload_max_audio_bytes
+        == 100 * 1024 * 1024
+    )
+    assert (
+        settings.upload_max_transcript_bytes
+        == 2 * 1024 * 1024
+    )
+
+
+def test_upload_settings_load_environment_overrides(
+    monkeypatch,
+):
+    monkeypatch.setenv(
+        "HETREN_UPLOAD_MAX_AUDIO_BYTES",
+        "123456",
+    )
+    monkeypatch.setenv(
+        "HETREN_UPLOAD_MAX_TRANSCRIPT_BYTES",
+        "654321",
+    )
+
+    settings = Settings(_env_file=None)
+
+    assert settings.upload_max_audio_bytes == 123456
+    assert settings.upload_max_transcript_bytes == 654321
+
+
+@pytest.mark.parametrize(
+    "environment_name",
+    [
+        "HETREN_UPLOAD_MAX_AUDIO_BYTES",
+        "HETREN_UPLOAD_MAX_TRANSCRIPT_BYTES",
+    ],
+)
+def test_upload_settings_reject_non_positive_limits(
+    monkeypatch,
+    environment_name,
+):
+    monkeypatch.setenv(environment_name, "0")
 
     with pytest.raises(ValidationError):
         Settings(_env_file=None)

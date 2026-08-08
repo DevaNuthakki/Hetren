@@ -62,6 +62,18 @@ class Settings(BaseSettings):
         validation_alias="HETREN_AUTH_REFRESH_TOKEN_EXPIRE_DAYS",
     )
 
+    upload_max_audio_bytes: int = Field(
+        default=100 * 1024 * 1024,
+        gt=0,
+        validation_alias="HETREN_UPLOAD_MAX_AUDIO_BYTES",
+    )
+
+    upload_max_transcript_bytes: int = Field(
+        default=2 * 1024 * 1024,
+        gt=0,
+        validation_alias="HETREN_UPLOAD_MAX_TRANSCRIPT_BYTES",
+    )
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",

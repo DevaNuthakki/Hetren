@@ -376,6 +376,14 @@ class ASRRunnerJobExecutor:
             provider=provider_name,
             provider_metadata={
                 "model_name": model_name,
+                "execution_config": {
+                    "provider": provider_name,
+                    "model_name": model_name,
+                    "device": transcription.device,
+                    "compute_type": (
+                        transcription.compute_type
+                    ),
+                },
             },
         )
 

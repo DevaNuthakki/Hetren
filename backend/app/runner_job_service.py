@@ -56,6 +56,8 @@ MAX_RUNNER_JOB_INPUT_BYTES = 262_144
 
 MAX_ASR_GENERATED_TRANSCRIPT_LENGTH = 1_000_000
 MAX_ASR_PROVIDER_LENGTH = 100
+MAX_ASR_MODEL_LENGTH = 200
+MAX_ASR_RUNTIME_VALUE_LENGTH = 100
 MAX_ASR_PROVIDER_METADATA_BYTES = 65_536
 
 MAX_RUNNER_JOB_LOG_BATCH_SIZE = 100
@@ -801,6 +803,101 @@ def _normalize_asr_provider(
     return normalized
 
 
+def _normalize_asr_execution_config(
+    execution_config: object,
+) -> dict[str, object]:
+    """
+    Validate the reserved runner-reported ASR execution contract.
+
+    These values describe execution observed by the runner, not by
+    the Hetren server. Unknown provider metadata remains allowed
+    outside this reserved object for forward compatibility.
+    """
+    if not isinstance(execution_config, dict):
+        raise ValueError(
+            "ASR execution config must be a JSON object."
+        )
+
+    required_keys = {
+        "provider",
+        "model_name",
+        "device",
+        "compute_type",
+    }
+
+    if set(execution_config) != required_keys:
+        raise ValueError(
+            "ASR execution config has an invalid structure."
+        )
+
+    provider = _normalize_asr_provider(
+        execution_config["provider"]
+    )
+
+    model_name = execution_config["model_name"]
+
+    if not isinstance(model_name, str):
+        raise ValueError(
+            "ASR execution model name must be text."
+        )
+
+    normalized_model = model_name.strip()
+
+    if not normalized_model:
+        raise ValueError(
+            "ASR execution model name must not be empty."
+        )
+
+    if len(normalized_model) > MAX_ASR_MODEL_LENGTH:
+        raise ValueError(
+            "ASR execution model name is too long."
+        )
+
+    normalized_runtime: dict[str, str | None] = {}
+
+    for field_name in ("device", "compute_type"):
+        value = execution_config[field_name]
+
+        if value is None:
+            normalized_runtime[field_name] = None
+            continue
+
+        if not isinstance(value, str):
+            raise ValueError(
+                f"ASR execution {field_name} must be text "
+                "or null."
+            )
+
+        normalized_value = value.strip().lower()
+
+        if not normalized_value:
+            raise ValueError(
+                f"ASR execution {field_name} must not "
+                "be empty."
+            )
+
+        if (
+            len(normalized_value)
+            > MAX_ASR_RUNTIME_VALUE_LENGTH
+        ):
+            raise ValueError(
+                f"ASR execution {field_name} is too long."
+            )
+
+        normalized_runtime[field_name] = (
+            normalized_value
+        )
+
+    return {
+        "provider": provider,
+        "model_name": normalized_model,
+        "device": normalized_runtime["device"],
+        "compute_type": (
+            normalized_runtime["compute_type"]
+        ),
+    }
+
+
 def _normalize_asr_provider_metadata(
     provider_metadata: dict[str, object] | None,
 ) -> dict[str, object]:
@@ -839,6 +936,13 @@ def _normalize_asr_provider_metadata(
     if not isinstance(normalized, dict):
         raise ValueError(
             "ASR provider metadata must be a JSON object."
+        )
+
+    if "execution_config" in normalized:
+        normalized["execution_config"] = (
+            _normalize_asr_execution_config(
+                normalized["execution_config"]
+            )
         )
 
     return normalized
@@ -1235,6 +1339,36 @@ def submit_asr_evaluation_result(
             provider_metadata
         )
     )
+
+    reported_execution_config = (
+        normalized_metadata.get(
+            "execution_config"
+        )
+    )
+
+    if (
+        isinstance(reported_execution_config, dict)
+        and reported_execution_config["provider"]
+        != normalized_provider
+    ):
+        raise ValueError(
+            "ASR provider does not match "
+            "the reported execution config."
+        )
+
+    external_reported_evidence: dict[
+        str,
+        object,
+    ] = {
+        "provider": normalized_provider,
+        "provider_metadata": normalized_metadata,
+    }
+
+    if isinstance(reported_execution_config, dict):
+        external_reported_evidence[
+            "execution_config"
+        ] = dict(reported_execution_config)
+
     completion_time = _resolve_now(now)
 
     job = _get_owned_job_claim_for_update(
@@ -1425,12 +1559,9 @@ def submit_asr_evaluation_result(
                     )
                 ),
             },
-            external_reported={
-                "provider": normalized_provider,
-                "provider_metadata": (
-                    normalized_metadata
-                ),
-            },
+            external_reported=(
+                external_reported_evidence
+            ),
             input_artifact_seal=(
                 input_artifact_seal
             ),

@@ -507,6 +507,12 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             "provider_metadata"
         ] == {
             "model_name": "mock-asr-integration",
+            "execution_config": {
+                "provider": "mock_local",
+                "model_name": "mock-asr-integration",
+                "device": None,
+                "compute_type": None,
+            },
         }
         assert result_payload["wer"] == pytest.approx(0.0)
         assert result_payload["cer"] == pytest.approx(0.0)
@@ -711,6 +717,22 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                     "model_name": (
                         "mock-asr-integration"
                     ),
+                    "execution_config": {
+                        "provider": "mock_local",
+                        "model_name": (
+                            "mock-asr-integration"
+                        ),
+                        "device": None,
+                        "compute_type": None,
+                    },
+                },
+                "execution_config": {
+                    "provider": "mock_local",
+                    "model_name": (
+                        "mock-asr-integration"
+                    ),
+                    "device": None,
+                    "compute_type": None,
                 },
             }
 
