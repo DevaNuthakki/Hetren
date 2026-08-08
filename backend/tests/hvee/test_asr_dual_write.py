@@ -22,6 +22,9 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    EXACT_NORMALIZED_MATCH_METRIC,
+    GENERATED_EMPTY_METRIC,
+    MISSING_OUTPUT_METRIC,
     NORMALIZED_CER_EVALUATOR,
     NORMALIZED_CER_METRIC,
     NORMALIZED_DELETIONS_METRIC,
@@ -30,9 +33,13 @@ from hvee.packs.asr import (
     NORMALIZED_WER_EVALUATOR,
     NORMALIZED_WER_METRIC,
     NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
+    REFERENCE_EMPTY_METRIC,
+    TRANSCRIPT_INTEGRITY_EVALUATOR,
+    UNEXPECTED_OUTPUT_METRIC,
     WER_EVALUATOR,
     WER_METRIC,
     evaluate_normalized_transcript_pair,
+    evaluate_transcript_integrity,
 )
 
 
@@ -162,6 +169,11 @@ def test_synchronous_result_dual_writes_wer_and_cer(
         NORMALIZED_SUBSTITUTIONS_METRIC.key,
         NORMALIZED_INSERTIONS_METRIC.key,
         NORMALIZED_DELETIONS_METRIC.key,
+        EXACT_NORMALIZED_MATCH_METRIC.key,
+        REFERENCE_EMPTY_METRIC.key,
+        GENERATED_EMPTY_METRIC.key,
+        UNEXPECTED_OUTPUT_METRIC.key,
+        MISSING_OUTPUT_METRIC.key,
     }
 
     wer = observations[WER_METRIC.key]
@@ -229,6 +241,68 @@ def test_synchronous_result_dual_writes_wer_and_cer(
         normalized_evaluation.deletions
     )
 
+    integrity_evaluation = (
+        evaluate_transcript_integrity(
+            normalized_evaluation
+        )
+    )
+
+    exact_match = observations[
+        EXACT_NORMALIZED_MATCH_METRIC.key
+    ]
+    reference_empty = observations[
+        REFERENCE_EMPTY_METRIC.key
+    ]
+    generated_empty = observations[
+        GENERATED_EMPTY_METRIC.key
+    ]
+    unexpected_output = observations[
+        UNEXPECTED_OUTPUT_METRIC.key
+    ]
+    missing_output = observations[
+        MISSING_OUTPUT_METRIC.key
+    ]
+
+    integrity_observations = (
+        exact_match,
+        reference_empty,
+        generated_empty,
+        unexpected_output,
+        missing_output,
+    )
+
+    for observation in integrity_observations:
+        assert observation.scope == "test_case"
+        assert observation.status == "success"
+        assert observation.value_type == "boolean"
+
+    assert (
+        exact_match.boolean_value
+        is integrity_evaluation.exact_match
+    )
+    assert (
+        reference_empty.boolean_value
+        is integrity_evaluation.reference_empty
+    )
+    assert (
+        generated_empty.boolean_value
+        is integrity_evaluation.generated_empty
+    )
+    assert (
+        unexpected_output.boolean_value
+        is integrity_evaluation.unexpected_output
+    )
+    assert (
+        missing_output.boolean_value
+        is integrity_evaluation.missing_output
+    )
+
+    assert exact_match.boolean_value is False
+    assert reference_empty.boolean_value is False
+    assert generated_empty.boolean_value is False
+    assert unexpected_output.boolean_value is False
+    assert missing_output.boolean_value is False
+
 
 def test_dual_write_resolves_canonical_registry_once(
     db: Session,
@@ -263,15 +337,15 @@ def test_dual_write_resolves_canonical_registry_once(
 
     assert (
         db.query(HveeMetricDefinition).count()
-        == 7
+        == 12
     )
     assert (
         db.query(HveeEvaluatorVersion).count()
-        == 5
+        == 6
     )
     assert (
         db.query(HveeObservation).count()
-        == 14
+        == 24
     )
 
     metrics = {
@@ -310,6 +384,26 @@ def test_dual_write_resolves_canonical_registry_once(
             NORMALIZED_DELETIONS_METRIC.key,
             NORMALIZED_DELETIONS_METRIC.version,
         ),
+        (
+            EXACT_NORMALIZED_MATCH_METRIC.key,
+            EXACT_NORMALIZED_MATCH_METRIC.version,
+        ),
+        (
+            REFERENCE_EMPTY_METRIC.key,
+            REFERENCE_EMPTY_METRIC.version,
+        ),
+        (
+            GENERATED_EMPTY_METRIC.key,
+            GENERATED_EMPTY_METRIC.version,
+        ),
+        (
+            UNEXPECTED_OUTPUT_METRIC.key,
+            UNEXPECTED_OUTPUT_METRIC.version,
+        ),
+        (
+            MISSING_OUTPUT_METRIC.key,
+            MISSING_OUTPUT_METRIC.version,
+        ),
     }
 
     assert evaluators == {
@@ -332,6 +426,10 @@ def test_dual_write_resolves_canonical_registry_once(
         (
             NORMALIZED_WORD_ALIGNMENT_EVALUATOR.key,
             NORMALIZED_WORD_ALIGNMENT_EVALUATOR.version,
+        ),
+        (
+            TRANSCRIPT_INTEGRITY_EVALUATOR.key,
+            TRANSCRIPT_INTEGRITY_EVALUATOR.version,
         ),
     }
 
@@ -399,7 +497,7 @@ def test_stage_dual_write_does_not_commit(
 
     assert (
         db.query(HveeObservation).count()
-        == 7
+        == 12
     )
 
     db.rollback()

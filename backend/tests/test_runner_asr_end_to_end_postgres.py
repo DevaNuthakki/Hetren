@@ -22,6 +22,9 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    EXACT_NORMALIZED_MATCH_METRIC,
+    GENERATED_EMPTY_METRIC,
+    MISSING_OUTPUT_METRIC,
     NORMALIZED_CER_EVALUATOR,
     NORMALIZED_CER_METRIC,
     NORMALIZED_DELETIONS_METRIC,
@@ -30,9 +33,13 @@ from hvee.packs.asr import (
     NORMALIZED_WER_EVALUATOR,
     NORMALIZED_WER_METRIC,
     NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
+    REFERENCE_EMPTY_METRIC,
+    TRANSCRIPT_INTEGRITY_EVALUATOR,
+    UNEXPECTED_OUTPUT_METRIC,
     WER_EVALUATOR,
     WER_METRIC,
     evaluate_normalized_transcript_pair,
+    evaluate_transcript_integrity,
 )
 from app.database import get_db
 from app.evaluation_provenance import (
@@ -647,7 +654,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 .all()
             )
 
-            assert len(persisted_observations) == 7
+            assert len(persisted_observations) == 12
 
             metric_ids = [
                 observation.metric_definition_id
@@ -699,6 +706,11 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 NORMALIZED_SUBSTITUTIONS_METRIC.key,
                 NORMALIZED_INSERTIONS_METRIC.key,
                 NORMALIZED_DELETIONS_METRIC.key,
+                EXACT_NORMALIZED_MATCH_METRIC.key,
+                REFERENCE_EMPTY_METRIC.key,
+                GENERATED_EMPTY_METRIC.key,
+                UNEXPECTED_OUTPUT_METRIC.key,
+                MISSING_OUTPUT_METRIC.key,
             }
 
             wer_observation = observations_by_metric_key[
@@ -842,6 +854,78 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 normalized_evaluation.deletions
             )
 
+            integrity_evaluation = (
+                evaluate_transcript_integrity(
+                    normalized_evaluation
+                )
+            )
+
+            exact_match_observation = (
+                observations_by_metric_key[
+                    EXACT_NORMALIZED_MATCH_METRIC.key
+                ]
+            )
+            reference_empty_observation = (
+                observations_by_metric_key[
+                    REFERENCE_EMPTY_METRIC.key
+                ]
+            )
+            generated_empty_observation = (
+                observations_by_metric_key[
+                    GENERATED_EMPTY_METRIC.key
+                ]
+            )
+            unexpected_output_observation = (
+                observations_by_metric_key[
+                    UNEXPECTED_OUTPUT_METRIC.key
+                ]
+            )
+            missing_output_observation = (
+                observations_by_metric_key[
+                    MISSING_OUTPUT_METRIC.key
+                ]
+            )
+
+            integrity_observations = (
+                exact_match_observation,
+                reference_empty_observation,
+                generated_empty_observation,
+                unexpected_output_observation,
+                missing_output_observation,
+            )
+
+            for observation in integrity_observations:
+                assert observation.scope == "test_case"
+                assert observation.status == "success"
+                assert observation.value_type == "boolean"
+
+            assert (
+                exact_match_observation.boolean_value
+                is integrity_evaluation.exact_match
+            )
+            assert (
+                reference_empty_observation.boolean_value
+                is integrity_evaluation.reference_empty
+            )
+            assert (
+                generated_empty_observation.boolean_value
+                is integrity_evaluation.generated_empty
+            )
+            assert (
+                unexpected_output_observation.boolean_value
+                is integrity_evaluation.unexpected_output
+            )
+            assert (
+                missing_output_observation.boolean_value
+                is integrity_evaluation.missing_output
+            )
+
+            assert exact_match_observation.boolean_value is True
+            assert reference_empty_observation.boolean_value is False
+            assert generated_empty_observation.boolean_value is False
+            assert unexpected_output_observation.boolean_value is False
+            assert missing_output_observation.boolean_value is False
+
             normalized_wer_evaluator = evaluators_by_id[
                 normalized_wer_observation.evaluator_version_id
             ]
@@ -850,6 +934,9 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             ]
             alignment_evaluator = evaluators_by_id[
                 substitutions_observation.evaluator_version_id
+            ]
+            integrity_evaluator = evaluators_by_id[
+                exact_match_observation.evaluator_version_id
             ]
 
             assert (

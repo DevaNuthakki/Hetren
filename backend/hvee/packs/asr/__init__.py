@@ -65,3 +65,33 @@ __all__ += [
     "evaluate_normalized_transcript_pair",
     "normalize_text_basic",
 ]
+
+
+from hvee.packs.asr.transcript_integrity import (
+    ASRTranscriptIntegrityEvaluation,
+    EXACT_NORMALIZED_MATCH_METRIC,
+    GENERATED_EMPTY_METRIC,
+    MISSING_OUTPUT_METRIC,
+    REFERENCE_EMPTY_METRIC,
+    TRANSCRIPT_INTEGRITY_EVALUATOR,
+    TRANSCRIPT_INTEGRITY_EVALUATOR_VERSION,
+    TRANSCRIPT_INTEGRITY_METRIC_VERSION,
+    UNEXPECTED_OUTPUT_METRIC,
+    build_transcript_integrity_observations,
+    evaluate_transcript_integrity,
+)
+
+
+__all__ += [
+    "ASRTranscriptIntegrityEvaluation",
+    "EXACT_NORMALIZED_MATCH_METRIC",
+    "GENERATED_EMPTY_METRIC",
+    "MISSING_OUTPUT_METRIC",
+    "REFERENCE_EMPTY_METRIC",
+    "TRANSCRIPT_INTEGRITY_EVALUATOR",
+    "TRANSCRIPT_INTEGRITY_EVALUATOR_VERSION",
+    "TRANSCRIPT_INTEGRITY_METRIC_VERSION",
+    "UNEXPECTED_OUTPUT_METRIC",
+    "build_transcript_integrity_observations",
+    "evaluate_transcript_integrity",
+]

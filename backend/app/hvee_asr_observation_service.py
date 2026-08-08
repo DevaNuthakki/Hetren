@@ -168,3 +168,113 @@ def stage_asr_normalized_text_error_observations(
         db_insertions_observation,
         db_deletions_observation,
     )
+
+
+from app.hvee_asr_registry import (
+    resolve_asr_transcript_integrity_registry,
+)
+from hvee.packs.asr import (
+    ASRTranscriptIntegrityEvaluation,
+    build_transcript_integrity_observations,
+)
+
+
+def stage_asr_transcript_integrity_observations(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    evaluation: ASRTranscriptIntegrityEvaluation,
+) -> tuple[
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+]:
+    """
+    Stage deterministic transcript-integrity observations.
+
+    All five metrics are produced by one versioned evaluator and are
+    staged in the caller-owned transaction. This function never
+    commits.
+    """
+
+    registry = (
+        resolve_asr_transcript_integrity_registry(
+            db
+        )
+    )
+
+    (
+        exact_match_observation,
+        reference_empty_observation,
+        generated_empty_observation,
+        unexpected_output_observation,
+        missing_output_observation,
+    ) = build_transcript_integrity_observations(
+        evaluation
+    )
+
+    db_exact_match = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.exact_match_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=exact_match_observation,
+    )
+
+    db_reference_empty = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.reference_empty_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=reference_empty_observation,
+    )
+
+    db_generated_empty = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.generated_empty_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=generated_empty_observation,
+    )
+
+    db_unexpected_output = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.unexpected_output_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=unexpected_output_observation,
+    )
+
+    db_missing_output = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.missing_output_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=missing_output_observation,
+    )
+
+    return (
+        db_exact_match,
+        db_reference_empty,
+        db_generated_empty,
+        db_unexpected_output,
+        db_missing_output,
+    )
