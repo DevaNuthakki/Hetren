@@ -423,3 +423,250 @@ class HveeObservation(Base):
         default=utc_now,
         server_default=func.now(),
     )
+
+
+class HveeDecision(Base):
+    """
+    Persisted HVEE decision bound to one immutable result provenance.
+
+    The row stores queryable decision summaries plus a deterministic
+    decision payload and digest. Scientific evidence itself remains
+    owned by EvaluationResultProvenance rather than being duplicated
+    here.
+    """
+
+    __tablename__ = "hvee_decisions"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "result_provenance_id",
+            "policy_sha256",
+            "schema_version",
+            name=(
+                "uq_hvee_decisions_"
+                "provenance_policy_schema"
+            ),
+        ),
+        CheckConstraint(
+            "schema_version >= 1",
+            name=(
+                "ck_hvee_decisions_"
+                "positive_schema_version"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(evaluation_type)) > 0",
+            name=(
+                "ck_hvee_decisions_"
+                "evaluation_type_not_blank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(policy_key)) > 0",
+            name=(
+                "ck_hvee_decisions_"
+                "policy_key_not_blank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(policy_version)) > 0",
+            name=(
+                "ck_hvee_decisions_"
+                "policy_version_not_blank"
+            ),
+        ),
+        CheckConstraint(
+            "length(policy_sha256) = 64",
+            name=(
+                "ck_hvee_decisions_"
+                "policy_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(provenance_sha256) = 64",
+            name=(
+                "ck_hvee_decisions_"
+                "provenance_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(observation_evidence_sha256) = 64",
+            name=(
+                "ck_hvee_decisions_"
+                "observation_evidence_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "integrity_assessment IN ("
+                "'valid', "
+                "'invalid'"
+                ")"
+            ),
+            name=(
+                "ck_hvee_decisions_"
+                "integrity_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "evidence_assessment IN ("
+                "'sufficient', "
+                "'insufficient'"
+                ")"
+            ),
+            name=(
+                "ck_hvee_decisions_"
+                "evidence_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "critical_assessment IN ("
+                "'clear', "
+                "'violated'"
+                ")"
+            ),
+            name=(
+                "ck_hvee_decisions_"
+                "critical_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "claim_assessment IN ("
+                "'supported', "
+                "'contradicted', "
+                "'unresolved'"
+                ")"
+            ),
+            name=(
+                "ck_hvee_decisions_"
+                "claim_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "verdict IN ("
+                "'pass', "
+                "'fail', "
+                "'inconclusive', "
+                "'invalid'"
+                ")"
+            ),
+            name="ck_hvee_decisions_verdict",
+        ),
+        CheckConstraint(
+            "length(trim(reason)) > 0",
+            name=(
+                "ck_hvee_decisions_"
+                "reason_not_blank"
+            ),
+        ),
+        CheckConstraint(
+            "length(decision_sha256) = 64",
+            name=(
+                "ck_hvee_decisions_"
+                "decision_sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(
+        Integer,
+        primary_key=True,
+    )
+
+    result_provenance_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_result_provenances.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+        index=True,
+    )
+
+    policy_key = Column(
+        String(200),
+        nullable=False,
+    )
+
+    policy_version = Column(
+        String(100),
+        nullable=False,
+    )
+
+    policy_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    provenance_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    observation_evidence_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    integrity_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    evidence_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    critical_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    claim_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    verdict = Column(
+        String(32),
+        nullable=False,
+        index=True,
+    )
+
+    reason = Column(
+        String(100),
+        nullable=False,
+    )
+
+    decision_payload = Column(
+        JSON,
+        nullable=False,
+    )
+
+    decision_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
