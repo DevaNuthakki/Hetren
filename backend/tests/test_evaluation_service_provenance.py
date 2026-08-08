@@ -8,8 +8,9 @@ from sqlalchemy.pool import StaticPool
 from app import models
 from app.database import Base
 from app.evaluation_provenance import (
-    EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
+    EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_with_manifest,
+    verify_evaluation_result_observation_binding,
     verify_evaluation_result_provenance,
 )
 from app.evaluation_service import (
@@ -98,10 +99,17 @@ def test_uploaded_transcript_persists_provenance(
         == "uploaded_transcript"
     )
     assert result.provenance.schema_version == (
-        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+        EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
     )
 
     payload = result.provenance.provenance_payload
+
+    assert payload["hvee_observations"]["count"] == 17
+    assert verify_evaluation_result_observation_binding(
+        db,
+        result.provenance,
+    )
+
     hvee_asr = payload["hvee_asr"]
 
     assert hvee_asr["normalization"] == {

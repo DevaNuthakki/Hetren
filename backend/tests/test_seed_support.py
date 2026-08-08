@@ -8,6 +8,7 @@ from sqlalchemy.pool import StaticPool
 from app import models
 from app.database import Base
 from app.evaluation_provenance import (
+    EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_with_manifest,
     verify_evaluation_result_provenance,
 )
@@ -208,11 +209,16 @@ def test_stages_seed_fixture_result_with_provenance(
     assert result.provenance.execution_mode == (
         "seed_fixture"
     )
+    assert result.provenance.schema_version == (
+        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+    )
     assert verify_evaluation_result_provenance(
         result.provenance
     )
 
     payload = result.provenance.provenance_payload
+
+    assert "hvee_observations" not in payload
     execution = payload["execution"]
 
     assert payload["run_manifest"]["status"] == (

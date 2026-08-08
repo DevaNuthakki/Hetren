@@ -50,7 +50,9 @@ from hvee.packs.asr import (
 )
 from app.database import get_db
 from app.evaluation_provenance import (
+    EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION,
     stage_evaluation_run_with_manifest,
+    verify_evaluation_result_observation_binding,
     verify_evaluation_result_provenance,
 )
 from app.local_runner_client import LocalRunnerClient
@@ -1128,7 +1130,23 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 == "sealed"
             )
 
-            assert provenance.schema_version == 3
+            assert provenance.schema_version == (
+                EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
+            )
+
+            assert (
+                provenance_payload[
+                    "hvee_observations"
+                ]["count"]
+                == 17
+            )
+
+            assert (
+                verify_evaluation_result_observation_binding(
+                    db,
+                    provenance,
+                )
+            )
 
             hvee_asr = provenance_payload["hvee_asr"]
 

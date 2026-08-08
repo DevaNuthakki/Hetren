@@ -15,6 +15,9 @@ from app.evaluation_provenance import (
     stage_evaluation_run_with_manifest,
     verify_evaluation_result_provenance,
 )
+from app.evaluation_service import (
+    stage_evaluation_result,
+)
 
 
 @pytest.fixture
@@ -80,18 +83,15 @@ def _stage_result(
     run: models.EvaluationRun,
     test_case: models.TestCase,
 ) -> models.EvaluationResult:
-    result = models.EvaluationResult(
-        run_id=run.id,
-        test_case_id=test_case.id,
-        generated_transcript=(
+    result = stage_evaluation_result(
+        db=db,
+        db_run=run,
+        db_test_case=test_case,
+        generated_text=(
             "unique generated output phrase"
         ),
-        wer=0.25,
-        cer=0.10,
-        quality_label="needs_review",
-        error_summary="test result",
     )
-    db.add(result)
+
     db.flush()
 
     return result

@@ -5,6 +5,13 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from app import models
+from app.hvee_observation_evidence import (
+    HveeObservationEvidenceError,
+    build_test_case_observation_evidence_bundle,
+)
+from hvee.core.observation_evidence import (
+    verify_observation_evidence_bundle,
+)
 from hvee.packs.asr.normalization import (
     BASIC_TEXT_NORMALIZATION,
     normalize_text_basic,
@@ -222,12 +229,15 @@ EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION = 2
 
 EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION = 3
 
+EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION = 4
+
 SUPPORTED_EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSIONS = (
     frozenset(
         {
             EVALUATION_RESULT_PROVENANCE_SCHEMA_VERSION,
             EVALUATION_RESULT_PROVENANCE_INPUT_ARTIFACT_SCHEMA_VERSION,
             EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION,
+            EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION,
         }
     )
 )
@@ -524,6 +534,74 @@ def _build_input_artifact_evidence(
     }
 
 
+def _observation_evidence_bundle_matches_result(
+    *,
+    bundle: object,
+    evaluation_type: str,
+    evaluation_run_id: int,
+    test_case_id: int,
+) -> bool:
+    """
+    Verify that one canonical observation bundle belongs to the
+    evaluation result that will carry it.
+
+    Result provenance binds only immutable test-case observations.
+    Run-level aggregates are intentionally outside this contract.
+    """
+
+    if not verify_observation_evidence_bundle(
+        bundle
+    ):
+        return False
+
+    if not isinstance(bundle, dict):
+        return False
+
+    count = bundle.get("count")
+    observations = bundle.get(
+        "observations"
+    )
+
+    if (
+        isinstance(count, bool)
+        or not isinstance(count, int)
+        or count < 1
+        or not isinstance(
+            observations,
+            list,
+        )
+    ):
+        return False
+
+    expected_target = {
+        "evaluation_run_id": (
+            evaluation_run_id
+        ),
+        "test_case_id": test_case_id,
+    }
+
+    for observation in observations:
+        if not isinstance(
+            observation,
+            dict,
+        ):
+            return False
+
+        if (
+            observation.get(
+                "evaluation_type"
+            )
+            != evaluation_type
+            or observation.get("scope")
+            != "test_case"
+            or observation.get("target")
+            != expected_target
+        ):
+            return False
+
+    return True
+
+
 def build_evaluation_result_provenance_payload(
     *,
     result: models.EvaluationResult,
@@ -534,6 +612,9 @@ def build_evaluation_result_provenance_payload(
     external_reported: dict[str, object] | None = None,
     input_artifact_seal: (
         models.EvaluationInputArtifactSeal | None
+    ) = None,
+    observation_evidence_bundle: (
+        dict[str, object] | None
     ) = None,
 ) -> dict[str, object]:
     normalized_mode = (
@@ -597,8 +678,40 @@ def build_evaluation_result_provenance_payload(
         dict[str, object] | None
     ) = None
 
+    observation_evidence_snapshot: (
+        dict[str, object] | None
+    ) = None
+
+    if observation_evidence_bundle is not None:
+        if not _observation_evidence_bundle_matches_result(
+            bundle=observation_evidence_bundle,
+            evaluation_type=(
+                evaluation_run.evaluation_type
+            ),
+            evaluation_run_id=(
+                evaluation_run.id
+            ),
+            test_case_id=test_case.id,
+        ):
+            raise ValueError(
+                "HVEE observation evidence does not "
+                "match the evaluation result."
+            )
+
+        # Canonical JSON round-trip creates a detached snapshot so
+        # later caller mutation cannot alter the payload by reference.
+        observation_evidence_snapshot = (
+            json.loads(
+                canonicalize_json(
+                    observation_evidence_bundle
+                )
+            )
+        )
+
     schema_version = (
-        EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
+        EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
+        if observation_evidence_snapshot is not None
+        else EVALUATION_RESULT_PROVENANCE_HVEE_ASR_EVIDENCE_SCHEMA_VERSION
     )
 
     if input_artifact_seal is not None:
@@ -688,6 +801,11 @@ def build_evaluation_result_provenance_payload(
             input_artifact_evidence
         )
 
+    if observation_evidence_snapshot is not None:
+        payload["hvee_observations"] = (
+            observation_evidence_snapshot
+        )
+
     # Validate that the complete evidence payload is
     # deterministic JSON before it can be persisted.
     canonicalize_json(payload)
@@ -707,6 +825,7 @@ def stage_evaluation_result_provenance(
     input_artifact_seal: (
         models.EvaluationInputArtifactSeal | None
     ) = None,
+    bind_observation_evidence: bool = True,
 ) -> models.EvaluationResultProvenance:
     if result.id is None:
         db.flush()
@@ -714,6 +833,34 @@ def stage_evaluation_result_provenance(
     if result.provenance is not None:
         raise ValueError(
             "Evaluation result provenance already exists."
+        )
+
+    normalized_mode = (
+        execution_mode.strip()
+        if isinstance(execution_mode, str)
+        else ""
+    )
+
+    if (
+        not bind_observation_evidence
+        and normalized_mode != "seed_fixture"
+    ):
+        raise ValueError(
+            "HVEE observation evidence may only be "
+            "omitted for explicit seed fixtures."
+        )
+
+    observation_evidence_bundle: (
+        dict[str, object] | None
+    ) = None
+
+    if bind_observation_evidence:
+        observation_evidence_bundle = (
+            build_test_case_observation_evidence_bundle(
+                db,
+                evaluation_run_id=evaluation_run.id,
+                test_case_id=test_case.id,
+            )
         )
 
     payload = (
@@ -726,6 +873,9 @@ def stage_evaluation_result_provenance(
             external_reported=external_reported,
             input_artifact_seal=(
                 input_artifact_seal
+            ),
+            observation_evidence_bundle=(
+                observation_evidence_bundle
             ),
         )
     )
@@ -1056,6 +1206,89 @@ def _verify_v3_hvee_asr_evidence(
     )
 
 
+def _verify_v4_observation_evidence(
+    *,
+    payload: dict[str, object],
+) -> bool:
+    """
+    Verify schema-v4 observation evidence and parent-resource binding.
+
+    This validates internal integrity and binding. It does not prove
+    authenticity against an attacker able to rewrite all persisted
+    application state and recompute digests.
+    """
+
+    if not _verify_v3_hvee_asr_evidence(
+        payload=payload,
+    ):
+        return False
+
+    expected_keys = {
+        "schema_version",
+        "evaluation_type",
+        "result",
+        "run_manifest",
+        "evidence",
+        "hvee_asr",
+        "hvee_observations",
+        "evaluation",
+        "execution",
+    }
+
+    if "input_artifact" in payload:
+        expected_keys.add(
+            "input_artifact"
+        )
+
+    if set(payload) != expected_keys:
+        return False
+
+    result = payload.get("result")
+
+    if (
+        not isinstance(result, dict)
+        or set(result)
+        != {
+            "id",
+            "run_id",
+            "test_case_id",
+        }
+    ):
+        return False
+
+    result_id = result.get("id")
+    run_id = result.get("run_id")
+    test_case_id = result.get(
+        "test_case_id"
+    )
+
+    for identifier in (
+        result_id,
+        run_id,
+        test_case_id,
+    ):
+        if (
+            isinstance(identifier, bool)
+            or not isinstance(
+                identifier,
+                int,
+            )
+            or identifier < 1
+        ):
+            return False
+
+    return _observation_evidence_bundle_matches_result(
+        bundle=payload.get(
+            "hvee_observations"
+        ),
+        evaluation_type=payload.get(
+            "evaluation_type"
+        ),
+        evaluation_run_id=run_id,
+        test_case_id=test_case_id,
+    )
+
+
 def verify_evaluation_result_provenance(
     provenance: models.EvaluationResultProvenance,
 ) -> bool:
@@ -1124,6 +1357,24 @@ def verify_evaluation_result_provenance(
         ):
             return False
 
+    elif (
+        provenance.schema_version
+        == EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
+    ):
+        if not _verify_v4_observation_evidence(
+            payload=payload,
+        ):
+            return False
+
+        if (
+            "input_artifact" in payload
+            and not _verify_v2_input_artifact_evidence(
+                payload=payload,
+                provenance=provenance,
+            )
+        ):
+            return False
+
     try:
         expected_sha256 = (
             calculate_manifest_sha256(
@@ -1136,4 +1387,68 @@ def verify_evaluation_result_provenance(
     return (
         provenance.provenance_sha256
         == expected_sha256
+    )
+
+
+
+def verify_evaluation_result_observation_binding(
+    db: Session,
+    provenance: models.EvaluationResultProvenance,
+) -> bool:
+    """
+    Compare stored schema-v4 evidence with current persisted observations.
+
+    The normal provenance verifier checks the self-contained evidence
+    payload. This verifier additionally detects later changes to the
+    persisted HVEE observation rows.
+    """
+
+    if (
+        provenance.schema_version
+        != EVALUATION_RESULT_PROVENANCE_OBSERVATION_EVIDENCE_SCHEMA_VERSION
+        or not verify_evaluation_result_provenance(
+            provenance
+        )
+    ):
+        return False
+
+    payload = provenance.provenance_payload
+
+    if not isinstance(payload, dict):
+        return False
+
+    result = payload.get("result")
+
+    if not isinstance(result, dict):
+        return False
+
+    run_id = result.get("run_id")
+    test_case_id = result.get(
+        "test_case_id"
+    )
+
+    if (
+        isinstance(run_id, bool)
+        or not isinstance(run_id, int)
+        or run_id < 1
+        or isinstance(test_case_id, bool)
+        or not isinstance(test_case_id, int)
+        or test_case_id < 1
+    ):
+        return False
+
+    try:
+        current_bundle = (
+            build_test_case_observation_evidence_bundle(
+                db,
+                evaluation_run_id=run_id,
+                test_case_id=test_case_id,
+            )
+        )
+    except HveeObservationEvidenceError:
+        return False
+
+    return (
+        payload.get("hvee_observations")
+        == current_bundle
     )
