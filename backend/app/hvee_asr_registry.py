@@ -211,3 +211,73 @@ def resolve_asr_transcript_integrity_registry(
         missing_output_metric=missing_output_metric,
         evaluator=evaluator,
     )
+
+
+from hvee.packs.asr import (
+    GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
+    MISSING_NUMERIC_TOKEN_COUNT_METRIC,
+    NUMERIC_TOKEN_PRESERVATION_EVALUATOR,
+    NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC,
+    REFERENCE_NUMERIC_TOKEN_COUNT_METRIC,
+    UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ASRNumericPreservationRegistry:
+    reference_count_metric: HveeMetricDefinition
+    generated_count_metric: HveeMetricDefinition
+    sequence_match_metric: HveeMetricDefinition
+    missing_count_metric: HveeMetricDefinition
+    unexpected_count_metric: HveeMetricDefinition
+    evaluator: HveeEvaluatorVersion
+
+
+def resolve_asr_numeric_preservation_registry(
+    db: Session,
+) -> ASRNumericPreservationRegistry:
+    """
+    Resolve the canonical digit-form numeric-preservation registry.
+
+    Registry resolution participates in the caller-owned transaction
+    and never commits independently.
+    """
+
+    reference_count_metric = resolve_metric_definition(
+        db,
+        REFERENCE_NUMERIC_TOKEN_COUNT_METRIC,
+    )
+
+    generated_count_metric = resolve_metric_definition(
+        db,
+        GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
+    )
+
+    sequence_match_metric = resolve_metric_definition(
+        db,
+        NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC,
+    )
+
+    missing_count_metric = resolve_metric_definition(
+        db,
+        MISSING_NUMERIC_TOKEN_COUNT_METRIC,
+    )
+
+    unexpected_count_metric = resolve_metric_definition(
+        db,
+        UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC,
+    )
+
+    evaluator = resolve_evaluator_version(
+        db,
+        NUMERIC_TOKEN_PRESERVATION_EVALUATOR,
+    )
+
+    return ASRNumericPreservationRegistry(
+        reference_count_metric=reference_count_metric,
+        generated_count_metric=generated_count_metric,
+        sequence_match_metric=sequence_match_metric,
+        missing_count_metric=missing_count_metric,
+        unexpected_count_metric=unexpected_count_metric,
+        evaluator=evaluator,
+    )

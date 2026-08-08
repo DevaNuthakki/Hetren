@@ -24,6 +24,8 @@ from hvee.packs.asr import (
     CER_METRIC,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
+    GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
+    MISSING_NUMERIC_TOKEN_COUNT_METRIC,
     MISSING_OUTPUT_METRIC,
     NORMALIZED_CER_EVALUATOR,
     NORMALIZED_CER_METRIC,
@@ -33,8 +35,12 @@ from hvee.packs.asr import (
     NORMALIZED_WER_EVALUATOR,
     NORMALIZED_WER_METRIC,
     NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
+    NUMERIC_TOKEN_PRESERVATION_EVALUATOR,
+    NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC,
     REFERENCE_EMPTY_METRIC,
+    REFERENCE_NUMERIC_TOKEN_COUNT_METRIC,
     TRANSCRIPT_INTEGRITY_EVALUATOR,
+    UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC,
     UNEXPECTED_OUTPUT_METRIC,
     WER_EVALUATOR,
     WER_METRIC,
@@ -174,6 +180,11 @@ def test_synchronous_result_dual_writes_wer_and_cer(
         GENERATED_EMPTY_METRIC.key,
         UNEXPECTED_OUTPUT_METRIC.key,
         MISSING_OUTPUT_METRIC.key,
+        REFERENCE_NUMERIC_TOKEN_COUNT_METRIC.key,
+        GENERATED_NUMERIC_TOKEN_COUNT_METRIC.key,
+        NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key,
+        MISSING_NUMERIC_TOKEN_COUNT_METRIC.key,
+        UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
     }
 
     wer = observations[WER_METRIC.key]
@@ -337,15 +348,15 @@ def test_dual_write_resolves_canonical_registry_once(
 
     assert (
         db.query(HveeMetricDefinition).count()
-        == 12
+        == 17
     )
     assert (
         db.query(HveeEvaluatorVersion).count()
-        == 6
+        == 7
     )
     assert (
         db.query(HveeObservation).count()
-        == 24
+        == 34
     )
 
     metrics = {
@@ -404,6 +415,26 @@ def test_dual_write_resolves_canonical_registry_once(
             MISSING_OUTPUT_METRIC.key,
             MISSING_OUTPUT_METRIC.version,
         ),
+        (
+            REFERENCE_NUMERIC_TOKEN_COUNT_METRIC.key,
+            REFERENCE_NUMERIC_TOKEN_COUNT_METRIC.version,
+        ),
+        (
+            GENERATED_NUMERIC_TOKEN_COUNT_METRIC.key,
+            GENERATED_NUMERIC_TOKEN_COUNT_METRIC.version,
+        ),
+        (
+            NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key,
+            NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.version,
+        ),
+        (
+            MISSING_NUMERIC_TOKEN_COUNT_METRIC.key,
+            MISSING_NUMERIC_TOKEN_COUNT_METRIC.version,
+        ),
+        (
+            UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
+            UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.version,
+        ),
     }
 
     assert evaluators == {
@@ -430,6 +461,10 @@ def test_dual_write_resolves_canonical_registry_once(
         (
             TRANSCRIPT_INTEGRITY_EVALUATOR.key,
             TRANSCRIPT_INTEGRITY_EVALUATOR.version,
+        ),
+        (
+            NUMERIC_TOKEN_PRESERVATION_EVALUATOR.key,
+            NUMERIC_TOKEN_PRESERVATION_EVALUATOR.version,
         ),
     }
 
@@ -497,7 +532,7 @@ def test_stage_dual_write_does_not_commit(
 
     assert (
         db.query(HveeObservation).count()
-        == 12
+        == 17
     )
 
     db.rollback()

@@ -278,3 +278,112 @@ def stage_asr_transcript_integrity_observations(
         db_unexpected_output,
         db_missing_output,
     )
+
+
+from app.hvee_asr_registry import (
+    resolve_asr_numeric_preservation_registry,
+)
+from hvee.packs.asr import (
+    ASRNumericPreservationEvaluation,
+    build_numeric_preservation_observations,
+)
+
+
+def stage_asr_numeric_preservation_observations(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    evaluation: ASRNumericPreservationEvaluation,
+) -> tuple[
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+    HveeObservation,
+]:
+    """
+    Stage deterministic digit-form numeric-preservation observations.
+
+    The five metrics share one versioned evaluator and participate in
+    the caller-owned transaction. This function never commits.
+    """
+
+    registry = (
+        resolve_asr_numeric_preservation_registry(
+            db
+        )
+    )
+
+    (
+        reference_count_observation,
+        generated_count_observation,
+        sequence_match_observation,
+        missing_count_observation,
+        unexpected_count_observation,
+    ) = build_numeric_preservation_observations(
+        evaluation
+    )
+
+    db_reference_count = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.reference_count_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=reference_count_observation,
+    )
+
+    db_generated_count = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.generated_count_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=generated_count_observation,
+    )
+
+    db_sequence_match = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.sequence_match_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=sequence_match_observation,
+    )
+
+    db_missing_count = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.missing_count_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=missing_count_observation,
+    )
+
+    db_unexpected_count = stage_hvee_observation(
+        db,
+        evaluation_run=evaluation_run,
+        test_case=test_case,
+        metric_definition=(
+            registry.unexpected_count_metric
+        ),
+        evaluator_version=registry.evaluator,
+        observation=unexpected_count_observation,
+    )
+
+    return (
+        db_reference_count,
+        db_generated_count,
+        db_sequence_match,
+        db_missing_count,
+        db_unexpected_count,
+    )

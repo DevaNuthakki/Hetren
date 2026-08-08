@@ -24,6 +24,8 @@ from hvee.packs.asr import (
     CER_METRIC,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
+    GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
+    MISSING_NUMERIC_TOKEN_COUNT_METRIC,
     MISSING_OUTPUT_METRIC,
     NORMALIZED_CER_EVALUATOR,
     NORMALIZED_CER_METRIC,
@@ -33,12 +35,17 @@ from hvee.packs.asr import (
     NORMALIZED_WER_EVALUATOR,
     NORMALIZED_WER_METRIC,
     NORMALIZED_WORD_ALIGNMENT_EVALUATOR,
+    NUMERIC_TOKEN_PRESERVATION_EVALUATOR,
+    NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC,
     REFERENCE_EMPTY_METRIC,
+    REFERENCE_NUMERIC_TOKEN_COUNT_METRIC,
     TRANSCRIPT_INTEGRITY_EVALUATOR,
+    UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC,
     UNEXPECTED_OUTPUT_METRIC,
     WER_EVALUATOR,
     WER_METRIC,
     evaluate_normalized_transcript_pair,
+    evaluate_numeric_preservation,
     evaluate_transcript_integrity,
 )
 from app.database import get_db
@@ -654,7 +661,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 .all()
             )
 
-            assert len(persisted_observations) == 12
+            assert len(persisted_observations) == 17
 
             metric_ids = [
                 observation.metric_definition_id
@@ -711,6 +718,11 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 GENERATED_EMPTY_METRIC.key,
                 UNEXPECTED_OUTPUT_METRIC.key,
                 MISSING_OUTPUT_METRIC.key,
+                REFERENCE_NUMERIC_TOKEN_COUNT_METRIC.key,
+                GENERATED_NUMERIC_TOKEN_COUNT_METRIC.key,
+                NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key,
+                MISSING_NUMERIC_TOKEN_COUNT_METRIC.key,
+                UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
             }
 
             wer_observation = observations_by_metric_key[
@@ -926,6 +938,83 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             assert unexpected_output_observation.boolean_value is False
             assert missing_output_observation.boolean_value is False
 
+            numeric_evaluation = (
+                evaluate_numeric_preservation(
+                    reference_text=EXPECTED_TRANSCRIPT,
+                    generated_text=(
+                        evaluation_result.generated_transcript
+                    ),
+                )
+            )
+
+            reference_numeric_count = (
+                observations_by_metric_key[
+                    REFERENCE_NUMERIC_TOKEN_COUNT_METRIC.key
+                ]
+            )
+            generated_numeric_count = (
+                observations_by_metric_key[
+                    GENERATED_NUMERIC_TOKEN_COUNT_METRIC.key
+                ]
+            )
+            numeric_sequence_match = (
+                observations_by_metric_key[
+                    NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key
+                ]
+            )
+            missing_numeric_count = (
+                observations_by_metric_key[
+                    MISSING_NUMERIC_TOKEN_COUNT_METRIC.key
+                ]
+            )
+            unexpected_numeric_count = (
+                observations_by_metric_key[
+                    UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key
+                ]
+            )
+
+            numeric_observations = (
+                reference_numeric_count,
+                generated_numeric_count,
+                numeric_sequence_match,
+                missing_numeric_count,
+                unexpected_numeric_count,
+            )
+
+            for observation in numeric_observations:
+                assert observation.scope == "test_case"
+                assert observation.status == "success"
+
+            assert reference_numeric_count.value_type == "integer"
+            assert generated_numeric_count.value_type == "integer"
+            assert numeric_sequence_match.value_type == "boolean"
+            assert missing_numeric_count.value_type == "integer"
+            assert unexpected_numeric_count.value_type == "integer"
+
+            assert reference_numeric_count.integer_value == (
+                numeric_evaluation.reference_count
+            )
+            assert generated_numeric_count.integer_value == (
+                numeric_evaluation.generated_count
+            )
+            assert numeric_sequence_match.boolean_value is (
+                numeric_evaluation.sequence_match
+            )
+            assert missing_numeric_count.integer_value == (
+                numeric_evaluation.missing_count
+            )
+            assert unexpected_numeric_count.integer_value == (
+                numeric_evaluation.unexpected_count
+            )
+
+            # EXPECTED_TRANSCRIPT contains no digit-form numeric tokens
+            # and the mock ASR output matches it exactly.
+            assert reference_numeric_count.integer_value == 0
+            assert generated_numeric_count.integer_value == 0
+            assert numeric_sequence_match.boolean_value is True
+            assert missing_numeric_count.integer_value == 0
+            assert unexpected_numeric_count.integer_value == 0
+
             normalized_wer_evaluator = evaluators_by_id[
                 normalized_wer_observation.evaluator_version_id
             ]
@@ -937,6 +1026,9 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             ]
             integrity_evaluator = evaluators_by_id[
                 exact_match_observation.evaluator_version_id
+            ]
+            numeric_evaluator = evaluators_by_id[
+                reference_numeric_count.evaluator_version_id
             ]
 
             assert (
@@ -971,6 +1063,34 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 deletions_observation.evaluator_version_id
                 == substitutions_observation.evaluator_version_id
             )
+
+            assert (
+                integrity_evaluator.key,
+                integrity_evaluator.version,
+            ) == (
+                TRANSCRIPT_INTEGRITY_EVALUATOR.key,
+                TRANSCRIPT_INTEGRITY_EVALUATOR.version,
+            )
+
+            for observation in integrity_observations:
+                assert (
+                    observation.evaluator_version_id
+                    == exact_match_observation.evaluator_version_id
+                )
+
+            assert (
+                numeric_evaluator.key,
+                numeric_evaluator.version,
+            ) == (
+                NUMERIC_TOKEN_PRESERVATION_EVALUATOR.key,
+                NUMERIC_TOKEN_PRESERVATION_EVALUATOR.version,
+            )
+
+            for observation in numeric_observations:
+                assert (
+                    observation.evaluator_version_id
+                    == reference_numeric_count.evaluator_version_id
+                )
 
             assert evaluation_result.generated_transcript == (
                 EXPECTED_TRANSCRIPT
