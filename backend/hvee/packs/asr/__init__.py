@@ -223,9 +223,25 @@ from hvee.packs.asr.critical_number_portfolio import (
     run_critical_number_portfolio,
     run_critical_number_portfolio_case,
 )
+from hvee.packs.asr.critical_number_assurance import (
+    CRITICAL_NUMBER_ASSURANCE_EVIDENCE_SCHEMA_VERSION,
+    CRITICAL_NUMBER_ASSURANCE_EVIDENCE_SHA256_V1,
+    CRITICAL_NUMBER_ASSURANCE_EXPECTED_CASES_V1,
+    CRITICAL_NUMBER_ASSURANCE_EXPECTED_MUTANTS_V1,
+    CRITICAL_NUMBER_ASSURANCE_PROFILE_KEY,
+    CRITICAL_NUMBER_ASSURANCE_PROFILE_VERSION,
+    ASRCriticalNumberAssuranceEvidenceBundle,
+    ASRCriticalNumberAssuranceStatus,
+    build_critical_number_assurance_evidence_bundle,
+    calculate_critical_number_assurance_sha256,
+    verify_critical_number_assurance_evidence_bundle,
+    verify_critical_number_assurance_profile_v1,
+)
 
 
 __all__ += [
+    "ASRCriticalNumberAssuranceEvidenceBundle",
+    "ASRCriticalNumberAssuranceStatus",
     "ASRCriticalNumberEntity",
     "ASRCriticalNumberEvaluatorMutation",
     "ASRCriticalNumberFidelityEvaluation",
@@ -245,6 +261,12 @@ __all__ += [
     "ASRCriticalNumberType",
     "CRITICAL_NUMBER_AMBIGUITY_COUNT_METRIC",
     "CRITICAL_NUMBER_APPLICABLE_METRIC",
+    "CRITICAL_NUMBER_ASSURANCE_EVIDENCE_SCHEMA_VERSION",
+    "CRITICAL_NUMBER_ASSURANCE_EVIDENCE_SHA256_V1",
+    "CRITICAL_NUMBER_ASSURANCE_EXPECTED_CASES_V1",
+    "CRITICAL_NUMBER_ASSURANCE_EXPECTED_MUTANTS_V1",
+    "CRITICAL_NUMBER_ASSURANCE_PROFILE_KEY",
+    "CRITICAL_NUMBER_ASSURANCE_PROFILE_VERSION",
     "CRITICAL_NUMBER_EVALUATOR_MUTATIONS_V1",
     "CRITICAL_NUMBER_EVALUATOR_VERSION",
     "CRITICAL_NUMBER_FIDELITY_EVALUATOR",
@@ -265,8 +287,10 @@ __all__ += [
     "CRITICAL_NUMBER_SUBSTITUTION_COUNT_METRIC",
     "EN_US_CRITICAL_NUMBER_PROFILE",
     "apply_critical_number_evaluator_mutation",
+    "build_critical_number_assurance_evidence_bundle",
     "build_critical_number_fidelity_observations",
     "compare_critical_number_portfolio_case",
+    "calculate_critical_number_assurance_sha256",
     "evaluate_critical_number_fidelity",
     "evaluate_critical_number_portfolio_case_observations",
     "extract_critical_number_entities",
@@ -274,4 +298,6 @@ __all__ += [
     "run_critical_number_evaluator_mutation_suite",
     "run_critical_number_portfolio",
     "run_critical_number_portfolio_case",
+    "verify_critical_number_assurance_evidence_bundle",
+    "verify_critical_number_assurance_profile_v1",
 ]
