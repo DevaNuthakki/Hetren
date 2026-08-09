@@ -670,3 +670,393 @@ class HveeDecision(Base):
         default=utc_now,
         server_default=func.now(),
     )
+
+
+class HveeMatchedReleaseDecision(Base):
+    """
+    Immutable matched-release decision for an ordered run pair.
+
+    The application independently verifies all persisted provenance
+    and observation evidence before constructing this snapshot through
+    the pure HVEE evaluation layer.
+    """
+
+    __tablename__ = "hvee_matched_release_decisions"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "baseline_run_id",
+            "candidate_run_id",
+            "target_sha256",
+            "policy_sha256",
+            "schema_version",
+            name=(
+                "uq_hvee_matched_release_decisions_"
+                "target_policy_schema"
+            ),
+        ),
+        CheckConstraint(
+            "baseline_run_id <> candidate_run_id",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "distinct_runs"
+            ),
+        ),
+        CheckConstraint(
+            "schema_version > 0",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "schema_version_positive"
+            ),
+        ),
+        CheckConstraint(
+            "length(target_sha256) = 64",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "target_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(evaluation_type)) > 0",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "evaluation_type_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(policy_key)) > 0",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "policy_key_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(policy_version)) > 0",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "policy_version_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(policy_sha256) = 64",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "policy_sha256_length"
+            ),
+        ),
+        CheckConstraint(
+            "integrity_assessment IN ('valid', 'invalid')",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "integrity_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "evidence_assessment IN "
+                "('sufficient', 'insufficient')"
+            ),
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "evidence_assessment"
+            ),
+        ),
+        CheckConstraint(
+            "critical_assessment IN ('clear', 'violated')",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "critical_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "claim_assessment IN "
+                "('supported', 'contradicted', 'unresolved')"
+            ),
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "claim_assessment"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "verdict IN "
+                "('pass', 'fail', 'inconclusive', 'invalid')"
+            ),
+            name=(
+                "ck_hvee_matched_release_decisions_verdict"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(reason)) > 0",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "reason_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(decision_sha256) = 64",
+            name=(
+                "ck_hvee_matched_release_decisions_"
+                "decision_sha256_length"
+            ),
+        ),
+        Index(
+            "ix_hvee_matched_release_decisions_baseline_run",
+            "baseline_run_id",
+        ),
+        Index(
+            "ix_hvee_matched_release_decisions_candidate_run",
+            "candidate_run_id",
+        ),
+        Index(
+            "ix_hvee_matched_release_decisions_evaluation_type",
+            "evaluation_type",
+        ),
+        Index(
+            "ix_hvee_matched_release_decisions_verdict",
+            "verdict",
+        ),
+    )
+
+    id = Column(
+        Integer,
+        primary_key=True,
+    )
+
+    baseline_run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    candidate_run_id = Column(
+        Integer,
+        ForeignKey(
+            "evaluation_runs.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    target_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+
+    evaluation_type = Column(
+        String(50),
+        nullable=False,
+    )
+
+    policy_key = Column(
+        String(200),
+        nullable=False,
+    )
+
+    policy_version = Column(
+        String(100),
+        nullable=False,
+    )
+
+    policy_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    integrity_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    evidence_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    critical_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    claim_assessment = Column(
+        String(32),
+        nullable=False,
+    )
+
+    verdict = Column(
+        String(32),
+        nullable=False,
+    )
+
+    reason = Column(
+        String(100),
+        nullable=False,
+    )
+
+    decision_payload = Column(
+        JSON,
+        nullable=False,
+    )
+
+    decision_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+
+class HveeMatchedReleaseDecisionBinding(Base):
+    """
+    Verified provenance pair for one declared matched test case.
+
+    Digests are retained with the referenced provenance identities so
+    a persisted decision remains bound to the exact evidence used.
+    """
+
+    __tablename__ = "hvee_matched_release_decision_bindings"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "matched_release_decision_id",
+            "test_case_id",
+            name=(
+                "uq_hvee_matched_release_bindings_"
+                "decision_case"
+            ),
+        ),
+        UniqueConstraint(
+            "matched_release_decision_id",
+            "baseline_result_provenance_id",
+            name=(
+                "uq_hvee_matched_release_bindings_"
+                "decision_baseline"
+            ),
+        ),
+        UniqueConstraint(
+            "matched_release_decision_id",
+            "candidate_result_provenance_id",
+            name=(
+                "uq_hvee_matched_release_bindings_"
+                "decision_candidate"
+            ),
+        ),
+        CheckConstraint(
+            (
+                "baseline_result_provenance_id "
+                "<> candidate_result_provenance_id"
+            ),
+            name=(
+                "ck_hvee_matched_release_bindings_"
+                "distinct_provenances"
+            ),
+        ),
+        CheckConstraint(
+            "length(baseline_provenance_sha256) = 64",
+            name="ck_hvee_mrd_bindings_baseline_provenance_sha256",
+        ),
+        CheckConstraint(
+            (
+                "length("
+                "baseline_observation_evidence_sha256"
+                ") = 64"
+            ),
+            name="ck_hvee_mrd_bindings_baseline_observation_sha256",
+        ),
+        CheckConstraint(
+            "length(candidate_provenance_sha256) = 64",
+            name="ck_hvee_mrd_bindings_candidate_provenance_sha256",
+        ),
+        CheckConstraint(
+            (
+                "length("
+                "candidate_observation_evidence_sha256"
+                ") = 64"
+            ),
+            name="ck_hvee_mrd_bindings_candidate_observation_sha256",
+        ),
+        Index(
+            "ix_hvee_matched_release_bindings_test_case",
+            "test_case_id",
+        ),
+        Index(
+            (
+                "ix_hvee_matched_release_bindings_"
+                "baseline_provenance"
+            ),
+            "baseline_result_provenance_id",
+        ),
+        Index(
+            (
+                "ix_hvee_matched_release_bindings_"
+                "candidate_provenance"
+            ),
+            "candidate_result_provenance_id",
+        ),
+    )
+
+    id = Column(
+        Integer,
+        primary_key=True,
+    )
+
+    matched_release_decision_id = Column(
+        Integer,
+        ForeignKey(
+            "hvee_matched_release_decisions.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+    )
+
+    test_case_id = Column(
+        Integer,
+        ForeignKey("test_cases.id"),
+        nullable=False,
+    )
+
+    baseline_result_provenance_id = Column(
+        Integer,
+        ForeignKey("evaluation_result_provenances.id"),
+        nullable=False,
+    )
+
+    baseline_provenance_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    baseline_observation_evidence_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    candidate_result_provenance_id = Column(
+        Integer,
+        ForeignKey("evaluation_result_provenances.id"),
+        nullable=False,
+    )
+
+    candidate_provenance_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    candidate_observation_evidence_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
