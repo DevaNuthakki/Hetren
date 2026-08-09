@@ -22,6 +22,8 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    CRITICAL_NUMBER_METRICS,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
     GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
@@ -185,6 +187,10 @@ def test_synchronous_result_dual_writes_wer_and_cer(
         NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key,
         MISSING_NUMERIC_TOKEN_COUNT_METRIC.key,
         UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
+        *(
+            metric.key
+            for metric in CRITICAL_NUMBER_METRICS
+        ),
     }
 
     wer = observations[WER_METRIC.key]
@@ -348,15 +354,15 @@ def test_dual_write_resolves_canonical_registry_once(
 
     assert (
         db.query(HveeMetricDefinition).count()
-        == 17
+        == 27
     )
     assert (
         db.query(HveeEvaluatorVersion).count()
-        == 7
+        == 8
     )
     assert (
         db.query(HveeObservation).count()
-        == 34
+        == 54
     )
 
     metrics = {
@@ -435,6 +441,10 @@ def test_dual_write_resolves_canonical_registry_once(
             UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
             UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.version,
         ),
+        *(
+            (metric.key, metric.version)
+            for metric in CRITICAL_NUMBER_METRICS
+        ),
     }
 
     assert evaluators == {
@@ -465,6 +475,10 @@ def test_dual_write_resolves_canonical_registry_once(
         (
             NUMERIC_TOKEN_PRESERVATION_EVALUATOR.key,
             NUMERIC_TOKEN_PRESERVATION_EVALUATOR.version,
+        ),
+        (
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
         ),
     }
 
@@ -532,7 +546,7 @@ def test_stage_dual_write_does_not_commit(
 
     assert (
         db.query(HveeObservation).count()
-        == 17
+        == 27
     )
 
     db.rollback()

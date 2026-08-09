@@ -27,6 +27,7 @@ from hvee.core.observation_evidence import (
 )
 from hvee.packs.asr import (
     CER_METRIC,
+    CRITICAL_NUMBER_METRICS,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
     GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
@@ -123,7 +124,7 @@ def build_resources(
     return run, test_case
 
 
-def test_adapter_builds_bundle_from_all_17_asr_observations(
+def test_adapter_builds_bundle_from_all_27_asr_observations(
     db: Session,
 ):
     run, test_case = build_resources(db)
@@ -147,7 +148,7 @@ def test_adapter_builds_bundle_from_all_17_asr_observations(
         )
     )
 
-    assert len(records) == 17
+    assert len(records) == 27
 
     bundle = (
         build_test_case_observation_evidence_bundle(
@@ -157,7 +158,7 @@ def test_adapter_builds_bundle_from_all_17_asr_observations(
         )
     )
 
-    assert bundle["count"] == 17
+    assert bundle["count"] == 27
     assert verify_observation_evidence_bundle(
         bundle
     )
@@ -187,6 +188,10 @@ def test_adapter_builds_bundle_from_all_17_asr_observations(
         NUMERIC_TOKEN_SEQUENCE_MATCH_METRIC.key,
         MISSING_NUMERIC_TOKEN_COUNT_METRIC.key,
         UNEXPECTED_NUMERIC_TOKEN_COUNT_METRIC.key,
+        *(
+            metric.key
+            for metric in CRITICAL_NUMBER_METRICS
+        ),
     }
 
 
@@ -336,7 +341,7 @@ def test_adapter_excludes_run_scoped_observations(
         )
     )
 
-    assert bundle["count"] == 17
+    assert bundle["count"] == 27
 
     assert all(
         observation["scope"]
