@@ -5,6 +5,7 @@ from app.evaluation_provenance import (
     stage_evaluation_result_provenance,
 )
 from app.hvee_asr_observation_service import (
+    stage_asr_critical_number_fidelity_observations,
     stage_asr_normalized_text_error_observations,
     stage_asr_numeric_preservation_observations,
     stage_asr_text_error_observations,
@@ -12,6 +13,8 @@ from app.hvee_asr_observation_service import (
 )
 from hvee.packs.asr import (
     ASRTextEvaluation,
+    EN_US_CRITICAL_NUMBER_PROFILE,
+    evaluate_critical_number_fidelity,
     evaluate_normalized_transcript_pair,
     evaluate_numeric_preservation,
     evaluate_transcript_integrity,
@@ -99,6 +102,14 @@ def stage_evaluation_result(
         )
     )
 
+    critical_number_evaluation = (
+        evaluate_critical_number_fidelity(
+            reference_text=reference_text,
+            generated_text=generated_text,
+            profile=EN_US_CRITICAL_NUMBER_PROFILE,
+        )
+    )
+
     error_summary = _format_error_summary(
         evaluation
     )
@@ -154,6 +165,16 @@ def stage_evaluation_result(
         evaluation_run=db_run,
         test_case=db_test_case,
         evaluation=numeric_evaluation,
+    )
+
+    # Critical Number Fidelity runs in evidence-only shadow mode. Its
+    # versioned observations are persisted and sealed with the result,
+    # but they do not influence legacy quality labels or release policy.
+    stage_asr_critical_number_fidelity_observations(
+        db,
+        evaluation_run=db_run,
+        test_case=db_test_case,
+        evaluation=critical_number_evaluation,
     )
 
     return db_result
