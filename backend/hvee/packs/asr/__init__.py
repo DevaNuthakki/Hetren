@@ -237,6 +237,16 @@ from hvee.packs.asr.critical_number_assurance import (
     verify_critical_number_assurance_evidence_bundle,
     verify_critical_number_assurance_profile_v1,
 )
+from hvee.packs.asr.critical_number_release_shadow import (
+    CRITICAL_NUMBER_MATCHED_RELEASE_SHADOW_KEY,
+    CRITICAL_NUMBER_MATCHED_RELEASE_SHADOW_VERSION,
+    ASRCriticalNumberMatchedReleaseShadowResult,
+    ASRCriticalNumberShadowCase,
+    ASRCriticalNumberShadowEvidenceState,
+    ASRCriticalNumberShadowSide,
+    ASRCriticalNumberShadowTransition,
+    evaluate_asr_critical_number_matched_release_shadow,
+)
 
 
 __all__ += [
@@ -250,6 +260,7 @@ __all__ += [
     "ASRCriticalNumberFindingType",
     "ASRCriticalNumberMutationReport",
     "ASRCriticalNumberMutationResult",
+    "ASRCriticalNumberMatchedReleaseShadowResult",
     "ASRCriticalNumberPortfolioCase",
     "ASRCriticalNumberPortfolioCaseResult",
     "ASRCriticalNumberPortfolioDefinition",
@@ -258,6 +269,10 @@ __all__ += [
     "ASRCriticalNumberPortfolioReport",
     "ASRCriticalNumberProfile",
     "ASRCriticalNumberReasonCode",
+    "ASRCriticalNumberShadowCase",
+    "ASRCriticalNumberShadowEvidenceState",
+    "ASRCriticalNumberShadowSide",
+    "ASRCriticalNumberShadowTransition",
     "ASRCriticalNumberType",
     "CRITICAL_NUMBER_AMBIGUITY_COUNT_METRIC",
     "CRITICAL_NUMBER_APPLICABLE_METRIC",
@@ -276,6 +291,8 @@ __all__ += [
     "CRITICAL_NUMBER_INSERTION_COUNT_METRIC",
     "CRITICAL_NUMBER_METRICS",
     "CRITICAL_NUMBER_METRIC_VERSION",
+    "CRITICAL_NUMBER_MATCHED_RELEASE_SHADOW_KEY",
+    "CRITICAL_NUMBER_MATCHED_RELEASE_SHADOW_VERSION",
     "CRITICAL_NUMBER_MUTATION_SUITE_KEY",
     "CRITICAL_NUMBER_MUTATION_SUITE_VERSION",
     "CRITICAL_NUMBER_OMISSION_COUNT_METRIC",
@@ -292,6 +309,7 @@ __all__ += [
     "compare_critical_number_portfolio_case",
     "calculate_critical_number_assurance_sha256",
     "evaluate_critical_number_fidelity",
+    "evaluate_asr_critical_number_matched_release_shadow",
     "evaluate_critical_number_portfolio_case_observations",
     "extract_critical_number_entities",
     "run_critical_number_evaluator_mutation",
