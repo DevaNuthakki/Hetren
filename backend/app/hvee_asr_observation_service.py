@@ -387,3 +387,68 @@ def stage_asr_numeric_preservation_observations(
         db_missing_count,
         db_unexpected_count,
     )
+
+
+from app.hvee_asr_registry import (
+    resolve_asr_critical_number_fidelity_registry,
+)
+from hvee.packs.asr import (
+    ASRCriticalNumberFidelityEvaluation,
+    build_critical_number_fidelity_observations,
+)
+
+
+def stage_asr_critical_number_fidelity_observations(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    evaluation: ASRCriticalNumberFidelityEvaluation,
+) -> tuple[HveeObservation, ...]:
+    """
+    Stage en-US Critical Number Fidelity observations.
+
+    All ten observations share one versioned evaluator and retain the
+    evaluator's explicit success, abstained, or unsupported status.
+    They participate in the caller-owned transaction; this function
+    never commits and does not enable shadow or release execution.
+    """
+
+    registry = (
+        resolve_asr_critical_number_fidelity_registry(
+            db
+        )
+    )
+    observations = (
+        build_critical_number_fidelity_observations(
+            evaluation
+        )
+    )
+    metric_definitions = (
+        registry.applicable_metric,
+        registry.preserved_metric,
+        registry.outcome_metric,
+        registry.reference_count_metric,
+        registry.generated_count_metric,
+        registry.substitution_count_metric,
+        registry.omission_count_metric,
+        registry.insertion_count_metric,
+        registry.ambiguity_count_metric,
+        registry.findings_metric,
+    )
+
+    return tuple(
+        stage_hvee_observation(
+            db,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+            metric_definition=metric_definition,
+            evaluator_version=registry.evaluator,
+            observation=observation,
+        )
+        for metric_definition, observation in zip(
+            metric_definitions,
+            observations,
+            strict=True,
+        )
+    )
