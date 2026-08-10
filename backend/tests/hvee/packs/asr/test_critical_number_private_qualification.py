@@ -66,6 +66,14 @@ from hvee.packs.asr.critical_number_private_qualification import (
     verify_critical_number_private_qualification_campaign,
     verify_critical_number_private_qualification_protocol,
 )
+from hvee.packs.asr.critical_number_private_assessment import (
+    ASRCriticalNumberPrivateStatisticalAssessmentResult,
+    build_critical_number_private_statistical_assessment_v1,
+    verify_critical_number_private_statistical_assessment_v1,
+)
+from hvee.packs.asr.critical_number_private_statistics import (
+    build_critical_number_private_statistical_method_manifest_v1,
+)
 
 
 _SIGNING_KEY = b"private-qualification-test-signing-key-not-production"
@@ -164,7 +172,6 @@ def _criteria(**changes: object):
         "method_manifest_sha256": _digest("statistical-method"),
         "multiplicity_control_key": "holm-familywise-control",
         "multiplicity_control_version": "1.0.0",
-        "random_seed_commitment_sha256": _digest("private-random-seed"),
         "confidence_level_ppm": 950_000,
         "minimum_total_usable_cases": 7,
         "minimum_usable_cases_per_stratum": 1,
@@ -232,9 +239,16 @@ def _envelope_definition(*, run_id: str, sequence: int, previous: str | None):
     )
 
 
-def _full_campaign():
+def _full_campaign(*, statistical_criteria=None, execution_statuses=None):
     material = _private_material()
-    campaign_definition = _campaign_definition(material)
+    campaign_definition = _campaign_definition(
+        material,
+        **(
+            {"statistical_criteria": statistical_criteria}
+            if statistical_criteria is not None
+            else {}
+        ),
+    )
     protocol = build_critical_number_private_qualification_protocol(
         campaign_definition
     )
@@ -245,7 +259,7 @@ def _full_campaign():
         commitment.case_token: disclosure
         for commitment, disclosure in material.values()
     }
-    statuses = (
+    statuses = execution_statuses or (
         ASRCriticalNumberPrivateHoldoutExecutionStatus.COMPLETED,
         ASRCriticalNumberPrivateHoldoutExecutionStatus.COMPLETED,
         ASRCriticalNumberPrivateHoldoutExecutionStatus.COMPLETED,
@@ -254,6 +268,8 @@ def _full_campaign():
         ASRCriticalNumberPrivateHoldoutExecutionStatus.FAILED,
         ASRCriticalNumberPrivateHoldoutExecutionStatus.TIMED_OUT,
     )
+    if len(statuses) != len(plan_definition.cases):
+        raise ValueError("execution statuses must cover every planned case")
     executions = tuple(
         ASRCriticalNumberPrivateHoldoutCaseExecution(
             case_token=case.case_token,
@@ -489,6 +505,57 @@ def _build_adjudication(context, definition=None):
         definition=definition,
     )
 
+
+def _assessment_criteria(**changes: object):
+    method_manifest = (
+        build_critical_number_private_statistical_method_manifest_v1()
+    )
+    values: dict[str, object] = {
+        "method_manifest_sha256": method_manifest.sha256,
+        "minimum_oracle_detection_lower_bound_ppm": 0,
+        "maximum_control_false_positive_upper_bound_ppm": 1_000_000,
+        "maximum_abstention_upper_bound_ppm": 1_000_000,
+        "maximum_unresolved_fraction_ppm": 0,
+        "maximum_execution_failure_fraction_ppm": 0,
+    }
+    values.update(changes)
+    return _criteria(**values)
+
+
+def _all_completed_statuses():
+    return tuple(
+        ASRCriticalNumberPrivateHoldoutExecutionStatus.COMPLETED
+        for _stratum in CRITICAL_NUMBER_PRIVATE_QUALIFICATION_REQUIRED_STRATA_V1
+    )
+
+
+def _build_assessment(context, adjudication_definition=None, adjudication=None):
+    adjudication_definition = (
+        adjudication_definition or _adjudication_definition(context)
+    )
+    adjudication = adjudication or _build_adjudication(
+        context,
+        adjudication_definition,
+    )
+    return build_critical_number_private_statistical_assessment_v1(
+        method_manifest=(
+            build_critical_number_private_statistical_method_manifest_v1()
+        ),
+        adjudication=adjudication,
+        campaign=context["campaign"],
+        protocol=context["protocol"],
+        campaign_definition=context["campaign_definition"],
+        plan=context["plan"],
+        plan_definition=context["plan_definition"],
+        run=context["run"],
+        run_definition=context["run_definition"],
+        disclosure_manifest=context["manifest"],
+        disclosure_definition=context["disclosure_definition"],
+        verified_plan_envelope=context["verified_plan"],
+        verified_run_envelope=context["verified_run"],
+        verified_disclosure_envelope=context["verified_disclosure"],
+        adjudication_definition=adjudication_definition,
+    )
 
 def test_protocol_is_deterministic_and_binds_exact_experimental_v1_identity():
     definition = _campaign_definition()
@@ -1041,8 +1108,149 @@ def test_campaign_and_adjudication_never_issue_qualification_or_enforcement():
     }
 
 
+def test_statistical_assessment_rebuilds_chain_and_meets_extreme_criteria():
+    context = _full_campaign(
+        statistical_criteria=_assessment_criteria(),
+        execution_statuses=_all_completed_statuses(),
+    )
+    definition = _adjudication_definition(context)
+    adjudication = _build_adjudication(context, definition)
+    first = _build_assessment(context, definition, adjudication)
+    second = _build_assessment(context, definition, adjudication)
+
+    assert first == second
+    assert first.payload["sealed_evidence"]["complete_chain_reverified"] is True
+    assert first.payload["readiness"]["all_minimums_met"] is True
+    assert first.payload["statistical_claims"]["family_size"] == 14
+    assert first.payload["statistical_claims"]["all_claims_met"] is True
+    assert first.payload["result"] == {
+        "value": (
+            ASRCriticalNumberPrivateStatisticalAssessmentResult
+            .MEETS_PREREGISTERED_CRITERIA.value
+        ),
+        "all_minimums_met": True,
+        "all_fraction_gates_met": True,
+        "all_statistical_claims_met": True,
+    }
+
+    verified = verify_critical_number_private_statistical_assessment_v1(
+        payload=first.payload,
+        expected_sha256=first.sha256,
+        method_manifest=(
+            build_critical_number_private_statistical_method_manifest_v1()
+        ),
+        adjudication=adjudication,
+        campaign=context["campaign"],
+        protocol=context["protocol"],
+        campaign_definition=context["campaign_definition"],
+        plan=context["plan"],
+        plan_definition=context["plan_definition"],
+        run=context["run"],
+        run_definition=context["run_definition"],
+        disclosure_manifest=context["manifest"],
+        disclosure_definition=context["disclosure_definition"],
+        verified_plan_envelope=context["verified_plan"],
+        verified_run_envelope=context["verified_run"],
+        verified_disclosure_envelope=context["verified_disclosure"],
+        adjudication_definition=definition,
+    )
+    assert verified == first
+
+
+def test_statistical_assessment_reports_non_meeting_holm_claim():
+    context = _full_campaign(
+        statistical_criteria=_assessment_criteria(),
+        execution_statuses=_all_completed_statuses(),
+    )
+    definition = _adjudication_definition(context)
+    detected_index = next(
+        index
+        for index, case in enumerate(definition.cases)
+        if case.outcome
+        == ASRCriticalNumberPrivateQualificationAdjudicationOutcome.DETECTED
+    )
+    changed_cases = list(definition.cases)
+    changed_cases[detected_index] = replace(
+        changed_cases[detected_index],
+        outcome=ASRCriticalNumberPrivateQualificationAdjudicationOutcome.MISSED,
+    )
+    changed_definition = replace(definition, cases=tuple(changed_cases))
+    assessment = _build_assessment(context, changed_definition)
+
+    assert assessment.payload["readiness"]["all_minimums_met"] is True
+    assert assessment.payload["result"]["value"] == (
+        ASRCriticalNumberPrivateStatisticalAssessmentResult
+        .DOES_NOT_MEET_PREREGISTERED_CRITERIA.value
+    )
+    failed = [
+        claim
+        for claim in assessment.payload["statistical_claims"]["claims"]
+        if not claim["meets_criterion"]
+    ]
+    assert len(failed) == 1
+    assert failed[0]["estimand"] == "oracle_detection"
+    assert failed[0]["bound_meets_criterion"] is True
+    assert failed[0]["holm_rejected"] is False
+
+
+def test_statistical_assessment_stops_when_evidence_is_insufficient():
+    context = _full_campaign(
+        statistical_criteria=_assessment_criteria(),
+    )
+    assessment = _build_assessment(context)
+
+    assert assessment.payload["readiness"]["all_minimums_met"] is False
+    assert assessment.payload["statistical_claims"]["calculated"] is False
+    assert assessment.payload["statistical_claims"]["claims"] == []
+    assert assessment.payload["result"]["value"] == (
+        ASRCriticalNumberPrivateStatisticalAssessmentResult.INSUFFICIENT_EVIDENCE.value
+    )
+
+
+def test_statistical_assessment_rejects_unbound_method_manifest():
+    context = _full_campaign(
+        statistical_criteria=_criteria(),
+        execution_statuses=_all_completed_statuses(),
+    )
+
+    with pytest.raises(HveeContractError, match="do not bind the v1"):
+        _build_assessment(context)
+
+
+def test_statistical_assessment_is_aggregate_and_non_certifying():
+    context = _full_campaign(
+        statistical_criteria=_assessment_criteria(),
+        execution_statuses=_all_completed_statuses(),
+    )
+    assessment = _build_assessment(context)
+    serialized = repr(assessment.payload)
+
+    assert all(
+        case.case_token not in serialized
+        for case in context["plan_definition"].cases
+    )
+    assert "private reference" not in serialized
+    assert "private expected" not in serialized
+    assert assessment.payload["qualification"] == {
+        "campaign_mechanics_verified": True,
+        "statistical_qualification_assessed": True,
+        "evaluator_status": "experimental",
+        "certification_issued": False,
+        "production_qualified": False,
+        "release_enforcement_eligible": False,
+        "official_release_verdict_modified": False,
+    }
+
 def test_private_qualification_public_exports_are_complete():
     expected = {
+        "ASRCriticalNumberPrivateStatisticalAssessmentBundle",
+        "ASRCriticalNumberPrivateStatisticalAssessmentResult",
+        "ASRCriticalNumberPrivateStatisticalMethodManifestBundle",
+        "CRITICAL_NUMBER_PRIVATE_STATISTICAL_ASSESSMENT_SCHEMA_VERSION",
+        "build_critical_number_private_statistical_assessment_v1",
+        "build_critical_number_private_statistical_method_manifest_v1",
+        "verify_critical_number_private_statistical_assessment_v1",
+        "verify_critical_number_private_statistical_method_manifest_v1",
         "CRITICAL_NUMBER_PRIVATE_QUALIFICATION_ADJUDICATION_SCHEMA_VERSION",
         "CRITICAL_NUMBER_PRIVATE_QUALIFICATION_CAMPAIGN_SCHEMA_VERSION",
         "CRITICAL_NUMBER_PRIVATE_QUALIFICATION_CONTROL_STRATA_V1",
