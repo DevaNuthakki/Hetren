@@ -334,7 +334,6 @@ class ASRCriticalNumberPrivateQualificationStatisticalCriteria:
     method_manifest_sha256: str
     multiplicity_control_key: str
     multiplicity_control_version: str
-    random_seed_commitment_sha256: str
     confidence_level_ppm: int
     minimum_total_usable_cases: int
     minimum_usable_cases_per_stratum: int
@@ -361,10 +360,6 @@ class ASRCriticalNumberPrivateQualificationStatisticalCriteria:
         _require_version(
             name="private multiplicity-control version",
             value=self.multiplicity_control_version,
-        )
-        _require_sha256(
-            name="private statistical random-seed commitment",
-            value=self.random_seed_commitment_sha256,
         )
         _require_rate(
             name="private statistical confidence level",
@@ -611,9 +606,6 @@ def _criteria_snapshot(
             "key": criteria.multiplicity_control_key,
             "version": criteria.multiplicity_control_version,
         },
-        "random_seed_commitment_sha256": (
-            criteria.random_seed_commitment_sha256
-        ),
         "confidence_level_ppm": criteria.confidence_level_ppm,
         "minimum_total_usable_cases": criteria.minimum_total_usable_cases,
         "minimum_usable_cases_per_stratum": (
