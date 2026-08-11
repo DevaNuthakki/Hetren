@@ -17,6 +17,7 @@ from hvee.packs.asr.critical_identifier_portfolio import (
     CRITICAL_IDENTIFIER_PORTFOLIO_VERSION,
     ASRCriticalIdentifierPortfolioOperation,
     ASRCriticalIdentifierPortfolioPartition,
+    ASRCriticalIdentifierPortfolioReport,
     compare_critical_identifier_portfolio_case,
     evaluate_critical_identifier_portfolio_case_observations,
     run_critical_identifier_portfolio,
@@ -414,3 +415,15 @@ def test_portfolio_detects_controlled_observation_corruption(
 
     assert result.passed is False
     assert expected_failed_check in result.failed_checks
+
+
+def test_generic_laboratory_preserves_public_portfolio_report_type():
+    report = run_critical_identifier_portfolio(
+        CRITICAL_IDENTIFIER_FIDELITY_PORTFOLIO_V1
+    )
+
+    assert type(report) is ASRCriticalIdentifierPortfolioReport
+    assert report.total_cases == 42
+    assert report.passed_cases == 42
+    assert report.failed_cases == 0
+    assert report.passed is True

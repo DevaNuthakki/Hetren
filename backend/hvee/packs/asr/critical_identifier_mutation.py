@@ -15,6 +15,11 @@ from hvee.core.contracts import (
     Observation,
     ObservationStatus,
 )
+from hvee.laboratory.semantic.mutation import (
+    replace_success_observation_value,
+    run_semantic_evaluator_mutation,
+    run_semantic_evaluator_mutation_suite,
+)
 from hvee.packs.asr.critical_identifier_fidelity import (
     CRITICAL_IDENTIFIER_AMBIGUITY_COUNT_METRIC,
     CRITICAL_IDENTIFIER_APPLICABLE_METRIC,
@@ -140,21 +145,11 @@ def _replace_success_value(
     current_value: object,
     new_value: object,
 ) -> tuple[Observation, ...]:
-    return tuple(
-        (
-            replace(
-                observation,
-                value=new_value,
-            )
-            if (
-                observation.metric_key == metric_key
-                and observation.status
-                == ObservationStatus.SUCCESS
-                and observation.value == current_value
-            )
-            else observation
-        )
-        for observation in observations
+    return replace_success_observation_value(
+        observations,
+        metric_key=metric_key,
+        current_value=current_value,
+        new_value=new_value,
     )
 
 
@@ -369,59 +364,20 @@ def run_critical_identifier_evaluator_mutation(
             "requires a portfolio"
         )
 
-    changed: list[str] = []
-    detected: list[str] = []
-
-    for case in portfolio.cases:
-        observations = (
-            evaluate_critical_identifier_portfolio_case_observations(
-                case
-            )
-        )
-
-        baseline = (
-            compare_critical_identifier_portfolio_case(
-                case=case,
-                observations=observations,
-            )
-        )
-
-        if not baseline.passed:
-            raise HveeContractError(
-                "critical-identifier mutation testing "
-                "requires a passing baseline"
-            )
-
-        mutated = (
-            apply_critical_identifier_evaluator_mutation(
-                mutation=mutation,
-                observations=observations,
-            )
-        )
-
-        if mutated != observations:
-            changed.append(case.case_id)
-
-        result = (
-            compare_critical_identifier_portfolio_case(
-                case=case,
-                observations=mutated,
-            )
-        )
-
-        if not result.passed:
-            detected.append(case.case_id)
-
-    if not changed:
-        raise HveeContractError(
-            "critical-identifier evaluator mutation "
-            "had no portfolio effect"
-        )
+    laboratory_result = run_semantic_evaluator_mutation(
+        cases=portfolio.cases,
+        mutation=mutation,
+        evaluate_case=(
+            evaluate_critical_identifier_portfolio_case_observations
+        ),
+        compare_case=compare_critical_identifier_portfolio_case,
+        apply_mutation=apply_critical_identifier_evaluator_mutation,
+    )
 
     return ASRCriticalIdentifierMutationResult(
-        mutation=mutation,
-        changed_case_ids=tuple(changed),
-        detected_case_ids=tuple(detected),
+        mutation=laboratory_result.mutation,
+        changed_case_ids=laboratory_result.changed_case_ids,
+        detected_case_ids=laboratory_result.detected_case_ids,
     )
 
 
@@ -437,19 +393,41 @@ def run_critical_identifier_evaluator_mutation_suite(
             "requires a portfolio"
         )
 
+    laboratory_report = (
+        run_semantic_evaluator_mutation_suite(
+            portfolio_key=portfolio.key,
+            portfolio_version=portfolio.version,
+            suite_key=CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY,
+            suite_version=(
+                CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION
+            ),
+            cases=portfolio.cases,
+            mutations=(
+                CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1
+            ),
+            evaluate_case=(
+                evaluate_critical_identifier_portfolio_case_observations
+            ),
+            compare_case=(
+                compare_critical_identifier_portfolio_case
+            ),
+            apply_mutation=(
+                apply_critical_identifier_evaluator_mutation
+            ),
+        )
+    )
+
     return ASRCriticalIdentifierMutationReport(
-        portfolio_key=portfolio.key,
-        portfolio_version=portfolio.version,
-        suite_key=CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY,
-        suite_version=(
-            CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION
-        ),
+        portfolio_key=laboratory_report.portfolio_key,
+        portfolio_version=laboratory_report.portfolio_version,
+        suite_key=laboratory_report.suite_key,
+        suite_version=laboratory_report.suite_version,
         results=tuple(
-            run_critical_identifier_evaluator_mutation(
-                portfolio=portfolio,
-                mutation=mutation,
+            ASRCriticalIdentifierMutationResult(
+                mutation=result.mutation,
+                changed_case_ids=result.changed_case_ids,
+                detected_case_ids=result.detected_case_ids,
             )
-            for mutation
-            in CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1
+            for result in laboratory_report.results
         ),
     )
