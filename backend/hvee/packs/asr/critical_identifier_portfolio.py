@@ -15,6 +15,9 @@ from hvee.core.contracts import (
     Observation,
     ObservationStatus,
 )
+from hvee.laboratory.semantic.portfolio import (
+    run_semantic_portfolio,
+)
 from hvee.packs.asr.critical_identifier_fidelity import (
     CRITICAL_IDENTIFIER_AMBIGUITY_COUNT_METRIC,
     CRITICAL_IDENTIFIER_APPLICABLE_METRIC,
@@ -1185,11 +1188,15 @@ def run_critical_identifier_portfolio(
             "requires a definition"
         )
 
-    return ASRCriticalIdentifierPortfolioReport(
+    laboratory_report = run_semantic_portfolio(
         portfolio_key=portfolio.key,
         portfolio_version=portfolio.version,
-        case_results=tuple(
-            run_critical_identifier_portfolio_case(case)
-            for case in portfolio.cases
-        ),
+        cases=portfolio.cases,
+        run_case=run_critical_identifier_portfolio_case,
+    )
+
+    return ASRCriticalIdentifierPortfolioReport(
+        portfolio_key=laboratory_report.portfolio_key,
+        portfolio_version=laboratory_report.portfolio_version,
+        case_results=laboratory_report.case_results,
     )

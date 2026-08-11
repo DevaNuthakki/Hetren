@@ -11,6 +11,8 @@ from hvee.packs.asr.critical_identifier_mutation import (
     CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY,
     CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION,
     ASRCriticalIdentifierEvaluatorMutation,
+    ASRCriticalIdentifierMutationReport,
+    ASRCriticalIdentifierMutationResult,
     apply_critical_identifier_evaluator_mutation,
     run_critical_identifier_evaluator_mutation,
     run_critical_identifier_evaluator_mutation_suite,
@@ -309,3 +311,37 @@ def test_public_asr_mutation_exports_are_available():
         assert hasattr(asr_pack, name)
         assert name in asr_pack.__all__
         assert asr_pack.__all__.count(name) == 1
+
+
+def test_generic_laboratory_preserves_public_mutation_result_type():
+    result = run_critical_identifier_evaluator_mutation(
+        portfolio=CRITICAL_IDENTIFIER_FIDELITY_PORTFOLIO_V1,
+        mutation=(
+            ASRCriticalIdentifierEvaluatorMutation
+            .SUBSTITUTION_BLIND
+        ),
+    )
+
+    assert type(result) is ASRCriticalIdentifierMutationResult
+    assert result.killed is True
+    assert result.changed_cases > 0
+    assert result.detected_cases > 0
+
+
+def test_generic_laboratory_preserves_public_mutation_report_type():
+    report = (
+        run_critical_identifier_evaluator_mutation_suite(
+            CRITICAL_IDENTIFIER_FIDELITY_PORTFOLIO_V1
+        )
+    )
+
+    assert type(report) is ASRCriticalIdentifierMutationReport
+    assert all(
+        type(result)
+        is ASRCriticalIdentifierMutationResult
+        for result in report.results
+    )
+    assert report.total_mutants == 10
+    assert report.killed_mutants == 10
+    assert report.survived_mutants == 0
+    assert report.mutation_score == 1.0
