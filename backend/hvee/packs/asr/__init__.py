@@ -769,3 +769,63 @@ __all__ += [
     "evaluate_critical_identifier_fidelity",
     "extract_critical_identifier_entities",
 ]
+
+
+from hvee.packs.asr.critical_identifier_portfolio import (
+    CRITICAL_IDENTIFIER_FIDELITY_PORTFOLIO_V1,
+    CRITICAL_IDENTIFIER_PORTFOLIO_KEY,
+    CRITICAL_IDENTIFIER_PORTFOLIO_VERSION,
+    ASRCriticalIdentifierPortfolioCase,
+    ASRCriticalIdentifierPortfolioCaseResult,
+    ASRCriticalIdentifierPortfolioDefinition,
+    ASRCriticalIdentifierPortfolioOperation,
+    ASRCriticalIdentifierPortfolioPartition,
+    ASRCriticalIdentifierPortfolioReport,
+    compare_critical_identifier_portfolio_case,
+    evaluate_critical_identifier_portfolio_case_observations,
+    run_critical_identifier_portfolio,
+    run_critical_identifier_portfolio_case,
+)
+
+
+__all__ += [
+    "ASRCriticalIdentifierPortfolioCase",
+    "ASRCriticalIdentifierPortfolioCaseResult",
+    "ASRCriticalIdentifierPortfolioDefinition",
+    "ASRCriticalIdentifierPortfolioOperation",
+    "ASRCriticalIdentifierPortfolioPartition",
+    "ASRCriticalIdentifierPortfolioReport",
+    "CRITICAL_IDENTIFIER_FIDELITY_PORTFOLIO_V1",
+    "CRITICAL_IDENTIFIER_PORTFOLIO_KEY",
+    "CRITICAL_IDENTIFIER_PORTFOLIO_VERSION",
+    "compare_critical_identifier_portfolio_case",
+    "evaluate_critical_identifier_portfolio_case_observations",
+    "run_critical_identifier_portfolio",
+    "run_critical_identifier_portfolio_case",
+]
+
+
+from hvee.packs.asr.critical_identifier_mutation import (
+    CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1,
+    CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY,
+    CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION,
+    ASRCriticalIdentifierEvaluatorMutation,
+    ASRCriticalIdentifierMutationReport,
+    ASRCriticalIdentifierMutationResult,
+    apply_critical_identifier_evaluator_mutation,
+    run_critical_identifier_evaluator_mutation,
+    run_critical_identifier_evaluator_mutation_suite,
+)
+
+
+__all__ += [
+    "ASRCriticalIdentifierEvaluatorMutation",
+    "ASRCriticalIdentifierMutationReport",
+    "ASRCriticalIdentifierMutationResult",
+    "CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1",
+    "CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY",
+    "CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION",
+    "apply_critical_identifier_evaluator_mutation",
+    "run_critical_identifier_evaluator_mutation",
+    "run_critical_identifier_evaluator_mutation_suite",
+]
