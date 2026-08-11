@@ -803,3 +803,29 @@ __all__ += [
     "run_critical_identifier_portfolio",
     "run_critical_identifier_portfolio_case",
 ]
+
+
+from hvee.packs.asr.critical_identifier_mutation import (
+    CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1,
+    CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY,
+    CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION,
+    ASRCriticalIdentifierEvaluatorMutation,
+    ASRCriticalIdentifierMutationReport,
+    ASRCriticalIdentifierMutationResult,
+    apply_critical_identifier_evaluator_mutation,
+    run_critical_identifier_evaluator_mutation,
+    run_critical_identifier_evaluator_mutation_suite,
+)
+
+
+__all__ += [
+    "ASRCriticalIdentifierEvaluatorMutation",
+    "ASRCriticalIdentifierMutationReport",
+    "ASRCriticalIdentifierMutationResult",
+    "CRITICAL_IDENTIFIER_EVALUATOR_MUTATIONS_V1",
+    "CRITICAL_IDENTIFIER_MUTATION_SUITE_KEY",
+    "CRITICAL_IDENTIFIER_MUTATION_SUITE_VERSION",
+    "apply_critical_identifier_evaluator_mutation",
+    "run_critical_identifier_evaluator_mutation",
+    "run_critical_identifier_evaluator_mutation_suite",
+]
