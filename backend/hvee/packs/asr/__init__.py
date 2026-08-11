@@ -673,3 +673,37 @@ __all__ += [
     "verify_critical_number_production_qualification_authorization_v1",
     "verify_critical_number_production_qualification_policy_v1",
 ]
+
+
+from hvee.packs.asr.critical_number_runtime_eligibility import (
+    CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_KEY,
+    CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_SCHEMA_VERSION,
+    CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_VERSION,
+    ASRCriticalNumberProductionQualificationVerificationContext,
+    ASRCriticalNumberRuntimeEligibilityBundle,
+    ASRCriticalNumberRuntimeEligibilityDefinition,
+    ASRCriticalNumberRuntimeEligibilityResult,
+    ASRCriticalNumberRuntimeRequestedScope,
+    ASRCriticalNumberRuntimeRequalificationEvent,
+    ASRCriticalNumberRuntimeRevocationState,
+    build_critical_number_runtime_eligibility_v1,
+    calculate_critical_number_runtime_eligibility_sha256,
+    verify_critical_number_runtime_eligibility_v1,
+)
+
+
+__all__ += [
+    "ASRCriticalNumberProductionQualificationVerificationContext",
+    "ASRCriticalNumberRuntimeEligibilityBundle",
+    "ASRCriticalNumberRuntimeEligibilityDefinition",
+    "ASRCriticalNumberRuntimeEligibilityResult",
+    "ASRCriticalNumberRuntimeRequestedScope",
+    "ASRCriticalNumberRuntimeRequalificationEvent",
+    "ASRCriticalNumberRuntimeRevocationState",
+    "CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_KEY",
+    "CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_SCHEMA_VERSION",
+    "CRITICAL_NUMBER_RUNTIME_ELIGIBILITY_VERSION",
+    "build_critical_number_runtime_eligibility_v1",
+    "calculate_critical_number_runtime_eligibility_sha256",
+    "verify_critical_number_runtime_eligibility_v1",
+]
