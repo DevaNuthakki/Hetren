@@ -22,6 +22,12 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    CRITICAL_IDENTIFIER_APPLICABLE_METRIC,
+    CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR,
+    CRITICAL_IDENTIFIER_FINDINGS_METRIC,
+    CRITICAL_IDENTIFIER_METRICS,
+    CRITICAL_IDENTIFIER_OUTCOME_METRIC,
+    CRITICAL_IDENTIFIER_PRESERVED_METRIC,
     CRITICAL_NUMBER_APPLICABLE_METRIC,
     CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     CRITICAL_NUMBER_FINDINGS_METRIC,
@@ -669,7 +675,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 .all()
             )
 
-            assert len(persisted_observations) == 27
+            assert len(persisted_observations) == 38
 
             metric_ids = [
                 observation.metric_definition_id
@@ -717,6 +723,10 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 metric.key
                 for metric in CRITICAL_NUMBER_METRICS
             }
+            expected_critical_identifier_metric_keys = {
+                metric.key
+                for metric in CRITICAL_IDENTIFIER_METRICS
+            }
             expected_metric_keys = {
                 WER_METRIC.key,
                 CER_METRIC.key,
@@ -738,6 +748,9 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             }
             expected_metric_keys.update(
                 expected_critical_number_metric_keys
+            )
+            expected_metric_keys.update(
+                expected_critical_identifier_metric_keys
             )
 
             assert set(observations_by_metric_key) == (
@@ -1105,6 +1118,96 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 assert count_observation.status == "success"
                 assert count_observation.integer_value == 0
 
+            critical_identifier_observations = {
+                metric.key: observations_by_metric_key[
+                    metric.key
+                ]
+                for metric in CRITICAL_IDENTIFIER_METRICS
+            }
+
+            for metric in CRITICAL_IDENTIFIER_METRICS:
+                observation = critical_identifier_observations[
+                    metric.key
+                ]
+                persisted_metric = metrics_by_id[
+                    observation.metric_definition_id
+                ]
+
+                assert (
+                    persisted_metric.key,
+                    persisted_metric.version,
+                ) == (
+                    metric.key,
+                    metric.version,
+                )
+                assert observation.scope == "test_case"
+                assert observation.value_type == (
+                    metric.value_type.value
+                )
+
+            critical_identifier_applicable = (
+                critical_identifier_observations[
+                    CRITICAL_IDENTIFIER_APPLICABLE_METRIC.key
+                ]
+            )
+            critical_identifier_preserved = (
+                critical_identifier_observations[
+                    CRITICAL_IDENTIFIER_PRESERVED_METRIC.key
+                ]
+            )
+            critical_identifier_outcome = (
+                critical_identifier_observations[
+                    CRITICAL_IDENTIFIER_OUTCOME_METRIC.key
+                ]
+            )
+            critical_identifier_findings = (
+                critical_identifier_observations[
+                    CRITICAL_IDENTIFIER_FINDINGS_METRIC.key
+                ]
+            )
+
+            # EXPECTED_TRANSCRIPT contains no cue-bound identifier
+            # evidence, so Critical Identifier correctly abstains.
+            assert critical_identifier_applicable.status == "success"
+            assert (
+                critical_identifier_applicable.boolean_value
+                is False
+            )
+
+            assert (
+                critical_identifier_preserved.status
+                == "abstained"
+            )
+            assert (
+                critical_identifier_preserved.boolean_value
+                is None
+            )
+            assert (
+                critical_identifier_preserved.status_detail
+                == "not_applicable"
+            )
+
+            assert critical_identifier_outcome.status == "success"
+            assert (
+                critical_identifier_outcome.string_value
+                == "not_applicable"
+            )
+
+            assert critical_identifier_findings.status == "success"
+            assert critical_identifier_findings.json_value == []
+
+            for metric in CRITICAL_IDENTIFIER_METRICS:
+                if metric.value_type.value != "integer":
+                    continue
+
+                count_observation = (
+                    critical_identifier_observations[
+                        metric.key
+                    ]
+                )
+                assert count_observation.status == "success"
+                assert count_observation.integer_value == 0
+
             normalized_wer_evaluator = evaluators_by_id[
                 normalized_wer_observation.evaluator_version_id
             ]
@@ -1122,6 +1225,9 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             ]
             critical_number_evaluator = evaluators_by_id[
                 critical_number_applicable.evaluator_version_id
+            ]
+            critical_identifier_evaluator = evaluators_by_id[
+                critical_identifier_applicable.evaluator_version_id
             ]
 
             assert (
@@ -1201,6 +1307,25 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                     == critical_number_applicable.evaluator_version_id
                 )
 
+            assert (
+                critical_identifier_evaluator.key,
+                critical_identifier_evaluator.version,
+            ) == (
+                CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR.key,
+                CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR.version,
+            )
+
+            for observation in (
+                critical_identifier_observations.values()
+            ):
+                assert (
+                    observation.evaluator_version_id
+                    == (
+                        critical_identifier_applicable
+                        .evaluator_version_id
+                    )
+                )
+
             assert evaluation_result.generated_transcript == (
                 EXPECTED_TRANSCRIPT
             )
@@ -1245,7 +1370,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
                 provenance_payload[
                     "hvee_observations"
                 ]["count"]
-                == 27
+                == 38
             )
 
             assert (

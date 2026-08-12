@@ -166,7 +166,7 @@ def test_shadow_execution_persists_and_seals_failure_evidence(
         for metric in CRITICAL_NUMBER_METRICS
     }
 
-    assert len(observations) == 27
+    assert len(observations) == 38
     assert critical_metric_keys <= set(observations)
 
     assert observations[
@@ -195,7 +195,7 @@ def test_shadow_execution_persists_and_seals_failure_evidence(
     assert provenance is not None
     assert provenance.provenance_payload[
         "hvee_observations"
-    ]["count"] == 27
+    ]["count"] == 38
     assert verify_evaluation_result_provenance(
         provenance
     )

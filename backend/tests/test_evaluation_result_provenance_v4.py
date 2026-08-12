@@ -116,7 +116,7 @@ def persist_result(
     )
 
 
-def test_new_provenance_is_v4_and_binds_27_observations(
+def test_new_provenance_is_v4_and_binds_38_observations(
     db: Session,
 ):
     run, _dataset, test_case = (
@@ -140,7 +140,7 @@ def test_new_provenance_is_v4_and_binds_27_observations(
         "hvee_observations"
     ]
 
-    assert bundle["count"] == 27
+    assert bundle["count"] == 38
     assert verify_evaluation_result_provenance(
         provenance
     )

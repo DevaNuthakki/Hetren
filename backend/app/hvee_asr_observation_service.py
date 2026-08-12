@@ -452,3 +452,70 @@ def stage_asr_critical_number_fidelity_observations(
             strict=True,
         )
     )
+
+
+from app.hvee_asr_registry import (
+    resolve_asr_critical_identifier_fidelity_registry,
+)
+from hvee.packs.asr import (
+    ASRCriticalIdentifierFidelityEvaluation,
+    build_critical_identifier_fidelity_observations,
+)
+
+
+def stage_asr_critical_identifier_fidelity_observations(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+    test_case: models.TestCase,
+    evaluation: ASRCriticalIdentifierFidelityEvaluation,
+) -> tuple[HveeObservation, ...]:
+    """
+    Stage en-US Critical Identifier Fidelity observations.
+
+    These observations are evidence-only. They participate in the
+    caller-owned transaction and never independently commit or influence
+    legacy quality labels, release policy, or release authority.
+    """
+
+    registry = (
+        resolve_asr_critical_identifier_fidelity_registry(
+            db
+        )
+    )
+
+    observations = (
+        build_critical_identifier_fidelity_observations(
+            evaluation
+        )
+    )
+
+    metric_definitions = (
+        registry.applicable_metric,
+        registry.preserved_metric,
+        registry.outcome_metric,
+        registry.reference_count_metric,
+        registry.generated_count_metric,
+        registry.substitution_count_metric,
+        registry.omission_count_metric,
+        registry.insertion_count_metric,
+        registry.ordering_change_count_metric,
+        registry.ambiguity_count_metric,
+        registry.findings_metric,
+    )
+
+    return tuple(
+        stage_hvee_observation(
+            db,
+            evaluation_run=evaluation_run,
+            test_case=test_case,
+            metric_definition=metric_definition,
+            evaluator_version=registry.evaluator,
+            observation=observation,
+        )
+        for metric_definition, observation in zip(
+            metric_definitions,
+            observations,
+            strict=True,
+        )
+    )

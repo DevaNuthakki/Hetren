@@ -27,6 +27,7 @@ from hvee.core.observation_evidence import (
 )
 from hvee.packs.asr import (
     CER_METRIC,
+    CRITICAL_IDENTIFIER_METRICS,
     CRITICAL_NUMBER_METRICS,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
@@ -124,7 +125,7 @@ def build_resources(
     return run, test_case
 
 
-def test_adapter_builds_bundle_from_all_27_asr_observations(
+def test_adapter_builds_bundle_from_all_38_asr_observations(
     db: Session,
 ):
     run, test_case = build_resources(db)
@@ -148,7 +149,7 @@ def test_adapter_builds_bundle_from_all_27_asr_observations(
         )
     )
 
-    assert len(records) == 27
+    assert len(records) == 38
 
     bundle = (
         build_test_case_observation_evidence_bundle(
@@ -158,7 +159,7 @@ def test_adapter_builds_bundle_from_all_27_asr_observations(
         )
     )
 
-    assert bundle["count"] == 27
+    assert bundle["count"] == 38
     assert verify_observation_evidence_bundle(
         bundle
     )
@@ -191,6 +192,10 @@ def test_adapter_builds_bundle_from_all_27_asr_observations(
         *(
             metric.key
             for metric in CRITICAL_NUMBER_METRICS
+        ),
+        *(
+            metric.key
+            for metric in CRITICAL_IDENTIFIER_METRICS
         ),
     }
 
@@ -341,7 +346,7 @@ def test_adapter_excludes_run_scoped_observations(
         )
     )
 
-    assert bundle["count"] == 27
+    assert bundle["count"] == 38
 
     assert all(
         observation["scope"]
