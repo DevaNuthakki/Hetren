@@ -7,6 +7,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app import models, schemas
+from app.asr_semantic_evidence_service import (
+    ASRSemanticEvidenceIntegrityError,
+    build_asr_semantic_evidence_read,
+)
 from app.auth.authorization import (
     PRODUCT_READ_ROLES,
     PRODUCT_WRITE_ROLES,
@@ -1748,6 +1752,38 @@ def get_evaluation_result(
     )
 
     return access.result
+
+
+@router.get(
+    "/results/{result_id}/semantic-evidence",
+    response_model=schemas.ASRSemanticEvidenceRead,
+)
+def get_result_semantic_evidence(
+    result_id: int,
+    current_user: models.User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    access = _authorize_evaluation_result_for_request(
+        db,
+        current_user=current_user,
+        result_id=result_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
+
+    try:
+        return build_asr_semantic_evidence_read(
+            db,
+            result=access.result,
+            evaluation_run=access.run,
+        )
+    except ASRSemanticEvidenceIntegrityError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Semantic evidence integrity "
+                "check failed"
+            ),
+        ) from exc
 
 
 @router.get(

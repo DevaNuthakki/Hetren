@@ -1,3 +1,4 @@
+from typing import Literal
 from datetime import datetime
 from typing import Any, Literal, Optional
 
@@ -135,6 +136,57 @@ class EvaluationResultRead(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+
+class ASRSemanticEvidenceObservationRead(BaseModel):
+    metric_key: str
+    metric_version: str
+
+    evaluator_key: str
+    evaluator_version: str
+
+    status: Literal[
+        "success",
+        "abstained",
+        "unsupported",
+        "timed_out",
+        "failed",
+        "cancelled",
+        "invalid",
+    ]
+    value_type: Literal[
+        "number",
+        "integer",
+        "boolean",
+        "string",
+        "json",
+    ]
+    value: object | None
+    status_detail: Optional[str] = None
+
+
+class ASRSemanticEvidenceFamilyRead(BaseModel):
+    status: Literal[
+        "available",
+        "not_configured",
+        "legacy_unavailable",
+    ]
+    observations: list[
+        ASRSemanticEvidenceObservationRead
+    ]
+
+
+class ASRSemanticEvidenceRead(BaseModel):
+    result_id: int
+    evaluation_run_id: int
+    test_case_id: int
+
+    evaluation_type: Literal["asr"]
+
+    critical_number: ASRSemanticEvidenceFamilyRead
+    critical_identifier: ASRSemanticEvidenceFamilyRead
+    critical_terminology: ASRSemanticEvidenceFamilyRead
 
 
 class RunComparisonCreate(BaseModel):
