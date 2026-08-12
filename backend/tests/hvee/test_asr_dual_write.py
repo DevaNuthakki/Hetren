@@ -22,6 +22,8 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     CER_EVALUATOR,
     CER_METRIC,
+    CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR,
+    CRITICAL_IDENTIFIER_METRICS,
     CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     CRITICAL_NUMBER_METRICS,
     EXACT_NORMALIZED_MATCH_METRIC,
@@ -191,6 +193,10 @@ def test_synchronous_result_dual_writes_wer_and_cer(
             metric.key
             for metric in CRITICAL_NUMBER_METRICS
         ),
+        *(
+            metric.key
+            for metric in CRITICAL_IDENTIFIER_METRICS
+        ),
     }
 
     wer = observations[WER_METRIC.key]
@@ -354,15 +360,15 @@ def test_dual_write_resolves_canonical_registry_once(
 
     assert (
         db.query(HveeMetricDefinition).count()
-        == 27
+        == 38
     )
     assert (
         db.query(HveeEvaluatorVersion).count()
-        == 8
+        == 9
     )
     assert (
         db.query(HveeObservation).count()
-        == 54
+        == 76
     )
 
     metrics = {
@@ -445,6 +451,10 @@ def test_dual_write_resolves_canonical_registry_once(
             (metric.key, metric.version)
             for metric in CRITICAL_NUMBER_METRICS
         ),
+        *(
+            (metric.key, metric.version)
+            for metric in CRITICAL_IDENTIFIER_METRICS
+        ),
     }
 
     assert evaluators == {
@@ -479,6 +489,10 @@ def test_dual_write_resolves_canonical_registry_once(
         (
             CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
             CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
+        ),
+        (
+            CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR.key,
+            CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR.version,
         ),
     }
 
@@ -546,7 +560,7 @@ def test_stage_dual_write_does_not_commit(
 
     assert (
         db.query(HveeObservation).count()
-        == 27
+        == 38
     )
 
     db.rollback()

@@ -381,3 +381,110 @@ def resolve_asr_critical_number_fidelity_registry(
         findings_metric=findings_metric,
         evaluator=evaluator,
     )
+
+
+from hvee.packs.asr import (
+    CRITICAL_IDENTIFIER_AMBIGUITY_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_APPLICABLE_METRIC,
+    CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR,
+    CRITICAL_IDENTIFIER_FINDINGS_METRIC,
+    CRITICAL_IDENTIFIER_GENERATED_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_INSERTION_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_OMISSION_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_ORDERING_CHANGE_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_OUTCOME_METRIC,
+    CRITICAL_IDENTIFIER_PRESERVED_METRIC,
+    CRITICAL_IDENTIFIER_REFERENCE_COUNT_METRIC,
+    CRITICAL_IDENTIFIER_SUBSTITUTION_COUNT_METRIC,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ASRCriticalIdentifierFidelityRegistry:
+    applicable_metric: HveeMetricDefinition
+    preserved_metric: HveeMetricDefinition
+    outcome_metric: HveeMetricDefinition
+    reference_count_metric: HveeMetricDefinition
+    generated_count_metric: HveeMetricDefinition
+    substitution_count_metric: HveeMetricDefinition
+    omission_count_metric: HveeMetricDefinition
+    insertion_count_metric: HveeMetricDefinition
+    ordering_change_count_metric: HveeMetricDefinition
+    ambiguity_count_metric: HveeMetricDefinition
+    findings_metric: HveeMetricDefinition
+    evaluator: HveeEvaluatorVersion
+
+
+def resolve_asr_critical_identifier_fidelity_registry(
+    db: Session,
+) -> ASRCriticalIdentifierFidelityRegistry:
+    """
+    Resolve canonical en-US Critical Identifier Fidelity registry records.
+
+    Registry resolution participates in the caller-owned transaction and
+    never commits independently.
+    """
+
+    applicable_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_APPLICABLE_METRIC,
+    )
+    preserved_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_PRESERVED_METRIC,
+    )
+    outcome_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_OUTCOME_METRIC,
+    )
+    reference_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_REFERENCE_COUNT_METRIC,
+    )
+    generated_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_GENERATED_COUNT_METRIC,
+    )
+    substitution_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_SUBSTITUTION_COUNT_METRIC,
+    )
+    omission_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_OMISSION_COUNT_METRIC,
+    )
+    insertion_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_INSERTION_COUNT_METRIC,
+    )
+    ordering_change_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_ORDERING_CHANGE_COUNT_METRIC,
+    )
+    ambiguity_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_AMBIGUITY_COUNT_METRIC,
+    )
+    findings_metric = resolve_metric_definition(
+        db,
+        CRITICAL_IDENTIFIER_FINDINGS_METRIC,
+    )
+    evaluator = resolve_evaluator_version(
+        db,
+        CRITICAL_IDENTIFIER_FIDELITY_EVALUATOR,
+    )
+
+    return ASRCriticalIdentifierFidelityRegistry(
+        applicable_metric=applicable_metric,
+        preserved_metric=preserved_metric,
+        outcome_metric=outcome_metric,
+        reference_count_metric=reference_count_metric,
+        generated_count_metric=generated_count_metric,
+        substitution_count_metric=substitution_count_metric,
+        omission_count_metric=omission_count_metric,
+        insertion_count_metric=insertion_count_metric,
+        ordering_change_count_metric=ordering_change_count_metric,
+        ambiguity_count_metric=ambiguity_count_metric,
+        findings_metric=findings_metric,
+        evaluator=evaluator,
+    )

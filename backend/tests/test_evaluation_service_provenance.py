@@ -104,7 +104,7 @@ def test_uploaded_transcript_persists_provenance(
 
     payload = result.provenance.provenance_payload
 
-    assert payload["hvee_observations"]["count"] == 27
+    assert payload["hvee_observations"]["count"] == 38
     assert verify_evaluation_result_observation_binding(
         db,
         result.provenance,
