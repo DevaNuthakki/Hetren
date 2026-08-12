@@ -933,3 +933,29 @@ __all__ += [
     "run_critical_terminology_portfolio",
     "run_critical_terminology_portfolio_case",
 ]
+
+
+from hvee.packs.asr.critical_terminology_mutation import (
+    CRITICAL_TERMINOLOGY_EVALUATOR_MUTATIONS_V1,
+    CRITICAL_TERMINOLOGY_MUTATION_SUITE_KEY,
+    CRITICAL_TERMINOLOGY_MUTATION_SUITE_VERSION,
+    ASRCriticalTerminologyEvaluatorMutation,
+    ASRCriticalTerminologyMutationReport,
+    ASRCriticalTerminologyMutationResult,
+    apply_critical_terminology_evaluator_mutation,
+    run_critical_terminology_evaluator_mutation,
+    run_critical_terminology_evaluator_mutation_suite,
+)
+
+
+__all__ += [
+    "ASRCriticalTerminologyEvaluatorMutation",
+    "ASRCriticalTerminologyMutationReport",
+    "ASRCriticalTerminologyMutationResult",
+    "CRITICAL_TERMINOLOGY_EVALUATOR_MUTATIONS_V1",
+    "CRITICAL_TERMINOLOGY_MUTATION_SUITE_KEY",
+    "CRITICAL_TERMINOLOGY_MUTATION_SUITE_VERSION",
+    "apply_critical_terminology_evaluator_mutation",
+    "run_critical_terminology_evaluator_mutation",
+    "run_critical_terminology_evaluator_mutation_suite",
+]
