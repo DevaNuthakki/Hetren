@@ -2,11 +2,13 @@ from sqlalchemy.orm import Session
 
 from app import models
 from app.evaluation_provenance import (
+    resolve_evaluation_run_critical_terminology_profile,
     stage_evaluation_result_provenance,
 )
 from app.hvee_asr_observation_service import (
     stage_asr_critical_identifier_fidelity_observations,
     stage_asr_critical_number_fidelity_observations,
+    stage_asr_critical_terminology_fidelity_observations,
     stage_asr_normalized_text_error_observations,
     stage_asr_numeric_preservation_observations,
     stage_asr_text_error_observations,
@@ -18,6 +20,7 @@ from hvee.packs.asr import (
     EN_US_CRITICAL_NUMBER_PROFILE,
     evaluate_critical_identifier_fidelity,
     evaluate_critical_number_fidelity,
+    evaluate_critical_terminology_fidelity,
     evaluate_normalized_transcript_pair,
     evaluate_numeric_preservation,
     evaluate_transcript_integrity,
@@ -121,6 +124,24 @@ def stage_evaluation_result(
         )
     )
 
+    critical_terminology_profile = (
+        resolve_evaluation_run_critical_terminology_profile(
+            db,
+            evaluation_run=db_run,
+        )
+    )
+
+    critical_terminology_evaluation = None
+
+    if critical_terminology_profile is not None:
+        critical_terminology_evaluation = (
+            evaluate_critical_terminology_fidelity(
+                reference_text=reference_text,
+                generated_text=generated_text,
+                profile=critical_terminology_profile,
+            )
+        )
+
     error_summary = _format_error_summary(
         evaluation
     )
@@ -197,6 +218,23 @@ def stage_evaluation_result(
         test_case=db_test_case,
         evaluation=critical_identifier_evaluation,
     )
+
+    # Critical Terminology Fidelity is project-configured and
+    # run-pinned. When configured, its eleven versioned observations
+    # are persisted and sealed with the result in evidence-only mode.
+    # Legacy and explicitly unconfigured runs retain their existing
+    # observation set and never adopt vocabulary retroactively.
+    if (
+        critical_terminology_profile is not None
+        and critical_terminology_evaluation is not None
+    ):
+        stage_asr_critical_terminology_fidelity_observations(
+            db,
+            evaluation_run=db_run,
+            test_case=db_test_case,
+            evaluation=critical_terminology_evaluation,
+            profile=critical_terminology_profile,
+        )
 
     return db_result
 

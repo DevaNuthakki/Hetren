@@ -488,3 +488,113 @@ def resolve_asr_critical_identifier_fidelity_registry(
         findings_metric=findings_metric,
         evaluator=evaluator,
     )
+
+from hvee.packs.asr import (
+    CRITICAL_TERMINOLOGY_APPLICABLE_METRIC,
+    CRITICAL_TERMINOLOGY_FIDELITY_EVALUATOR,
+    CRITICAL_TERMINOLOGY_FINDINGS_METRIC,
+    CRITICAL_TERMINOLOGY_GENERATED_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_INSERTION_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_OMISSION_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_ORDERING_CHANGE_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_OUTCOME_METRIC,
+    CRITICAL_TERMINOLOGY_PRESERVED_METRIC,
+    CRITICAL_TERMINOLOGY_REFERENCE_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_SUBSTITUTION_COUNT_METRIC,
+    CRITICAL_TERMINOLOGY_VOCABULARY_SHA256_METRIC,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ASRCriticalTerminologyFidelityRegistry:
+    applicable_metric: HveeMetricDefinition
+    preserved_metric: HveeMetricDefinition
+    outcome_metric: HveeMetricDefinition
+    vocabulary_sha256_metric: HveeMetricDefinition
+    reference_count_metric: HveeMetricDefinition
+    generated_count_metric: HveeMetricDefinition
+    substitution_count_metric: HveeMetricDefinition
+    omission_count_metric: HveeMetricDefinition
+    insertion_count_metric: HveeMetricDefinition
+    ordering_change_count_metric: HveeMetricDefinition
+    findings_metric: HveeMetricDefinition
+    evaluator: HveeEvaluatorVersion
+
+
+def resolve_asr_critical_terminology_fidelity_registry(
+    db: Session,
+) -> ASRCriticalTerminologyFidelityRegistry:
+    """
+    Resolve canonical en-US Critical Terminology Fidelity registry rows.
+
+    Registry resolution participates in the caller-owned transaction
+    and never independently commits.
+    """
+
+    applicable_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_APPLICABLE_METRIC,
+    )
+    preserved_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_PRESERVED_METRIC,
+    )
+    outcome_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_OUTCOME_METRIC,
+    )
+    vocabulary_sha256_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_VOCABULARY_SHA256_METRIC,
+    )
+    reference_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_REFERENCE_COUNT_METRIC,
+    )
+    generated_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_GENERATED_COUNT_METRIC,
+    )
+    substitution_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_SUBSTITUTION_COUNT_METRIC,
+    )
+    omission_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_OMISSION_COUNT_METRIC,
+    )
+    insertion_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_INSERTION_COUNT_METRIC,
+    )
+    ordering_change_count_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_ORDERING_CHANGE_COUNT_METRIC,
+    )
+    findings_metric = resolve_metric_definition(
+        db,
+        CRITICAL_TERMINOLOGY_FINDINGS_METRIC,
+    )
+    evaluator = resolve_evaluator_version(
+        db,
+        CRITICAL_TERMINOLOGY_FIDELITY_EVALUATOR,
+    )
+
+    return ASRCriticalTerminologyFidelityRegistry(
+        applicable_metric=applicable_metric,
+        preserved_metric=preserved_metric,
+        outcome_metric=outcome_metric,
+        vocabulary_sha256_metric=(
+            vocabulary_sha256_metric
+        ),
+        reference_count_metric=reference_count_metric,
+        generated_count_metric=generated_count_metric,
+        substitution_count_metric=substitution_count_metric,
+        omission_count_metric=omission_count_metric,
+        insertion_count_metric=insertion_count_metric,
+        ordering_change_count_metric=(
+            ordering_change_count_metric
+        ),
+        findings_metric=findings_metric,
+        evaluator=evaluator,
+    )
