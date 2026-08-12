@@ -893,3 +893,69 @@ __all__ += [
     "evaluate_critical_terminology_fidelity",
     "extract_critical_terminology_entities",
 ]
+
+
+from hvee.packs.asr.critical_terminology_portfolio import (
+    CRITICAL_TERMINOLOGY_FIDELITY_PORTFOLIO_V1,
+    CRITICAL_TERMINOLOGY_PORTFOLIO_KEY,
+    CRITICAL_TERMINOLOGY_PORTFOLIO_PROFILE_V1,
+    CRITICAL_TERMINOLOGY_PORTFOLIO_VERSION,
+    CRITICAL_TERMINOLOGY_PORTFOLIO_VOCABULARY_SHA256,
+    ASRCriticalTerminologyFindingExpectation,
+    ASRCriticalTerminologyPortfolioCase,
+    ASRCriticalTerminologyPortfolioCaseResult,
+    ASRCriticalTerminologyPortfolioDefinition,
+    ASRCriticalTerminologyPortfolioOperation,
+    ASRCriticalTerminologyPortfolioPartition,
+    ASRCriticalTerminologyPortfolioReport,
+    compare_critical_terminology_portfolio_case,
+    evaluate_critical_terminology_portfolio_case_observations,
+    run_critical_terminology_portfolio,
+    run_critical_terminology_portfolio_case,
+)
+
+
+__all__ += [
+    "ASRCriticalTerminologyFindingExpectation",
+    "ASRCriticalTerminologyPortfolioCase",
+    "ASRCriticalTerminologyPortfolioCaseResult",
+    "ASRCriticalTerminologyPortfolioDefinition",
+    "ASRCriticalTerminologyPortfolioOperation",
+    "ASRCriticalTerminologyPortfolioPartition",
+    "ASRCriticalTerminologyPortfolioReport",
+    "CRITICAL_TERMINOLOGY_FIDELITY_PORTFOLIO_V1",
+    "CRITICAL_TERMINOLOGY_PORTFOLIO_KEY",
+    "CRITICAL_TERMINOLOGY_PORTFOLIO_PROFILE_V1",
+    "CRITICAL_TERMINOLOGY_PORTFOLIO_VERSION",
+    "CRITICAL_TERMINOLOGY_PORTFOLIO_VOCABULARY_SHA256",
+    "compare_critical_terminology_portfolio_case",
+    "evaluate_critical_terminology_portfolio_case_observations",
+    "run_critical_terminology_portfolio",
+    "run_critical_terminology_portfolio_case",
+]
+
+
+from hvee.packs.asr.critical_terminology_mutation import (
+    CRITICAL_TERMINOLOGY_EVALUATOR_MUTATIONS_V1,
+    CRITICAL_TERMINOLOGY_MUTATION_SUITE_KEY,
+    CRITICAL_TERMINOLOGY_MUTATION_SUITE_VERSION,
+    ASRCriticalTerminologyEvaluatorMutation,
+    ASRCriticalTerminologyMutationReport,
+    ASRCriticalTerminologyMutationResult,
+    apply_critical_terminology_evaluator_mutation,
+    run_critical_terminology_evaluator_mutation,
+    run_critical_terminology_evaluator_mutation_suite,
+)
+
+
+__all__ += [
+    "ASRCriticalTerminologyEvaluatorMutation",
+    "ASRCriticalTerminologyMutationReport",
+    "ASRCriticalTerminologyMutationResult",
+    "CRITICAL_TERMINOLOGY_EVALUATOR_MUTATIONS_V1",
+    "CRITICAL_TERMINOLOGY_MUTATION_SUITE_KEY",
+    "CRITICAL_TERMINOLOGY_MUTATION_SUITE_VERSION",
+    "apply_critical_terminology_evaluator_mutation",
+    "run_critical_terminology_evaluator_mutation",
+    "run_critical_terminology_evaluator_mutation_suite",
+]
