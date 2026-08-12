@@ -281,6 +281,15 @@ class Project(Base):
         cascade="all, delete-orphan",
     )
 
+    critical_terminology_vocabulary_versions = relationship(
+        "CriticalTerminologyVocabularyVersion",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        order_by=(
+            "CriticalTerminologyVocabularyVersion.revision"
+        ),
+    )
+
     runs = relationship(
         "EvaluationRun",
         back_populates="project",
@@ -321,6 +330,159 @@ class Project(Base):
         "RunnerJob",
         back_populates="project",
         cascade="all, delete-orphan",
+    )
+
+
+class CriticalTerminologyVocabularyVersion(Base):
+    """
+    Immutable project-owned Critical Terminology vocabulary snapshot.
+
+    A vocabulary is append-only: changing terminology creates a new
+    project-local revision rather than mutating historical configuration.
+    The vocabulary SHA-256 is calculated by the HVEE Critical Terminology
+    contract and provides the scientific identity used by later evaluation
+    provenance.
+    """
+
+    __tablename__ = "critical_terminology_vocabulary_versions"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "project_id",
+            "revision",
+            name=(
+                "uq_critical_terminology_vocab_versions_"
+                "project_revision"
+            ),
+        ),
+        CheckConstraint(
+            "revision > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "revision_positive"
+            ),
+        ),
+        CheckConstraint(
+            "profile_schema_version > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "schema_version_positive"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(profile_key)) > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "profile_key_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(profile_version)) > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "profile_version_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(language)) > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "language_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(trim(locale)) > 0",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "locale_nonblank"
+            ),
+        ),
+        CheckConstraint(
+            "length(vocabulary_sha256) = 64",
+            name=(
+                "ck_critical_terminology_vocab_versions_"
+                "sha256_length"
+            ),
+        ),
+    )
+
+    id = Column(
+        Integer,
+        primary_key=True,
+    )
+
+    project_id = Column(
+        Integer,
+        ForeignKey(
+            "projects.id",
+            ondelete="CASCADE",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    revision = Column(
+        Integer,
+        nullable=False,
+    )
+
+    profile_schema_version = Column(
+        Integer,
+        nullable=False,
+    )
+
+    profile_key = Column(
+        String(200),
+        nullable=False,
+    )
+
+    profile_version = Column(
+        String(100),
+        nullable=False,
+    )
+
+    language = Column(
+        String(16),
+        nullable=False,
+    )
+
+    locale = Column(
+        String(32),
+        nullable=False,
+    )
+
+    terms_snapshot = Column(
+        JSON,
+        nullable=False,
+    )
+
+    vocabulary_sha256 = Column(
+        String(64),
+        nullable=False,
+    )
+
+    created_by_user_id = Column(
+        Integer,
+        ForeignKey(
+            "users.id",
+            ondelete="RESTRICT",
+        ),
+        nullable=False,
+        index=True,
+    )
+
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utc_now,
+        server_default=func.now(),
+    )
+
+    project = relationship(
+        "Project",
+        back_populates=(
+            "critical_terminology_vocabulary_versions"
+        ),
     )
 
 
