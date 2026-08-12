@@ -22,6 +22,47 @@ class ProjectRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class CriticalTerminologyTermInput(BaseModel):
+    term_key: str
+    canonical_text: str
+    accepted_surfaces: list[str] = Field(
+        min_length=1,
+    )
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
+class CriticalTerminologyVocabularyCreate(BaseModel):
+    terms: list[
+        CriticalTerminologyTermInput
+    ] = Field(
+        min_length=1,
+    )
+
+    model_config = ConfigDict(
+        extra="forbid",
+    )
+
+
+class CriticalTerminologyVocabularyRead(BaseModel):
+    id: int
+    project_id: int
+    revision: int
+    profile_schema_version: int
+    profile_key: str
+    profile_version: str
+    language: str
+    locale: str
+    terms: list[
+        CriticalTerminologyTermInput
+    ]
+    vocabulary_sha256: str
+    created_by_user_id: int
+    created_at: datetime
+
+
 class DatasetCreate(BaseModel):
     name: str
     description: Optional[str] = None

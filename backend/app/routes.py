@@ -46,6 +46,14 @@ from app.auth.authorization import (
 )
 from app.auth.dependencies import get_current_user
 from app.config import get_settings
+from app.critical_terminology_vocabulary_service import (
+    CriticalTerminologyVocabularyIntegrityError,
+    CriticalTerminologyVocabularyValidationError,
+    get_critical_terminology_vocabulary_version,
+    get_current_critical_terminology_vocabulary_version,
+    list_critical_terminology_vocabulary_versions,
+    stage_critical_terminology_vocabulary_version,
+)
 from app.database import check_database_connection, get_db
 from app.evaluation_artifacts import (
     SUPPORTED_ASR_AUDIO_MEDIA_TYPES,
@@ -743,6 +751,254 @@ def get_project(
     )
 
     return access.project
+
+
+def _critical_terminology_vocabulary_read(
+    vocabulary: (
+        models.CriticalTerminologyVocabularyVersion
+    ),
+) -> schemas.CriticalTerminologyVocabularyRead:
+    """Build the public API representation of a vocabulary revision."""
+
+    return schemas.CriticalTerminologyVocabularyRead(
+        id=vocabulary.id,
+        project_id=vocabulary.project_id,
+        revision=vocabulary.revision,
+        profile_schema_version=(
+            vocabulary.profile_schema_version
+        ),
+        profile_key=vocabulary.profile_key,
+        profile_version=(
+            vocabulary.profile_version
+        ),
+        language=vocabulary.language,
+        locale=vocabulary.locale,
+        terms=vocabulary.terms_snapshot,
+        vocabulary_sha256=(
+            vocabulary.vocabulary_sha256
+        ),
+        created_by_user_id=(
+            vocabulary.created_by_user_id
+        ),
+        created_at=vocabulary.created_at,
+    )
+
+
+@router.post(
+    "/projects/{project_id}/critical-terminology-vocabularies",
+    response_model=(
+        schemas.CriticalTerminologyVocabularyRead
+    ),
+    status_code=201,
+)
+def create_critical_terminology_vocabulary(
+    project_id: int,
+    vocabulary: (
+        schemas.CriticalTerminologyVocabularyCreate
+    ),
+    current_user: models.User = Depends(
+        get_current_user
+    ),
+    db: Session = Depends(get_db),
+):
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_WRITE_ROLES,
+    )
+
+    try:
+        created = (
+            stage_critical_terminology_vocabulary_version(
+                db,
+                project_id=access.project.id,
+                created_by_user_id=(
+                    current_user.id
+                ),
+                terms=[
+                    term.model_dump()
+                    for term in vocabulary.terms
+                ],
+            )
+        )
+    except CriticalTerminologyVocabularyValidationError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=422,
+            detail=str(exc),
+        ) from exc
+    except CriticalTerminologyVocabularyIntegrityError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Critical terminology vocabulary "
+                "integrity check failed"
+            ),
+        ) from exc
+
+    db.commit()
+    db.refresh(created)
+
+    return _critical_terminology_vocabulary_read(
+        created
+    )
+
+
+@router.get(
+    "/projects/{project_id}/critical-terminology-vocabularies",
+    response_model=list[
+        schemas.CriticalTerminologyVocabularyRead
+    ],
+)
+def list_critical_terminology_vocabularies(
+    project_id: int,
+    current_user: models.User = Depends(
+        get_current_user
+    ),
+    db: Session = Depends(get_db),
+):
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
+
+    try:
+        vocabularies = (
+            list_critical_terminology_vocabulary_versions(
+                db,
+                project_id=access.project.id,
+            )
+        )
+    except CriticalTerminologyVocabularyIntegrityError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Critical terminology vocabulary "
+                "integrity check failed"
+            ),
+        ) from exc
+
+    return [
+        _critical_terminology_vocabulary_read(
+            vocabulary
+        )
+        for vocabulary in vocabularies
+    ]
+
+
+@router.get(
+    "/projects/{project_id}/critical-terminology-vocabularies/current",
+    response_model=(
+        schemas.CriticalTerminologyVocabularyRead
+    ),
+)
+def get_current_critical_terminology_vocabulary(
+    project_id: int,
+    current_user: models.User = Depends(
+        get_current_user
+    ),
+    db: Session = Depends(get_db),
+):
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
+
+    try:
+        vocabulary = (
+            get_current_critical_terminology_vocabulary_version(
+                db,
+                project_id=access.project.id,
+            )
+        )
+    except CriticalTerminologyVocabularyIntegrityError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Critical terminology vocabulary "
+                "integrity check failed"
+            ),
+        ) from exc
+
+    if vocabulary is None:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                "Critical terminology vocabulary "
+                "is not configured"
+            ),
+        )
+
+    return _critical_terminology_vocabulary_read(
+        vocabulary
+    )
+
+
+@router.get(
+    "/projects/{project_id}/critical-terminology-vocabularies/{revision}",
+    response_model=(
+        schemas.CriticalTerminologyVocabularyRead
+    ),
+)
+def get_critical_terminology_vocabulary(
+    project_id: int,
+    revision: int,
+    current_user: models.User = Depends(
+        get_current_user
+    ),
+    db: Session = Depends(get_db),
+):
+    access = _authorize_project_for_request(
+        db,
+        current_user=current_user,
+        project_id=project_id,
+        required_roles=PRODUCT_READ_ROLES,
+    )
+
+    if revision <= 0:
+        raise HTTPException(
+            status_code=422,
+            detail=(
+                "Critical terminology vocabulary "
+                "revision must be positive"
+            ),
+        )
+
+    try:
+        vocabulary = (
+            get_critical_terminology_vocabulary_version(
+                db,
+                project_id=access.project.id,
+                revision=revision,
+            )
+        )
+    except CriticalTerminologyVocabularyIntegrityError as exc:
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Critical terminology vocabulary "
+                "integrity check failed"
+            ),
+        ) from exc
+
+    if vocabulary is None:
+        raise HTTPException(
+            status_code=404,
+            detail=(
+                "Critical terminology vocabulary "
+                "revision not found"
+            ),
+        )
+
+    return _critical_terminology_vocabulary_read(
+        vocabulary
+    )
 
 
 @router.get(
