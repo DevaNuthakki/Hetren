@@ -2,9 +2,16 @@ import hashlib
 import json
 from typing import Any
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app import models
+from app.critical_terminology_vocabulary_service import (
+    CriticalTerminologyVocabularyIntegrityError,
+    build_profile_from_vocabulary_version,
+    get_critical_terminology_vocabulary_version,
+    get_current_critical_terminology_vocabulary_version,
+)
 from app.hvee_observation_evidence import (
     HveeObservationEvidenceError,
     build_test_case_observation_evidence_bundle,
@@ -28,7 +35,23 @@ from hvee.packs.asr.normalized_evaluation import (
 )
 
 
-EVALUATION_MANIFEST_SCHEMA_VERSION = 1
+LEGACY_EVALUATION_MANIFEST_SCHEMA_VERSION = 1
+EVALUATION_MANIFEST_SCHEMA_VERSION = 2
+
+SUPPORTED_EVALUATION_MANIFEST_SCHEMA_VERSIONS = frozenset(
+    {
+        LEGACY_EVALUATION_MANIFEST_SCHEMA_VERSION,
+        EVALUATION_MANIFEST_SCHEMA_VERSION,
+    }
+)
+
+CRITICAL_TERMINOLOGY_MANIFEST_STATUS_CONFIGURED = (
+    "configured"
+)
+CRITICAL_TERMINOLOGY_MANIFEST_STATUS_NOT_CONFIGURED = (
+    "not_configured"
+)
+
 ASR_EVALUATION_TYPE = "asr"
 HETREN_EVALUATOR_ENGINE = "hetren"
 ASR_EVALUATOR_CONTRACT_VERSION = "asr-v1"
@@ -68,6 +91,163 @@ def calculate_manifest_sha256(
     ).hexdigest()
 
 
+
+def _is_canonical_sha256(
+    value: object,
+) -> bool:
+    return (
+        isinstance(value, str)
+        and len(value) == 64
+        and all(
+            character
+            in "0123456789abcdef"
+            for character in value
+        )
+    )
+
+
+def _is_valid_critical_terminology_manifest_binding(
+    value: object,
+) -> bool:
+    """
+    Validate the Critical Terminology creation-time run binding.
+
+    The run manifest owns only immutable identity. Vocabulary content
+    remains in the project-owned version table and is reconstructed
+    through the HVEE scientific contract when a result is evaluated.
+    """
+
+    if not isinstance(value, dict):
+        return False
+
+    status = value.get("status")
+
+    if status == (
+        CRITICAL_TERMINOLOGY_MANIFEST_STATUS_NOT_CONFIGURED
+    ):
+        return set(value) == {"status"}
+
+    if status != (
+        CRITICAL_TERMINOLOGY_MANIFEST_STATUS_CONFIGURED
+    ):
+        return False
+
+    expected_fields = {
+        "status",
+        "revision",
+        "profile_schema_version",
+        "profile_key",
+        "profile_version",
+        "language",
+        "locale",
+        "vocabulary_sha256",
+    }
+
+    if set(value) != expected_fields:
+        return False
+
+    revision = value.get("revision")
+    profile_schema_version = value.get(
+        "profile_schema_version"
+    )
+    profile_key = value.get("profile_key")
+    profile_version = value.get("profile_version")
+    language = value.get("language")
+    locale = value.get("locale")
+
+    return (
+        isinstance(revision, int)
+        and not isinstance(revision, bool)
+        and revision > 0
+        and isinstance(
+            profile_schema_version,
+            int,
+        )
+        and not isinstance(
+            profile_schema_version,
+            bool,
+        )
+        and profile_schema_version > 0
+        and isinstance(profile_key, str)
+        and bool(profile_key.strip())
+        and isinstance(profile_version, str)
+        and bool(profile_version.strip())
+        and isinstance(language, str)
+        and bool(language.strip())
+        and isinstance(locale, str)
+        and bool(locale.strip())
+        and _is_canonical_sha256(
+            value.get("vocabulary_sha256")
+        )
+    )
+
+
+def _critical_terminology_manifest_binding_from_version(
+    vocabulary: models.CriticalTerminologyVocabularyVersion,
+) -> dict[str, object]:
+    return {
+        "status": (
+            CRITICAL_TERMINOLOGY_MANIFEST_STATUS_CONFIGURED
+        ),
+        "revision": vocabulary.revision,
+        "profile_schema_version": (
+            vocabulary.profile_schema_version
+        ),
+        "profile_key": vocabulary.profile_key,
+        "profile_version": vocabulary.profile_version,
+        "language": vocabulary.language,
+        "locale": vocabulary.locale,
+        "vocabulary_sha256": (
+            vocabulary.vocabulary_sha256
+        ),
+    }
+
+
+def _build_current_critical_terminology_manifest_binding(
+    db: Session,
+    *,
+    project_id: int,
+) -> dict[str, object]:
+    """
+    Resolve Critical Terminology exactly once when a run is created.
+
+    Later project vocabulary revisions never change this sealed run
+    binding.
+    """
+
+    vocabulary = (
+        get_current_critical_terminology_vocabulary_version(
+            db,
+            project_id=project_id,
+        )
+    )
+
+    if vocabulary is None:
+        return {
+            "status": (
+                CRITICAL_TERMINOLOGY_MANIFEST_STATUS_NOT_CONFIGURED
+            )
+        }
+
+    binding = (
+        _critical_terminology_manifest_binding_from_version(
+            vocabulary
+        )
+    )
+
+    if not (
+        _is_valid_critical_terminology_manifest_binding(
+            binding
+        )
+    ):
+        raise CriticalTerminologyVocabularyIntegrityError(
+            "critical terminology run binding "
+            "could not be constructed"
+        )
+
+    return binding
+
+
 def build_evaluation_run_manifest_payload(
     *,
     run_id: int,
@@ -75,6 +255,9 @@ def build_evaluation_run_manifest_payload(
     run_name: str,
     model_name: str,
     evaluation_type: str = ASR_EVALUATION_TYPE,
+    critical_terminology: (
+        dict[str, object] | None
+    ) = None,
 ) -> dict[str, Any]:
     """
     Build the creation-time facts known when an ASR run is created.
@@ -86,6 +269,23 @@ def build_evaluation_run_manifest_payload(
     if evaluation_type != ASR_EVALUATION_TYPE:
         raise ValueError(
             "Unsupported evaluation type."
+        )
+
+    if critical_terminology is None:
+        critical_terminology = {
+            "status": (
+                CRITICAL_TERMINOLOGY_MANIFEST_STATUS_NOT_CONFIGURED
+            )
+        }
+
+    if not (
+        _is_valid_critical_terminology_manifest_binding(
+            critical_terminology
+        )
+    ):
+        raise ValueError(
+            "Invalid Critical Terminology "
+            "run-manifest binding."
         )
 
     return {
@@ -107,6 +307,9 @@ def build_evaluation_run_manifest_payload(
                 ASR_EVALUATOR_CONTRACT_VERSION
             ),
         },
+        "critical_terminology": (
+            critical_terminology
+        ),
     }
 
 
@@ -127,12 +330,20 @@ def stage_evaluation_run_manifest(
             "creating its manifest."
         )
 
+    critical_terminology = (
+        _build_current_critical_terminology_manifest_binding(
+            db,
+            project_id=evaluation_run.project_id,
+        )
+    )
+
     payload = build_evaluation_run_manifest_payload(
         run_id=evaluation_run.id,
         project_id=evaluation_run.project_id,
         run_name=evaluation_run.run_name,
         model_name=evaluation_run.model_name,
         evaluation_type=evaluation_run.evaluation_type,
+        critical_terminology=critical_terminology,
     )
 
     manifest = models.EvaluationRunManifest(
@@ -197,12 +408,21 @@ def verify_evaluation_run_manifest(
     manifest: models.EvaluationRunManifest,
 ) -> bool:
     """
-    Verify that the stored manifest payload still matches its digest
-    and its indexed schema/type fields.
+    Verify the stored immutable run manifest.
+
+    Schema v1 remains valid for historical runs. Schema v2 additionally
+    requires an explicit Critical Terminology configuration binding.
     """
+
     payload = manifest.manifest_payload
 
     if not isinstance(payload, dict):
+        return False
+
+    if (
+        manifest.schema_version
+        not in SUPPORTED_EVALUATION_MANIFEST_SCHEMA_VERSIONS
+    ):
         return False
 
     if (
@@ -217,9 +437,111 @@ def verify_evaluation_run_manifest(
     ):
         return False
 
-    return (
+    if (
         calculate_manifest_sha256(payload)
-        == manifest.manifest_sha256
+        != manifest.manifest_sha256
+    ):
+        return False
+
+    if (
+        manifest.schema_version
+        == LEGACY_EVALUATION_MANIFEST_SCHEMA_VERSION
+    ):
+        return True
+
+    return (
+        _is_valid_critical_terminology_manifest_binding(
+            payload.get("critical_terminology")
+        )
+    )
+
+
+def resolve_evaluation_run_critical_terminology_profile(
+    db: Session,
+    *,
+    evaluation_run: models.EvaluationRun,
+):
+    """
+    Resolve the exact Critical Terminology profile sealed by a run.
+
+    Historical schema-v1 or unsealed legacy runs have no terminology
+    binding and therefore return None.
+
+    Schema-v2 configured runs must reproduce the exact immutable project
+    revision and identity sealed at run creation. Any mismatch fails
+    closed.
+    """
+
+    if evaluation_run.id is None:
+        raise CriticalTerminologyVocabularyIntegrityError(
+            "evaluation run must be persisted "
+            "before terminology resolution"
+        )
+
+    manifest = db.scalar(
+        select(models.EvaluationRunManifest)
+        .where(
+            models.EvaluationRunManifest.run_id
+            == evaluation_run.id
+        )
+    )
+
+    # Preserve historical support for runs created before sealed
+    # manifests were required.
+    if manifest is None:
+        return None
+
+    if not verify_evaluation_run_manifest(
+        manifest
+    ):
+        raise CriticalTerminologyVocabularyIntegrityError(
+            "evaluation run manifest integrity "
+            "check failed"
+        )
+
+    if (
+        manifest.schema_version
+        == LEGACY_EVALUATION_MANIFEST_SCHEMA_VERSION
+    ):
+        return None
+
+    binding = manifest.manifest_payload[
+        "critical_terminology"
+    ]
+
+    if binding["status"] == (
+        CRITICAL_TERMINOLOGY_MANIFEST_STATUS_NOT_CONFIGURED
+    ):
+        return None
+
+    vocabulary = (
+        get_critical_terminology_vocabulary_version(
+            db,
+            project_id=evaluation_run.project_id,
+            revision=binding["revision"],
+        )
+    )
+
+    if vocabulary is None:
+        raise CriticalTerminologyVocabularyIntegrityError(
+            "run-pinned Critical Terminology "
+            "vocabulary does not exist"
+        )
+
+    expected_binding = (
+        _critical_terminology_manifest_binding_from_version(
+            vocabulary
+        )
+    )
+
+    if binding != expected_binding:
+        raise CriticalTerminologyVocabularyIntegrityError(
+            "run-pinned Critical Terminology "
+            "vocabulary identity does not verify"
+        )
+
+    return build_profile_from_vocabulary_version(
+        vocabulary
     )
 
 

@@ -14,6 +14,9 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from app import models
+from app.critical_terminology_vocabulary_service import (
+    stage_critical_terminology_vocabulary_version,
+)
 from app.hvee_models import (
     HveeEvaluatorVersion,
     HveeMetricDefinition,
@@ -34,6 +37,12 @@ from hvee.packs.asr import (
     CRITICAL_NUMBER_METRICS,
     CRITICAL_NUMBER_OUTCOME_METRIC,
     CRITICAL_NUMBER_PRESERVED_METRIC,
+    CRITICAL_TERMINOLOGY_APPLICABLE_METRIC,
+    CRITICAL_TERMINOLOGY_FINDINGS_METRIC,
+    CRITICAL_TERMINOLOGY_METRICS,
+    CRITICAL_TERMINOLOGY_OUTCOME_METRIC,
+    CRITICAL_TERMINOLOGY_PRESERVED_METRIC,
+    CRITICAL_TERMINOLOGY_VOCABULARY_SHA256_METRIC,
     EXACT_NORMALIZED_MATCH_METRIC,
     GENERATED_EMPTY_METRIC,
     GENERATED_NUMERIC_TOKEN_COUNT_METRIC,
@@ -94,6 +103,39 @@ pytestmark = [
 EXPECTED_TRANSCRIPT = (
     "mock asr transcript generated from input"
 )
+
+
+def critical_terminology_terms_v1() -> list[
+    dict[str, object]
+]:
+    # Present in both the runner reference transcript and mock output.
+    return [
+        {
+            "term_key": "mock-asr-transcript",
+            "canonical_text": "mock asr transcript",
+            "accepted_surfaces": [
+                "mock asr transcript",
+            ],
+        }
+    ]
+
+
+def critical_terminology_terms_v2() -> list[
+    dict[str, object]
+]:
+    # Revision 2 is deliberately different. The original term remains,
+    # but a new customer-owned term changes the project vocabulary while
+    # an already-created run must remain pinned to revision 1.
+    return [
+        *critical_terminology_terms_v1(),
+        {
+            "term_key": "neurodex",
+            "canonical_text": "Neurodex",
+            "accepted_surfaces": [
+                "Neurodex",
+            ],
+        },
+    ]
 
 
 class RecordingSynchronousASGITransport(
@@ -169,6 +211,10 @@ class RunnerASREndToEndCase:
     job_public_id: str
     credential: str
     source_audio_path: Path
+    critical_terminology_creator_user_id: int | None = None
+    critical_terminology_v1_sha256: str | None = None
+    critical_terminology_v2_sha256: str | None = None
+    critical_terminology_profile_key: str | None = None
 
 
 @pytest.fixture
@@ -286,6 +332,16 @@ def cleanup_case(
             .delete(synchronize_session=False)
         )
         (
+            db.query(
+                models.CriticalTerminologyVocabularyVersion
+            )
+            .filter(
+                models.CriticalTerminologyVocabularyVersion.project_id
+                == case.project_id
+            )
+            .delete(synchronize_session=False)
+        )
+        (
             db.query(models.Project)
             .filter(
                 models.Project.id
@@ -293,6 +349,22 @@ def cleanup_case(
             )
             .delete(synchronize_session=False)
         )
+
+        if (
+            case.critical_terminology_creator_user_id
+            is not None
+        ):
+            (
+                db.query(models.User)
+                .filter(
+                    models.User.id
+                    == (
+                        case
+                        .critical_terminology_creator_user_id
+                    )
+                )
+                .delete(synchronize_session=False)
+            )
 
         db.commit()
     except BaseException:
@@ -306,8 +378,14 @@ def create_case(
     harness: RunnerHTTPHarness,
     *,
     uploads_root: Path,
+    configure_critical_terminology: bool = False,
 ) -> RunnerASREndToEndCase:
     suffix = uuid4().hex
+
+    terminology_creator_user_id: int | None = None
+    terminology_v1_sha256: str | None = None
+    terminology_v2_sha256: str | None = None
+    terminology_profile_key: str | None = None
     source_audio_path = (
         uploads_root
         / "datasets"
@@ -333,6 +411,44 @@ def create_case(
         db.add(project)
         db.commit()
         db.refresh(project)
+
+        if configure_critical_terminology:
+            terminology_creator = models.User(
+                email=(
+                    "runner-terminology-"
+                    f"{suffix}@example.com"
+                ),
+            )
+            db.add(terminology_creator)
+            db.flush()
+
+            terminology_v1 = (
+                stage_critical_terminology_vocabulary_version(
+                    db,
+                    project_id=project.id,
+                    created_by_user_id=(
+                        terminology_creator.id
+                    ),
+                    terms=(
+                        critical_terminology_terms_v1()
+                    ),
+                )
+            )
+
+            # v1 must be durable before the evaluation run is created,
+            # because run-manifest construction resolves the current
+            # project vocabulary at that exact point.
+            db.commit()
+
+            terminology_creator_user_id = (
+                terminology_creator.id
+            )
+            terminology_v1_sha256 = (
+                terminology_v1.vocabulary_sha256
+            )
+            terminology_profile_key = (
+                terminology_v1.profile_key
+            )
 
         issued = issue_registration_token(
             db,
@@ -438,6 +554,34 @@ def create_case(
             max_attempts=3,
         )
 
+        if configure_critical_terminology:
+            assert (
+                terminology_creator_user_id
+                is not None
+            )
+
+            terminology_v2 = (
+                stage_critical_terminology_vocabulary_version(
+                    db,
+                    project_id=project_id,
+                    created_by_user_id=(
+                        terminology_creator_user_id
+                    ),
+                    terms=(
+                        critical_terminology_terms_v2()
+                    ),
+                )
+            )
+
+            # The job already exists. Advancing the project to v2 now
+            # simulates configuration changing while runner work is
+            # still in flight.
+            db.commit()
+
+            terminology_v2_sha256 = (
+                terminology_v2.vocabulary_sha256
+            )
+
         return RunnerASREndToEndCase(
             project_id=project_id,
             dataset_id=dataset_id,
@@ -451,6 +595,18 @@ def create_case(
             job_public_id=job.public_id,
             credential=credential,
             source_audio_path=source_audio_path,
+            critical_terminology_creator_user_id=(
+                terminology_creator_user_id
+            ),
+            critical_terminology_v1_sha256=(
+                terminology_v1_sha256
+            ),
+            critical_terminology_v2_sha256=(
+                terminology_v2_sha256
+            ),
+            critical_terminology_profile_key=(
+                terminology_profile_key
+            ),
         )
     finally:
         db.close()
@@ -1573,6 +1729,306 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
             ]
         finally:
             db.close()
+    finally:
+        cleanup_case(
+            runner_http_harness,
+            case,
+        )
+
+
+
+def test_postgres_runner_uses_run_pinned_critical_terminology_vocabulary(
+    runner_http_harness: RunnerHTTPHarness,
+    tmp_path: Path,
+    monkeypatch,
+):
+    """
+    Prove a runner job cannot drift to a newer project vocabulary.
+
+    Revision 1 exists when the run is created. Revision 2 is created
+    after the runner job exists but before execution. The resulting
+    observations and provenance must still bind revision 1.
+    """
+
+    monkeypatch.chdir(tmp_path)
+
+    uploads_root = tmp_path / "uploads"
+
+    case = create_case(
+        runner_http_harness,
+        uploads_root=uploads_root,
+        configure_critical_terminology=True,
+    )
+
+    assert (
+        case.critical_terminology_v1_sha256
+        is not None
+    )
+    assert (
+        case.critical_terminology_v2_sha256
+        is not None
+    )
+    assert (
+        case.critical_terminology_profile_key
+        is not None
+    )
+
+    # The project really changed while the run remained in flight.
+    assert (
+        case.critical_terminology_v1_sha256
+        != case.critical_terminology_v2_sha256
+    )
+
+    try:
+        with LocalRunnerClient(
+            api_base_url="http://testserver",
+            credential=case.credential,
+            timeout_seconds=5,
+            transport=(
+                runner_http_harness.transport
+            ),
+        ) as client:
+            cycle_result = run_one_local_runner_cycle(
+                client=client,
+                settings=build_settings(case),
+                system_info={
+                    "platform": (
+                        "postgres-asr-terminology-pinning"
+                    ),
+                },
+            )
+
+        assert cycle_result.status == "completed"
+        assert cycle_result.job_public_id == (
+            case.job_public_id
+        )
+        assert cycle_result.result_payload is not None
+
+        db = runner_http_harness.session_factory()
+
+        try:
+            job = db.get(
+                models.RunnerJob,
+                case.job_id,
+            )
+            evaluation_run = db.get(
+                models.EvaluationRun,
+                case.evaluation_run_id,
+            )
+
+            assert job is not None
+            assert evaluation_run is not None
+
+            manifest = (
+                db.query(
+                    models.EvaluationRunManifest
+                )
+                .filter(
+                    models.EvaluationRunManifest.run_id
+                    == case.evaluation_run_id
+                )
+                .one()
+            )
+
+            binding = manifest.manifest_payload[
+                "critical_terminology"
+            ]
+
+            assert binding["status"] == "configured"
+            assert binding["revision"] == 1
+            assert binding["profile_version"] == "1"
+
+            assert (
+                binding["profile_key"]
+                == case.critical_terminology_profile_key
+            )
+
+            assert (
+                binding["vocabulary_sha256"]
+                == case.critical_terminology_v1_sha256
+            )
+
+            vocabularies = (
+                db.query(
+                    models.CriticalTerminologyVocabularyVersion
+                )
+                .filter(
+                    models.CriticalTerminologyVocabularyVersion.project_id
+                    == case.project_id
+                )
+                .order_by(
+                    models.CriticalTerminologyVocabularyVersion.revision
+                )
+                .all()
+            )
+
+            assert [
+                vocabulary.revision
+                for vocabulary in vocabularies
+            ] == [1, 2]
+
+            assert (
+                vocabularies[0].vocabulary_sha256
+                == case.critical_terminology_v1_sha256
+            )
+
+            assert (
+                vocabularies[1].vocabulary_sha256
+                == case.critical_terminology_v2_sha256
+            )
+
+            assert (
+                vocabularies[1].profile_version
+                == "2"
+            )
+
+            result = (
+                db.query(models.EvaluationResult)
+                .filter(
+                    models.EvaluationResult.run_id
+                    == case.evaluation_run_id,
+                    models.EvaluationResult.test_case_id
+                    == case.test_case_id,
+                )
+                .one()
+            )
+
+            persisted_observations = (
+                db.query(HveeObservation)
+                .filter(
+                    HveeObservation.evaluation_run_id
+                    == case.evaluation_run_id,
+                    HveeObservation.test_case_id
+                    == case.test_case_id,
+                )
+                .all()
+            )
+
+            assert len(persisted_observations) == 49
+
+            metric_ids = [
+                observation.metric_definition_id
+                for observation in persisted_observations
+            ]
+
+            metrics_by_id = {
+                metric.id: metric
+                for metric in (
+                    db.query(HveeMetricDefinition)
+                    .filter(
+                        HveeMetricDefinition.id.in_(
+                            metric_ids
+                        )
+                    )
+                    .all()
+                )
+            }
+
+            observations_by_metric_key = {
+                metrics_by_id[
+                    observation.metric_definition_id
+                ].key: observation
+                for observation
+                in persisted_observations
+            }
+
+            terminology_metric_keys = {
+                metric.key
+                for metric
+                in CRITICAL_TERMINOLOGY_METRICS
+            }
+
+            assert len(
+                CRITICAL_TERMINOLOGY_METRICS
+            ) == 11
+
+            assert terminology_metric_keys <= set(
+                observations_by_metric_key
+            )
+
+            assert observations_by_metric_key[
+                CRITICAL_TERMINOLOGY_APPLICABLE_METRIC.key
+            ].boolean_value is True
+
+            preserved = observations_by_metric_key[
+                CRITICAL_TERMINOLOGY_PRESERVED_METRIC.key
+            ]
+
+            assert preserved.status == "success"
+            assert preserved.boolean_value is True
+
+            assert observations_by_metric_key[
+                CRITICAL_TERMINOLOGY_OUTCOME_METRIC.key
+            ].string_value == "preserved"
+
+            sha_observation = observations_by_metric_key[
+                CRITICAL_TERMINOLOGY_VOCABULARY_SHA256_METRIC.key
+            ]
+
+            assert sha_observation.string_value == (
+                case.critical_terminology_v1_sha256
+            )
+
+            assert sha_observation.string_value != (
+                case.critical_terminology_v2_sha256
+            )
+
+            findings = observations_by_metric_key[
+                CRITICAL_TERMINOLOGY_FINDINGS_METRIC.key
+            ].json_value
+
+            assert isinstance(findings, list)
+            assert findings
+
+            assert all(
+                finding["profile_key"]
+                == case.critical_terminology_profile_key
+                and finding["profile_version"] == "1"
+                and finding["vocabulary_sha256"]
+                == case.critical_terminology_v1_sha256
+                for finding in findings
+            )
+
+            assert any(
+                finding["finding_type"] == "match"
+                for finding in findings
+            )
+
+            assert result.provenance is not None
+
+            provenance = result.provenance
+
+            assert provenance.execution_mode == (
+                "runner_asr"
+            )
+
+            assert (
+                provenance.provenance_payload[
+                    "hvee_observations"
+                ]["count"]
+                == 49
+            )
+
+            assert verify_evaluation_result_provenance(
+                provenance
+            )
+
+            assert (
+                verify_evaluation_result_observation_binding(
+                    db,
+                    provenance,
+                )
+            )
+
+            assert evaluation_run.status == "evaluated"
+
+            assert job.status == "completed"
+            assert job.completed_at is not None
+            assert job.error_message is None
+
+        finally:
+            db.close()
+
     finally:
         cleanup_case(
             runner_http_harness,
