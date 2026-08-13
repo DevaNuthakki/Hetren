@@ -80,7 +80,10 @@ def db() -> Generator[Session, None, None]:
 
     Base.metadata.create_all(engine)
 
-    factory = sessionmaker(bind=engine)
+    factory = sessionmaker(
+        bind=engine,
+        autoflush=False,
+    )
     session = factory()
 
     try:

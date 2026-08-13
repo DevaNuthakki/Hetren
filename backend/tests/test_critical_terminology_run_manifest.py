@@ -36,7 +36,10 @@ def _session() -> tuple[
 
     Base.metadata.create_all(engine)
 
-    factory = sessionmaker(bind=engine)
+    factory = sessionmaker(
+        bind=engine,
+        autoflush=False,
+    )
 
     return factory(), engine
 
