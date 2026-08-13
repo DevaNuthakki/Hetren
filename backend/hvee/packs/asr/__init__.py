@@ -959,3 +959,47 @@ __all__ += [
     "run_critical_terminology_evaluator_mutation",
     "run_critical_terminology_evaluator_mutation_suite",
 ]
+
+
+from hvee.packs.asr.adversarial_evidence import (
+    ASR_ADVERSARIAL_EVIDENCE_KEY,
+    ASR_ADVERSARIAL_EVIDENCE_SCHEMA_VERSION,
+    ASR_ADVERSARIAL_EVIDENCE_VERSION,
+    ASRAdversarialCase,
+    ASRAdversarialChannel,
+    ASRAdversarialCodec,
+    ASRAdversarialCondition,
+    ASRAdversarialDurationBucket,
+    ASRAdversarialEvidenceBundle,
+    ASRAdversarialLongContextPosition,
+    ASRAdversarialNoiseCondition,
+    ASRAdversarialOverlapCondition,
+    ASRAdversarialSemanticLoad,
+    ASRAdversarialSpeakingRate,
+    ASRAdversarialSuiteDefinition,
+    build_asr_adversarial_evidence_v1,
+    calculate_asr_adversarial_evidence_sha256,
+    verify_asr_adversarial_evidence_v1,
+)
+
+
+__all__ += [
+    "ASR_ADVERSARIAL_EVIDENCE_KEY",
+    "ASR_ADVERSARIAL_EVIDENCE_SCHEMA_VERSION",
+    "ASR_ADVERSARIAL_EVIDENCE_VERSION",
+    "ASRAdversarialCase",
+    "ASRAdversarialChannel",
+    "ASRAdversarialCodec",
+    "ASRAdversarialCondition",
+    "ASRAdversarialDurationBucket",
+    "ASRAdversarialEvidenceBundle",
+    "ASRAdversarialLongContextPosition",
+    "ASRAdversarialNoiseCondition",
+    "ASRAdversarialOverlapCondition",
+    "ASRAdversarialSemanticLoad",
+    "ASRAdversarialSpeakingRate",
+    "ASRAdversarialSuiteDefinition",
+    "build_asr_adversarial_evidence_v1",
+    "calculate_asr_adversarial_evidence_sha256",
+    "verify_asr_adversarial_evidence_v1",
+]
