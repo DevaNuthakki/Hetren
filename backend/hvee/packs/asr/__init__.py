@@ -1039,3 +1039,13 @@ __all__ += [
     "calculate_asr_adversarial_transcript_sha256",
     "verify_asr_adversarial_execution_evidence_v1",
 ]
+
+
+from hvee.packs.asr.adversarial_semantic_execution import (
+    evaluate_asr_adversarial_semantics,
+)
+
+
+__all__ += [
+    "evaluate_asr_adversarial_semantics",
+]
