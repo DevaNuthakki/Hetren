@@ -25,6 +25,7 @@ import {
   type AuthenticatedUser,
   getReleaseReport,
   getResultTranscriptDiff,
+  getResultSemanticEvidence,
   transcribeAndEvaluateTestCaseForRun,
   type Dataset,
   type DebugCase,
@@ -35,10 +36,12 @@ import {
   type ProjectWorkflowSummary,
   type ReleaseReport,
   type RunComparison,
+  type ASRSemanticEvidence,
   type StructuredTranscriptDiff,
   type TestCase,
 } from "./api";
 import { RunnerOperationsPanel } from "./RunnerOperationsPanel";
+import { SemanticEvidencePanel } from "./SemanticEvidencePanel";
 
 type MetricCard = {
   label: string;
@@ -366,6 +369,12 @@ function App() {
   const [transcriptDiffError, setTranscriptDiffError] = useState<string | null>(
     null,
   );
+  const [selectedSemanticEvidence, setSelectedSemanticEvidence] =
+    useState<ASRSemanticEvidence | null>(null);
+  const [isSemanticEvidenceLoading, setIsSemanticEvidenceLoading] =
+    useState(false);
+  const [semanticEvidenceError, setSemanticEvidenceError] =
+    useState<string | null>(null);
 
   const latestWorkspaceComparisonId =
     workspaceData?.comparisons[0]?.id ?? null;
@@ -643,6 +652,56 @@ function App() {
     }
   }, [selectedDebugCaseDetails?.current_result?.id]);
 
+  useEffect(() => {
+    const currentResultId =
+      selectedDebugCaseDetails?.current_result?.id;
+
+    let isCancelled = false;
+
+    async function loadSemanticEvidence(resultId: number) {
+      try {
+        setIsSemanticEvidenceLoading(true);
+        setSemanticEvidenceError(null);
+        setSelectedSemanticEvidence(null);
+
+        const evidence =
+          await getResultSemanticEvidence(resultId);
+
+        if (!isCancelled) {
+          setSelectedSemanticEvidence(evidence);
+        }
+      } catch (error) {
+        if (isCancelled) {
+          return;
+        }
+
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Unable to load semantic fidelity evidence.";
+
+        setSemanticEvidenceError(message);
+        setSelectedSemanticEvidence(null);
+      } finally {
+        if (!isCancelled) {
+          setIsSemanticEvidenceLoading(false);
+        }
+      }
+    }
+
+    if (currentResultId) {
+      void loadSemanticEvidence(currentResultId);
+    } else {
+      setSelectedSemanticEvidence(null);
+      setSemanticEvidenceError(null);
+      setIsSemanticEvidenceLoading(false);
+    }
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedDebugCaseDetails?.current_result?.id]);
+
   const openDebugCases = debugCases.filter(
     (debugCase) => debugCase.status !== "closed",
   );
@@ -778,6 +837,9 @@ function App() {
     setSelectedTranscriptDiff(null);
     setTranscriptDiffError(null);
     setIsTranscriptDiffLoading(false);
+    setSelectedSemanticEvidence(null);
+    setSemanticEvidenceError(null);
+    setIsSemanticEvidenceLoading(false);
   }
 
   function clearAuthenticatedData() {
@@ -1704,6 +1766,23 @@ function App() {
           </section>
         )}
 
+        {isSemanticEvidenceLoading && (
+          <section
+            className="state-banner"
+            role="status"
+            aria-live="polite"
+          >
+            Loading semantic fidelity evidence...
+          </section>
+        )}
+
+        {semanticEvidenceError && (
+          <section className="state-banner error" role="alert">
+            <strong>Unable to load semantic fidelity evidence.</strong>
+            <span>{semanticEvidenceError}</span>
+          </section>
+        )}
+
         {!workspaceData ? (
           <section className="empty-state">
             Project workspace data is not loaded yet.
@@ -1833,6 +1912,13 @@ function App() {
                   )}
                   {renderRunInspectionCard("Current run", currentRun, currentResult)}
                 </div>
+
+                {currentResult &&
+                  selectedSemanticEvidence?.result_id === currentResult.id && (
+                    <SemanticEvidencePanel
+                      evidence={selectedSemanticEvidence}
+                    />
+                  )}
 
                 <section className="transcript-grid" aria-label="Transcript comparison">
                   <article className="transcript-panel">

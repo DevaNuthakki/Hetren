@@ -1729,3 +1729,210 @@ button:disabled {
 .sidebar-account .sidebar-account-error {
   color: #fecaca;
 }
+
+
+.semantic-evidence-panel {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 20px;
+  background: rgba(14, 165, 233, 0.05);
+}
+
+.semantic-evidence-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.semantic-evidence-panel-header h3 {
+  margin: 0 0 6px;
+  color: #f8fafc;
+  font-size: 1.15rem;
+}
+
+.semantic-evidence-panel-header > div > p:last-child {
+  max-width: 760px;
+  margin: 0;
+  color: #93a4b8;
+  line-height: 1.55;
+}
+
+.semantic-evidence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.semantic-evidence-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.42);
+}
+
+.semantic-evidence-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.semantic-evidence-card-header h4 {
+  margin: 0 0 6px;
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.semantic-evidence-card-header p {
+  margin: 0;
+  color: #93a4b8;
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.semantic-evidence-card-header .status-pill {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.semantic-evidence-unavailable {
+  padding: 12px;
+  border: 1px dashed rgba(148, 163, 184, 0.26);
+  border-radius: 12px;
+  color: #aebdd0;
+  background: rgba(15, 23, 42, 0.46);
+  line-height: 1.55;
+}
+
+.semantic-evidence-counts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.semantic-evidence-counts div {
+  padding: 9px 10px;
+  border-radius: 11px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.semantic-evidence-counts dt {
+  margin-bottom: 4px;
+  color: #93a4b8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.semantic-evidence-counts dd {
+  margin: 0;
+  color: #f8fafc;
+  font-weight: 800;
+}
+
+.semantic-evidence-vocabulary {
+  margin: 0 0 12px;
+  color: #aebdd0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.semantic-evidence-vocabulary code {
+  color: #bae6fd;
+}
+
+.semantic-evidence-details {
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  padding-top: 12px;
+}
+
+.semantic-evidence-details summary {
+  cursor: pointer;
+  color: #bae6fd;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+
+.semantic-observation-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.semantic-observation {
+  min-width: 0;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.72);
+}
+
+.semantic-observation-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.semantic-observation-header strong {
+  min-width: 0;
+  color: #e2e8f0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.semantic-observation-identity {
+  display: block;
+  margin-top: 7px;
+  color: #64748b;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.semantic-observation-value {
+  max-height: 180px;
+  margin: 9px 0 0;
+  padding: 8px;
+  overflow: auto;
+  border-radius: 8px;
+  color: #cbd5e1;
+  background: rgba(2, 6, 23, 0.62);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.semantic-observation-detail {
+  margin: 8px 0 0;
+  color: #aebdd0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+@media (max-width: 1200px) {
+  .semantic-evidence-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .semantic-evidence-panel-header,
+  .semantic-evidence-card-header,
+  .semantic-observation-header {
+    flex-direction: column;
+  }
+
+  .semantic-evidence-counts {
+    grid-template-columns: 1fr;
+  }
+}
