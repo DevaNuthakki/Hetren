@@ -401,6 +401,12 @@ def stage_evaluation_run_with_manifest(
         evaluation_run=evaluation_run,
     )
 
+    # SessionLocal disables autoflush. Make the sealed manifest
+    # query-visible inside the caller-owned transaction before
+    # returning so immediate run-scoped resolvers observe the
+    # exact creation-time configuration.
+    db.flush()
+
     return evaluation_run
 
 
