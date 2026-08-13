@@ -1003,3 +1003,39 @@ __all__ += [
     "calculate_asr_adversarial_evidence_sha256",
     "verify_asr_adversarial_evidence_v1",
 ]
+
+
+from hvee.packs.asr.adversarial_execution_evidence import (
+    ASR_ADVERSARIAL_EXECUTION_EVIDENCE_KEY,
+    ASR_ADVERSARIAL_EXECUTION_EVIDENCE_SCHEMA_VERSION,
+    ASR_ADVERSARIAL_EXECUTION_EVIDENCE_VERSION,
+    ASR_ADVERSARIAL_TRANSCRIPT_COMMITMENT_SCHEME,
+    ASRAdversarialExecutionDefinition,
+    ASRAdversarialExecutionEvidenceBundle,
+    ASRAdversarialExecutionStatus,
+    ASRAdversarialSemanticObservations,
+    ASRAdversarialTerminologyBinding,
+    ASRAdversarialTerminologyState,
+    build_asr_adversarial_execution_evidence_v1,
+    calculate_asr_adversarial_execution_evidence_sha256,
+    calculate_asr_adversarial_transcript_sha256,
+    verify_asr_adversarial_execution_evidence_v1,
+)
+
+
+__all__ += [
+    "ASR_ADVERSARIAL_EXECUTION_EVIDENCE_KEY",
+    "ASR_ADVERSARIAL_EXECUTION_EVIDENCE_SCHEMA_VERSION",
+    "ASR_ADVERSARIAL_EXECUTION_EVIDENCE_VERSION",
+    "ASR_ADVERSARIAL_TRANSCRIPT_COMMITMENT_SCHEME",
+    "ASRAdversarialExecutionDefinition",
+    "ASRAdversarialExecutionEvidenceBundle",
+    "ASRAdversarialExecutionStatus",
+    "ASRAdversarialSemanticObservations",
+    "ASRAdversarialTerminologyBinding",
+    "ASRAdversarialTerminologyState",
+    "build_asr_adversarial_execution_evidence_v1",
+    "calculate_asr_adversarial_execution_evidence_sha256",
+    "calculate_asr_adversarial_transcript_sha256",
+    "verify_asr_adversarial_execution_evidence_v1",
+]
