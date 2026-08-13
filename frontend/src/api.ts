@@ -175,6 +175,54 @@ export type StructuredTranscriptDiff = {
   tokens: StructuredTranscriptDiffToken[];
 };
 
+
+export type ASRSemanticEvidenceObservationStatus =
+  | "success"
+  | "abstained"
+  | "unsupported"
+  | "timed_out"
+  | "failed"
+  | "cancelled"
+  | "invalid";
+
+export type ASRSemanticEvidenceValueType =
+  | "number"
+  | "integer"
+  | "boolean"
+  | "string"
+  | "json";
+
+export type ASRSemanticEvidenceFamilyStatus =
+  | "available"
+  | "not_configured"
+  | "legacy_unavailable";
+
+export type ASRSemanticEvidenceObservation = {
+  metric_key: string;
+  metric_version: string;
+  evaluator_key: string;
+  evaluator_version: string;
+  status: ASRSemanticEvidenceObservationStatus;
+  value_type: ASRSemanticEvidenceValueType;
+  value: unknown;
+  status_detail: string | null;
+};
+
+export type ASRSemanticEvidenceFamily = {
+  status: ASRSemanticEvidenceFamilyStatus;
+  observations: ASRSemanticEvidenceObservation[];
+};
+
+export type ASRSemanticEvidence = {
+  result_id: number;
+  evaluation_run_id: number;
+  test_case_id: number;
+  evaluation_type: "asr";
+  critical_number: ASRSemanticEvidenceFamily;
+  critical_identifier: ASRSemanticEvidenceFamily;
+  critical_terminology: ASRSemanticEvidenceFamily;
+};
+
 export type AuthenticatedUser = {
   id: number;
   email: string;
@@ -595,6 +643,13 @@ export async function getDebugCaseDetails(debugCaseId: number) {
 export async function getResultTranscriptDiff(resultId: number) {
   return fetchJson<StructuredTranscriptDiff>(
     `/results/${resultId}/transcript-diff`,
+  );
+}
+
+
+export async function getResultSemanticEvidence(resultId: number) {
+  return fetchJson<ASRSemanticEvidence>(
+    `/results/${resultId}/semantic-evidence`,
   );
 }
 
