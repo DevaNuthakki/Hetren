@@ -1049,3 +1049,29 @@ from hvee.packs.asr.adversarial_semantic_execution import (
 __all__ += [
     "evaluate_asr_adversarial_semantics",
 ]
+
+
+from hvee.packs.asr.adversarial_campaign_evidence import (
+    ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_KEY,
+    ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_SCHEMA_VERSION,
+    ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_VERSION,
+    ASRAdversarialCampaignAttempt,
+    ASRAdversarialCampaignDefinition,
+    ASRAdversarialCampaignEvidenceBundle,
+    build_asr_adversarial_campaign_evidence_v1,
+    calculate_asr_adversarial_campaign_evidence_sha256,
+    verify_asr_adversarial_campaign_evidence_v1,
+)
+
+
+__all__ += [
+    "ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_KEY",
+    "ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_SCHEMA_VERSION",
+    "ASR_ADVERSARIAL_CAMPAIGN_EVIDENCE_VERSION",
+    "ASRAdversarialCampaignAttempt",
+    "ASRAdversarialCampaignDefinition",
+    "ASRAdversarialCampaignEvidenceBundle",
+    "build_asr_adversarial_campaign_evidence_v1",
+    "calculate_asr_adversarial_campaign_evidence_sha256",
+    "verify_asr_adversarial_campaign_evidence_v1",
+]
