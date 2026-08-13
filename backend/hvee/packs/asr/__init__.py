@@ -1075,3 +1075,31 @@ __all__ += [
     "calculate_asr_adversarial_campaign_evidence_sha256",
     "verify_asr_adversarial_campaign_evidence_v1",
 ]
+
+
+from hvee.packs.asr.adversarial_corpus_manifest import (
+    ASR_ADVERSARIAL_CORPUS_MANIFEST_KEY,
+    ASR_ADVERSARIAL_CORPUS_MANIFEST_SCHEMA_VERSION,
+    ASR_ADVERSARIAL_CORPUS_MANIFEST_VERSION,
+    ASRAdversarialCorpusAsset,
+    ASRAdversarialCorpusManifestBundle,
+    ASRAdversarialCorpusManifestDefinition,
+    ASRAdversarialCorpusProvenanceType,
+    build_asr_adversarial_corpus_manifest_v1,
+    calculate_asr_adversarial_corpus_manifest_sha256,
+    verify_asr_adversarial_corpus_manifest_v1,
+)
+
+
+__all__ += [
+    "ASR_ADVERSARIAL_CORPUS_MANIFEST_KEY",
+    "ASR_ADVERSARIAL_CORPUS_MANIFEST_SCHEMA_VERSION",
+    "ASR_ADVERSARIAL_CORPUS_MANIFEST_VERSION",
+    "ASRAdversarialCorpusAsset",
+    "ASRAdversarialCorpusManifestBundle",
+    "ASRAdversarialCorpusManifestDefinition",
+    "ASRAdversarialCorpusProvenanceType",
+    "build_asr_adversarial_corpus_manifest_v1",
+    "calculate_asr_adversarial_corpus_manifest_sha256",
+    "verify_asr_adversarial_corpus_manifest_v1",
+]
