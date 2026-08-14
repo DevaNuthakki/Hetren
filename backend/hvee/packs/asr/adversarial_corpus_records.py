@@ -30,6 +30,9 @@ ASR_ADVERSARIAL_CORPUS_TRANSFORMATION_RECORD_KEY = (
 ASR_ADVERSARIAL_CORPUS_GENERATION_PLAN_KEY = (
     "hetren.asr.adversarial-corpus-generation-plan.en-us"
 )
+ASR_ADVERSARIAL_CORPUS_DERIVATION_PLAN_KEY = (
+    "hetren.asr.adversarial-corpus-derivation-plan.en-us"
+)
 
 ASR_ADVERSARIAL_CORPUS_RECORD_VERSION = "1.0.0"
 
@@ -534,6 +537,140 @@ class ASRAdversarialCorpusGenerationPlan:
 
 
 @dataclass(frozen=True, slots=True)
+class ASRAdversarialCorpusDerivationPlanEntry:
+    """One deterministic parent-to-derived asset binding."""
+
+    case_id: str
+    parent_case_id: str
+    parent_relative_path: str
+    parent_audio_sha256: str
+    output_relative_path: str
+    provenance_record_sha256: str
+    rights_record_sha256: str
+    transformation_record_sha256: str
+
+    def __post_init__(self) -> None:
+        _require_identifier(
+            name="derivation-plan case id",
+            value=self.case_id,
+        )
+        _require_identifier(
+            name="derivation-plan parent case id",
+            value=self.parent_case_id,
+        )
+        _require_relative_path(
+            name="derivation-plan parent path",
+            value=self.parent_relative_path,
+        )
+        _require_sha256(
+            name="derivation-plan parent audio",
+            value=self.parent_audio_sha256,
+        )
+        _require_relative_path(
+            name="derivation-plan output path",
+            value=self.output_relative_path,
+        )
+        _require_sha256(
+            name="derivation-plan provenance record",
+            value=self.provenance_record_sha256,
+        )
+        _require_sha256(
+            name="derivation-plan rights record",
+            value=self.rights_record_sha256,
+        )
+        _require_sha256(
+            name="derivation-plan transformation record",
+            value=self.transformation_record_sha256,
+        )
+
+        if self.case_id == self.parent_case_id:
+            raise HveeContractError(
+                "derived case id must differ from its parent case id"
+            )
+
+        if (
+            self.output_relative_path
+            == self.parent_relative_path
+        ):
+            raise HveeContractError(
+                "derived output path must differ from its parent path"
+            )
+
+
+@dataclass(frozen=True, slots=True)
+class ASRAdversarialCorpusDerivationPlan:
+    """Versioned deterministic plan for corpus-to-corpus derivations."""
+
+    corpus_id: str
+    corpus_version: str
+    parent_manifest_sha256: str
+    entries: tuple[
+        ASRAdversarialCorpusDerivationPlanEntry,
+        ...,
+    ]
+
+    def __post_init__(self) -> None:
+        _require_identifier(
+            name="derivation-plan corpus id",
+            value=self.corpus_id,
+        )
+        _require_version(
+            name="derivation-plan corpus version",
+            value=self.corpus_version,
+        )
+        _require_sha256(
+            name="derivation-plan parent manifest",
+            value=self.parent_manifest_sha256,
+        )
+
+        if (
+            not isinstance(self.entries, tuple)
+            or not self.entries
+            or not all(
+                isinstance(
+                    entry,
+                    ASRAdversarialCorpusDerivationPlanEntry,
+                )
+                for entry in self.entries
+            )
+        ):
+            raise HveeContractError(
+                "derivation plan requires entries"
+            )
+
+        case_ids = tuple(
+            entry.case_id
+            for entry in self.entries
+        )
+
+        if case_ids != tuple(
+            sorted(case_ids)
+        ):
+            raise HveeContractError(
+                "derivation-plan entries must be ordered by case id"
+            )
+
+        if len(case_ids) != len(
+            set(case_ids)
+        ):
+            raise HveeContractError(
+                "derivation-plan case ids must be unique"
+            )
+
+        output_paths = tuple(
+            entry.output_relative_path
+            for entry in self.entries
+        )
+
+        if len(output_paths) != len(
+            set(output_paths)
+        ):
+            raise HveeContractError(
+                "derivation-plan output paths must be unique"
+            )
+
+
+@dataclass(frozen=True, slots=True)
 class ASRAdversarialCorpusRecordBundle:
     payload: dict[str, object]
     sha256: str
@@ -743,6 +880,66 @@ def build_asr_adversarial_corpus_generation_plan_v1(
                 "entries": [
                     {
                         "case_id": entry.case_id,
+                        "output_relative_path": (
+                            entry.output_relative_path
+                        ),
+                        "provenance_record_sha256": (
+                            entry.provenance_record_sha256
+                        ),
+                        "rights_record_sha256": (
+                            entry.rights_record_sha256
+                        ),
+                        "transformation_record_sha256": (
+                            entry.transformation_record_sha256
+                        ),
+                    }
+                    for entry in plan.entries
+                ],
+            },
+        )
+    )
+
+
+def build_asr_adversarial_corpus_derivation_plan_v1(
+    plan: ASRAdversarialCorpusDerivationPlan,
+) -> ASRAdversarialCorpusRecordBundle:
+    """Build deterministic parent-to-derived corpus lineage evidence."""
+
+    if not isinstance(
+        plan,
+        ASRAdversarialCorpusDerivationPlan,
+    ):
+        raise HveeContractError(
+            "derivation plan type is invalid"
+        )
+
+    return _bundle(
+        _record_envelope(
+            key=(
+                ASR_ADVERSARIAL_CORPUS_DERIVATION_PLAN_KEY
+            ),
+            record_type=(
+                "source_visible_adversarial_"
+                "corpus_derivation_plan"
+            ),
+            record={
+                "corpus_id": plan.corpus_id,
+                "corpus_version": plan.corpus_version,
+                "parent_manifest_sha256": (
+                    plan.parent_manifest_sha256
+                ),
+                "entries": [
+                    {
+                        "case_id": entry.case_id,
+                        "parent_case_id": (
+                            entry.parent_case_id
+                        ),
+                        "parent_relative_path": (
+                            entry.parent_relative_path
+                        ),
+                        "parent_audio_sha256": (
+                            entry.parent_audio_sha256
+                        ),
                         "output_relative_path": (
                             entry.output_relative_path
                         ),
@@ -1090,6 +1287,123 @@ def _rebuild_record_bundle(
 
     if (
         key
+        == ASR_ADVERSARIAL_CORPUS_DERIVATION_PLAN_KEY
+    ):
+        if (
+            artifact_type
+            != "source_visible_adversarial_"
+            "corpus_derivation_plan"
+        ):
+            raise HveeContractError(
+                "corpus derivation-plan artifact type is invalid"
+            )
+
+        plan_record = _require_exact_keys(
+            name="corpus derivation plan",
+            value=record,
+            expected={
+                "corpus_id",
+                "corpus_version",
+                "parent_manifest_sha256",
+                "entries",
+            },
+        )
+
+        entries = plan_record[
+            "entries"
+        ]
+
+        if not isinstance(
+            entries,
+            list,
+        ):
+            raise HveeContractError(
+                "corpus derivation-plan entries "
+                "must be a JSON array"
+            )
+
+        parsed_entries = []
+
+        for entry in entries:
+            normalized = _require_exact_keys(
+                name="corpus derivation-plan entry",
+                value=entry,
+                expected={
+                    "case_id",
+                    "parent_case_id",
+                    "parent_relative_path",
+                    "parent_audio_sha256",
+                    "output_relative_path",
+                    "provenance_record_sha256",
+                    "rights_record_sha256",
+                    "transformation_record_sha256",
+                },
+            )
+
+            parsed_entries.append(
+                ASRAdversarialCorpusDerivationPlanEntry(
+                    case_id=normalized[
+                        "case_id"
+                    ],
+                    parent_case_id=normalized[
+                        "parent_case_id"
+                    ],
+                    parent_relative_path=(
+                        normalized[
+                            "parent_relative_path"
+                        ]
+                    ),
+                    parent_audio_sha256=(
+                        normalized[
+                            "parent_audio_sha256"
+                        ]
+                    ),
+                    output_relative_path=(
+                        normalized[
+                            "output_relative_path"
+                        ]
+                    ),
+                    provenance_record_sha256=(
+                        normalized[
+                            "provenance_record_sha256"
+                        ]
+                    ),
+                    rights_record_sha256=(
+                        normalized[
+                            "rights_record_sha256"
+                        ]
+                    ),
+                    transformation_record_sha256=(
+                        normalized[
+                            "transformation_record_sha256"
+                        ]
+                    ),
+                )
+            )
+
+        return (
+            build_asr_adversarial_corpus_derivation_plan_v1(
+                ASRAdversarialCorpusDerivationPlan(
+                    corpus_id=plan_record[
+                        "corpus_id"
+                    ],
+                    corpus_version=plan_record[
+                        "corpus_version"
+                    ],
+                    parent_manifest_sha256=(
+                        plan_record[
+                            "parent_manifest_sha256"
+                        ]
+                    ),
+                    entries=tuple(
+                        parsed_entries
+                    ),
+                )
+            )
+        )
+
+    if (
+        key
         == ASR_ADVERSARIAL_CORPUS_GENERATION_PLAN_KEY
     ):
         if (
@@ -1271,18 +1585,22 @@ def verify_asr_adversarial_corpus_record_v1(
 
 
 __all__ = [
+    "ASR_ADVERSARIAL_CORPUS_DERIVATION_PLAN_KEY",
     "ASR_ADVERSARIAL_CORPUS_GENERATION_PLAN_KEY",
     "ASR_ADVERSARIAL_CORPUS_PROVENANCE_RECORD_KEY",
     "ASR_ADVERSARIAL_CORPUS_RECORD_SCHEMA_VERSION",
     "ASR_ADVERSARIAL_CORPUS_RECORD_VERSION",
     "ASR_ADVERSARIAL_CORPUS_RIGHTS_RECORD_KEY",
     "ASR_ADVERSARIAL_CORPUS_TRANSFORMATION_RECORD_KEY",
+    "ASRAdversarialCorpusDerivationPlan",
+    "ASRAdversarialCorpusDerivationPlanEntry",
     "ASRAdversarialCorpusGenerationPlan",
     "ASRAdversarialCorpusGenerationPlanEntry",
     "ASRAdversarialCorpusProvenanceRecord",
     "ASRAdversarialCorpusRecordBundle",
     "ASRAdversarialCorpusRightsRecord",
     "ASRAdversarialCorpusTransformationRecord",
+    "build_asr_adversarial_corpus_derivation_plan_v1",
     "build_asr_adversarial_corpus_generation_plan_v1",
     "build_asr_adversarial_corpus_provenance_record_v1",
     "build_asr_adversarial_corpus_rights_record_v1",
