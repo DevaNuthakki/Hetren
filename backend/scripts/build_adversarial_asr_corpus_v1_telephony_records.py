@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 
 from app.adversarial_asr_ffmpeg import (
+    ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV,
 )
 from hvee.packs.asr.adversarial_corpus_records import (
@@ -81,6 +82,24 @@ FFMPEG_PCM8K_ENVIRONMENT_SHA256 = (
     "daa5207677305b064601cb5f6dfb8aa0"
 )
 
+MULAW_CASE_ID = (
+    "stress.codec-mulaw.multi-number-id"
+)
+
+MULAW_OUTPUT_RELATIVE_PATH = (
+    "telephony/"
+    "stress.codec-mulaw.multi-number-id.wav"
+)
+
+MULAW_TRANSFORMATION_RECORD_ID = (
+    "transform.stress-codec-mulaw-multi-number-id-v1"
+)
+
+FFMPEG_MULAW8K_ENVIRONMENT_SHA256 = (
+    "db90491d9804eeb81620b6585ee361ee"
+    "15095716bd739b51f5b09e954fa419d4"
+)
+
 
 def _canonical_document(
     bundle: ASRAdversarialCorpusRecordBundle,
@@ -130,8 +149,11 @@ def _write_if_changed(
 def build_records() -> tuple[
     ASRAdversarialCorpusRecordBundle,
     ASRAdversarialCorpusRecordBundle,
+    ASRAdversarialCorpusRecordBundle,
 ]:
-    transformation = (
+    """Build the I3 telephony-bandwidth and codec-stress records."""
+
+    telephony_transformation = (
         build_asr_adversarial_corpus_transformation_record_v1(
             ASRAdversarialCorpusTransformationRecord(
                 record_id=(
@@ -161,6 +183,36 @@ def build_records() -> tuple[
         )
     )
 
+    mulaw_transformation = (
+        build_asr_adversarial_corpus_transformation_record_v1(
+            ASRAdversarialCorpusTransformationRecord(
+                record_id=(
+                    MULAW_TRANSFORMATION_RECORD_ID
+                ),
+                case_id=MULAW_CASE_ID,
+                parent_audio_sha256=(
+                    PARENT_AUDIO_SHA256
+                ),
+                tool_key="ffmpeg",
+                tool_version=FFMPEG_VERSION,
+                tool_environment_sha256=(
+                    FFMPEG_MULAW8K_ENVIRONMENT_SHA256
+                ),
+                argv=(
+                    ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV
+                ),
+                output_relative_path=(
+                    MULAW_OUTPUT_RELATIVE_PATH
+                ),
+                expected_sample_rate_hz=8_000,
+                expected_channel_count=1,
+                expected_codec_name=(
+                    "pcm_mulaw"
+                ),
+            )
+        )
+    )
+
     derivation_plan = (
         build_asr_adversarial_corpus_derivation_plan_v1(
             ASRAdversarialCorpusDerivationPlan(
@@ -172,6 +224,30 @@ def build_records() -> tuple[
                     PARENT_MANIFEST_SHA256
                 ),
                 entries=(
+                    ASRAdversarialCorpusDerivationPlanEntry(
+                        case_id=MULAW_CASE_ID,
+                        parent_case_id=(
+                            PARENT_CASE_ID
+                        ),
+                        parent_relative_path=(
+                            PARENT_RELATIVE_PATH
+                        ),
+                        parent_audio_sha256=(
+                            PARENT_AUDIO_SHA256
+                        ),
+                        output_relative_path=(
+                            MULAW_OUTPUT_RELATIVE_PATH
+                        ),
+                        provenance_record_sha256=(
+                            PROVENANCE_RECORD_SHA256
+                        ),
+                        rights_record_sha256=(
+                            RIGHTS_RECORD_SHA256
+                        ),
+                        transformation_record_sha256=(
+                            mulaw_transformation.sha256
+                        ),
+                    ),
                     ASRAdversarialCorpusDerivationPlanEntry(
                         case_id=CASE_ID,
                         parent_case_id=(
@@ -193,7 +269,7 @@ def build_records() -> tuple[
                             RIGHTS_RECORD_SHA256
                         ),
                         transformation_record_sha256=(
-                            transformation.sha256
+                            telephony_transformation.sha256
                         ),
                     ),
                 ),
@@ -202,22 +278,31 @@ def build_records() -> tuple[
     )
 
     return (
-        transformation,
+        telephony_transformation,
+        mulaw_transformation,
         derivation_plan,
     )
 
 
 def main() -> None:
     (
-        transformation,
+        telephony_transformation,
+        mulaw_transformation,
         derivation_plan,
     ) = build_records()
 
-    transformation_path = (
+    telephony_transformation_path = (
         CORPUS_ROOT
         / "records"
         / "transformations"
         / f"{CASE_ID}.json"
+    )
+
+    mulaw_transformation_path = (
+        CORPUS_ROOT
+        / "records"
+        / "transformations"
+        / f"{MULAW_CASE_ID}.json"
     )
 
     derivation_plan_path = (
@@ -227,8 +312,13 @@ def main() -> None:
     )
 
     _write_if_changed(
-        transformation_path,
-        transformation,
+        telephony_transformation_path,
+        telephony_transformation,
+    )
+
+    _write_if_changed(
+        mulaw_transformation_path,
+        mulaw_transformation,
     )
 
     _write_if_changed(
@@ -237,10 +327,6 @@ def main() -> None:
     )
 
     print(
-        "case_id:",
-        CASE_ID,
-    )
-    print(
         "parent_case_id:",
         PARENT_CASE_ID,
     )
@@ -248,17 +334,35 @@ def main() -> None:
         "parent_audio_sha256:",
         PARENT_AUDIO_SHA256,
     )
+
+    print()
     print(
-        "transformation_record_sha256:",
-        transformation.sha256,
+        "telephony_case_id:",
+        CASE_ID,
     )
+    print(
+        "telephony_transformation_sha256:",
+        telephony_transformation.sha256,
+    )
+
+    print()
+    print(
+        "mulaw_case_id:",
+        MULAW_CASE_ID,
+    )
+    print(
+        "mulaw_transformation_sha256:",
+        mulaw_transformation.sha256,
+    )
+    print(
+        "mulaw_output_relative_path:",
+        MULAW_OUTPUT_RELATIVE_PATH,
+    )
+
+    print()
     print(
         "derivation_plan_sha256:",
         derivation_plan.sha256,
-    )
-    print(
-        "output_relative_path:",
-        OUTPUT_RELATIVE_PATH,
     )
 
 

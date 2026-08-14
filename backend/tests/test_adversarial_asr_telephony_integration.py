@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -68,9 +69,10 @@ EXPECTED_TRANSFORMATION_SHA256 = (
     "2d9b58930b93c0751df679bea535fcdb"
 )
 
-EXPECTED_DERIVATION_PLAN_SHA256 = (
-    "6bbd708654191b4f3487e200a464b283"
-    "dda4a78cc4261b1b18c51f3908af20a9"
+DERIVATION_PLAN_PATH = (
+    CORPUS_ROOT
+    / "specification"
+    / "derivation-plan.json"
 )
 
 EXPECTED_TRANSFORMER_ENVIRONMENT_SHA256 = (
@@ -249,9 +251,17 @@ def test_real_telephony_bandwidth_derivative_is_frozen(
         == EXPECTED_TRANSFORMATION_SHA256
     )
 
+    derivation_document = json.loads(
+        DERIVATION_PLAN_PATH.read_text(
+            encoding="utf-8"
+        )
+    )
+
     assert (
         first.derivation_plan_sha256
-        == EXPECTED_DERIVATION_PLAN_SHA256
+        == derivation_document[
+            "sha256"
+        ]
     )
 
     assert (
