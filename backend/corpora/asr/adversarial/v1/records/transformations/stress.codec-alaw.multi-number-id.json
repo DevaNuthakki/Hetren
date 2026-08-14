@@ -1,0 +1,56 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-transformation-record.en-us",
+      "type": "source_visible_adversarial_corpus_transformation_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "argv": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-n",
+        "-i",
+        "{input}",
+        "-map_metadata",
+        "-1",
+        "-ar",
+        "8000",
+        "-ac",
+        "1",
+        "-c:a",
+        "pcm_alaw",
+        "{output}"
+      ],
+      "case_id": "stress.codec-alaw.multi-number-id",
+      "expected_output": {
+        "channel_count": 1,
+        "codec_name": "pcm_alaw",
+        "relative_path": "telephony/stress.codec-alaw.multi-number-id.wav",
+        "sample_rate_hz": 8000
+      },
+      "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+      "record_id": "transform.stress-codec-alaw-multi-number-id-v1",
+      "tool": {
+        "environment_sha256": "73e3a2fd247e2f0ecf4fdb68e5ed4e9f96e582eb58515ef699ca0361fdf79d42",
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "5d7202803ca6b26f0ac8ef45fcf42ed7f9b87e70279eee0dc76f8e792ebdb2ed"
+}

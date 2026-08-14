@@ -21,6 +21,16 @@
       "corpus_version": "1.0.0",
       "entries": [
         {
+          "case_id": "stress.codec-alaw.multi-number-id",
+          "output_relative_path": "telephony/stress.codec-alaw.multi-number-id.wav",
+          "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+          "parent_case_id": "clean.multi-number-id",
+          "parent_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "5d7202803ca6b26f0ac8ef45fcf42ed7f9b87e70279eee0dc76f8e792ebdb2ed"
+        },
+        {
           "case_id": "stress.codec-mulaw.multi-number-id",
           "output_relative_path": "telephony/stress.codec-mulaw.multi-number-id.wav",
           "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
@@ -45,5 +55,5 @@
     },
     "schema_version": 1
   },
-  "sha256": "cb42bf351319bf2d67e92a0ca5a0e7d05da470ed94cfd5c6d25de31fbea6a020"
+  "sha256": "bdfcbea2d5983f5c3f72b8d58ddac5490b6e0641e18a7d6c5f213ebc26fbf8f4"
 }

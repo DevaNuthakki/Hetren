@@ -1,8 +1,9 @@
-"""Frozen I3 telephony and G.711 μ-law adversarial ASR records."""
+"""Frozen I3 telephony and G.711 adversarial ASR records."""
 
 from __future__ import annotations
 
 from app.adversarial_asr_ffmpeg import (
+    ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV,
 )
@@ -10,7 +11,10 @@ from hvee.packs.asr.adversarial_corpus_records import (
     verify_asr_adversarial_corpus_record_v1,
 )
 from scripts.build_adversarial_asr_corpus_v1_telephony_records import (
+    ALAW_CASE_ID,
+    ALAW_OUTPUT_RELATIVE_PATH,
     CASE_ID,
+    FFMPEG_ALAW8K_ENVIRONMENT_SHA256,
     FFMPEG_MULAW8K_ENVIRONMENT_SHA256,
     FFMPEG_PCM8K_ENVIRONMENT_SHA256,
     MULAW_CASE_ID,
@@ -36,9 +40,14 @@ EXPECTED_MULAW_TRANSFORMATION_SHA256 = (
     "579927d1eeacbc70d9af256d596636c2"
 )
 
+EXPECTED_ALAW_TRANSFORMATION_SHA256 = (
+    "5d7202803ca6b26f0ac8ef45fcf42ed7"
+    "f9b87e70279eee0dc76f8e792ebdb2ed"
+)
+
 EXPECTED_DERIVATION_PLAN_SHA256 = (
-    "cb42bf351319bf2d67e92a0ca5a0e7d0"
-    "5da470ed94cfd5c6d25de31fbea6a020"
+    "bdfcbea2d5983f5c3f72b8d58ddac549"
+    "0b6e0641e18a7d6c5f213ebc26fbf8f4"
 )
 
 EXPECTED_PARENT_MANIFEST_SHA256 = (
@@ -61,11 +70,17 @@ EXPECTED_MULAW_ENVIRONMENT_SHA256 = (
     "15095716bd739b51f5b09e954fa419d4"
 )
 
+EXPECTED_ALAW_ENVIRONMENT_SHA256 = (
+    "73e3a2fd247e2f0ecf4fdb68e5ed4e9"
+    "f96e582eb58515ef699ca0361fdf79d42"
+)
+
 
 def test_i3_portfolio_record_identities_are_frozen():
     (
         telephony,
         mulaw,
+        alaw,
         derivation_plan,
     ) = build_records()
 
@@ -77,6 +92,11 @@ def test_i3_portfolio_record_identities_are_frozen():
     assert (
         mulaw.sha256
         == EXPECTED_MULAW_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        alaw.sha256
+        == EXPECTED_ALAW_TRANSFORMATION_SHA256
     )
 
     assert (
@@ -113,6 +133,7 @@ def test_i3_telephony_transformation_remains_frozen():
     (
         telephony,
         _mulaw,
+        _alaw,
         _plan,
     ) = build_records()
 
@@ -155,19 +176,18 @@ def test_i3_telephony_transformation_remains_frozen():
     assert record[
         "expected_output"
     ] == {
-        "relative_path": (
-            OUTPUT_RELATIVE_PATH
-        ),
+        "relative_path": OUTPUT_RELATIVE_PATH,
         "sample_rate_hz": 8_000,
         "channel_count": 1,
         "codec_name": "pcm_s16le",
     }
 
 
-def test_i3_mulaw_transformation_is_frozen():
+def test_i3_mulaw_transformation_remains_frozen():
     (
         _telephony,
         mulaw,
+        _alaw,
         _plan,
     ) = build_records()
 
@@ -222,10 +242,70 @@ def test_i3_mulaw_transformation_is_frozen():
     }
 
 
-def test_i3_derivation_portfolio_contains_exact_two_cases():
+def test_i3_alaw_transformation_is_frozen():
     (
         _telephony,
         _mulaw,
+        alaw,
+        _plan,
+    ) = build_records()
+
+    record = alaw.payload[
+        "record"
+    ]
+
+    assert (
+        record[
+            "case_id"
+        ]
+        == ALAW_CASE_ID
+    )
+
+    assert (
+        record[
+            "parent_audio_sha256"
+        ]
+        == EXPECTED_PARENT_AUDIO_SHA256
+    )
+
+    assert record[
+        "tool"
+    ] == {
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1",
+        "environment_sha256": (
+            EXPECTED_ALAW_ENVIRONMENT_SHA256
+        ),
+    }
+
+    assert (
+        FFMPEG_ALAW8K_ENVIRONMENT_SHA256
+        == EXPECTED_ALAW_ENVIRONMENT_SHA256
+    )
+
+    assert record[
+        "argv"
+    ] == list(
+        ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV
+    )
+
+    assert record[
+        "expected_output"
+    ] == {
+        "relative_path": (
+            ALAW_OUTPUT_RELATIVE_PATH
+        ),
+        "sample_rate_hz": 8_000,
+        "channel_count": 1,
+        "codec_name": "pcm_alaw",
+    }
+
+
+def test_i3_derivation_portfolio_contains_exact_three_cases():
+    (
+        _telephony,
+        _mulaw,
+        _alaw,
         plan,
     ) = build_records()
 
@@ -244,9 +324,7 @@ def test_i3_derivation_portfolio_contains_exact_two_cases():
         "entries"
     ]
 
-    assert len(
-        entries
-    ) == 2
+    assert len(entries) == 3
 
     assert [
         entry[
@@ -254,6 +332,7 @@ def test_i3_derivation_portfolio_contains_exact_two_cases():
         ]
         for entry in entries
     ] == [
+        ALAW_CASE_ID,
         MULAW_CASE_ID,
         CASE_ID,
     ]
@@ -265,17 +344,22 @@ def test_i3_derivation_portfolio_contains_exact_two_cases():
         for entry in entries
     }
 
-    telephony = by_case[
-        CASE_ID
+    alaw = by_case[
+        ALAW_CASE_ID
     ]
 
     mulaw = by_case[
         MULAW_CASE_ID
     ]
 
+    telephony = by_case[
+        CASE_ID
+    ]
+
     for entry in (
-        telephony,
+        alaw,
         mulaw,
+        telephony,
     ):
         assert (
             entry[
@@ -338,6 +422,20 @@ def test_i3_derivation_portfolio_contains_exact_two_cases():
             "transformation_record_sha256"
         ]
         == EXPECTED_MULAW_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        alaw[
+            "output_relative_path"
+        ]
+        == ALAW_OUTPUT_RELATIVE_PATH
+    )
+
+    assert (
+        alaw[
+            "transformation_record_sha256"
+        ]
+        == EXPECTED_ALAW_TRANSFORMATION_SHA256
     )
 
 
