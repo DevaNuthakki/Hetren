@@ -1,12 +1,14 @@
-"""Build deterministic I3 telephony-stress corpus records.
+"""Build deterministic I3 synthetic acoustic-stress corpus records.
 
-This slice derives one 8 kHz mono linear-PCM development asset from the
-sealed 16 kHz clean multi-number/identifier parent case.
+This builder derives telephony-bandwidth, G.711 codec, and numerically
+calibrated synthetic-noise development assets from the sealed 16 kHz
+clean multi-number/identifier parent case.
 
 It establishes deterministic lineage and transformation evidence only.
-It does not establish human acoustic diversity, apply qualification
-thresholds, certify ASR behavior, authorize production use, or alter
-release authority.
+Synthetic white-noise cases remain development evidence and do not
+represent natural environmental noise or human acoustic diversity.
+This builder does not apply qualification thresholds, certify ASR
+behavior, authorize production use, or alter release authority.
 """
 
 from __future__ import annotations
@@ -17,6 +19,8 @@ from pathlib import Path
 from app.adversarial_asr_ffmpeg import (
     ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV,
+    ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV,
+    ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV,
     ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV,
 )
 from hvee.packs.asr.adversarial_corpus_records import (
@@ -119,6 +123,42 @@ FFMPEG_ALAW8K_ENVIRONMENT_SHA256 = (
     "f96e582eb58515ef699ca0361fdf79d42"
 )
 
+NOISE_MODERATE_CASE_ID = (
+    "stress.noise-moderate.multi-number-id"
+)
+
+NOISE_MODERATE_OUTPUT_RELATIVE_PATH = (
+    "noise/"
+    "stress.noise-moderate.multi-number-id.wav"
+)
+
+NOISE_MODERATE_TRANSFORMATION_RECORD_ID = (
+    "transform.stress-noise-moderate-multi-number-id-v1"
+)
+
+FFMPEG_NOISE_MODERATE_ENVIRONMENT_SHA256 = (
+    "2f71f0619cb588a211f68de064125301"
+    "2ec8209cc633e53b0a15dbe94dfb4682"
+)
+
+NOISE_SEVERE_USABLE_CASE_ID = (
+    "stress.noise-severe-usable.multi-number-id"
+)
+
+NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH = (
+    "noise/"
+    "stress.noise-severe-usable.multi-number-id.wav"
+)
+
+NOISE_SEVERE_USABLE_TRANSFORMATION_RECORD_ID = (
+    "transform.stress-noise-severe-usable-multi-number-id-v1"
+)
+
+FFMPEG_NOISE_SEVERE_USABLE_ENVIRONMENT_SHA256 = (
+    "410054a787ab53be40332d8efcec98c1"
+    "91229d772d047626a1c073e946036043"
+)
+
 
 def _canonical_document(
     bundle: ASRAdversarialCorpusRecordBundle,
@@ -170,8 +210,10 @@ def build_records() -> tuple[
     ASRAdversarialCorpusRecordBundle,
     ASRAdversarialCorpusRecordBundle,
     ASRAdversarialCorpusRecordBundle,
+    ASRAdversarialCorpusRecordBundle,
+    ASRAdversarialCorpusRecordBundle,
 ]:
-    """Build the I3 telephony and G.711 codec-stress records."""
+    """Build the I3 synthetic acoustic-stress record portfolio."""
 
     telephony_transformation = (
         build_asr_adversarial_corpus_transformation_record_v1(
@@ -249,11 +291,63 @@ def build_records() -> tuple[
         )
     )
 
+    moderate_noise_transformation = (
+        build_asr_adversarial_corpus_transformation_record_v1(
+            ASRAdversarialCorpusTransformationRecord(
+                record_id=(
+                    NOISE_MODERATE_TRANSFORMATION_RECORD_ID
+                ),
+                case_id=NOISE_MODERATE_CASE_ID,
+                parent_audio_sha256=PARENT_AUDIO_SHA256,
+                tool_key="ffmpeg",
+                tool_version=FFMPEG_VERSION,
+                tool_environment_sha256=(
+                    FFMPEG_NOISE_MODERATE_ENVIRONMENT_SHA256
+                ),
+                argv=(
+                    ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV
+                ),
+                output_relative_path=(
+                    NOISE_MODERATE_OUTPUT_RELATIVE_PATH
+                ),
+                expected_sample_rate_hz=16_000,
+                expected_channel_count=1,
+                expected_codec_name="pcm_s16le",
+            )
+        )
+    )
+
+    severe_usable_noise_transformation = (
+        build_asr_adversarial_corpus_transformation_record_v1(
+            ASRAdversarialCorpusTransformationRecord(
+                record_id=(
+                    NOISE_SEVERE_USABLE_TRANSFORMATION_RECORD_ID
+                ),
+                case_id=NOISE_SEVERE_USABLE_CASE_ID,
+                parent_audio_sha256=PARENT_AUDIO_SHA256,
+                tool_key="ffmpeg",
+                tool_version=FFMPEG_VERSION,
+                tool_environment_sha256=(
+                    FFMPEG_NOISE_SEVERE_USABLE_ENVIRONMENT_SHA256
+                ),
+                argv=(
+                    ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV
+                ),
+                output_relative_path=(
+                    NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH
+                ),
+                expected_sample_rate_hz=16_000,
+                expected_channel_count=1,
+                expected_codec_name="pcm_s16le",
+            )
+        )
+    )
+
     derivation_plan = (
         build_asr_adversarial_corpus_derivation_plan_v1(
             ASRAdversarialCorpusDerivationPlan(
                 corpus_id=(
-                    "qualification.synthetic-telephony-v1"
+                    "qualification.synthetic-acoustic-stress-v1"
                 ),
                 corpus_version="1.0.0",
                 parent_manifest_sha256=(
@@ -305,6 +399,50 @@ def build_records() -> tuple[
                         ),
                     ),
                     ASRAdversarialCorpusDerivationPlanEntry(
+                        case_id=NOISE_MODERATE_CASE_ID,
+                        parent_case_id=PARENT_CASE_ID,
+                        parent_relative_path=(
+                            PARENT_RELATIVE_PATH
+                        ),
+                        parent_audio_sha256=(
+                            PARENT_AUDIO_SHA256
+                        ),
+                        output_relative_path=(
+                            NOISE_MODERATE_OUTPUT_RELATIVE_PATH
+                        ),
+                        provenance_record_sha256=(
+                            PROVENANCE_RECORD_SHA256
+                        ),
+                        rights_record_sha256=(
+                            RIGHTS_RECORD_SHA256
+                        ),
+                        transformation_record_sha256=(
+                            moderate_noise_transformation.sha256
+                        ),
+                    ),
+                    ASRAdversarialCorpusDerivationPlanEntry(
+                        case_id=NOISE_SEVERE_USABLE_CASE_ID,
+                        parent_case_id=PARENT_CASE_ID,
+                        parent_relative_path=(
+                            PARENT_RELATIVE_PATH
+                        ),
+                        parent_audio_sha256=(
+                            PARENT_AUDIO_SHA256
+                        ),
+                        output_relative_path=(
+                            NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH
+                        ),
+                        provenance_record_sha256=(
+                            PROVENANCE_RECORD_SHA256
+                        ),
+                        rights_record_sha256=(
+                            RIGHTS_RECORD_SHA256
+                        ),
+                        transformation_record_sha256=(
+                            severe_usable_noise_transformation.sha256
+                        ),
+                    ),
+                    ASRAdversarialCorpusDerivationPlanEntry(
                         case_id=CASE_ID,
                         parent_case_id=PARENT_CASE_ID,
                         parent_relative_path=(
@@ -335,6 +473,8 @@ def build_records() -> tuple[
         telephony_transformation,
         mulaw_transformation,
         alaw_transformation,
+        moderate_noise_transformation,
+        severe_usable_noise_transformation,
         derivation_plan,
     )
 
@@ -344,6 +484,8 @@ def main() -> None:
         telephony_transformation,
         mulaw_transformation,
         alaw_transformation,
+        moderate_noise_transformation,
+        severe_usable_noise_transformation,
         derivation_plan,
     ) = build_records()
 
@@ -369,6 +511,18 @@ def main() -> None:
         transformation_root
         / f"{ALAW_CASE_ID}.json",
         alaw_transformation,
+    )
+
+    _write_if_changed(
+        transformation_root
+        / f"{NOISE_MODERATE_CASE_ID}.json",
+        moderate_noise_transformation,
+    )
+
+    _write_if_changed(
+        transformation_root
+        / f"{NOISE_SEVERE_USABLE_CASE_ID}.json",
+        severe_usable_noise_transformation,
     )
 
     _write_if_changed(
@@ -399,6 +553,14 @@ def main() -> None:
     print(
         "alaw_transformation_sha256:",
         alaw_transformation.sha256,
+    )
+    print(
+        "moderate_noise_transformation_sha256:",
+        moderate_noise_transformation.sha256,
+    )
+    print(
+        "severe_usable_noise_transformation_sha256:",
+        severe_usable_noise_transformation.sha256,
     )
 
     print()

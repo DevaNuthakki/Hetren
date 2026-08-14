@@ -17,7 +17,7 @@
       "speaker_attributes_inferred": false
     },
     "record": {
-      "corpus_id": "qualification.synthetic-telephony-v1",
+      "corpus_id": "qualification.synthetic-acoustic-stress-v1",
       "corpus_version": "1.0.0",
       "entries": [
         {
@@ -41,6 +41,26 @@
           "transformation_record_sha256": "5d2f4c99e16410a359d92aeb7bfc7f42579927d1eeacbc70d9af256d596636c2"
         },
         {
+          "case_id": "stress.noise-moderate.multi-number-id",
+          "output_relative_path": "noise/stress.noise-moderate.multi-number-id.wav",
+          "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+          "parent_case_id": "clean.multi-number-id",
+          "parent_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "66780406d90fc01622fcc9850a6dd3af4698eb5f07ff3413a012734e8d7d973a"
+        },
+        {
+          "case_id": "stress.noise-severe-usable.multi-number-id",
+          "output_relative_path": "noise/stress.noise-severe-usable.multi-number-id.wav",
+          "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+          "parent_case_id": "clean.multi-number-id",
+          "parent_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "1443bdb65921415ccc8949ae55022b1fca540af6ca42fcd625831324bb767ac1"
+        },
+        {
           "case_id": "stress.telephony-bandwidth.multi-number-id",
           "output_relative_path": "telephony/stress.telephony-bandwidth.multi-number-id.wav",
           "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
@@ -55,5 +75,5 @@
     },
     "schema_version": 1
   },
-  "sha256": "bdfcbea2d5983f5c3f72b8d58ddac5490b6e0641e18a7d6c5f213ebc26fbf8f4"
+  "sha256": "0ff0a36c1c1b4236d56a6459d59cb3ad53edcb7fa38d99f03b893b38e1afa14c"
 }

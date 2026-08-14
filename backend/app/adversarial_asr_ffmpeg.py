@@ -135,6 +135,104 @@ ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV = (
     "{output}",
 )
 
+ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_RECIPE_KEY = (
+    "white-noise-multi-number-id-moderate-16000-v1"
+)
+
+ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-filter_complex_threads",
+    "1",
+    "-i",
+    "{input}",
+    "-filter_complex",
+    (
+        "anoisesrc="
+        "sample_rate=16000:"
+        "amplitude=1:"
+        "color=white:"
+        "seed=39039"
+        "[noise];"
+        "[noise]"
+        "volume=0.050141109355923044:"
+        "precision=double"
+        "[scaled_noise];"
+        "[0:a][scaled_noise]"
+        "amix="
+        "inputs=2:"
+        "duration=first:"
+        "dropout_transition=0:"
+        "normalize=0"
+        "[mixed]"
+    ),
+    "-map",
+    "[mixed]",
+    "-map_metadata",
+    "-1",
+    "-ar",
+    "16000",
+    "-ac",
+    "1",
+    "-threads",
+    "1",
+    "-c:a",
+    "pcm_s16le",
+    "{output}",
+)
+
+ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE_KEY = (
+    "white-noise-multi-number-id-severe-usable-16000-v1"
+)
+
+ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-filter_complex_threads",
+    "1",
+    "-i",
+    "{input}",
+    "-filter_complex",
+    (
+        "anoisesrc="
+        "sample_rate=16000:"
+        "amplitude=1:"
+        "color=white:"
+        "seed=39039"
+        "[noise];"
+        "[noise]"
+        "volume=0.089164902364147938:"
+        "precision=double"
+        "[scaled_noise];"
+        "[0:a][scaled_noise]"
+        "amix="
+        "inputs=2:"
+        "duration=first:"
+        "dropout_transition=0:"
+        "normalize=0"
+        "[mixed]"
+    ),
+    "-map",
+    "[mixed]",
+    "-map_metadata",
+    "-1",
+    "-ar",
+    "16000",
+    "-ac",
+    "1",
+    "-threads",
+    "1",
+    "-c:a",
+    "pcm_s16le",
+    "{output}",
+)
+
 _RECIPE_KEY_PATTERN = re.compile(
     r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
 )
@@ -511,6 +609,34 @@ ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE = (
         sample_rate_hz=8_000,
         channel_count=1,
         codec_name="pcm_alaw",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV
+        ),
+        sample_rate_hz=16_000,
+        channel_count=1,
+        codec_name="pcm_s16le",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV
+        ),
+        sample_rate_hz=16_000,
+        channel_count=1,
+        codec_name="pcm_s16le",
     )
 )
 
@@ -978,6 +1104,12 @@ __all__ = [
     "ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_KEY",
     "ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_RECIPE_KEY",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE",
     "ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_PCM16K_ARGV",

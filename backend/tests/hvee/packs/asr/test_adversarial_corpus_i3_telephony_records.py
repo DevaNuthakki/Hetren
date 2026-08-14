@@ -1,10 +1,12 @@
-"""Frozen I3 telephony and G.711 adversarial ASR records."""
+"""Frozen I3 synthetic acoustic-stress adversarial ASR records."""
 
 from __future__ import annotations
 
 from app.adversarial_asr_ffmpeg import (
     ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV,
+    ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV,
+    ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV,
     ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV,
 )
 from hvee.packs.asr.adversarial_corpus_records import (
@@ -16,9 +18,15 @@ from scripts.build_adversarial_asr_corpus_v1_telephony_records import (
     CASE_ID,
     FFMPEG_ALAW8K_ENVIRONMENT_SHA256,
     FFMPEG_MULAW8K_ENVIRONMENT_SHA256,
+    FFMPEG_NOISE_MODERATE_ENVIRONMENT_SHA256,
+    FFMPEG_NOISE_SEVERE_USABLE_ENVIRONMENT_SHA256,
     FFMPEG_PCM8K_ENVIRONMENT_SHA256,
     MULAW_CASE_ID,
     MULAW_OUTPUT_RELATIVE_PATH,
+    NOISE_MODERATE_CASE_ID,
+    NOISE_MODERATE_OUTPUT_RELATIVE_PATH,
+    NOISE_SEVERE_USABLE_CASE_ID,
+    NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH,
     OUTPUT_RELATIVE_PATH,
     PARENT_AUDIO_SHA256,
     PARENT_CASE_ID,
@@ -45,9 +53,23 @@ EXPECTED_ALAW_TRANSFORMATION_SHA256 = (
     "f9b87e70279eee0dc76f8e792ebdb2ed"
 )
 
+EXPECTED_MODERATE_TRANSFORMATION_SHA256 = (
+    "66780406d90fc01622fcc9850a6dd3af"
+    "4698eb5f07ff3413a012734e8d7d973a"
+)
+
+EXPECTED_SEVERE_USABLE_TRANSFORMATION_SHA256 = (
+    "1443bdb65921415ccc8949ae55022b1fc"
+    "a540af6ca42fcd625831324bb767ac1"
+)
+
 EXPECTED_DERIVATION_PLAN_SHA256 = (
-    "bdfcbea2d5983f5c3f72b8d58ddac549"
-    "0b6e0641e18a7d6c5f213ebc26fbf8f4"
+    "0ff0a36c1c1b4236d56a6459d59cb3a"
+    "d53edcb7fa38d99f03b893b38e1afa14c"
+)
+
+EXPECTED_CORPUS_ID = (
+    "qualification.synthetic-acoustic-stress-v1"
 )
 
 EXPECTED_PARENT_MANIFEST_SHA256 = (
@@ -75,12 +97,24 @@ EXPECTED_ALAW_ENVIRONMENT_SHA256 = (
     "f96e582eb58515ef699ca0361fdf79d42"
 )
 
+EXPECTED_MODERATE_ENVIRONMENT_SHA256 = (
+    "2f71f0619cb588a211f68de064125301"
+    "2ec8209cc633e53b0a15dbe94dfb4682"
+)
+
+EXPECTED_SEVERE_USABLE_ENVIRONMENT_SHA256 = (
+    "410054a787ab53be40332d8efcec98c1"
+    "91229d772d047626a1c073e946036043"
+)
+
 
 def test_i3_portfolio_record_identities_are_frozen():
     (
         telephony,
         mulaw,
         alaw,
+        moderate,
+        severe_usable,
         derivation_plan,
     ) = build_records()
 
@@ -97,6 +131,16 @@ def test_i3_portfolio_record_identities_are_frozen():
     assert (
         alaw.sha256
         == EXPECTED_ALAW_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        moderate.sha256
+        == EXPECTED_MODERATE_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        severe_usable.sha256
+        == EXPECTED_SEVERE_USABLE_TRANSFORMATION_SHA256
     )
 
     assert (
@@ -134,6 +178,8 @@ def test_i3_telephony_transformation_remains_frozen():
         telephony,
         _mulaw,
         _alaw,
+        _moderate,
+        _severe,
         _plan,
     ) = build_records()
 
@@ -188,6 +234,8 @@ def test_i3_mulaw_transformation_remains_frozen():
         _telephony,
         mulaw,
         _alaw,
+        _moderate,
+        _severe,
         _plan,
     ) = build_records()
 
@@ -247,6 +295,8 @@ def test_i3_alaw_transformation_is_frozen():
         _telephony,
         _mulaw,
         alaw,
+        _moderate,
+        _severe,
         _plan,
     ) = build_records()
 
@@ -301,11 +351,115 @@ def test_i3_alaw_transformation_is_frozen():
     }
 
 
-def test_i3_derivation_portfolio_contains_exact_three_cases():
+def test_i3_moderate_noise_transformation_is_frozen():
     (
         _telephony,
         _mulaw,
         _alaw,
+        moderate,
+        _severe,
+        _plan,
+    ) = build_records()
+
+    record = moderate.payload[
+        "record"
+    ]
+
+    assert (
+        record["case_id"]
+        == NOISE_MODERATE_CASE_ID
+    )
+
+    assert (
+        record["parent_audio_sha256"]
+        == EXPECTED_PARENT_AUDIO_SHA256
+    )
+
+    assert record["tool"] == {
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1",
+        "environment_sha256": (
+            EXPECTED_MODERATE_ENVIRONMENT_SHA256
+        ),
+    }
+
+    assert (
+        FFMPEG_NOISE_MODERATE_ENVIRONMENT_SHA256
+        == EXPECTED_MODERATE_ENVIRONMENT_SHA256
+    )
+
+    assert record["argv"] == list(
+        ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV
+    )
+
+    assert record["expected_output"] == {
+        "relative_path": (
+            NOISE_MODERATE_OUTPUT_RELATIVE_PATH
+        ),
+        "sample_rate_hz": 16_000,
+        "channel_count": 1,
+        "codec_name": "pcm_s16le",
+    }
+
+
+def test_i3_severe_usable_noise_transformation_is_frozen():
+    (
+        _telephony,
+        _mulaw,
+        _alaw,
+        _moderate,
+        severe,
+        _plan,
+    ) = build_records()
+
+    record = severe.payload[
+        "record"
+    ]
+
+    assert (
+        record["case_id"]
+        == NOISE_SEVERE_USABLE_CASE_ID
+    )
+
+    assert (
+        record["parent_audio_sha256"]
+        == EXPECTED_PARENT_AUDIO_SHA256
+    )
+
+    assert record["tool"] == {
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1",
+        "environment_sha256": (
+            EXPECTED_SEVERE_USABLE_ENVIRONMENT_SHA256
+        ),
+    }
+
+    assert (
+        FFMPEG_NOISE_SEVERE_USABLE_ENVIRONMENT_SHA256
+        == EXPECTED_SEVERE_USABLE_ENVIRONMENT_SHA256
+    )
+
+    assert record["argv"] == list(
+        ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV
+    )
+
+    assert record["expected_output"] == {
+        "relative_path": (
+            NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH
+        ),
+        "sample_rate_hz": 16_000,
+        "channel_count": 1,
+        "codec_name": "pcm_s16le",
+    }
+
+
+def test_i3_derivation_portfolio_contains_exact_five_cases():
+    (
+        _telephony,
+        _mulaw,
+        _alaw,
+        _moderate,
+        _severe,
         plan,
     ) = build_records()
 
@@ -320,11 +474,18 @@ def test_i3_derivation_portfolio_contains_exact_three_cases():
         == EXPECTED_PARENT_MANIFEST_SHA256
     )
 
+    assert (
+        record[
+            "corpus_id"
+        ]
+        == EXPECTED_CORPUS_ID
+    )
+
     entries = record[
         "entries"
     ]
 
-    assert len(entries) == 3
+    assert len(entries) == 5
 
     assert [
         entry[
@@ -334,6 +495,8 @@ def test_i3_derivation_portfolio_contains_exact_three_cases():
     ] == [
         ALAW_CASE_ID,
         MULAW_CASE_ID,
+        NOISE_MODERATE_CASE_ID,
+        NOISE_SEVERE_USABLE_CASE_ID,
         CASE_ID,
     ]
 
@@ -352,6 +515,14 @@ def test_i3_derivation_portfolio_contains_exact_three_cases():
         MULAW_CASE_ID
     ]
 
+    moderate = by_case[
+        NOISE_MODERATE_CASE_ID
+    ]
+
+    severe = by_case[
+        NOISE_SEVERE_USABLE_CASE_ID
+    ]
+
     telephony = by_case[
         CASE_ID
     ]
@@ -359,6 +530,8 @@ def test_i3_derivation_portfolio_contains_exact_three_cases():
     for entry in (
         alaw,
         mulaw,
+        moderate,
+        severe,
         telephony,
     ):
         assert (
@@ -436,6 +609,34 @@ def test_i3_derivation_portfolio_contains_exact_three_cases():
             "transformation_record_sha256"
         ]
         == EXPECTED_ALAW_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        moderate[
+            "output_relative_path"
+        ]
+        == NOISE_MODERATE_OUTPUT_RELATIVE_PATH
+    )
+
+    assert (
+        moderate[
+            "transformation_record_sha256"
+        ]
+        == EXPECTED_MODERATE_TRANSFORMATION_SHA256
+    )
+
+    assert (
+        severe[
+            "output_relative_path"
+        ]
+        == NOISE_SEVERE_USABLE_OUTPUT_RELATIVE_PATH
+    )
+
+    assert (
+        severe[
+            "transformation_record_sha256"
+        ]
+        == EXPECTED_SEVERE_USABLE_TRANSFORMATION_SHA256
     )
 
 
