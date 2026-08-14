@@ -144,18 +144,39 @@ def test_committed_generation_plan_binds_clean_source_records():
         == "1.0.0"
     )
 
-    assert len(
-        record["entries"]
-    ) == 1
+    entries = record["entries"]
 
-    entry = record[
-        "entries"
-    ][0]
-
-    assert (
-        entry["case_id"]
-        == "control.clean-critical"
+    expected_case_ids = (
+        "clean.identifier-account-order",
+        "clean.identifier-confirmation",
+        "clean.identifier-multiple",
+        "clean.multi-number-id",
+        "clean.number-currency-time",
+        "clean.number-measurement",
+        "clean.number-percentage",
+        "control.clean-critical",
     )
+
+    assert tuple(
+        entry["case_id"]
+        for entry in entries
+    ) == expected_case_ids
+
+    entries_by_case_id = {
+        entry["case_id"]: entry
+        for entry in entries
+    }
+
+    assert len(
+        entries_by_case_id
+    ) == len(
+        expected_case_ids
+    )
+
+    entry = entries_by_case_id[
+        "control.clean-critical"
+    ]
+
     assert (
         entry["output_relative_path"]
         == "source/control.clean-critical.wav"

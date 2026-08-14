@@ -270,9 +270,20 @@ def test_source_generator_rejects_derivative_plan_entry(
         )
     )
 
-    document["payload"]["record"][
+    entries = document["payload"]["record"][
         "entries"
-    ][0][
+    ]
+
+    control_entries = [
+        entry
+        for entry in entries
+        if entry["case_id"]
+        == "control.clean-critical"
+    ]
+
+    assert len(control_entries) == 1
+
+    control_entries[0][
         "transformation_record_sha256"
     ] = "0" * 64
 

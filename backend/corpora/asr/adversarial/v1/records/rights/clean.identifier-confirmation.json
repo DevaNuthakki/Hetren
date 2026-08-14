@@ -1,0 +1,33 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-rights-record.en-us",
+      "type": "source_visible_adversarial_corpus_rights_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "case_id": "clean.identifier-confirmation",
+      "development_use_only": true,
+      "record_id": "rights.clean-identifier-confirmation-v1",
+      "review_status": "not_adjudicated",
+      "source_package": {
+        "key": "debian.espeak-ng",
+        "packaged_copyright_sha256": "bf721eede49d50f84bd2c50f96888629ced572b66ad4087c7a224c4a5e1193bb",
+        "version": "1.51+dfsg-10+deb12u2"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "ac9ded0f23b45f96d0f1842cf3d85e343d275faba8a1b298c4bae84d6b1eff5b"
+}
