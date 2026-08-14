@@ -9,6 +9,7 @@ from hvee.packs.asr.adversarial_corpus_manifest import (
 )
 from hvee.packs.asr.adversarial_corpus_v1 import (
     ASR_ADVERSARIAL_CORPUS_V1_AUDIO_SHA256,
+    ASR_ADVERSARIAL_CORPUS_V1_CASE_IDS,
     ASR_ADVERSARIAL_CORPUS_V1_CONTROL_CASE_ID,
     ASR_ADVERSARIAL_CORPUS_V1_REFERENCE_TRANSCRIPT,
     ASR_ADVERSARIAL_CORPUS_V1_TRANSFORMATION_SHA256,
@@ -40,13 +41,13 @@ ROOT = Path(
 
 
 ASR_ADVERSARIAL_CORPUS_V1_SUITE_EVIDENCE_SHA256 = (
-    "960cbbb458b2cc581582558837feeebcc"
-    "372ba8cff63bbe6057994462cbfb307"
+    "888d3ac40a31047de678d881372f34d22"
+    "25a78b1e781f0f4a75aa3106a8e3938"
 )
 
 ASR_ADVERSARIAL_CORPUS_V1_MANIFEST_SHA256 = (
-    "940a2e636c389a48e072bb79715a8d2f"
-    "9e193c06eba89c8b0a694669342b40e0"
+    "9823b12023ed39ff482f8636dd8625d0"
+    "294905f7f4e406a555506e3ecb766f38"
 )
 
 
@@ -95,9 +96,21 @@ def test_canonical_control_case_has_narrow_declared_semantics():
 
     assert len(
         suite.cases
-    ) == 1
+    ) == 8
 
-    case = suite.cases[0]
+    assert tuple(
+        item.case_id
+        for item in suite.cases
+    ) == ASR_ADVERSARIAL_CORPUS_V1_CASE_IDS
+
+    cases_by_id = {
+        item.case_id: item
+        for item in suite.cases
+    }
+
+    case = cases_by_id[
+        ASR_ADVERSARIAL_CORPUS_V1_CONTROL_CASE_ID
+    ]
 
     assert (
         case.case_id
@@ -132,9 +145,14 @@ def test_canonical_control_case_has_no_declared_acoustic_stress():
         _manifest,
     ) = build_asr_adversarial_corpus_v1()
 
-    condition = (
-        suite.cases[0].condition
-    )
+    cases_by_id = {
+        item.case_id: item
+        for item in suite.cases
+    }
+
+    condition = cases_by_id[
+        ASR_ADVERSARIAL_CORPUS_V1_CONTROL_CASE_ID
+    ].condition
 
     assert (
         condition.channel
@@ -268,9 +286,21 @@ def test_real_manifest_binds_exact_generated_derivative():
 
     assert len(
         definition.assets
-    ) == 1
+    ) == 8
 
-    asset = definition.assets[0]
+    assert tuple(
+        item.case_id
+        for item in definition.assets
+    ) == ASR_ADVERSARIAL_CORPUS_V1_CASE_IDS
+
+    assets_by_id = {
+        item.case_id: item
+        for item in definition.assets
+    }
+
+    asset = assets_by_id[
+        ASR_ADVERSARIAL_CORPUS_V1_CONTROL_CASE_ID
+    ]
 
     assert (
         asset.case_id
