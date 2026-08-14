@@ -27,6 +27,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import subprocess
 import tempfile
 from copy import deepcopy
@@ -66,6 +67,79 @@ ASR_ADVERSARIAL_FFMPEG_PCM16K_ARGV = (
     "-c:a",
     "pcm_s16le",
     "{output}",
+)
+
+ASR_ADVERSARIAL_FFMPEG_PCM8K_RECIPE_KEY = (
+    "pcm-s16le-mono-8000-v1"
+)
+ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "{input}",
+    "-map_metadata",
+    "-1",
+    "-ar",
+    "8000",
+    "-ac",
+    "1",
+    "-c:a",
+    "pcm_s16le",
+    "{output}",
+)
+
+ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE_KEY = (
+    "pcm-mulaw-mono-8000-v1"
+)
+ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "{input}",
+    "-map_metadata",
+    "-1",
+    "-ar",
+    "8000",
+    "-ac",
+    "1",
+    "-c:a",
+    "pcm_mulaw",
+    "{output}",
+)
+
+ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE_KEY = (
+    "pcm-alaw-mono-8000-v1"
+)
+ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "{input}",
+    "-map_metadata",
+    "-1",
+    "-ar",
+    "8000",
+    "-ac",
+    "1",
+    "-c:a",
+    "pcm_alaw",
+    "{output}",
+)
+
+_RECIPE_KEY_PATTERN = re.compile(
+    r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
+)
+_CODEC_NAME_PATTERN = re.compile(
+    r"^[a-z0-9][a-z0-9_]*$"
 )
 
 DEFAULT_FFMPEG_TIMEOUT_SECONDS = 30.0
@@ -296,6 +370,152 @@ def _resolve_output(
 
 
 @dataclass(frozen=True, slots=True)
+class ASRAdversarialFFmpegRecipe:
+    """One explicit deterministic FFmpeg audio recipe."""
+
+    recipe_key: str
+    argv: tuple[str, ...]
+    sample_rate_hz: int
+    channel_count: int
+    codec_name: str
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(
+                self.recipe_key,
+                str,
+            )
+            or _RECIPE_KEY_PATTERN.fullmatch(
+                self.recipe_key
+            )
+            is None
+        ):
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe key must be canonical lowercase text."
+            )
+
+        if (
+            not isinstance(
+                self.argv,
+                tuple,
+            )
+            or not self.argv
+        ):
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe argv must be a non-empty tuple."
+            )
+
+        for argument in self.argv:
+            if (
+                not isinstance(
+                    argument,
+                    str,
+                )
+                or not argument
+                or "\x00" in argument
+            ):
+                raise ASRAdversarialFFmpegError(
+                    "FFmpeg recipe argv contains an invalid argument."
+                )
+
+        if self.argv.count(
+            "{input}"
+        ) != 1:
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe requires exactly one input placeholder."
+            )
+
+        if self.argv.count(
+            "{output}"
+        ) != 1:
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe requires exactly one output placeholder."
+            )
+
+        _require_positive_integer(
+            name="FFmpeg recipe sample rate",
+            value=self.sample_rate_hz,
+        )
+
+        _require_positive_integer(
+            name="FFmpeg recipe channel count",
+            value=self.channel_count,
+        )
+
+        if (
+            not isinstance(
+                self.codec_name,
+                str,
+            )
+            or _CODEC_NAME_PATTERN.fullmatch(
+                self.codec_name
+            )
+            is None
+        ):
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe codec name must be "
+                "canonical lowercase text."
+            )
+
+
+ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_PCM16K_ARGV
+        ),
+        sample_rate_hz=16_000,
+        channel_count=1,
+        codec_name="pcm_s16le",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_PCM8K_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_PCM8K_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV
+        ),
+        sample_rate_hz=8_000,
+        channel_count=1,
+        codec_name="pcm_s16le",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV
+        ),
+        sample_rate_hz=8_000,
+        channel_count=1,
+        codec_name="pcm_mulaw",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV
+        ),
+        sample_rate_hz=8_000,
+        channel_count=1,
+        codec_name="pcm_alaw",
+    )
+)
+
+
+@dataclass(frozen=True, slots=True)
 class ASRAdversarialFFmpegTransformResult:
     """Observed content identities around one deterministic transformation."""
 
@@ -334,7 +554,33 @@ class ASRAdversarialFFmpeg:
         max_output_bytes: int = (
             DEFAULT_FFMPEG_MAX_OUTPUT_BYTES
         ),
+        recipe: ASRAdversarialFFmpegRecipe | None = None,
     ) -> None:
+        if recipe is None:
+            selected_recipe = (
+                ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE
+            )
+        elif isinstance(
+            recipe,
+            ASRAdversarialFFmpegRecipe,
+        ):
+            selected_recipe = recipe
+        else:
+            raise ASRAdversarialFFmpegError(
+                "FFmpeg recipe is invalid."
+            )
+
+        self._recipe = selected_recipe
+
+        # Preserve the original public attributes used by the
+        # I2 derivative service and committed transformation records.
+        self.recipe_key = (
+            selected_recipe.recipe_key
+        )
+        self.recipe_argv = (
+            selected_recipe.argv
+        )
+
         self._timeout_seconds = (
             _require_positive_number(
                 name="FFmpeg timeout",
@@ -401,9 +647,15 @@ class ASRAdversarialFFmpeg:
                 "argv": list(
                     self.recipe_argv
                 ),
-                "sample_rate_hz": 16_000,
-                "channel_count": 1,
-                "codec_name": "pcm_s16le",
+                "sample_rate_hz": (
+                    self._recipe.sample_rate_hz
+                ),
+                "channel_count": (
+                    self._recipe.channel_count
+                ),
+                "codec_name": (
+                    self._recipe.codec_name
+                ),
                 "metadata_policy": (
                     "strip-input-metadata-v1"
                 ),
@@ -429,6 +681,12 @@ class ASRAdversarialFFmpeg:
                 ).encode("utf-8")
             ).hexdigest()
         )
+
+    @property
+    def recipe(
+        self,
+    ) -> ASRAdversarialFFmpegRecipe:
+        return self._recipe
 
     @property
     def reported_version(
@@ -605,7 +863,7 @@ class ASRAdversarialFFmpeg:
 
         return reported_version
 
-    def transform_pcm16k(
+    def transform(
         self,
         *,
         input_path: Path,
@@ -691,16 +949,49 @@ class ASRAdversarialFFmpeg:
             )
         )
 
+    def transform_pcm16k(
+        self,
+        *,
+        input_path: Path,
+        output_path: Path,
+    ) -> ASRAdversarialFFmpegTransformResult:
+        """Run the frozen I2 PCM16K transformation only."""
+
+        if (
+            self._recipe
+            != ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE
+        ):
+            raise ASRAdversarialFFmpegError(
+                "transform_pcm16k requires the "
+                "frozen PCM16K recipe."
+            )
+
+        return self.transform(
+            input_path=input_path,
+            output_path=output_path,
+        )
+
 
 __all__ = [
+    "ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_KEY",
+    "ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_MULAW8K_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_PCM16K_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE",
     "ASR_ADVERSARIAL_FFMPEG_PCM16K_RECIPE_KEY",
+    "ASR_ADVERSARIAL_FFMPEG_PCM8K_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_PCM8K_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_PCM8K_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_SCHEMA_VERSION",
     "ASR_ADVERSARIAL_FFMPEG_TOOL_KEY",
     "ASR_ADVERSARIAL_FFMPEG_VERSION",
     "ASRAdversarialFFmpeg",
     "ASRAdversarialFFmpegError",
+    "ASRAdversarialFFmpegRecipe",
     "ASRAdversarialFFmpegTransformResult",
     "DEFAULT_FFMPEG_MAX_OUTPUT_BYTES",
     "DEFAULT_FFMPEG_TIMEOUT_SECONDS",
