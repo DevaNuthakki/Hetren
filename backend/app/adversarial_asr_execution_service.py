@@ -18,7 +18,7 @@ import json
 from dataclasses import dataclass
 from pathlib import Path
 
-from app.evaluation_artifacts import (
+from app.content_hashing import (
     calculate_content_sha256,
 )
 from app.speech import (
