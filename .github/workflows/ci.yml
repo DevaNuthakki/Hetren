@@ -151,11 +151,11 @@ jobs:
 
       - name: Build pinned Hetren media image
         run: |
-          docker build --platform linux/amd64 --file docker/media/Dockerfile --tag hetren-media-ci:phase3.9-h3 .
+          docker build --platform linux/amd64 --file docker/media/Dockerfile --tag hetren-media-ci:ci .
 
       - name: Verify pinned media toolchain
         run: |
-          docker run --rm hetren-media-ci:phase3.9-h3 sh -ceu '
+          docker run --rm hetren-media-ci:ci sh -ceu '
             test "$(command -v ffprobe)" = "/usr/bin/ffprobe"
             test "$(command -v ffmpeg)" = "/usr/bin/ffmpeg"
 
@@ -179,14 +179,15 @@ jobs:
           docker run --rm \
             -e HETREN_REAL_MEDIA_INTEGRATION=1 \
             -v "$GITHUB_WORKSPACE/backend:/workspace/backend:ro" \
-            hetren-media-ci:phase3.9-h3 \
+            hetren-media-ci:ci \
             python -m pytest \
               -p no:cacheprovider \
               -q \
               -W error \
               tests/test_content_hashing.py \
               tests/test_adversarial_asr_ffprobe.py \
-              tests/test_adversarial_asr_ffprobe_integration.py
+              tests/test_adversarial_asr_ffprobe_integration.py \
+              tests/test_adversarial_asr_synthetic_tts_integration.py
 
   frontend:
     name: Frontend

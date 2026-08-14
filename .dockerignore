@@ -16,3 +16,4 @@ backend/test-upload
 *.sqlite
 *.sqlite3
 .DS_Store
+backend/corpora/asr/adversarial/v1/generated
