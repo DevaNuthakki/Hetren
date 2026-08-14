@@ -1,0 +1,66 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-manifest.en-us",
+      "type": "source_visible_adversarial_corpus_manifest",
+      "version": "1.0.0"
+    },
+    "corpus": {
+      "asset_count": 1,
+      "assets": [
+        {
+          "audio_asset_sha256": "f97e1d36b87676aaacf4dbd8059fa8fef2d323d23cfb8468aa22426f05dbd3b3",
+          "byte_length": 403394,
+          "case_id": "control.clean-critical",
+          "media": {
+            "channel_count": 1,
+            "codec_name": "pcm_s16le",
+            "duration_ms": 12604,
+            "sample_rate_hz": 16000
+          },
+          "provenance": {
+            "provenance_record_sha256": "30d7a75e8ad8dca1f03a3576d167a12b62bff7df2fbd5bfe7a2e825771dde1c4",
+            "rights_record_sha256": "cfcc0861946a6fe96da954f6efda69e745e7bd2533e1f9b8718e0084d7bcdb14",
+            "transformation_record_sha256": "4cd349d56ca7c5fc60c773024dc36488b75f3944a4b1a98da260178c726c3f0f",
+            "type": "deterministic_derivative"
+          },
+          "relative_audio_path": "clean/control.clean-critical.wav"
+        }
+      ],
+      "case_ids": [
+        "control.clean-critical"
+      ],
+      "corpus_id": "qualification.synthetic-v1",
+      "corpus_version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "acoustic_conditions_measured_by_manifest": false,
+      "asset_sha256_bound_to_suite": true,
+      "audio_content_present_in_manifest": false,
+      "certification_issued": false,
+      "codec_family_metadata_bound_to_suite": true,
+      "declared_speech_variety_is_not_demographic_inference": true,
+      "development_evidence_only": true,
+      "exact_suite_case_inventory_retained": true,
+      "filesystem_audio_verified_by_manifest": false,
+      "media_metadata_measured_by_manifest": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "provenance_records_committed_not_embedded": true,
+      "qualification_threshold_applied": false,
+      "relative_paths_only": true,
+      "release_enforcement_eligible": false,
+      "rights_records_committed_not_adjudicated": true,
+      "sample_rate_metadata_bound_to_suite": true,
+      "sealed_suite_reverified": true,
+      "speaker_attributes_inferred_from_audio": false
+    },
+    "schema_version": 1,
+    "suite": {
+      "key": "hetren.asr.adversarial-evidence.en-us",
+      "sha256": "960cbbb458b2cc581582558837feeebcc372ba8cff63bbe6057994462cbfb307",
+      "version": "1.0.0"
+    }
+  },
+  "sha256": "940a2e636c389a48e072bb79715a8d2f9e193c06eba89c8b0a694669342b40e0"
+}

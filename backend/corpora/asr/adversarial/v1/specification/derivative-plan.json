@@ -1,0 +1,35 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-generation-plan.en-us",
+      "type": "source_visible_adversarial_corpus_generation_plan",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "corpus_id": "qualification.synthetic-derivative-v1",
+      "corpus_version": "1.0.0",
+      "entries": [
+        {
+          "case_id": "control.clean-critical",
+          "output_relative_path": "clean/control.clean-critical.wav",
+          "provenance_record_sha256": "30d7a75e8ad8dca1f03a3576d167a12b62bff7df2fbd5bfe7a2e825771dde1c4",
+          "rights_record_sha256": "cfcc0861946a6fe96da954f6efda69e745e7bd2533e1f9b8718e0084d7bcdb14",
+          "transformation_record_sha256": "4cd349d56ca7c5fc60c773024dc36488b75f3944a4b1a98da260178c726c3f0f"
+        }
+      ]
+    },
+    "schema_version": 1
+  },
+  "sha256": "f5b40bd42bff3a2bf35e68108b0241462bdcd35abeaf3f857a77a7284ac85897"
+}
