@@ -201,6 +201,15 @@ else:
         }},
     }}
 
+if "programmed-audio" in name:
+    payload["programs"] = [
+        {{
+            "program_id": 1,
+        }}
+    ]
+else:
+    payload["programs"] = []
+
 print(
     json.dumps(
         payload,
@@ -581,6 +590,10 @@ def test_rejects_invalid_utf8(
         (
             "multiple-streams.wav",
             "exactly one stream",
+        ),
+        (
+            "programmed-audio.wav",
+            "program metadata",
         ),
         (
             "video-stream.wav",

@@ -8,6 +8,10 @@ from pathlib import Path
 
 from sqlalchemy.orm import Session
 
+from app.content_hashing import (
+    ContentHashingError,
+    calculate_content_sha256 as _calculate_content_sha256,
+)
 from app import models
 from app.evaluation_provenance import (
     ASR_EVALUATION_TYPE,
@@ -105,27 +109,15 @@ def calculate_content_sha256(
     *,
     chunk_size: int = DEFAULT_COPY_CHUNK_SIZE,
 ) -> tuple[str, int]:
-    if chunk_size <= 0:
-        raise EvaluationInputArtifactSealError(
-            "chunk_size must be positive."
+    try:
+        return _calculate_content_sha256(
+            path,
+            chunk_size=chunk_size,
         )
-
-    file_path = Path(path)
-
-    digest = hashlib.sha256()
-    byte_length = 0
-
-    with file_path.open("rb") as source:
-        while True:
-            chunk = source.read(chunk_size)
-
-            if not chunk:
-                break
-
-            digest.update(chunk)
-            byte_length += len(chunk)
-
-    return digest.hexdigest(), byte_length
+    except ContentHashingError as exc:
+        raise EvaluationInputArtifactSealError(
+            str(exc)
+        ) from exc
 
 
 def calculate_artifact_seal_sha256(

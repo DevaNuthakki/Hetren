@@ -42,7 +42,7 @@ from pathlib import Path
 from app.adversarial_asr_corpus_verification_service import (
     ASRAdversarialMeasuredMedia,
 )
-from app.evaluation_artifacts import (
+from app.content_hashing import (
     calculate_content_sha256,
 )
 
@@ -276,12 +276,23 @@ def _parse_probe_payload(
         not isinstance(payload, dict)
         or set(payload)
         != {
+            "programs",
             "streams",
             "format",
         }
     ):
         raise ASRAdversarialFFprobeError(
             "FFprobe returned an invalid media schema."
+        )
+
+    programs = payload[
+        "programs"
+    ]
+
+    if programs != []:
+        raise ASRAdversarialFFprobeError(
+            "FFprobe media must not contain "
+            "program metadata."
         )
 
     streams = payload[
@@ -500,7 +511,7 @@ class ASRAdversarialFFprobe:
                     "strict-canonical-ffprobe-token-v1"
                 ),
                 "stream_policy": (
-                    "exactly-one-stream-and-it-must-be-audio-v1"
+                    "exactly-one-audio-stream-no-programs-v1"
                 ),
             },
             "process": {
