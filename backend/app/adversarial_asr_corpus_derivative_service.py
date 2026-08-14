@@ -34,9 +34,18 @@ from app.adversarial_asr_ffmpeg import (
 from app.content_hashing import (
     calculate_content_sha256,
 )
+from hvee.packs.asr.adversarial_corpus_manifest import (
+    ASRAdversarialCorpusManifestBundle,
+    ASRAdversarialCorpusManifestDefinition,
+    verify_asr_adversarial_corpus_manifest_v1,
+)
 from hvee.packs.asr.adversarial_corpus_records import (
     ASRAdversarialCorpusRecordBundle,
     verify_asr_adversarial_corpus_record_v1,
+)
+from hvee.packs.asr.adversarial_evidence import (
+    ASRAdversarialEvidenceBundle,
+    ASRAdversarialSuiteDefinition,
 )
 
 
@@ -911,5 +920,698 @@ def generate_asr_adversarial_derivative_v1(
         ),
         transformer_environment_sha256=(
             transformer.transform_environment_sha256
+        ),
+    )
+
+
+class ASRAdversarialDerivedAudioTransformer(
+    Protocol
+):
+    """Generic deterministic transformer used by I3 derived cases."""
+
+    tool_key: str
+    reported_version: str
+    transform_environment_sha256: str
+    recipe_argv: tuple[str, ...]
+
+    def transform(
+        self,
+        *,
+        input_path: Path,
+        output_path: Path,
+    ) -> ASRAdversarialFFmpegTransformResult:
+        ...
+
+
+@dataclass(frozen=True, slots=True)
+class ASRAdversarialGeneratedDerivedCase:
+    """Verified facts for one parent-manifest-derived audio case."""
+
+    case_id: str
+    parent_case_id: str
+    parent_relative_path: str
+    output_relative_path: str
+    parent_audio_sha256: str
+    audio_asset_sha256: str
+    byte_length: int
+    duration_ms: int
+    sample_rate_hz: int
+    channel_count: int
+    codec_name: str
+    provenance_record_sha256: str
+    rights_record_sha256: str
+    transformation_record_sha256: str
+    transformer_environment_sha256: str
+    parent_manifest_sha256: str
+    derivation_plan_sha256: str
+    development_evidence_only: bool = True
+
+
+def _load_parent_manifest(
+    *,
+    corpus_root: Path,
+    definition: ASRAdversarialCorpusManifestDefinition,
+    suite: ASRAdversarialSuiteDefinition,
+    suite_evidence: ASRAdversarialEvidenceBundle,
+) -> ASRAdversarialCorpusManifestBundle:
+    path = _resolve_direct_file(
+        root=corpus_root,
+        relative_path=(
+            "specification/corpus-manifest.json"
+        ),
+        name="parent corpus manifest",
+    )
+
+    try:
+        document = json.loads(
+            path.read_text(
+                encoding="utf-8"
+            )
+        )
+    except (
+        OSError,
+        UnicodeDecodeError,
+        json.JSONDecodeError,
+    ) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest could not be loaded."
+        ) from exc
+
+    if (
+        not isinstance(document, dict)
+        or set(document)
+        != {
+            "payload",
+            "sha256",
+        }
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest document is invalid."
+        )
+
+    try:
+        return verify_asr_adversarial_corpus_manifest_v1(
+            payload=document[
+                "payload"
+            ],
+            expected_sha256=document[
+                "sha256"
+            ],
+            definition=definition,
+            suite=suite,
+            suite_evidence=suite_evidence,
+        )
+    except (TypeError, ValueError) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest verification failed."
+        ) from exc
+
+
+def _manifest_asset_for_case(
+    *,
+    manifest: ASRAdversarialCorpusManifestBundle,
+    case_id: str,
+) -> dict[str, object]:
+    try:
+        assets = manifest.payload[
+            "corpus"
+        ]["assets"]
+    except (KeyError, TypeError) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest asset inventory is invalid."
+        ) from exc
+
+    if not isinstance(
+        assets,
+        list,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest asset inventory is invalid."
+        )
+
+    matches = [
+        asset
+        for asset in assets
+        if (
+            isinstance(asset, dict)
+            and asset.get(
+                "case_id"
+            )
+            == case_id
+        )
+    ]
+
+    if len(matches) != 1:
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent corpus manifest must contain "
+            "exactly one matching parent case."
+        )
+
+    return matches[0]
+
+
+def generate_asr_adversarial_derived_case_v1(
+    *,
+    corpus_root: str | Path,
+    generated_root: str | Path,
+    case_id: str,
+    parent_manifest_definition: (
+        ASRAdversarialCorpusManifestDefinition
+    ),
+    parent_suite: ASRAdversarialSuiteDefinition,
+    parent_suite_evidence: ASRAdversarialEvidenceBundle,
+    transformer: ASRAdversarialDerivedAudioTransformer,
+    probe: ASRAdversarialMediaProbe,
+) -> ASRAdversarialGeneratedDerivedCase:
+    """Generate one deterministic I3 case from a sealed parent manifest."""
+
+    case_id = _require_case_id(
+        case_id
+    )
+
+    corpus = _resolve_existing_root(
+        corpus_root,
+        name="adversarial corpus root",
+    )
+
+    generated = _resolve_existing_root(
+        generated_root,
+        name="adversarial generated root",
+    )
+
+    parent_manifest = _load_parent_manifest(
+        corpus_root=corpus,
+        definition=parent_manifest_definition,
+        suite=parent_suite,
+        suite_evidence=parent_suite_evidence,
+    )
+
+    derivation_plan = _load_record(
+        corpus_root=corpus,
+        relative_path=(
+            "specification/derivation-plan.json"
+        ),
+    )
+
+    derivation_entry = _entry_for_case(
+        bundle=derivation_plan,
+        case_id=case_id,
+        name="corpus derivation plan",
+    )
+
+    try:
+        derivation_record = (
+            derivation_plan.payload[
+                "record"
+            ]
+        )
+    except (KeyError, TypeError) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "corpus derivation plan is invalid."
+        ) from exc
+
+    if not isinstance(
+        derivation_record,
+        dict,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "corpus derivation plan is invalid."
+        )
+
+    if (
+        derivation_record.get(
+            "parent_manifest_sha256"
+        )
+        != parent_manifest.sha256
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derivation plan does not bind "
+            "the verified parent manifest."
+        )
+
+    parent_case_id = (
+        derivation_entry.get(
+            "parent_case_id"
+        )
+    )
+
+    if not isinstance(
+        parent_case_id,
+        str,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derivation parent case id is invalid."
+        )
+
+    parent_asset = _manifest_asset_for_case(
+        manifest=parent_manifest,
+        case_id=parent_case_id,
+    )
+
+    try:
+        parent_provenance = parent_asset[
+            "provenance"
+        ]
+    except (KeyError, TypeError) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent manifest provenance is invalid."
+        ) from exc
+
+    if not isinstance(
+        parent_provenance,
+        dict,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "parent manifest provenance is invalid."
+        )
+
+    expected_parent_bindings = {
+        "parent_relative_path": (
+            parent_asset.get(
+                "relative_audio_path"
+            )
+        ),
+        "parent_audio_sha256": (
+            parent_asset.get(
+                "audio_asset_sha256"
+            )
+        ),
+        "provenance_record_sha256": (
+            parent_provenance.get(
+                "provenance_record_sha256"
+            )
+        ),
+        "rights_record_sha256": (
+            parent_provenance.get(
+                "rights_record_sha256"
+            )
+        ),
+    }
+
+    for field, expected_value in (
+        expected_parent_bindings.items()
+    ):
+        if (
+            derivation_entry.get(
+                field
+            )
+            != expected_value
+        ):
+            raise ASRAdversarialCorpusDerivativeError(
+                "derivation parent binding does not "
+                "match the verified parent manifest."
+            )
+
+    parent_relative_path = (
+        derivation_entry[
+            "parent_relative_path"
+        ]
+    )
+
+    parent = _resolve_direct_file(
+        root=generated,
+        relative_path=parent_relative_path,
+        name="generated parent audio",
+    )
+
+    (
+        observed_parent_sha256,
+        observed_parent_byte_length,
+    ) = _hash(
+        parent
+    )
+
+    if (
+        observed_parent_sha256
+        != parent_asset.get(
+            "audio_asset_sha256"
+        )
+        or observed_parent_byte_length
+        != parent_asset.get(
+            "byte_length"
+        )
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "generated parent audio does not match "
+            "the verified parent manifest."
+        )
+
+    transformation_sha256 = (
+        derivation_entry.get(
+            "transformation_record_sha256"
+        )
+    )
+
+    if not isinstance(
+        transformation_sha256,
+        str,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived case requires a transformation commitment."
+        )
+
+    transformation = _load_record(
+        corpus_root=corpus,
+        relative_path=(
+            "records/transformations/"
+            f"{case_id}.json"
+        ),
+    )
+
+    if (
+        transformation.sha256
+        != transformation_sha256
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation commitment does not match."
+        )
+
+    try:
+        transform_record = (
+            transformation.payload[
+                "record"
+            ]
+        )
+    except (KeyError, TypeError) as exc:
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation record is invalid."
+        ) from exc
+
+    if not isinstance(
+        transform_record,
+        dict,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation record is invalid."
+        )
+
+    if (
+        transform_record.get(
+            "case_id"
+        )
+        != case_id
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation case does not match."
+        )
+
+    if (
+        transform_record.get(
+            "parent_audio_sha256"
+        )
+        != observed_parent_sha256
+        or transform_record.get(
+            "parent_audio_sha256"
+        )
+        != derivation_entry.get(
+            "parent_audio_sha256"
+        )
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation parent does not match."
+        )
+
+    expected_output = (
+        transform_record.get(
+            "expected_output"
+        )
+    )
+
+    if not isinstance(
+        expected_output,
+        dict,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation expected output is invalid."
+        )
+
+    output_relative_path = (
+        derivation_entry.get(
+            "output_relative_path"
+        )
+    )
+
+    if (
+        not isinstance(
+            output_relative_path,
+            str,
+        )
+        or output_relative_path
+        != expected_output.get(
+            "relative_path"
+        )
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived output path does not match "
+            "the transformation record."
+        )
+
+    tool = transform_record.get(
+        "tool"
+    )
+
+    if not isinstance(
+        tool,
+        dict,
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "derived transformation tool identity is invalid."
+        )
+
+    if (
+        getattr(
+            transformer,
+            "tool_key",
+            None,
+        )
+        != tool.get(
+            "key"
+        )
+        or getattr(
+            transformer,
+            "reported_version",
+            None,
+        )
+        != tool.get(
+            "version"
+        )
+        or getattr(
+            transformer,
+            "transform_environment_sha256",
+            None,
+        )
+        != tool.get(
+            "environment_sha256"
+        )
+        or list(
+            getattr(
+                transformer,
+                "recipe_argv",
+                (),
+            )
+        )
+        != transform_record.get(
+            "argv"
+        )
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "runtime derived transformer does not match "
+            "the committed transformation record."
+        )
+
+    destination = _ensure_output_path(
+        generated_root=generated,
+        relative_path=output_relative_path,
+    )
+
+    with tempfile.TemporaryDirectory(
+        prefix=".hetren-derived-",
+        dir=destination.parent,
+    ) as temporary_directory:
+        temporary_output = (
+            Path(
+                temporary_directory
+            )
+            / destination.name
+        )
+
+        try:
+            transform_result = (
+                transformer.transform(
+                    input_path=parent,
+                    output_path=temporary_output,
+                )
+            )
+        except Exception as exc:
+            raise ASRAdversarialCorpusDerivativeError(
+                "deterministic derived transformation failed."
+            ) from exc
+
+        if not isinstance(
+            transform_result,
+            ASRAdversarialFFmpegTransformResult,
+        ):
+            raise ASRAdversarialCorpusDerivativeError(
+                "derived transformer returned invalid evidence."
+            )
+
+        if (
+            transform_result.parent_audio_sha256
+            != observed_parent_sha256
+            or transform_result.parent_byte_length
+            != observed_parent_byte_length
+        ):
+            raise ASRAdversarialCorpusDerivativeError(
+                "derived transformer parent evidence "
+                "does not match the verified parent."
+            )
+
+        (
+            temporary_sha256,
+            temporary_byte_length,
+        ) = _hash(
+            temporary_output
+        )
+
+        if (
+            temporary_sha256
+            != transform_result.output_audio_sha256
+            or temporary_byte_length
+            != transform_result.output_byte_length
+        ):
+            raise ASRAdversarialCorpusDerivativeError(
+                "derived transformer output evidence "
+                "does not match the generated output."
+            )
+
+        temporary_media = _probe_and_require(
+            probe=probe,
+            path=temporary_output,
+            expected=expected_output,
+        )
+
+        if destination.exists():
+            if (
+                destination.is_symlink()
+                or not destination.is_file()
+            ):
+                raise ASRAdversarialCorpusDerivativeError(
+                    "existing derived output is invalid."
+                )
+
+            (
+                existing_sha256,
+                existing_byte_length,
+            ) = _hash(
+                destination
+            )
+
+            if (
+                existing_sha256
+                != temporary_sha256
+                or existing_byte_length
+                != temporary_byte_length
+            ):
+                raise ASRAdversarialCorpusDerivativeError(
+                    "existing derived output conflicts "
+                    "with deterministic generation."
+                )
+        else:
+            try:
+                os.link(
+                    temporary_output,
+                    destination,
+                    follow_symlinks=False,
+                )
+            except FileExistsError:
+                if (
+                    destination.is_symlink()
+                    or not destination.is_file()
+                ):
+                    raise ASRAdversarialCorpusDerivativeError(
+                        "concurrent derived publication "
+                        "created an invalid output."
+                    )
+
+                (
+                    existing_sha256,
+                    existing_byte_length,
+                ) = _hash(
+                    destination
+                )
+
+                if (
+                    existing_sha256
+                    != temporary_sha256
+                    or existing_byte_length
+                    != temporary_byte_length
+                ):
+                    raise ASRAdversarialCorpusDerivativeError(
+                        "concurrent derived publication conflict."
+                    )
+            except OSError as exc:
+                raise ASRAdversarialCorpusDerivativeError(
+                    "derived output could not be published."
+                ) from exc
+
+    (
+        published_sha256,
+        published_byte_length,
+    ) = _hash(
+        destination
+    )
+
+    published_media = _probe_and_require(
+        probe=probe,
+        path=destination,
+        expected=expected_output,
+    )
+
+    if (
+        published_sha256
+        != temporary_sha256
+        or published_byte_length
+        != temporary_byte_length
+        or published_media
+        != temporary_media
+    ):
+        raise ASRAdversarialCorpusDerivativeError(
+            "published derived output changed "
+            "after verification."
+        )
+
+    return ASRAdversarialGeneratedDerivedCase(
+        case_id=case_id,
+        parent_case_id=parent_case_id,
+        parent_relative_path=parent_relative_path,
+        output_relative_path=output_relative_path,
+        parent_audio_sha256=observed_parent_sha256,
+        audio_asset_sha256=published_sha256,
+        byte_length=published_byte_length,
+        duration_ms=published_media.duration_ms,
+        sample_rate_hz=published_media.sample_rate_hz,
+        channel_count=published_media.channel_count,
+        codec_name=published_media.codec_name,
+        provenance_record_sha256=(
+            derivation_entry[
+                "provenance_record_sha256"
+            ]
+        ),
+        rights_record_sha256=(
+            derivation_entry[
+                "rights_record_sha256"
+            ]
+        ),
+        transformation_record_sha256=(
+            transformation.sha256
+        ),
+        transformer_environment_sha256=(
+            transformer.transform_environment_sha256
+        ),
+        parent_manifest_sha256=(
+            parent_manifest.sha256
+        ),
+        derivation_plan_sha256=(
+            derivation_plan.sha256
         ),
     )
