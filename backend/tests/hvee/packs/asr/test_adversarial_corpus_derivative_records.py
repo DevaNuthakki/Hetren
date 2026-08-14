@@ -13,8 +13,8 @@ ROOT = Path(
 )
 
 SOURCE_PLAN_SHA256 = (
-    "4c6cc01ac38986dc66d2f18326a95680b"
-    "a86139d7aedc5d4cc69498635c32ea4"
+    "7c3f4a729a490ea2471f86ef4077e1c4"
+    "eb38f5c095ba29e66373c139a14e1c57"
 )
 
 TRANSFORMATION_SHA256 = (
@@ -23,8 +23,8 @@ TRANSFORMATION_SHA256 = (
 )
 
 DERIVATIVE_PLAN_SHA256 = (
-    "f5b40bd42bff3a2bf35e68108b024146"
-    "2bdcd35abeaf3f857a77a7284ac85897"
+    "3b428ccf140a5bf6666a0b6f60d7b662"
+    "827e769de16272e8986861f8e5ced53f"
 )
 
 PARENT_AUDIO_SHA256 = (
@@ -89,9 +89,20 @@ def test_source_plan_identity_remains_frozen():
         == SOURCE_PLAN_SHA256
     )
 
-    entry = bundle.payload[
+    entries = bundle.payload[
         "record"
-    ]["entries"][0]
+    ]["entries"]
+
+    entries_by_case_id = {
+        entry["case_id"]: entry
+        for entry in entries
+    }
+
+    assert len(entries_by_case_id) == 8
+
+    entry = entries_by_case_id[
+        "control.clean-critical"
+    ]
 
     assert (
         entry["case_id"]
@@ -181,9 +192,20 @@ def test_derivative_plan_identity_is_frozen():
         == "qualification.synthetic-derivative-v1"
     )
 
-    entry = record[
+    entries = record[
         "entries"
-    ][0]
+    ]
+
+    entries_by_case_id = {
+        entry["case_id"]: entry
+        for entry in entries
+    }
+
+    assert len(entries_by_case_id) == 8
+
+    entry = entries_by_case_id[
+        "control.clean-critical"
+    ]
 
     assert (
         entry["case_id"]

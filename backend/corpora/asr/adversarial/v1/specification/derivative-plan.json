@@ -21,6 +21,55 @@
       "corpus_version": "1.0.0",
       "entries": [
         {
+          "case_id": "clean.identifier-account-order",
+          "output_relative_path": "clean/clean.identifier-account-order.wav",
+          "provenance_record_sha256": "36bf894c8d87bbc77f87952a205edaa3bdd1ef7f22a4b75d4dce676a8cdf76bf",
+          "rights_record_sha256": "0efb0b85af7394612abab52185fc43811ecd5f362a7976f696e01ed39952845c",
+          "transformation_record_sha256": "73a5476351d16890a6c13d67f61baaed4721978935b8123c640cde8cd025cf45"
+        },
+        {
+          "case_id": "clean.identifier-confirmation",
+          "output_relative_path": "clean/clean.identifier-confirmation.wav",
+          "provenance_record_sha256": "a11556ba44a0381a0e3e6035166b1263f62d9a6a5ae815fe5151e2a21f9efd02",
+          "rights_record_sha256": "ac9ded0f23b45f96d0f1842cf3d85e343d275faba8a1b298c4bae84d6b1eff5b",
+          "transformation_record_sha256": "a19bc2dac6c67eaae14813cd6842ff013a37ae2fdb114bb2c40a5aa646387139"
+        },
+        {
+          "case_id": "clean.identifier-multiple",
+          "output_relative_path": "clean/clean.identifier-multiple.wav",
+          "provenance_record_sha256": "d0de5c0b7de55db1b940f4fbac6f5018d2edc80f14e1003b58ca968c1ba6fdfd",
+          "rights_record_sha256": "8448ae71a3b9a4c157d9301451a4f86ff8b32a627829b94aa9a7305ac04bd9b6",
+          "transformation_record_sha256": "29cbce81a09fc05fad49931b77f5c9c35ed4d5552d3cae843d99e3562c81dfd1"
+        },
+        {
+          "case_id": "clean.multi-number-id",
+          "output_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "672cf776feddf77a79182103541b2b10880b8eeae0852c07c3ffdd73701b0044"
+        },
+        {
+          "case_id": "clean.number-currency-time",
+          "output_relative_path": "clean/clean.number-currency-time.wav",
+          "provenance_record_sha256": "ae8dac7e2893bbe643950b1b6ec642611a2bf5c38406c77e6bc9dcff7e44ba8a",
+          "rights_record_sha256": "f3b89d00b8c9be37055514fa6a4292592768bd797ccde8e9fb8776acfaaf10be",
+          "transformation_record_sha256": "c3ed7e3cee110ed91446506355e232fb7cb05bf03dd0c9cbf2cbe65ad0711b9e"
+        },
+        {
+          "case_id": "clean.number-measurement",
+          "output_relative_path": "clean/clean.number-measurement.wav",
+          "provenance_record_sha256": "84474e713f6889d12c2baeb7fc08efe0cc7b17ef43ee33fb6facf23ab20bccef",
+          "rights_record_sha256": "aeb089aa364b4d2c0fec5731b74cda61b484c6433db68553e79c55665f07d5ec",
+          "transformation_record_sha256": "f9f87b23361bdb4b53aef1d28321b9dbefbb26b846fc42fca7a8f81df84223bd"
+        },
+        {
+          "case_id": "clean.number-percentage",
+          "output_relative_path": "clean/clean.number-percentage.wav",
+          "provenance_record_sha256": "a5ee833742b53fb0a79bfb2b039ff03255053538ed5895e699ab9aed25f06105",
+          "rights_record_sha256": "067555dd4af75f64c65343edc37614ca7fdf58d124fc379bf081ac9b8564c41b",
+          "transformation_record_sha256": "23ea98f530e1a258b230a508b45efaeccce905843026e0ff4bfeb3a7d8220eac"
+        },
+        {
           "case_id": "control.clean-critical",
           "output_relative_path": "clean/control.clean-critical.wav",
           "provenance_record_sha256": "30d7a75e8ad8dca1f03a3576d167a12b62bff7df2fbd5bfe7a2e825771dde1c4",
@@ -31,5 +80,5 @@
     },
     "schema_version": 1
   },
-  "sha256": "f5b40bd42bff3a2bf35e68108b0241462bdcd35abeaf3f857a77a7284ac85897"
+  "sha256": "3b428ccf140a5bf6666a0b6f60d7b662827e769de16272e8986861f8e5ced53f"
 }
