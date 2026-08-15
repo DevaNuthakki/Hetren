@@ -1,0 +1,91 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-transformation-record.en-us",
+      "type": "source_visible_adversarial_corpus_transformation_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "argv": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-n",
+        "-i",
+        "{input}",
+        "-map",
+        "0:a:0",
+        "-map_metadata",
+        "-1",
+        "-vn",
+        "-ac",
+        "1",
+        "-ar",
+        "16000",
+        "-threads",
+        "1",
+        "-c:a",
+        "aac",
+        "-b:a",
+        "32k",
+        "-aac_coder",
+        "twoloop",
+        "-aac_ms",
+        "0",
+        "-aac_is",
+        "1",
+        "-aac_pns",
+        "1",
+        "-aac_tns",
+        "1",
+        "-aac_ltp",
+        "0",
+        "-aac_pred",
+        "0",
+        "-aac_pce",
+        "0",
+        "-movflags",
+        "+faststart",
+        "-use_editlist",
+        "1",
+        "-write_btrt",
+        "0",
+        "-write_prft",
+        "0",
+        "-movie_timescale",
+        "1000",
+        "-f",
+        "ipod",
+        "{output}"
+      ],
+      "case_id": "stress.codec-aac.multi-number-id",
+      "expected_output": {
+        "channel_count": 1,
+        "codec_name": "aac",
+        "relative_path": "lossy/stress.codec-aac.multi-number-id.m4a",
+        "sample_rate_hz": 16000
+      },
+      "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+      "record_id": "transform.stress-codec-aac-multi-number-id-v1",
+      "tool": {
+        "environment_sha256": "8a23edea7a13d66422dbd083023cf7e812cc8dbed8bb788d51fe799f9a62a877",
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "0cbf53bd9f528f1b8345472d14b3e7819fec745de77c8df5843119d36eae95a0"
+}

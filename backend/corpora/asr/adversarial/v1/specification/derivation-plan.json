@@ -21,6 +21,16 @@
       "corpus_version": "1.0.0",
       "entries": [
         {
+          "case_id": "stress.codec-aac.multi-number-id",
+          "output_relative_path": "lossy/stress.codec-aac.multi-number-id.m4a",
+          "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+          "parent_case_id": "clean.multi-number-id",
+          "parent_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "0cbf53bd9f528f1b8345472d14b3e7819fec745de77c8df5843119d36eae95a0"
+        },
+        {
           "case_id": "stress.codec-alaw.multi-number-id",
           "output_relative_path": "telephony/stress.codec-alaw.multi-number-id.wav",
           "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
@@ -29,6 +39,16 @@
           "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
           "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
           "transformation_record_sha256": "5d7202803ca6b26f0ac8ef45fcf42ed7f9b87e70279eee0dc76f8e792ebdb2ed"
+        },
+        {
+          "case_id": "stress.codec-mp3.multi-number-id",
+          "output_relative_path": "lossy/stress.codec-mp3.multi-number-id.mp3",
+          "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+          "parent_case_id": "clean.multi-number-id",
+          "parent_relative_path": "clean/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": "a08d6dd8f929d4b5145ae31116d8cbc330e1d6ea92e37a46006a275cbb128cf5"
         },
         {
           "case_id": "stress.codec-mulaw.multi-number-id",
@@ -75,5 +95,5 @@
     },
     "schema_version": 1
   },
-  "sha256": "0ff0a36c1c1b4236d56a6459d59cb3ad53edcb7fa38d99f03b893b38e1afa14c"
+  "sha256": "306b5c28556a95da98cf7169474d42bd55408dff75a9762a17d178565dac4489"
 }

@@ -1,8 +1,8 @@
 """Build deterministic I3 synthetic acoustic-stress corpus records.
 
-This builder derives telephony-bandwidth, G.711 codec, and numerically
-calibrated synthetic-noise development assets from the sealed 16 kHz
-clean multi-number/identifier parent case.
+This builder derives telephony-bandwidth, G.711 codec, lossy-compression,
+and numerically calibrated synthetic-noise development assets from the
+sealed 16 kHz clean multi-number/identifier parent case.
 
 It establishes deterministic lineage and transformation evidence only.
 Synthetic white-noise cases remain development evidence and do not
@@ -17,7 +17,9 @@ import json
 from pathlib import Path
 
 from app.adversarial_asr_ffmpeg import (
+    ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_ARGV,
     ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV,
+    ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_ARGV,
     ASR_ADVERSARIAL_FFMPEG_MULAW8K_ARGV,
     ASR_ADVERSARIAL_FFMPEG_NOISE_MODERATE_ARGV,
     ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV,
@@ -123,6 +125,43 @@ FFMPEG_ALAW8K_ENVIRONMENT_SHA256 = (
     "f96e582eb58515ef699ca0361fdf79d42"
 )
 
+AAC_CASE_ID = (
+    "stress.codec-aac.multi-number-id"
+)
+
+AAC_OUTPUT_RELATIVE_PATH = (
+    "lossy/"
+    "stress.codec-aac.multi-number-id.m4a"
+)
+
+AAC_TRANSFORMATION_RECORD_ID = (
+    "transform.stress-codec-aac-multi-number-id-v1"
+)
+
+FFMPEG_AAC_M4A_CBR32_ENVIRONMENT_SHA256 = (
+    "8a23edea7a13d66422dbd083023cf7e8"
+    "12cc8dbed8bb788d51fe799f9a62a877"
+)
+
+MP3_CASE_ID = (
+    "stress.codec-mp3.multi-number-id"
+)
+
+MP3_OUTPUT_RELATIVE_PATH = (
+    "lossy/"
+    "stress.codec-mp3.multi-number-id.mp3"
+)
+
+MP3_TRANSFORMATION_RECORD_ID = (
+    "transform.stress-codec-mp3-multi-number-id-v1"
+)
+
+FFMPEG_MP3_CBR32_ENVIRONMENT_SHA256 = (
+    "9f442ee2686f49578f817b29a7303241"
+    "b379b0b47d1743fc2d1684de77cb1bb3"
+)
+
+
 NOISE_MODERATE_CASE_ID = (
     "stress.noise-moderate.multi-number-id"
 )
@@ -212,6 +251,8 @@ def build_records() -> tuple[
     ASRAdversarialCorpusRecordBundle,
     ASRAdversarialCorpusRecordBundle,
     ASRAdversarialCorpusRecordBundle,
+    ASRAdversarialCorpusRecordBundle,
+    ASRAdversarialCorpusRecordBundle,
 ]:
     """Build the I3 synthetic acoustic-stress record portfolio."""
 
@@ -291,6 +332,58 @@ def build_records() -> tuple[
         )
     )
 
+    aac_transformation = (
+        build_asr_adversarial_corpus_transformation_record_v1(
+            ASRAdversarialCorpusTransformationRecord(
+                record_id=(
+                    AAC_TRANSFORMATION_RECORD_ID
+                ),
+                case_id=AAC_CASE_ID,
+                parent_audio_sha256=PARENT_AUDIO_SHA256,
+                tool_key="ffmpeg",
+                tool_version=FFMPEG_VERSION,
+                tool_environment_sha256=(
+                    FFMPEG_AAC_M4A_CBR32_ENVIRONMENT_SHA256
+                ),
+                argv=(
+                    ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_ARGV
+                ),
+                output_relative_path=(
+                    AAC_OUTPUT_RELATIVE_PATH
+                ),
+                expected_sample_rate_hz=16_000,
+                expected_channel_count=1,
+                expected_codec_name="aac",
+            )
+        )
+    )
+
+    mp3_transformation = (
+        build_asr_adversarial_corpus_transformation_record_v1(
+            ASRAdversarialCorpusTransformationRecord(
+                record_id=(
+                    MP3_TRANSFORMATION_RECORD_ID
+                ),
+                case_id=MP3_CASE_ID,
+                parent_audio_sha256=PARENT_AUDIO_SHA256,
+                tool_key="ffmpeg",
+                tool_version=FFMPEG_VERSION,
+                tool_environment_sha256=(
+                    FFMPEG_MP3_CBR32_ENVIRONMENT_SHA256
+                ),
+                argv=(
+                    ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_ARGV
+                ),
+                output_relative_path=(
+                    MP3_OUTPUT_RELATIVE_PATH
+                ),
+                expected_sample_rate_hz=16_000,
+                expected_channel_count=1,
+                expected_codec_name="mp3",
+            )
+        )
+    )
+
     moderate_noise_transformation = (
         build_asr_adversarial_corpus_transformation_record_v1(
             ASRAdversarialCorpusTransformationRecord(
@@ -355,6 +448,28 @@ def build_records() -> tuple[
                 ),
                 entries=(
                     ASRAdversarialCorpusDerivationPlanEntry(
+                        case_id=AAC_CASE_ID,
+                        parent_case_id=PARENT_CASE_ID,
+                        parent_relative_path=(
+                            PARENT_RELATIVE_PATH
+                        ),
+                        parent_audio_sha256=(
+                            PARENT_AUDIO_SHA256
+                        ),
+                        output_relative_path=(
+                            AAC_OUTPUT_RELATIVE_PATH
+                        ),
+                        provenance_record_sha256=(
+                            PROVENANCE_RECORD_SHA256
+                        ),
+                        rights_record_sha256=(
+                            RIGHTS_RECORD_SHA256
+                        ),
+                        transformation_record_sha256=(
+                            aac_transformation.sha256
+                        ),
+                    ),
+                    ASRAdversarialCorpusDerivationPlanEntry(
                         case_id=ALAW_CASE_ID,
                         parent_case_id=PARENT_CASE_ID,
                         parent_relative_path=(
@@ -374,6 +489,28 @@ def build_records() -> tuple[
                         ),
                         transformation_record_sha256=(
                             alaw_transformation.sha256
+                        ),
+                    ),
+                    ASRAdversarialCorpusDerivationPlanEntry(
+                        case_id=MP3_CASE_ID,
+                        parent_case_id=PARENT_CASE_ID,
+                        parent_relative_path=(
+                            PARENT_RELATIVE_PATH
+                        ),
+                        parent_audio_sha256=(
+                            PARENT_AUDIO_SHA256
+                        ),
+                        output_relative_path=(
+                            MP3_OUTPUT_RELATIVE_PATH
+                        ),
+                        provenance_record_sha256=(
+                            PROVENANCE_RECORD_SHA256
+                        ),
+                        rights_record_sha256=(
+                            RIGHTS_RECORD_SHA256
+                        ),
+                        transformation_record_sha256=(
+                            mp3_transformation.sha256
                         ),
                     ),
                     ASRAdversarialCorpusDerivationPlanEntry(
@@ -475,6 +612,8 @@ def build_records() -> tuple[
         alaw_transformation,
         moderate_noise_transformation,
         severe_usable_noise_transformation,
+        aac_transformation,
+        mp3_transformation,
         derivation_plan,
     )
 
@@ -486,6 +625,8 @@ def main() -> None:
         alaw_transformation,
         moderate_noise_transformation,
         severe_usable_noise_transformation,
+        aac_transformation,
+        mp3_transformation,
         derivation_plan,
     ) = build_records()
 
@@ -511,6 +652,18 @@ def main() -> None:
         transformation_root
         / f"{ALAW_CASE_ID}.json",
         alaw_transformation,
+    )
+
+    _write_if_changed(
+        transformation_root
+        / f"{AAC_CASE_ID}.json",
+        aac_transformation,
+    )
+
+    _write_if_changed(
+        transformation_root
+        / f"{MP3_CASE_ID}.json",
+        mp3_transformation,
     )
 
     _write_if_changed(
@@ -553,6 +706,14 @@ def main() -> None:
     print(
         "alaw_transformation_sha256:",
         alaw_transformation.sha256,
+    )
+    print(
+        "aac_transformation_sha256:",
+        aac_transformation.sha256,
+    )
+    print(
+        "mp3_transformation_sha256:",
+        mp3_transformation.sha256,
     )
     print(
         "moderate_noise_transformation_sha256:",

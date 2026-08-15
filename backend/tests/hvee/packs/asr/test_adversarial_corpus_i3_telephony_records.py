@@ -34,7 +34,7 @@ from scripts.build_adversarial_asr_corpus_v1_telephony_records import (
     PARENT_RELATIVE_PATH,
     PROVENANCE_RECORD_SHA256,
     RIGHTS_RECORD_SHA256,
-    build_records,
+    build_records as build_records_v2,
 )
 
 
@@ -64,8 +64,8 @@ EXPECTED_SEVERE_USABLE_TRANSFORMATION_SHA256 = (
 )
 
 EXPECTED_DERIVATION_PLAN_SHA256 = (
-    "0ff0a36c1c1b4236d56a6459d59cb3a"
-    "d53edcb7fa38d99f03b893b38e1afa14c"
+    "306b5c28556a95da98cf7169474d42bd"
+    "55408dff75a9762a17d178565dac4489"
 )
 
 EXPECTED_CORPUS_ID = (
@@ -106,6 +106,28 @@ EXPECTED_SEVERE_USABLE_ENVIRONMENT_SHA256 = (
     "410054a787ab53be40332d8efcec98c1"
     "91229d772d047626a1c073e946036043"
 )
+
+
+def build_records():
+    (
+        telephony,
+        mulaw,
+        alaw,
+        moderate,
+        severe,
+        _aac,
+        _mp3,
+        derivation_plan,
+    ) = build_records_v2()
+
+    return (
+        telephony,
+        mulaw,
+        alaw,
+        moderate,
+        severe,
+        derivation_plan,
+    )
 
 
 def test_i3_portfolio_record_identities_are_frozen():
@@ -453,7 +475,7 @@ def test_i3_severe_usable_noise_transformation_is_frozen():
     }
 
 
-def test_i3_derivation_portfolio_contains_exact_five_cases():
+def test_i3_derivation_portfolio_contains_exact_seven_cases():
     (
         _telephony,
         _mulaw,
@@ -485,7 +507,7 @@ def test_i3_derivation_portfolio_contains_exact_five_cases():
         "entries"
     ]
 
-    assert len(entries) == 5
+    assert len(entries) == 7
 
     assert [
         entry[
@@ -493,7 +515,9 @@ def test_i3_derivation_portfolio_contains_exact_five_cases():
         ]
         for entry in entries
     ] == [
+        "stress.codec-aac.multi-number-id",
         ALAW_CASE_ID,
+        "stress.codec-mp3.multi-number-id",
         MULAW_CASE_ID,
         NOISE_MODERATE_CASE_ID,
         NOISE_SEVERE_USABLE_CASE_ID,

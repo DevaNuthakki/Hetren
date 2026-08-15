@@ -233,6 +233,109 @@ ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_ARGV = (
     "{output}",
 )
 
+ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_RECIPE_KEY = (
+    "lossy-mp3-cbr32-multi-number-id-16000-v1"
+)
+
+ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "{input}",
+    "-map",
+    "0:a:0",
+    "-map_metadata",
+    "-1",
+    "-vn",
+    "-ac",
+    "1",
+    "-ar",
+    "16000",
+    "-threads",
+    "1",
+    "-c:a",
+    "libmp3lame",
+    "-b:a",
+    "32k",
+    "-abr",
+    "0",
+    "-reservoir",
+    "1",
+    "-joint_stereo",
+    "0",
+    "-id3v2_version",
+    "3",
+    "-write_id3v1",
+    "0",
+    "-write_xing",
+    "0",
+    "-f",
+    "mp3",
+    "{output}",
+)
+
+ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_RECIPE_KEY = (
+    "lossy-aac-m4a-cbr32-multi-number-id-16000-v1"
+)
+
+ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_ARGV = (
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-nostdin",
+    "-n",
+    "-i",
+    "{input}",
+    "-map",
+    "0:a:0",
+    "-map_metadata",
+    "-1",
+    "-vn",
+    "-ac",
+    "1",
+    "-ar",
+    "16000",
+    "-threads",
+    "1",
+    "-c:a",
+    "aac",
+    "-b:a",
+    "32k",
+    "-aac_coder",
+    "twoloop",
+    "-aac_ms",
+    "0",
+    "-aac_is",
+    "1",
+    "-aac_pns",
+    "1",
+    "-aac_tns",
+    "1",
+    "-aac_ltp",
+    "0",
+    "-aac_pred",
+    "0",
+    "-aac_pce",
+    "0",
+    "-movflags",
+    "+faststart",
+    "-use_editlist",
+    "1",
+    "-write_btrt",
+    "0",
+    "-write_prft",
+    "0",
+    "-movie_timescale",
+    "1000",
+    "-f",
+    "ipod",
+    "{output}",
+)
+
+
 _RECIPE_KEY_PATTERN = re.compile(
     r"^[a-z0-9]+(?:[._-][a-z0-9]+)*$"
 )
@@ -637,6 +740,35 @@ ASR_ADVERSARIAL_FFMPEG_NOISE_SEVERE_USABLE_RECIPE = (
         sample_rate_hz=16_000,
         channel_count=1,
         codec_name="pcm_s16le",
+    )
+)
+
+
+ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_ARGV
+        ),
+        sample_rate_hz=16_000,
+        channel_count=1,
+        codec_name="mp3",
+    )
+)
+
+ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_RECIPE = (
+    ASRAdversarialFFmpegRecipe(
+        recipe_key=(
+            ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_RECIPE_KEY
+        ),
+        argv=(
+            ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_ARGV
+        ),
+        sample_rate_hz=16_000,
+        channel_count=1,
+        codec_name="aac",
     )
 )
 
@@ -1099,6 +1231,12 @@ class ASRAdversarialFFmpeg:
 
 
 __all__ = [
+    "ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_AAC_M4A_CBR32_RECIPE_KEY",
+    "ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_ARGV",
+    "ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_RECIPE",
+    "ASR_ADVERSARIAL_FFMPEG_MP3_CBR32_RECIPE_KEY",
     "ASR_ADVERSARIAL_FFMPEG_ALAW8K_ARGV",
     "ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE",
     "ASR_ADVERSARIAL_FFMPEG_ALAW8K_RECIPE_KEY",
