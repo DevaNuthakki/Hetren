@@ -1206,3 +1206,26 @@ __all__ += [
     "get_asr_adversarial_minilibrispeech_case_v1",
     "verify_asr_adversarial_minilibrispeech_selection_v1",
 ]
+
+
+from hvee.packs.asr.adversarial_human_external_portfolio_v1 import (
+    ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_KEY,
+    ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_SCHEMA_VERSION,
+    ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_SHA256,
+    ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_VERSION,
+    ASRAdversarialHumanExternalPortfolioBundle,
+    build_asr_adversarial_human_external_portfolio_v1,
+    calculate_asr_adversarial_human_external_portfolio_sha256,
+    verify_asr_adversarial_human_external_portfolio_v1,
+)
+
+__all__ += (
+    "ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_KEY",
+    "ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_SCHEMA_VERSION",
+    "ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_SHA256",
+    "ASR_ADVERSARIAL_HUMAN_EXTERNAL_PORTFOLIO_VERSION",
+    "ASRAdversarialHumanExternalPortfolioBundle",
+    "build_asr_adversarial_human_external_portfolio_v1",
+    "calculate_asr_adversarial_human_external_portfolio_sha256",
+    "verify_asr_adversarial_human_external_portfolio_v1",
+)
