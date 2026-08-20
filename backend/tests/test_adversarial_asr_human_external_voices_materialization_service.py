@@ -786,6 +786,33 @@ def test_materializes_exact_controlled_fixture(
         "capture",
     }
 
+    source_media = next(
+        value
+        for value in result.media
+        if value.kind == "source"
+    )
+
+    capture_media = next(
+        value
+        for value in result.media
+        if value.kind == "capture"
+    )
+
+    assert (
+        source_media.capture_condition
+        is None
+    )
+
+    assert (
+        capture_media.require_capture_condition()
+        == service.ASRAdversarialVOiCESMaterializedCaptureCondition(
+            angle_degrees=10,
+            room="rm1",
+            distractor="none",
+            microphone_id=1,
+        )
+    )
+
     assert all(
         value.path.is_absolute()
         for value in result.media

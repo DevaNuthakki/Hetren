@@ -536,6 +536,34 @@ class ASRAdversarialVOiCESMaterializationDefinition:
             )
 
 
+@dataclass(frozen=True, slots=True)
+class ASRAdversarialVOiCESMaterializedCaptureCondition:
+    """Verified selection metadata for one materialized capture."""
+
+    angle_degrees: int
+    room: str
+    distractor: str
+    microphone_id: int
+
+    def __post_init__(self) -> None:
+        _require_positive_integer(
+            name="materialized VOiCES capture angle",
+            value=self.angle_degrees,
+        )
+        _require_non_empty_text(
+            name="materialized VOiCES capture room",
+            value=self.room,
+        )
+        _require_non_empty_text(
+            name="materialized VOiCES capture distractor",
+            value=self.distractor,
+        )
+        _require_positive_integer(
+            name="materialized VOiCES capture microphone id",
+            value=self.microphone_id,
+        )
+
+
 @dataclass(
     frozen=True,
     slots=True,
@@ -556,6 +584,10 @@ class ASRAdversarialVOiCESMaterializedMedia:
     sample_width_bytes: int
     sample_count: int
     duration_seconds: str
+    capture_condition: (
+        ASRAdversarialVOiCESMaterializedCaptureCondition
+        | None
+    ) = None
 
     def __post_init__(
         self,
@@ -635,6 +667,43 @@ class ASRAdversarialVOiCESMaterializedMedia:
             name="materialized VOiCES duration",
             value=self.duration_seconds,
         )
+
+        if (
+            self.capture_condition is not None
+            and not isinstance(
+                self.capture_condition,
+                ASRAdversarialVOiCESMaterializedCaptureCondition,
+            )
+        ):
+            raise ASRAdversarialVOiCESMaterializationError(
+                "materialized VOiCES capture condition is invalid."
+            )
+
+        if (
+            self.kind == "source"
+            and self.capture_condition is not None
+        ):
+            raise ASRAdversarialVOiCESMaterializationError(
+                "source media cannot contain a capture condition."
+            )
+
+    def require_capture_condition(
+        self,
+    ) -> ASRAdversarialVOiCESMaterializedCaptureCondition:
+        """Return verified capture metadata or fail closed."""
+
+        if (
+            self.kind != "capture"
+            or not isinstance(
+                self.capture_condition,
+                ASRAdversarialVOiCESMaterializedCaptureCondition,
+            )
+        ):
+            raise ASRAdversarialVOiCESMaterializationError(
+                "capture media requires a capture condition."
+            )
+
+        return self.capture_condition
 
 
 @dataclass(
@@ -1290,7 +1359,10 @@ def _selection_media_paths(
     *,
     selection: dict[str, object],
     definition: ASRAdversarialVOiCESMaterializationDefinition,
-) -> set[str]:
+) -> tuple[
+    set[str],
+    dict[str, ASRAdversarialVOiCESMaterializedCaptureCondition],
+]:
     summary = _expect_mapping(
         name="VOiCES selection summary",
         value=selection.get(
@@ -1406,7 +1478,11 @@ def _selection_media_paths(
             "VOiCES selection population changed."
         )
 
-    paths = set()
+    paths: set[str] = set()
+    capture_conditions_by_path: dict[
+        str,
+        ASRAdversarialVOiCESMaterializedCaptureCondition,
+    ] = {}
     capture_counts = Counter()
 
     for value in sources:
@@ -1566,6 +1642,17 @@ def _selection_media_paths(
                 "VOiCES selection contains duplicate paths."
             )
 
+        capture_conditions_by_path[
+            relative_path
+        ] = (
+            ASRAdversarialVOiCESMaterializedCaptureCondition(
+                angle_degrees=capture_angle,
+                room=room,
+                distractor=distractor,
+                microphone_id=mic_id,
+            )
+        )
+
         paths.add(
             relative_path
         )
@@ -1596,7 +1683,20 @@ def _selection_media_paths(
             "VOiCES selection media count changed."
         )
 
-    return paths
+    if (
+        len(
+            capture_conditions_by_path
+        )
+        != definition.expected_capture_file_count
+    ):
+        raise ASRAdversarialVOiCESMaterializationError(
+            "VOiCES capture-condition population changed."
+        )
+
+    return (
+        paths,
+        capture_conditions_by_path,
+    )
 
 
 def _verify_chain(
@@ -1753,8 +1853,12 @@ def _verify_cross_bindings(
 ) -> tuple[
     dict[str, dict[str, object]],
     dict[str, dict[str, object]],
+    dict[str, ASRAdversarialVOiCESMaterializedCaptureCondition],
 ]:
-    selection_paths = _selection_media_paths(
+    (
+        selection_paths,
+        capture_conditions_by_path,
+    ) = _selection_media_paths(
         selection=selection,
         definition=definition,
     )
@@ -2247,6 +2351,7 @@ def _verify_cross_bindings(
     return (
         manifest_records,
         report_records,
+        capture_conditions_by_path,
     )
 
 
@@ -2255,11 +2360,37 @@ def _verify_current_media(
     materialization_root: Path,
     manifest_records: dict[str, dict[str, object]],
     report_records: dict[str, dict[str, object]],
+    capture_conditions_by_path: dict[
+        str,
+        ASRAdversarialVOiCESMaterializedCaptureCondition,
+    ],
     definition: ASRAdversarialVOiCESMaterializationDefinition,
 ) -> tuple[
     ASRAdversarialVOiCESMaterializedMedia,
     ...,
 ]:
+    expected_capture_paths = {
+        relative_path
+        for relative_path, record in (
+            report_records.items()
+        )
+        if record.get(
+            "kind"
+        )
+        == "capture"
+    }
+
+    if (
+        set(
+            capture_conditions_by_path
+        )
+        != expected_capture_paths
+    ):
+        raise ASRAdversarialVOiCESMaterializationError(
+            "VOiCES capture-condition paths do not match "
+            "the verified capture population."
+        )
+
     _verify_exact_materialization_tree(
         materialization_root=materialization_root,
         expected_media_paths=set(
@@ -2516,8 +2647,18 @@ def _verify_current_media(
                 sample_width_bytes=materialized_sample_width,
                 sample_count=materialized_sample_count,
                 duration_seconds=materialized_duration,
+                capture_condition=(
+                    capture_conditions_by_path.get(
+                        relative_path
+                    )
+                ),
             )
         )
+
+        if materialized_kind == "capture":
+            materialized[
+                -1
+            ].require_capture_condition()
 
     if (
         len(
@@ -2776,6 +2917,7 @@ def _materialize_asr_adversarial_voices_evidence(
     (
         manifest_records,
         report_records,
+        capture_conditions_by_path,
     ) = _verify_cross_bindings(
         selection=selection,
         manifest=manifest,
@@ -2797,6 +2939,9 @@ def _materialize_asr_adversarial_voices_evidence(
         materialization_root=materialization_root,
         manifest_records=manifest_records,
         report_records=report_records,
+        capture_conditions_by_path=(
+            capture_conditions_by_path
+        ),
         definition=definition,
     )
 
