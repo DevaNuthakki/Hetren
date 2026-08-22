@@ -51,7 +51,8 @@ from hvee.packs.asr.adversarial_human_external_voices_babble_matched_control_v1 
 
 
 ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_SCHEMA_VERSION = 1
-ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_VERSION = "1.0.0"
+ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_VERSION = "1.0.1"
+ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE = 1e-12
 ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_KEY = (
     "hetren.asr.adversarial-human-external-"
     "voices-babble-matched-control-normalized-metrics"
@@ -142,6 +143,20 @@ def _mean(values: tuple[float, ...]) -> float:
         )
 
     return math.fsum(values) / len(values)
+
+
+def _canonical_metric_delta(value: float) -> float:
+    if math.isclose(
+        value,
+        0.0,
+        rel_tol=0.0,
+        abs_tol=(
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+        ),
+    ):
+        return 0.0
+
+    return value
 
 
 @dataclass(frozen=True, slots=True)
@@ -277,11 +292,15 @@ class ASRAdversarialVOiCESMatchedControlPairMetrics:
 
     @property
     def wer_delta(self) -> float:
-        return self.babble.evaluation.wer - self.control.evaluation.wer
+        return _canonical_metric_delta(
+            self.babble.evaluation.wer - self.control.evaluation.wer
+        )
 
     @property
     def cer_delta(self) -> float:
-        return self.babble.evaluation.cer - self.control.evaluation.cer
+        return _canonical_metric_delta(
+            self.babble.evaluation.cer - self.control.evaluation.cer
+        )
 
     @property
     def substitutions_delta(self) -> int:
@@ -386,10 +405,14 @@ def _pair_payload(
 def _direction_counts(
     values: tuple[float, ...],
 ) -> dict[str, int]:
+    canonical = tuple(
+        _canonical_metric_delta(value)
+        for value in values
+    )
     return {
-        "babble_higher": sum(value > 0.0 for value in values),
-        "equal": sum(value == 0.0 for value in values),
-        "babble_lower": sum(value < 0.0 for value in values),
+        "babble_higher": sum(value > 0.0 for value in canonical),
+        "equal": sum(value == 0.0 for value in canonical),
+        "babble_lower": sum(value < 0.0 for value in canonical),
     }
 
 
@@ -715,6 +738,13 @@ class ASRAdversarialVOiCESMatchedControlMetricsBundle:
                         "metric_key": NORMALIZED_DELETIONS_METRIC.key,
                         "metric_version": NORMALIZED_DELETIONS_METRIC.version,
                     },
+                },
+                "metric_equality": {
+                    "absolute_tolerance": (
+                        ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+                    ),
+                    "relative_tolerance": 0.0,
+                    "canonical_zero": True,
                 },
                 "pair_delta_direction": "babble_minus_control",
                 "aggregate_method": "equal_weight_macro_mean_over_16_pairs",

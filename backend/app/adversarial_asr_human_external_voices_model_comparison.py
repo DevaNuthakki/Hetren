@@ -19,6 +19,7 @@ import json
 import math
 
 from app.adversarial_asr_human_external_voices_matched_control_metrics import (
+    ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE,
     ASRAdversarialVOiCESMatchedControlCaseMetrics,
     ASRAdversarialVOiCESMatchedControlMetricsBundle,
     ASRAdversarialVOiCESMatchedControlMetricsError,
@@ -38,7 +39,7 @@ from hvee.packs.asr.adversarial_human_external_voices_babble_matched_control_v1 
 
 
 ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_SCHEMA_VERSION = 1
-ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_VERSION = "1.0.0"
+ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_VERSION = "1.0.1"
 ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_KEY = (
     "hetren.asr.adversarial-human-external-"
     "voices-babble-matched-control-model-comparison"
@@ -94,6 +95,20 @@ def _mean(values: tuple[float, ...]) -> float:
             "VOiCES model comparison mean requires values."
         )
     return math.fsum(values) / len(values)
+
+
+def _canonical_metric_delta(value: float) -> float:
+    if math.isclose(
+        value,
+        0.0,
+        rel_tol=0.0,
+        abs_tol=(
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+        ),
+    ):
+        return 0.0
+
+    return value
 
 
 def _model_identity(
@@ -282,11 +297,15 @@ class ASRAdversarialVOiCESCaseModelComparison:
 
     @property
     def wer_delta(self) -> float:
-        return self.candidate.evaluation.wer - self.baseline.evaluation.wer
+        return _canonical_metric_delta(
+            self.candidate.evaluation.wer - self.baseline.evaluation.wer
+        )
 
     @property
     def cer_delta(self) -> float:
-        return self.candidate.evaluation.cer - self.baseline.evaluation.cer
+        return _canonical_metric_delta(
+            self.candidate.evaluation.cer - self.baseline.evaluation.cer
+        )
 
     @property
     def substitutions_delta(self) -> int:
@@ -352,11 +371,15 @@ class ASRAdversarialVOiCESPairModelComparison:
 
     @property
     def wer_degradation_delta(self) -> float:
-        return self.candidate.wer_delta - self.baseline.wer_delta
+        return _canonical_metric_delta(
+            self.candidate.wer_delta - self.baseline.wer_delta
+        )
 
     @property
     def cer_degradation_delta(self) -> float:
-        return self.candidate.cer_delta - self.baseline.cer_delta
+        return _canonical_metric_delta(
+            self.candidate.cer_delta - self.baseline.cer_delta
+        )
 
     @property
     def substitutions_degradation_delta(self) -> int:
@@ -485,10 +508,14 @@ def _pair_payload(
 
 
 def _direction_counts(values: tuple[float, ...]) -> dict[str, int]:
+    canonical = tuple(
+        _canonical_metric_delta(value)
+        for value in values
+    )
     return {
-        "candidate_higher": sum(value > 0.0 for value in values),
-        "equal": sum(value == 0.0 for value in values),
-        "candidate_lower": sum(value < 0.0 for value in values),
+        "candidate_higher": sum(value > 0.0 for value in canonical),
+        "equal": sum(value == 0.0 for value in canonical),
+        "candidate_lower": sum(value < 0.0 for value in canonical),
     }
 
 
@@ -776,6 +803,13 @@ class ASRAdversarialVOiCESModelComparisonBundle:
                 "equal_case_weighting": True,
                 "raw_transcripts_compared": False,
                 "precomputed_b7_metrics_reverified": True,
+                "metric_equality": {
+                    "absolute_tolerance": (
+                        ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+                    ),
+                    "relative_tolerance": 0.0,
+                    "canonical_zero": True,
+                },
             },
             "cases": [_case_payload(value) for value in self.cases],
             "pairs": [_pair_payload(value) for value in self.pairs],

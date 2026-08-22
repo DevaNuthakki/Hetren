@@ -12,6 +12,7 @@ from app.adversarial_asr_human_external_voices_matched_control_campaign_service 
     execute_asr_adversarial_voices_babble_matched_control_campaign_v1,
 )
 from app.adversarial_asr_human_external_voices_matched_control_metrics import (
+    ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE,
     ASRAdversarialVOiCESMatchedControlMetricsBundle,
     build_asr_adversarial_voices_babble_matched_control_metrics_v1,
 )
@@ -283,7 +284,7 @@ def comparison(
 
 def test_constants_are_exact():
     assert ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_SCHEMA_VERSION == 1
-    assert ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_VERSION == "1.0.0"
+    assert ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_VERSION == "1.0.1"
     assert ASR_ADVERSARIAL_VOICES_MODEL_COMPARISON_KEY == (
         "hetren.asr.adversarial-human-external-"
         "voices-babble-matched-control-model-comparison"
@@ -400,6 +401,116 @@ def test_pair_difference_in_differences_is_exact(comparison):
     )
 
 
+@pytest.mark.parametrize(
+    ("candidate_value", "baseline_value"),
+    [
+        (
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+            0.0,
+        ),
+        (
+            0.0,
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+        ),
+    ],
+)
+def test_negligible_case_deltas_are_canonical_zero(
+    comparison,
+    candidate_value,
+    baseline_value,
+):
+    original = comparison.cases[0]
+    baseline = replace(
+        original.baseline,
+        evaluation=replace(
+            original.baseline.evaluation,
+            wer=baseline_value,
+            cer=baseline_value,
+        ),
+    )
+    candidate = replace(
+        original.candidate,
+        evaluation=replace(
+            original.candidate.evaluation,
+            wer=candidate_value,
+            cer=candidate_value,
+        ),
+    )
+    observed = replace(
+        original,
+        baseline=baseline,
+        candidate=candidate,
+    )
+
+    assert observed.wer_delta == 0.0
+    assert observed.cer_delta == 0.0
+
+
+@pytest.mark.parametrize(
+    ("candidate_delta", "baseline_delta"),
+    [
+        (
+            0.5
+            + ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+            0.5,
+        ),
+        (
+            0.5,
+            0.5
+            + ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+        ),
+    ],
+)
+def test_negligible_degradation_deltas_are_canonical_zero(
+    comparison,
+    candidate_delta,
+    baseline_delta,
+):
+    original = comparison.pairs[0]
+
+    def with_delta(value, delta):
+        babble = replace(
+            value.babble,
+            evaluation=replace(
+                value.babble.evaluation,
+                wer=delta,
+                cer=delta,
+            ),
+        )
+        control = replace(
+            value.control,
+            evaluation=replace(
+                value.control.evaluation,
+                wer=0.0,
+                cer=0.0,
+            ),
+        )
+        return replace(
+            value,
+            babble=babble,
+            control=control,
+        )
+
+    observed = replace(
+        original,
+        baseline=with_delta(
+            original.baseline,
+            baseline_delta,
+        ),
+        candidate=with_delta(
+            original.candidate,
+            candidate_delta,
+        ),
+    )
+
+    assert observed.wer_degradation_delta == 0.0
+    assert observed.cer_degradation_delta == 0.0
+
+
 def test_case_direction_counts_are_descriptive(comparison):
     assert comparison.aggregate["case_direction_counts"] == {
         "wer": {
@@ -477,6 +588,11 @@ def test_pair_macro_equals_mean_of_pair_differences(comparison):
 
 def test_payload_names_delta_directions_explicitly(comparison):
     methodology = comparison.payload["methodology"]
+    assert methodology["metric_equality"] == {
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 0.0,
+        "canonical_zero": True,
+    }
     assert methodology["case_delta"] == "candidate_minus_baseline"
     assert methodology["pair_noise_degradation"] == "babble_minus_control"
     assert methodology["difference_in_differences"] == (

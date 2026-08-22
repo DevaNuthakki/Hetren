@@ -13,6 +13,7 @@ from app.adversarial_asr_human_external_voices_matched_control_campaign_service 
     execute_asr_adversarial_voices_babble_matched_control_campaign_v1,
 )
 from app.adversarial_asr_human_external_voices_matched_control_metrics import (
+    ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE,
     ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_KEY,
     ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_SCHEMA_VERSION,
     ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_VERSION,
@@ -327,7 +328,11 @@ def metrics_bundle(
 
 def test_metrics_constants_are_exact():
     assert ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_SCHEMA_VERSION == 1
-    assert ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_VERSION == "1.0.0"
+    assert ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_VERSION == "1.0.1"
+    assert (
+        ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+        == 1e-12
+    )
     assert ASR_ADVERSARIAL_VOICES_MATCHED_CONTROL_METRICS_KEY == (
         "hetren.asr.adversarial-human-external-"
         "voices-babble-matched-control-normalized-metrics"
@@ -459,6 +464,11 @@ def test_pair_direction_counts_are_descriptive_not_thresholds(metrics_bundle):
 
 def test_payload_binds_canonical_metric_and_evaluator_versions(metrics_bundle):
     methodology = metrics_bundle.payload["methodology"]
+    assert methodology["metric_equality"] == {
+        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 0.0,
+        "canonical_zero": True,
+    }
     assert methodology["normalization"] == {
         "key": BASIC_TEXT_NORMALIZATION.key,
         "version": BASIC_TEXT_NORMALIZATION.version,
@@ -585,6 +595,108 @@ def test_equal_deltas_are_preserved_without_reinterpretation(tmp_path):
         "equal": 16,
         "babble_lower": 0,
     }
+
+
+@pytest.mark.parametrize(
+    ("babble_value", "control_value"),
+    [
+        (
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+            0.0,
+        ),
+        (
+            0.0,
+            ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+            / 2,
+        ),
+    ],
+)
+def test_negligible_pair_deltas_are_canonical_zero(
+    metrics_bundle,
+    babble_value,
+    control_value,
+):
+    original = metrics_bundle.pairs[0]
+    babble = replace(
+        original.babble,
+        evaluation=replace(
+            original.babble.evaluation,
+            wer=babble_value,
+            cer=babble_value,
+        ),
+    )
+    control = replace(
+        original.control,
+        evaluation=replace(
+            original.control.evaluation,
+            wer=control_value,
+            cer=control_value,
+        ),
+    )
+    observed = replace(
+        original,
+        babble=babble,
+        control=control,
+    )
+
+    assert observed.wer_delta == 0.0
+    assert observed.cer_delta == 0.0
+
+
+def test_pair_deltas_outside_tolerance_are_preserved(metrics_bundle):
+    original = metrics_bundle.pairs[0]
+    meaningful = (
+        ASR_ADVERSARIAL_VOICES_METRIC_EQUALITY_ABSOLUTE_TOLERANCE
+        * 2
+    )
+    babble = replace(
+        original.babble,
+        evaluation=replace(
+            original.babble.evaluation,
+            wer=meaningful,
+            cer=meaningful,
+        ),
+    )
+    control = replace(
+        original.control,
+        evaluation=replace(
+            original.control.evaluation,
+            wer=0.0,
+            cer=0.0,
+        ),
+    )
+    positive = replace(
+        original,
+        babble=babble,
+        control=control,
+    )
+    negative_babble = replace(
+        original.babble,
+        evaluation=replace(
+            original.babble.evaluation,
+            wer=0.0,
+            cer=0.0,
+        ),
+    )
+    negative_control = replace(
+        original.control,
+        evaluation=replace(
+            original.control.evaluation,
+            wer=meaningful,
+            cer=meaningful,
+        ),
+    )
+    negative = replace(
+        original,
+        babble=negative_babble,
+        control=negative_control,
+    )
+
+    assert positive.wer_delta > 0.0
+    assert positive.cer_delta > 0.0
+    assert negative.wer_delta < 0.0
+    assert negative.cer_delta < 0.0
 
 
 def test_partial_b6_campaign_is_rejected(tmp_path):
