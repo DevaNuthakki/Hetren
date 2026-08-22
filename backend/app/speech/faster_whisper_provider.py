@@ -65,7 +65,7 @@ class FasterWhisperASRProvider:
         *,
         default_model_name: str = "large-v3-turbo",
         device: str = "cpu",
-        compute_type: str = "int8",
+        compute_type: str = "int8_float32",
         model_loader: WhisperModelLoader | None = None,
     ):
         normalized_model = default_model_name.strip()
@@ -160,7 +160,9 @@ class FasterWhisperASRProvider:
         ):
             raise TranscriptionError(
                 "faster-whisper runtime device "
-                "does not match the requested device."
+                "does not match the requested device: "
+                f"requested={self._device!r}; "
+                f"observed={observed_device!r}."
             )
 
         if (
@@ -172,7 +174,9 @@ class FasterWhisperASRProvider:
             raise TranscriptionError(
                 "faster-whisper runtime compute type "
                 "does not match the requested "
-                "compute type."
+                "compute type: "
+                f"requested={self._compute_type!r}; "
+                f"observed={observed_compute_type!r}."
             )
 
         return _LoadedWhisperModel(

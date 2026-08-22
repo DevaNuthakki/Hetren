@@ -295,7 +295,9 @@ def test_local_runner_settings_use_safe_asr_defaults(
         "mock-asr-foundation"
     )
     assert settings.asr_device == "cpu"
-    assert settings.asr_compute_type == "int8"
+    assert settings.asr_compute_type == (
+        "int8_float32"
+    )
 
 
 @pytest.mark.parametrize(

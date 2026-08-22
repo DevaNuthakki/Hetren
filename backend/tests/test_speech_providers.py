@@ -125,6 +125,64 @@ def test_registry_builds_configured_faster_whisper(
     assert result.model_name == "small.en"
 
 
+def test_registry_uses_concrete_cpu_compute_type_by_default(
+    monkeypatch,
+    tmp_path: Path,
+):
+    constructor_calls: list[dict[str, str]] = []
+
+    class FakeWhisperModel:
+        def __init__(
+            self,
+            model_name: str,
+            *,
+            device: str,
+            compute_type: str,
+        ):
+            constructor_calls.append(
+                {
+                    "model_name": model_name,
+                    "device": device,
+                    "compute_type": compute_type,
+                }
+            )
+            self.model = SimpleNamespace(
+                device=device,
+                compute_type=compute_type,
+            )
+
+        def transcribe(self, _audio_path, **_kwargs):
+            return (
+                [SimpleNamespace(text=" concrete cpu ")],
+                SimpleNamespace(),
+            )
+
+    monkeypatch.setitem(
+        sys.modules,
+        "faster_whisper",
+        SimpleNamespace(
+            WhisperModel=FakeWhisperModel,
+        ),
+    )
+
+    provider = get_asr_provider(
+        "faster-whisper",
+        model_name="small.en",
+    )
+    result = provider.transcribe(
+        build_audio_file(tmp_path)
+    )
+
+    assert constructor_calls == [
+        {
+            "model_name": "small.en",
+            "device": "cpu",
+            "compute_type": "int8_float32",
+        }
+    ]
+    assert result.compute_type == "int8_float32"
+
+
 def test_faster_whisper_uses_run_model_override(
     monkeypatch,
     tmp_path: Path,
@@ -366,7 +424,7 @@ def test_faster_whisper_loads_model_lazily_and_reuses_it(
         {
             "model_name": "small.en",
             "device": "cpu",
-            "compute_type": "int8",
+            "compute_type": "int8_float32",
         }
     ]
     assert transcription_calls == [
@@ -535,12 +593,16 @@ def test_faster_whisper_rejects_invalid_loaded_model(
         (
             "cpu",
             "float16",
-            "compute type does not match",
+            "compute type does not match.*"
+            "requested='int8'.*"
+            "observed='float16'",
         ),
         (
             "cuda",
             "int8",
-            "device does not match",
+            "device does not match.*"
+            "requested='cpu'.*"
+            "observed='cuda'",
         ),
     ],
 )
