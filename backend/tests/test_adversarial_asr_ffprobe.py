@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -489,7 +490,43 @@ def test_detects_executable_mutation_after_initialization(
 
 def test_timeout_is_controlled(
     tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
 ):
+    observed_timeouts: list[float] = []
+
+    def controlled_run(
+        command: list[str],
+        **kwargs,
+    ) -> subprocess.CompletedProcess:
+        if command[1:] == ["-version"]:
+            kwargs["stdout"].write(
+                b"ffprobe version 7.1.1-test\n"
+                b"fake build configuration\n"
+            )
+
+            return subprocess.CompletedProcess(
+                command,
+                returncode=0,
+            )
+
+        timeout = kwargs["timeout"]
+        observed_timeouts.append(
+            timeout
+        )
+
+        raise subprocess.TimeoutExpired(
+            command,
+            timeout,
+        )
+
+    monkeypatch.setattr(
+        (
+            "app.adversarial_asr_ffprobe."
+            "subprocess.run"
+        ),
+        controlled_run,
+    )
+
     probe = _probe(
         tmp_path,
         timeout_seconds=0.5,
@@ -505,6 +542,10 @@ def test_timeout_is_controlled(
                 "timeout.wav",
             )
         )
+
+    assert observed_timeouts == [
+        0.5,
+    ]
 
 
 def test_nonzero_exit_does_not_leak_stderr(
