@@ -27,7 +27,7 @@ def get_asr_provider(
     *,
     model_name: str | None = None,
     device: str = "cpu",
-    compute_type: str = "int8",
+    compute_type: str = "int8_float32",
 ) -> ASRProvider:
     """
     Build an explicitly configured ASR provider.

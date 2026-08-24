@@ -1,0 +1,56 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-transformation-record.en-us",
+      "type": "source_visible_adversarial_corpus_transformation_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "argv": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-n",
+        "-i",
+        "{input}",
+        "-map_metadata",
+        "-1",
+        "-ar",
+        "16000",
+        "-ac",
+        "1",
+        "-c:a",
+        "pcm_s16le",
+        "{output}"
+      ],
+      "case_id": "clean.number-measurement",
+      "expected_output": {
+        "channel_count": 1,
+        "codec_name": "pcm_s16le",
+        "relative_path": "clean/clean.number-measurement.wav",
+        "sample_rate_hz": 16000
+      },
+      "parent_audio_sha256": "1e5aeed9bf1d861b041de5283b96c78b1e1e09b71bba3f01e15f68c12e50f3bb",
+      "record_id": "transform.clean-number-measurement-pcm16k-v1",
+      "tool": {
+        "environment_sha256": "e400ae359be1dc681937ba5caefc2d1fa077247c8939aa04aee0067e67fc87fc",
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "f9f87b23361bdb4b53aef1d28321b9dbefbb26b846fc42fca7a8f81df84223bd"
+}

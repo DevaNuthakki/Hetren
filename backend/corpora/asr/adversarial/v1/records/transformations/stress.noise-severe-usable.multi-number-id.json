@@ -1,0 +1,64 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-transformation-record.en-us",
+      "type": "source_visible_adversarial_corpus_transformation_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "argv": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-n",
+        "-filter_complex_threads",
+        "1",
+        "-i",
+        "{input}",
+        "-filter_complex",
+        "anoisesrc=sample_rate=16000:amplitude=1:color=white:seed=39039[noise];[noise]volume=0.089164902364147938:precision=double[scaled_noise];[0:a][scaled_noise]amix=inputs=2:duration=first:dropout_transition=0:normalize=0[mixed]",
+        "-map",
+        "[mixed]",
+        "-map_metadata",
+        "-1",
+        "-ar",
+        "16000",
+        "-ac",
+        "1",
+        "-threads",
+        "1",
+        "-c:a",
+        "pcm_s16le",
+        "{output}"
+      ],
+      "case_id": "stress.noise-severe-usable.multi-number-id",
+      "expected_output": {
+        "channel_count": 1,
+        "codec_name": "pcm_s16le",
+        "relative_path": "noise/stress.noise-severe-usable.multi-number-id.wav",
+        "sample_rate_hz": 16000
+      },
+      "parent_audio_sha256": "23f9af39d01afe47e932bd061467bd0b5f49dc8bf520c2a8296a4556c54f1297",
+      "record_id": "transform.stress-noise-severe-usable-multi-number-id-v1",
+      "tool": {
+        "environment_sha256": "410054a787ab53be40332d8efcec98c191229d772d047626a1c073e946036043",
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "1443bdb65921415ccc8949ae55022b1fca540af6ca42fcd625831324bb767ac1"
+}

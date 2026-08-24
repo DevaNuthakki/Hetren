@@ -379,6 +379,10 @@ def create_case(
     *,
     uploads_root: Path,
     configure_critical_terminology: bool = False,
+    source_audio_name: str = "support-call.wav",
+    source_audio_bytes: bytes = (
+        b"ovrin-runner-asr-end-to-end-audio"
+    ),
 ) -> RunnerASREndToEndCase:
     suffix = uuid4().hex
 
@@ -386,20 +390,38 @@ def create_case(
     terminology_v1_sha256: str | None = None
     terminology_v2_sha256: str | None = None
     terminology_profile_key: str | None = None
+    safe_audio_name = Path(
+        source_audio_name
+    ).name
+
+    if (
+        not safe_audio_name
+        or safe_audio_name
+        != source_audio_name
+    ):
+        raise ValueError(
+            "E2E source audio name must be a safe file name."
+        )
+
+    if not source_audio_bytes:
+        raise ValueError(
+            "E2E source audio must not be empty."
+        )
+
     source_audio_path = (
         uploads_root
         / "datasets"
         / suffix
         / "test-cases"
         / "audio"
-        / "support-call.wav"
+        / safe_audio_name
     )
     source_audio_path.parent.mkdir(
         parents=True,
         exist_ok=True,
     )
     source_audio_path.write_bytes(
-        b"ovrin-runner-asr-end-to-end-audio"
+        source_audio_bytes
     )
 
     db = harness.session_factory()
@@ -2025,6 +2047,429 @@ def test_postgres_runner_uses_run_pinned_critical_terminology_vocabulary(
             assert job.status == "completed"
             assert job.completed_at is not None
             assert job.error_message is None
+
+        finally:
+            db.close()
+
+    finally:
+        cleanup_case(
+            runner_http_harness,
+            case,
+        )
+
+
+
+@pytest.mark.parametrize(
+    (
+        "audio_file_name",
+        "expected_sha256",
+        "expected_byte_length",
+        "expected_media_type",
+    ),
+    (
+        (
+            "stress.codec-aac.multi-number-id.m4a",
+            (
+                "1f303beee42f35d86f920487fbbb67e8"
+                "70576f7278a1d3b6bd97a7bd6e67fb09"
+            ),
+            28_701,
+            "audio/mp4",
+        ),
+        (
+            "stress.codec-mp3.multi-number-id.mp3",
+            (
+                "938fc367f744dee780d57c8b7e64f9dd"
+                "781fe1e8599abbe4bb0987b8f844d2f3"
+            ),
+            27_981,
+            "audio/mpeg",
+        ),
+    ),
+    ids=(
+        "official-aac-m4a",
+        "official-mp3",
+    ),
+)
+def test_postgres_runner_executes_official_lossy_audio_end_to_end(
+    runner_http_harness: RunnerHTTPHarness,
+    tmp_path: Path,
+    monkeypatch,
+    audio_file_name: str,
+    expected_sha256: str,
+    expected_byte_length: int,
+    expected_media_type: str,
+):
+    import hashlib
+
+    backend_root = (
+        Path(__file__)
+        .resolve()
+        .parents[1]
+    )
+
+    official_audio_path = (
+        backend_root
+        / "corpora"
+        / "asr"
+        / "adversarial"
+        / "v1"
+        / "generated"
+        / "lossy"
+        / audio_file_name
+    )
+
+    if not official_audio_path.is_file():
+        pytest.skip(
+            "Official I3 lossy media has not been "
+            "generated in this environment."
+        )
+
+    official_audio_bytes = (
+        official_audio_path.read_bytes()
+    )
+
+    assert (
+        len(
+            official_audio_bytes
+        )
+        == expected_byte_length
+    )
+
+    assert (
+        hashlib.sha256(
+            official_audio_bytes
+        ).hexdigest()
+        == expected_sha256
+    )
+
+    audio_suffix = (
+        official_audio_path.suffix.lower()
+    )
+
+    assert audio_suffix in {
+        ".m4a",
+        ".mp3",
+    }
+
+    monkeypatch.chdir(
+        tmp_path
+    )
+
+    uploads_root = (
+        tmp_path
+        / "uploads"
+    )
+
+    case = create_case(
+        runner_http_harness,
+        uploads_root=uploads_root,
+        source_audio_name=audio_file_name,
+        source_audio_bytes=(
+            official_audio_bytes
+        ),
+    )
+
+    temporary_audio_paths: list[
+        Path
+    ] = []
+
+    original_transcribe = (
+        MockASRProvider.transcribe
+    )
+
+    def verify_transcription_input(
+        self,
+        audio_path: str | Path,
+        model_name: str | None = None,
+    ):
+        temporary_audio_path = Path(
+            audio_path
+        )
+
+        assert (
+            temporary_audio_path.exists()
+        )
+
+        assert (
+            temporary_audio_path.name
+            == f"input{audio_suffix}"
+        )
+
+        observed_bytes = (
+            temporary_audio_path.read_bytes()
+        )
+
+        assert (
+            observed_bytes
+            == official_audio_bytes
+        )
+
+        assert (
+            len(
+                observed_bytes
+            )
+            == expected_byte_length
+        )
+
+        assert (
+            hashlib.sha256(
+                observed_bytes
+            ).hexdigest()
+            == expected_sha256
+        )
+
+        temporary_audio_paths.append(
+            temporary_audio_path
+        )
+
+        return original_transcribe(
+            self,
+            temporary_audio_path,
+            model_name=model_name,
+        )
+
+    monkeypatch.setattr(
+        MockASRProvider,
+        "transcribe",
+        verify_transcription_input,
+    )
+
+    try:
+        with LocalRunnerClient(
+            api_base_url="http://testserver",
+            credential=case.credential,
+            timeout_seconds=5,
+            transport=(
+                runner_http_harness.transport
+            ),
+        ) as client:
+            cycle_result = (
+                run_one_local_runner_cycle(
+                    client=client,
+                    settings=(
+                        build_settings(
+                            case
+                        )
+                    ),
+                    system_info={
+                        "platform": (
+                            "postgres-asr-"
+                            "lossy-integration"
+                        ),
+                    },
+                )
+            )
+
+        assert (
+            cycle_result.status
+            == "completed"
+        )
+
+        assert (
+            cycle_result.job_public_id
+            == case.job_public_id
+        )
+
+        assert (
+            cycle_result.result_payload
+            is not None
+        )
+
+        assert (
+            cycle_result.result_payload[
+                "evaluation_run_id"
+            ]
+            == case.evaluation_run_id
+        )
+
+        assert (
+            cycle_result.result_payload[
+                "test_case_id"
+            ]
+            == case.test_case_id
+        )
+
+        assert (
+            len(
+                temporary_audio_paths
+            )
+            == 1
+        )
+
+        temporary_audio_path = (
+            temporary_audio_paths[0]
+        )
+
+        assert (
+            temporary_audio_path.name
+            == f"input{audio_suffix}"
+        )
+
+        assert not (
+            temporary_audio_path.exists()
+        )
+
+        assert (
+            case.source_audio_path.exists()
+        )
+
+        assert (
+            case.source_audio_path.name
+            == audio_file_name
+        )
+
+        source_bytes = (
+            case.source_audio_path.read_bytes()
+        )
+
+        assert (
+            source_bytes
+            == official_audio_bytes
+        )
+
+        assert (
+            hashlib.sha256(
+                source_bytes
+            ).hexdigest()
+            == expected_sha256
+        )
+
+        request_paths = [
+            path
+            for _method, path
+            in (
+                runner_http_harness
+                .transport
+                .requests
+            )
+        ]
+
+        context_path = (
+            f"/runners/jobs/"
+            f"{case.job_public_id}"
+            "/asr/context"
+        )
+
+        audio_path = (
+            f"/runners/jobs/"
+            f"{case.job_public_id}"
+            "/asr/audio"
+        )
+
+        result_path = (
+            f"/runners/jobs/"
+            f"{case.job_public_id}"
+            "/asr/result"
+        )
+
+        assert (
+            context_path
+            in request_paths
+        )
+
+        assert (
+            audio_path
+            in request_paths
+        )
+
+        assert (
+            result_path
+            in request_paths
+        )
+
+        assert (
+            request_paths.index(
+                context_path
+            )
+            < request_paths.index(
+                audio_path
+            )
+            < request_paths.index(
+                result_path
+            )
+        )
+
+        db = (
+            runner_http_harness
+            .session_factory()
+        )
+
+        try:
+            seals = (
+                db.query(
+                    models.EvaluationInputArtifactSeal
+                )
+                .filter(
+                    (
+                        models
+                        .EvaluationInputArtifactSeal
+                        .run_id
+                    )
+                    == case.evaluation_run_id,
+                    (
+                        models
+                        .EvaluationInputArtifactSeal
+                        .test_case_id
+                    )
+                    == case.test_case_id,
+                    (
+                        models
+                        .EvaluationInputArtifactSeal
+                        .artifact_role
+                    )
+                    == "input_audio",
+                )
+                .all()
+            )
+
+            assert len(
+                seals
+            ) == 1
+
+            seal = seals[0]
+
+            assert (
+                seal.media_type
+                == expected_media_type
+            )
+
+            assert (
+                seal.content_sha256
+                == expected_sha256
+            )
+
+            assert (
+                seal.byte_length
+                == expected_byte_length
+            )
+
+            job = db.get(
+                models.RunnerJob,
+                case.job_id,
+            )
+
+            evaluation_run = db.get(
+                models.EvaluationRun,
+                case.evaluation_run_id,
+            )
+
+            assert job is not None
+
+            assert (
+                job.status
+                == "completed"
+            )
+
+            assert (
+                evaluation_run
+                is not None
+            )
+
+            assert (
+                evaluation_run.status
+                == "evaluated"
+            )
 
         finally:
             db.close()

@@ -133,7 +133,7 @@ class LocalRunnerSettings(BaseSettings):
     )
 
     asr_compute_type: str = Field(
-        default="int8",
+        default="int8_float32",
         min_length=1,
         max_length=100,
         validation_alias=(

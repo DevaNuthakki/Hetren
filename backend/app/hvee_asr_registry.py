@@ -598,3 +598,101 @@ def resolve_asr_critical_terminology_fidelity_registry(
         findings_metric=findings_metric,
         evaluator=evaluator,
     )
+
+
+from hvee.packs.asr import (
+    ASR_RELIABILITY_PROFILE_V1,
+    ASRReliabilityProfileDefinition,
+    verify_asr_reliability_profile_v1,
+)
+
+
+@dataclass(frozen=True, slots=True)
+class ASRReliabilityProfileRegistry:
+    """Persisted metric/evaluator rows bound to one profile identity."""
+
+    profile_key: str
+    profile_version: str
+    profile_sha256: str
+    metric_definitions: tuple[HveeMetricDefinition, ...]
+    evaluator_versions: tuple[HveeEvaluatorVersion, ...]
+
+    def metric_by_identity(
+        self,
+        *,
+        key: str,
+        version: str,
+    ) -> HveeMetricDefinition:
+        for metric in self.metric_definitions:
+            if metric.key == key and metric.version == version:
+                return metric
+
+        raise KeyError(
+            "metric identity is not registered by the ASR "
+            "Reliability Profile"
+        )
+
+    def evaluator_by_identity(
+        self,
+        *,
+        key: str,
+        version: str,
+    ) -> HveeEvaluatorVersion:
+        for evaluator in self.evaluator_versions:
+            if evaluator.key == key and evaluator.version == version:
+                return evaluator
+
+        raise KeyError(
+            "evaluator identity is not registered by the ASR "
+            "Reliability Profile"
+        )
+
+
+def resolve_asr_reliability_profile_registry(
+    db: Session,
+    *,
+    profile: ASRReliabilityProfileDefinition = (
+        ASR_RELIABILITY_PROFILE_V1
+    ),
+) -> ASRReliabilityProfileRegistry:
+    """Resolve every canonical registry identity required by B10G.
+
+    The profile remains source-versioned while its metric and evaluator
+    identities use the existing conflict-safe persistence registry.  The
+    caller owns the surrounding transaction; this function never commits.
+    """
+
+    verified = verify_asr_reliability_profile_v1(profile)
+
+    metric_definitions = tuple(
+        resolve_metric_definition(
+            db,
+            binding.metric,
+        )
+        for binding in verified.bindings
+    )
+
+    evaluator_versions = []
+    evaluator_identities: set[tuple[str, str]] = set()
+
+    for binding in verified.bindings:
+        identity = binding.evaluator_identity
+
+        if identity in evaluator_identities:
+            continue
+
+        evaluator_identities.add(identity)
+        evaluator_versions.append(
+            resolve_evaluator_version(
+                db,
+                binding.evaluator,
+            )
+        )
+
+    return ASRReliabilityProfileRegistry(
+        profile_key=verified.key,
+        profile_version=verified.version,
+        profile_sha256=verified.sha256,
+        metric_definitions=metric_definitions,
+        evaluator_versions=tuple(evaluator_versions),
+    )

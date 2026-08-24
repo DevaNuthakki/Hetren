@@ -25,3 +25,6 @@ uploads/
 
 # Local API upload test files
 backend/test-upload/
+
+# Deterministically generated adversarial ASR corpus audio
+backend/corpora/asr/adversarial/v1/generated/

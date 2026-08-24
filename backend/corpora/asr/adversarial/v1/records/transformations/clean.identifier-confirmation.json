@@ -1,0 +1,56 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-transformation-record.en-us",
+      "type": "source_visible_adversarial_corpus_transformation_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "argv": [
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-nostdin",
+        "-n",
+        "-i",
+        "{input}",
+        "-map_metadata",
+        "-1",
+        "-ar",
+        "16000",
+        "-ac",
+        "1",
+        "-c:a",
+        "pcm_s16le",
+        "{output}"
+      ],
+      "case_id": "clean.identifier-confirmation",
+      "expected_output": {
+        "channel_count": 1,
+        "codec_name": "pcm_s16le",
+        "relative_path": "clean/clean.identifier-confirmation.wav",
+        "sample_rate_hz": 16000
+      },
+      "parent_audio_sha256": "2ed4f6de5b2ae6ea96a7b49c635d030e2679a42c55e5511911b82bbc56227936",
+      "record_id": "transform.clean-identifier-confirmation-pcm16k-v1",
+      "tool": {
+        "environment_sha256": "e400ae359be1dc681937ba5caefc2d1fa077247c8939aa04aee0067e67fc87fc",
+        "key": "ffmpeg",
+        "version": "5.1.9-0+deb12u1"
+      }
+    },
+    "schema_version": 1
+  },
+  "sha256": "a19bc2dac6c67eaae14813cd6842ff013a37ae2fdb114bb2c40a5aa646387139"
+}

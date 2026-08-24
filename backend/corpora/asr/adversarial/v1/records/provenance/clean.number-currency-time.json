@@ -1,0 +1,38 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-provenance-record.en-us",
+      "type": "source_visible_adversarial_corpus_provenance_record",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "case_id": "clean.number-currency-time",
+      "generator": {
+        "amplitude": 100,
+        "executable_sha256": "0a2f26e328f1dd4cec926987d3dc22bf841879132fd3aa497dd4fcad0d4d77a3",
+        "key": "espeak-ng",
+        "pitch": 50,
+        "platform_key": "linux-amd64",
+        "speed_wpm": 150,
+        "version": "1.51+dfsg-10+deb12u2",
+        "voice_key": "en-us"
+      },
+      "record_id": "source.clean-number-currency-time-v1",
+      "source_kind": "synthetic_tts",
+      "transcript_sha256": "4bac8f9591f3baa62018f15676bb91f6b61d876cef773e8e99f783c8b7e30f82"
+    },
+    "schema_version": 1
+  },
+  "sha256": "ae8dac7e2893bbe643950b1b6ec642611a2bf5c38406c77e6bc9dcff7e44ba8a"
+}

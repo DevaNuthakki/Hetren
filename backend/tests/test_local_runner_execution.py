@@ -1708,7 +1708,7 @@ def test_run_one_cycle_uses_real_asr_executor_by_default(
             "provider_name": "mock_local",
             "model_name": "mock-asr-foundation",
             "device": "cpu",
-            "compute_type": "int8",
+            "compute_type": "int8_float32",
         }
     ]
 

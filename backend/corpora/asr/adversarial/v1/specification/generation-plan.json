@@ -1,0 +1,84 @@
+{
+  "payload": {
+    "artifact": {
+      "key": "hetren.asr.adversarial-corpus-generation-plan.en-us",
+      "type": "source_visible_adversarial_corpus_generation_plan",
+      "version": "1.0.0"
+    },
+    "evidence_boundary": {
+      "certification_issued": false,
+      "development_evidence_only": true,
+      "human_acoustic_diversity_established": false,
+      "official_release_verdict_modified": false,
+      "production_qualified": false,
+      "qualification_threshold_applied": false,
+      "release_enforcement_eligible": false,
+      "rights_adjudicated": false,
+      "speaker_attributes_inferred": false
+    },
+    "record": {
+      "corpus_id": "qualification.synthetic-v1",
+      "corpus_version": "1.0.0",
+      "entries": [
+        {
+          "case_id": "clean.identifier-account-order",
+          "output_relative_path": "source/clean.identifier-account-order.wav",
+          "provenance_record_sha256": "36bf894c8d87bbc77f87952a205edaa3bdd1ef7f22a4b75d4dce676a8cdf76bf",
+          "rights_record_sha256": "0efb0b85af7394612abab52185fc43811ecd5f362a7976f696e01ed39952845c",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.identifier-confirmation",
+          "output_relative_path": "source/clean.identifier-confirmation.wav",
+          "provenance_record_sha256": "a11556ba44a0381a0e3e6035166b1263f62d9a6a5ae815fe5151e2a21f9efd02",
+          "rights_record_sha256": "ac9ded0f23b45f96d0f1842cf3d85e343d275faba8a1b298c4bae84d6b1eff5b",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.identifier-multiple",
+          "output_relative_path": "source/clean.identifier-multiple.wav",
+          "provenance_record_sha256": "d0de5c0b7de55db1b940f4fbac6f5018d2edc80f14e1003b58ca968c1ba6fdfd",
+          "rights_record_sha256": "8448ae71a3b9a4c157d9301451a4f86ff8b32a627829b94aa9a7305ac04bd9b6",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.multi-number-id",
+          "output_relative_path": "source/clean.multi-number-id.wav",
+          "provenance_record_sha256": "f804bf7391cc39286bc54d5727ebe01f61d3a460f169a1b9b4d9d43a903113b4",
+          "rights_record_sha256": "0b38e02c548a775ed4db61603fdcc68148840d3396feaef59ac8d51c6b3c6ae7",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.number-currency-time",
+          "output_relative_path": "source/clean.number-currency-time.wav",
+          "provenance_record_sha256": "ae8dac7e2893bbe643950b1b6ec642611a2bf5c38406c77e6bc9dcff7e44ba8a",
+          "rights_record_sha256": "f3b89d00b8c9be37055514fa6a4292592768bd797ccde8e9fb8776acfaaf10be",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.number-measurement",
+          "output_relative_path": "source/clean.number-measurement.wav",
+          "provenance_record_sha256": "84474e713f6889d12c2baeb7fc08efe0cc7b17ef43ee33fb6facf23ab20bccef",
+          "rights_record_sha256": "aeb089aa364b4d2c0fec5731b74cda61b484c6433db68553e79c55665f07d5ec",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "clean.number-percentage",
+          "output_relative_path": "source/clean.number-percentage.wav",
+          "provenance_record_sha256": "a5ee833742b53fb0a79bfb2b039ff03255053538ed5895e699ab9aed25f06105",
+          "rights_record_sha256": "067555dd4af75f64c65343edc37614ca7fdf58d124fc379bf081ac9b8564c41b",
+          "transformation_record_sha256": null
+        },
+        {
+          "case_id": "control.clean-critical",
+          "output_relative_path": "source/control.clean-critical.wav",
+          "provenance_record_sha256": "30d7a75e8ad8dca1f03a3576d167a12b62bff7df2fbd5bfe7a2e825771dde1c4",
+          "rights_record_sha256": "cfcc0861946a6fe96da954f6efda69e745e7bd2533e1f9b8718e0084d7bcdb14",
+          "transformation_record_sha256": null
+        }
+      ]
+    },
+    "schema_version": 1
+  },
+  "sha256": "7c3f4a729a490ea2471f86ef4077e1c4eb38f5c095ba29e66373c139a14e1c57"
+}
