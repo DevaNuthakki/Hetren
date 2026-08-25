@@ -187,6 +187,7 @@ jobs:
               tests/test_content_hashing.py \
               tests/test_adversarial_asr_ffprobe.py \
               tests/test_adversarial_asr_ffprobe_integration.py \
+              tests/test_adversarial_asr_brutal_media_integration.py \
               tests/test_adversarial_asr_synthetic_tts_integration.py
 
   frontend:
