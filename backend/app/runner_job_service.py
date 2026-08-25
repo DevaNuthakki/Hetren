@@ -39,6 +39,7 @@ MAX_EXPIRED_JOB_RECOVERY_BATCH = 1000
 SUPPORTED_RUNNER_JOB_TYPES = frozenset(
     {
         "asr_evaluation",
+        "incident_replay_compatibility",
     }
 )
 

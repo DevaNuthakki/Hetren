@@ -7,13 +7,14 @@ from types import SimpleNamespace
 
 import pytest
 
+import app.incident_runner_compatibility_execution as incident_compatibility_execution
 import app.local_runner_execution as local_runner_execution
 from app.local_runner_execution import (
     GENERIC_EXECUTION_ERROR,
     GENERIC_EXECUTION_TIMEOUT_ERROR,
     ASRRunnerExecutionResult,
     ASRRunnerJobExecutor,
-    ExecutionControl,
+    build_default_runner_job_executor,    ExecutionControl,
     JobControlWorker,
     LeaseRenewalWorker,
     LocalRunnerCycleResult,
@@ -1803,3 +1804,345 @@ def test_explicit_executor_skips_default_provider_factory(
         "execution_mode": "test",
         "evaluation_run_id": 42,
     }
+
+
+def _incident_compatibility_job():
+    return build_job(
+        job_type="incident_replay_compatibility",
+    ).model_copy(
+        update={
+            "required_capabilities": [
+                "asr",
+                "incident_replay",
+            ],
+            "input_payload": {
+                "schema_version": 1,
+                "type": (
+                    "incident_replay_compatibility_request"
+                ),
+                "evidence": {
+                    "runner_test_placeholder": True,
+                },
+            },
+        }
+    )
+
+
+def test_default_runner_selects_incident_compatibility_without_asr_provider(
+    monkeypatch,
+):
+    job = _incident_compatibility_job()
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    def reject_provider_initialization(*args, **kwargs):
+        raise AssertionError(
+            "Incident compatibility must not initialize "
+            "an ASR provider."
+        )
+
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        reject_provider_initialization,
+    )
+
+    executor = build_default_runner_job_executor(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CAPABILITIES=[
+                "incident_replay",
+                "asr",
+            ],
+        ),
+        job=job,
+        claim_token="ovrin_claim_test-token",
+    )
+
+    assert isinstance(
+        executor,
+        incident_compatibility_execution.IncidentCompatibilityRunnerJobExecutor,
+    )
+
+
+def test_incident_compatibility_executor_observes_only_proven_runner_state(
+    monkeypatch,
+):
+    job = _incident_compatibility_job()
+
+    captured = {}
+
+    expected_bundle = SimpleNamespace(
+        payload={
+            "compatibility": {
+                "status": "blocked_unobserved",
+                "ready_for_materialization": False,
+            },
+            "evidence_boundary": {
+                "environment_materialized": False,
+                "replay_executed": False,
+                "reproduction_claimed": False,
+                "qualification_authority": False,
+            },
+        },
+        sha256="a" * 64,
+    )
+
+    def fake_evaluate(**kwargs):
+        captured.update(kwargs)
+        return expected_bundle
+
+    monkeypatch.setattr(
+        incident_compatibility_execution,
+        "evaluate_incident_replay_compatibility_request",
+        fake_evaluate,
+    )
+
+    executor = (
+        incident_compatibility_execution
+        .IncidentCompatibilityRunnerJobExecutor(
+            settings=build_settings(
+                OVRIN_RUNNER_CAPABILITIES=[
+                    "incident_replay",
+                    "asr",
+                ],
+            ),
+        )
+    )
+
+    result = executor.execute(
+        job,
+        ExecutionControl(),
+    )
+
+    observation = captured["observation"]
+
+    assert observation.capabilities == (
+        "asr",
+        "incident_replay",
+    )
+
+    assert observation.deployment_key is None
+    assert observation.deployment_version is None
+    assert observation.provider_key is None
+    assert observation.provider_version is None
+    assert observation.model_key is None
+    assert observation.model_version is None
+    assert observation.model_artifact_sha256 is None
+    assert observation.source_code_sha256 is None
+    assert observation.configuration_sha256 is None
+    assert observation.runtime_environment_sha256 is None
+    assert observation.host_environment_sha256 is None
+    assert observation.exact_context_components == ()
+    assert observation.supported_materializations == ()
+    assert observation.unsupported_materializations == ()
+
+    assert captured["required_capabilities"] == (
+        "asr",
+        "incident_replay",
+    )
+
+    assert result == {
+        "schema_version": 1,
+        "type": "incident_replay_compatibility_result",
+        "compatibility": {
+            "payload": expected_bundle.payload,
+            "sha256": "a" * 64,
+        },
+    }
+
+
+def test_incident_compatibility_executor_rejects_modified_capability_contract():
+    job = _incident_compatibility_job().model_copy(
+        update={
+            "required_capabilities": [
+                "asr",
+            ],
+        }
+    )
+
+    executor = (
+        incident_compatibility_execution
+        .IncidentCompatibilityRunnerJobExecutor(
+            settings=build_settings(
+                OVRIN_RUNNER_CAPABILITIES=[
+                    "asr",
+                    "incident_replay",
+                ],
+            ),
+        )
+    )
+
+    with pytest.raises(
+        incident_compatibility_execution
+        .IncidentCompatibilityRunnerExecutionError,
+        match="capability contract is invalid",
+    ):
+        executor.execute(
+            job,
+            ExecutionControl(),
+        )
+
+
+def test_incident_compatibility_executor_honors_cancellation_before_evaluation(
+    monkeypatch,
+):
+    job = _incident_compatibility_job()
+
+    def reject_evaluation(**kwargs):
+        raise AssertionError(
+            "Cancelled compatibility job must not evaluate."
+        )
+
+    monkeypatch.setattr(
+        incident_compatibility_execution,
+        "evaluate_incident_replay_compatibility_request",
+        reject_evaluation,
+    )
+
+    control = ExecutionControl()
+    control.request_stop("cancelled")
+
+    executor = (
+        incident_compatibility_execution
+        .IncidentCompatibilityRunnerJobExecutor(
+            settings=build_settings(
+                OVRIN_RUNNER_CAPABILITIES=[
+                    "asr",
+                    "incident_replay",
+                ],
+            ),
+        )
+    )
+
+    with pytest.raises(
+        RunnerJobCancelledError,
+    ):
+        executor.execute(
+            job,
+            control,
+        )
+
+
+def test_incident_compatibility_default_cycle_uses_generic_completion(
+    monkeypatch,
+):
+    job = _incident_compatibility_job()
+
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    expected_bundle = SimpleNamespace(
+        payload={
+            "compatibility": {
+                "status": "blocked_unobserved",
+                "ready_for_materialization": False,
+            },
+            "evidence_boundary": {
+                "environment_materialized": False,
+                "models_loaded": False,
+                "replay_executed": False,
+                "transcriptions_executed": False,
+                "reproduction_claimed": False,
+                "model_failure_verified": False,
+                "contract_promoted": False,
+                "qualification_authority": False,
+            },
+        },
+        sha256="b" * 64,
+    )
+
+    def fake_evaluate(**kwargs):
+        return expected_bundle
+
+    def reject_provider_initialization(*args, **kwargs):
+        raise AssertionError(
+            "Incident compatibility must not initialize "
+            "an ASR provider."
+        )
+
+    monkeypatch.setattr(
+        incident_compatibility_execution,
+        "evaluate_incident_replay_compatibility_request",
+        fake_evaluate,
+    )
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        reject_provider_initialization,
+    )
+
+    result = run_one_local_runner_cycle(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CAPABILITIES=[
+                "asr",
+                "incident_replay",
+            ],
+        ),
+        system_info={
+            "platform": "test",
+        },
+    )
+
+    assert result.status == "completed"
+    assert result.job_public_id == job.public_id
+
+    assert result.result_payload == {
+        "schema_version": 1,
+        "type": "incident_replay_compatibility_result",
+        "compatibility": {
+            "payload": expected_bundle.payload,
+            "sha256": "b" * 64,
+        },
+    }
+
+    call_names = [
+        call[0]
+        for call in client.calls
+    ]
+
+    assert "complete" in call_names
+    assert "submit_asr_result" not in call_names
+    assert "context" not in call_names
+    assert "download" not in call_names
+    assert "fail" not in call_names
+
+    complete_call = next(
+        call
+        for call in client.calls
+        if call[0] == "complete"
+    )
+
+    assert complete_call[1]["result_payload"] == (
+        result.result_payload
+    )
+
+    evidence_boundary = (
+        result.result_payload[
+            "compatibility"
+        ]["payload"]["evidence_boundary"]
+    )
+
+    assert evidence_boundary[
+        "environment_materialized"
+    ] is False
+    assert evidence_boundary[
+        "replay_executed"
+    ] is False
+    assert evidence_boundary[
+        "reproduction_claimed"
+    ] is False
+    assert evidence_boundary[
+        "qualification_authority"
+    ] is False

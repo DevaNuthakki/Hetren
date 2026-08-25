@@ -9,6 +9,9 @@ from threading import Event, Lock, Thread
 from time import monotonic
 from typing import Literal, Protocol
 
+from app.incident_runner_compatibility_execution import (
+    IncidentCompatibilityRunnerJobExecutor,
+)
 from app.local_runner_client import (
     LocalRunnerClient,
     LocalRunnerClientError,
@@ -710,6 +713,14 @@ def build_default_runner_job_executor(
     claimed. Unsupported job types retain the controlled placeholder
     executor so the existing safe failure path remains active.
     """
+    if (
+        job.job_type
+        == IncidentCompatibilityRunnerJobExecutor.supported_job_type
+    ):
+        return IncidentCompatibilityRunnerJobExecutor(
+            settings=settings,
+        )
+
     if job.job_type == "asr_evaluation":
         return ASRRunnerJobExecutor(
             client=client,
