@@ -37,6 +37,20 @@ from hvee.core.incident_environment_materialization import (
 from hvee.core.incident_intake import (
     verify_incident_intake_bundle,
 )
+from hvee.core.incident_governance_assurance import (
+    IncidentGovernanceAssuranceDefinition,
+    IncidentGovernanceAssuranceProtocolDefinition,
+    IncidentGovernanceDisposition,
+    IncidentGovernanceIntegrationVerificationContext,
+    IncidentGovernanceReviewer,
+    IncidentGovernanceReviewerDecision,
+    IncidentGovernanceReviewerKind,
+    IncidentGovernanceReviewerRole,
+    build_incident_governance_assurance_bundle,
+    build_incident_governance_assurance_protocol_bundle,
+    verify_incident_governance_assurance_bundle,
+    verify_incident_governance_assurance_protocol_bundle,
+)
 from hvee.core.incident_integration_gate import (
     build_incident_integration_gate_bundle,
     verify_incident_integration_gate_bundle,
@@ -303,7 +317,7 @@ def _completed_replay_operations(
     return operations
 
 
-def test_real_incident_mode_chain_is_verified_indeterminate():
+def _build_real_incident_mode_chain():
     fixture = (
         _load_real_fixture_module()
     )
@@ -1056,5 +1070,398 @@ def test_real_incident_mode_chain_is_verified_indeterminate():
             comparison_observation=(
                 comparison_observation
             ),
+        )
+    )
+
+    return {
+        "intake": intake,
+        "preparation": preparation,
+        "manifest": manifest,
+        "compatibility": compatibility,
+        "compatibility_observation": (
+            compatibility_observation
+        ),
+        "materialization": materialization,
+        "controlled_replay": controlled_replay,
+        "reproduction": reproduction,
+        "comparison_observation": (
+            comparison_observation
+        ),
+        "integration": integration,
+    }
+
+
+def test_real_incident_mode_chain_is_verified_indeterminate():
+    chain = _build_real_incident_mode_chain()
+
+    integration = chain[
+        "integration"
+    ]
+
+    assert integration.payload[
+        "integration"
+    ]["status"] == "verified_indeterminate"
+
+    assert integration.payload[
+        "integration"
+    ]["integration_verified"] is True
+
+    assert integration.payload[
+        "evidence_boundary"
+    ]["governance_assurance_completed"] is False
+
+
+def test_real_incident_mode_chain_reaches_governance_assurance():
+    chain = _build_real_incident_mode_chain()
+
+    intake = chain["intake"]
+    preparation = chain["preparation"]
+    manifest = chain["manifest"]
+    compatibility = chain["compatibility"]
+    compatibility_observation = chain[
+        "compatibility_observation"
+    ]
+    materialization = chain[
+        "materialization"
+    ]
+    controlled_replay = chain[
+        "controlled_replay"
+    ]
+    reproduction = chain["reproduction"]
+    comparison_observation = chain[
+        "comparison_observation"
+    ]
+    integration = chain["integration"]
+
+    verification = (
+        IncidentGovernanceIntegrationVerificationContext(
+            intake_payload=intake.payload,
+            expected_intake_sha256=(
+                intake.sha256
+            ),
+            replay_preparation_payload=(
+                preparation.payload
+            ),
+            expected_replay_preparation_sha256=(
+                preparation.sha256
+            ),
+            environment_manifest_payload=(
+                manifest.payload
+            ),
+            expected_environment_manifest_sha256=(
+                manifest.sha256
+            ),
+            runner_compatibility_payload=(
+                compatibility.payload
+            ),
+            expected_runner_compatibility_sha256=(
+                compatibility.sha256
+            ),
+            required_capabilities=(
+                _REQUIRED_CAPABILITIES
+            ),
+            compatibility_observation=(
+                compatibility_observation
+            ),
+            environment_materialization_payload=(
+                materialization.payload
+            ),
+            expected_environment_materialization_sha256=(
+                materialization.sha256
+            ),
+            controlled_replay_payload=(
+                controlled_replay.payload
+            ),
+            expected_controlled_replay_sha256=(
+                controlled_replay.sha256
+            ),
+            reproduction_evidence_payload=(
+                reproduction.payload
+            ),
+            expected_reproduction_evidence_sha256=(
+                reproduction.sha256
+            ),
+            comparison_observation=(
+                comparison_observation
+            ),
+        )
+    )
+
+    reviewers = (
+        IncidentGovernanceReviewer(
+            role=(
+                IncidentGovernanceReviewerRole
+                .EVALUATION_REVIEWER
+            ),
+            key_id=(
+                "incident-evaluation-reviewer-001"
+            ),
+            affiliation_key="hetren-reliability",
+            reviewer_kind=(
+                IncidentGovernanceReviewerKind.HUMAN
+            ),
+            qualification_sha256=(
+                _sha256_bytes(
+                    b"incident-evaluation-reviewer-qualification"
+                )
+            ),
+            authorization_sha256=(
+                _sha256_bytes(
+                    b"incident-evaluation-reviewer-authorization"
+                )
+            ),
+            independence_attestation_sha256=(
+                _sha256_bytes(
+                    b"incident-evaluation-reviewer-independence"
+                )
+            ),
+        ),
+        IncidentGovernanceReviewer(
+            role=(
+                IncidentGovernanceReviewerRole
+                .RISK_REVIEWER
+            ),
+            key_id="incident-risk-reviewer-001",
+            affiliation_key="hetren-risk",
+            reviewer_kind=(
+                IncidentGovernanceReviewerKind.HUMAN
+            ),
+            qualification_sha256=(
+                _sha256_bytes(
+                    b"incident-risk-reviewer-qualification"
+                )
+            ),
+            authorization_sha256=(
+                _sha256_bytes(
+                    b"incident-risk-reviewer-authorization"
+                )
+            ),
+            independence_attestation_sha256=(
+                _sha256_bytes(
+                    b"incident-risk-reviewer-independence"
+                )
+            ),
+        ),
+        IncidentGovernanceReviewer(
+            role=(
+                IncidentGovernanceReviewerRole
+                .GOVERNANCE_APPROVER
+            ),
+            key_id=(
+                "incident-governance-council"
+            ),
+            affiliation_key="hetren-governance",
+            reviewer_kind=(
+                IncidentGovernanceReviewerKind
+                .GOVERNANCE_BODY
+            ),
+            qualification_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-council-qualification"
+                )
+            ),
+            authorization_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-council-authorization"
+                )
+            ),
+            independence_attestation_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-council-independence"
+                )
+            ),
+        ),
+    )
+
+    protocol_definition = (
+        IncidentGovernanceAssuranceProtocolDefinition(
+            review_id=(
+                "incident-governance-review"
+            ),
+            review_version="1.0.0",
+            integration_gate_sha256=(
+                integration.sha256
+            ),
+            reviewers=reviewers,
+            review_procedure_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-review-procedure"
+                )
+            ),
+            reviewer_qualification_policy_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-reviewer-qualification-policy"
+                )
+            ),
+            conflict_of_interest_policy_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-conflict-policy"
+                )
+            ),
+            authority_policy_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-authority-policy"
+                )
+            ),
+        )
+    )
+
+    protocol = (
+        build_incident_governance_assurance_protocol_bundle(
+            integration_gate=integration,
+            integration_verification=verification,
+            definition=protocol_definition,
+        )
+    )
+
+    assert (
+        verify_incident_governance_assurance_protocol_bundle(
+            payload=protocol.payload,
+            expected_sha256=protocol.sha256,
+            integration_gate=integration,
+            integration_verification=verification,
+            definition=protocol_definition,
+        )
+    )
+
+    decisions = tuple(
+        IncidentGovernanceReviewerDecision(
+            role=reviewer.role,
+            reviewer_key_id=reviewer.key_id,
+            integration_gate_sha256=(
+                integration.sha256
+            ),
+            disposition=(
+                IncidentGovernanceDisposition
+                .APPROVED_FOR_ASSURANCE
+            ),
+            rationale_code=(
+                "verified-incident-evidence"
+            ),
+            rationale_sha256=(
+                _sha256_bytes(
+                    (
+                        "incident-governance-rationale-"
+                        f"{reviewer.role.value}"
+                    ).encode("utf-8")
+                )
+            ),
+            decision_record_sha256=(
+                _sha256_bytes(
+                    (
+                        "incident-governance-decision-"
+                        f"{reviewer.role.value}"
+                    ).encode("utf-8")
+                )
+            ),
+            evidence_review_attestation_sha256=(
+                _sha256_bytes(
+                    (
+                        "incident-governance-evidence-review-"
+                        f"{reviewer.role.value}"
+                    ).encode("utf-8")
+                )
+            ),
+        )
+        for reviewer in reviewers
+    )
+
+    definition = (
+        IncidentGovernanceAssuranceDefinition(
+            review_id=(
+                protocol_definition.review_id
+            ),
+            review_version=(
+                protocol_definition.review_version
+            ),
+            protocol_sha256=protocol.sha256,
+            integration_gate_sha256=(
+                integration.sha256
+            ),
+            review_environment_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-review-environment"
+                )
+            ),
+            independence_attestation_sha256=(
+                _sha256_bytes(
+                    b"incident-governance-review-independence"
+                )
+            ),
+            decisions=decisions,
+        )
+    )
+
+    assurance = (
+        build_incident_governance_assurance_bundle(
+            protocol=protocol,
+            protocol_definition=(
+                protocol_definition
+            ),
+            integration_gate=integration,
+            integration_verification=verification,
+            definition=definition,
+        )
+    )
+
+    assert assurance.payload[
+        "review"
+    ]["status"] == "assured"
+
+    assert assurance.payload[
+        "review"
+    ]["unanimous_approval"] is True
+
+    assert assurance.payload[
+        "sealed_evidence"
+    ]["integration_gate_reverified"] is True
+
+    boundary = assurance.payload[
+        "evidence_boundary"
+    ]
+
+    assert boundary[
+        "governance_assurance_completed"
+    ] is True
+
+    assert boundary[
+        "model_failure_verified"
+    ] is False
+
+    assert boundary[
+        "causal_explanation_claimed"
+    ] is False
+
+    assert boundary[
+        "counterexample_confirmed"
+    ] is False
+
+    assert boundary[
+        "contract_promoted"
+    ] is False
+
+    assert boundary[
+        "blocking_release_gate_enabled"
+    ] is False
+
+    assert boundary[
+        "release_authority_granted"
+    ] is False
+
+    assert boundary[
+        "qualification_authority"
+    ] is False
+
+    assert (
+        verify_incident_governance_assurance_bundle(
+            payload=assurance.payload,
+            expected_sha256=assurance.sha256,
+            protocol=protocol,
+            protocol_definition=(
+                protocol_definition
+            ),
+            integration_gate=integration,
+            integration_verification=verification,
+            definition=definition,
         )
     )
