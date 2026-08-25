@@ -41,6 +41,7 @@ SUPPORTED_RUNNER_JOB_TYPES = frozenset(
         "asr_evaluation",
         "incident_replay_compatibility",
         "incident_environment_materialization",
+        "incident_controlled_replay",
     }
 )
 

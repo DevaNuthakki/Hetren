@@ -9,6 +9,9 @@ from threading import Event, Lock, Thread
 from time import monotonic
 from typing import Literal, Protocol
 
+from app.incident_controlled_replay_execution import (
+    IncidentControlledReplayRunnerJobExecutor,
+)
 from app.incident_environment_materialization_execution import (
     IncidentEnvironmentMaterializationRunnerJobExecutor,
 )
@@ -716,6 +719,14 @@ def build_default_runner_job_executor(
     claimed. Unsupported job types retain the controlled placeholder
     executor so the existing safe failure path remains active.
     """
+    if (
+        job.job_type
+        == IncidentControlledReplayRunnerJobExecutor.supported_job_type
+    ):
+        return IncidentControlledReplayRunnerJobExecutor(
+            settings=settings,
+        )
+
     if (
         job.job_type
         == IncidentEnvironmentMaterializationRunnerJobExecutor.supported_job_type
