@@ -70,15 +70,81 @@ def test_existing_and_required_new_cases_are_distinct():
         is ASRBrutalCaseSource.REQUIRED_NEW_CASE
     }
 
-    assert len(existing) == 10
-    assert len(required_new) == 3
+    assert len(existing) == 11
+    assert len(required_new) == 2
     assert existing.isdisjoint(required_new)
 
+    assert "control.clean-critical" in existing
+
     assert {
-        "brutal.terminology.clean",
         "brutal.terminology.telephony-noise",
         "brutal.compound-critical.telephony-noise",
     } == required_new
+
+
+def test_existing_clean_terminology_case_is_reused():
+    matches = tuple(
+        case
+        for case
+        in ASR_BRUTAL_VALIDATION_CASES_V1
+        if case.case_id == "control.clean-critical"
+    )
+
+    assert len(matches) == 1
+
+    case = matches[0]
+
+    assert case.source is (
+        ASRBrutalCaseSource.EXISTING_CORPUS
+    )
+
+    assert case.stress_families == (
+        ASRBrutalStressFamily.CONTROL,
+    )
+
+    assert (
+        ASRBrutalSemanticDimension
+        .CRITICAL_TERMINOLOGY
+        in case.semantic_dimensions
+    )
+
+
+
+def test_derived_telephony_noise_cases_preserve_compound_semantics():
+    expected_dimensions = (
+        ASRBrutalSemanticDimension.CRITICAL_NUMBER,
+        ASRBrutalSemanticDimension.CRITICAL_IDENTIFIER,
+        ASRBrutalSemanticDimension.CRITICAL_TERMINOLOGY,
+    )
+
+    expected_stress = (
+        ASRBrutalStressFamily.TELEPHONY,
+        ASRBrutalStressFamily.NOISE,
+    )
+
+    by_id = {
+        case.case_id: case
+        for case
+        in ASR_BRUTAL_VALIDATION_CASES_V1
+    }
+
+    for case_id in (
+        "brutal.terminology.telephony-noise",
+        "brutal.compound-critical.telephony-noise",
+    ):
+        case = by_id[case_id]
+
+        assert case.source is (
+            ASRBrutalCaseSource.REQUIRED_NEW_CASE
+        )
+
+        assert case.stress_families == expected_stress
+
+        assert (
+            case.semantic_dimensions
+            == expected_dimensions
+        )
+
 
 
 def test_brutal_v1_covers_all_stress_families():

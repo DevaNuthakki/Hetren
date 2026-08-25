@@ -406,14 +406,15 @@ ASR_BRUTAL_VALIDATION_CASES_V1 = (
     ),
 
     # ---------------------------------------------------------
-    # Required new terminology-bearing controls / stress.
+    # Existing terminology-bearing clean control.
     #
-    # These are obligations only. This plan does NOT claim their
-    # audio assets already exist.
+    # control.clean-critical is already part of the canonical
+    # adversarial corpus and has materialized audio. Do not
+    # manufacture a duplicate clean terminology case.
     # ---------------------------------------------------------
     _case(
-        "brutal.terminology.clean",
-        ASRBrutalCaseSource.REQUIRED_NEW_CASE,
+        "control.clean-critical",
+        ASRBrutalCaseSource.EXISTING_CORPUS,
         (
             ASRBrutalStressFamily.CONTROL,
         ),
@@ -421,6 +422,13 @@ ASR_BRUTAL_VALIDATION_CASES_V1 = (
             ASRBrutalSemanticDimension.CRITICAL_TERMINOLOGY,
         ),
     ),
+
+    # ---------------------------------------------------------
+    # Required new terminology-bearing stress derivatives.
+    #
+    # These remain obligations until their derived audio,
+    # transformation provenance, and corpus bindings verify.
+    # ---------------------------------------------------------
     _case(
         "brutal.terminology.telephony-noise",
         ASRBrutalCaseSource.REQUIRED_NEW_CASE,
@@ -429,6 +437,8 @@ ASR_BRUTAL_VALIDATION_CASES_V1 = (
             ASRBrutalStressFamily.NOISE,
         ),
         (
+            ASRBrutalSemanticDimension.CRITICAL_NUMBER,
+            ASRBrutalSemanticDimension.CRITICAL_IDENTIFIER,
             ASRBrutalSemanticDimension.CRITICAL_TERMINOLOGY,
         ),
     ),
