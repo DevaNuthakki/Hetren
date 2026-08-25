@@ -525,17 +525,29 @@ def _prepared_artifact_receipts(
                 "prepared artifact receipt is not exact"
             )
 
-        normalized.append(
-            {
-                "kind": kind,
-                "reference_sha256": reference,
-                "expected_byte_length": expected_length,
-                "media_type": _require_text(
-                    name="prepared artifact media type",
-                    value=receipt["media_type"],
-                ),
-            }
+        media_type = _require_text(
+            name="prepared artifact media type",
+            value=receipt["media_type"],
         )
+
+        # Stage 2 verifies the complete incident evidence package.
+        # Stage 7 independently reacquires only artifacts that are
+        # inputs to controlled replay execution. Non-execution
+        # evidence such as incident reports and reference
+        # transcripts remains verified upstream but is not a
+        # controlled-replay execution artifact.
+        if kind in {
+            "source_audio",
+            "transport_trace",
+        }:
+            normalized.append(
+                {
+                    "kind": kind,
+                    "reference_sha256": reference,
+                    "expected_byte_length": expected_length,
+                    "media_type": media_type,
+                }
+            )
 
     ordered = tuple(
         sorted(

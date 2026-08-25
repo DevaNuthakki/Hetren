@@ -788,3 +788,115 @@ def test_transcript_helper_hashes_exact_utf8():
     )
 
     assert first != second
+
+
+def test_non_execution_evidence_receipt_is_not_replay_artifact():
+    report = _receipt(
+        kind="incident_report",
+        digest=_sha("3"),
+        length=9,
+        media_type="application/json",
+    )
+
+    trace = _receipt(
+        kind="transport_trace",
+        digest=_sha("2"),
+        length=8,
+        media_type="application/json",
+    )
+
+    preparation = _preparation(
+        receipts=[
+            report,
+            _receipt(),
+            trace,
+        ],
+        operations=[
+            "verify_intake_commitment",
+            "verify_artifact_manifest",
+            "restore_runtime_context",
+            "restore_audio_context",
+            "restore_transport_context",
+            "stage_source_audio",
+            "stage_transport_trace",
+            "execute_isolated_replay",
+            "capture_replay_output",
+            "compare_behavior_commitments",
+        ],
+    )
+
+    artifacts = tuple(
+        sorted(
+            (
+                _artifact_observation(),
+                _artifact_observation(
+                    kind="transport_trace",
+                    reference=_sha("2"),
+                    expected_length=8,
+                    media_type="application/json",
+                    observed=_sha("2"),
+                    observed_length=8,
+                ),
+            ),
+            key=lambda value: value.identity,
+        )
+    )
+
+    operations = (
+        "verify_intake_commitment",
+        "verify_artifact_manifest",
+        "restore_runtime_context",
+        "restore_audio_context",
+        "restore_transport_context",
+        "stage_source_audio",
+        "stage_transport_trace",
+        "execute_isolated_replay",
+        "capture_replay_output",
+    )
+
+    bundle = (
+        replay.build_incident_controlled_replay_bundle(
+            **_builder_kwargs(
+                preparation=preparation,
+                execution=_execution(
+                    operations=operations,
+                    artifacts=artifacts,
+                ),
+            )
+        )
+    )
+
+    assert (
+        bundle.payload["execution"][
+            "artifact_reverification"
+        ]["count"]
+        == 2
+    )
+
+
+def test_non_execution_evidence_receipt_must_still_be_exact():
+    report = _receipt(
+        kind="incident_report",
+        digest=_sha("3"),
+        length=9,
+        media_type="application/json",
+    )
+
+    report["observed_sha256"] = _sha("4")
+
+    preparation = _preparation(
+        receipts=[
+            report,
+            _receipt(),
+        ],
+    )
+
+    with pytest.raises(
+        HveeContractError,
+        match="prepared artifact receipt is not exact",
+    ):
+        replay.build_incident_controlled_replay_bundle(
+            **_builder_kwargs(
+                preparation=preparation,
+            )
+        )
