@@ -141,6 +141,90 @@ class LocalRunnerSettings(BaseSettings):
         ),
     )
 
+    incident_deployment_key: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_DEPLOYMENT_KEY"
+        ),
+    )
+
+    incident_deployment_version: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_DEPLOYMENT_VERSION"
+        ),
+    )
+
+    incident_provider_version: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_PROVIDER_VERSION"
+        ),
+    )
+
+    incident_model_version: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_MODEL_VERSION"
+        ),
+    )
+
+    incident_model_artifact_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_MODEL_ARTIFACT_SHA256"
+        ),
+    )
+
+    incident_source_code_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_SOURCE_CODE_SHA256"
+        ),
+    )
+
+    incident_configuration_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_CONFIGURATION_SHA256"
+        ),
+    )
+
+    incident_runtime_environment_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_RUNTIME_ENVIRONMENT_SHA256"
+        ),
+    )
+
+    incident_host_environment_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_HOST_ENVIRONMENT_SHA256"
+        ),
+    )
+
+    incident_materialization_authorization_sha256: str | None = Field(
+        default=None,
+        pattern=r"^[0-9a-f]{64}$",
+        validation_alias=_runner_environment_alias(
+            "INCIDENT_MATERIALIZATION_AUTHORIZATION_SHA256"
+        ),
+    )
+
     model_config = SettingsConfigDict(
         env_file=PROJECT_ROOT / ".env",
         env_file_encoding="utf-8",
@@ -201,6 +285,30 @@ class LocalRunnerSettings(BaseSettings):
             raise ValueError(
                 "Runner ASR runtime settings must "
                 "not be empty."
+            )
+
+        return normalized
+
+    @field_validator(
+        "incident_deployment_key",
+        "incident_deployment_version",
+        "incident_provider_version",
+        "incident_model_version",
+        mode="before",
+    )
+    @classmethod
+    def normalize_optional_incident_text(
+        cls,
+        value,
+    ):
+        if value is None or not isinstance(value, str):
+            return value
+
+        normalized = value.strip()
+
+        if not normalized:
+            raise ValueError(
+                "Incident runner identity values must not be empty."
             )
 
         return normalized

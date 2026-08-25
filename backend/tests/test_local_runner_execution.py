@@ -7,6 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
+import app.incident_environment_materialization_execution as incident_materialization_execution
 import app.incident_runner_compatibility_execution as incident_compatibility_execution
 import app.local_runner_execution as local_runner_execution
 from app.local_runner_execution import (
@@ -2146,3 +2147,63 @@ def test_incident_compatibility_default_cycle_uses_generic_completion(
     assert evidence_boundary[
         "qualification_authority"
     ] is False
+
+
+def test_default_runner_selects_incident_materialization_without_asr_provider(
+    monkeypatch,
+):
+    job = build_job(
+        job_type="incident_environment_materialization",
+    ).model_copy(
+        update={
+            "required_capabilities": [
+                "asr",
+                "incident_materialization",
+                "incident_replay",
+            ],
+            "input_payload": {
+                "type": (
+                    "incident_replay_compatibility_request"
+                ),
+            },
+        }
+    )
+
+    client = RecordingClient(
+        RunnerJobClaimResponse(
+            status="claimed",
+            claim_token="ovrin_claim_test-token",
+            job=job,
+        )
+    )
+
+    def reject_provider_initialization(*args, **kwargs):
+        raise AssertionError(
+            "Environment materialization must not "
+            "initialize an ASR provider."
+        )
+
+    monkeypatch.setattr(
+        local_runner_execution,
+        "get_asr_provider",
+        reject_provider_initialization,
+    )
+
+    executor = build_default_runner_job_executor(
+        client=client,
+        settings=build_settings(
+            OVRIN_RUNNER_CAPABILITIES=[
+                "asr",
+                "incident_materialization",
+                "incident_replay",
+            ],
+        ),
+        job=job,
+        claim_token="ovrin_claim_test-token",
+    )
+
+    assert isinstance(
+        executor,
+        incident_materialization_execution
+        .IncidentEnvironmentMaterializationRunnerJobExecutor,
+    )
