@@ -8,6 +8,10 @@ from pathlib import Path
 
 import pytest
 
+from app.adversarial_asr_brutal_campaign import (
+    bind_asr_brutal_validation_media_v1,
+)
+
 from app.adversarial_asr_brutal_media import (
     ASRBrutalMediaExpectation,
     ASR_BRUTAL_COMPOUND_TELEPHONY_NOISE_EXPECTATION,
@@ -199,3 +203,68 @@ def test_real_brutal_media_derivative_is_frozen(
         parent.stat().st_size,
         parent.stat().st_mtime_ns,
     ) == parent_before
+
+
+def test_real_brutal_media_binds_exact_executable_suite(
+    tmp_path: Path,
+):
+    corpus_root = (
+        CORPUS_GENERATED_ROOT.resolve(strict=True)
+    )
+    brutal_root = tmp_path.resolve(strict=True)
+    parent = (
+        corpus_root
+        / ASR_BRUTAL_MEDIA_PARENT_RELATIVE_PATH
+    ).resolve(strict=True)
+
+    for expectation, recipe in CASES:
+        output = (
+            brutal_root
+            / expectation.output_relative_path
+        ).resolve(strict=False)
+        output.parent.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        result = ASRAdversarialFFmpeg(
+            executable_path=Path("/usr/bin/ffmpeg"),
+            recipe=recipe,
+        ).transform(
+            input_path=parent,
+            output_path=output,
+        )
+
+        assert (
+            result.output_audio_sha256
+            == expectation.audio_asset_sha256
+        )
+
+    bundle = bind_asr_brutal_validation_media_v1(
+        corpus_generated_root=corpus_root,
+        brutal_generated_root=brutal_root,
+    )
+    case_ids = tuple(
+        case.case_id
+        for case in bundle.suite.cases
+    )
+    brutal_case_ids = {
+        expectation.case_id
+        for expectation, _recipe in CASES
+    }
+
+    assert len(case_ids) == 13
+    assert tuple(bundle.audio_paths) == case_ids
+
+    for case in bundle.suite.cases:
+        path = bundle.audio_paths[case.case_id]
+        expected_root = (
+            brutal_root
+            if case.case_id in brutal_case_ids
+            else corpus_root
+        )
+
+        assert path.is_absolute()
+        assert path.is_file()
+        assert path.is_relative_to(expected_root)
+        assert _sha256(path) == case.audio_asset_sha256
