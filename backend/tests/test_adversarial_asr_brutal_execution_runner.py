@@ -227,7 +227,12 @@ def test_substituted_case_is_rejected_before_model_verification(
     bundle = SimpleNamespace(
         suite=SimpleNamespace(
             cases=tuple(
-                SimpleNamespace(case_id=case_id)
+                SimpleNamespace(
+                    case_id=case_id,
+                    reference_transcript=(
+                        f"reference transcript for {case_id}"
+                    ),
+                )
                 for case_id in case_ids
             ),
         ),

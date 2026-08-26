@@ -26,13 +26,22 @@ from app.speech import ASRProvider, get_asr_provider
 from hvee.packs.asr.adversarial_campaign_evidence import (
     verify_asr_adversarial_campaign_evidence_v1,
 )
+from hvee.packs.asr.adversarial_execution_evidence import (
+    calculate_asr_adversarial_transcript_sha256,
+)
+from hvee.packs.asr.normalized_evaluation import (
+    NORMALIZED_CER_METRIC,
+    NORMALIZED_WER_METRIC,
+    build_normalized_error_observations,
+    evaluate_normalized_transcript_pair,
+)
 
 
 ASR_BRUTAL_EXECUTION_RUN_SCHEMA_VERSION = 1
 ASR_BRUTAL_EXECUTION_RUN_KEY = (
     "hetren.asr.brutal-validation-execution-run"
 )
-ASR_BRUTAL_EXECUTION_RUN_VERSION = "1.0.0"
+ASR_BRUTAL_EXECUTION_RUN_VERSION = "1.1.0"
 
 _GIT_COMMIT_PATTERN = re.compile(r"[0-9a-f]{40}")
 
@@ -324,19 +333,109 @@ def verify_asr_brutal_frozen_model_v1(
     }
 
 
+def _normalized_error_attachment(
+    *,
+    reference_transcript: str,
+    generated_transcript: str,
+) -> dict[str, object]:
+    evaluation = evaluate_normalized_transcript_pair(
+        reference_text=reference_transcript,
+        generated_text=generated_transcript,
+    )
+    observations = build_normalized_error_observations(
+        evaluation
+    )
+
+    by_key = {
+        observation.metric_key: observation
+        for observation in observations
+    }
+
+    try:
+        wer_observation = by_key[
+            NORMALIZED_WER_METRIC.key
+        ]
+        cer_observation = by_key[
+            NORMALIZED_CER_METRIC.key
+        ]
+    except KeyError as error:
+        raise ASRBrutalExecutionRunnerError(
+            "Canonical normalized WER/CER observations are incomplete."
+        ) from error
+
+    return {
+        "attachment_version": "1.0.0",
+        "normalization": {
+            "key": evaluation.normalization_key,
+            "version": evaluation.normalization_version,
+        },
+        "reference_transcript_sha256": (
+            calculate_asr_adversarial_transcript_sha256(
+                reference_transcript
+            )
+        ),
+        "generated_transcript_sha256": (
+            calculate_asr_adversarial_transcript_sha256(
+                generated_transcript
+            )
+        ),
+        "wer": _jsonable(wer_observation),
+        "cer": _jsonable(cer_observation),
+    }
+
+
 def _completed_result_payload(
     result: object,
+    *,
+    bundle: ASRBrutalValidationSuiteBundle,
 ) -> dict[str, object]:
+    case_id = str(
+        getattr(result, "case_id")
+    )
+
+    matching_cases = tuple(
+        case
+        for case in bundle.suite.cases
+        if case.case_id == case_id
+    )
+
+    if len(matching_cases) != 1:
+        raise ASRBrutalExecutionRunnerError(
+            "Completed brutal result does not map to exactly one suite case."
+        )
+
+    reference_transcript = str(
+        getattr(
+            matching_cases[0],
+            "reference_transcript",
+        )
+    )
+
+    generated_transcript = str(
+        getattr(
+            result,
+            "generated_transcript",
+        )
+    )
+
+    normalized_error_evidence = (
+        _normalized_error_attachment(
+            reference_transcript=reference_transcript,
+            generated_transcript=generated_transcript,
+        )
+    )
+
     return {
-        "case_id": str(getattr(result, "case_id")),
+        "case_id": case_id,
         "audio_asset_sha256": str(
             getattr(result, "audio_asset_sha256")
         ),
         "audio_byte_length": int(
             getattr(result, "audio_byte_length")
         ),
-        "generated_transcript": str(
-            getattr(result, "generated_transcript")
+        "generated_transcript": generated_transcript,
+        "normalized_error_evidence": (
+            normalized_error_evidence
         ),
         "environment": _jsonable(
             getattr(result, "environment")
@@ -392,13 +491,19 @@ def _campaign_payload(
             "sha256": verified_evidence.sha256,
         },
         "completed_results": [
-            _completed_result_payload(item)
+            _completed_result_payload(
+                item,
+                bundle=bundle,
+            )
             for item in result.completed_results
         ],
         "evidence_boundary": {
             "raw_audio_embedded": False,
             "absolute_audio_paths_embedded": False,
             "raw_generated_transcripts_preserved": True,
+            "normalized_error_observations_attached": True,
+            "normalized_error_observations_use_existing_evaluator": True,
+            "normalized_error_evaluator_methodology_modified": False,
             "partial_outcomes_preserved": True,
             "development_evidence_only": True,
             "qualification_threshold_applied": False,
