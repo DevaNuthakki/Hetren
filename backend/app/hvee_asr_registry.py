@@ -602,8 +602,11 @@ def resolve_asr_critical_terminology_fidelity_registry(
 
 from hvee.packs.asr import (
     ASR_RELIABILITY_PROFILE_V1,
+    ASR_RELIABILITY_PROFILE_V1_1,
     ASRReliabilityProfileDefinition,
+    ASRReliabilityProfileError,
     verify_asr_reliability_profile_v1,
+    verify_asr_reliability_profile_v1_1,
 )
 
 
@@ -648,6 +651,31 @@ class ASRReliabilityProfileRegistry:
         )
 
 
+def _verify_supported_asr_reliability_profile(
+    profile: ASRReliabilityProfileDefinition,
+) -> ASRReliabilityProfileDefinition:
+    if not isinstance(profile, ASRReliabilityProfileDefinition):
+        raise ASRReliabilityProfileError(
+            "ASR Reliability Profile registry requires a profile."
+        )
+
+    if (
+        profile.key == ASR_RELIABILITY_PROFILE_V1.key
+        and profile.version == ASR_RELIABILITY_PROFILE_V1.version
+    ):
+        return verify_asr_reliability_profile_v1(profile)
+
+    if (
+        profile.key == ASR_RELIABILITY_PROFILE_V1_1.key
+        and profile.version == ASR_RELIABILITY_PROFILE_V1_1.version
+    ):
+        return verify_asr_reliability_profile_v1_1(profile)
+
+    raise ASRReliabilityProfileError(
+        "ASR Reliability Profile identity is unsupported or changed."
+    )
+
+
 def resolve_asr_reliability_profile_registry(
     db: Session,
     *,
@@ -662,7 +690,7 @@ def resolve_asr_reliability_profile_registry(
     caller owns the surrounding transaction; this function never commits.
     """
 
-    verified = verify_asr_reliability_profile_v1(profile)
+    verified = _verify_supported_asr_reliability_profile(profile)
 
     metric_definitions = tuple(
         resolve_metric_definition(

@@ -29,6 +29,7 @@ from hvee.packs.asr.critical_number_assurance import (
 )
 from hvee.packs.asr.critical_number_fidelity import (
     CRITICAL_NUMBER_FINDINGS_METRIC,
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
     CRITICAL_NUMBER_OUTCOME_METRIC,
     CRITICAL_NUMBER_PRESERVED_METRIC,
     EN_US_CRITICAL_NUMBER_PROFILE,
@@ -115,6 +116,7 @@ def _critical_records(
         reference_text=reference_text,
         generated_text=generated_text,
         profile=EN_US_CRITICAL_NUMBER_PROFILE,
+        evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
     )
     return tuple(
         _observation_record(

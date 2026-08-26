@@ -28,7 +28,7 @@ from hvee.packs.asr.critical_number_assurance import (
     verify_critical_number_assurance_profile_v1,
 )
 from hvee.packs.asr.critical_number_fidelity import (
-    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1 as CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     EN_US_CRITICAL_NUMBER_PROFILE,
 )
 from hvee.packs.asr.critical_number_private_evidence import (

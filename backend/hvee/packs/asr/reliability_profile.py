@@ -25,6 +25,7 @@ from hvee.packs.asr.critical_identifier_fidelity import (
     CRITICAL_IDENTIFIER_PRESERVED_METRIC,
 )
 from hvee.packs.asr.critical_number_fidelity import (
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
     CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     CRITICAL_NUMBER_PRESERVED_METRIC,
 )
@@ -53,11 +54,11 @@ from hvee.packs.asr.transcript_integrity import (
 
 ASR_RELIABILITY_PROFILE_SCHEMA_VERSION = 1
 ASR_RELIABILITY_PROFILE_VERSION = "1.0.0"
+ASR_RELIABILITY_PROFILE_V1_1_VERSION = "1.1.0"
 ASR_RELIABILITY_PROFILE_KEY = "hetren.asr.reliability-profile"
 ASR_RELIABILITY_METRIC_VERSION = "1.0.0"
 ASR_RELIABILITY_EVALUATOR_VERSION = "1.0.0"
 ASR_RELIABILITY_METRIC_EQUALITY_ABSOLUTE_TOLERANCE = 1e-12
-
 
 class ASRReliabilityProfileError(ValueError):
     """Raised when an ASR Reliability Profile contract is invalid."""
@@ -541,8 +542,12 @@ def _binding(
     )
 
 
-def build_asr_reliability_profile_v1() -> ASRReliabilityProfileDefinition:
-    """Build the canonical, score-free ASR Reliability Profile v1."""
+def _build_asr_reliability_profile(
+    *,
+    profile_version: str,
+    critical_number_evaluator: EvaluatorVersion,
+) -> ASRReliabilityProfileDefinition:
+    """Build one canonical, score-free ASR Reliability Profile identity."""
 
     diagnostic = ASRReliabilityMetricRole.SUPPORTING
     diagnostic_only = ASRReliabilityAggregationUse.DIAGNOSTIC_ONLY
@@ -553,7 +558,7 @@ def build_asr_reliability_profile_v1() -> ASRReliabilityProfileDefinition:
 
     return ASRReliabilityProfileDefinition(
         key=ASR_RELIABILITY_PROFILE_KEY,
-        version=ASR_RELIABILITY_PROFILE_VERSION,
+        version=profile_version,
         evaluation_type=ASR_EVALUATION_TYPE,
         bindings=(
             _binding(
@@ -778,7 +783,7 @@ def build_asr_reliability_profile_v1() -> ASRReliabilityProfileDefinition:
                 ) in (
                     (
                         CRITICAL_NUMBER_PRESERVED_METRIC,
-                        CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+                        critical_number_evaluator,
                         ASRReliabilityEvidenceRequirement
                         .CRITICAL_NUMBER_EVIDENCE,
                         "critical_number_integrity",
@@ -806,6 +811,26 @@ def build_asr_reliability_profile_v1() -> ASRReliabilityProfileDefinition:
                 )
             ),
         ),
+    )
+
+
+def build_asr_reliability_profile_v1() -> ASRReliabilityProfileDefinition:
+    """Build the frozen historical ASR Reliability Profile v1."""
+
+    return _build_asr_reliability_profile(
+        profile_version=ASR_RELIABILITY_PROFILE_VERSION,
+        critical_number_evaluator=(
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1
+        ),
+    )
+
+
+def build_asr_reliability_profile_v1_1() -> ASRReliabilityProfileDefinition:
+    """Build ASR Reliability Profile 1.1 with evaluator 1.1 semantics."""
+
+    return _build_asr_reliability_profile(
+        profile_version=ASR_RELIABILITY_PROFILE_V1_1_VERSION,
+        critical_number_evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     )
 
 
@@ -840,6 +865,41 @@ def verify_asr_reliability_profile_v1(
     ):
         raise ASRReliabilityProfileError(
             "ASR Reliability Profile identity is unsupported or changed."
+        )
+
+    return value
+
+ASR_RELIABILITY_PROFILE_V1_1 = build_asr_reliability_profile_v1_1()
+ASR_RELIABILITY_PROFILE_V1_1_SHA256 = "74af95a1ecaaf1f227872110b7e4c25bb848c68fdd2044dd55ef8df4340ddfc9"
+
+if (
+    ASR_RELIABILITY_PROFILE_V1_1.sha256
+    != ASR_RELIABILITY_PROFILE_V1_1_SHA256
+):
+    raise ASRReliabilityProfileError(
+        "Canonical ASR Reliability Profile 1.1 SHA-256 changed: "
+        f"{ASR_RELIABILITY_PROFILE_V1_1.sha256}."
+    )
+
+
+def verify_asr_reliability_profile_v1_1(
+    value: ASRReliabilityProfileDefinition,
+) -> ASRReliabilityProfileDefinition:
+    """Require the exact canonical ASR Reliability Profile 1.1."""
+
+    if not isinstance(value, ASRReliabilityProfileDefinition):
+        raise ASRReliabilityProfileError(
+            "ASR Reliability Profile 1.1 verification requires a profile."
+        )
+
+    if (
+        value.key != ASR_RELIABILITY_PROFILE_KEY
+        or value.version != ASR_RELIABILITY_PROFILE_V1_1_VERSION
+        or value.payload != ASR_RELIABILITY_PROFILE_V1_1.payload
+        or value.sha256 != ASR_RELIABILITY_PROFILE_V1_1_SHA256
+    ):
+        raise ASRReliabilityProfileError(
+            "ASR Reliability Profile 1.1 identity is unsupported or changed."
         )
 
     return value

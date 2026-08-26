@@ -13,7 +13,7 @@ import pytest
 from hvee.core.contracts import HveeContractError
 from hvee.packs import asr
 from hvee.packs.asr.critical_number_fidelity import (
-    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1 as CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     EN_US_CRITICAL_NUMBER_PROFILE,
 )
 from hvee.packs.asr.critical_number_governance_review import (

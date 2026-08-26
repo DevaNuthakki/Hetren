@@ -16,6 +16,8 @@ from app.hvee_models import (
 from hvee.packs.asr import (
     ASR_RELIABILITY_PROFILE_V1,
     ASR_RELIABILITY_PROFILE_V1_SHA256,
+    ASR_RELIABILITY_PROFILE_V1_1,
+    ASR_RELIABILITY_PROFILE_V1_1_SHA256,
     MATCHED_CONTROL_RELIABILITY_EVALUATOR,
     MATCHED_CONTROL_WER_ROBUSTNESS_DIFFERENTIAL_METRIC,
     ASRReliabilityProfileError,
@@ -133,3 +135,125 @@ def test_registry_resolver_does_not_call_commit(
 
     assert len(registry.metric_definitions) == 15
     assert len(registry.evaluator_versions) == 8
+
+def test_profile_1_1_registry_resolves_all_unique_identities(
+    db: Session,
+):
+    registry = resolve_asr_reliability_profile_registry(
+        db,
+        profile=ASR_RELIABILITY_PROFILE_V1_1,
+    )
+
+    assert registry.profile_key == ASR_RELIABILITY_PROFILE_V1_1.key
+    assert registry.profile_version == ASR_RELIABILITY_PROFILE_V1_1.version
+    assert registry.profile_sha256 == ASR_RELIABILITY_PROFILE_V1_1_SHA256
+
+    assert len(registry.metric_definitions) == 15
+    assert len(registry.evaluator_versions) == 8
+
+    critical_number = registry.evaluator_by_identity(
+        key="hetren.asr.critical-number-fidelity.en-us",
+        version="1.1.0",
+    )
+
+    assert critical_number.version == "1.1.0"
+
+    assert db.query(HveeMetricDefinition).count() == 15
+    assert db.query(HveeEvaluatorVersion).count() == 8
+
+
+def test_profile_1_1_registry_is_idempotent(db: Session):
+    first = resolve_asr_reliability_profile_registry(
+        db,
+        profile=ASR_RELIABILITY_PROFILE_V1_1,
+    )
+
+    second = resolve_asr_reliability_profile_registry(
+        db,
+        profile=ASR_RELIABILITY_PROFILE_V1_1,
+    )
+
+    assert tuple(
+        value.id
+        for value in second.metric_definitions
+    ) == tuple(
+        value.id
+        for value in first.metric_definitions
+    )
+
+    assert tuple(
+        value.id
+        for value in second.evaluator_versions
+    ) == tuple(
+        value.id
+        for value in first.evaluator_versions
+    )
+
+    assert db.query(HveeMetricDefinition).count() == 15
+    assert db.query(HveeEvaluatorVersion).count() == 8
+
+
+def test_profile_versions_coexist_without_registry_collisions(
+    db: Session,
+):
+    historical = resolve_asr_reliability_profile_registry(
+        db,
+        profile=ASR_RELIABILITY_PROFILE_V1,
+    )
+
+    current = resolve_asr_reliability_profile_registry(
+        db,
+        profile=ASR_RELIABILITY_PROFILE_V1_1,
+    )
+
+    assert historical.profile_version == "1.0.0"
+    assert historical.profile_sha256 == ASR_RELIABILITY_PROFILE_V1_SHA256
+
+    assert current.profile_version == "1.1.0"
+    assert current.profile_sha256 == ASR_RELIABILITY_PROFILE_V1_1_SHA256
+
+    assert tuple(
+        value.id
+        for value in historical.metric_definitions
+    ) == tuple(
+        value.id
+        for value in current.metric_definitions
+    )
+
+    historical_critical_number = historical.evaluator_by_identity(
+        key="hetren.asr.critical-number-fidelity.en-us",
+        version="1.0.0",
+    )
+
+    current_critical_number = current.evaluator_by_identity(
+        key="hetren.asr.critical-number-fidelity.en-us",
+        version="1.1.0",
+    )
+
+    assert historical_critical_number.id != current_critical_number.id
+    assert historical_critical_number.version == "1.0.0"
+    assert current_critical_number.version == "1.1.0"
+
+    assert db.query(HveeMetricDefinition).count() == 15
+    assert db.query(HveeEvaluatorVersion).count() == 9
+
+
+def test_changed_profile_1_1_is_rejected_before_registry_writes(
+    db: Session,
+):
+    changed = replace(
+        ASR_RELIABILITY_PROFILE_V1_1,
+        version="1.1.1",
+    )
+
+    with pytest.raises(
+        ASRReliabilityProfileError,
+        match="unsupported or changed",
+    ):
+        resolve_asr_reliability_profile_registry(
+            db,
+            profile=changed,
+        )
+
+    assert db.query(HveeMetricDefinition).count() == 0
+    assert db.query(HveeEvaluatorVersion).count() == 0

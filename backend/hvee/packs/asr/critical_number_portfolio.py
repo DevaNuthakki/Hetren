@@ -9,6 +9,7 @@ from hvee.core.contracts import (
     ObservationStatus,
 )
 from hvee.packs.asr.critical_number_fidelity import (
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     CRITICAL_NUMBER_AMBIGUITY_COUNT_METRIC,
     CRITICAL_NUMBER_APPLICABLE_METRIC,
     CRITICAL_NUMBER_FINDINGS_METRIC,
@@ -526,6 +527,8 @@ CRITICAL_NUMBER_FIDELITY_PORTFOLIO_V1 = (
 
 def evaluate_critical_number_portfolio_case_observations(
     case: ASRCriticalNumberPortfolioCase,
+    *,
+    evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> tuple[Observation, ...]:
     if not isinstance(case, ASRCriticalNumberPortfolioCase):
         raise HveeContractError(
@@ -535,6 +538,7 @@ def evaluate_critical_number_portfolio_case_observations(
         reference_text=case.reference_text,
         generated_text=case.generated_text,
         profile=EN_US_CRITICAL_NUMBER_PROFILE,
+        evaluator=evaluator,
     )
     return build_critical_number_fidelity_observations(evaluation)
 
@@ -662,15 +666,22 @@ def compare_critical_number_portfolio_case(
 
 def run_critical_number_portfolio_case(
     case: ASRCriticalNumberPortfolioCase,
+    *,
+    evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> ASRCriticalNumberPortfolioCaseResult:
     return compare_critical_number_portfolio_case(
         case=case,
-        observations=evaluate_critical_number_portfolio_case_observations(case),
+        observations=evaluate_critical_number_portfolio_case_observations(
+            case,
+            evaluator=evaluator,
+        ),
     )
 
 
 def run_critical_number_portfolio(
     portfolio: ASRCriticalNumberPortfolioDefinition,
+    *,
+    evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> ASRCriticalNumberPortfolioReport:
     if not isinstance(portfolio, ASRCriticalNumberPortfolioDefinition):
         raise HveeContractError(
@@ -680,7 +691,10 @@ def run_critical_number_portfolio(
         portfolio_key=portfolio.key,
         portfolio_version=portfolio.version,
         case_results=tuple(
-            run_critical_number_portfolio_case(case)
+            run_critical_number_portfolio_case(
+                case,
+                evaluator=evaluator,
+            )
             for case in portfolio.cases
         ),
     )

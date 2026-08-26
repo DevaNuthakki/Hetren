@@ -170,6 +170,7 @@ __all__ += [
 
 
 from hvee.packs.asr.critical_number_fidelity import (
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
     CRITICAL_NUMBER_AMBIGUITY_COUNT_METRIC,
     CRITICAL_NUMBER_APPLICABLE_METRIC,
     CRITICAL_NUMBER_EVALUATOR_VERSION,
@@ -421,6 +422,7 @@ __all__ += [
     "CRITICAL_NUMBER_EVALUATOR_MUTATIONS_V1",
     "CRITICAL_NUMBER_EVALUATOR_VERSION",
     "CRITICAL_NUMBER_FIDELITY_EVALUATOR",
+    "CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1",
     "CRITICAL_NUMBER_FIDELITY_PORTFOLIO_V1",
     "CRITICAL_NUMBER_FINDINGS_METRIC",
     "CRITICAL_NUMBER_GENERATED_COUNT_METRIC",
@@ -1409,6 +1411,9 @@ from hvee.packs.asr.reliability_profile import (
     ASR_RELIABILITY_PROFILE_SCHEMA_VERSION,
     ASR_RELIABILITY_PROFILE_V1,
     ASR_RELIABILITY_PROFILE_V1_SHA256,
+    ASR_RELIABILITY_PROFILE_V1_1,
+    ASR_RELIABILITY_PROFILE_V1_1_SHA256,
+    ASR_RELIABILITY_PROFILE_V1_1_VERSION,
     ASR_RELIABILITY_PROFILE_VERSION,
     MATCHED_CONTROL_CER_NOISE_DEGRADATION_METRIC,
     MATCHED_CONTROL_CER_ROBUSTNESS_DIFFERENTIAL_METRIC,
@@ -1424,7 +1429,9 @@ from hvee.packs.asr.reliability_profile import (
     ASRReliabilityProfileDefinition,
     ASRReliabilityProfileError,
     build_asr_reliability_profile_v1,
+    build_asr_reliability_profile_v1_1,
     verify_asr_reliability_profile_v1,
+    verify_asr_reliability_profile_v1_1,
 )
 
 
@@ -1436,6 +1443,9 @@ __all__ += [
     "ASR_RELIABILITY_PROFILE_SCHEMA_VERSION",
     "ASR_RELIABILITY_PROFILE_V1",
     "ASR_RELIABILITY_PROFILE_V1_SHA256",
+    "ASR_RELIABILITY_PROFILE_V1_1",
+    "ASR_RELIABILITY_PROFILE_V1_1_SHA256",
+    "ASR_RELIABILITY_PROFILE_V1_1_VERSION",
     "ASR_RELIABILITY_PROFILE_VERSION",
     "ASRReliabilityAggregationUse",
     "ASRReliabilityAxis",
@@ -1451,7 +1461,9 @@ __all__ += [
     "MATCHED_CONTROL_WER_NOISE_DEGRADATION_METRIC",
     "MATCHED_CONTROL_WER_ROBUSTNESS_DIFFERENTIAL_METRIC",
     "build_asr_reliability_profile_v1",
+    "build_asr_reliability_profile_v1_1",
     "verify_asr_reliability_profile_v1",
+    "verify_asr_reliability_profile_v1_1",
 ]
 
 

@@ -19,6 +19,9 @@ from hvee.packs.asr.critical_number_fidelity import (
     CRITICAL_NUMBER_SUBSTITUTION_COUNT_METRIC,
     ASRCriticalNumberFidelityOutcome,
 )
+from hvee.packs.asr.critical_number_fidelity import (
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+)
 from hvee.packs.asr.critical_number_portfolio import (
     ASRCriticalNumberPortfolioDefinition,
     compare_critical_number_portfolio_case,
@@ -225,6 +228,7 @@ def run_critical_number_evaluator_mutation(
     *,
     portfolio: ASRCriticalNumberPortfolioDefinition,
     mutation: ASRCriticalNumberEvaluatorMutation,
+    evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> ASRCriticalNumberMutationResult:
     if not isinstance(portfolio, ASRCriticalNumberPortfolioDefinition):
         raise HveeContractError(
@@ -233,7 +237,10 @@ def run_critical_number_evaluator_mutation(
     changed: list[str] = []
     detected: list[str] = []
     for case in portfolio.cases:
-        observations = evaluate_critical_number_portfolio_case_observations(case)
+        observations = evaluate_critical_number_portfolio_case_observations(
+            case,
+            evaluator=evaluator,
+        )
         baseline = compare_critical_number_portfolio_case(
             case=case,
             observations=observations,
@@ -267,6 +274,8 @@ def run_critical_number_evaluator_mutation(
 
 def run_critical_number_evaluator_mutation_suite(
     portfolio: ASRCriticalNumberPortfolioDefinition,
+    *,
+    evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> ASRCriticalNumberMutationReport:
     if not isinstance(portfolio, ASRCriticalNumberPortfolioDefinition):
         raise HveeContractError(
@@ -281,6 +290,7 @@ def run_critical_number_evaluator_mutation_suite(
             run_critical_number_evaluator_mutation(
                 portfolio=portfolio,
                 mutation=mutation,
+                evaluator=evaluator,
             )
             for mutation in CRITICAL_NUMBER_EVALUATOR_MUTATIONS_V1
         ),

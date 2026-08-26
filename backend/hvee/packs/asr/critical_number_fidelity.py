@@ -28,7 +28,7 @@ from hvee.packs.asr.evaluation import ASR_EVALUATION_TYPE
 
 
 CRITICAL_NUMBER_METRIC_VERSION = "1.0.0"
-CRITICAL_NUMBER_EVALUATOR_VERSION = "1.0.0"
+CRITICAL_NUMBER_EVALUATOR_VERSION = "1.1.0"
 
 
 @dataclass(frozen=True, slots=True)
@@ -233,6 +233,30 @@ CRITICAL_NUMBER_FIDELITY_EVALUATOR = EvaluatorVersion(
         "typed, context-bound critical-number evidence."
     ),
 )
+
+
+CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1 = EvaluatorVersion(
+    key="hetren.asr.critical-number-fidelity.en-us",
+    version="1.0.0",
+    evaluation_type=ASR_EVALUATION_TYPE,
+    description=(
+        "Deterministic US English ASR evaluator for preservation of "
+        "typed, context-bound critical-number evidence."
+    ),
+)
+
+
+def _require_supported_critical_number_evaluator(
+    evaluator: EvaluatorVersion,
+) -> EvaluatorVersion:
+    if evaluator not in (
+        CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
+        CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    ):
+        raise HveeContractError(
+            "critical-number evaluator identity is unsupported"
+        )
+    return evaluator
 
 
 def _metric(
@@ -639,7 +663,12 @@ def _is_between_only_space_or_hyphen(
     return bool(re.fullmatch(r"[\s-]*", text[left:right]))
 
 
-def _extract_raw_entities(normalized: str) -> tuple[_RawEntity, ...]:
+def _extract_raw_entities(
+    normalized: str,
+    *,
+    evaluator: EvaluatorVersion,
+) -> tuple[_RawEntity, ...]:
+    evaluator = _require_supported_critical_number_evaluator(evaluator)
     entities: list[_RawEntity] = []
 
     def free(start: int, end: int) -> bool:
@@ -718,9 +747,14 @@ def _extract_raw_entities(normalized: str) -> tuple[_RawEntity, ...]:
                 )
             )
 
-    digit_time_pattern = re.compile(
+    digit_time_pattern_text = (
         r"\b(?P<hour>[0-9]{1,2}):(?P<minute>[0-9]{2})"
-        r"\s*(?P<period>a\.?m\.?|p\.?m\.?)\b",
+        if evaluator == CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1
+        else r"\b(?P<hour>[0-9]{1,2})[:.](?P<minute>[0-9]{2})"
+    )
+    digit_time_pattern = re.compile(
+        digit_time_pattern_text
+        + r"\s*(?P<period>a\.?m\.?|p\.?m\.?)\b",
         re.IGNORECASE,
     )
     for match in digit_time_pattern.finditer(normalized):
@@ -1055,15 +1089,20 @@ def extract_critical_number_entities(
     *,
     text: str,
     profile: ASRCriticalNumberProfile,
+    evaluator: EvaluatorVersion = CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> tuple[ASRCriticalNumberEntity, ...]:
     if not isinstance(text, str):
         raise HveeContractError(
             "critical-number extraction requires a string"
         )
     _validate_profile(profile)
+    evaluator = _require_supported_critical_number_evaluator(evaluator)
     normalized, source_map = _normalize_with_span_map(text)
     result: list[ASRCriticalNumberEntity] = []
-    for raw in _extract_raw_entities(normalized):
+    for raw in _extract_raw_entities(
+        normalized,
+        evaluator=evaluator,
+    ):
         source_start, source_end = _source_span(
             raw.start,
             raw.end,
@@ -1328,19 +1367,23 @@ def evaluate_critical_number_fidelity(
     reference_text: str,
     generated_text: str,
     profile: ASRCriticalNumberProfile,
+    evaluator: EvaluatorVersion = CRITICAL_NUMBER_FIDELITY_EVALUATOR,
 ) -> ASRCriticalNumberFidelityEvaluation:
     if not isinstance(reference_text, str) or not isinstance(generated_text, str):
         raise HveeContractError(
             "critical-number evaluation requires string transcripts"
         )
     _validate_profile(profile)
+    evaluator = _require_supported_critical_number_evaluator(evaluator)
     reference_all = extract_critical_number_entities(
         text=reference_text,
         profile=profile,
+        evaluator=evaluator,
     )
     generated_all = extract_critical_number_entities(
         text=generated_text,
         profile=profile,
+        evaluator=evaluator,
     )
     reference = tuple(
         entity for entity in reference_all if entity.issue_reason_code is None
@@ -1533,8 +1576,8 @@ def evaluate_critical_number_fidelity(
     return ASRCriticalNumberFidelityEvaluation(
         profile_key=profile.key,
         profile_version=profile.version,
-        evaluator_key=CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
-        evaluator_version=CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
+        evaluator_key=evaluator.key,
+        evaluator_version=evaluator.version,
         outcome=outcome,
         reference_entities=reference,
         generated_entities=generated,
@@ -1544,16 +1587,18 @@ def evaluate_critical_number_fidelity(
 
 def _observation(
     *,
+    evaluator: EvaluatorVersion,
     metric: MetricDefinition,
     value: object | None,
     status: ObservationStatus = ObservationStatus.SUCCESS,
     status_detail: str | None = None,
 ) -> Observation:
+    evaluator = _require_supported_critical_number_evaluator(evaluator)
     return Observation(
         metric_key=metric.key,
         metric_version=metric.version,
-        evaluator_key=CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
-        evaluator_version=CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
+        evaluator_key=evaluator.key,
+        evaluator_version=evaluator.version,
         evaluation_type=ASR_EVALUATION_TYPE,
         status=status,
         value_type=metric.value_type,
@@ -1573,12 +1618,46 @@ def build_critical_number_fidelity_observations(
     if (
         evaluation.profile_key != EN_US_CRITICAL_NUMBER_PROFILE.key
         or evaluation.profile_version != EN_US_CRITICAL_NUMBER_PROFILE.version
-        or evaluation.evaluator_key != CRITICAL_NUMBER_FIDELITY_EVALUATOR.key
-        or evaluation.evaluator_version
-        != CRITICAL_NUMBER_FIDELITY_EVALUATOR.version
     ):
         raise HveeContractError(
-            "critical-number observations require en-US evaluator v1.0.0"
+            "critical-number observations require the en-US profile"
+        )
+
+    evaluator_by_identity = {
+        (
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1.key,
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1.version,
+        ): CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
+        (
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
+        ): CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    }
+    evaluator = evaluator_by_identity.get(
+        (
+            evaluation.evaluator_key,
+            evaluation.evaluator_version,
+        )
+    )
+    if evaluator is None:
+        raise HveeContractError(
+            "critical-number observations require a supported evaluator"
+        )
+
+
+    def observation(
+        *,
+        metric: MetricDefinition,
+        value: object | None,
+        status: ObservationStatus = ObservationStatus.SUCCESS,
+        status_detail: str | None = None,
+    ) -> Observation:
+        return _observation(
+            evaluator=evaluator,
+            metric=metric,
+            value=value,
+            status=status,
+            status_detail=status_detail,
         )
 
     if any(
@@ -1655,7 +1734,7 @@ def build_critical_number_fidelity_observations(
         preserved_status = ObservationStatus.SUCCESS
         preserved_detail = None
 
-    preserved_observation = _observation(
+    preserved_observation = observation(
         metric=CRITICAL_NUMBER_PRESERVED_METRIC,
         value=(
             evaluation.preserved
@@ -1667,40 +1746,40 @@ def build_critical_number_fidelity_observations(
     )
 
     return (
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_APPLICABLE_METRIC,
             value=evaluation.applicable,
         ),
         preserved_observation,
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_OUTCOME_METRIC,
             value=evaluation.outcome.value,
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_REFERENCE_COUNT_METRIC,
             value=len(evaluation.reference_entities),
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_GENERATED_COUNT_METRIC,
             value=len(evaluation.generated_entities),
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_SUBSTITUTION_COUNT_METRIC,
             value=evaluation.substitution_count,
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_OMISSION_COUNT_METRIC,
             value=evaluation.omission_count,
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_INSERTION_COUNT_METRIC,
             value=evaluation.insertion_count,
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_AMBIGUITY_COUNT_METRIC,
             value=evaluation.ambiguity_count,
         ),
-        _observation(
+        observation(
             metric=CRITICAL_NUMBER_FINDINGS_METRIC,
             value=[finding.to_json() for finding in evaluation.findings],
         ),

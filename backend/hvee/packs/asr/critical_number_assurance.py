@@ -19,7 +19,7 @@ from hvee.core.contracts import (
 )
 from hvee.packs.asr.critical_number_fidelity import (
     CRITICAL_NUMBER_APPLICABLE_METRIC,
-    CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1 as CRITICAL_NUMBER_FIDELITY_EVALUATOR,
     CRITICAL_NUMBER_OUTCOME_METRIC,
     CRITICAL_NUMBER_PRESERVED_METRIC,
     EN_US_CRITICAL_NUMBER_PROFILE,
@@ -611,8 +611,14 @@ def build_critical_number_assurance_evidence_bundle(
     """Build exact, timestamp-free evaluator-assurance evidence for v1."""
 
     _require_v1_identities(portfolio)
-    baseline = run_critical_number_portfolio(portfolio)
-    mutations = run_critical_number_evaluator_mutation_suite(portfolio)
+    baseline = run_critical_number_portfolio(
+        portfolio,
+        evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    )
+    mutations = run_critical_number_evaluator_mutation_suite(
+        portfolio,
+        evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+    )
 
     result_by_case = {
         result.case_id: result for result in baseline.case_results
@@ -626,7 +632,8 @@ def build_critical_number_assurance_evidence_bundle(
                 "critical-number assurance baseline is missing a case"
             )
         observations = evaluate_critical_number_portfolio_case_observations(
-            case
+            case,
+            evaluator=CRITICAL_NUMBER_FIDELITY_EVALUATOR,
         )
         by_key = _observations_by_key(observations)
         observations_by_case[case.case_id] = by_key
