@@ -24,17 +24,17 @@ def _sha(value: str) -> str:
 
 def _settings(**overrides) -> LocalRunnerSettings:
     values = {
-        "OVRIN_RUNNER_CREDENTIAL": (
+        "HETREN_RUNNER_CREDENTIAL": (
             "runner-test-credential"
         ),
-        "OVRIN_RUNNER_CAPABILITIES": [
+        "HETREN_RUNNER_CAPABILITIES": [
             "incident_replay",
             "asr",
         ],
-        "OVRIN_RUNNER_ASR_PROVIDER": (
+        "HETREN_RUNNER_ASR_PROVIDER": (
             "faster_whisper"
         ),
-        "OVRIN_RUNNER_ASR_MODEL": (
+        "HETREN_RUNNER_ASR_MODEL": (
             "large-v3-turbo"
         ),
     }

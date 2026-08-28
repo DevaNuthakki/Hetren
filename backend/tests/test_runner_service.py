@@ -463,7 +463,7 @@ def test_heartbeat_rejects_invalid_credential(
     ):
         record_runner_heartbeat(
             db,
-            credential="ovrin_runner_invalid",
+            credential="hetren_runner_invalid",
         )
 
 

@@ -50,18 +50,18 @@ def build_settings(
     **overrides,
 ) -> LocalRunnerSettings:
     values = {
-        "OVRIN_RUNNER_API_URL": (
-            "https://ovrin.example.com"
+        "HETREN_RUNNER_API_URL": (
+            "https://hetren.example.com"
         ),
-        "OVRIN_RUNNER_CREDENTIAL": (
-            "ovrin_runner_test-credential"
+        "HETREN_RUNNER_CREDENTIAL": (
+            "hetren_runner_test-credential"
         ),
-        "OVRIN_RUNNER_VERSION": "0.2.0",
-        "OVRIN_RUNNER_CAPABILITIES": [
+        "HETREN_RUNNER_VERSION": "0.2.0",
+        "HETREN_RUNNER_CAPABILITIES": [
             "asr",
             "cpu",
         ],
-        "OVRIN_RUNNER_LEASE_SECONDS": 600,
+        "HETREN_RUNNER_LEASE_SECONDS": 600,
     }
     values.update(overrides)
 
@@ -285,7 +285,7 @@ def test_run_one_cycle_completes_claimed_job_in_order():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -345,7 +345,7 @@ def test_run_one_cycle_reports_executor_failure():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -395,7 +395,7 @@ def test_unsupported_job_type_is_failed_safely():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -468,7 +468,7 @@ def test_lease_renewal_worker_renews_active_claim():
         job_public_id=(
             "20000000-0000-0000-0000-000000000001"
         ),
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
         lease_seconds=60,
         interval_seconds=0.01,
         execution_control=ExecutionControl(),
@@ -486,7 +486,7 @@ def test_lease_renewal_worker_renews_active_claim():
         "job_public_id": (
             "20000000-0000-0000-0000-000000000001"
         ),
-        "claim_token": "ovrin_claim_test-token",
+        "claim_token": "hetren_claim_test-token",
         "lease_seconds": 60,
     }
 
@@ -505,7 +505,7 @@ def test_lease_renewal_worker_records_failure():
         job_public_id=(
             "20000000-0000-0000-0000-000000000001"
         ),
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
         lease_seconds=60,
         interval_seconds=0.01,
         execution_control=execution_control,
@@ -530,7 +530,7 @@ def test_run_one_cycle_does_not_complete_after_renewal_failure():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -543,7 +543,7 @@ def test_run_one_cycle_does_not_complete_after_renewal_failure():
     def build_failing_worker(**kwargs):
         assert kwargs["job_public_id"] == job.public_id
         assert kwargs["claim_token"] == (
-            "ovrin_claim_test-token"
+            "hetren_claim_test-token"
         )
         assert kwargs["lease_seconds"] == 600
         assert kwargs["interval_seconds"] == 60
@@ -897,7 +897,7 @@ def test_run_one_cycle_stops_after_remote_cancellation():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         ),
         control_status="cancelled",
@@ -906,10 +906,10 @@ def test_run_one_cycle_stops_after_remote_cancellation():
     result = run_one_local_runner_cycle(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+            HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
                 0.01
             ),
-            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
+            HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
         ),
         executor=CooperativeBlockingExecutor(),
         system_info={"platform": "test"},
@@ -938,7 +938,7 @@ def test_run_one_cycle_fails_timed_out_execution():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -946,10 +946,10 @@ def test_run_one_cycle_fails_timed_out_execution():
     result = run_one_local_runner_cycle(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+            HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
                 0.01
             ),
-            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=0.02,
+            HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=0.02,
         ),
         executor=CooperativeBlockingExecutor(),
         system_info={"platform": "test"},
@@ -987,7 +987,7 @@ def test_run_one_cycle_stops_active_execution_on_shutdown():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -995,10 +995,10 @@ def test_run_one_cycle_stops_active_execution_on_shutdown():
     result = run_one_local_runner_cycle(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+            HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
                 0.01
             ),
-            OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
+            HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=1,
         ),
         executor=CooperativeBlockingExecutor(
             runner_stop_event=runner_stop_event,
@@ -1077,7 +1077,7 @@ def test_run_one_cycle_does_not_complete_after_late_shutdown():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1130,7 +1130,7 @@ def test_run_one_cycle_classifies_signalled_renewal_failure():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1272,7 +1272,7 @@ def test_asr_executor_transcribes_downloaded_audio():
 
     result = ASRRunnerJobExecutor(
         client=client,
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
         provider=provider,
     ).execute(
         job,
@@ -1305,7 +1305,7 @@ def test_asr_executor_transcribes_downloaded_audio():
 
     assert client.calls[0][1] == {
         "job_public_id": job.public_id,
-        "claim_token": "ovrin_claim_test-token",
+        "claim_token": "hetren_claim_test-token",
     }
 
     assert client.calls[1][1][
@@ -1313,7 +1313,7 @@ def test_asr_executor_transcribes_downloaded_audio():
     ] == job.public_id
     assert client.calls[1][1][
         "claim_token"
-    ] == "ovrin_claim_test-token"
+    ] == "hetren_claim_test-token"
 
     assert provider.calls[0][
         "model_name"
@@ -1339,7 +1339,7 @@ def test_asr_executor_removes_audio_after_provider_failure():
     ):
         ASRRunnerJobExecutor(
             client=client,
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             provider=provider,
         ).execute(
             build_job(),
@@ -1361,7 +1361,7 @@ def test_asr_executor_rejects_unsupported_job_type():
     ):
         ASRRunnerJobExecutor(
             client=client,
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             provider=provider,
         ).execute(
             build_job(
@@ -1386,7 +1386,7 @@ def test_asr_executor_rejects_unsupported_audio_format():
     ):
         ASRRunnerJobExecutor(
             client=client,
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             provider=provider,
         ).execute(
             build_job(),
@@ -1413,7 +1413,7 @@ def test_asr_executor_checks_control_before_api_access():
     ):
         ASRRunnerJobExecutor(
             client=client,
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             provider=provider,
         ).execute(
             build_job(),
@@ -1473,7 +1473,7 @@ def test_run_one_cycle_submits_asr_result_atomically():
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1525,7 +1525,7 @@ def test_run_one_cycle_submits_asr_result_atomically():
 
     assert submission == {
         "job_public_id": job.public_id,
-        "claim_token": "ovrin_claim_test-token",
+        "claim_token": "hetren_claim_test-token",
         "generated_transcript": (
             "thank you for calling"
         ),
@@ -1626,7 +1626,7 @@ def test_run_one_cycle_uses_real_asr_executor_by_default(
     client = DefaultASRRecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1778,7 +1778,7 @@ def test_explicit_executor_skips_default_provider_factory(
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1837,7 +1837,7 @@ def test_default_runner_selects_incident_compatibility_without_asr_provider(
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -1857,13 +1857,13 @@ def test_default_runner_selects_incident_compatibility_without_asr_provider(
     executor = build_default_runner_job_executor(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CAPABILITIES=[
+            HETREN_RUNNER_CAPABILITIES=[
                 "incident_replay",
                 "asr",
             ],
         ),
         job=job,
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
     )
 
     assert isinstance(
@@ -1909,7 +1909,7 @@ def test_incident_compatibility_executor_observes_only_proven_runner_state(
         incident_compatibility_execution
         .IncidentCompatibilityRunnerJobExecutor(
             settings=build_settings(
-                OVRIN_RUNNER_CAPABILITIES=[
+                HETREN_RUNNER_CAPABILITIES=[
                     "incident_replay",
                     "asr",
                 ],
@@ -1972,7 +1972,7 @@ def test_incident_compatibility_executor_rejects_modified_capability_contract():
         incident_compatibility_execution
         .IncidentCompatibilityRunnerJobExecutor(
             settings=build_settings(
-                OVRIN_RUNNER_CAPABILITIES=[
+                HETREN_RUNNER_CAPABILITIES=[
                     "asr",
                     "incident_replay",
                 ],
@@ -2014,7 +2014,7 @@ def test_incident_compatibility_executor_honors_cancellation_before_evaluation(
         incident_compatibility_execution
         .IncidentCompatibilityRunnerJobExecutor(
             settings=build_settings(
-                OVRIN_RUNNER_CAPABILITIES=[
+                HETREN_RUNNER_CAPABILITIES=[
                     "asr",
                     "incident_replay",
                 ],
@@ -2039,7 +2039,7 @@ def test_incident_compatibility_default_cycle_uses_generic_completion(
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -2087,7 +2087,7 @@ def test_incident_compatibility_default_cycle_uses_generic_completion(
     result = run_one_local_runner_cycle(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CAPABILITIES=[
+            HETREN_RUNNER_CAPABILITIES=[
                 "asr",
                 "incident_replay",
             ],
@@ -2173,7 +2173,7 @@ def test_default_runner_selects_incident_materialization_without_asr_provider(
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -2193,14 +2193,14 @@ def test_default_runner_selects_incident_materialization_without_asr_provider(
     executor = build_default_runner_job_executor(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CAPABILITIES=[
+            HETREN_RUNNER_CAPABILITIES=[
                 "asr",
                 "incident_materialization",
                 "incident_replay",
             ],
         ),
         job=job,
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
     )
 
     assert isinstance(
@@ -2234,7 +2234,7 @@ def test_default_runner_selects_controlled_replay_without_asr_provider(
     client = RecordingClient(
         RunnerJobClaimResponse(
             status="claimed",
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             job=job,
         )
     )
@@ -2257,7 +2257,7 @@ def test_default_runner_selects_controlled_replay_without_asr_provider(
     executor = build_default_runner_job_executor(
         client=client,
         settings=build_settings(
-            OVRIN_RUNNER_CAPABILITIES=[
+            HETREN_RUNNER_CAPABILITIES=[
                 "asr",
                 "incident_controlled_replay",
                 "incident_materialization",
@@ -2265,7 +2265,7 @@ def test_default_runner_selects_controlled_replay_without_asr_provider(
             ],
         ),
         job=job,
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
     )
 
     assert isinstance(

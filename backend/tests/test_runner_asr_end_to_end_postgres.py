@@ -381,7 +381,7 @@ def create_case(
     configure_critical_terminology: bool = False,
     source_audio_name: str = "support-call.wav",
     source_audio_bytes: bytes = (
-        b"ovrin-runner-asr-end-to-end-audio"
+        b"hetren-runner-asr-end-to-end-audio"
     ),
 ) -> RunnerASREndToEndCase:
     suffix = uuid4().hex
@@ -639,24 +639,24 @@ def build_settings(
 ) -> LocalRunnerSettings:
     return LocalRunnerSettings(
         _env_file=None,
-        OVRIN_RUNNER_API_URL="http://testserver",
-        OVRIN_RUNNER_CREDENTIAL=case.credential,
-        OVRIN_RUNNER_VERSION="0.1.0-asr-e2e",
-        OVRIN_RUNNER_CAPABILITIES=[
+        HETREN_RUNNER_API_URL="http://testserver",
+        HETREN_RUNNER_CREDENTIAL=case.credential,
+        HETREN_RUNNER_VERSION="0.1.0-asr-e2e",
+        HETREN_RUNNER_CAPABILITIES=[
             "asr",
             "cpu",
             "local",
         ],
-        OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS=5,
-        OVRIN_RUNNER_LEASE_SECONDS=30,
-        OVRIN_RUNNER_POLL_INTERVAL_SECONDS=0.01,
-        OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=1,
-        OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=0.01,
-        OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=5,
-        OVRIN_RUNNER_ASR_PROVIDER="mock_local",
-        OVRIN_RUNNER_ASR_MODEL="mock-asr-foundation",
-        OVRIN_RUNNER_ASR_DEVICE="cpu",
-        OVRIN_RUNNER_ASR_COMPUTE_TYPE="int8",
+        HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS=5,
+        HETREN_RUNNER_LEASE_SECONDS=30,
+        HETREN_RUNNER_POLL_INTERVAL_SECONDS=0.01,
+        HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=1,
+        HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=0.01,
+        HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=5,
+        HETREN_RUNNER_ASR_PROVIDER="mock_local",
+        HETREN_RUNNER_ASR_MODEL="mock-asr-foundation",
+        HETREN_RUNNER_ASR_DEVICE="cpu",
+        HETREN_RUNNER_ASR_COMPUTE_TYPE="int8",
     )
 
 
@@ -686,7 +686,7 @@ def test_postgres_runner_executes_asr_evaluation_end_to_end(
         assert temporary_audio_path.exists()
         assert temporary_audio_path.name == "input.wav"
         assert temporary_audio_path.read_bytes() == (
-            b"ovrin-runner-asr-end-to-end-audio"
+            b"hetren-runner-asr-end-to-end-audio"
         )
 
         temporary_audio_paths.append(
@@ -2514,7 +2514,7 @@ def test_postgres_runner_hides_asr_provider_failure(
         assert temporary_audio_path.exists()
         assert temporary_audio_path.name == "input.wav"
         assert temporary_audio_path.read_bytes() == (
-            b"ovrin-runner-asr-end-to-end-audio"
+            b"hetren-runner-asr-end-to-end-audio"
         )
 
         temporary_audio_paths.append(

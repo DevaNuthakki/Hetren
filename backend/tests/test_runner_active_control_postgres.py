@@ -312,23 +312,23 @@ def build_runner_settings(
 ) -> LocalRunnerSettings:
     return LocalRunnerSettings(
         _env_file=None,
-        OVRIN_RUNNER_API_URL="http://testserver",
-        OVRIN_RUNNER_CREDENTIAL=case.credential,
-        OVRIN_RUNNER_VERSION=(
+        HETREN_RUNNER_API_URL="http://testserver",
+        HETREN_RUNNER_CREDENTIAL=case.credential,
+        HETREN_RUNNER_VERSION=(
             "0.1.0-integration"
         ),
-        OVRIN_RUNNER_CAPABILITIES=[
+        HETREN_RUNNER_CAPABILITIES=[
             "asr",
             "cpu",
         ],
-        OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS=5,
-        OVRIN_RUNNER_LEASE_SECONDS=30,
-        OVRIN_RUNNER_POLL_INTERVAL_SECONDS=0.01,
-        OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=1,
-        OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
+        HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS=5,
+        HETREN_RUNNER_LEASE_SECONDS=30,
+        HETREN_RUNNER_POLL_INTERVAL_SECONDS=0.01,
+        HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=1,
+        HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS=(
             0.01
         ),
-        OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS=(
+        HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS=(
             execution_timeout_seconds
         ),
     )
@@ -432,7 +432,7 @@ def test_postgres_running_job_cancellation_reaches_executor(
             cycle_thread = threading.Thread(
                 target=run_cycle,
                 name=(
-                    "ovrin-cancellation-integration"
+                    "hetren-cancellation-integration"
                 ),
             )
             cycle_thread.start()

@@ -83,7 +83,7 @@ def test_local_runner_client_sends_authenticated_heartbeat():
         assert request.method == "POST"
         assert request.url.path == "/runners/heartbeat"
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
 
         assert request.read() == (
@@ -103,8 +103,8 @@ def test_local_runner_client_sends_authenticated_heartbeat():
     transport = httpx.MockTransport(handler)
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com/",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com/",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         response = client.heartbeat(
@@ -125,7 +125,7 @@ def test_local_runner_client_claims_job():
         assert request.method == "POST"
         assert request.url.path == "/runners/jobs/claim"
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
         assert request.read() == b'{"lease_seconds":600}'
 
@@ -133,7 +133,7 @@ def test_local_runner_client_claims_job():
             200,
             json={
                 "status": "claimed",
-                "claim_token": "ovrin_claim_test-token",
+                "claim_token": "hetren_claim_test-token",
                 "job": build_job_payload(),
             },
         )
@@ -141,8 +141,8 @@ def test_local_runner_client_claims_job():
     transport = httpx.MockTransport(handler)
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         response = client.claim_next_job(
@@ -150,7 +150,7 @@ def test_local_runner_client_claims_job():
         )
 
     assert response.status == "claimed"
-    assert response.claim_token == "ovrin_claim_test-token"
+    assert response.claim_token == "hetren_claim_test-token"
     assert response.job is not None
     assert response.job.job_type == "asr_evaluation"
 
@@ -168,8 +168,8 @@ def test_local_runner_client_handles_idle_queue():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         response = client.claim_next_job(
@@ -195,8 +195,8 @@ def test_local_runner_client_maps_authentication_failure():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_secret-value",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_secret-value",
         transport=transport,
     ) as client:
         with pytest.raises(
@@ -206,7 +206,7 @@ def test_local_runner_client_maps_authentication_failure():
                 lease_seconds=300,
             )
 
-    assert "ovrin_runner_secret-value" not in str(
+    assert "hetren_runner_secret-value" not in str(
         error.value
     )
 
@@ -222,8 +222,8 @@ def test_local_runner_client_maps_api_error():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(
@@ -247,7 +247,7 @@ def test_local_runner_client_maps_api_error():
         },
         {
             "status": "idle",
-            "claim_token": "ovrin_claim_invalid-token",
+            "claim_token": "hetren_claim_invalid-token",
             "job": None,
         },
         {
@@ -268,8 +268,8 @@ def test_local_runner_client_rejects_invalid_response(
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(LocalRunnerProtocolError):
@@ -290,8 +290,8 @@ def test_local_runner_client_maps_connection_failure():
     transport = httpx.MockTransport(handler)
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(LocalRunnerRequestError):
@@ -304,13 +304,13 @@ def test_local_runner_client_maps_connection_failure():
 def test_build_local_runner_client_uses_settings():
     settings = LocalRunnerSettings(
         _env_file=None,
-        OVRIN_RUNNER_API_URL=(
-            "https://ovrin.example.com/"
+        HETREN_RUNNER_API_URL=(
+            "https://hetren.example.com/"
         ),
-        OVRIN_RUNNER_CREDENTIAL=(
-            "ovrin_runner_test-credential"
+        HETREN_RUNNER_CREDENTIAL=(
+            "hetren_runner_test-credential"
         ),
-        OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS=45,
+        HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS=45,
     )
 
     transport = httpx.MockTransport(
@@ -350,7 +350,7 @@ def test_local_runner_client_starts_claimed_job():
         )
         assert request.method == "POST"
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token"}'
+            b'{"claim_token":"hetren_claim_test-token"}'
         )
 
         return httpx.Response(
@@ -362,15 +362,15 @@ def test_local_runner_client_starts_claimed_job():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.start_job(
             job_public_id=str(
                 build_job_payload()["public_id"]
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
         )
 
     assert response.status == "running"
@@ -383,7 +383,7 @@ def test_local_runner_client_renews_job_lease():
     ) -> httpx.Response:
         assert request.url.path.endswith("/renew")
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token",'
+            b'{"claim_token":"hetren_claim_test-token",'
             b'"lease_seconds":600}'
         )
 
@@ -396,15 +396,15 @@ def test_local_runner_client_renews_job_lease():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.renew_job_lease(
             job_public_id=str(
                 build_job_payload()["public_id"]
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             lease_seconds=600,
         )
 
@@ -417,7 +417,7 @@ def test_local_runner_client_appends_structured_logs():
     ) -> httpx.Response:
         assert request.url.path.endswith("/logs")
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token",'
+            b'{"claim_token":"hetren_claim_test-token",'
             b'"entries":[{"level":"info",'
             b'"event_type":"execution_started",'
             b'"message":"Runner execution started.",'
@@ -451,15 +451,15 @@ def test_local_runner_client_appends_structured_logs():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.append_job_logs(
             job_public_id=str(
                 build_job_payload()["public_id"]
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             entries=[
                 {
                     "level": "info",
@@ -492,7 +492,7 @@ def test_local_runner_client_completes_job():
     ) -> httpx.Response:
         assert request.url.path.endswith("/complete")
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token",'
+            b'{"claim_token":"hetren_claim_test-token",'
             b'"result_payload":'
             b'{"execution_mode":"placeholder"}}'
         )
@@ -506,15 +506,15 @@ def test_local_runner_client_completes_job():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.complete_job(
             job_public_id=str(
                 build_job_payload()["public_id"]
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             result_payload={
                 "execution_mode": "placeholder",
             },
@@ -538,7 +538,7 @@ def test_local_runner_client_fails_job():
     ) -> httpx.Response:
         assert request.url.path.endswith("/fail")
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token",'
+            b'{"claim_token":"hetren_claim_test-token",'
             b'"error_message":'
             b'"Placeholder execution failed."}'
         )
@@ -552,15 +552,15 @@ def test_local_runner_client_fails_job():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.fail_job(
             job_public_id=str(
                 build_job_payload()["public_id"]
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             error_message=(
                 "Placeholder execution failed."
             ),
@@ -583,8 +583,8 @@ def test_local_runner_client_rejects_unsafe_job_id(
     job_public_id: str,
 ):
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -596,14 +596,14 @@ def test_local_runner_client_rejects_unsafe_job_id(
         ):
             client.start_job(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             )
 
 
 def test_local_runner_client_rejects_invalid_log_batch():
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -617,7 +617,7 @@ def test_local_runner_client_rejects_invalid_log_batch():
                 job_public_id=str(
                     build_job_payload()["public_id"]
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[],
             )
 
@@ -635,7 +635,7 @@ def test_local_runner_client_gets_active_job_control_status():
             f"/runners/jobs/{job_public_id}/control"
         )
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
         assert request.read() == b"{}"
 
@@ -647,8 +647,8 @@ def test_local_runner_client_gets_active_job_control_status():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = client.get_job_control_status(
@@ -669,8 +669,8 @@ def test_local_runner_client_gets_cancelled_job_control_status():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         response = client.get_job_control_status(
@@ -696,8 +696,8 @@ def test_local_runner_client_rejects_unsafe_control_job_id(
     job_public_id: str,
 ):
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -724,13 +724,13 @@ def test_local_runner_client_gets_asr_evaluation_context():
             f"/runners/jobs/{job_public_id}/asr/context"
         )
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
         assert request.headers["accept"] == (
             "application/json"
         )
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token"}'
+            b'{"claim_token":"hetren_claim_test-token"}'
         )
 
         return httpx.Response(
@@ -747,13 +747,13 @@ def test_local_runner_client_gets_asr_evaluation_context():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         context = client.get_asr_evaluation_context(
             job_public_id=job_public_id,
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
         )
 
     assert context.project_id == 7
@@ -781,8 +781,8 @@ def test_local_runner_client_rejects_invalid_asr_context_response():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(LocalRunnerProtocolError):
@@ -791,7 +791,7 @@ def test_local_runner_client_rejects_invalid_asr_context_response():
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             )
 
 
@@ -816,11 +816,11 @@ def test_local_runner_client_downloads_asr_audio_atomically(
             f"/runners/jobs/{job_public_id}/asr/audio"
         )
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
         assert request.headers["accept"] == "audio/*"
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token"}'
+            b'{"claim_token":"hetren_claim_test-token"}'
         )
 
         return httpx.Response(
@@ -832,14 +832,14 @@ def test_local_runner_client_downloads_asr_audio_atomically(
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         downloaded_path = (
             client.download_asr_evaluation_audio(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
         )
@@ -874,8 +874,8 @@ def test_local_runner_audio_download_replaces_complete_file(
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         client.download_asr_evaluation_audio(
@@ -883,7 +883,7 @@ def test_local_runner_audio_download_replaces_complete_file(
                 "20000000-0000-0000-0000-"
                 "000000000001"
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             destination=destination,
         )
 
@@ -914,8 +914,8 @@ def test_local_runner_audio_download_rejects_non_audio_response(
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(LocalRunnerProtocolError):
@@ -924,7 +924,7 @@ def test_local_runner_audio_download_rejects_non_audio_response(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
 
@@ -970,8 +970,8 @@ def test_local_runner_audio_download_preserves_file_on_interruption(
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         with pytest.raises(LocalRunnerRequestError):
@@ -980,7 +980,7 @@ def test_local_runner_audio_download_preserves_file_on_interruption(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
 
@@ -1012,8 +1012,8 @@ def test_local_runner_audio_download_maps_authentication_failure(
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_secret-value",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_secret-value",
         transport=transport,
     ) as client:
         with pytest.raises(
@@ -1024,12 +1024,12 @@ def test_local_runner_audio_download_maps_authentication_failure(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
 
     assert not destination.exists()
-    assert "ovrin_runner_secret-value" not in str(
+    assert "hetren_runner_secret-value" not in str(
         error.value
     )
 
@@ -1051,8 +1051,8 @@ def test_local_runner_audio_download_maps_api_failure(
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(
@@ -1063,7 +1063,7 @@ def test_local_runner_audio_download_maps_api_failure(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
 
@@ -1081,8 +1081,8 @@ def test_local_runner_audio_download_rejects_directory_destination(
     destination.mkdir()
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -1095,7 +1095,7 @@ def test_local_runner_audio_download_rejects_directory_destination(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=destination,
             )
 
@@ -1114,8 +1114,8 @@ def test_local_runner_asr_methods_reject_unsafe_job_id(
     tmp_path: Path,
 ):
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -1125,13 +1125,13 @@ def test_local_runner_asr_methods_reject_unsafe_job_id(
         with pytest.raises(LocalRunnerInputError):
             client.get_asr_evaluation_context(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             )
 
         with pytest.raises(LocalRunnerInputError):
             client.download_asr_evaluation_audio(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 destination=(
                     tmp_path / "support-call.wav"
                 ),
@@ -1169,13 +1169,13 @@ def test_local_runner_client_submits_asr_evaluation_result():
             f"/runners/jobs/{job_public_id}/asr/result"
         )
         assert request.headers["authorization"] == (
-            "Bearer ovrin_runner_test-credential"
+            "Bearer hetren_runner_test-credential"
         )
         assert request.headers["accept"] == (
             "application/json"
         )
         assert request.read() == (
-            b'{"claim_token":"ovrin_claim_test-token",'
+            b'{"claim_token":"hetren_claim_test-token",'
             b'"generated_transcript":'
             b'"thank you for calling",'
             b'"provider":"faster-whisper",'
@@ -1214,14 +1214,14 @@ def test_local_runner_client_submits_asr_evaluation_result():
         )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(handler),
     ) as client:
         response = (
             client.submit_asr_evaluation_result(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 generated_transcript=(
                     "thank you for calling"
                 ),
@@ -1266,8 +1266,8 @@ def test_local_runner_client_rejects_invalid_asr_result_input(
     provider: str,
 ):
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -1280,7 +1280,7 @@ def test_local_runner_client_rejects_invalid_asr_result_input(
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 generated_transcript=generated_transcript,
                 provider=provider,
             )
@@ -1305,8 +1305,8 @@ def test_local_runner_client_rejects_invalid_asr_result_response():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(LocalRunnerProtocolError):
@@ -1315,7 +1315,7 @@ def test_local_runner_client_rejects_invalid_asr_result_response():
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 generated_transcript=(
                     "thank you for calling"
                 ),
@@ -1337,8 +1337,8 @@ def test_local_runner_asr_result_maps_api_failure():
     )
 
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=transport,
     ) as client:
         with pytest.raises(
@@ -1349,7 +1349,7 @@ def test_local_runner_asr_result_maps_api_failure():
                     "20000000-0000-0000-0000-"
                     "000000000001"
                 ),
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 generated_transcript=(
                     "thank you for calling"
                 ),
@@ -1375,8 +1375,8 @@ def test_local_runner_asr_result_rejects_unsafe_job_id(
     job_public_id: str,
 ):
     with LocalRunnerClient(
-        api_base_url="https://ovrin.example.com",
-        credential="ovrin_runner_test-credential",
+        api_base_url="https://hetren.example.com",
+        credential="hetren_runner_test-credential",
         transport=httpx.MockTransport(
             lambda _request: pytest.fail(
                 "HTTP request must not be sent."
@@ -1386,7 +1386,7 @@ def test_local_runner_asr_result_rejects_unsafe_job_id(
         with pytest.raises(LocalRunnerInputError):
             client.submit_asr_evaluation_result(
                 job_public_id=job_public_id,
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 generated_transcript=(
                     "thank you for calling"
                 ),

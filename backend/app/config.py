@@ -19,6 +19,7 @@ class Settings(BaseSettings):
         default="development",
         validation_alias=AliasChoices(
             "HETREN_ENV",
+            # Compatibility for pre-Hetren deployments.
             "OVRIN_ENV",
         ),
     )

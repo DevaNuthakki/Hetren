@@ -104,6 +104,13 @@ Test database:        ovrin_test
 PostgreSQL port:      5433
 ```
 
+The two database names, the local PostgreSQL user, and the Docker volume keep
+their pre-Hetren storage identities intentionally. Renaming them without an
+explicit dump/restore migration would attach Hetren to a new empty volume and
+make existing local data appear lost. Product-facing configuration uses
+`HETREN_*`; see `docs/HETREN_IDENTITY_MIGRATION.md` for the compatibility
+boundary.
+
 The credentials in `.env.example` are for local development only. Staging and production must use separately generated credentials managed outside the repository.
 
 ## Start PostgreSQL

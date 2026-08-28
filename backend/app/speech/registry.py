@@ -16,6 +16,7 @@ def _get_product_environment_value(
     if hetren_value is not None:
         return hetren_value
 
+    # Compatibility for pre-Hetren deployments.
     return os.getenv(
         f"OVRIN_{setting_name}",
         default,

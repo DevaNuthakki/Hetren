@@ -28,14 +28,14 @@ from scripts.run_local_runner import (
 def build_settings() -> LocalRunnerSettings:
     return LocalRunnerSettings(
         _env_file=None,
-        OVRIN_RUNNER_API_URL=(
-            "https://ovrin.example.com"
+        HETREN_RUNNER_API_URL=(
+            "https://hetren.example.com"
         ),
-        OVRIN_RUNNER_CREDENTIAL=(
-            "ovrin_runner_test-credential"
+        HETREN_RUNNER_CREDENTIAL=(
+            "hetren_runner_test-credential"
         ),
-        OVRIN_RUNNER_LEASE_SECONDS=600,
-        OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60,
+        HETREN_RUNNER_LEASE_SECONDS=600,
+        HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS=60,
     )
 
 

@@ -16,7 +16,7 @@ from app.runner_service import (
 
 def build_request() -> RunnerRegisterRequest:
     return RunnerRegisterRequest(
-        registration_token="ovrin_reg_test-token",
+        registration_token="hetren_reg_test-token",
         name="Local ASR Runner",
         runner_version="0.1.0",
         capabilities=["asr", "cpu"],
@@ -48,7 +48,7 @@ def build_registered_runner() -> RegisteredRunner:
     )
 
     return RegisteredRunner(
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         runner=runner,
     )
 
@@ -67,7 +67,7 @@ def test_register_runner_endpoint_returns_one_time_credential(
 
     def fake_register_runner(_db, **kwargs):
         assert kwargs == {
-            "registration_token": "ovrin_reg_test-token",
+            "registration_token": "hetren_reg_test-token",
             "name": "Local ASR Runner",
             "runner_version": "0.1.0",
             "capabilities": ["asr", "cpu"],
@@ -197,7 +197,7 @@ def test_runner_heartbeat_returns_authenticated_runner(
 
     def fake_record_heartbeat(_db, **kwargs):
         assert kwargs["credential"] == (
-            "ovrin_runner_test-credential"
+            "hetren_runner_test-credential"
         )
         assert kwargs["runner_version"] == "0.2.0"
         assert kwargs["capabilities"] == ["asr", "cpu"]
@@ -216,7 +216,7 @@ def test_runner_heartbeat_returns_authenticated_runner(
 
     response = runner_routes.runner_heartbeat_endpoint(
         request=request,
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -286,7 +286,7 @@ def build_claimed_runner_job():
     )
 
     return ClaimedRunnerJob(
-        claim_token="ovrin_claim_test-token",
+        claim_token="hetren_claim_test-token",
         job=job,
     )
 
@@ -305,7 +305,7 @@ def test_runner_job_claim_returns_claimed_job(
 
     def fake_claim_next_job(_db, **kwargs):
         assert kwargs["credential"] == (
-            "ovrin_runner_test-credential"
+            "hetren_runner_test-credential"
         )
         assert kwargs["lease_duration"] == timedelta(
             seconds=600
@@ -324,7 +324,7 @@ def test_runner_job_claim_returns_claimed_job(
 
     response = runner_routes.runner_job_claim_endpoint(
         request=request,
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -344,7 +344,7 @@ def test_runner_job_claim_returns_idle_when_queue_is_empty(
 
     response = runner_routes.runner_job_claim_endpoint(
         request=runner_routes.RunnerJobClaimRequest(),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -402,7 +402,7 @@ def test_runner_job_claim_maps_conflict_to_409(
     with pytest.raises(HTTPException) as error:
         runner_routes.runner_job_claim_endpoint(
             request=runner_routes.RunnerJobClaimRequest(),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -429,7 +429,7 @@ def test_runner_job_claim_maps_invalid_lease_to_422(
     with pytest.raises(HTTPException) as error:
         runner_routes.runner_job_claim_endpoint(
             request=runner_routes.RunnerJobClaimRequest(),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -460,9 +460,9 @@ def test_runner_job_start_returns_running_job(
 
     def fake_start_job(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": claimed.job.public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
         }
         return claimed.job
 
@@ -475,9 +475,9 @@ def test_runner_job_start_returns_running_job(
     response = runner_routes.runner_job_start_endpoint(
         job_public_id=claimed.job.public_id,
         request=runner_routes.RunnerJobStartRequest(
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
         ),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -496,9 +496,9 @@ def test_runner_job_complete_returns_completed_job(
 
     def fake_complete_job(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": claimed.job.public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "result_payload": {"evaluation_run_id": 42},
         }
         return claimed.job
@@ -512,10 +512,10 @@ def test_runner_job_complete_returns_completed_job(
     response = runner_routes.runner_job_complete_endpoint(
         job_public_id=claimed.job.public_id,
         request=runner_routes.RunnerJobCompleteRequest(
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             result_payload={"evaluation_run_id": 42},
         ),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -534,9 +534,9 @@ def test_runner_job_fail_returns_failed_job(
 
     def fake_fail_job(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": claimed.job.public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "error_message": "Runner process failed.",
         }
         return claimed.job
@@ -550,10 +550,10 @@ def test_runner_job_fail_returns_failed_job(
     response = runner_routes.runner_job_fail_endpoint(
         job_public_id=claimed.job.public_id,
         request=runner_routes.RunnerJobFailRequest(
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             error_message="Runner process failed.",
         ),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -581,7 +581,7 @@ def test_runner_job_start_maps_authentication_failure_to_401(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobStartRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
             credential="invalid",
             db=object(),
@@ -613,9 +613,9 @@ def test_runner_job_start_hides_invalid_claim_state(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobStartRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -646,9 +646,9 @@ def test_runner_job_complete_maps_transition_failure_to_409(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobCompleteRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -678,10 +678,10 @@ def test_runner_job_fail_maps_invalid_error_to_422(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobFailRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 error_message="Temporary valid value",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -707,9 +707,9 @@ def test_runner_job_renew_returns_renewed_job(
 
     def fake_renew_job_lease(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": claimed.job.public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "lease_duration": timedelta(seconds=600),
         }
         return claimed.job
@@ -723,10 +723,10 @@ def test_runner_job_renew_returns_renewed_job(
     response = runner_routes.runner_job_renew_endpoint(
         job_public_id=claimed.job.public_id,
         request=runner_routes.RunnerJobRenewRequest(
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             lease_seconds=600,
         ),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -754,7 +754,7 @@ def test_runner_job_renew_maps_authentication_failure_to_401(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobRenewRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
             credential="invalid",
             db=object(),
@@ -786,9 +786,9 @@ def test_runner_job_renew_hides_invalid_claim_state(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobRenewRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -819,9 +819,9 @@ def test_runner_job_renew_maps_transition_failure_to_409(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobRenewRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -851,9 +851,9 @@ def test_runner_job_renew_maps_invalid_duration_to_422(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobRenewRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -908,9 +908,9 @@ def test_runner_job_log_append_returns_persisted_logs(
 
     def fake_append_job_logs(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "entries": [
                 {
                     "level": "info",
@@ -944,7 +944,7 @@ def test_runner_job_log_append_returns_persisted_logs(
         runner_routes.runner_job_log_append_endpoint(
             job_public_id=job_public_id,
             request=runner_routes.RunnerJobLogAppendRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[
                     {
                         "level": "info",
@@ -966,7 +966,7 @@ def test_runner_job_log_append_returns_persisted_logs(
                     },
                 ],
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
     )
@@ -995,7 +995,7 @@ def test_runner_job_log_append_maps_authentication_failure_to_401(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogAppendRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[
                     {
                         "level": "info",
@@ -1037,7 +1037,7 @@ def test_runner_job_log_append_hides_invalid_claim_state(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogAppendRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[
                     {
                         "level": "info",
@@ -1046,7 +1046,7 @@ def test_runner_job_log_append_hides_invalid_claim_state(
                     },
                 ],
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1077,7 +1077,7 @@ def test_runner_job_log_append_maps_conflict_to_409(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogAppendRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[
                     {
                         "level": "info",
@@ -1086,7 +1086,7 @@ def test_runner_job_log_append_maps_conflict_to_409(
                     },
                 ],
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1116,7 +1116,7 @@ def test_runner_job_log_append_maps_service_validation_to_422(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogAppendRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 entries=[
                     {
                         "level": "info",
@@ -1125,7 +1125,7 @@ def test_runner_job_log_append_maps_service_validation_to_422(
                     },
                 ],
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1186,9 +1186,9 @@ def test_runner_job_log_query_returns_ordered_page(
 
     def fake_query_job_logs(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "after_sequence": 5,
             "limit": 2,
             "attempt_number": 2,
@@ -1206,13 +1206,13 @@ def test_runner_job_log_query_returns_ordered_page(
         runner_routes.runner_job_log_query_endpoint(
             job_public_id=job_public_id,
             request=runner_routes.RunnerJobLogQueryRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
                 after_sequence=5,
                 limit=2,
                 attempt_number=2,
                 level="error",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
     )
@@ -1242,7 +1242,7 @@ def test_runner_job_log_query_maps_authentication_failure_to_401(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogQueryRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
             credential="invalid",
             db=object(),
@@ -1277,9 +1277,9 @@ def test_runner_job_log_query_hides_invalid_claim_state(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogQueryRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1310,9 +1310,9 @@ def test_runner_job_log_query_maps_service_validation_to_422(
                 "10000000-0000-0000-0000-000000000001"
             ),
             request=runner_routes.RunnerJobLogQueryRequest(
-                claim_token="ovrin_claim_test-token",
+                claim_token="hetren_claim_test-token",
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1339,7 +1339,7 @@ def test_runner_job_control_returns_active_status(
 
     def fake_get_job_control_status(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
         }
         return "active"
@@ -1352,7 +1352,7 @@ def test_runner_job_control_returns_active_status(
 
     response = runner_routes.runner_job_control_endpoint(
         job_public_id=job_public_id,
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -1374,7 +1374,7 @@ def test_runner_job_control_returns_cancelled_status(
         job_public_id=(
             "10000000-0000-0000-0000-000000000001"
         ),
-        credential="ovrin_runner_test-credential",
+        credential="hetren_runner_test-credential",
         db=object(),
     )
 
@@ -1434,7 +1434,7 @@ def test_runner_job_control_hides_unavailable_state(
             job_public_id=(
                 "10000000-0000-0000-0000-000000000001"
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
 
@@ -1484,9 +1484,9 @@ def test_runner_asr_context_returns_safe_metadata(
 
     def fake_get_context(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
         }
         return context
 
@@ -1503,10 +1503,10 @@ def test_runner_asr_context_returns_safe_metadata(
             request=(
                 runner_routes
                 .RunnerASREvaluationContextRequest(
-                    claim_token="ovrin_claim_test-token",
+                    claim_token="hetren_claim_test-token",
                 )
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
     )
@@ -1550,7 +1550,7 @@ def test_runner_asr_context_maps_authentication_failure_to_401(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
@@ -1597,12 +1597,12 @@ def test_runner_asr_context_hides_invalid_claim(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -1644,12 +1644,12 @@ def test_runner_asr_context_hides_unavailable_context(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -1692,12 +1692,12 @@ def test_runner_asr_context_maps_invalid_payload_to_422(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -1734,9 +1734,9 @@ def test_runner_asr_audio_returns_file_response(
 
     def fake_get_audio(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
         }
         return audio
 
@@ -1753,10 +1753,10 @@ def test_runner_asr_audio_returns_file_response(
             request=(
                 runner_routes
                 .RunnerASREvaluationContextRequest(
-                    claim_token="ovrin_claim_test-token",
+                    claim_token="hetren_claim_test-token",
                 )
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
     )
@@ -1798,7 +1798,7 @@ def test_runner_asr_audio_maps_authentication_failure_to_401(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
@@ -1845,12 +1845,12 @@ def test_runner_asr_audio_hides_invalid_claim(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -1892,12 +1892,12 @@ def test_runner_asr_audio_hides_unavailable_audio(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -1937,12 +1937,12 @@ def test_runner_asr_audio_maps_invalid_payload_to_422(
                     runner_routes
                     .RunnerASREvaluationContextRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -2001,9 +2001,9 @@ def test_runner_asr_result_returns_completed_submission(
 
     def fake_submit_result(_db, **kwargs):
         assert kwargs == {
-            "credential": "ovrin_runner_test-credential",
+            "credential": "hetren_runner_test-credential",
             "job_public_id": job_public_id,
-            "claim_token": "ovrin_claim_test-token",
+            "claim_token": "hetren_claim_test-token",
             "generated_transcript": (
                 "thank you for calling"
             ),
@@ -2028,7 +2028,7 @@ def test_runner_asr_result_returns_completed_submission(
             request=(
                 runner_routes
                 .RunnerASREvaluationResultRequest(
-                    claim_token="ovrin_claim_test-token",
+                    claim_token="hetren_claim_test-token",
                     generated_transcript=(
                         "thank you for calling"
                     ),
@@ -2039,7 +2039,7 @@ def test_runner_asr_result_returns_completed_submission(
                     },
                 )
             ),
-            credential="ovrin_runner_test-credential",
+            credential="hetren_runner_test-credential",
             db=object(),
         )
     )
@@ -2086,7 +2086,7 @@ def test_runner_asr_result_maps_authentication_failure_to_401(
                     runner_routes
                     .RunnerASREvaluationResultRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                         generated_transcript=(
                             "thank you for calling"
@@ -2137,7 +2137,7 @@ def test_runner_asr_result_hides_invalid_claim(
                     runner_routes
                     .RunnerASREvaluationResultRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                         generated_transcript=(
                             "thank you for calling"
@@ -2146,7 +2146,7 @@ def test_runner_asr_result_hides_invalid_claim(
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -2188,7 +2188,7 @@ def test_runner_asr_result_hides_unavailable_result(
                     runner_routes
                     .RunnerASREvaluationResultRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                         generated_transcript=(
                             "thank you for calling"
@@ -2197,7 +2197,7 @@ def test_runner_asr_result_hides_unavailable_result(
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -2237,7 +2237,7 @@ def test_runner_asr_result_maps_invalid_output_to_422(
                     runner_routes
                     .RunnerASREvaluationResultRequest(
                         claim_token=(
-                            "ovrin_claim_test-token"
+                            "hetren_claim_test-token"
                         ),
                         generated_transcript=(
                             "thank you for calling"
@@ -2246,7 +2246,7 @@ def test_runner_asr_result_maps_invalid_output_to_422(
                     )
                 ),
                 credential=(
-                    "ovrin_runner_test-credential"
+                    "hetren_runner_test-credential"
                 ),
                 db=object(),
             )
@@ -2267,7 +2267,7 @@ def test_runner_asr_result_request_forbids_runner_metrics():
             .model_validate(
                 {
                     "claim_token": (
-                        "ovrin_claim_test-token"
+                        "hetren_claim_test-token"
                     ),
                     "generated_transcript": (
                         "thank you for calling"
@@ -2293,7 +2293,7 @@ def test_runner_asr_result_request_rejects_empty_text(
     value: str,
 ):
     payload = {
-        "claim_token": "ovrin_claim_test-token",
+        "claim_token": "hetren_claim_test-token",
         "generated_transcript": (
             "thank you for calling"
         ),

@@ -1387,39 +1387,39 @@ def _incident_chain(
 
     settings = LocalRunnerSettings(
         _env_file=None,
-        OVRIN_RUNNER_CREDENTIAL="local-full-chain-runner",
-        OVRIN_RUNNER_VERSION=ASR_BRUTAL_FULL_CHAIN_RUN_VERSION,
-        OVRIN_RUNNER_CAPABILITIES=list(
+        HETREN_RUNNER_CREDENTIAL="local-full-chain-runner",
+        HETREN_RUNNER_VERSION=ASR_BRUTAL_FULL_CHAIN_RUN_VERSION,
+        HETREN_RUNNER_CAPABILITIES=list(
             INCIDENT_REPLAY_COMPATIBILITY_REQUIRED_CAPABILITIES
         ),
-        OVRIN_RUNNER_ASR_PROVIDER="faster_whisper",
-        OVRIN_RUNNER_ASR_MODEL=str(
+        HETREN_RUNNER_ASR_PROVIDER="faster_whisper",
+        HETREN_RUNNER_ASR_MODEL=str(
             candidate_model_identity["model_name"]
         ),
-        OVRIN_RUNNER_ASR_DEVICE="cpu",
-        OVRIN_RUNNER_ASR_COMPUTE_TYPE="int8_float32",
-        OVRIN_RUNNER_INCIDENT_DEPLOYMENT_KEY=runtime.deployment_key,
-        OVRIN_RUNNER_INCIDENT_DEPLOYMENT_VERSION=(
+        HETREN_RUNNER_ASR_DEVICE="cpu",
+        HETREN_RUNNER_ASR_COMPUTE_TYPE="int8_float32",
+        HETREN_RUNNER_INCIDENT_DEPLOYMENT_KEY=runtime.deployment_key,
+        HETREN_RUNNER_INCIDENT_DEPLOYMENT_VERSION=(
             runtime.deployment_version
         ),
-        OVRIN_RUNNER_INCIDENT_PROVIDER_VERSION=runtime.provider_version,
-        OVRIN_RUNNER_INCIDENT_MODEL_VERSION=runtime.model_version,
-        OVRIN_RUNNER_INCIDENT_MODEL_ARTIFACT_SHA256=(
+        HETREN_RUNNER_INCIDENT_PROVIDER_VERSION=runtime.provider_version,
+        HETREN_RUNNER_INCIDENT_MODEL_VERSION=runtime.model_version,
+        HETREN_RUNNER_INCIDENT_MODEL_ARTIFACT_SHA256=(
             runtime.model_artifact_sha256
         ),
-        OVRIN_RUNNER_INCIDENT_SOURCE_CODE_SHA256=(
+        HETREN_RUNNER_INCIDENT_SOURCE_CODE_SHA256=(
             runtime.source_code_sha256
         ),
-        OVRIN_RUNNER_INCIDENT_CONFIGURATION_SHA256=(
+        HETREN_RUNNER_INCIDENT_CONFIGURATION_SHA256=(
             runtime.configuration_sha256
         ),
-        OVRIN_RUNNER_INCIDENT_RUNTIME_ENVIRONMENT_SHA256=(
+        HETREN_RUNNER_INCIDENT_RUNTIME_ENVIRONMENT_SHA256=(
             runtime.runtime_environment_sha256
         ),
-        OVRIN_RUNNER_INCIDENT_HOST_ENVIRONMENT_SHA256=(
+        HETREN_RUNNER_INCIDENT_HOST_ENVIRONMENT_SHA256=(
             runtime.host_environment_sha256
         ),
-        OVRIN_RUNNER_INCIDENT_MATERIALIZATION_AUTHORIZATION_SHA256=(
+        HETREN_RUNNER_INCIDENT_MATERIALIZATION_AUTHORIZATION_SHA256=(
             authorization
         ),
     )

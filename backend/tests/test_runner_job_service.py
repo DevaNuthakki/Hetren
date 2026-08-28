@@ -400,7 +400,7 @@ def test_claim_next_job_rejects_invalid_runner_credential(
     ):
         claim_next_job(
             db,
-            credential="ovrin_runner_invalid",
+            credential="hetren_runner_invalid",
         )
 
 
@@ -569,7 +569,7 @@ def test_verify_job_claim_ownership_rejects_wrong_token(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
-            claim_token="ovrin_claim_wrong-token",
+            claim_token="hetren_claim_wrong-token",
             now=claim_time + timedelta(minutes=1),
         )
 
@@ -1060,7 +1060,7 @@ def test_complete_job_rejects_non_json_result_payload(
             job_public_id=(
                 "10000000-0000-0000-0000-000000000001"
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             result_payload={"invalid": object()},
         )
 
@@ -1094,7 +1094,7 @@ def test_fail_job_rejects_empty_error_message(
             job_public_id=(
                 "10000000-0000-0000-0000-000000000001"
             ),
-            claim_token="ovrin_claim_test-token",
+            claim_token="hetren_claim_test-token",
             error_message=error_message,
         )
 
@@ -2163,7 +2163,7 @@ def test_append_job_logs_rejects_invalid_claim_without_writes(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
-            claim_token="ovrin_claim_wrong-token",
+            claim_token="hetren_claim_wrong-token",
             entries=[
                 {
                     "level": "info",
@@ -2609,7 +2609,7 @@ def test_query_job_logs_rejects_invalid_claim(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
-            claim_token="ovrin_claim_wrong-token",
+            claim_token="hetren_claim_wrong-token",
             now=claim_time + timedelta(seconds=10),
         )
 
@@ -3779,7 +3779,7 @@ def test_get_asr_evaluation_audio_preserves_claim_failure(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
-            claim_token="ovrin_claim_invalid-token",
+            claim_token="hetren_claim_invalid-token",
             uploads_root=uploads_root,
         )
 
@@ -4656,7 +4656,7 @@ def test_submit_asr_evaluation_result_preserves_claim_failure(
             db,
             credential=registered.credential,
             job_public_id=claimed.job.public_id,
-            claim_token="ovrin_claim_wrong-token",
+            claim_token="hetren_claim_wrong-token",
             generated_transcript="thank you for calling",
             provider="faster-whisper",
         )

@@ -7,6 +7,8 @@ REGISTRATION_TOKEN_PREFIX = "hetren_reg_"
 RUNNER_CREDENTIAL_PREFIX = "hetren_runner_"
 JOB_CLAIM_TOKEN_PREFIX = "hetren_claim_"
 
+# These values are cryptographic compatibility identities, not branding.
+# Removing or renaming them would make issued Ovrin secrets unverifiable.
 LEGACY_REGISTRATION_TOKEN_PREFIX = "ovrin_reg_"
 LEGACY_RUNNER_CREDENTIAL_PREFIX = "ovrin_runner_"
 LEGACY_JOB_CLAIM_TOKEN_PREFIX = "ovrin_claim_"

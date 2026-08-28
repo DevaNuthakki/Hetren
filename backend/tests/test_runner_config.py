@@ -37,7 +37,7 @@ def clear_runner_environment(monkeypatch):
         monkeypatch.delenv(key, raising=False)
 
 
-def test_local_runner_settings_load_environment(
+def test_local_runner_settings_load_complete_legacy_ovrin_environment(
     monkeypatch,
 ):
     clear_runner_environment(monkeypatch)
@@ -144,10 +144,10 @@ def test_local_runner_settings_hide_credential(
     clear_runner_environment(monkeypatch)
 
     plaintext_credential = (
-        "ovrin_runner_secret-test-credential"
+        "hetren_runner_secret-test-credential"
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
+        "HETREN_RUNNER_CREDENTIAL",
         plaintext_credential,
     )
 
@@ -161,51 +161,51 @@ def test_local_runner_settings_hide_credential(
     ("environment_key", "environment_value"),
     [
         (
-            "OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS",
+            "HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_REQUEST_TIMEOUT_SECONDS",
+            "HETREN_RUNNER_REQUEST_TIMEOUT_SECONDS",
             "301",
         ),
         (
-            "OVRIN_RUNNER_LEASE_SECONDS",
+            "HETREN_RUNNER_LEASE_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_LEASE_SECONDS",
+            "HETREN_RUNNER_LEASE_SECONDS",
             "3601",
         ),
         (
-            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_POLL_INTERVAL_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_POLL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_POLL_INTERVAL_SECONDS",
             "301",
         ),
         (
-            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
             "1801",
         ),
         (
-            "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
+            "HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
             "301",
         ),
         (
-            "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
+            "HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
             "0",
         ),
         (
-            "OVRIN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
+            "HETREN_RUNNER_EXECUTION_TIMEOUT_SECONDS",
             "86401",
         ),
     ],
@@ -218,8 +218,8 @@ def test_local_runner_settings_reject_invalid_limits(
     clear_runner_environment(monkeypatch)
 
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
-        "ovrin_runner_test-credential",
+        "HETREN_RUNNER_CREDENTIAL",
+        "hetren_runner_test-credential",
     )
     monkeypatch.setenv(
         environment_key,
@@ -235,15 +235,15 @@ def test_local_runner_settings_require_renewal_before_expiry(
     clear_runner_environment(monkeypatch)
 
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
-        "ovrin_runner_test-credential",
+        "HETREN_RUNNER_CREDENTIAL",
+        "hetren_runner_test-credential",
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_LEASE_SECONDS",
+        "HETREN_RUNNER_LEASE_SECONDS",
         "60",
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+        "HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
         "60",
     )
 
@@ -258,19 +258,19 @@ def test_local_runner_settings_require_control_polling_before_renewal(
     clear_runner_environment(monkeypatch)
 
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
-        "ovrin_runner_test-credential",
+        "HETREN_RUNNER_CREDENTIAL",
+        "hetren_runner_test-credential",
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_LEASE_SECONDS",
+        "HETREN_RUNNER_LEASE_SECONDS",
         "120",
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
+        "HETREN_RUNNER_LEASE_RENEWAL_INTERVAL_SECONDS",
         "30",
     )
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
+        "HETREN_RUNNER_CONTROL_POLL_INTERVAL_SECONDS",
         "30",
     )
 
@@ -284,8 +284,8 @@ def test_local_runner_settings_use_safe_asr_defaults(
 ):
     clear_runner_environment(monkeypatch)
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
-        "ovrin_runner_test-credential",
+        "HETREN_RUNNER_CREDENTIAL",
+        "hetren_runner_test-credential",
     )
 
     settings = LocalRunnerSettings(_env_file=None)
@@ -303,10 +303,10 @@ def test_local_runner_settings_use_safe_asr_defaults(
 @pytest.mark.parametrize(
     ("environment_key", "environment_value"),
     [
-        ("OVRIN_RUNNER_ASR_PROVIDER", "unknown"),
-        ("OVRIN_RUNNER_ASR_MODEL", "   "),
-        ("OVRIN_RUNNER_ASR_DEVICE", "   "),
-        ("OVRIN_RUNNER_ASR_COMPUTE_TYPE", "   "),
+        ("HETREN_RUNNER_ASR_PROVIDER", "unknown"),
+        ("HETREN_RUNNER_ASR_MODEL", "   "),
+        ("HETREN_RUNNER_ASR_DEVICE", "   "),
+        ("HETREN_RUNNER_ASR_COMPUTE_TYPE", "   "),
     ],
 )
 def test_local_runner_settings_reject_invalid_asr_configuration(
@@ -316,8 +316,8 @@ def test_local_runner_settings_reject_invalid_asr_configuration(
 ):
     clear_runner_environment(monkeypatch)
     monkeypatch.setenv(
-        "OVRIN_RUNNER_CREDENTIAL",
-        "ovrin_runner_test-credential",
+        "HETREN_RUNNER_CREDENTIAL",
+        "hetren_runner_test-credential",
     )
     monkeypatch.setenv(
         environment_key,

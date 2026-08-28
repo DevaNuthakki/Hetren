@@ -22,6 +22,7 @@ def _runner_environment_alias(
 ) -> AliasChoices:
     return AliasChoices(
         f"HETREN_RUNNER_{setting_name}",
+        # Compatibility for pre-Hetren runner deployments.
         f"OVRIN_RUNNER_{setting_name}",
     )
 
