@@ -24,6 +24,7 @@ jobs:
 
     env:
       HETREN_ENV: test
+      HETREN_REAL_MEDIA_INTEGRATION: "0"
       HETREN_AUTH_SECRET_KEY: hetren-ci-auth-secret-test-only-2026-not-production
       DATABASE_URL: postgresql+psycopg://ovrin:ovrin_ci_only@127.0.0.1:5432/ovrin
       TEST_DATABASE_URL: postgresql+psycopg://ovrin:ovrin_ci_only@127.0.0.1:5432/ovrin_test
@@ -186,9 +187,14 @@ jobs:
               -W error \
               tests/test_content_hashing.py \
               tests/test_adversarial_asr_ffprobe.py \
-              tests/test_adversarial_asr_ffprobe_integration.py \
+              tests/test_adversarial_asr_alaw_integration.py \
               tests/test_adversarial_asr_brutal_media_integration.py \
-              tests/test_adversarial_asr_synthetic_tts_integration.py
+              tests/test_adversarial_asr_ffprobe_integration.py \
+              tests/test_adversarial_asr_lossy_integration.py \
+              tests/test_adversarial_asr_mulaw_integration.py \
+              tests/test_adversarial_asr_noise_integration.py \
+              tests/test_adversarial_asr_synthetic_tts_integration.py \
+              tests/test_adversarial_asr_telephony_integration.py
 
   frontend:
     name: Frontend
