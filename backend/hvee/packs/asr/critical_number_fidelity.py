@@ -246,12 +246,25 @@ CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1 = EvaluatorVersion(
 )
 
 
+CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2 = EvaluatorVersion(
+    key="hetren.asr.critical-number-fidelity.en-us",
+    version="1.2.0",
+    evaluation_type=ASR_EVALUATION_TYPE,
+    description=(
+        "Deterministic US English ASR evaluator for preservation of "
+        "typed, context-bound critical-number evidence with qualified "
+        "sentence-period numeric boundaries."
+    ),
+)
+
+
 def _require_supported_critical_number_evaluator(
     evaluator: EvaluatorVersion,
 ) -> EvaluatorVersion:
     if evaluator not in (
         CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1,
         CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+        CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2,
     ):
         raise HveeContractError(
             "critical-number evaluator identity is unsupported"
@@ -788,6 +801,44 @@ def _extract_raw_entities(
             )
         )
 
+    if evaluator == CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2:
+        comma_run_pattern = re.compile(
+            r"(?<!\w)[0-9]+(?:,[0-9]+)+(?!\w)"
+        )
+        valid_grouped_integer_pattern = re.compile(
+            r"^[0-9]{1,3}(?:,[0-9]{3})+$"
+        )
+
+        for match in comma_run_pattern.finditer(normalized):
+            if valid_grouped_integer_pattern.fullmatch(match.group(0)):
+                continue
+            add(
+                _RawEntity(
+                    ASRCriticalNumberType.UNKNOWN,
+                    match.start(),
+                    match.end(),
+                    match.group(0),
+                    None,
+                    ASRCriticalNumberReasonCode.REFERENCE_EXPRESSION_UNSUPPORTED,
+                )
+            )
+
+        unsupported_period_run_pattern = re.compile(
+            rf"(?<![\w.]){_NUMBER_LITERAL}"
+            r"(?:\.{2}|\.{4,})(?!\.)"
+        )
+        for match in unsupported_period_run_pattern.finditer(normalized):
+            add(
+                _RawEntity(
+                    ASRCriticalNumberType.UNKNOWN,
+                    match.start(),
+                    match.end(),
+                    match.group(0),
+                    None,
+                    ASRCriticalNumberReasonCode.REFERENCE_EXPRESSION_UNSUPPORTED,
+                )
+            )
+
     unsupported_patterns = (
         re.compile(r"\b(?:[0-9]{1,3}\.){2,}[0-9]{1,3}\b"),
         re.compile(rf"\b{_NUMBER_LITERAL}[eE][+-]?[0-9]+\b"),
@@ -1054,7 +1105,37 @@ def _extract_raw_entities(
         else:
             index = chosen_end + 1
 
-    digit_pattern = re.compile(rf"(?<![\w.]){_NUMBER_LITERAL}(?![\w.])")
+    if evaluator == CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2:
+        v1_2_numeric_boundary = (
+            r"(?=$|[^\w.,]|,(?![0-9])|\.(?![\w.])|\.{3}(?![\w.]))"
+        )
+
+        grouped_digit_pattern = re.compile(
+            rf"(?<![\w.])"
+            rf"[0-9]{{1,3}}(?:,[0-9]{{3}})+(?:\.[0-9]+)?"
+            rf"{v1_2_numeric_boundary}"
+        )
+        for match in grouped_digit_pattern.finditer(normalized):
+            add(
+                _RawEntity(
+                    ASRCriticalNumberType.CARDINAL_DECIMAL,
+                    match.start(),
+                    match.end(),
+                    _canonical_decimal(match.group(0)),
+                    None,
+                )
+            )
+
+        digit_pattern = re.compile(
+            rf"(?<![\w.])(?<![0-9],)"
+            rf"[0-9]+(?:\.[0-9]+)?"
+            rf"{v1_2_numeric_boundary}"
+        )
+    else:
+        digit_pattern = re.compile(
+            rf"(?<![\w.]){_NUMBER_LITERAL}(?![\w.])"
+        )
+
     for match in digit_pattern.finditer(normalized):
         add(
             _RawEntity(
@@ -1632,6 +1713,10 @@ def build_critical_number_fidelity_observations(
             CRITICAL_NUMBER_FIDELITY_EVALUATOR.key,
             CRITICAL_NUMBER_FIDELITY_EVALUATOR.version,
         ): CRITICAL_NUMBER_FIDELITY_EVALUATOR,
+        (
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2.key,
+            CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2.version,
+        ): CRITICAL_NUMBER_FIDELITY_EVALUATOR_V1_2,
     }
     evaluator = evaluator_by_identity.get(
         (
