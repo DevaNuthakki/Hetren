@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Callable
+
 from copy import deepcopy
 from dataclasses import dataclass
 from enum import StrEnum
@@ -1178,6 +1180,938 @@ def verify_behavioral_engine_observation_return_bundle(
         return False
 
     if rebuilt.sha256 != (expected_sha256):
+        return False
+
+    return True
+
+
+@dataclass(frozen=True)
+class BehavioralEngineClosedLoopStepBundle:
+    payload: dict[str, object]
+    advanced_source_bundle: (
+        AdaptiveScenarioSearchBundle
+        | MinimalCounterexampleReductionBundle
+        | NeighborhoodGenerationBundle
+    )
+    next_experiment: BehavioralEngineExperimentBundle | None
+    sha256: str
+
+
+_NativeBehavioralObservation = (
+    AdaptiveScenarioObservation
+    | CounterexampleReductionObservation
+    | NeighborhoodObservation
+)
+
+_NativeStateAdvancer = Callable[
+    [_NativeBehavioralObservation],
+    object,
+]
+
+
+def _source_observation_history(
+    payload: dict[str, object],
+) -> list[object]:
+    observations = payload.get("observations")
+
+    if not isinstance(
+        observations,
+        list,
+    ):
+        raise HveeContractError("behavioral source observations " "must be a list")
+
+    return observations
+
+
+def _behavioral_source_status(
+    *,
+    operation: BehavioralEngineOperation,
+    payload: dict[str, object],
+) -> str:
+    (
+        _expected_type,
+        _payload_type,
+        status_section_key,
+    ) = _source_contract(operation)
+
+    section = payload.get(status_section_key)
+
+    if not isinstance(
+        section,
+        dict,
+    ):
+        raise HveeContractError("behavioral source status section " "must be an object")
+
+    status = section.get("status")
+
+    if (
+        not isinstance(
+            status,
+            str,
+        )
+        or not status
+    ):
+        raise HveeContractError("behavioral source status is invalid")
+
+    return status
+
+
+def _behavioral_source_next_proposal(
+    payload: dict[str, object],
+) -> dict[str, object] | None:
+    outcome = payload.get("outcome")
+
+    if not isinstance(
+        outcome,
+        dict,
+    ):
+        raise HveeContractError("behavioral source outcome " "must be an object")
+
+    proposal = outcome.get("next_proposal")
+
+    if proposal is None:
+        return None
+
+    if not isinstance(
+        proposal,
+        dict,
+    ):
+        raise HveeContractError("behavioral next proposal " "must be an object or null")
+
+    return proposal
+
+
+def _persisted_native_observation_projection(
+    *,
+    operation: BehavioralEngineOperation,
+    appended: object,
+) -> dict[str, object]:
+    if not isinstance(
+        appended,
+        dict,
+    ):
+        raise HveeContractError(
+            "advanced native observation payload " "must be an object"
+        )
+
+    sequence = appended.get("sequence")
+
+    if operation == BehavioralEngineOperation.ADAPTIVE_SCENARIO_SEARCH:
+        evidence = appended.get("evidence")
+
+        if not isinstance(
+            evidence,
+            dict,
+        ):
+            raise HveeContractError(
+                "adaptive persisted observation " "evidence must be an object"
+            )
+
+        return {
+            "sequence": sequence,
+            "candidate_index": (appended.get("candidate_index")),
+            "scenario_sha256": (appended.get("scenario_sha256")),
+            "verdict": (appended.get("verdict")),
+            "result_provenance_sha256": (evidence.get("result_provenance_sha256")),
+            "observation_evidence_sha256": (
+                evidence.get("observation_evidence_sha256")
+            ),
+            "decision_evidence_sha256": (evidence.get("decision_evidence_sha256")),
+            "counterexample_evidence_sha256": (
+                evidence.get("counterexample_evidence_sha256")
+            ),
+        }
+
+    if operation == BehavioralEngineOperation.MINIMAL_COUNTEREXAMPLE_REDUCTION:
+        proposal = appended.get("proposal")
+
+        candidate = appended.get("candidate")
+
+        if not isinstance(
+            proposal,
+            dict,
+        ):
+            raise HveeContractError("reduction persisted proposal " "must be an object")
+
+        if not isinstance(
+            candidate,
+            dict,
+        ):
+            raise HveeContractError(
+                "reduction persisted candidate " "must be an object"
+            )
+
+        removed_unit = proposal.get("removed_unit")
+
+        evidence = candidate.get("evidence")
+
+        if not isinstance(
+            removed_unit,
+            dict,
+        ):
+            raise HveeContractError(
+                "reduction persisted removed_unit " "must be an object"
+            )
+
+        if not isinstance(
+            evidence,
+            dict,
+        ):
+            raise HveeContractError("reduction persisted evidence " "must be an object")
+
+        verdict = candidate.get("verdict")
+
+        accepted = appended.get("accepted")
+
+        if not isinstance(
+            accepted,
+            bool,
+        ):
+            raise HveeContractError(
+                "reduction persisted accepted flag " "must be boolean"
+            )
+
+        expected_accepted = verdict == DecisionVerdict.FAIL.value
+
+        if accepted != expected_accepted:
+            raise HveeContractError(
+                "reduction persisted accepted flag " "does not match verdict"
+            )
+
+        return {
+            "sequence": sequence,
+            "removed_unit_index": (removed_unit.get("index")),
+            "scenario_sha256": (candidate.get("scenario_sha256")),
+            "verdict": verdict,
+            "result_provenance_sha256": (evidence.get("result_provenance_sha256")),
+            "observation_evidence_sha256": (
+                evidence.get("observation_evidence_sha256")
+            ),
+            "decision_evidence_sha256": (evidence.get("decision_evidence_sha256")),
+            "counterexample_evidence_sha256": (
+                evidence.get("counterexample_evidence_sha256")
+            ),
+        }
+
+    if operation == BehavioralEngineOperation.NEIGHBORHOOD_GENERATION:
+        proposal = appended.get("proposal")
+
+        result = appended.get("result")
+
+        if not isinstance(
+            proposal,
+            dict,
+        ):
+            raise HveeContractError(
+                "neighborhood persisted proposal " "must be an object"
+            )
+
+        if not isinstance(
+            result,
+            dict,
+        ):
+            raise HveeContractError(
+                "neighborhood persisted result " "must be an object"
+            )
+
+        candidate = proposal.get("candidate")
+
+        evidence = result.get("evidence")
+
+        if not isinstance(
+            candidate,
+            dict,
+        ):
+            raise HveeContractError(
+                "neighborhood persisted candidate " "must be an object"
+            )
+
+        if not isinstance(
+            evidence,
+            dict,
+        ):
+            raise HveeContractError(
+                "neighborhood persisted evidence " "must be an object"
+            )
+
+        verdict = result.get("verdict")
+
+        observed_as_failure = appended.get("observed_as_failure")
+
+        if not isinstance(
+            observed_as_failure,
+            bool,
+        ):
+            raise HveeContractError(
+                "neighborhood persisted failure flag " "must be boolean"
+            )
+
+        expected_failure = verdict == DecisionVerdict.FAIL.value
+
+        if observed_as_failure != expected_failure:
+            raise HveeContractError(
+                "neighborhood persisted failure flag " "does not match verdict"
+            )
+
+        return {
+            "sequence": sequence,
+            "candidate_index": (candidate.get("index")),
+            "scenario_sha256": (result.get("scenario_sha256")),
+            "verdict": verdict,
+            "result_provenance_sha256": (evidence.get("result_provenance_sha256")),
+            "observation_evidence_sha256": (
+                evidence.get("observation_evidence_sha256")
+            ),
+            "decision_evidence_sha256": (evidence.get("decision_evidence_sha256")),
+            "counterexample_evidence_sha256": (
+                evidence.get("counterexample_evidence_sha256")
+            ),
+        }
+
+    raise HveeContractError("unsupported behavioral operation")
+
+
+def _native_state_continuity_projection(
+    *,
+    operation: BehavioralEngineOperation,
+    payload: dict[str, object],
+) -> dict[str, object]:
+    projection = deepcopy(payload)
+
+    projection.pop(
+        "observations",
+        None,
+    )
+
+    projection.pop(
+        "outcome",
+        None,
+    )
+
+    (
+        _expected_type,
+        _payload_type,
+        status_section_key,
+    ) = _source_contract(operation)
+
+    status_section = projection.get(status_section_key)
+
+    if not isinstance(
+        status_section,
+        dict,
+    ):
+        raise HveeContractError("native continuity status section " "must be an object")
+
+    status_section = deepcopy(status_section)
+
+    status_section.pop(
+        "status",
+        None,
+    )
+
+    projection[status_section_key] = status_section
+
+    budget = projection.get("budget")
+
+    if not isinstance(
+        budget,
+        dict,
+    ):
+        raise HveeContractError("native continuity budget " "must be an object")
+
+    maximum_observations = budget.get("maximum_observations")
+
+    if (
+        isinstance(
+            maximum_observations,
+            bool,
+        )
+        or not isinstance(
+            maximum_observations,
+            int,
+        )
+        or maximum_observations < 1
+    ):
+        raise HveeContractError("native continuity maximum " "observations is invalid")
+
+    projection["budget"] = {"maximum_observations": (maximum_observations)}
+
+    return projection
+
+
+def _verify_native_state_continuity(
+    *,
+    operation: BehavioralEngineOperation,
+    before_payload: dict[str, object],
+    after_payload: dict[str, object],
+) -> None:
+    before_projection = _native_state_continuity_projection(
+        operation=operation,
+        payload=before_payload,
+    )
+
+    after_projection = _native_state_continuity_projection(
+        operation=operation,
+        payload=after_payload,
+    )
+
+    if before_projection != after_projection:
+        raise HveeContractError(
+            "native state advancement changed " "immutable native state configuration"
+        )
+
+
+def _verify_history_extension(
+    *,
+    operation: BehavioralEngineOperation,
+    before_payload: dict[str, object],
+    after_payload: dict[str, object],
+    returned_observation: _NativeBehavioralObservation,
+) -> tuple[int, int]:
+    before = _source_observation_history(before_payload)
+
+    after = _source_observation_history(after_payload)
+
+    before_count = len(before)
+
+    after_count = len(after)
+
+    if after_count != (before_count + 1):
+        raise HveeContractError(
+            "native state advancement must append " "exactly one observation"
+        )
+
+    if after[:before_count] != before:
+        raise HveeContractError(
+            "native state advancement changed " "previous observation history"
+        )
+
+    expected = _native_observation_payload(
+        operation=operation,
+        observation=(returned_observation),
+    )
+
+    actual = _persisted_native_observation_projection(
+        operation=operation,
+        appended=after[-1],
+    )
+
+    if actual != expected:
+        mismatch_fields = sorted(
+            key
+            for key in (set(actual) | set(expected))
+            if (actual.get(key) != expected.get(key))
+        )
+
+        raise HveeContractError(
+            "advanced native state does not bind "
+            "the exact returned observation; "
+            "mismatch_fields=" + ",".join(mismatch_fields)
+        )
+
+    return (
+        before_count,
+        after_count,
+    )
+
+
+def calculate_behavioral_engine_closed_loop_step_sha256(
+    payload: dict[str, object],
+) -> str:
+    if not isinstance(
+        payload,
+        dict,
+    ):
+        raise HveeContractError("closed-loop payload must be an object")
+
+    return _calculate_sha256(payload)
+
+
+def advance_behavioral_engine_closed_loop_step(
+    *,
+    source_bundle: object,
+    experiment_bundle: BehavioralEngineExperimentBundle,
+    observation_return_bundle: BehavioralEngineObservationReturnBundle,
+    advance_native_state: _NativeStateAdvancer,
+    next_target_sha256: str | None,
+    next_estimated_cost_units: int | None = None,
+    next_maximum_cost_units: int | None = None,
+) -> BehavioralEngineClosedLoopStepBundle:
+    if not isinstance(
+        experiment_bundle,
+        BehavioralEngineExperimentBundle,
+    ):
+        raise HveeContractError(
+            "experiment_bundle must be " "BehavioralEngineExperimentBundle"
+        )
+
+    if not isinstance(
+        observation_return_bundle,
+        BehavioralEngineObservationReturnBundle,
+    ):
+        raise HveeContractError(
+            "observation_return_bundle must be "
+            "BehavioralEngineObservationReturnBundle"
+        )
+
+    if not callable(advance_native_state):
+        raise HveeContractError("advance_native_state must be callable")
+
+    if not verify_behavioral_engine_experiment_bundle(
+        payload=experiment_bundle.payload,
+        expected_sha256=experiment_bundle.sha256,
+        source_bundle=source_bundle,
+    ):
+        raise HveeContractError("behavioral experiment bundle " "failed verification")
+
+    if not verify_behavioral_engine_observation_return_bundle(
+        payload=observation_return_bundle.payload,
+        expected_sha256=observation_return_bundle.sha256,
+        experiment_bundle=experiment_bundle,
+        source_bundle=source_bundle,
+    ):
+        raise HveeContractError("behavioral observation return " "failed verification")
+
+    try:
+        operation = BehavioralEngineOperation(experiment_bundle.payload["operation"])
+    except (
+        KeyError,
+        TypeError,
+        ValueError,
+    ) as exc:
+        raise HveeContractError(
+            "behavioral experiment operation " "is invalid"
+        ) from exc
+
+    (
+        source_payload,
+        source_sha256,
+    ) = _validated_source_bundle(
+        operation=operation,
+        source_bundle=source_bundle,
+    )
+
+    status_before = _behavioral_source_status(
+        operation=operation,
+        payload=source_payload,
+    )
+
+    source_next_proposal = _behavioral_source_next_proposal(source_payload)
+
+    if source_next_proposal is None:
+        raise HveeContractError(
+            "closed-loop advancement requires " "a non-terminal source state"
+        )
+
+    advanced_source_bundle = advance_native_state(
+        observation_return_bundle.native_observation
+    )
+
+    (
+        advanced_payload,
+        advanced_sha256,
+    ) = _validated_source_bundle(
+        operation=operation,
+        source_bundle=advanced_source_bundle,
+    )
+
+    _verify_native_state_continuity(
+        operation=operation,
+        before_payload=source_payload,
+        after_payload=advanced_payload,
+    )
+
+    if advanced_sha256 == source_sha256:
+        raise HveeContractError(
+            "native state advancement did not " "produce a new state identity"
+        )
+
+    (
+        observation_count_before,
+        observation_count_after,
+    ) = _verify_history_extension(
+        operation=operation,
+        before_payload=source_payload,
+        after_payload=advanced_payload,
+        returned_observation=(observation_return_bundle.native_observation),
+    )
+
+    status_after = _behavioral_source_status(
+        operation=operation,
+        payload=advanced_payload,
+    )
+
+    next_native_proposal = _behavioral_source_next_proposal(advanced_payload)
+
+    terminal = next_native_proposal is None
+
+    protocol_payload = experiment_bundle.experiment_protocol.payload
+
+    campaign = protocol_payload.get("campaign")
+
+    budget = protocol_payload.get("budget")
+
+    proposals = protocol_payload.get("proposals")
+
+    subject_sha256 = protocol_payload.get("subject_sha256")
+
+    if not isinstance(
+        campaign,
+        dict,
+    ):
+        raise HveeContractError("experiment campaign is invalid")
+
+    if not isinstance(
+        budget,
+        dict,
+    ):
+        raise HveeContractError("experiment budget is invalid")
+
+    if (
+        not isinstance(
+            proposals,
+            list,
+        )
+        or len(proposals) != 1
+        or not isinstance(
+            proposals[0],
+            dict,
+        )
+    ):
+        raise HveeContractError("behavioral experiment proposal " "surface is invalid")
+
+    if not isinstance(
+        subject_sha256,
+        str,
+    ):
+        raise HveeContractError("experiment subject identity " "is invalid")
+
+    if next_estimated_cost_units is None:
+        next_estimated_cost_units = proposals[0].get("estimated_cost_units")
+
+    if next_maximum_cost_units is None:
+        next_maximum_cost_units = budget.get("maximum_cost_units")
+
+    next_estimated_cost_units = _require_positive_integer(
+        next_estimated_cost_units,
+        field=("next_estimated_cost_units"),
+    )
+
+    next_maximum_cost_units = _require_positive_integer(
+        next_maximum_cost_units,
+        field=("next_maximum_cost_units"),
+    )
+
+    next_experiment = None
+    normalized_next_target = None
+
+    if terminal:
+        if next_target_sha256 is not None:
+            raise HveeContractError(
+                "terminal behavioral state must " "not declare a next target"
+            )
+
+    else:
+        if next_target_sha256 is None:
+            raise HveeContractError(
+                "non-terminal behavioral state " "requires next_target_sha256"
+            )
+
+        normalized_next_target = _require_sha256(
+            next_target_sha256,
+            field=("next_target_sha256"),
+        )
+
+        campaign_key = campaign.get("key")
+
+        campaign_version = campaign.get("version")
+
+        if not isinstance(
+            campaign_key,
+            str,
+        ) or not isinstance(
+            campaign_version,
+            str,
+        ):
+            raise HveeContractError("experiment campaign identity " "is invalid")
+
+        next_experiment = build_behavioral_engine_experiment_bundle(
+            operation=operation,
+            source_bundle=(advanced_source_bundle),
+            campaign_key=(campaign_key),
+            campaign_version=(campaign_version),
+            subject_sha256=(subject_sha256),
+            target_sha256=(normalized_next_target),
+            estimated_cost_units=(next_estimated_cost_units),
+            maximum_cost_units=(next_maximum_cost_units),
+        )
+
+    payload: dict[str, object] = {
+        "schema_version": 1,
+        "type": ("behavioral_engine_closed_loop_step"),
+        "operation": (operation.value),
+        "source_bundle_sha256": (source_sha256),
+        "experiment_bundle_sha256": (experiment_bundle.sha256),
+        "observation_return_sha256": (observation_return_bundle.sha256),
+        "advanced_source_bundle_sha256": (advanced_sha256),
+        "state_transition": {
+            "status_before": (status_before),
+            "status_after": (status_after),
+            "observation_count_before": (observation_count_before),
+            "observation_count_after": (observation_count_after),
+            "terminal": (terminal),
+        },
+        "next_target_sha256": (normalized_next_target),
+        "next_experiment_sha256": (
+            next_experiment.sha256 if next_experiment is not None else None
+        ),
+        "evidence_boundary": {
+            "advanced_source_verified": (True),
+            "behavioral_performance_qualified": (False),
+            "execution_evidence_verified": (False),
+            "internal_engine_used": (False),
+            "native_state_advanced": (True),
+            "next_experiment_emitted": (next_experiment is not None),
+            "next_target_binding_verified": (False),
+            "production_qualified": (False),
+            "raw_content_persisted": (False),
+            "release_decision_issued": (False),
+        },
+    }
+
+    payload = deepcopy(payload)
+
+    return BehavioralEngineClosedLoopStepBundle(
+        payload=payload,
+        advanced_source_bundle=(advanced_source_bundle),
+        next_experiment=(next_experiment),
+        sha256=(calculate_behavioral_engine_closed_loop_step_sha256(payload)),
+    )
+
+
+def verify_behavioral_engine_closed_loop_step_bundle(
+    *,
+    payload: object,
+    expected_sha256: object,
+    source_bundle: object,
+    experiment_bundle: BehavioralEngineExperimentBundle,
+    observation_return_bundle: BehavioralEngineObservationReturnBundle,
+    advanced_source_bundle: object,
+    next_experiment: BehavioralEngineExperimentBundle | None,
+) -> bool:
+    try:
+        expected_sha256 = _require_sha256(
+            expected_sha256,
+            field="expected_sha256",
+        )
+
+        if not isinstance(
+            payload,
+            dict,
+        ):
+            return False
+
+        expected_fields = {
+            "schema_version",
+            "type",
+            "operation",
+            "source_bundle_sha256",
+            "experiment_bundle_sha256",
+            "observation_return_sha256",
+            "advanced_source_bundle_sha256",
+            "state_transition",
+            "next_target_sha256",
+            "next_experiment_sha256",
+            "evidence_boundary",
+        }
+
+        if set(payload) != expected_fields:
+            return False
+
+        if payload["schema_version"] != 1:
+            return False
+
+        if payload["type"] != "behavioral_engine_closed_loop_step":
+            return False
+
+        if not (
+            verify_behavioral_engine_experiment_bundle(
+                payload=experiment_bundle.payload,
+                expected_sha256=(experiment_bundle.sha256),
+                source_bundle=source_bundle,
+            )
+        ):
+            return False
+
+        if not (
+            verify_behavioral_engine_observation_return_bundle(
+                payload=(observation_return_bundle.payload),
+                expected_sha256=(observation_return_bundle.sha256),
+                experiment_bundle=(experiment_bundle),
+                source_bundle=(source_bundle),
+            )
+        ):
+            return False
+
+        operation = BehavioralEngineOperation(payload["operation"])
+
+        if experiment_bundle.payload["operation"] != operation.value:
+            return False
+
+        (
+            source_payload,
+            source_sha256,
+        ) = _validated_source_bundle(
+            operation=operation,
+            source_bundle=source_bundle,
+        )
+
+        (
+            advanced_payload,
+            advanced_sha256,
+        ) = _validated_source_bundle(
+            operation=operation,
+            source_bundle=advanced_source_bundle,
+        )
+
+        if payload["source_bundle_sha256"] != source_sha256:
+            return False
+
+        if payload["experiment_bundle_sha256"] != experiment_bundle.sha256:
+            return False
+
+        if payload["observation_return_sha256"] != observation_return_bundle.sha256:
+            return False
+
+        if payload["advanced_source_bundle_sha256"] != advanced_sha256:
+            return False
+
+        _verify_native_state_continuity(
+            operation=operation,
+            before_payload=source_payload,
+            after_payload=advanced_payload,
+        )
+
+        (
+            count_before,
+            count_after,
+        ) = _verify_history_extension(
+            operation=operation,
+            before_payload=(source_payload),
+            after_payload=(advanced_payload),
+            returned_observation=(observation_return_bundle.native_observation),
+        )
+
+        status_before = _behavioral_source_status(
+            operation=operation,
+            payload=source_payload,
+        )
+
+        status_after = _behavioral_source_status(
+            operation=operation,
+            payload=advanced_payload,
+        )
+
+        native_next = _behavioral_source_next_proposal(advanced_payload)
+
+        terminal = native_next is None
+
+        state_transition = payload["state_transition"]
+
+        if not isinstance(
+            state_transition,
+            dict,
+        ):
+            return False
+
+        if state_transition != {
+            "status_before": (status_before),
+            "status_after": (status_after),
+            "observation_count_before": (count_before),
+            "observation_count_after": (count_after),
+            "terminal": (terminal),
+        }:
+            return False
+
+        if terminal:
+            if next_experiment is not None:
+                return False
+
+            if payload["next_target_sha256"] is not None:
+                return False
+
+            if payload["next_experiment_sha256"] is not None:
+                return False
+
+        else:
+            if next_experiment is None:
+                return False
+
+            if not (
+                verify_behavioral_engine_experiment_bundle(
+                    payload=(next_experiment.payload),
+                    expected_sha256=(next_experiment.sha256),
+                    source_bundle=(advanced_source_bundle),
+                )
+            ):
+                return False
+
+            if payload["next_experiment_sha256"] != next_experiment.sha256:
+                return False
+
+            next_target_sha256 = _require_sha256(
+                payload["next_target_sha256"],
+                field=("next_target_sha256"),
+            )
+
+            next_protocol = next_experiment.experiment_protocol.payload
+
+            next_proposals = next_protocol.get("proposals")
+
+            if (
+                not isinstance(
+                    next_proposals,
+                    list,
+                )
+                or len(next_proposals) != 1
+                or not isinstance(
+                    next_proposals[0],
+                    dict,
+                )
+            ):
+                return False
+
+            if next_proposals[0].get("target_sha256") != next_target_sha256:
+                return False
+
+        expected_boundary = {
+            "advanced_source_verified": (True),
+            "behavioral_performance_qualified": (False),
+            "execution_evidence_verified": (False),
+            "internal_engine_used": (False),
+            "native_state_advanced": (True),
+            "next_experiment_emitted": (not terminal),
+            "next_target_binding_verified": (False),
+            "production_qualified": (False),
+            "raw_content_persisted": (False),
+            "release_decision_issued": (False),
+        }
+
+        if payload["evidence_boundary"] != expected_boundary:
+            return False
+
+        if (
+            calculate_behavioral_engine_closed_loop_step_sha256(payload)
+            != expected_sha256
+        ):
+            return False
+
+    except (
+        HveeContractError,
+        KeyError,
+        TypeError,
+        ValueError,
+    ):
         return False
 
     return True
