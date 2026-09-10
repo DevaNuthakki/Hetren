@@ -29,14 +29,18 @@ from hvee.packs.asr.normalized_evaluation import (
     evaluate_normalized_transcript_pair,
 )
 from hvee.packs.asr.run04_scoring_precommitment import (
+    RUN04_EXECUTION_SUCCESS_STATUS,
     RUN04_EXPECTED_GLOBAL_COMPLETE_PAIRS,
     RUN04_EXPECTED_LANE_COMPLETE_PAIR_COUNTS,
+    RUN04_EXPECTED_OPERATOR_INTERRUPTION_SLOTS,
     RUN04_EXPECTED_RECORDINGS,
+    RUN04_EXPECTED_SUCCESSFUL_TRANSCRIPTS,
     RUN04_EXPECTED_TERMINAL_SLOTS,
     RUN04_INPUT_ARTIFACTS,
     RUN04_MODEL_ROLES,
     RUN04_OPERATOR_INTERRUPTION_MODEL_ROLE,
     RUN04_OPERATOR_INTERRUPTION_SLOT_ORDINAL,
+    RUN04_OPERATOR_INTERRUPTION_STATUS,
     build_run04_scoring_precommitment_v1,
 )
 
@@ -150,6 +154,79 @@ def _require_text(
         )
 
     return value
+
+
+def _classify_run04_execution_status(
+    record: dict[str, Any],
+) -> str:
+    """Classify one result using the exact frozen status encoding."""
+
+    status = record.get("status")
+    transcript = record.get("raw_transcript_text")
+
+    if status == RUN04_EXECUTION_SUCCESS_STATUS:
+        if not isinstance(transcript, str):
+            raise Run04ScoringError(
+                "SUCCESS execution must carry transcript text"
+            )
+
+        return "successful_transcript"
+
+    if (
+        status == RUN04_OPERATOR_INTERRUPTION_STATUS
+        and record.get("model_role")
+        == RUN04_OPERATOR_INTERRUPTION_MODEL_ROLE
+        and record.get("execution_slot_ordinal")
+        == RUN04_OPERATOR_INTERRUPTION_SLOT_ORDINAL
+        and transcript is None
+        and record.get("score_eligible") is False
+        and record.get(
+            "operator_interruption_terminalization"
+        )
+        is True
+        and record.get("model_quality_failure") is False
+    ):
+        return "governed_operator_interruption"
+
+    raise Run04ScoringError(
+        "execution result violates frozen Run-04 status contract: "
+        f"status={status!r}, "
+        f"role={record.get('model_role')!r}, "
+        f"slot={record.get('execution_slot_ordinal')!r}"
+    )
+
+
+def validate_run04_execution_status_contract(
+    result_records: Iterable[dict[str, Any]],
+) -> dict[str, int]:
+    """Require the exact SUCCESS/ERROR distribution before scoring."""
+
+    counts = Counter(
+        _classify_run04_execution_status(record)
+        for record in result_records
+    )
+
+    expected = {
+        "successful_transcript": (
+            RUN04_EXPECTED_SUCCESSFUL_TRANSCRIPTS
+        ),
+        "governed_operator_interruption": (
+            RUN04_EXPECTED_OPERATOR_INTERRUPTION_SLOTS
+        ),
+    }
+
+    observed = {
+        key: counts.get(key, 0)
+        for key in sorted(expected)
+    }
+
+    if observed != expected:
+        raise Run04ScoringError(
+            "Run-04 execution status distribution changed: "
+            f"observed={observed!r}, expected={expected!r}"
+        )
+
+    return observed
 
 
 def _metric_direction(
@@ -887,6 +964,8 @@ def _build_complete_pairs(
                 != RUN04_OPERATOR_INTERRUPTION_MODEL_ROLE
                 or missing_result.get("execution_slot_ordinal")
                 != RUN04_OPERATOR_INTERRUPTION_SLOT_ORDINAL
+                or missing_result.get("status")
+                != RUN04_OPERATOR_INTERRUPTION_STATUS
                 or missing_result.get("score_eligible") is not False
                 or missing_result.get(
                     "operator_interruption_terminalization"
@@ -933,15 +1012,12 @@ def _build_complete_pairs(
                 "candidate transcript must be text"
             )
 
-        if baseline_result.get("status") != "success":
-            raise Run04ScoringError(
-                "complete baseline result is not successful"
-            )
-
-        if candidate_result.get("status") != "success":
-            raise Run04ScoringError(
-                "complete candidate result is not successful"
-            )
+        _classify_run04_execution_status(
+            baseline_result
+        )
+        _classify_run04_execution_status(
+            candidate_result
+        )
 
         scored_rows.append(
             score_transcript_pair(
@@ -1071,6 +1147,12 @@ def score_frozen_run04_public_v2(
         result_records=result_records,
     )
 
+    execution_status_counts = (
+        validate_run04_execution_status_contract(
+            result_records
+        )
+    )
+
     reference_by_recording = _validate_references(
         reference_records
     )
@@ -1118,6 +1200,9 @@ def score_frozen_run04_public_v2(
         "accounting": {
             "terminal_slots": RUN04_EXPECTED_TERMINAL_SLOTS,
             "recordings": RUN04_EXPECTED_RECORDINGS,
+            "execution_status_counts": (
+                execution_status_counts
+            ),
             "complete_pairs": len(scored_rows),
             "excluded_pairs": len(excluded_rows),
             "lane_complete_pair_counts": (
@@ -1208,5 +1293,6 @@ __all__ = [
     "score_transcript_pair",
     "summarize_all_lane_categories",
     "summarize_scored_pairs",
+    "validate_run04_execution_status_contract",
     "validate_run04_lane_complete_pair_denominators",
 ]

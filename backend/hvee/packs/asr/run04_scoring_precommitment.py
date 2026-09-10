@@ -46,7 +46,19 @@ RUN04_SCORING_PRECOMMITMENT_SCHEMA_VERSION = 1
 RUN04_SCORING_PRECOMMITMENT_KEY = (
     "hetren.asr.run04-public-v2.scoring-precommitment"
 )
-RUN04_SCORING_PRECOMMITMENT_VERSION = "1.0.0"
+RUN04_SCORING_PRECOMMITMENT_VERSION = "1.0.1"
+
+RUN04_PRIOR_SCORING_PRECOMMITMENT_SHA256 = (
+    "2bffc9b2a51d9b07f8fa6da5483cdbab"
+    "9ca6c8ba32dffb55d3c32cea75c343d1"
+)
+
+RUN04_FIRST_SCORING_ATTEMPT_CODE_COMMIT = (
+    "72440515cb6394eaf7840cb96fe91e34a1b8f555"
+)
+
+RUN04_EXECUTION_SUCCESS_STATUS = "SUCCESS"
+RUN04_OPERATOR_INTERRUPTION_STATUS = "ERROR"
 
 RUN04_SCORING_BASE_COMMIT = (
     "4b412b098190928e3377e5054c8b4bfc6c7271d0"
@@ -344,6 +356,9 @@ def build_run04_scoring_precommitment_v1(
             "version": RUN04_SCORING_PRECOMMITMENT_VERSION,
             "status": "experimental",
             "base_evaluator_commit": RUN04_SCORING_BASE_COMMIT,
+            "supersedes_precommitment_sha256": (
+                RUN04_PRIOR_SCORING_PRECOMMITMENT_SHA256
+            ),
             "production_qualified": False,
             "release_decision_authority": False,
             "certification_issued": False,
@@ -366,6 +381,33 @@ def build_run04_scoring_precommitment_v1(
             ),
             "correction_was_sealed_before_scoring": True,
         },
+        "post_unlock_pre_result_publication_correction": {
+            "applies": True,
+            "correction_type": (
+                "execution_status_serialization_compatibility"
+            ),
+            "failed_scoring_code_commit": (
+                RUN04_FIRST_SCORING_ATTEMPT_CODE_COMMIT
+            ),
+            "prior_precommitment_sha256": (
+                RUN04_PRIOR_SCORING_PRECOMMITMENT_SHA256
+            ),
+            "observed_complete_result_status": (
+                RUN04_EXECUTION_SUCCESS_STATUS
+            ),
+            "observed_governed_interruption_status": (
+                RUN04_OPERATOR_INTERRUPTION_STATUS
+            ),
+            "status_comparison_is_case_sensitive": True,
+            "first_attempt_opened_real_prediction_values": True,
+            "first_attempt_opened_real_reference_values": True,
+            "transient_pair_evaluation_may_have_occurred": True,
+            "published_model_quality_summary_before_correction": False,
+            "persisted_scoring_artifacts_before_correction": False,
+            "model_quality_outcome_inspected_before_correction": False,
+            "hidden_holdout_opened_before_correction": False,
+            "asr_execution_performed_before_correction": False,
+        },
         "runtime": runtime,
         "source_bindings": RUN04_SOURCE_BINDINGS,
         "input_artifacts": RUN04_INPUT_ARTIFACTS,
@@ -375,6 +417,14 @@ def build_run04_scoring_precommitment_v1(
             "successful_transcripts": (
                 RUN04_EXPECTED_SUCCESSFUL_TRANSCRIPTS
             ),
+            "expected_execution_status_counts": {
+                RUN04_EXECUTION_SUCCESS_STATUS: (
+                    RUN04_EXPECTED_SUCCESSFUL_TRANSCRIPTS
+                ),
+                RUN04_OPERATOR_INTERRUPTION_STATUS: (
+                    RUN04_EXPECTED_OPERATOR_INTERRUPTION_SLOTS
+                ),
+            },
             "operator_interruption_slots": (
                 RUN04_EXPECTED_OPERATOR_INTERRUPTION_SLOTS
             ),
@@ -411,6 +461,14 @@ def build_run04_scoring_precommitment_v1(
             "recording_identity_key": "recording_identity_sha256",
             "reference_field": "reference_text",
             "generated_field": "raw_transcript_text",
+            "complete_result_status": (
+                RUN04_EXECUTION_SUCCESS_STATUS
+            ),
+            "governed_interruption_status": (
+                RUN04_OPERATOR_INTERRUPTION_STATUS
+            ),
+            "status_comparison_is_case_sensitive": True,
+            "unrecognized_execution_status_rejected": True,
             "pair_requires_both_model_transcripts": True,
             "all_observed_lane_role_categories_are_reported": True,
             "lane_category_selection_after_scoring_allowed": False,
@@ -526,6 +584,7 @@ def build_run04_scoring_precommitment_v1(
 
 __all__ = [
     "ASRRun04ScoringPrecommitmentBundle",
+    "RUN04_EXECUTION_SUCCESS_STATUS",
     "RUN04_EXPECTED_GLOBAL_COMPLETE_PAIRS",
     "RUN04_EXPECTED_LANE_COMPLETE_PAIR_COUNTS",
     "RUN04_EXPECTED_RECORDINGS",
@@ -534,6 +593,8 @@ __all__ = [
     "RUN04_MODEL_ROLES",
     "RUN04_OPERATOR_INTERRUPTION_MODEL_ROLE",
     "RUN04_OPERATOR_INTERRUPTION_SLOT_ORDINAL",
+    "RUN04_OPERATOR_INTERRUPTION_STATUS",
+    "RUN04_PRIOR_SCORING_PRECOMMITMENT_SHA256",
     "RUN04_SCORING_BASE_COMMIT",
     "RUN04_SCORING_PRECOMMITMENT_KEY",
     "RUN04_SCORING_PRECOMMITMENT_VERSION",
