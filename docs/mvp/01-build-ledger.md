@@ -14,7 +14,7 @@ exist.
 
 | ID | Task | Status |
 |---|---|---|
-| 1 | Write the MVP charter | NOT_STARTED |
+| 1 | Write the MVP charter | COMPLETE |
 | 2 | Create the decision register | IN_PROGRESS |
 | 3 | Define success contracts | NOT_STARTED |
 | 4 | Create the system taxonomy | NOT_STARTED |
@@ -27,3 +27,15 @@ exist.
 
 Current repository reset work establishes the development boundary only.
 It does not itself complete the 0-10 milestone.
+
+## Completed task evidence
+
+### Task 1 — MVP charter
+
+- Status: `COMPLETE`
+- Charter: `docs/mvp/02-charter.md`
+- Qualification record: `docs/mvp/02-charter-qualification.md`
+- Structural qualification: PASS
+- Semantic/adversarial qualification: PASS
+- Authority-alignment qualification: PASS
+- Charter version: `1.0.0`
