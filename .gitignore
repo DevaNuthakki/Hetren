@@ -1,30 +1,47 @@
 # Python
 __pycache__/
 *.py[cod]
+*.so
 .venv/
 venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
 
-# Node / Next.js
+# Node / web tooling
 node_modules/
+dist/
+build/
 .next/
 out/
-dist/
+coverage/
 
-# OS
-.DS_Store
-
-# Local generated files
+# Local runtime state
+.local/
+artifacts/
 uploads/
+tmp/
+.cache/
+*.sqlite
 *.sqlite3
 *.db
 
-# Secrets
+# Research / experiment runtime output
+runs/
+checkpoints/
+mlruns/
+wandb/
+
+# Secrets and local environment
 .env
 .env.*
 !.env.example
 
-# Local API upload test files
-backend/test-upload/
-
-# Deterministically generated adversarial ASR corpus audio
-backend/corpora/asr/adversarial/v1/generated/
+# IDE / operating system
+.DS_Store
+.idea/
+*.swp
+*.swo
