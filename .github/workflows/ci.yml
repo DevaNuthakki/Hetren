@@ -91,6 +91,7 @@ jobs:
           set -euo pipefail
 
           test -f docs/mvp/00-authority.md
-          test -f docs/mvp/01-build-ledger.md
+          test -f docs/mvp/02-charter.md
+          test -f docs/mvp/02-charter-qualification.md
           test -f docs/decisions/0001-reset-active-repository.md
           test -f docs/architecture/repository-layout.md
