@@ -101,11 +101,16 @@ jobs:
           test -f docs/decisions/register.md
           test -f docs/decisions/template.md
           test -f docs/decisions/qualification/0002-decision-governance.md
+          test -f docs/mvp/03-success-contracts.md
+          test -f docs/decisions/0003-success-contracts.md
+          test -f docs/decisions/qualification/0003-success-contracts.md
           test -f docs/architecture/repository-layout.md
           test -f scripts/check_mvp_charter.py
           test -f scripts/check_decision_register.py
+          test -f scripts/check_success_contracts.py
           test -f tests/qualification/test_mvp_charter.py
           test -f tests/qualification/test_decision_register.py
+          test -f tests/qualification/test_success_contracts.py
 
       - name: Qualify MVP charter
         shell: bash
@@ -122,3 +127,11 @@ jobs:
 
           python3 scripts/check_decision_register.py
           python3 tests/qualification/test_decision_register.py
+
+      - name: Qualify success contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_success_contracts.py --require-qualified
+          python3 tests/qualification/test_success_contracts.py
