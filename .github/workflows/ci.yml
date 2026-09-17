@@ -46,6 +46,9 @@ jobs:
             environments/tabular
             environments/vision
             research/native_intelligence
+            research/adaptive_intelligence
+            docs/research/native_intelligence
+            docs/research/adaptive_intelligence
             tests/qualification
             docs/mvp
           )
@@ -95,3 +98,13 @@ jobs:
           test -f docs/mvp/02-charter-qualification.md
           test -f docs/decisions/0001-reset-active-repository.md
           test -f docs/architecture/repository-layout.md
+          test -f scripts/check_mvp_charter.py
+          test -f tests/qualification/test_mvp_charter.py
+
+      - name: Qualify MVP charter
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_mvp_charter.py --require-qualified
+          python3 tests/qualification/test_mvp_charter.py
