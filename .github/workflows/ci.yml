@@ -111,6 +111,11 @@ jobs:
           test -f tests/qualification/test_mvp_charter.py
           test -f tests/qualification/test_decision_register.py
           test -f tests/qualification/test_success_contracts.py
+          test -f docs/mvp/04-system-taxonomy.md
+          test -f docs/decisions/0004-system-taxonomy.md
+          test -f docs/decisions/qualification/0004-system-taxonomy.md
+          test -f scripts/check_system_taxonomy.py
+          test -f tests/qualification/test_system_taxonomy.py
 
       - name: Qualify MVP charter
         shell: bash
@@ -135,3 +140,11 @@ jobs:
 
           python3 scripts/check_success_contracts.py --require-qualified
           python3 tests/qualification/test_success_contracts.py
+
+      - name: Qualify system taxonomy
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_system_taxonomy.py --require-qualified
+          python3 tests/qualification/test_system_taxonomy.py
