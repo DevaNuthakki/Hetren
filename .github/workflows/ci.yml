@@ -97,9 +97,15 @@ jobs:
           test -f docs/mvp/02-charter.md
           test -f docs/mvp/02-charter-qualification.md
           test -f docs/decisions/0001-reset-active-repository.md
+          test -f docs/decisions/0002-decision-governance.md
+          test -f docs/decisions/register.md
+          test -f docs/decisions/template.md
+          test -f docs/decisions/qualification/0002-decision-governance.md
           test -f docs/architecture/repository-layout.md
           test -f scripts/check_mvp_charter.py
+          test -f scripts/check_decision_register.py
           test -f tests/qualification/test_mvp_charter.py
+          test -f tests/qualification/test_decision_register.py
 
       - name: Qualify MVP charter
         shell: bash
@@ -108,3 +114,11 @@ jobs:
 
           python3 scripts/check_mvp_charter.py --require-qualified
           python3 tests/qualification/test_mvp_charter.py
+
+      - name: Qualify decision governance
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_decision_register.py
+          python3 tests/qualification/test_decision_register.py
