@@ -1,12 +1,12 @@
 # Hetren MVP Charter
 
 **Document:** MVP Charter
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Status:** Qualified
 **MVP Task:** 1 / 100
-**Authority:** Hetren MVP Plan v2.0
-**Long-term boundary:** Hetren Product Specification v1.4
-**Research authority:** Hetren Neural Intelligence Research and MVP Design v1.0
+**Execution authority:** Hetren Unified MVP and Adaptive Intelligence Execution Plan v3.0 (`AUTH-HETREN-MVP-3.0`)
+**Long-term authority:** Hetren Unified Product, Intelligence, and Adaptive Research Master Specification v2.0 (`AUTH-HETREN-MASTER-2.0`)
+**Research programs:** Native Hetren Intelligence and Adaptive Intelligence
 
 ---
 
@@ -39,19 +39,41 @@ than architecture claims or demonstrations alone.
 
 ## 2. Authority And Change Control
 
-The current execution authority for the MVP is the Hetren MVP Plan v2.0.
+The current execution authority is the Hetren Unified MVP and Adaptive
+Intelligence Execution Plan v3.0 (`AUTH-HETREN-MVP-3.0`).
 
-The Hetren Product Specification v1.4 defines the broader long-term product
-boundary.
+The long-term product, architecture, intelligence, and research boundary is
+the Hetren Unified Product, Intelligence, and Adaptive Research Master
+Specification v2.0 (`AUTH-HETREN-MASTER-2.0`).
 
-Hetren Neural Intelligence Research and MVP Design v1.0 is the current
-research authority for the native neural workstream. It develops the research
-requirements of MVP Plan v2.0 without replacing the full platform plan.
+The earlier Product Specification v1.4, Cross-Domain MVP v2.0, Neural
+Intelligence Research and MVP Design v1.0, and Adaptive Intelligence Master
+Plan v1.0 remain preserved source-lineage and historical references. They are
+not the primary authority for new implementation decisions.
 
-Its candidate architecture, numerical settings, and experimental mechanisms
-remain research hypotheses until qualified by evidence. No neural architecture
-or superiority result is considered established merely because it appears in
-the research design.
+Hetren maintains two distinct but connected intelligence research programs:
+
+- Native Hetren Intelligence;
+- Adaptive Intelligence.
+
+They may share canonical contracts, evidence semantics, execution
+infrastructure, permissions, evaluation, verification, and release controls,
+but they retain separate hypotheses, experiments, qualification evidence, and
+scientific status.
+
+Neither research program may create an alternate Hetren Core, alternate
+permission model, or alternate verification authority merely for convenience.
+
+Candidate architectures, algorithms, numerical settings, adaptation
+mechanisms, and scientific superiority claims remain hypotheses until
+qualified by evidence.
+
+A negative Adaptive Intelligence result does not by itself invalidate the
+Hetren engineering product.
+
+A positive Adaptive Intelligence result does not waive product requirements
+for permissions, implementation, verification, recovery, compatibility,
+rollback, or evidence integrity.
 
 Changes to this charter require an explicit decision record.
 
@@ -61,7 +83,7 @@ Observed experimental results must not silently redefine success criteria.
 
 ## 3. MVP Outcomes
 
-The MVP must produce evidence for four outcomes.
+The MVP must produce evidence for five outcomes.
 
 ### 3.1 Useful Product
 
@@ -75,13 +97,31 @@ Hetren can construct or revise an investigation or improvement method from
 available system capabilities rather than requiring a hard-coded workflow for
 each domain.
 
-### 3.3 Native Research
+### 3.3 Native Intelligence Research
 
-Hetren contains a native learning or reasoning research system that learns from
-audited engineering trajectories and is experimentally evaluated as a distinct
-system rather than being represented only by prompts to an external model.
+Hetren contains a native learning or reasoning research system that learns
+from audited engineering trajectories and is experimentally evaluated as a
+distinct system rather than being represented only by prompts to an external
+model.
 
-### 3.4 Practical Value
+The native candidate is not required to prove superiority for the product to
+remain useful, but it must be implemented, trained, compared, ablated, and
+reported honestly.
+
+### 3.4 Adaptive Intelligence Research
+
+Hetren runs a separate adaptive-intelligence research program that tests
+whether deployed neural systems can acquire useful new behavior through
+controlled, reversible, and verifiable plasticity while preserving prior
+capabilities.
+
+The adaptive program must produce a scientifically explicit status such as
+supported at the current gate, inconclusive, pivoted, stopped, or blocked.
+
+Product polish must never be used as evidence that adaptive intelligence
+succeeded.
+
+### 3.5 Practical Value
 
 The system records enough information to evaluate whether its work reduces
 engineering effort, improves outcomes, reduces regressions, or produces other
@@ -339,7 +379,7 @@ evaluated.
 Its initial responsibilities must include:
 
 - outcome prediction;
-- adaptation as evidence arrives;
+- task-state revision as evidence arrives;
 - experiment selection;
 - improvement selection;
 - calibrated stopping.
@@ -384,7 +424,92 @@ A successful demonstration is not automatically a validated research result.
 
 ---
 
-## 12. External Generative Models
+## 12. Adaptive Intelligence Research
+
+Adaptive Intelligence is a distinct scientific workstream from Native Hetren
+Intelligence.
+
+Its central research question is whether a deployed neural system can acquire
+useful new behavior from experience through controlled, reversible, and
+verifiable plasticity while preserving prior capabilities and selectively
+retaining, consolidating, or transferring useful adaptation.
+
+Hetren Governed Plasticity, or HGP, is a working research hypothesis. It is not
+an established product capability.
+
+The adaptive research program must preserve a clear distinction between:
+
+- experience capture;
+- candidate adaptation;
+- sandbox execution;
+- target evaluation;
+- related-case generalization;
+- locality and retention evaluation;
+- critical invariants;
+- rollback;
+- temporary promotion;
+- hidden qualification;
+- persistence or rejection;
+- consolidation;
+- transfer.
+
+The MVP adaptive workstream must establish research governance before
+scientific promotion. At minimum this includes:
+
+- numbered research decisions for material hypothesis, metric, threshold,
+  model, data, baseline, and algorithm changes;
+- predeclared hypotheses and qualification criteria;
+- protected or hidden qualification data whose identity is preserved;
+- explicit separation between development and final qualification;
+- pinned model and baseline revisions;
+- reproducible experiment manifests;
+- critical invariants;
+- rollback qualification;
+- negative-result preservation;
+- invalidation and rerun rules when evaluation or training defects are found.
+
+The program must compare HGP or any successor mechanism against strong
+relevant adaptation baselines rather than weak or selectively chosen
+comparators.
+
+The MVP adaptive track must exercise the early scientific program, including
+baseline reproduction, bounded HGP experiments, held-out adaptation
+measurement, locality or retention measurement, and rollback verification.
+
+Later claims involving long sequential learning, consolidation, Experience
+Capsules, cross-model transfer, multimodal generality, or scaling require their
+own scientific gates and are not inherited from an earlier result.
+
+No adaptive candidate may certify its own success.
+
+Protected qualification, independent evaluation, and declared invariants
+remain authoritative over model confidence or proposal quality.
+
+A failed adaptive experiment is valid scientific evidence.
+
+If the adaptive hypothesis is unsupported, inconclusive, or requires a pivot,
+the result must be recorded without being converted into a product-success
+claim.
+
+The engineering product may continue toward qualification when Adaptive
+Intelligence fails, provided product claims do not imply the failed scientific
+capability.
+
+A positive adaptive result does not authorize deployment, permanent
+persistence, broad safety claims, or general transfer without the corresponding
+product and scientific qualification.
+
+Detailed Adaptive Intelligence research artifacts belong under:
+
+`docs/research/adaptive_intelligence/`
+
+Experimental Adaptive Intelligence implementation belongs under:
+
+`research/adaptive_intelligence/`
+
+---
+
+## 13. External Generative Models
 
 External models may be used as engineering accelerators or system components.
 
@@ -408,7 +533,7 @@ performance.
 
 ---
 
-## 13. Private Execution
+## 14. Private Execution
 
 The MVP must preserve a clear boundary between the Hetren control plane and
 private execution.
@@ -446,7 +571,7 @@ decision and consent model.
 
 ---
 
-## 14. Evidence Principle
+## 15. Evidence Principle
 
 Hetren must separate:
 
@@ -480,7 +605,7 @@ sufficient for a consequential Hetren claim.
 
 ---
 
-## 15. Qualification Principle
+## 16. Qualification Principle
 
 Implementation is evidence of construction.
 
@@ -531,7 +656,7 @@ Every task requires enough evidence to support its actual claim.
 
 ---
 
-## 16. Brutal Qualification Rule
+## 17. Brutal Qualification Rule
 
 Hetren intentionally attempts to break material features before accepting them.
 
@@ -566,7 +691,7 @@ explicit revision record and the previous result must remain preserved.
 
 ---
 
-## 17. Completion State Machine
+## 18. Completion State Machine
 
 Material work follows:
 
@@ -578,7 +703,7 @@ If qualification or verification fails, work returns to FIX_OR_REVISE and must b
 
 ---
 
-## 18. Independent Verification
+## 19. Independent Verification
 
 Consequential Hetren claims require a verification path that is meaningfully separate from the path that produced the candidate change.
 
@@ -588,7 +713,7 @@ The exact mechanism depends on the feature. The intent is to reduce self-confirm
 
 ---
 
-## 19. Regression Preservation
+## 20. Regression Preservation
 
 Material failures discovered during development must become reusable
 regression evidence where legally and operationally possible.
@@ -625,34 +750,90 @@ product sophistication.
 
 ---
 
-## 20. Research Qualification
+## 21. Research Qualification
 
 Research claims require stronger evidence than implementation claims.
 
-Research qualification must define and exercise the applicable combination of
-explicit hypotheses, predeclared success and failure criteria, meaningful
-baselines, controlled comparisons, matched experiments where appropriate,
-negative controls, ablations, repeatability, uncertainty reporting, protected
-evaluation, failure analysis, and cross-environment transfer when transfer is
-claimed.
+Every research claim must identify which research program it belongs to and
+must not borrow evidence from the other program merely because both use shared
+Hetren infrastructure.
 
-The research system must permit negative results. An experiment that cannot fail to support its hypothesis is not sufficient qualification.
+Applicable research qualification must include the appropriate combination of:
+
+- explicit hypotheses;
+- predeclared success and failure criteria;
+- meaningful strong baselines;
+- controlled comparisons;
+- negative controls;
+- ablations;
+- repeatability across seeds or instances where applicable;
+- uncertainty reporting;
+- protected or hidden evaluation;
+- leakage controls;
+- failure analysis;
+- cost and resource accounting;
+- preserved raw outcomes;
+- versioned experiment manifests;
+- invalidation and rerun rules.
+
+Native Intelligence claims additionally require evidence appropriate to shared
+method construction, learned decision value, cold-start behavior, transfer,
+retention, and comparison against equally resourced neural and non-neural
+baselines when those claims are made.
+
+Adaptive Intelligence claims additionally require evidence appropriate to
+target adaptation, related generalization, locality or retention, critical
+invariants, rollback, adaptation cost, and the relevant sequential, transfer,
+consolidation, multimodal, or scaling gate when those claims are made.
+
+Protected success criteria must be frozen before the evidence governed by them
+is inspected.
+
+A qualification failure must not be repaired by silently changing the same
+threshold, holdout, evaluator, or protocol and treating the result as the same
+experiment. The changed protocol must receive a new version and the affected
+qualification must be rerun.
+
+The research system must permit negative results.
+
+An experiment that cannot meaningfully fail to support its hypothesis is not
+sufficient research qualification.
+
+Research status and product status must remain separately reportable.
 
 ---
 
-## 21. Cross-Domain Transfer Requirement
+## 22. Cross-Domain Transfer Requirement
 
-The MVP cannot establish a shared-method claim by succeeding repeatedly in only one domain.
+The MVP cannot establish a shared-method claim by succeeding repeatedly in
+only one domain.
 
-At least one material method, learned representation, investigation strategy, or decision mechanism must be evaluated for transfer across system-family boundaries.
+At least one material learned representation, method-construction behavior,
+investigation strategy, or decision mechanism must be evaluated across
+system-family boundaries under the declared transfer protocol.
 
-Transfer evidence must distinguish between reusing shared infrastructure, reusing shared record schemas, reusing a hand-written strategy, and transferring an actually learned or generalized method.
+Transfer evidence must distinguish between:
 
-Only the final category supports a native learning-transfer claim.
+- reusing shared infrastructure;
+- reusing shared record schemas;
+- retrieving prior examples;
+- reusing a hand-written strategy;
+- adapting task state within the declared protocol;
+- transferring an actually learned or generalized decision capability.
+
+Only evidence appropriate to the final category supports a native
+learning-transfer claim.
+
+Adaptive Intelligence transfer is a separate scientific claim.
+
+Experience Capsule transfer, cross-model transfer, cross-architecture
+transfer, or multimodal adaptive transfer must satisfy the corresponding
+Adaptive Intelligence qualification gate and cannot inherit validity from
+Native Intelligence cross-domain transfer.
 
 ---
 
-## 22. Studio
+## 23. Studio
 
 Hetren Studio is the primary product surface.
 
@@ -667,7 +848,7 @@ A persistent AI assistant may help operate the workspace, but the product is not
 
 ---
 
-## 23. Integrations
+## 24. Integrations
 
 The MVP includes architectural boundaries for GitHub integration, Hetren MCP, and external model or provider integrations.
 
@@ -677,7 +858,7 @@ Provider-specific logic must remain isolated behind explicit integration boundar
 
 ---
 
-## 24. Practical Value Ledger
+## 25. Practical Value Ledger
 
 The MVP must record practical engineering value where it can be measured.
 
@@ -687,7 +868,7 @@ The Value Ledger is not a marketing score. It is evidence for whether Hetren mak
 
 ---
 
-## 25. Legacy Boundary
+## 26. Legacy Boundary
 
 The pre-MVP-v2 implementation is historical evidence, not the architectural foundation of the new MVP.
 
@@ -697,7 +878,7 @@ No MVP task is required to reuse a legacy artifact merely because it already exi
 
 ---
 
-## 26. Explicit Non-Goals
+## 27. Explicit Non-Goals
 
 The MVP does not require support for every AI modality, every model provider, autonomous production deployment, autonomous approval of high-risk changes, or a general-purpose coding IDE.
 
@@ -709,7 +890,7 @@ The system should remain modular without becoming prematurely distributed.
 
 ---
 
-## 27. Claims Hetren Must Not Make Without Evidence
+## 28. Claims Hetren Must Not Make Without Evidence
 
 Hetren must not claim that it understands a model, discovered a root cause, proved causality, learned a transferable method, improved a system, prevented a regression, reduced engineering cost, generalized across domains, is autonomous, is reliable, or is production-ready unless the relevant claim is supported by evidence appropriate to that claim.
 
@@ -717,26 +898,72 @@ The phrase "world class" is not an internal qualification result. Hetren records
 
 ---
 
-## 28. MVP Falsification Conditions
+## 29. MVP Falsification Conditions
 
-The MVP thesis is weakened or falsified if evidence shows that each required system family needs a fundamentally separate Hetren workflow, or that the intelligence layer reduces to hard-coded domain strategies.
+### 29.1 Product And Shared-Method Falsification
 
-It is also weakened if capability discovery does not materially affect method selection, method revision does not improve investigation or improvement behavior, or the Behavioral and Internal Engines cannot produce useful discriminating evidence.
+The core product thesis is weakened or falsified if evidence shows that each
+required system family needs a fundamentally separate Hetren investigation
+strategy, or that the claimed shared intelligence reduces to hidden
+domain-specific planner logic.
 
-The thesis is further weakened if internal observations cannot be connected to behavioral consequence where such a connection is claimed, if native research shows no measurable advantage over meaningful baselines, or if claimed transfer disappears on protected cross-domain evaluation.
+The product thesis is also weakened if capability discovery does not
+materially affect permitted method construction, method revision cannot use
+observed outcomes, the Behavioral Engine cannot establish useful external
+evidence, or the Internal Engine cannot satisfy its declared qualification
+where internal capability is claimed.
 
-The MVP also fails its thesis if consequential results cannot be independently reproduced, evidence cannot be traced to execution context, private execution cannot maintain required isolation, protected constraints are violated to improve headline metrics, or practical engineering value cannot be demonstrated on the selected MVP tasks.
+The product release is blocked if consequential results cannot be
+independently verified, evidence cannot be traced to execution context,
+private execution cannot maintain required isolation, protected constraints
+are violated to improve headline metrics, required recovery or rollback fails,
+or the release cannot demonstrate the required engineering workflow and value
+evidence.
 
-A falsification result must be preserved rather than hidden.
+### 29.2 Native Intelligence Outcome
 
-If any material falsification condition is observed, Hetren must not declare the
-corresponding MVP thesis or release claim successful unless the claim is
-explicitly revised, the revision is recorded, and the revised claim is
-qualified independently.
+Failure of the native neural candidate to outperform a meaningful baseline does
+not by itself invalidate the engineering product.
+
+Such a result invalidates or limits the corresponding native-advantage claim.
+
+The native experiment must still be implemented, reproducible, compared
+against strong baselines, ablated where required, and reported honestly.
+
+If another qualified policy performs better, the product may use the strongest
+qualified serving policy while native research continues or is revised.
+
+### 29.3 Adaptive Intelligence Outcome
+
+Failure of HGP or another adaptive mechanism does not by itself invalidate the
+engineering product.
+
+The Adaptive Intelligence program must instead issue the scientific status
+supported by its evidence, including STOP, PIVOT, inconclusive, blocked, or an
+earned GO-level result.
+
+A failed adaptive result must not be represented as successful learning,
+continual learning, safe self-improvement, transferable experience, or another
+stronger capability.
+
+### 29.4 Evidence Preservation
+
+Internal observations cannot support causal claims unless the required
+discriminating intervention or equivalent evidence exists.
+
+Claimed transfer that disappears under protected evaluation must be narrowed
+or withdrawn.
+
+A falsifying, negative, blocked, or inconclusive result must be preserved
+rather than hidden.
+
+If a material claim changes after qualification begins, the revised claim,
+protocol, and affected evidence must be versioned and independently
+requalified before the revised claim can pass.
 
 ---
 
-## 29. MVP Release Gate
+## 30. MVP Release Gate
 
 The MVP may be called complete only when evidence demonstrates all of the
 following:
@@ -756,6 +983,27 @@ following:
 13. intelligence, product, evaluator, and runtime releases have explicit compatibility, rollback, and regression evidence;
 14. engineering outcome and practical value are demonstrated through independent replay, complete effort/cost accounting, and recorded human review decisions.
 
+These fourteen conditions correspond to the product/native MVP release
+contract and must remain independently evidenced.
+
+### 30.1 Adaptive Scientific Status At MVP Release
+
+At MVP release time, the Adaptive Intelligence workstream must also have an
+explicit evidence-backed scientific status.
+
+That status may be an earned GO-level result, inconclusive, PIVOT, STOP, or
+blocked according to the applicable scientific gate.
+
+The adaptive program is not required to produce a positive scientific result
+for the engineering product to release.
+
+It is required to have preserved governance, experiments, evidence, negative
+results, limitations, and the scientific status actually supported by that
+evidence.
+
+The product release decision and Adaptive Intelligence scientific decision
+must remain separately inspectable so that one cannot hide the other.
+
 Passing architectural review without exercising these requirements is not
 sufficient.
 
@@ -770,7 +1018,7 @@ revision and requalification.
 
 ---
 
-## 30. Task-Level Definition Of Done
+## 31. Task-Level Definition Of Done
 
 Every material MVP task must record its objective, implementation, acceptance contract, applicable qualification plan, qualification result, discovered failures, resolved failures, accepted limitations, evidence location or reference, implementation commit, and verification result.
 
@@ -780,31 +1028,44 @@ If a task changes its claim, scope, or success criteria after qualification begi
 
 ---
 
-## 31. Task 1 Qualification Contract
+## 32. Task 1 Qualification Contract
 
-This charter passes Task 1 qualification only if review confirms all of the following conditions.
+This charter passes Task 1 qualification only if review confirms all of the
+following conditions.
 
 1. Hetren is not defined as speech-first.
-2. all three required system families are preserved.
-3. both required problem types are preserved.
-4. both Behavioral and Internal Engines are required.
-5. native neural intelligence research is required.
-6. the neural architecture is not prematurely frozen.
-7. private-execution boundaries are established.
-8. evidence and provenance requirements are explicit.
-9. brutal qualification is required before completion.
-10. negative and falsifying results are permitted and preserved.
-11. consequential claims require independent verification.
-12. MVP release conditions are measurable.
-13. adapters, evaluators, and intelligence remain distinct responsibilities.
-14. the long-term architecture boundary is preserved.
-15. legacy implementation structure is prevented from silently becoming the new foundation.
+2. E1 tool-using agent, E2 structured-data ML, and E3 vision are all required.
+3. regression repair and constrained improvement are both required problem types.
+4. Behavioral and authorized Internal Engines are first-class requirements.
+5. the same shared Core and planner boundary applies across the three required environments.
+6. adapters, evaluators, intelligence, permissions, and verification remain distinct responsibilities.
+7. Native Hetren Intelligence is a required research workstream.
+8. Adaptive Intelligence is a separate required research workstream.
+9. Native Intelligence and Adaptive Intelligence connect through shared Hetren contracts and infrastructure without creating duplicate Cores, permission systems, evidence semantics, or verification authorities.
+10. native architecture, HGP, adaptation mechanisms, and scientific superiority remain hypotheses until qualified.
+11. Adaptive Intelligence requires predeclared governance, protected or hidden qualification, strong baselines, rollback, locality or retention evidence, negative-result preservation, and versioned rerun rules.
+12. failure of a native candidate to establish advantage does not by itself invalidate the engineering product, while the unsupported native claim must be narrowed or rejected.
+13. failure of Adaptive Intelligence does not by itself invalidate the engineering product, while the adaptive scientific status must be reported honestly.
+14. a positive Adaptive Intelligence result does not waive product permissions, implementation, verification, recovery, compatibility, rollback, or evidence-integrity requirements.
+15. product release status, Native Intelligence research status, and Adaptive Intelligence scientific status remain separately inspectable.
+16. private-execution, authorization, credential, egress, budget, cancellation, recovery, and isolation boundaries are established.
+17. evidence identity, provenance, immutable artifacts, evaluation identity, and historical preservation requirements are explicit.
+18. consequential success claims require independent verification through authority separated from the proposing process.
+19. brutal qualification and the completion state machine prevent implementation existence from being treated as completion.
+20. negative, falsifying, blocked, unsupported, and inconclusive results are valid evidence and must be preserved.
+21. the fourteen product/native MVP release requirements remain measurable and are not silently expanded or reduced by the adaptive research program.
+22. protected success criteria cannot be changed after observing protected results without versioned revision and requalification.
+23. the long-term Master Specification v2.0 boundary and current MVP v3.0 execution authority are explicit.
+24. earlier Product v1.4, MVP v2.0, Neural Research v1.0, and Adaptive Intelligence v1.0 materials remain source lineage rather than current primary authority.
+25. legacy implementation structure is prevented from silently becoming the new architectural foundation.
 
-Until this contract passes review, Task 1 remains incomplete.
+Until this contract passes requalification, Charter v1.1.0 remains
+`Requalifying` and Task 1's previous v1.0.0 qualification does not automatically
+qualify the changed charter.
 
 ---
 
-## 32. Charter Principle
+## 33. Charter Principle
 
 Hetren is not successful because it can produce an answer.
 
