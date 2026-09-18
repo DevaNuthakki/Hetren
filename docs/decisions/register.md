@@ -1,6 +1,6 @@
 # Hetren Decision Register
 
-**Version:** 1.4.0
+**Version:** 1.5.0
 **Status:** Active
 **MVP Task:** 2 / 100
 **Governing execution authority:** `AUTH-HETREN-MVP-3.0`
@@ -195,6 +195,8 @@ that evidence as not applicable and provides the reason.
 | `0003` | `evaluation.success-contracts` | Define shared success-contract semantics | `ACCEPTED` | `EVALUATION` | `AUTH-HETREN-MVP-3.0` | `0003-success-contracts.md` |
 | `0004` | `architecture.system-taxonomy` | Define governed MVP system taxonomy | `ACCEPTED` | `ARCHITECTURE` | `AUTH-HETREN-MVP-3.0` | `0004-system-taxonomy.md` |
 | `0005` | `product.mvp-support-matrix` | Freeze the initial MVP capability-support matrix | `ACCEPTED` | `PRODUCT` | `AUTH-HETREN-MVP-3.0` | `0005-mvp-support-matrix.md` |
+| `0006` | `research.native-intelligence.mvp-hypotheses` | Govern initial Native Intelligence MVP hypotheses | `ACCEPTED` | `RESEARCH_GOVERNANCE` | `AUTH-HETREN-MVP-3.0` | `0006-native-intelligence-mvp-hypotheses.md` |
+| `0007` | `research.adaptive-intelligence.mvp-hypotheses` | Govern initial Adaptive Intelligence MVP hypotheses | `ACCEPTED` | `RESEARCH_GOVERNANCE` | `AUTH-HETREN-MVP-3.0` | `0007-adaptive-intelligence-mvp-hypotheses.md` |
 
 ---
 
