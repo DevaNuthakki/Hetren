@@ -161,3 +161,11 @@ jobs:
 
           python3 scripts/check_support_matrix.py --require-qualified
           python3 tests/qualification/test_support_matrix.py
+
+      - name: Qualify research hypotheses
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_research_hypotheses.py --require-qualified
+          python3 tests/qualification/test_research_hypotheses.py
