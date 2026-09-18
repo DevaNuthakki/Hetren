@@ -116,6 +116,11 @@ jobs:
           test -f docs/decisions/qualification/0004-system-taxonomy.md
           test -f scripts/check_system_taxonomy.py
           test -f tests/qualification/test_system_taxonomy.py
+          test -f docs/mvp/05-support-matrix.md
+          test -f docs/decisions/0005-mvp-support-matrix.md
+          test -f docs/decisions/qualification/0005-mvp-support-matrix.md
+          test -f scripts/check_support_matrix.py
+          test -f tests/qualification/test_support_matrix.py
 
       - name: Qualify MVP charter
         shell: bash
@@ -148,3 +153,11 @@ jobs:
 
           python3 scripts/check_system_taxonomy.py --require-qualified
           python3 tests/qualification/test_system_taxonomy.py
+
+      - name: Qualify MVP support matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_support_matrix.py --require-qualified
+          python3 tests/qualification/test_support_matrix.py
