@@ -1,6 +1,6 @@
 # Hetren Decision Register
 
-**Version:** 1.3.0
+**Version:** 1.4.0
 **Status:** Active
 **MVP Task:** 2 / 100
 **Governing execution authority:** `AUTH-HETREN-MVP-3.0`
@@ -194,6 +194,7 @@ that evidence as not applicable and provides the reason.
 | `0002` | `governance.decision-system` | Establish governed decision records | `ACCEPTED` | `GOVERNANCE` | `AUTH-HETREN-MVP-3.0` | `0002-decision-governance.md` |
 | `0003` | `evaluation.success-contracts` | Define shared success-contract semantics | `ACCEPTED` | `EVALUATION` | `AUTH-HETREN-MVP-3.0` | `0003-success-contracts.md` |
 | `0004` | `architecture.system-taxonomy` | Define governed MVP system taxonomy | `ACCEPTED` | `ARCHITECTURE` | `AUTH-HETREN-MVP-3.0` | `0004-system-taxonomy.md` |
+| `0005` | `product.mvp-support-matrix` | Freeze the initial MVP capability-support matrix | `ACCEPTED` | `PRODUCT` | `AUTH-HETREN-MVP-3.0` | `0005-mvp-support-matrix.md` |
 
 ---
 
