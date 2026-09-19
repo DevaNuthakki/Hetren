@@ -1,0 +1,753 @@
+{
+  "schema_version": "1.0.0",
+  "task": 7,
+  "dataset_id": "TASK7-INITIAL-SPLITS-SET-E",
+  "authority": "AUTH-HETREN-MVP-3.0",
+  "decision_id": "0008",
+  "evidence_class": "FROZEN_FINAL_UNSEEN_HOLDOUT",
+  "historical_unseen_at_definition": true,
+  "case_count": 32,
+  "family_count": 8,
+  "must_reject_count": 16,
+  "must_accept_count": 16,
+  "acceptance_criterion": "The first frozen execution must classify all 32 cases correctly: every MUST_REJECT must be rejected and every MUST_ACCEPT must be accepted. Any miss is preserved as first-run evidence before remediation.",
+  "interpretation": "Set E is the final preregistered unseen Task 7 holdout. Its definitions are created only after the Set E preregistration and pre-acceptance implementation boundary were frozen. The first execution is the only execution that may be interpreted as unseen evidence; all later executions are regression evidence.",
+  "cases": [
+    {
+      "case_id": "T7-E-01-01",
+      "family_id": "E01",
+      "family": "MULTI_HOP_PROTECTED_PROVENANCE",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "A second-order briefing derived from disclosed protected summaries is falsely declared fresh.",
+      "related_invariant_ids": [
+        "T7.INV.global.derived.artifact.freshness.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 30,
+          "section_title": "Fresh Protected Evidence",
+          "addition": "A second-order briefing produced from a redacted summary of disclosed protected outcomes may be treated as fresh protected evidence because neither derivation layer contains the original protected records."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-01-02",
+      "family_id": "E01",
+      "family": "MULTI_HOP_PROTECTED_PROVENANCE",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "An intermediate digest and new checksum are used to launder exposed protected lineage.",
+      "related_invariant_ids": [
+        "T7.INV.global.derived.artifact.freshness.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 30,
+          "section_title": "Fresh Protected Evidence",
+          "addition": "A cache rebuilt from an exposed protected dashboard through an intermediate feature digest may be considered fresh for a descendant candidate when the rebuilt cache has a new checksum."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-01-03",
+      "family_id": "E01",
+      "family": "MULTI_HOP_PROTECTED_PROVENANCE",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Exposure propagates through multiple derivative layers.",
+      "related_invariant_ids": [
+        "T7.INV.global.derived.artifact.freshness.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 30,
+          "section_title": "Fresh Protected Evidence",
+          "addition": "A summary derived from another summary of disclosed protected outcomes remains exposed through every derivation step; redaction, reformatting, or a new checksum does not restore freshness."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-01-04",
+      "family_id": "E01",
+      "family": "MULTI_HOP_PROTECTED_PROVENANCE",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "An independently sourced protected partition does not become exposed merely by sharing neutral formatting infrastructure.",
+      "related_invariant_ids": [
+        "T7.INV.global.derived.artifact.freshness.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 30,
+          "section_title": "Fresh Protected Evidence",
+          "addition": "A separately collected protected partition with independent provenance may remain fresh when a neutral formatter also processes exposed artifacts, provided its membership and selection are not derived from exposed protected evidence."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-02-01",
+      "family_id": "E02",
+      "family": "TEMPORAL_AND_ORDERING_LEAKAGE",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "Protected report release ordering encodes target performance and is used before freeze.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Before candidate freeze, transfer methods may be ranked by the order in which the protected evaluator releases their reports when earlier release encodes stronger target performance, even if numerical scores remain hidden."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-02-02",
+      "family_id": "E02",
+      "family": "TEMPORAL_AND_ORDERING_LEAKAGE",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "Evaluator-generated timing bands are used as a protected outcome proxy.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "A candidate may be revised using whether a protected target report arrives before or after a preregistered deadline when that arrival timing is generated from evaluator success bands."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-02-03",
+      "family_id": "E02",
+      "family": "TEMPORAL_AND_ORDERING_LEAKAGE",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Pre-evaluation submission chronology determines processing order without carrying outcome data.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Submission timestamps fixed before protected evaluation may define deterministic processing order when they contain no protected outcome information and cannot be changed from evaluation results."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-02-04",
+      "family_id": "E02",
+      "family": "TEMPORAL_AND_ORDERING_LEAKAGE",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "Protected timing metadata is retained post-freeze for audit only.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Protected report timestamps may be retained after candidate freeze for audit and incident reconstruction, but they cannot select, rank, or revise a candidate."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-03-01",
+      "family_id": "E03",
+      "family": "CROSS_SYSTEM_SHARED_ANCESTRY",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "Different vendors render one hidden scenario seed bank and claim independent evidence.",
+      "related_invariant_ids": [
+        "T7.INV.global.nh1.anti.pseudoreplication",
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Evaluations produced by two vendors from non-overlapping renderings of the same hidden scenario seed bank may count as independent N-H1 units because the vendors use different software stacks."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-03-02",
+      "family_id": "E03",
+      "family": "CROSS_SYSTEM_SHARED_ANCESTRY",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "Copied branches of one upstream evaluation population are counted independently.",
+      "related_invariant_ids": [
+        "T7.INV.global.nh1.anti.pseudoreplication",
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Two model services may count as independent N-H1 units when each samples from a separately copied branch of the same upstream evaluation population and executes in different regions."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-03-03",
+      "family_id": "E03",
+      "family": "CROSS_SYSTEM_SHARED_ANCESTRY",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Independent source populations may share neutral execution infrastructure.",
+      "related_invariant_ids": [
+        "T7.INV.global.nh1.anti.pseudoreplication",
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Two evaluations may count as independent when their evaluation units are independently sourced with no shared units, scenario ancestry, or upstream population, even when both use the same neutral execution framework."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-03-04",
+      "family_id": "E03",
+      "family": "CROSS_SYSTEM_SHARED_ANCESTRY",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "Shared governance and logging alone do not create shared evidence ancestry.",
+      "related_invariant_ids": [
+        "T7.INV.global.nh1.anti.pseudoreplication",
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Using one governance schema and one neutral logging service does not by itself create shared evidence ancestry when protected evaluation units and their source populations are otherwise independent."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-04-01",
+      "family_id": "E04",
+      "family": "PARTIAL_DISCLOSURE_AND_THRESHOLD_PROBING",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "Repeated yes/no threshold queries reconstruct protected performance for tuning.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Before candidate freeze, a candidate may be tuned from a sequence of yes-or-no protected queries asking whether target performance exceeds progressively higher thresholds, because no exact score is returned."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-04-02",
+      "family_id": "E04",
+      "family": "PARTIAL_DISCLOSURE_AND_THRESHOLD_PROBING",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "Coarse protected rank information is disclosed incrementally for strategy selection.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "A transfer strategy may be selected from protected rank quartiles disclosed one bit at a time before candidate freeze as long as each individual disclosure remains coarse."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-04-03",
+      "family_id": "E04",
+      "family": "PARTIAL_DISCLOSURE_AND_THRESHOLD_PROBING",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "A post-freeze threshold indicator is used for reporting only.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "After candidate freeze, a single protected threshold-crossing indicator may be disclosed for reporting when it cannot return to candidate selection, ranking, or tuning."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-04-04",
+      "family_id": "E04",
+      "family": "PARTIAL_DISCLOSURE_AND_THRESHOLD_PROBING",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "Post-evaluation aggregate publication does not authorize replay or candidate revision.",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.verification.replay.anti.tuning.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Protected aggregate status may be published after evaluation for audit; publication does not authorize replaying the evaluator or revising the frozen candidate."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-05-01",
+      "family_id": "E05",
+      "family": "ROLE_PURPOSE_AUTHORITY_ALIASING",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "An operational alias gives VALIDATION protected claim authority.",
+      "related_invariant_ids": [
+        "T7.INV.partitionrole.alias.bypass.integrity",
+        "T7.INV.partitionpurpose.alias.bypass.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 5,
+          "section_title": "PartitionRole Vocabulary",
+          "addition": "A VALIDATION partition carrying the operational alias `review_shadow` may exercise PROTECTED authority for final claim evidence without changing its declared PartitionRole."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-05-02",
+      "family_id": "E05",
+      "family": "ROLE_PURPOSE_AUTHORITY_ALIASING",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "PartitionPurpose overrides PartitionRole to grant protected authority.",
+      "related_invariant_ids": [
+        "T7.INV.partitionrole.alias.bypass.integrity",
+        "T7.INV.partitionpurpose.alias.bypass.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 9,
+          "section_title": "PartitionPurpose Vocabulary",
+          "addition": "When role and purpose imply different authority, a DEVELOPMENT partition with TRANSFER_TARGET purpose may exercise protected target authority because the purpose controls how its evidence is used."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-05-03",
+      "family_id": "E05",
+      "family": "ROLE_PURPOSE_AUTHORITY_ALIASING",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Workflow aliases remain descriptive and cannot escalate evidence authority.",
+      "related_invariant_ids": [
+        "T7.INV.partitionrole.alias.bypass.integrity",
+        "T7.INV.partitionpurpose.alias.bypass.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 5,
+          "section_title": "PartitionRole Vocabulary",
+          "addition": "Operational aliases may describe storage or workflow only; they do not add evidence authority beyond the partition's declared PartitionRole and PartitionPurpose."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-05-04",
+      "family_id": "E05",
+      "family": "ROLE_PURPOSE_AUTHORITY_ALIASING",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "A DEVELOPMENT role may carry TRANSFER_TARGET purpose without becoming protected evidence.",
+      "related_invariant_ids": [
+        "T7.INV.partitionrole.alias.bypass.integrity",
+        "T7.INV.partitionpurpose.alias.bypass.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 9,
+          "section_title": "PartitionPurpose Vocabulary",
+          "addition": "A DEVELOPMENT partition may legitimately carry TRANSFER_TARGET purpose for construction or bookkeeping, but that purpose does not make its evidence PROTECTED or authorize final protected claims."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-06-01",
+      "family_id": "E06",
+      "family": "DELEGATED_VERIFICATION_CONTROL",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "Final certification is delegated through credentials administered by the candidate-producing authority.",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "An independent verifier may delegate final certification to a service account whose authorization policy is administered by the candidate-producing team, provided the verifier initiates each certification request."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-06-02",
+      "family_id": "E06",
+      "family": "DELEGATED_VERIFICATION_CONTROL",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "The candidate producer controls which verification artifacts are allowed to reach the verifier.",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "The candidate-producing path may pre-filter which verification artifacts are delivered to the independent verifier, provided the verifier cannot directly edit the candidate."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-06-03",
+      "family_id": "E06",
+      "family": "DELEGATED_VERIFICATION_CONTROL",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Read-only shared storage is neutral when verification authority and evidence remain separately controlled.",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "The candidate producer and verifier may share read-only artifact storage when the candidate producer cannot alter verifier evidence, credentials, verification policy, or the certification decision."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-06-04",
+      "family_id": "E06",
+      "family": "DELEGATED_VERIFICATION_CONTROL",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "A neutral scheduler may launch both paths without sharing consequential authority.",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "A neutral scheduler may launch both candidate and verification jobs when neither path can change the other's evidence or consequential authority and the verifier retains separate certification authority."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-07-01",
+      "family_id": "E07",
+      "family": "SPLIT_SUCCESSION_AND_HISTORICAL_FORKING",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "A successor split drops predecessor invalidation and contamination history.",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.historical.manifest.preservation",
+        "T7.INV.protected.invalidation.transition.integrity",
+        "T7.INV.contamination.effective.state.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "A successor SplitVersion may omit the predecessor's invalidation and contamination history when it records a parent pointer and computes a new manifest hash."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-07-02",
+      "family_id": "E07",
+      "family": "SPLIT_SUCCESSION_AND_HISTORICAL_FORKING",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "A renamed copy restarts protected access history.",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.historical.manifest.preservation",
+        "T7.INV.protected.invalidation.transition.integrity",
+        "T7.INV.contamination.effective.state.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "Renaming a copied protected manifest and assigning a new SplitVersion identity may restart protected access history from empty while the predecessor remains archived."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-07-03",
+      "family_id": "E07",
+      "family": "SPLIT_SUCCESSION_AND_HISTORICAL_FORKING",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "A successor identity preserves predecessor history and provenance.",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.historical.manifest.preservation",
+        "T7.INV.protected.invalidation.transition.integrity",
+        "T7.INV.contamination.effective.state.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "A successor SplitVersion receives a new identity and explicitly links its predecessor while preserving predecessor invalidation, contamination, access, and result history."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-07-04",
+      "family_id": "E07",
+      "family": "SPLIT_SUCCESSION_AND_HISTORICAL_FORKING",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "Changed membership creates a governed successor without erasing the frozen predecessor.",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.historical.manifest.preservation",
+        "T7.INV.protected.invalidation.transition.integrity",
+        "T7.INV.contamination.effective.state.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "A genuinely new governed SplitVersion may contain changed membership, but it cannot overwrite or detach the frozen predecessor; historical manifests and prior outcomes remain preserved."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-08-01",
+      "family_id": "E08",
+      "family": "DEFERRED_COMPARATOR_RESOURCE_COMPOSITION",
+      "variant": 1,
+      "expected": "MUST_REJECT",
+      "description": "Several baselines are frozen, but the official comparator is selected after protected outcomes.",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "Several eligible baselines may be frozen before evaluation while the official qualification comparator is chosen after protected outcomes according to which frozen baseline yields the strongest efficiency story."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "The resource-accounting inclusion rule remains fixed while that post-result comparator choice is made."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-08-02",
+      "family_id": "E08",
+      "family": "DEFERRED_COMPARATOR_RESOURCE_COMPOSITION",
+      "variant": 2,
+      "expected": "MUST_REJECT",
+      "description": "The comparator is frozen but the accounting window is selected post-result from preregistered options.",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "The qualification comparator remains fixed before protected evaluation."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "After protected results are known, accounting may choose between two previously declared resource windows according to which one keeps the observed result within budget."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-08-03",
+      "family_id": "E08",
+      "family": "DEFERRED_COMPARATOR_RESOURCE_COMPOSITION",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "description": "Comparator identity and resource inclusion are both precommitted before protected outcomes.",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "The qualification comparator identity is frozen before protected outcomes and remains the comparator used for the governed claim."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "The resource-accounting window and inclusion rule are frozen before protected outcomes and retain both favorable and unfavorable runs according to that same rule."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-E-08-04",
+      "family_id": "E08",
+      "family": "DEFERRED_COMPARATOR_RESOURCE_COMPOSITION",
+      "variant": 4,
+      "expected": "MUST_ACCEPT",
+      "description": "Post-qualification operational comparisons do not retroactively alter the governed comparator or resource ledger.",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "Additional operational comparators may be reported after qualification, but they do not replace the predeclared qualification comparator or rewrite the protected result."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "Later deployment analysis may use additional resource views, but the qualification ledger retains every run required by its predeclared inclusion rule."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+cfad2b1673ab592331338001e2b127d8350f000326f63c77c49cddb3841af3cc  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1-snapshot/.github/workflows/ci.yml
+25f2e15b0364a80972c88d48af3013acfc56251a7c717c74a76bc62ad57e2f4d  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1-snapshot/docs/decisions/register.md
+21eaf645cef0c8f0fb4a7a519d63d904044c5e0c034ce230b2522b9f5eb1f70c  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1-snapshot/scripts/check_research_hypotheses.py
+4874860f46e49fee5cf6208516b2e2032d6efd7cd1068d98436875090abe5844  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1-snapshot/tests/qualification/test_research_hypotheses.py
+5488806a31a7a23d7c7f75ea52fedb014b9362ac0f22426abe62d968dd2538cc  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1-snapshot.md
+60d486d270877cf42e0e2a879dc24c59dcd30f81e01ac77d8592e3d4958a1aa8  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1.sha256
+88e5ea25b571c358b0a1ea67b22a9bcb2ed4a1a5d677e0dc61deae94c57d065e  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1.txt
+f7993803bb42ddfe2203de5007e7cd9acdbec1c078b2aec10f817acac7805f8e  docs/decisions/qualification/evidence/0008-task7-post-acceptance-ci-candidate-wall-attempt-1.md

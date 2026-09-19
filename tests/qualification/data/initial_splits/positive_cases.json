@@ -1,0 +1,542 @@
+{
+  "schema_version": "1.0.0",
+  "task": 7,
+  "dataset_id": "TASK7-INITIAL-SPLITS-POSITIVE-CASES",
+  "authority": "AUTH-HETREN-MVP-3.0",
+  "decision_id": "0008",
+  "purpose": "Frozen MUST_ACCEPT decision-boundary cases for Task 7 initial-split governance.",
+  "interpretation": "These cases are intended to express valid governance relationships using wording not copied verbatim from the governing specification. Their first validator execution must be recorded separately and must not be rewritten after observation.",
+  "positive_case_count": 24,
+  "family_count": 8,
+  "variants_per_family": 3,
+  "cases": [
+    {
+      "case_id": "T7-POS-C01-01",
+      "family_id": "C01",
+      "family": "PROTECTED_OUTCOME_SELECTION_SEPARATION",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "A summary derived from protected target outcomes remains evaluation-only. It is not supplied to any process that selects, ranks, chooses, or changes the method or candidate before candidate freeze."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C01-02",
+      "family_id": "C01",
+      "family": "PROTECTED_OUTCOME_SELECTION_SEPARATION",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Coarsened protected target performance information stays behind the evaluation boundary and cannot influence candidate-producing decisions prior to candidate freeze."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C01-03",
+      "family_id": "C01",
+      "family": "PROTECTED_OUTCOME_SELECTION_SEPARATION",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.protected.target.derived.selection.integrity",
+        "T7.INV.nh2.proxy.outcome.leakage.integrity",
+        "T7.INV.protected.derived.signal.lineage"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 36,
+          "section_title": "N-H2 Transfer Leakage Controls",
+          "addition": "Protected target outcome indicators may be retained for audit after evaluation, but they are excluded from method selection, candidate construction, and tuning for that candidate lineage."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C02-01",
+      "family_id": "C02",
+      "family": "INDEPENDENCE_AND_PSEUDOREPLICATION",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity",
+        "T7.INV.global.nh1.anti.pseudoreplication"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Measurements from one shared upstream source remain one scientific independence lineage; different annotators do not make those measurements independent evaluation units."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C02-02",
+      "family_id": "C02",
+      "family": "INDEPENDENCE_AND_PSEUDOREPLICATION",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity",
+        "T7.INV.global.nh1.anti.pseudoreplication"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Disjoint calendar windows derived from the same source are grouped together unless a governed scientific basis proves distinct evidence-generating processes. Mere separation does not count as independence."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C02-03",
+      "family_id": "C02",
+      "family": "INDEPENDENCE_AND_PSEUDOREPLICATION",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.shared.source.count.as.independent.integrity",
+        "T7.INV.shared.ancestry.independence.integrity",
+        "T7.INV.global.nh1.anti.pseudoreplication"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 32,
+          "section_title": "N-H1 Independent Evaluation Units",
+          "addition": "Different cloud regions may execute repeated evaluations, but shared source ancestry remains in the same applicable IndependenceGroup unless the governed contract establishes a genuinely distinct evidence-generating process."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C03-01",
+      "family_id": "C03",
+      "family": "SPLITVERSION_IMMUTABILITY",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.identity.retention.integrity",
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.global.splitversion.immutability"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "Changing a governed membership pointer requires a successor SplitVersion identity; the frozen SplitVersion retains its original governed referent."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C03-02",
+      "family_id": "C03",
+      "family": "SPLITVERSION_IMMUTABILITY",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.identity.retention.integrity",
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.global.splitversion.immutability"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "Replacing the manifest member index creates a new governed SplitVersion rather than reusing the existing frozen SplitVersion identity."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C03-03",
+      "family_id": "C03",
+      "family": "SPLITVERSION_IMMUTABILITY",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.splitversion.identity.retention.integrity",
+        "T7.INV.splitversion.referential.immutability",
+        "T7.INV.global.splitversion.immutability"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 12,
+          "section_title": "SplitVersion",
+          "addition": "A frozen SplitVersion identity remains bound to unchanged governed membership. Remapping that membership must create a successor version with a distinct identity."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C04-01",
+      "family_id": "C04",
+      "family": "CONTAMINATION_STATE_INTEGRITY",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.non.clean.effective.clean.integrity",
+        "T7.INV.contamination.effective.state.integrity",
+        "T7.INV.global.contamination.anti.laundering"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 27,
+          "section_title": "ContaminationState",
+          "addition": "A SUSPECTED contamination state remains non-CLEAN until a governed contamination-resolution event changes it; a low-risk heuristic does not convert the state to CLEAN."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C04-02",
+      "family_id": "C04",
+      "family": "CONTAMINATION_STATE_INTEGRITY",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.non.clean.effective.clean.integrity",
+        "T7.INV.contamination.effective.state.integrity",
+        "T7.INV.global.contamination.anti.laundering"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 27,
+          "section_title": "ContaminationState",
+          "addition": "CONFIRMED contamination cannot be treated as CLEAN merely because the affected artifact later becomes unavailable."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C04-03",
+      "family_id": "C04",
+      "family": "CONTAMINATION_STATE_INTEGRITY",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.non.clean.effective.clean.integrity",
+        "T7.INV.contamination.effective.state.integrity",
+        "T7.INV.global.contamination.anti.laundering"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 27,
+          "section_title": "ContaminationState",
+          "addition": "UNKNOWN contamination may be investigated, but it remains non-CLEAN until governed resolution explicitly changes the recorded contamination state."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C05-01",
+      "family_id": "C05",
+      "family": "VERIFICATION_INDEPENDENCE",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "A verifier may run in a different CI job only with separate control authority, credentials, and writable evidence state. Shared mutable verification state is prohibited for certification."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C05-02",
+      "family_id": "C05",
+      "family": "VERIFICATION_INDEPENDENCE",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "A separate operating-system process is insufficient when the candidate-producing path still shares its controller or writable verification state; certification requires authority separation as well as execution separation."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C05-03",
+      "family_id": "C05",
+      "family": "VERIFICATION_INDEPENDENCE",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.verification.shared.authority.integrity",
+        "T7.INV.verification.structural.independence.integrity",
+        "T7.INV.independent.verification.authority.separation",
+        "T7.INV.global.anti.self.certification"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 44,
+          "section_title": "Independent Verification And Authority Separation",
+          "addition": "Verifier certification may proceed when credentials, evidence state, and control authority are separately governed and the candidate-producing process cannot modify the protected verification evidence."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C06-01",
+      "family_id": "C06",
+      "family": "ADAPTIVE_HYPOTHESIS_SEPARATION",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.adaptive.cross.hypothesis.laundering.integrity",
+        "T7.INV.global.adaptive.hypothesis.independence",
+        "T7.INV.ah1.input.outcome.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 40,
+          "section_title": "A-H2 Paired Pre/Post/Rollback Evaluation",
+          "addition": "Passing A-H2 retention and rollback checks does not retroactively validate an A-H1 result whose protected outcome separation was incomplete."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C06-02",
+      "family_id": "C06",
+      "family": "ADAPTIVE_HYPOTHESIS_SEPARATION",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.adaptive.cross.hypothesis.laundering.integrity",
+        "T7.INV.global.adaptive.hypothesis.independence",
+        "T7.INV.ah1.input.outcome.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 40,
+          "section_title": "A-H2 Paired Pre/Post/Rollback Evaluation",
+          "addition": "Successful rollback evidence remains evidence for A-H2 only; a contaminated or invalid A-H1 result requires its own governed remediation and rerun."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C06-03",
+      "family_id": "C06",
+      "family": "ADAPTIVE_HYPOTHESIS_SEPARATION",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.adaptive.cross.hypothesis.laundering.integrity",
+        "T7.INV.global.adaptive.hypothesis.independence",
+        "T7.INV.ah1.input.outcome.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 40,
+          "section_title": "A-H2 Paired Pre/Post/Rollback Evaluation",
+          "addition": "A-H1 and A-H2 are qualified independently. Retention success cannot rescue an A-H1 result invalidated by protected-outcome leakage."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C07-01",
+      "family_id": "C07",
+      "family": "DATA_CONSEQUENCE_NON_WAIVER",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.data.evidence.consequence.non.waiver",
+        "T7.INV.decision.0008.evidence.boundary.integrity",
+        "T7.INV.global.decision.0008.evidence.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_DECISION_SECTION",
+          "document": "DECISION",
+          "section_title": "Decision",
+          "addition": "Any material split revision requires `RERUN_AND_PRESERVE_DATA_DISTINCTIONS`; reviewer confidence does not waive that consequence or authorize reuse of the prior result."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C07-02",
+      "family_id": "C07",
+      "family": "DATA_CONSEQUENCE_NON_WAIVER",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.data.evidence.consequence.non.waiver",
+        "T7.INV.decision.0008.evidence.boundary.integrity",
+        "T7.INV.global.decision.0008.evidence.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_DECISION_SECTION",
+          "document": "DECISION",
+          "section_title": "Decision",
+          "addition": "Operational cost does not permit skipping `RERUN_AND_PRESERVE_DATA_DISTINCTIONS` after a material data or split change. The prior result remains historical evidence only."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C07-03",
+      "family_id": "C07",
+      "family": "DATA_CONSEQUENCE_NON_WAIVER",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.data.evidence.consequence.non.waiver",
+        "T7.INV.decision.0008.evidence.boundary.integrity",
+        "T7.INV.global.decision.0008.evidence.separation"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_DECISION_SECTION",
+          "document": "DECISION",
+          "section_title": "Decision",
+          "addition": "Even when revised records appear equivalent, a material split change cannot reuse the prior result instead of executing `RERUN_AND_PRESERVE_DATA_DISTINCTIONS`."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C08-01",
+      "family_id": "C08",
+      "family": "BASELINE_RESOURCE_PRECOMMITMENT",
+      "variant": 1,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "Baseline eligibility and resource rules are frozen before protected evaluation and must not be filtered or narrowed after outcomes are observed."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "Protected outcomes must not adjust the accounting window, cost boundary, or resource policy; accounting remains governed by the predeclared rule."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C08-02",
+      "family_id": "C08",
+      "family": "BASELINE_RESOURCE_PRECOMMITMENT",
+      "variant": 2,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "The comparator set is selected from predeclared eligibility rules before protected results are known. Later resource observations are reported without removing a comparator."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "After protected results are available, accounting boundaries remain unchanged and cannot be revised to favor a comparison."
+        }
+      ]
+    },
+    {
+      "case_id": "T7-POS-C08-03",
+      "family_id": "C08",
+      "family": "BASELINE_RESOURCE_PRECOMMITMENT",
+      "variant": 3,
+      "expected": "MUST_ACCEPT",
+      "related_invariant_ids": [
+        "T7.INV.baseline.resource.composition.integrity",
+        "T7.INV.baseline.anti.gaming.integrity",
+        "T7.INV.resource.accounting.anti.gaming.integrity",
+        "T7.INV.global.post.result.comparator.integrity"
+      ],
+      "operations": [
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 45,
+          "section_title": "Task 8 Baseline Handoff",
+          "addition": "Resource reporting criteria determine comparator eligibility only before protected evaluation; the frozen comparator identity remains reportable regardless of later outcome."
+        },
+        {
+          "operation": "APPEND_SPEC_SECTION",
+          "document": "SPEC",
+          "section_number": 46,
+          "section_title": "Task 9 Cost And Resource Handoff",
+          "addition": "Post-result measurements are recorded under the existing accounting window; they do not influence or narrow cost or resource boundaries."
+        }
+      ]
+    }
+  ]
+}

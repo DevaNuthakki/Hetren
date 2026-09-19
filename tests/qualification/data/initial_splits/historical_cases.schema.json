@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren://task7/initial-splits/historical-cases.schema.json",
+  "title": "Task 7 Initial Splits Historical Cases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task",
+    "dataset_id",
+    "purpose",
+    "authority",
+    "decision_id",
+    "historical_case_count",
+    "important_interpretation",
+    "sources",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "task": {
+      "const": 7
+    },
+    "dataset_id": {
+      "const": "TASK7-INITIAL-SPLITS-HISTORICAL-CASES"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "const": "AUTH-HETREN-MVP-3.0"
+    },
+    "decision_id": {
+      "const": "0008"
+    },
+    "historical_case_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "important_interpretation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical",
+        "set_a",
+        "set_b",
+        "set_c"
+      ],
+      "properties": {
+        "canonical": {
+          "type": "string",
+          "minLength": 1
+        },
+        "set_a": {
+          "type": "string",
+          "minLength": 1
+        },
+        "set_b": {
+          "type": "string",
+          "minLength": 1
+        },
+        "set_c": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical",
+        "set_a",
+        "set_b",
+        "set_c"
+      ],
+      "properties": {
+        "canonical": {
+          "$ref": "#/$defs/canonicalDevelopmentSource"
+        },
+        "set_a": {
+          "$ref": "#/$defs/sourceWithoutAttackHash"
+        },
+        "set_b": {
+          "$ref": "#/$defs/sourceWithAttackHash"
+        },
+        "set_c": {
+          "$ref": "#/$defs/sourceWithAttackHash"
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/historicalCase"
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "sourceWithoutAttackHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "file_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sourceWithAttackHash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "file_sha256",
+        "attack_definition_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "file_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "attack_definition_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "historicalCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "suite",
+        "ordinal",
+        "label",
+        "expected",
+        "evidence_class",
+        "historical_unseen",
+        "first_run_disposition",
+        "current_disposition",
+        "source_file",
+        "evidence_ref"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string"
+        },
+        "suite": {
+          "enum": [
+            "CANONICAL",
+            "SET_A",
+            "SET_B",
+            "SET_C"
+          ]
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "generated_case_id": {
+          "type": "string",
+          "pattern": "^C0[1-8]\\.0[1-8]$"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected": {
+          "const": "MUST_REJECT"
+        },
+        "evidence_class": {
+          "enum": [
+            "DEVELOPMENT_MUTATION",
+            "DISCOVERED_HOLDOUT_REGRESSION",
+            "GENERATED_DISCOVERED_REGRESSION"
+          ]
+        },
+        "historical_unseen": {
+          "type": "boolean"
+        },
+        "first_run_disposition": {
+          "enum": [
+            "KNOWN_DEVELOPMENT_CASE",
+            "REJECTED",
+            "SURVIVED"
+          ]
+        },
+        "current_disposition": {
+          "const": "REJECTED"
+        },
+        "source_file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "suite": {
+                "const": "CANONICAL"
+              }
+            },
+            "required": [
+              "suite"
+            ]
+          },
+          "then": {
+            "properties": {
+              "case_id": {
+                "pattern": "^T7-DEV-[0-9]{3}$"
+              },
+              "ordinal": {
+                "maximum": 52
+              },
+              "evidence_class": {
+                "const": "DEVELOPMENT_MUTATION"
+              },
+              "historical_unseen": {
+                "const": false
+              },
+              "first_run_disposition": {
+                "const": "KNOWN_DEVELOPMENT_CASE"
+              },
+              "source_file": {
+                "const": "tests/qualification/test_initial_splits.py"
+              },
+              "evidence_ref": {
+                "const": "tests/qualification/test_initial_splits.py"
+              }
+            },
+            "not": {
+              "required": [
+                "generated_case_id"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "suite": {
+                "const": "SET_A"
+              }
+            },
+            "required": [
+              "suite"
+            ]
+          },
+          "then": {
+            "properties": {
+              "case_id": {
+                "pattern": "^T7-A-[0-9]{3}$"
+              },
+              "ordinal": {
+                "maximum": 12
+              },
+              "evidence_class": {
+                "const": "DISCOVERED_HOLDOUT_REGRESSION"
+              },
+              "historical_unseen": {
+                "const": true
+              },
+              "first_run_disposition": {
+                "const": "SURVIVED"
+              },
+              "source_file": {
+                "const": "tests/qualification/test_initial_splits_holdout.py"
+              },
+              "evidence_ref": {
+                "const": "docs/decisions/qualification/evidence/0008-red-team-set-a.md"
+              }
+            },
+            "not": {
+              "required": [
+                "generated_case_id"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "suite": {
+                "const": "SET_B"
+              }
+            },
+            "required": [
+              "suite"
+            ]
+          },
+          "then": {
+            "properties": {
+              "case_id": {
+                "pattern": "^T7-B-[0-9]{3}$"
+              },
+              "ordinal": {
+                "maximum": 12
+              },
+              "evidence_class": {
+                "const": "DISCOVERED_HOLDOUT_REGRESSION"
+              },
+              "historical_unseen": {
+                "const": true
+              },
+              "first_run_disposition": {
+                "const": "SURVIVED"
+              },
+              "source_file": {
+                "const": "tests/qualification/test_initial_splits_holdout_b.py"
+              },
+              "evidence_ref": {
+                "const": "docs/decisions/qualification/evidence/0008-red-team-set-b.md"
+              }
+            },
+            "not": {
+              "required": [
+                "generated_case_id"
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "suite": {
+                "const": "SET_C"
+              }
+            },
+            "required": [
+              "suite"
+            ]
+          },
+          "then": {
+            "required": [
+              "generated_case_id"
+            ],
+            "properties": {
+              "case_id": {
+                "pattern": "^T7-C-[0-9]{3}$"
+              },
+              "ordinal": {
+                "maximum": 64
+              },
+              "evidence_class": {
+                "const": "GENERATED_DISCOVERED_REGRESSION"
+              },
+              "historical_unseen": {
+                "const": true
+              },
+              "first_run_disposition": {
+                "enum": [
+                  "REJECTED",
+                  "SURVIVED"
+                ]
+              },
+              "source_file": {
+                "const": "tests/qualification/test_initial_splits_holdout_c.py"
+              },
+              "evidence_ref": {
+                "const": "docs/decisions/qualification/evidence/0008-red-team-set-c.md"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "canonicalDevelopmentSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "historical_file_sha256",
+        "historical_snapshot_ref",
+        "attack_definition_sha256"
+      ],
+      "properties": {
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "historical_file_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "historical_snapshot_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attack_definition_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    }
+  }
+}

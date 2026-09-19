@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "suite_id": "TASK7-POST-SET-E-REMEDIATION-REGRESSION",
+  "evidence_class": "KNOWN_REGRESSION",
+  "case_count": 13,
+  "interpretation": "Known regression cases created after the authoritative Set E first run. These cases are not fresh or unseen evidence and do not replace the frozen Set E result.",
+  "cases": [
+    {
+      "case_id": "T7-E-REG-01",
+      "expected": "MUST_REJECT",
+      "expected_label": "global derived-artifact freshness integrity",
+      "section_number": 30,
+      "section_title": "Fresh Protected Evidence",
+      "addition": "A cache synthesized through an intermediate digest from exposed protected evidence may be declared fresh because it receives a new storage checksum."
+    },
+    {
+      "case_id": "T7-E-REG-02",
+      "expected": "MUST_REJECT",
+      "expected_label": "N-H2 proxy-outcome leakage integrity",
+      "section_number": 36,
+      "section_title": "N-H2 Transfer Leakage Controls",
+      "addition": "A candidate may be revised using evaluator timing bands derived from protected target performance."
+    },
+    {
+      "case_id": "T7-E-REG-03",
+      "expected": "MUST_REJECT",
+      "expected_label": "N-H2 proxy-outcome leakage integrity",
+      "section_number": 36,
+      "section_title": "N-H2 Transfer Leakage Controls",
+      "addition": "A transfer strategy may be tuned from protected threshold probes and rank quartiles before freeze."
+    },
+    {
+      "case_id": "T7-E-REG-04",
+      "expected": "MUST_REJECT",
+      "expected_label": "shared-source count-as-independent integrity",
+      "section_number": 32,
+      "section_title": "N-H1 Independent Evaluation Units",
+      "addition": "Two renders from the same scenario seed bank may count as independent evaluation units."
+    },
+    {
+      "case_id": "T7-E-REG-05",
+      "expected": "MUST_REJECT",
+      "expected_label": "PartitionPurpose alias-bypass integrity",
+      "section_number": 10,
+      "section_title": "Role And Purpose Are Separate Axes",
+      "addition": "A partition purpose may control protected evidence authority even when the declared role would not grant it."
+    },
+    {
+      "case_id": "T7-E-REG-06",
+      "expected": "MUST_REJECT",
+      "expected_label": "independent-verification authority separation",
+      "section_number": 44,
+      "section_title": "Independent Verification And Authority Separation",
+      "addition": "The candidate-producing team may administer the service account and authorization policy used for final verification certification."
+    },
+    {
+      "case_id": "T7-E-REG-07",
+      "expected": "MUST_REJECT",
+      "expected_label": "independent-verification authority separation",
+      "section_number": 44,
+      "section_title": "Independent Verification And Authority Separation",
+      "addition": "The candidate-producing path may filter which verification artifacts are delivered to the verifier, provided the verifier cannot modify the candidate."
+    },
+    {
+      "case_id": "T7-E-REG-08",
+      "expected": "MUST_REJECT",
+      "expected_label": "historical-manifest preservation",
+      "section_number": 12,
+      "section_title": "SplitVersion",
+      "addition": "A copied successor SplitVersion may restart access history and omit predecessor contamination history."
+    },
+    {
+      "case_id": "T7-E-REG-09",
+      "expected": "MUST_REJECT",
+      "expected_label": "resource-accounting anti-gaming integrity",
+      "section_number": 46,
+      "section_title": "Task 9 Cost And Resource Handoff",
+      "addition": "After protected results are known, accounting may choose between predeclared resource windows according to which observed result remains within budget."
+    },
+    {
+      "case_id": "T7-E-REG-10",
+      "expected": "MUST_ACCEPT",
+      "expected_label": null,
+      "section_number": 32,
+      "section_title": "N-H1 Independent Evaluation Units",
+      "addition": "Two evaluations may count as independent when their source populations and scenario ancestry are independent, even when both use the same neutral execution framework."
+    },
+    {
+      "case_id": "T7-E-REG-11",
+      "expected": "MUST_ACCEPT",
+      "expected_label": null,
+      "section_number": 44,
+      "section_title": "Independent Verification And Authority Separation",
+      "addition": "A neutral immutable artifact mirror may be readable by both paths while the candidate-producing authority cannot administer verifier credentials, verification evidence, or certification authority."
+    },
+    {
+      "case_id": "T7-E-REG-12",
+      "expected": "MUST_ACCEPT",
+      "expected_label": null,
+      "section_number": 36,
+      "section_title": "N-H2 Transfer Leakage Controls",
+      "addition": "After candidate freeze, a protected threshold indicator may be published for audit and cannot be used to select, revise, rank, or tune a candidate."
+    },
+    {
+      "case_id": "T7-E-REG-13",
+      "expected": "MUST_ACCEPT",
+      "expected_label": null,
+      "section_number": 12,
+      "section_title": "SplitVersion",
+      "addition": "A successor SplitVersion may have new membership while preserving predecessor manifests, access history, contamination history, invalidations, and prior results."
+    }
+  ]
+}

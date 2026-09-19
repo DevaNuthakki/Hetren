@@ -1,0 +1,231 @@
+name: Hetren Foundation CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'mvp/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hetren-foundation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository:
+    name: Repository foundation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install CI Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pip install --disable-pip-version-check "jsonschema==4.26.0"
+
+          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; print('jsonschema', version('jsonschema'))"
+
+      - name: Verify required repository boundaries
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required=(
+            apps/control_plane
+            apps/runner
+            apps/studio
+            packages/core
+            packages/contracts
+            packages/engines/behavioral
+            packages/engines/internal
+            environments/agent
+            environments/tabular
+            environments/vision
+            research/native_intelligence
+            research/adaptive_intelligence
+            docs/research/native_intelligence
+            docs/research/adaptive_intelligence
+            tests/qualification
+            docs/mvp
+          )
+
+          for path in "${required[@]}"; do
+            test -d "$path" || {
+              echo "Missing required repository boundary: $path"
+              exit 1
+            }
+          done
+
+      - name: Reject active legacy architecture
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          forbidden=(
+            backend
+            frontend
+            hvee
+          )
+
+          for path in "${forbidden[@]}"; do
+            if test -e "$path"; then
+              echo "Legacy architecture path is active: $path"
+              exit 1
+            fi
+          done
+
+      - name: Verify secrets are not tracked
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if git ls-files --error-unmatch .env >/dev/null 2>&1; then
+            echo ".env must not be tracked"
+            exit 1
+          fi
+
+      - name: Verify MVP authority records
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          test -f docs/mvp/00-authority.md
+          test -f docs/mvp/02-charter.md
+          test -f docs/mvp/02-charter-qualification.md
+          test -f docs/decisions/0001-reset-active-repository.md
+          test -f docs/decisions/0002-decision-governance.md
+          test -f docs/decisions/register.md
+          test -f docs/decisions/template.md
+          test -f docs/decisions/qualification/0002-decision-governance.md
+          test -f docs/mvp/03-success-contracts.md
+          test -f docs/decisions/0003-success-contracts.md
+          test -f docs/decisions/qualification/0003-success-contracts.md
+          test -f docs/architecture/repository-layout.md
+          test -f scripts/check_mvp_charter.py
+          test -f scripts/check_decision_register.py
+          test -f scripts/check_success_contracts.py
+          test -f tests/qualification/test_mvp_charter.py
+          test -f tests/qualification/test_decision_register.py
+          test -f tests/qualification/test_success_contracts.py
+          test -f docs/mvp/04-system-taxonomy.md
+          test -f docs/decisions/0004-system-taxonomy.md
+          test -f docs/decisions/qualification/0004-system-taxonomy.md
+          test -f scripts/check_system_taxonomy.py
+          test -f tests/qualification/test_system_taxonomy.py
+          test -f docs/mvp/05-support-matrix.md
+          test -f docs/decisions/0005-mvp-support-matrix.md
+          test -f docs/decisions/qualification/0005-mvp-support-matrix.md
+          test -f scripts/check_support_matrix.py
+          test -f tests/qualification/test_support_matrix.py
+          test -f docs/mvp/07-initial-splits.md
+          test -f docs/decisions/0008-initial-split-protocol.md
+          test -f docs/decisions/qualification/0008-initial-split-protocol.md
+          test -f scripts/check_initial_splits.py
+          test -f scripts/check_initial_splits_data.py
+          test -f scripts/check_initial_splits_qualification_data.py
+          test -f tests/qualification/test_initial_splits.py
+          test -f tests/qualification/test_initial_splits_data.py
+          test -f tests/qualification/test_initial_splits_positive.py
+          test -f tests/qualification/test_initial_splits_holdout.py
+          test -f tests/qualification/test_initial_splits_holdout_b.py
+          test -f tests/qualification/test_initial_splits_holdout_c.py
+          test -f tests/qualification/test_initial_splits_holdout_d.py
+          test -f tests/qualification/test_initial_splits_qualification_data.py
+          test -f tests/qualification/test_initial_splits_set_e_remediation.py
+          test -f tests/qualification/data/initial_splits/qualification_cases.json
+          test -f tests/qualification/data/initial_splits/qualification_cases.schema.json
+          test -f docs/decisions/qualification/evidence/0008-set-e-first-run-evidence.sha256
+          test -f docs/decisions/qualification/evidence/0008-set-e-remediation-2-regression-evidence.sha256
+
+      - name: Qualify MVP charter
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_mvp_charter.py --require-qualified
+          python3 tests/qualification/test_mvp_charter.py
+
+      - name: Qualify decision governance
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_decision_register.py
+          python3 tests/qualification/test_decision_register.py
+
+      - name: Qualify success contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_success_contracts.py --require-qualified
+          python3 tests/qualification/test_success_contracts.py
+
+      - name: Qualify system taxonomy
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_system_taxonomy.py --require-qualified
+          python3 tests/qualification/test_system_taxonomy.py
+
+      - name: Qualify MVP support matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_support_matrix.py --require-qualified
+          python3 tests/qualification/test_support_matrix.py
+
+      - name: Qualify research hypotheses
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_research_hypotheses.py --require-qualified
+          python3 tests/qualification/test_research_hypotheses.py
+
+      - name: Qualify initial split protocol
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_initial_splits.py --require-qualified
+
+          python3 scripts/check_initial_splits_data.py
+          python3 tests/qualification/test_initial_splits_data.py
+
+          python3 scripts/check_initial_splits_qualification_data.py
+          python3 tests/qualification/test_initial_splits_qualification_data.py
+
+          python3 tests/qualification/test_initial_splits.py
+          python3 tests/qualification/test_initial_splits_positive.py
+
+          python3 tests/qualification/test_initial_splits_holdout.py
+          python3 tests/qualification/test_initial_splits_holdout_b.py
+          python3 tests/qualification/test_initial_splits_holdout_c.py
+          python3 tests/qualification/test_initial_splits_holdout_d.py
+
+          python3 tests/qualification/test_initial_splits_set_e_remediation.py
+
+          sha256sum -c docs/decisions/qualification/evidence/0008-set-e-first-run-evidence.sha256
+
+          sha256sum -c docs/decisions/qualification/evidence/0008-set-e-remediation-2-regression-evidence.sha256

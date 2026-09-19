@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren://task7/initial-splits/set-d-cases.schema.json",
+  "title": "Task 7 Fresh Set E Holdout Cases",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task",
+    "dataset_id",
+    "authority",
+    "decision_id",
+    "evidence_class",
+    "historical_unseen_at_definition",
+    "case_count",
+    "family_count",
+    "must_reject_count",
+    "must_accept_count",
+    "acceptance_criterion",
+    "interpretation",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "task": {
+      "const": 7
+    },
+    "dataset_id": {
+      "const": "TASK7-INITIAL-SPLITS-SET-E"
+    },
+    "authority": {
+      "const": "AUTH-HETREN-MVP-3.0"
+    },
+    "decision_id": {
+      "const": "0008"
+    },
+    "evidence_class": {
+      "const": "FROZEN_FRESH_HOLDOUT"
+    },
+    "historical_unseen_at_definition": {
+      "const": true
+    },
+    "case_count": {
+      "const": 32
+    },
+    "family_count": {
+      "const": 8
+    },
+    "must_reject_count": {
+      "const": 16
+    },
+    "must_accept_count": {
+      "const": 16
+    },
+    "acceptance_criterion": {
+      "type": "string",
+      "minLength": 1
+    },
+    "interpretation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 32,
+      "maxItems": 32,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "family_id",
+        "family",
+        "variant",
+        "expected",
+        "description",
+        "related_invariant_ids",
+        "operations"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "pattern": "^T7-E-0[1-8]-0[1-4]$"
+        },
+        "family_id": {
+          "type": "string",
+          "pattern": "^E0[1-8]$"
+        },
+        "family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "variant": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4
+        },
+        "expected": {
+          "enum": [
+            "MUST_REJECT",
+            "MUST_ACCEPT"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "related_invariant_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^T7\\.INV\\.[a-z0-9]+(?:\\.[a-z0-9]+)*$"
+          }
+        },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 2,
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/specOperation"
+              },
+              {
+                "$ref": "#/$defs/decisionOperation"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "specOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "document",
+        "section_number",
+        "section_title",
+        "addition"
+      ],
+      "properties": {
+        "operation": {
+          "const": "APPEND_SPEC_SECTION"
+        },
+        "document": {
+          "const": "SPEC"
+        },
+        "section_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "section_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "addition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "decisionOperation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "document",
+        "section_title",
+        "addition"
+      ],
+      "properties": {
+        "operation": {
+          "const": "APPEND_DECISION_SECTION"
+        },
+        "document": {
+          "const": "DECISION"
+        },
+        "section_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "addition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

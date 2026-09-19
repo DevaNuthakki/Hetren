@@ -1,0 +1,88 @@
+===== SET C POSITIVE CONTROL =====
+PASS Set C positive control
+
+===== SET C DISCOVERED GENERATED REGRESSION =====
+Families: 8
+Variants per family: 8
+Total generated attacks: 64
+Attack-definition SHA-256: 368a0046c9fed38d007374c5a976a41b89dd0922c4e60d46c040dd890b73cfc2
+PASS Set C killed: C01.01 protected proxy feedback: traffic-light status
+PASS Set C killed: C01.02 protected proxy feedback: quantized performance bucket
+PASS Set C killed: C01.03 protected proxy feedback: binary improved-or-worse indicator
+PASS Set C killed: C01.04 protected proxy feedback: percentile band
+PASS Set C killed: C01.05 protected proxy feedback: coarsened success tier
+PASS Set C killed: C01.06 protected proxy feedback: aggregate quality flag
+PASS Set C killed: C01.07 protected proxy feedback: threshold-crossing signal
+PASS Set C killed: C01.08 protected proxy feedback: red-yellow-green dashboard value
+PASS Set C killed: C02.01 pseudoreplication via different annotators
+PASS Set C killed: C02.02 pseudoreplication via different calendar days
+PASS Set C killed: C02.03 pseudoreplication via different cloud regions
+PASS Set C killed: C02.04 pseudoreplication via different worker pools
+PASS Set C killed: C02.05 pseudoreplication via different file shards
+PASS Set C killed: C02.06 pseudoreplication via different API sessions
+PASS Set C killed: C02.07 pseudoreplication via different evaluation scripts
+PASS Set C killed: C02.08 pseudoreplication via different review queues
+PASS Set C killed: C03.01 SplitVersion identity laundering
+PASS Set C killed: C03.02 SplitVersion identity laundering
+PASS Set C killed: C03.03 SplitVersion identity laundering
+PASS Set C killed: C03.04 SplitVersion identity laundering
+PASS Set C killed: C03.05 SplitVersion identity laundering
+PASS Set C killed: C03.06 SplitVersion identity laundering
+PASS Set C killed: C03.07 SplitVersion identity laundering
+PASS Set C killed: C03.08 SplitVersion identity laundering
+PASS Set C killed: C04.01 contamination laundering
+PASS Set C killed: C04.02 contamination laundering
+PASS Set C killed: C04.03 contamination laundering
+PASS Set C killed: C04.04 contamination laundering
+PASS Set C killed: C04.05 contamination laundering
+PASS Set C killed: C04.06 contamination laundering
+PASS Set C killed: C04.07 contamination laundering
+PASS Set C killed: C04.08 contamination laundering
+PASS Set C killed: C05.01 fake verifier independence
+PASS Set C killed: C05.02 fake verifier independence
+PASS Set C killed: C05.03 fake verifier independence
+PASS Set C killed: C05.04 fake verifier independence
+PASS Set C killed: C05.05 fake verifier independence
+FAIL Set C survived: C05.06 fake verifier independence
+FAIL Set C survived: C05.07 fake verifier independence
+PASS Set C killed: C05.08 fake verifier independence
+PASS Set C killed: C06.01 Adaptive hypothesis laundering
+PASS Set C killed: C06.02 Adaptive hypothesis laundering
+PASS Set C killed: C06.03 Adaptive hypothesis laundering
+PASS Set C killed: C06.04 Adaptive hypothesis laundering
+PASS Set C killed: C06.05 Adaptive hypothesis laundering
+PASS Set C killed: C06.06 Adaptive hypothesis laundering
+PASS Set C killed: C06.07 Adaptive hypothesis laundering
+PASS Set C killed: C06.08 Adaptive hypothesis laundering
+PASS Set C killed: C07.01 DATA consequence waiver
+PASS Set C killed: C07.02 DATA consequence waiver
+PASS Set C killed: C07.03 DATA consequence waiver
+PASS Set C killed: C07.04 DATA consequence waiver
+PASS Set C killed: C07.05 DATA consequence waiver
+PASS Set C killed: C07.06 DATA consequence waiver
+PASS Set C killed: C07.07 DATA consequence waiver
+PASS Set C killed: C07.08 DATA consequence waiver
+PASS Set C killed: C08.01 distributed baseline/resource gaming
+PASS Set C killed: C08.02 distributed baseline/resource gaming
+PASS Set C killed: C08.03 distributed baseline/resource gaming
+PASS Set C killed: C08.04 distributed baseline/resource gaming
+PASS Set C killed: C08.05 distributed baseline/resource gaming
+PASS Set C killed: C08.06 distributed baseline/resource gaming
+PASS Set C killed: C08.07 distributed baseline/resource gaming
+PASS Set C killed: C08.08 distributed baseline/resource gaming
+
+===== SET C RESULT =====
+Killed: 62/64
+Survived: 2/64
+Survivors:
+- C05.06 fake verifier independence
+- C05.07 fake verifier independence
+Traceback (most recent call last):
+  File "/Users/deva/Documents/personal-projects/hetren/tests/qualification/test_initial_splits_holdout_c.py", line 676, in <module>
+    main()
+    ~~~~^^
+  File "/Users/deva/Documents/personal-projects/hetren/tests/qualification/test_initial_splits_holdout_c.py", line 665, in main
+    raise AssertionError(
+        "Task 7 validator has Set C regression survivors"
+    )
+AssertionError: Task 7 validator has Set C regression survivors
