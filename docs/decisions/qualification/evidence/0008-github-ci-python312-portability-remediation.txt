@@ -1,0 +1,27 @@
+===== GITHUB CI PYTHON 3.12 PORTABILITY REPRODUCTION =====
+
+Historical commit:
+30689f0151e49242cf44c570b33afb341eb6ab0e
+
+CI interpreter contract:
+Python 3.12
+
+CI dependency contract:
+jsonschema==4.26.0
+
+===== PRE-REMEDIATION COMMIT 30689f0 =====
+INITIAL SPLITS DATA VALIDATION: FAIL
+- AssertionError: 
+
+===== POST-REMEDIATION LIVE TREE =====
+INITIAL SPLITS DATA VALIDATION: PASS
+- historical adversarial cases: 140
+- canonical: 52
+- Set A: 12
+- Set B: 12
+- Set C: 64
+- Set C original unseen: 17 rejected / 47 survived
+- active explicit invariants: 44
+- schemas: Draft 2020-12
+- source hashes: verified
+- Set B/C attack hashes: verified

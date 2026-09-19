@@ -1,0 +1,870 @@
+===== HETREN TASKS 1-7 POST-ACCEPTANCE CI-CANDIDATE WALL — ATTEMPT 2 =====
+Task 7 lifecycle: Qualified / ACCEPTED
+Task 6 compatibility remediation: ACTIVE
+Task 6 historical mutation qualification: 52/52
+Task 7 unified qualification cases: 241
+Set E authoritative unseen first run: 20/32
+Set E current regression evidence: 32/32
+Set E execution in this wall: NO
+
+===== TASK 1 MVP CHARTER VALIDATOR =====
+MVP CHARTER VALIDATION: PASS
+- version: 1.1.0
+- status: Qualified
+- numbered sections: 33
+- MVP release conditions: 14
+- Task 1 qualification conditions: 25
+- canonical authorities: 2
+- research programs: Native Intelligence + Adaptive Intelligence
+[RETURN CODE] 0
+
+===== TASK 1 MVP CHARTER MUTATIONS =====
+PASS positive control
+PASS Qualified status accepted by final check
+PASS Requalifying status rejected by final check
+PASS mutation rejected: missing canonical MVP authority
+PASS mutation rejected: adaptive research section removed
+PASS mutation rejected: MVP release condition 14 removed
+PASS mutation rejected: Task 1 condition 25 removed
+PASS mutation rejected: product and adaptive status separation removed
+PASS mutation rejected: superseded authority resurrected
+PASS mutation rejected: adaptive research implementation boundary removed
+MVP CHARTER MUTATION SUITE: PASS
+[RETURN CODE] 0
+
+===== TASK 2 DECISION GOVERNANCE =====
+DECISION REGISTER VALIDATION: PASS
+[RETURN CODE] 0
+
+===== TASK 2 DECISION MUTATIONS =====
+PASS valid case: baseline governance
+PASS valid case: valid NATIVE THESIS mapping
+PASS valid case: valid NATIVE METRIC mapping
+PASS valid case: valid NATIVE DATA mapping
+PASS valid case: valid NATIVE BASELINE mapping
+PASS valid case: valid NATIVE MODEL mapping
+PASS valid case: valid NATIVE ALGORITHM mapping
+PASS valid case: valid NATIVE BUG mapping
+PASS valid case: valid NATIVE INFRA mapping
+PASS valid case: valid ADAPTIVE research decision
+PASS valid case: valid CROSS_PROGRAM research decision
+PASS mutation killed: duplicate Decision ID
+PASS mutation killed: duplicate record reference
+PASS mutation killed: unknown status
+PASS mutation killed: unknown class
+PASS mutation killed: old authority used by active decision
+PASS mutation killed: old authority resurrected in authority table
+PASS mutation killed: current authority removed
+PASS mutation killed: invalid register version
+PASS mutation killed: inactive accepted register
+PASS mutation killed: governing authority header drift
+PASS mutation killed: heading ID mismatch
+PASS mutation killed: metadata ID mismatch
+PASS mutation killed: metadata title mismatch
+PASS mutation killed: heading title mismatch
+PASS mutation killed: missing record
+PASS mutation killed: unregistered record
+PASS mutation killed: missing research metadata
+PASS mutation killed: missing Research Impact section
+PASS mutation killed: record path escape
+PASS mutation killed: invalid reversibility
+PASS mutation killed: impossible calendar date
+PASS mutation killed: invalid Decision Key
+PASS mutation killed: template missing metadata
+PASS mutation killed: template missing section
+PASS mutation killed: template missing research-program vocabulary
+PASS mutation killed: register scientific mapping drift
+PASS mutation killed: conflicting accepted key
+PASS mutation killed: accepted pending implementation
+PASS mutation killed: accepted pending verification
+PASS mutation killed: accepted missing qualification
+PASS mutation killed: asymmetric supersession
+PASS mutation killed: supersession across Decision Keys
+PASS mutation killed: invalid research program
+PASS mutation killed: invalid research category
+PASS mutation killed: research program/category mismatch
+PASS mutation killed: research category without program
+PASS mutation killed: wrong evidence consequence for THESIS
+PASS mutation killed: wrong evidence consequence for METRIC
+PASS mutation killed: wrong evidence consequence for DATA
+PASS mutation killed: wrong evidence consequence for BASELINE
+PASS mutation killed: wrong evidence consequence for MODEL
+PASS mutation killed: wrong evidence consequence for ALGORITHM
+PASS mutation killed: wrong evidence consequence for BUG
+PASS mutation killed: wrong evidence consequence for INFRA
+
+MUTATION QUALIFICATION: PASS (44/44 mutations killed)
+[RETURN CODE] 0
+
+===== TASK 3 SUCCESS CONTRACTS =====
+SUCCESS CONTRACT VALIDATION: PASS
+- version: 1.0.0
+- status: Qualified
+- decision: ACCEPTED
+- numbered sections: 29
+- Task 3 qualification conditions: 40
+- evaluation outcomes: PASS, FAIL, INCONCLUSIVE, BLOCKED, INVALID
+[RETURN CODE] 0
+
+===== TASK 3 SUCCESS CONTRACT MUTATIONS =====
+PASS positive control
+PASS final-state positive control
+PASS mutation killed: wrong MVP execution authority
+PASS mutation killed: section topology changed
+PASS mutation killed: evaluation outcome vocabulary expanded
+PASS mutation killed: condition 11 invalid-evidence protection weakened
+PASS mutation killed: condition 18 non-compensatory protection weakened
+PASS mutation killed: condition 28 adaptive self-certification protection removed
+PASS mutation killed: condition 37 contract omission protection removed
+PASS mutation killed: condition 38 consequential relabeling protection removed
+PASS mutation killed: condition 39 deterministic resolution removed
+PASS mutation killed: contract completeness weakened
+PASS mutation killed: protected threshold anti-gaming removed
+PASS mutation killed: adaptive candidate self-certification allowed
+PASS mutation killed: transfer claim separation removed
+PASS mutation killed: verification candidate freeze removed
+PASS mutation killed: unsupported treated as extra outcome state
+PASS mutation killed: Decision 0003 authority drift
+PASS mutation killed: Decision 0003 register status mismatch
+PASS final mutation killed: qualification record missing
+PASS final mutation killed: qualification Task drift
+PASS final mutation killed: qualification conditions incomplete
+PASS final mutation killed: mutation qualification incomplete
+PASS final mutation killed: qualification state not verified
+PASS final mutation killed: implementation evidence returned to pending
+PASS final mutation killed: verification evidence returned to pending
+PASS final mutation killed: qualification specification version mismatch
+SUCCESS CONTRACT MUTATION SUITE: PASS
+[RETURN CODE] 0
+
+===== TASK 4 SYSTEM TAXONOMY =====
+SYSTEM TAXONOMY VALIDATION: PASS
+- version: 1.0.0
+- status: Qualified
+- decision: ACCEPTED
+- numbered sections: 36
+- Task 4 qualification conditions: 50
+- system forms: AGENT, PIPELINE, MODEL, SERVICE, COMPOSITE
+- environment families: E1_AGENT, E2_STRUCTURED_ML, E3_VISION
+- investigation surfaces: BEHAVIORAL, AUTHORIZED_INTERNAL
+- graph relationships: HAS_SYSTEM_VERSION, HAS_COMPONENT, HAS_COMPONENT_VERSION, INCLUDES_COMPONENT_VERSION, DEPENDS_ON, INTERACTS_VIA, EVALUATED_VIA, EXPOSES_SURFACE
+[RETURN CODE] 0
+
+===== TASK 4 SYSTEM TAXONOMY MUTATIONS =====
+PASS positive control
+PASS final-state positive control
+PASS mutation killed: wrong MVP execution authority
+PASS mutation killed: section topology changed
+PASS mutation killed: SystemForm vocabulary expanded
+PASS mutation killed: EnvironmentFamily vocabulary expanded
+PASS mutation killed: InvestigationSurface vocabulary expanded
+PASS mutation killed: graph relationship vocabulary changed
+PASS mutation killed: qualification condition 6 weakened
+PASS mutation killed: tenant isolation weakened
+PASS mutation killed: SystemVersion made mutable
+PASS mutation killed: provider determines environment family
+PASS mutation killed: adapter allowed to define success
+PASS mutation killed: evaluator allowed to redefine outcomes
+PASS mutation killed: Internal declaration treated as authorization
+PASS mutation killed: Internal access inference allowed
+PASS mutation killed: system graph treated as support evidence
+PASS mutation killed: target provider change no longer versions system
+PASS mutation killed: classification allowed to synthesize capability
+PASS mutation killed: external model output treated as evidence
+PASS mutation killed: provider allowed to define Hetren Core
+PASS mutation killed: research programs create parallel architecture
+PASS mutation killed: historical retirement becomes deletion
+PASS mutation killed: taxonomy may force target into E1
+PASS mutation killed: Task 5 ownership moved into Task 4
+PASS mutation killed: classification allowed to manufacture support
+PASS mutation killed: Decision 0004 authority drift
+PASS mutation killed: Decision 0004 register mismatch
+PASS final mutation killed: qualification record missing
+PASS final mutation killed: qualification condition evidence incomplete
+PASS final mutation killed: mutation qualification incomplete
+PASS final mutation killed: qualification state not verified
+PASS final mutation killed: qualification version mismatch
+PASS final mutation killed: implementation evidence returned to pending
+PASS final mutation killed: verification evidence returned to pending
+PASS final mutation killed: accepted register returned to proposed
+
+SYSTEM TAXONOMY MUTATION SUITE: PASS (34/34 mutations killed)
+[RETURN CODE] 0
+
+===== TASK 5 SUPPORT MATRIX =====
+SUPPORT MATRIX VALIDATION: PASS
+- version: 1.0.0
+- status: Qualified
+- decision: ACCEPTED
+- numbered sections: 34
+- Task 5 qualification conditions: 50
+- capability kinds: REGRESSION_REPAIR, CONSTRAINED_IMPROVEMENT
+- MVP requirements: REQUIRED, PERMITTED, EXCLUDED
+- capability support states: QUALIFIED_SUPPORTED, UNQUALIFIED, UNSUPPORTED, INCOMPATIBLE, BLOCKED, UNKNOWN
+[RETURN CODE] 0
+
+===== TASK 5 SUPPORT MATRIX MUTATIONS =====
+PASS positive control
+PASS final-state positive control
+
+===== DEVELOPMENT MUTATIONS =====
+PASS mutation killed: specification heading drift
+PASS mutation killed: governing decision metadata drift
+PASS mutation killed: section topology drift
+PASS mutation killed: qualification condition topology drift
+PASS mutation killed: manufactured Behavioral support
+PASS mutation killed: E1 improvement no longer required
+PASS mutation killed: E2 repair support fabricated
+PASS mutation killed: E2 improvement no longer Behavioral
+PASS mutation killed: E3 repair no longer required
+PASS mutation killed: E3 improvement support fabricated
+PASS mutation killed: CNN Internal support fabricated
+PASS mutation killed: Transformer Internal surface weakened
+PASS mutation killed: combined obligation support fabricated
+PASS mutation killed: Internal surface grants permission
+PASS mutation killed: Internal declaration bypasses authorization
+PASS mutation killed: one successful execution qualifies support
+PASS mutation killed: one failed evaluation means unsupported
+PASS mutation killed: later support state erases history
+PASS mutation killed: requalification discards prior result
+PASS mutation killed: initial Behavioral obligations fabricated supported
+PASS mutation killed: Task 5 completion overclaims capability completion
+PASS mutation killed: Task 6 ownership stolen by Task 5
+PASS mutation killed: historical semantics silently rewritten
+PASS mutation killed: Decision fabricates all nine supports
+PASS mutation killed: Decision permits initial qualified support
+PASS mutation killed: Decision weakens qualification criteria
+PASS mutation killed: Decision key drift
+PASS mutation killed: register key drift
+PASS mutation killed: register prematurely accepted
+PASS mutation killed: Decision prematurely accepted
+
+TASK 5 DEVELOPMENT MUTATIONS: PASS (30 mutations killed)
+
+===== FINAL-STATE MUTATIONS =====
+PASS final mutation killed: qualification record missing
+PASS final mutation killed: qualification result falsified
+PASS final mutation killed: qualification state not verified
+PASS final mutation killed: qualification specification version drift
+PASS final mutation killed: mutation evidence incomplete
+PASS final mutation killed: zero mutation cardinality
+PASS final mutation killed: qualification execution authority drift
+PASS final mutation killed: Task 4 regression not passing
+PASS final mutation killed: final accepted-state qualification not passing
+PASS final mutation killed: qualification condition count falsified
+PASS final mutation killed: mutation-suite identity drift
+PASS final mutation killed: semantic qualification section missing
+PASS final mutation killed: acceptance record points to wrong decision
+PASS final mutation killed: accepted implementation evidence left pending
+PASS final mutation killed: accepted verification evidence left pending
+PASS final mutation killed: accepted register demoted to proposed
+
+TASK 5 FINAL-STATE MUTATIONS: PASS (16 mutations killed)
+
+TASK 5 MUTATION SUITE: PASS (46/46 mutations killed)
+[RETURN CODE] 0
+
+===== TASK 6 RESEARCH HYPOTHESES =====
+RESEARCH HYPOTHESES VALIDATION: PASS
+- version: 1.0.0
+- status: Qualified
+- Native decision: ACCEPTED
+- Adaptive decision: ACCEPTED
+- numbered sections: 50
+- Task 6 qualification conditions: 50
+- hypothesis IDs: N-H1, N-H2, A-H1, A-H2
+- research programs: NATIVE, ADAPTIVE
+- thesis evidence consequence: NEW_PROGRAM_VERSION_AND_RERUN
+- scientific support established by Task 6 specification: NO
+[RETURN CODE] 0
+
+===== TASK 6 RESEARCH HYPOTHESIS MUTATIONS =====
+===== POSITIVE CONTROL =====
+PASS positive control
+
+===== FINAL-STATE POSITIVE CONTROL =====
+PASS final-state positive control
+
+===== DEVELOPMENT MUTATIONS =====
+PASS mutation killed: wrong MVP execution authority
+PASS mutation killed: wrong long-term authority
+PASS mutation killed: section topology drift
+PASS mutation killed: qualification condition topology drift
+PASS mutation killed: initial N-H1 hypothesis removed
+PASS mutation killed: Native evidence allowed to establish Adaptive hypothesis
+PASS mutation killed: product result allowed to establish research hypothesis
+PASS mutation killed: sixth evaluation outcome allowed
+PASS mutation killed: protected threshold freeze removed
+PASS mutation killed: uncertainty requirement weakened to 90 percent
+PASS mutation killed: negative results no longer first-class evidence
+PASS mutation killed: Task 7 split ownership stolen
+PASS mutation killed: Task 8 baseline ownership stolen
+PASS mutation killed: Task 9 cost ownership stolen
+PASS mutation killed: N-H1 material-effect gate weakened
+PASS mutation killed: N-H1 positive confidence bound weakened
+PASS mutation killed: N-H1 pseudo-replication allowed
+PASS mutation killed: N-H1 heuristic attribution protection removed
+PASS mutation killed: N-H2 protected target gate weakened
+PASS mutation killed: N-H2 source advantage no longer strictly positive
+PASS mutation killed: N-H2 retained advantage weakened
+PASS mutation killed: N-H2 infrastructure reuse allowed as transfer proof
+PASS mutation killed: A-H1 pre-adaptation gain weakened
+PASS mutation killed: A-H1 adaptation-baseline advantage weakened
+PASS mutation killed: A-H1 critical invariant protection weakened
+PASS mutation killed: A-H1 adaptive self-certification allowed
+PASS mutation killed: A-H2 retention degradation tolerance weakened
+PASS mutation killed: A-H2 locality tolerance weakened
+PASS mutation killed: A-H2 executed rollback requirement weakened
+PASS mutation killed: A-H2 rollback restoration tolerance weakened
+PASS mutation killed: A-H1 allowed to imply A-H2
+PASS mutation killed: stronger self-improvement exclusion removed
+PASS mutation killed: Native transfer allowed to establish Adaptive transfer
+PASS mutation killed: invalidated evidence allowed to remain authoritative
+PASS mutation killed: Decision 0006 research program drift
+PASS mutation killed: Decision 0007 register prematurely accepted
+
+TASK 6 DEVELOPMENT MUTATIONS: PASS (36/36 mutations killed)
+
+===== FINAL-STATE MUTATIONS =====
+PASS final mutation killed: Native qualification record missing
+PASS final mutation killed: Adaptive qualification record missing
+PASS final mutation killed: Native qualification result falsified
+PASS final mutation killed: Adaptive qualification state not verified
+PASS final mutation killed: final specification version drift
+PASS final mutation killed: Native mutation evidence incomplete
+PASS final mutation killed: Adaptive qualification fabricates scientific support
+PASS final mutation killed: Native accepted decision demoted to proposed
+PASS final mutation killed: Adaptive accepted register demoted to proposed
+PASS final mutation killed: Native accepted implementation evidence returned to pending
+PASS final mutation killed: Adaptive accepted verification evidence returned to pending
+PASS final mutation killed: Native qualification decision key drift
+PASS final mutation killed: Adaptive qualification specification version drift
+PASS final mutation killed: Native Task 5 regression not passing
+PASS final mutation killed: Adaptive final qualification not passing
+PASS final mutation killed: Native qualification date invalid
+
+TASK 6 FINAL-STATE MUTATIONS: PASS (16/16 mutations killed)
+
+TASK 6 MUTATION SUITE: PASS (52/52 mutations killed)
+[RETURN CODE] 0
+
+===== TASK 6 REGISTER COMPATIBILITY =====
+PASS compatible register version: 1.5.0
+PASS compatible register version: 1.6.0
+PASS compatible register version: 1.7.0
+PASS compatible register version: 2.0.0
+PASS incompatible historical register version rejected: 1.4.9
+PASS malformed register version rejected
+
+TASK 6 REGISTER COMPATIBILITY REGRESSION: PASS
+[RETURN CODE] 0
+
+===== TASK 7 QUALIFIED GATE =====
+INITIAL SPLITS VALIDATION: PASS
+- version: 1.0.0
+- status: Qualified
+- decision: ACCEPTED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+[RETURN CODE] 0
+
+===== TASK 7 HISTORICAL DATA =====
+INITIAL SPLITS DATA VALIDATION: PASS
+- historical adversarial cases: 140
+- canonical: 52
+- Set A: 12
+- Set B: 12
+- Set C: 64
+- Set C original unseen: 17 rejected / 47 survived
+- active explicit invariants: 44
+- schemas: Draft 2020-12
+- source hashes: verified
+- Set B/C attack hashes: verified
+[RETURN CODE] 0
+
+===== TASK 7 HISTORICAL DATA MUTATIONS =====
+===== DATA SEMANTIC POSITIVE CONTROL =====
+PASS data semantic positive control
+
+===== SCHEMA-VALID SEMANTIC MUTATIONS =====
+PASS semantic mutation killed: declared historical case count drift
+PASS semantic mutation killed: canonical evidence order drift
+PASS semantic mutation killed: canonical ordinal identity drift
+PASS semantic mutation killed: canonical stable case ID drift
+PASS semantic mutation killed: Set C swaps original rejected identity while preserving 17/47
+PASS semantic mutation killed: Set C generated identity order drift
+PASS semantic mutation killed: canonical historical snapshot hash drift
+PASS semantic mutation killed: canonical historical snapshot reference drift
+PASS semantic mutation killed: canonical development attack-definition hash drift
+PASS semantic mutation killed: Set B attack-definition hash drift
+PASS semantic mutation killed: declared invariant count drift
+PASS semantic mutation killed: invariant source-line drift
+PASS semantic mutation killed: semantic helper identity drift
+PASS semantic mutation killed: invariant registry order drift
+
+===== DATA SEMANTIC MUTATION RESULT =====
+Killed: 14/14
+Survived: 0/14
+TASK 7 DATA SEMANTIC MUTATIONS: PASS (14/14 killed)
+[RETURN CODE] 0
+
+===== TASK 7 241-CASE DATA =====
+INITIAL SPLITS QUALIFICATION DATA: PASS
+- unified qualification cases: 241
+- historical adversarial: 140
+- P1 positive boundary: 24
+- Set D mixed holdout: 32
+- Set E final unseen holdout: 32
+- post-Set-E known regressions: 13
+- expected MUST_REJECT: 181
+- expected MUST_ACCEPT: 60
+- P1 original first run: 22 accepted / 2 rejected
+- Set D original first run: 21 correct / 11 incorrect
+- Set E original unseen first run: 20 correct / 12 incorrect
+- Set E current regression: 32/32 correct
+- current regression dispositions: 241/241 correct
+- source hashes: verified
+[RETURN CODE] 0
+
+===== TASK 7 26 DATA MUTATIONS =====
+===== QUALIFICATION DATA POSITIVE CONTROL =====
+PASS qualification data positive control
+
+===== SCHEMA ENFORCEMENT MUTATIONS =====
+PASS schema mutation killed: declared qualification case count drift
+PASS schema mutation killed: suite count drift
+PASS schema mutation killed: expectation count drift
+PASS schema mutation killed: first-run summary drift
+PASS schema mutation killed: current summary drift
+
+===== SCHEMA-VALID SEMANTIC MUTATIONS =====
+PASS semantic mutation killed: qualification case order drift
+PASS semantic mutation killed: stable qualification case ID drift
+PASS semantic mutation killed: P1 first false-positive history rewritten
+PASS semantic mutation killed: P1 second false-positive history rewritten
+PASS semantic mutation killed: Set D false-negative history rewritten
+PASS semantic mutation killed: Set D false-positive history rewritten
+PASS semantic mutation killed: Set D expected disposition rewritten
+PASS semantic mutation killed: historical unseen provenance drift
+PASS semantic mutation killed: current regression disposition drift
+PASS semantic mutation killed: definition reference drift
+PASS semantic mutation killed: first-run evidence reference drift
+PASS semantic mutation killed: current evidence reference drift
+PASS semantic mutation killed: authoritative source hash drift
+PASS semantic mutation killed: Set E false-negative first-run history rewritten
+PASS semantic mutation killed: Set E false-positive first-run history rewritten
+PASS semantic mutation killed: Set E unseen provenance rewritten
+PASS semantic mutation killed: Set E current regression disposition rewritten
+PASS semantic mutation killed: Set E regression evidence reference drift
+PASS semantic mutation killed: known-regression first-run provenance rewritten
+PASS semantic mutation killed: known-regression incorrectly promoted to unseen
+PASS semantic mutation killed: Set E first-run source hash drift
+
+===== QUALIFICATION DATA MUTATION RESULT =====
+Schema killed: 5/5
+Semantic killed: 21/21
+Total killed: 26/26
+Survived: 0/26
+TASK 7 QUALIFICATION DATA MUTATIONS: PASS (26/26 killed; schema=5, semantic=21)
+[RETURN CODE] 0
+
+===== TASK 7 68 MUTATIONS =====
+===== POSITIVE CONTROL =====
+PASS positive control
+
+===== DEVELOPMENT MUTATIONS 1-26 =====
+PASS mutation killed: execution authority drift
+PASS mutation killed: PartitionRole vocabulary expanded
+PASS mutation killed: validation promoted to protected evidence
+PASS mutation killed: protected outcomes allowed to tune candidate
+PASS mutation killed: PartitionPurpose vocabulary expanded
+PASS mutation killed: role and purpose axes collapsed
+PASS mutation killed: SplitPlan versionless identity weakened
+PASS mutation killed: SplitVersion made mutable
+PASS mutation killed: partition membership allowed to retain identity
+PASS mutation killed: repeated observations manufacture independence
+PASS mutation killed: resampling manufactures independent unit
+PASS mutation killed: random seed manufactures independent unit
+PASS mutation killed: same independence group allowed to count independently
+PASS mutation killed: different IDs manufacture independence
+PASS mutation killed: hash inequality treated as independence proof
+PASS mutation killed: transformed protected copy treated as fresh
+PASS mutation killed: protected membership selected after outcomes
+PASS mutation killed: independence boundaries redefined post-result
+PASS mutation killed: protected lifecycle vocabulary expanded
+PASS mutation killed: sealed outcomes returned to candidate path
+PASS mutation killed: candidate freeze permits protected tuning
+PASS mutation killed: evaluation feedback returned for interactive tuning
+PASS mutation killed: disclosed evidence automatically fresh for descendants
+PASS mutation killed: deleting access history restores freshness
+PASS mutation killed: evaluator-feedback leakage removed
+PASS mutation killed: best-of-many protected peeking allowed
+
+===== PART 1 RESULT =====
+Killed: 26/26
+TASK 7 DEVELOPMENT MUTATIONS PART 1: PASS (26/26 mutations killed)
+
+===== DEVELOPMENT MUTATIONS 27-39 =====
+PASS mutation killed: contamination vocabulary expanded
+PASS mutation killed: non-clean contamination silently laundered to CLEAN
+PASS mutation killed: invalidation stops preserving original result
+PASS mutation killed: replacement split erases invalid result
+PASS mutation killed: physically new file automatically treated as fresh
+PASS mutation killed: transformed exposed descendant treated as fresh
+PASS mutation killed: N-H1 reduced to one protected evaluation unit
+PASS mutation killed: N-H1 same IndependenceGroup accepted
+PASS mutation killed: N-H1 one behavior silently establishes another
+PASS mutation killed: N-H1 validation reused as fresh protected evidence
+PASS mutation killed: N-H2 target family chosen after protected outcomes
+PASS mutation killed: N-H2 best boundary may be selected post hoc
+PASS mutation killed: N-H2 protected target-outcome tuning permitted
+
+===== PART 2A RESULT =====
+Killed: 13/13
+TASK 7 DEVELOPMENT MUTATIONS PART 2A: PASS (13/13 mutations killed)
+TASK 7 DEVELOPMENT MUTATIONS SO FAR: PASS (39/39 mutations killed)
+
+===== DEVELOPMENT MUTATIONS 40-52 =====
+PASS mutation killed: A-H1 separation contradicted while correct rule remains
+PASS mutation killed: A-H1 protected evaluator outputs become adaptation input
+PASS mutation killed: A-H1 leakage no longer invalidates result
+PASS mutation killed: A-H2 paired observations also counted as independent
+PASS mutation killed: A-H2 rollback description accepted without execution
+PASS mutation killed: Task 5 split identity alone promotes capability support
+PASS mutation killed: grouped leakage allowed under random record split
+PASS mutation killed: candidate-producing path allowed to manipulate verification evidence
+PASS mutation killed: verification replay authorizes iterative protected tuning
+PASS mutation killed: Task 7 may deliberately select weak baseline
+PASS mutation killed: post-result resource accounting may manufacture pass
+PASS mutation killed: successor split allowed to overwrite historical manifest
+PASS mutation killed: Decision 0008 acceptance treated as scientific support
+
+===== PART 2B RESULT =====
+Killed: 13/13
+TASK 7 DEVELOPMENT MUTATIONS PART 2B: PASS (13/13 mutations killed)
+TASK 7 DEVELOPMENT MUTATIONS: PASS (52/52 mutations killed)
+
+- development mutation target: 52
+- final-state mutation target: 16
+- total frozen mutation target: 68
+
+===== FINAL-STATE POSITIVE CONTROL =====
+PASS final-state positive control
+
+===== FINAL-STATE MUTATIONS 1-16 =====
+PASS final mutation killed: qualification record missing
+PASS final mutation killed: qualification Result changed to FAIL
+PASS final mutation killed: qualification state left PENDING
+PASS final mutation killed: Qualified specification version drift
+PASS final mutation killed: mutation evidence incomplete
+PASS final mutation killed: scientific support incorrectly promoted
+PASS final mutation killed: Task 5 capability support incorrectly promoted
+PASS final mutation killed: Decision 0008 demoted after qualification
+PASS final mutation killed: Decision 0008 register demoted after qualification
+PASS final mutation killed: implementation evidence remains Pending
+PASS final mutation killed: verification evidence remains Pending
+PASS final mutation killed: Decision 0008 key drift
+PASS final mutation killed: qualification specification version mismatch
+PASS final mutation killed: Tasks 1 through 6 regression evidence changed to FAIL
+PASS final mutation killed: final accepted-state qualification changed to FAIL
+PASS final mutation killed: qualification date invalid
+
+===== FINAL-STATE MUTATION RESULT =====
+Killed: 16/16
+Survived: 0/16
+TASK 7 FINAL-STATE MUTATIONS: PASS (16/16 mutations killed)
+TASK 7 TOTAL MUTATIONS: PASS (68/68 mutations killed)
+[RETURN CODE] 0
+
+===== TASK 7 P1 REGRESSION =====
+===== POSITIVE DATA VALIDATION =====
+PASS: positive data and invariant references validated
+
+===== BASELINE POSITIVE CONTROL =====
+PASS: unmodified development contract accepted
+
+===== MUST_ACCEPT FIRST-RUN CASES =====
+PASS MUST_ACCEPT accepted: T7-POS-C01-01 PROTECTED_OUTCOME_SELECTION_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C01-02 PROTECTED_OUTCOME_SELECTION_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C01-03 PROTECTED_OUTCOME_SELECTION_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C02-01 INDEPENDENCE_AND_PSEUDOREPLICATION
+PASS MUST_ACCEPT accepted: T7-POS-C02-02 INDEPENDENCE_AND_PSEUDOREPLICATION
+PASS MUST_ACCEPT accepted: T7-POS-C02-03 INDEPENDENCE_AND_PSEUDOREPLICATION
+PASS MUST_ACCEPT accepted: T7-POS-C03-01 SPLITVERSION_IMMUTABILITY
+PASS MUST_ACCEPT accepted: T7-POS-C03-02 SPLITVERSION_IMMUTABILITY
+PASS MUST_ACCEPT accepted: T7-POS-C03-03 SPLITVERSION_IMMUTABILITY
+PASS MUST_ACCEPT accepted: T7-POS-C04-01 CONTAMINATION_STATE_INTEGRITY
+PASS MUST_ACCEPT accepted: T7-POS-C04-02 CONTAMINATION_STATE_INTEGRITY
+PASS MUST_ACCEPT accepted: T7-POS-C04-03 CONTAMINATION_STATE_INTEGRITY
+PASS MUST_ACCEPT accepted: T7-POS-C05-01 VERIFICATION_INDEPENDENCE
+PASS MUST_ACCEPT accepted: T7-POS-C05-02 VERIFICATION_INDEPENDENCE
+PASS MUST_ACCEPT accepted: T7-POS-C05-03 VERIFICATION_INDEPENDENCE
+PASS MUST_ACCEPT accepted: T7-POS-C06-01 ADAPTIVE_HYPOTHESIS_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C06-02 ADAPTIVE_HYPOTHESIS_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C06-03 ADAPTIVE_HYPOTHESIS_SEPARATION
+PASS MUST_ACCEPT accepted: T7-POS-C07-01 DATA_CONSEQUENCE_NON_WAIVER
+PASS MUST_ACCEPT accepted: T7-POS-C07-02 DATA_CONSEQUENCE_NON_WAIVER
+PASS MUST_ACCEPT accepted: T7-POS-C07-03 DATA_CONSEQUENCE_NON_WAIVER
+PASS MUST_ACCEPT accepted: T7-POS-C08-01 BASELINE_RESOURCE_PRECOMMITMENT
+PASS MUST_ACCEPT accepted: T7-POS-C08-02 BASELINE_RESOURCE_PRECOMMITMENT
+PASS MUST_ACCEPT accepted: T7-POS-C08-03 BASELINE_RESOURCE_PRECOMMITMENT
+
+===== FAMILY RESULTS =====
+C01: 3/3 accepted
+C02: 3/3 accepted
+C03: 3/3 accepted
+C04: 3/3 accepted
+C05: 3/3 accepted
+C06: 3/3 accepted
+C07: 3/3 accepted
+C08: 3/3 accepted
+
+===== POSITIVE RESULT =====
+Accepted: 24/24
+Rejected: 0/24
+TASK 7 MUST_ACCEPT SUITE: PASS (24/24 accepted)
+[RETURN CODE] 0
+
+===== TASK 7 SET A REGRESSION =====
+===== HOLDOUT POSITIVE CONTROL =====
+PASS holdout positive control
+
+===== SET A DISCOVERED RED-TEAM REGRESSION 1-12 =====
+PASS holdout killed: distant fourth PartitionRole authorization
+PASS holdout killed: distant eighth PartitionPurpose authorization
+PASS holdout killed: SplitVersion membership edited in place
+PASS holdout killed: materially changed candidate keeps identity
+PASS holdout killed: UNKNOWN contamination automatically expires to CLEAN
+PASS holdout killed: unlimited aggregate protected-score peeking
+PASS holdout killed: generated summaries declared freshness-neutral
+PASS holdout killed: same N-H1 source counted independent with different evaluators
+PASS holdout killed: three N-H2 boundaries manufacture universal transfer
+PASS holdout killed: A-H1 success automatically satisfies A-H2
+PASS holdout killed: originating process self-certifies with audit log
+PASS holdout killed: comparator selected after outcomes for favorable efficiency
+
+===== HOLDOUT RESULT =====
+Killed: 12/12
+Survived: 0/12
+TASK 7 SET A RED-TEAM REGRESSION: PASS (12/12 attacks killed)
+[RETURN CODE] 0
+
+===== TASK 7 SET B REGRESSION =====
+===== SET B POSITIVE CONTROL =====
+PASS Set B positive control
+
+===== SET B DISCOVERED RED-TEAM REGRESSION =====
+Attack-definition SHA-256: d8d6b8beb9bb5bc0db82a72177854928d793b351b75c50ae3f212e7af213f041
+PASS Set B killed: operational alias bypasses closed PartitionRole vocabulary
+PASS Set B killed: operational alias bypasses closed PartitionPurpose vocabulary
+PASS Set B killed: frozen SplitVersion repointed to revised member set
+PASS Set B killed: protected telemetry dashboard influences descendant candidate
+PASS Set B killed: SUSPECTED contamination treated as CLEAN below confidence threshold
+PASS Set B killed: INVALIDATED protected result restored without rerun
+PASS Set B killed: shared upstream source counted independent via disjoint windows
+PASS Set B killed: target-family performance bands used for N-H2 method selection
+PASS Set B killed: A-H2 retroactively validates contaminated A-H1
+PASS Set B killed: separate process masquerades as independent verifier
+PASS Set B killed: distributed baseline and cost rules manufacture preferred comparison
+PASS Set B killed: Decision 0008 permits material DATA rerun waiver
+
+===== SET B RESULT =====
+Killed: 12/12
+Survived: 0/12
+TASK 7 SET B RED-TEAM REGRESSION: PASS (12/12 attacks killed)
+[RETURN CODE] 0
+
+===== TASK 7 SET C REGRESSION =====
+===== SET C POSITIVE CONTROL =====
+PASS Set C positive control
+
+===== SET C DISCOVERED GENERATED REGRESSION =====
+Families: 8
+Variants per family: 8
+Total generated attacks: 64
+Attack-definition SHA-256: 368a0046c9fed38d007374c5a976a41b89dd0922c4e60d46c040dd890b73cfc2
+PASS Set C killed: C01.01 protected proxy feedback: traffic-light status
+PASS Set C killed: C01.02 protected proxy feedback: quantized performance bucket
+PASS Set C killed: C01.03 protected proxy feedback: binary improved-or-worse indicator
+PASS Set C killed: C01.04 protected proxy feedback: percentile band
+PASS Set C killed: C01.05 protected proxy feedback: coarsened success tier
+PASS Set C killed: C01.06 protected proxy feedback: aggregate quality flag
+PASS Set C killed: C01.07 protected proxy feedback: threshold-crossing signal
+PASS Set C killed: C01.08 protected proxy feedback: red-yellow-green dashboard value
+PASS Set C killed: C02.01 pseudoreplication via different annotators
+PASS Set C killed: C02.02 pseudoreplication via different calendar days
+PASS Set C killed: C02.03 pseudoreplication via different cloud regions
+PASS Set C killed: C02.04 pseudoreplication via different worker pools
+PASS Set C killed: C02.05 pseudoreplication via different file shards
+PASS Set C killed: C02.06 pseudoreplication via different API sessions
+PASS Set C killed: C02.07 pseudoreplication via different evaluation scripts
+PASS Set C killed: C02.08 pseudoreplication via different review queues
+PASS Set C killed: C03.01 SplitVersion identity laundering
+PASS Set C killed: C03.02 SplitVersion identity laundering
+PASS Set C killed: C03.03 SplitVersion identity laundering
+PASS Set C killed: C03.04 SplitVersion identity laundering
+PASS Set C killed: C03.05 SplitVersion identity laundering
+PASS Set C killed: C03.06 SplitVersion identity laundering
+PASS Set C killed: C03.07 SplitVersion identity laundering
+PASS Set C killed: C03.08 SplitVersion identity laundering
+PASS Set C killed: C04.01 contamination laundering
+PASS Set C killed: C04.02 contamination laundering
+PASS Set C killed: C04.03 contamination laundering
+PASS Set C killed: C04.04 contamination laundering
+PASS Set C killed: C04.05 contamination laundering
+PASS Set C killed: C04.06 contamination laundering
+PASS Set C killed: C04.07 contamination laundering
+PASS Set C killed: C04.08 contamination laundering
+PASS Set C killed: C05.01 fake verifier independence
+PASS Set C killed: C05.02 fake verifier independence
+PASS Set C killed: C05.03 fake verifier independence
+PASS Set C killed: C05.04 fake verifier independence
+PASS Set C killed: C05.05 fake verifier independence
+PASS Set C killed: C05.06 fake verifier independence
+PASS Set C killed: C05.07 fake verifier independence
+PASS Set C killed: C05.08 fake verifier independence
+PASS Set C killed: C06.01 Adaptive hypothesis laundering
+PASS Set C killed: C06.02 Adaptive hypothesis laundering
+PASS Set C killed: C06.03 Adaptive hypothesis laundering
+PASS Set C killed: C06.04 Adaptive hypothesis laundering
+PASS Set C killed: C06.05 Adaptive hypothesis laundering
+PASS Set C killed: C06.06 Adaptive hypothesis laundering
+PASS Set C killed: C06.07 Adaptive hypothesis laundering
+PASS Set C killed: C06.08 Adaptive hypothesis laundering
+PASS Set C killed: C07.01 DATA consequence waiver
+PASS Set C killed: C07.02 DATA consequence waiver
+PASS Set C killed: C07.03 DATA consequence waiver
+PASS Set C killed: C07.04 DATA consequence waiver
+PASS Set C killed: C07.05 DATA consequence waiver
+PASS Set C killed: C07.06 DATA consequence waiver
+PASS Set C killed: C07.07 DATA consequence waiver
+PASS Set C killed: C07.08 DATA consequence waiver
+PASS Set C killed: C08.01 distributed baseline/resource gaming
+PASS Set C killed: C08.02 distributed baseline/resource gaming
+PASS Set C killed: C08.03 distributed baseline/resource gaming
+PASS Set C killed: C08.04 distributed baseline/resource gaming
+PASS Set C killed: C08.05 distributed baseline/resource gaming
+PASS Set C killed: C08.06 distributed baseline/resource gaming
+PASS Set C killed: C08.07 distributed baseline/resource gaming
+PASS Set C killed: C08.08 distributed baseline/resource gaming
+
+===== SET C RESULT =====
+Killed: 64/64
+Survived: 0/64
+TASK 7 SET C GENERATED REGRESSION: PASS (64/64 attacks killed)
+[RETURN CODE] 0
+
+===== TASK 7 SET D REGRESSION =====
+===== FROZEN FRESH SET D =====
+Cases: 32
+MUST_REJECT: 16
+MUST_ACCEPT: 16
+PASS T7-D-01-01 MUST_REJECT
+PASS T7-D-01-02 MUST_REJECT
+PASS T7-D-01-03 MUST_ACCEPT
+PASS T7-D-01-04 MUST_ACCEPT
+PASS T7-D-02-01 MUST_REJECT
+PASS T7-D-02-02 MUST_REJECT
+PASS T7-D-02-03 MUST_ACCEPT
+PASS T7-D-02-04 MUST_ACCEPT
+PASS T7-D-03-01 MUST_REJECT
+PASS T7-D-03-02 MUST_REJECT
+PASS T7-D-03-03 MUST_ACCEPT
+PASS T7-D-03-04 MUST_ACCEPT
+PASS T7-D-04-01 MUST_REJECT
+PASS T7-D-04-02 MUST_REJECT
+PASS T7-D-04-03 MUST_ACCEPT
+PASS T7-D-04-04 MUST_ACCEPT
+PASS T7-D-05-01 MUST_REJECT
+PASS T7-D-05-02 MUST_REJECT
+PASS T7-D-05-03 MUST_ACCEPT
+PASS T7-D-05-04 MUST_ACCEPT
+PASS T7-D-06-01 MUST_REJECT
+PASS T7-D-06-02 MUST_REJECT
+PASS T7-D-06-03 MUST_ACCEPT
+PASS T7-D-06-04 MUST_ACCEPT
+PASS T7-D-07-01 MUST_REJECT
+PASS T7-D-07-02 MUST_REJECT
+PASS T7-D-07-03 MUST_ACCEPT
+PASS T7-D-07-04 MUST_ACCEPT
+PASS T7-D-08-01 MUST_REJECT
+PASS T7-D-08-02 MUST_REJECT
+PASS T7-D-08-03 MUST_ACCEPT
+PASS T7-D-08-04 MUST_ACCEPT
+
+===== SET D FAMILY RESULTS =====
+D01: 4/4 correct
+D02: 4/4 correct
+D03: 4/4 correct
+D04: 4/4 correct
+D05: 4/4 correct
+D06: 4/4 correct
+D07: 4/4 correct
+D08: 4/4 correct
+
+===== SET D RESULT =====
+Correct: 32/32
+Incorrect: 0/32
+TASK 7 SET D FRESH HOLDOUT: PASS (32/32 correct)
+[RETURN CODE] 0
+
+===== TASK 7 POST-SET-E REGRESSIONS =====
+===== POST-SET-E KNOWN REGRESSIONS =====
+PASS T7-E-REG-01 MUST_REJECT
+PASS T7-E-REG-02 MUST_REJECT
+PASS T7-E-REG-03 MUST_REJECT
+PASS T7-E-REG-04 MUST_REJECT
+PASS T7-E-REG-05 MUST_REJECT
+PASS T7-E-REG-06 MUST_REJECT
+PASS T7-E-REG-07 MUST_REJECT
+PASS T7-E-REG-08 MUST_REJECT
+PASS T7-E-REG-09 MUST_REJECT
+PASS T7-E-REG-10 MUST_ACCEPT
+PASS T7-E-REG-11 MUST_ACCEPT
+PASS T7-E-REG-12 MUST_ACCEPT
+PASS T7-E-REG-13 MUST_ACCEPT
+
+Correct: 13/13
+Incorrect: 0/13
+TASK 7 POST-SET-E REMEDIATION REGRESSIONS: PASS (13/13 correct)
+[RETURN CODE] 0
+
+===== DIFF CHECK =====
+[RETURN CODE] 0
+
+===== RETURN-CODE SUMMARY =====
+TASK 1 MVP CHARTER VALIDATOR: 0
+TASK 1 MVP CHARTER MUTATIONS: 0
+TASK 2 DECISION GOVERNANCE: 0
+TASK 2 DECISION MUTATIONS: 0
+TASK 3 SUCCESS CONTRACTS: 0
+TASK 3 SUCCESS CONTRACT MUTATIONS: 0
+TASK 4 SYSTEM TAXONOMY: 0
+TASK 4 SYSTEM TAXONOMY MUTATIONS: 0
+TASK 5 SUPPORT MATRIX: 0
+TASK 5 SUPPORT MATRIX MUTATIONS: 0
+TASK 6 RESEARCH HYPOTHESES: 0
+TASK 6 RESEARCH HYPOTHESIS MUTATIONS: 0
+TASK 6 REGISTER COMPATIBILITY: 0
+TASK 7 QUALIFIED GATE: 0
+TASK 7 HISTORICAL DATA: 0
+TASK 7 HISTORICAL DATA MUTATIONS: 0
+TASK 7 241-CASE DATA: 0
+TASK 7 26 DATA MUTATIONS: 0
+TASK 7 68 MUTATIONS: 0
+TASK 7 P1 REGRESSION: 0
+TASK 7 SET A REGRESSION: 0
+TASK 7 SET B REGRESSION: 0
+TASK 7 SET C REGRESSION: 0
+TASK 7 SET D REGRESSION: 0
+TASK 7 POST-SET-E REGRESSIONS: 0
+DIFF CHECK: 0

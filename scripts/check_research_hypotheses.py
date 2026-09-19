@@ -1765,10 +1765,27 @@ def validate_structure(
 
     register_version = register_metadata.get("Version")
 
-    if register_version != "1.5.0":
+    register_version_match = re.fullmatch(
+        r"([0-9]+)\.([0-9]+)\.([0-9]+)",
+        register_version or "",
+    )
+
+    if register_version_match is None:
         errors.append(
-            "decision register Version must be 1.5.0 for Task 6"
+            "decision register Version must be a valid "
+            "semantic version for Task 6"
         )
+    else:
+        register_version_tuple = tuple(
+            int(part)
+            for part in register_version_match.groups()
+        )
+
+        if register_version_tuple < (1, 5, 0):
+            errors.append(
+                "decision register Version must be at least "
+                "1.5.0 for Task 6"
+            )
 
     native_row = parse_register_row(
         register_text,

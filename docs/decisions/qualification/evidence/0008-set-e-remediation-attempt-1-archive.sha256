@@ -1,0 +1,6 @@
+c3e07906a302ae615db7d9b95d734d4712e74c021f38c5645b88d6fac0f57792  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-snapshot/scripts/check_initial_splits.py
+1bfd1cf391681b80842a4b591d1e70a02fdae0fb2f0c4e6340645dddf2a7465a  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-snapshot/tests/qualification/data/initial_splits/invariants.json
+e4ee5af8e370e49674abe4b7af0301e79a276e3551118a87592fa16c140e6280  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-snapshot/tests/qualification/data/initial_splits/set_e_remediation_cases.json
+513cf9603281e8a34781be813bab06913121594c8319b8455d9f12498bec48a1  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-snapshot/tests/qualification/data/initial_splits/set_e_remediation_cases.schema.json
+c7137ad3016cecf201f87b038335af34937ef38cfc242a442c053f87fc8cbb41  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-snapshot/tests/qualification/test_initial_splits_set_e_remediation.py
+62311791a62e35097e4c7532e66eede52341f8e3faf24803bddc340fcb6192b0  docs/decisions/qualification/evidence/0008-set-e-remediation-attempt-1-archive.md

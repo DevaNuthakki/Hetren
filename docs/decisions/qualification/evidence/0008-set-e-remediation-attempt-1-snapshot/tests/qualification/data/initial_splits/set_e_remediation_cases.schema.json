@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren://task7/initial-splits/set-e-remediation-cases.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "suite_id",
+    "evidence_class",
+    "case_count",
+    "interpretation",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "suite_id": {
+      "const": "TASK7-POST-SET-E-REMEDIATION-REGRESSION"
+    },
+    "evidence_class": {
+      "const": "KNOWN_REGRESSION"
+    },
+    "case_count": {
+      "const": 13
+    },
+    "interpretation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "expected",
+        "expected_label",
+        "section_number",
+        "section_title",
+        "addition"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "pattern": "^T7-E-REG-(?:0[1-9]|1[0-3])$"
+        },
+        "expected": {
+          "enum": [
+            "MUST_REJECT",
+            "MUST_ACCEPT"
+          ]
+        },
+        "expected_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "section_number": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50
+        },
+        "section_title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "addition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

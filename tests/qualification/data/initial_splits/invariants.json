@@ -1,0 +1,408 @@
+{
+  "schema_version": "1.0.0",
+  "task": 7,
+  "registry_id": "TASK7-INITIAL-SPLITS-INVARIANTS",
+  "authority": "AUTH-HETREN-MVP-3.0",
+  "decision_id": "0008",
+  "purpose": "Stable registry of explicitly named Task 7 semantic enforcement invariants.",
+  "important_interpretation": "Registry membership means the validator explicitly enforces a named relationship. It does not establish scientific support or Task 5 capability support.",
+  "invariant_count": 44,
+  "invariants": [
+    {
+      "invariant_id": "T7.INV.global.partitionrole.closure",
+      "label": "global PartitionRole closure",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1659,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.partitionpurpose.closure",
+      "label": "global PartitionPurpose closure",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1671,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.splitversion.immutability",
+      "label": "global SplitVersion immutability",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1685,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.candidate.identity.integrity",
+      "label": "global candidate identity integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1697,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.contamination.anti.laundering",
+      "label": "global contamination anti-laundering",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1711,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.protected.peeking.bound",
+      "label": "global protected-peeking bound",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1724,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.derived.artifact.freshness.integrity",
+      "label": "global derived-artifact freshness integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1739,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.nh1.anti.pseudoreplication",
+      "label": "global N-H1 anti-pseudoreplication",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1763,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.transfer.claim.boundedness",
+      "label": "global transfer-claim boundedness",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1777,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.adaptive.hypothesis.independence",
+      "label": "global Adaptive hypothesis independence",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1791,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.anti.self.certification",
+      "label": "global anti-self-certification",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1809,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.post.result.comparator.integrity",
+      "label": "global post-result comparator integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1822,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.global.decision.0008.evidence.separation",
+      "label": "global Decision 0008 evidence separation",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1837,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.partitionrole.alias.bypass.integrity",
+      "label": "PartitionRole alias-bypass integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1857,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.partitionpurpose.alias.bypass.integrity",
+      "label": "PartitionPurpose alias-bypass integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1868,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.splitversion.identity.retention.integrity",
+      "label": "SplitVersion identity-retention integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1889,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.splitversion.referential.immutability",
+      "label": "SplitVersion referential immutability",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1906,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.protected.derived.signal.lineage",
+      "label": "protected-derived-signal lineage",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1919,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.non.clean.effective.clean.integrity",
+      "label": "non-clean effective-CLEAN integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1931,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.contamination.effective.state.integrity",
+      "label": "contamination effective-state integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1945,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.protected.invalidation.transition.integrity",
+      "label": "protected invalidation transition integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1957,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.shared.source.count.as.independent.integrity",
+      "label": "shared-source count-as-independent integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1969,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.shared.ancestry.independence.integrity",
+      "label": "shared-ancestry independence integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 1989,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.protected.target.derived.selection.integrity",
+      "label": "protected-target-derived-selection integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2006,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.nh2.proxy.outcome.leakage.integrity",
+      "label": "N-H2 proxy-outcome leakage integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2027,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.adaptive.cross.hypothesis.laundering.integrity",
+      "label": "Adaptive cross-hypothesis laundering integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2056,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.verification.shared.authority.integrity",
+      "label": "verification shared-authority integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2068,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.verification.structural.independence.integrity",
+      "label": "verification structural-independence integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_paragraph_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2085,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.baseline.resource.composition.integrity",
+      "label": "baseline-resource composition integrity",
+      "enforcement_kind": "DISTRIBUTED_COMPOSITION",
+      "helper": null,
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2198,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.data.evidence.consequence.non.waiver",
+      "label": "DATA evidence-consequence non-waiver",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 2202,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.ah1.input.outcome.separation",
+      "label": "A-H1 input/outcome separation",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3410,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.ah1.protected.outcome.feedback",
+      "label": "A-H1 protected-outcome feedback",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3423,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.ah1.leakage.validity.permission.invariant",
+      "label": "A-H1 leakage-validity permission invariant",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3444,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.ah2.paired.observation.independence",
+      "label": "A-H2 paired-observation independence",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3455,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.ah2.rollback.execution.integrity",
+      "label": "A-H2 rollback-execution integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3470,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.task.5.capability.promotion.integrity",
+      "label": "Task 5 capability-promotion integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3485,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.environment.family.grouped.leakage.integrity",
+      "label": "environment-family grouped-leakage integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3500,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.independent.verification.authority.separation",
+      "label": "independent-verification authority separation",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3515,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.verification.replay.anti.tuning.integrity",
+      "label": "verification-replay anti-tuning integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3545,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.baseline.anti.gaming.integrity",
+      "label": "baseline anti-gaming integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3556,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.resource.accounting.anti.gaming.integrity",
+      "label": "resource-accounting anti-gaming integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3569,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.resource.accounting.protected.result.permission.invariant",
+      "label": "resource-accounting protected-result permission invariant",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3596,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.historical.manifest.preservation",
+      "label": "historical-manifest preservation",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_permissive_relationship",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3608,
+      "status": "ACTIVE"
+    },
+    {
+      "invariant_id": "T7.INV.decision.0008.evidence.boundary.integrity",
+      "label": "Decision 0008 evidence-boundary integrity",
+      "enforcement_kind": "SEMANTIC_HELPER",
+      "helper": "forbid_semantic_patterns",
+      "source_file": "scripts/check_initial_splits.py",
+      "source_line": 3630,
+      "status": "ACTIVE"
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren://task7/initial-splits/qualification-cases.schema.json",
+  "title": "Task 7 Unified Qualification Case Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task",
+    "dataset_id",
+    "authority",
+    "decision_id",
+    "purpose",
+    "important_interpretation",
+    "qualification_case_count",
+    "suite_counts",
+    "expectation_counts",
+    "first_run_summary",
+    "current_summary",
+    "source_hashes",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "task": {
+      "const": 7
+    },
+    "dataset_id": {
+      "const": "TASK7-INITIAL-SPLITS-QUALIFICATION-CASES"
+    },
+    "authority": {
+      "const": "AUTH-HETREN-MVP-3.0"
+    },
+    "decision_id": {
+      "const": "0008"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "important_interpretation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "qualification_case_count": {
+      "const": 241
+    },
+    "suite_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "CANONICAL",
+        "SET_A",
+        "SET_B",
+        "SET_C",
+        "P1",
+        "SET_D",
+        "SET_E",
+        "SET_E_REMEDIATION"
+      ],
+      "properties": {
+        "CANONICAL": {
+          "const": 52
+        },
+        "SET_A": {
+          "const": 12
+        },
+        "SET_B": {
+          "const": 12
+        },
+        "SET_C": {
+          "const": 64
+        },
+        "P1": {
+          "const": 24
+        },
+        "SET_D": {
+          "const": 32
+        },
+        "SET_E": {
+          "const": 32
+        },
+        "SET_E_REMEDIATION": {
+          "const": 13
+        }
+      }
+    },
+    "expectation_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "MUST_REJECT",
+        "MUST_ACCEPT"
+      ],
+      "properties": {
+        "MUST_REJECT": {
+          "const": 181
+        },
+        "MUST_ACCEPT": {
+          "const": 60
+        }
+      }
+    },
+    "first_run_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "KNOWN_DEVELOPMENT_CASE",
+        "ACCEPTED",
+        "REJECTED",
+        "KNOWN_REGRESSION_CASE"
+      ],
+      "properties": {
+        "KNOWN_DEVELOPMENT_CASE": {
+          "const": 52
+        },
+        "ACCEPTED": {
+          "const": 144
+        },
+        "REJECTED": {
+          "const": 32
+        },
+        "KNOWN_REGRESSION_CASE": {
+          "const": 13
+        }
+      }
+    },
+    "current_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ACCEPTED",
+        "REJECTED"
+      ],
+      "properties": {
+        "ACCEPTED": {
+          "const": 60
+        },
+        "REJECTED": {
+          "const": 181
+        }
+      }
+    },
+    "source_hashes": {
+      "type": "object",
+      "minProperties": 7,
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 241,
+      "maxItems": 241,
+      "items": {
+        "$ref": "#/$defs/qualificationCase"
+      }
+    }
+  },
+  "$defs": {
+    "qualificationCase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_id",
+        "suite",
+        "ordinal",
+        "label",
+        "family_id",
+        "family",
+        "expected",
+        "evidence_class",
+        "historical_unseen",
+        "first_run_disposition",
+        "current_disposition",
+        "definition_ref",
+        "first_run_evidence_ref",
+        "current_evidence_ref"
+      ],
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "suite": {
+          "enum": [
+            "CANONICAL",
+            "SET_A",
+            "SET_B",
+            "SET_C",
+            "P1",
+            "SET_D",
+            "SET_E",
+            "SET_E_REMEDIATION"
+          ]
+        },
+        "ordinal": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "family_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "family": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected": {
+          "enum": [
+            "MUST_REJECT",
+            "MUST_ACCEPT"
+          ]
+        },
+        "evidence_class": {
+          "enum": [
+            "DEVELOPMENT_MUTATION",
+            "DISCOVERED_HOLDOUT_REGRESSION",
+            "GENERATED_DISCOVERED_REGRESSION",
+            "FROZEN_POSITIVE_BOUNDARY",
+            "FROZEN_FRESH_HOLDOUT",
+            "FROZEN_FINAL_UNSEEN_HOLDOUT",
+            "KNOWN_REGRESSION"
+          ]
+        },
+        "historical_unseen": {
+          "type": "boolean"
+        },
+        "first_run_disposition": {
+          "enum": [
+            "KNOWN_DEVELOPMENT_CASE",
+            "ACCEPTED",
+            "REJECTED",
+            "KNOWN_REGRESSION_CASE"
+          ]
+        },
+        "current_disposition": {
+          "enum": [
+            "ACCEPTED",
+            "REJECTED"
+          ]
+        },
+        "definition_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "first_run_evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "current_evidence_ref": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

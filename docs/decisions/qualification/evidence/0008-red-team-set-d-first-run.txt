@@ -1,0 +1,238 @@
+===== FROZEN FRESH SET D =====
+Cases: 32
+MUST_REJECT: 16
+MUST_ACCEPT: 16
+FAIL T7-D-01-01 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+FAIL T7-D-01-02 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-01-03 MUST_ACCEPT
+PASS T7-D-01-04 MUST_ACCEPT
+PASS T7-D-02-01 MUST_REJECT
+PASS T7-D-02-02 MUST_REJECT
+PASS T7-D-02-03 MUST_ACCEPT
+PASS T7-D-02-04 MUST_ACCEPT
+PASS T7-D-03-01 MUST_REJECT
+PASS T7-D-03-02 MUST_REJECT
+PASS T7-D-03-03 MUST_ACCEPT
+PASS T7-D-03-04 MUST_ACCEPT
+PASS T7-D-04-01 MUST_REJECT
+FAIL T7-D-04-02 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-04-03 MUST_ACCEPT
+PASS T7-D-04-04 MUST_ACCEPT
+FAIL T7-D-05-01 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-05-02 MUST_REJECT
+PASS T7-D-05-03 MUST_ACCEPT
+FAIL T7-D-05-04 MUST_ACCEPT
+----- validator output -----
+INITIAL SPLITS VALIDATION: FAIL
+- protected-target-derived-selection integrity contains forbidden permissive composition
+----------------------------
+FAIL T7-D-06-01 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+FAIL T7-D-06-02 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-06-03 MUST_ACCEPT
+PASS T7-D-06-04 MUST_ACCEPT
+FAIL T7-D-07-01 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+FAIL T7-D-07-02 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-07-03 MUST_ACCEPT
+PASS T7-D-07-04 MUST_ACCEPT
+FAIL T7-D-08-01 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+FAIL T7-D-08-02 MUST_REJECT
+----- validator output -----
+INITIAL SPLITS VALIDATION: PASS
+- version: 0.1.0
+- status: Draft
+- decision: PROPOSED
+- numbered sections: 50
+- Task 7 qualification conditions: 50
+- partition roles: DEVELOPMENT, VALIDATION, PROTECTED
+- partition purposes: PRIMARY_OUTCOME, TRANSFER_SOURCE, TRANSFER_TARGET, ADAPTATION_INPUT, PRIOR_CAPABILITY, LOCALITY, CRITICAL_INVARIANT
+- protected lifecycle states: PREPARING, FROZEN, SEALED, EVALUATING, DISCLOSED, INVALIDATED
+- contamination states: CLEAN, SUSPECTED, CONFIRMED, UNKNOWN
+- initial SplitPlans: 13
+- N-H2 transfer boundaries: 3
+- evidence consequence: RERUN_AND_PRESERVE_DATA_DISTINCTIONS
+- scientific support established by Task 7 specification: NO
+- Task 5 capability support promoted by Task 7 specification: NO
+----------------------------
+PASS T7-D-08-03 MUST_ACCEPT
+PASS T7-D-08-04 MUST_ACCEPT
+
+===== SET D FAMILY RESULTS =====
+D01: 2/4 correct
+D02: 4/4 correct
+D03: 4/4 correct
+D04: 3/4 correct
+D05: 2/4 correct
+D06: 2/4 correct
+D07: 2/4 correct
+D08: 2/4 correct
+
+===== SET D RESULT =====
+Correct: 21/32
+Incorrect: 11/32
+TASK 7 SET D FRESH HOLDOUT: FAIL (21/32 correct)
+
+Incorrect case IDs:
+- T7-D-01-01 expected=MUST_REJECT
+- T7-D-01-02 expected=MUST_REJECT
+- T7-D-04-02 expected=MUST_REJECT
+- T7-D-05-01 expected=MUST_REJECT
+- T7-D-05-04 expected=MUST_ACCEPT
+- T7-D-06-01 expected=MUST_REJECT
+- T7-D-06-02 expected=MUST_REJECT
+- T7-D-07-01 expected=MUST_REJECT
+- T7-D-07-02 expected=MUST_REJECT
+- T7-D-08-01 expected=MUST_REJECT
+- T7-D-08-02 expected=MUST_REJECT
