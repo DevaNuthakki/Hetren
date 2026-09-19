@@ -143,6 +143,7 @@ jobs:
           test -f scripts/check_initial_splits_data.py
           test -f scripts/check_initial_splits_qualification_data.py
           test -f tests/qualification/test_initial_splits.py
+          test -f tests/qualification/test_initial_splits_fingerprint_portability.py
           test -f tests/qualification/test_initial_splits_data.py
           test -f tests/qualification/test_initial_splits_positive.py
           test -f tests/qualification/test_initial_splits_holdout.py
@@ -219,6 +220,7 @@ jobs:
           python3 tests/qualification/test_initial_splits_qualification_data.py
 
           python3 tests/qualification/test_initial_splits.py
+          python3 tests/qualification/test_initial_splits_fingerprint_portability.py
           python3 tests/qualification/test_initial_splits_positive.py
 
           python3 tests/qualification/test_initial_splits_holdout.py

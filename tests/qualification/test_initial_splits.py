@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+import copy
 import hashlib
 import re
 import shutil
@@ -1959,6 +1960,83 @@ DEVELOPMENT_ATTACK_DEFINITION_FUNCTIONS = (
 )
 
 
+def _stable_ast_dump(node: ast.AST) -> str:
+    """
+    Return a Python-version-stable AST representation for governed
+    mutation definitions.
+
+    Python 3.12 and 3.13 differ in whether ast.dump() displays empty
+    list fields by default. Remove only those empty-list attributes
+    from a deep copy before serialization.
+
+    Semantic values, including Constant(value=None), are preserved.
+    """
+
+    normalized = copy.deepcopy(
+        node
+    )
+
+    def remove_empty_lists(
+        value,
+    ) -> None:
+        if not isinstance(
+            value,
+            ast.AST,
+        ):
+            return
+
+        for field_name in tuple(
+            value._fields
+        ):
+            if not hasattr(
+                value,
+                field_name,
+            ):
+                continue
+
+            field_value = getattr(
+                value,
+                field_name,
+            )
+
+            if isinstance(
+                field_value,
+                list,
+            ):
+                if not field_value:
+                    delattr(
+                        value,
+                        field_name,
+                    )
+
+                    continue
+
+                for item in field_value:
+                    remove_empty_lists(
+                        item
+                    )
+
+                continue
+
+            if isinstance(
+                field_value,
+                ast.AST,
+            ):
+                remove_empty_lists(
+                    field_value
+                )
+
+    remove_empty_lists(
+        normalized
+    )
+
+    return ast.dump(
+        normalized,
+        annotate_fields=True,
+        include_attributes=False,
+    )
+
+
 def development_attack_definition_hash() -> str:
     """
     Return a line-number-independent fingerprint of the frozen
@@ -1997,10 +2075,8 @@ def development_attack_definition_hash() -> str:
     )
 
     normalized = "\n".join(
-        ast.dump(
-            nodes[name],
-            annotate_fields=True,
-            include_attributes=False,
+        _stable_ast_dump(
+            nodes[name]
         )
         for name
         in DEVELOPMENT_ATTACK_DEFINITION_FUNCTIONS
