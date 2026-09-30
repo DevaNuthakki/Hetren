@@ -1,0 +1,33 @@
+from .contracts import (
+    AgentTrace,
+    ContractError,
+    DiagnosisProblem,
+    DiagnosisStatus,
+    EventKind,
+    Experiment,
+    Hypothesis,
+    InterventionKind,
+    Observation,
+    PlannerDecision,
+    RationaleCode,
+    TraceEvent,
+    Verdict,
+    canonical_sha256,
+)
+
+__all__ = [
+    "AgentTrace",
+    "ContractError",
+    "DiagnosisProblem",
+    "DiagnosisStatus",
+    "EventKind",
+    "Experiment",
+    "Hypothesis",
+    "InterventionKind",
+    "Observation",
+    "PlannerDecision",
+    "RationaleCode",
+    "TraceEvent",
+    "Verdict",
+    "canonical_sha256",
+]
