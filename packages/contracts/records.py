@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import StrEnum
 import hashlib
 import json
 import re
@@ -255,9 +256,289 @@ class SystemSnapshot:
         return canonical_sha256(self.canonical_payload())
 
 
+
+
+class CapabilitySupportState(StrEnum):
+    QUALIFIED_SUPPORTED = "qualified_supported"
+    UNQUALIFIED = "unqualified"
+    UNSUPPORTED = "unsupported"
+    INCOMPATIBLE = "incompatible"
+    BLOCKED = "blocked"
+    UNKNOWN = "unknown"
+
+
+def _require_contract_text(value: object, field: str) -> None:
+    if not isinstance(value, str) or not value.strip():
+        raise ContractError(
+            f"{field} must be non-empty text"
+        )
+
+
+def _require_contract_tuple(
+    value: object,
+    field: str,
+) -> None:
+    if not isinstance(value, tuple):
+        raise ContractError(
+            f"{field} must be a tuple"
+        )
+
+    for item in value:
+        if not isinstance(item, str) or not item.strip():
+            raise ContractError(
+                f"{field} must contain only non-empty text"
+            )
+
+
+@dataclass(frozen=True)
+class CapabilityProfile:
+    tenant_id: str
+    project_id: str
+    profile_id: str
+    profile_version: str
+    system_id: str
+    system_version_id: str
+
+    declared_scope: str
+    environment_family: str
+    capability_kind: str
+    investigation_surface: str
+    mvp_requirement: str
+    support_state: CapabilitySupportState
+
+    action_semantics: tuple[str, ...]
+    required_access: tuple[str, ...]
+    schema_reference: str | None
+
+    system_form_constraints: tuple[str, ...]
+    adapter_requirements: tuple[str, ...]
+    evaluator_requirements: tuple[str, ...]
+    provider_constraints: tuple[str, ...]
+    target_component_constraints: tuple[str, ...]
+    compatibility_requirements: tuple[str, ...]
+    authorization_prerequisites: tuple[str, ...]
+
+    qualification_evidence_references: tuple[str, ...]
+    known_limitations: tuple[str, ...]
+    invalidation_conditions: tuple[str, ...]
+    requalification_conditions: tuple[str, ...]
+
+    cost: tuple[str, ...]
+    limits: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        for field in (
+            "tenant_id",
+            "project_id",
+            "profile_id",
+            "profile_version",
+            "system_id",
+            "system_version_id",
+            "declared_scope",
+            "environment_family",
+            "capability_kind",
+            "investigation_surface",
+            "mvp_requirement",
+        ):
+            _require_contract_text(
+                getattr(self, field),
+                field,
+            )
+
+        if not isinstance(
+            self.support_state,
+            CapabilitySupportState,
+        ):
+            raise ContractError(
+                "support_state must be a "
+                "CapabilitySupportState"
+            )
+
+        for field in (
+            "action_semantics",
+            "required_access",
+            "system_form_constraints",
+            "adapter_requirements",
+            "evaluator_requirements",
+            "provider_constraints",
+            "target_component_constraints",
+            "compatibility_requirements",
+            "authorization_prerequisites",
+            "qualification_evidence_references",
+            "known_limitations",
+            "invalidation_conditions",
+            "requalification_conditions",
+            "cost",
+            "limits",
+        ):
+            _require_contract_tuple(
+                getattr(self, field),
+                field,
+            )
+
+        if (
+            self.schema_reference is not None
+            and (
+                not isinstance(
+                    self.schema_reference,
+                    str,
+                )
+                or not self.schema_reference.strip()
+            )
+        ):
+            raise ContractError(
+                "schema_reference must be non-empty "
+                "text or None"
+            )
+
+        if (
+            self.support_state
+            is CapabilitySupportState.QUALIFIED_SUPPORTED
+            and not self.qualification_evidence_references
+        ):
+            raise ContractError(
+                "qualified_supported requires "
+                "qualification evidence"
+            )
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "tenant_id": self.tenant_id,
+            "project_id": self.project_id,
+            "profile_id": self.profile_id,
+            "profile_version": self.profile_version,
+            "system_id": self.system_id,
+            "system_version_id": self.system_version_id,
+            "declared_scope": self.declared_scope,
+            "environment_family": self.environment_family,
+            "capability_kind": self.capability_kind,
+            "investigation_surface": self.investigation_surface,
+            "mvp_requirement": self.mvp_requirement,
+            "support_state": self.support_state.value,
+            "action_semantics": self.action_semantics,
+            "required_access": self.required_access,
+            "schema_reference": self.schema_reference,
+            "system_form_constraints": (
+                self.system_form_constraints
+            ),
+            "adapter_requirements": (
+                self.adapter_requirements
+            ),
+            "evaluator_requirements": (
+                self.evaluator_requirements
+            ),
+            "provider_constraints": (
+                self.provider_constraints
+            ),
+            "target_component_constraints": (
+                self.target_component_constraints
+            ),
+            "compatibility_requirements": (
+                self.compatibility_requirements
+            ),
+            "authorization_prerequisites": (
+                self.authorization_prerequisites
+            ),
+            "qualification_evidence_references": (
+                self.qualification_evidence_references
+            ),
+            "known_limitations": self.known_limitations,
+            "invalidation_conditions": (
+                self.invalidation_conditions
+            ),
+            "requalification_conditions": (
+                self.requalification_conditions
+            ),
+            "cost": self.cost,
+            "limits": self.limits,
+        }
+
+    @property
+    def profile_sha256(self) -> str:
+        return canonical_sha256(
+            self.canonical_payload()
+        )
+
+
+@dataclass(frozen=True)
+class MethodProposal:
+    tenant_id: str
+    project_id: str
+    proposal_id: str
+    proposal_version: str
+
+    goal_contract_id: str
+    system_snapshot_id: str
+
+    question: str
+    alternatives: tuple[str, ...]
+    expected_outcomes: tuple[str, ...]
+    controls: tuple[str, ...]
+    generated_program: str
+    dependencies: tuple[str, ...]
+    stopping_rule: str
+
+    def __post_init__(self) -> None:
+        for field in (
+            "tenant_id",
+            "project_id",
+            "proposal_id",
+            "proposal_version",
+            "goal_contract_id",
+            "system_snapshot_id",
+            "question",
+            "generated_program",
+            "stopping_rule",
+        ):
+            _require_contract_text(
+                getattr(self, field),
+                field,
+            )
+
+        for field in (
+            "alternatives",
+            "expected_outcomes",
+            "controls",
+            "dependencies",
+        ):
+            _require_contract_tuple(
+                getattr(self, field),
+                field,
+            )
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "tenant_id": self.tenant_id,
+            "project_id": self.project_id,
+            "proposal_id": self.proposal_id,
+            "proposal_version": self.proposal_version,
+            "goal_contract_id": self.goal_contract_id,
+            "system_snapshot_id": self.system_snapshot_id,
+            "question": self.question,
+            "alternatives": self.alternatives,
+            "expected_outcomes": (
+                self.expected_outcomes
+            ),
+            "controls": self.controls,
+            "generated_program": (
+                self.generated_program
+            ),
+            "dependencies": self.dependencies,
+            "stopping_rule": self.stopping_rule,
+        }
+
+    @property
+    def proposal_sha256(self) -> str:
+        return canonical_sha256(
+            self.canonical_payload()
+        )
+
 __all__ = [
     "ContractError",
     "GoalContract",
     "SystemSnapshot",
     "canonical_sha256",
+    "CapabilityProfile",
+    "CapabilitySupportState",
+    "MethodProposal",
 ]

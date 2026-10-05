@@ -159,3 +159,311 @@ def test_system_snapshot_does_not_define_capability_support():
     assert "qualified" not in fields
     assert "verdict" not in fields
     assert "authorization" not in fields
+
+
+
+from dataclasses import FrozenInstanceError, fields
+import inspect
+
+from packages.contracts.records import (
+    CapabilityProfile,
+    CapabilitySupportState,
+    ContractError,
+    MethodProposal,
+)
+
+
+def make_capability_profile(
+    *,
+    support_state=CapabilitySupportState.UNKNOWN,
+    qualification_evidence_references=(),
+):
+    return CapabilityProfile(
+        tenant_id="tenant-1",
+        project_id="project-1",
+        profile_id="cap-1",
+        profile_version="1",
+        system_id="system-1",
+        system_version_id="system-version-1",
+        declared_scope="tool invocation",
+        environment_family="agent",
+        capability_kind="action",
+        investigation_surface="behavioral",
+        mvp_requirement="required",
+        support_state=support_state,
+        action_semantics=("invoke tool",),
+        required_access=("tool-access",),
+        schema_reference="schema-1",
+        system_form_constraints=(),
+        adapter_requirements=("adapter-1",),
+        evaluator_requirements=("evaluator-1",),
+        provider_constraints=(),
+        target_component_constraints=(),
+        compatibility_requirements=(),
+        authorization_prerequisites=(
+            "gateway-policy",
+        ),
+        qualification_evidence_references=(
+            qualification_evidence_references
+        ),
+        known_limitations=(),
+        invalidation_conditions=(),
+        requalification_conditions=(),
+        cost=("unit-cost",),
+        limits=("one-at-a-time",),
+    )
+
+
+def make_method_proposal():
+    return MethodProposal(
+        tenant_id="tenant-1",
+        project_id="project-1",
+        proposal_id="proposal-1",
+        proposal_version="1",
+        goal_contract_id="goal-1",
+        system_snapshot_id="snapshot-1",
+        question=(
+            "Which intervention best tests "
+            "the leading explanation?"
+        ),
+        alternatives=(
+            "baseline",
+            "intervention",
+        ),
+        expected_outcomes=(
+            "baseline remains unchanged",
+        ),
+        controls=("no-op control",),
+        generated_program=(
+            "run the declared comparison procedure"
+        ),
+        dependencies=("cap-1",),
+        stopping_rule=(
+            "stop when the evidence "
+            "requirement is satisfied"
+        ),
+    )
+
+
+def test_capability_support_state_values_are_explicit():
+    assert {
+        state.value for state in CapabilitySupportState
+    } == {
+        "qualified_supported",
+        "unqualified",
+        "unsupported",
+        "incompatible",
+        "blocked",
+        "unknown",
+    }
+
+
+def test_capability_profile_has_governed_semantic_surface():
+    assert {
+        field.name
+        for field in fields(CapabilityProfile)
+    } == {
+        "tenant_id",
+        "project_id",
+        "profile_id",
+        "profile_version",
+        "system_id",
+        "system_version_id",
+        "declared_scope",
+        "environment_family",
+        "capability_kind",
+        "investigation_surface",
+        "mvp_requirement",
+        "support_state",
+        "action_semantics",
+        "required_access",
+        "schema_reference",
+        "system_form_constraints",
+        "adapter_requirements",
+        "evaluator_requirements",
+        "provider_constraints",
+        "target_component_constraints",
+        "compatibility_requirements",
+        "authorization_prerequisites",
+        "qualification_evidence_references",
+        "known_limitations",
+        "invalidation_conditions",
+        "requalification_conditions",
+        "cost",
+        "limits",
+    }
+
+
+def test_unqualified_profile_can_have_no_evidence():
+    profile = make_capability_profile(
+        support_state=CapabilitySupportState.UNQUALIFIED,
+    )
+
+    assert profile.qualification_evidence_references == ()
+
+
+def test_qualified_supported_requires_evidence():
+    try:
+        make_capability_profile(
+            support_state=(
+                CapabilitySupportState.QUALIFIED_SUPPORTED
+            ),
+        )
+    except ContractError:
+        return
+
+    raise AssertionError(
+        "qualified_supported accepted without evidence"
+    )
+
+
+def test_qualified_supported_preserves_evidence():
+    profile = make_capability_profile(
+        support_state=(
+            CapabilitySupportState.QUALIFIED_SUPPORTED
+        ),
+        qualification_evidence_references=("evidence-1",),
+    )
+
+    assert profile.qualification_evidence_references == (
+        "evidence-1",
+    )
+
+
+def test_capability_profile_rejects_raw_support_state():
+    try:
+        make_capability_profile(
+            support_state="qualified_supported",
+            qualification_evidence_references="evidence-1",
+        )
+    except ContractError:
+        return
+
+    raise AssertionError(
+        "raw support state string was accepted"
+    )
+
+
+def test_capability_profile_is_immutable():
+    profile = make_capability_profile()
+
+    try:
+        profile.declared_scope = "changed"
+    except FrozenInstanceError:
+        return
+
+    raise AssertionError(
+        "CapabilityProfile is mutable"
+    )
+
+
+def test_identical_capability_profiles_have_identical_hashes():
+    first = make_capability_profile()
+    second = make_capability_profile()
+
+    assert first.profile_sha256 == second.profile_sha256
+
+
+def test_material_capability_change_changes_hash():
+    first = make_capability_profile()
+    payload = first.canonical_payload()
+    payload["declared_scope"] = "different scope"
+
+    second = CapabilityProfile(
+        **{
+            **payload,
+            "support_state": first.support_state,
+        }
+    )
+
+    assert first.profile_sha256 != second.profile_sha256
+
+
+def test_capability_profile_has_no_authority_fields():
+    names = {
+        field.name
+        for field in fields(CapabilityProfile)
+    }
+
+    assert "authorization" not in names
+    assert "execution_authority" not in names
+    assert "approval" not in names
+    assert "can_execute" not in names
+
+
+def test_capability_profile_has_no_execution_imports():
+    source = inspect.getsource(CapabilityProfile)
+
+    assert "subprocess" not in source
+    assert "requests" not in source
+    assert "httpx" not in source
+
+
+def test_method_proposal_has_minimum_governed_surface():
+    assert {
+        field.name
+        for field in fields(MethodProposal)
+    } == {
+        "tenant_id",
+        "project_id",
+        "proposal_id",
+        "proposal_version",
+        "goal_contract_id",
+        "system_snapshot_id",
+        "question",
+        "alternatives",
+        "expected_outcomes",
+        "controls",
+        "generated_program",
+        "dependencies",
+        "stopping_rule",
+    }
+
+
+def test_method_proposal_is_immutable():
+    proposal = make_method_proposal()
+
+    try:
+        proposal.question = "changed"
+    except FrozenInstanceError:
+        return
+
+    raise AssertionError(
+        "MethodProposal is mutable"
+    )
+
+
+def test_identical_method_proposals_have_identical_hashes():
+    first = make_method_proposal()
+    second = make_method_proposal()
+
+    assert first.proposal_sha256 == second.proposal_sha256
+
+
+def test_material_method_change_changes_hash():
+    first = make_method_proposal()
+    payload = first.canonical_payload()
+    payload["question"] = "A different question"
+
+    second = MethodProposal(**payload)
+
+    assert first.proposal_sha256 != second.proposal_sha256
+
+
+def test_method_proposal_has_no_authority_or_outcome_fields():
+    names = {
+        field.name
+        for field in fields(MethodProposal)
+    }
+
+    forbidden = {
+        "authorization",
+        "execution_authority",
+        "approval",
+        "verdict",
+        "evaluation",
+        "verification",
+        "execution_record",
+    }
+
+    assert names.isdisjoint(forbidden)
