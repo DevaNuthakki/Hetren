@@ -24,3 +24,18 @@ __all__ += [
     "CapabilitySupportState",
     "MethodProposal",
 ]
+
+
+from .execution import (
+    EvaluationOutcome,
+    EvaluationRecord,
+    ExecutionRecord,
+    ExecutionStatus,
+)
+
+__all__ += [
+    "EvaluationOutcome",
+    "EvaluationRecord",
+    "ExecutionRecord",
+    "ExecutionStatus",
+]
