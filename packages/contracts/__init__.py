@@ -50,3 +50,14 @@ __all__ += [
     "VerificationOutcome",
     "VerificationReport",
 ]
+
+
+from .policy import (
+    CandidateEligibilityDecision,
+    CandidateEligibilityOutcome,
+)
+
+__all__ += [
+    "CandidateEligibilityDecision",
+    "CandidateEligibilityOutcome",
+]
