@@ -39,3 +39,14 @@ __all__ += [
     "ExecutionRecord",
     "ExecutionStatus",
 ]
+
+
+from .verification import (
+    VerificationOutcome,
+    VerificationReport,
+)
+
+__all__ += [
+    "VerificationOutcome",
+    "VerificationReport",
+]
