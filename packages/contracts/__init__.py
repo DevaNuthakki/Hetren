@@ -61,3 +61,13 @@ __all__ += [
     "CandidateEligibilityDecision",
     "CandidateEligibilityOutcome",
 ]
+
+from .evidence import (
+    EvidenceRole,
+    EvidenceRoleAssignment,
+)
+
+__all__ += [
+    "EvidenceRole",
+    "EvidenceRoleAssignment",
+]
