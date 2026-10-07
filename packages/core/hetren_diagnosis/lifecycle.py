@@ -165,6 +165,19 @@ def select_next_decision(
         for observation in observations
     )
 
+    if _is_diagnosed(posterior):
+        return PlannerDecision(
+            planner_key=PLANNER_KEY,
+            planner_version=PLANNER_VERSION,
+            candidate_experiment_keys=(),
+            experiment_key=None,
+            expected_information_gain=0.0,
+            score_per_cost=0.0,
+            rationale=RationaleCode.COMPLETE,
+            status=DiagnosisStatus.DIAGNOSED,
+            problem_sha256=problem.problem_sha256,
+        )
+
     if remaining_budget == 0:
         return PlannerDecision(
             planner_key=PLANNER_KEY,
@@ -191,19 +204,6 @@ def select_next_decision(
             for experiment, _, _ in ranked
         )
     )
-
-    if _is_diagnosed(posterior):
-        return PlannerDecision(
-            planner_key=PLANNER_KEY,
-            planner_version=PLANNER_VERSION,
-            candidate_experiment_keys=candidate_keys,
-            experiment_key=None,
-            expected_information_gain=0.0,
-            score_per_cost=0.0,
-            rationale=RationaleCode.COMPLETE,
-            status=DiagnosisStatus.DIAGNOSED,
-            problem_sha256=problem.problem_sha256,
-        )
 
     if not ranked:
         return PlannerDecision(

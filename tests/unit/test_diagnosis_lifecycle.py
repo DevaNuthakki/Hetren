@@ -237,7 +237,7 @@ def test_actual_cost_controls_remaining_budget():
     ) == 1
 
 
-def test_actual_cost_can_exhaust_budget():
+def test_actual_cost_exhaustion_does_not_override_diagnosis():
     problem = make_two_hypothesis_problem()
 
     observation = observation_for(
@@ -247,15 +247,30 @@ def test_actual_cost_can_exhaust_budget():
         actual_cost_units=3,
     )
 
+    assert remaining_budget_units(
+        problem,
+        (observation,),
+    ) == 0
+
+    assert replay_observations(
+        problem,
+        (observation,),
+    ) == {
+        "h1": 0.0,
+        "h2": 1.0,
+    }
+
     decision = select_next_decision(
         problem,
         (observation,),
     )
 
-    assert decision.status is DiagnosisStatus.BUDGET_EXHAUSTED
-    assert decision.rationale is RationaleCode.BUDGET_EXHAUSTED
+    assert decision.status is DiagnosisStatus.DIAGNOSED
+    assert decision.rationale is RationaleCode.COMPLETE
     assert decision.experiment_key is None
     assert decision.candidate_experiment_keys == ()
+    assert decision.expected_information_gain == 0.0
+    assert decision.score_per_cost == 0.0
 
 
 def test_zero_information_experiment_is_inconclusive():
@@ -291,8 +306,44 @@ def test_zero_information_experiment_is_inconclusive():
     assert decision.candidate_experiment_keys == ("e1",)
 
 
-def test_zero_budget_reports_budget_exhaustion():
-    problem = make_two_hypothesis_problem()
+def test_zero_budget_reports_exhaustion_when_posterior_remains_ambiguous():
+    problem = DiagnosisProblem(
+        trace=AgentTrace(
+            "run-zero-budget-ambiguous",
+            (make_event(),),
+        ),
+        hypotheses=(
+            Hypothesis(
+                "h1",
+                "fault one",
+                0.5,
+            ),
+            Hypothesis(
+                "h2",
+                "fault two",
+                0.5,
+            ),
+        ),
+        experiments=(
+            Experiment(
+                "e1",
+                InterventionKind.REPLAY,
+                "step-0",
+                1,
+                (
+                    (
+                        "h1",
+                        Verdict.PASS,
+                    ),
+                    (
+                        "h2",
+                        Verdict.PASS,
+                    ),
+                ),
+            ),
+        ),
+        budget_units=1,
+    )
 
     observation = observation_for(
         problem,
@@ -301,20 +352,36 @@ def test_zero_budget_reports_budget_exhaustion():
         actual_cost_units=1,
     )
 
-    problem = problem.__class__(
-        trace=problem.trace,
-        hypotheses=problem.hypotheses,
-        experiments=problem.experiments,
-        budget_units=1,
-    )
+    assert remaining_budget_units(
+        problem,
+        (observation,),
+    ) == 0
+
+    assert replay_observations(
+        problem,
+        (observation,),
+    ) == {
+        "h1": 0.5,
+        "h2": 0.5,
+    }
 
     decision = select_next_decision(
         problem,
         (observation,),
     )
 
-    assert decision.status is DiagnosisStatus.BUDGET_EXHAUSTED
+    assert (
+        decision.status
+        is DiagnosisStatus.BUDGET_EXHAUSTED
+    )
+    assert (
+        decision.rationale
+        is RationaleCode.BUDGET_EXHAUSTED
+    )
     assert decision.experiment_key is None
+    assert decision.candidate_experiment_keys == ()
+    assert decision.expected_information_gain == 0.0
+    assert decision.score_per_cost == 0.0
 
 
 def test_observation_sequences_must_be_contiguous():
