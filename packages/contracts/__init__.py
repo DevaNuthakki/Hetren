@@ -109,3 +109,13 @@ __all__ += [
     "ClaimBoundaryExternalStatus",
     "ClaimBoundarySource",
 ]
+
+from .assurance_bundle import (
+    AssuranceBundle,
+    AssuranceBundleEvidenceRoleReference,
+)
+
+__all__ += [
+    "AssuranceBundle",
+    "AssuranceBundleEvidenceRoleReference",
+]
