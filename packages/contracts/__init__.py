@@ -81,3 +81,17 @@ __all__ += [
     "RepairContrastOutcome",
     "RepairContrastRecord",
 ]
+
+from .verifier_separation import (
+    VerifierSeparationAssessment,
+    VerifierSeparationDimension,
+    VerifierSeparationProfile,
+    VerifierSeparationState,
+)
+
+__all__ += [
+    "VerifierSeparationAssessment",
+    "VerifierSeparationDimension",
+    "VerifierSeparationProfile",
+    "VerifierSeparationState",
+]
