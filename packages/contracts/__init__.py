@@ -95,3 +95,17 @@ __all__ += [
     "VerifierSeparationProfile",
     "VerifierSeparationState",
 ]
+
+from .claim_boundary import (
+    ClaimBoundary,
+    ClaimBoundaryDemonstration,
+    ClaimBoundaryExternalStatus,
+    ClaimBoundarySource,
+)
+
+__all__ += [
+    "ClaimBoundary",
+    "ClaimBoundaryDemonstration",
+    "ClaimBoundaryExternalStatus",
+    "ClaimBoundarySource",
+]
