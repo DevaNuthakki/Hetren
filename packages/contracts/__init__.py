@@ -71,3 +71,13 @@ __all__ += [
     "EvidenceRole",
     "EvidenceRoleAssignment",
 ]
+
+from .repair_contrast import (
+    RepairContrastOutcome,
+    RepairContrastRecord,
+)
+
+__all__ += [
+    "RepairContrastOutcome",
+    "RepairContrastRecord",
+]
