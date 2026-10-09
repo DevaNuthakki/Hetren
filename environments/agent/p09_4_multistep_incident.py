@@ -721,10 +721,25 @@ def _build_report(
         ],
         ...,
     ],
+    *,
+    drop_boundary_incident: bool = False,
 ) -> P094Report:
+    if not isinstance(
+        drop_boundary_incident,
+        bool,
+    ):
+        raise ContractError(
+            "drop_boundary_incident must be boolean"
+        )
+
     incident_ids = tuple(
         row[0]
         for row in validated_rows
+        if not (
+            drop_boundary_incident
+            and row[0]
+            == "INC-2002"
+        )
     )
 
     return P094Report(
@@ -1160,21 +1175,20 @@ def _build_trace(
     )
 
 
-def run_p09_4_multistep_incident(
+def _execute_p09_4_multistep_incident(
     fault_mode: P094FaultMode,
     *,
     run_id: str,
-    intervention: P094DiagnosticIntervention | None = None,
+    intervention: P094DiagnosticIntervention | None,
+    report_assembly_fault: bool,
 ) -> P094IncidentRun:
-    """Execute one deterministic development-only P09.4 workflow."""
-    _require_inputs(
-        fault_mode,
-        run_id,
-    )
-
-    _require_intervention(
-        intervention
-    )
+    if not isinstance(
+        report_assembly_fault,
+        bool,
+    ):
+        raise ContractError(
+            "report_assembly_fault must be boolean"
+        )
 
     incidents = _load_incidents()
 
@@ -1224,7 +1238,10 @@ def run_p09_4_multistep_incident(
     )
 
     report = _build_report(
-        validated_rows
+        validated_rows,
+        drop_boundary_incident=(
+            report_assembly_fault
+        ),
     )
 
     trace = _build_trace(
@@ -1250,6 +1267,53 @@ def run_p09_4_multistep_incident(
     )
 
 
+def run_p09_4_multistep_incident(
+    fault_mode: P094FaultMode,
+    *,
+    run_id: str,
+    intervention: P094DiagnosticIntervention | None = None,
+) -> P094IncidentRun:
+    """Execute one deterministic development-only P09.4 workflow."""
+    _require_inputs(
+        fault_mode,
+        run_id,
+    )
+
+    _require_intervention(
+        intervention
+    )
+
+    return _execute_p09_4_multistep_incident(
+        fault_mode,
+        run_id=run_id,
+        intervention=intervention,
+        report_assembly_fault=False,
+    )
+
+
+def run_p09_4_out_of_rfs_control(
+    *,
+    run_id: str,
+    intervention: P094DiagnosticIntervention | None = None,
+) -> P094IncidentRun:
+    """Execute a failing development control whose latent cause is outside RFS."""
+    _require_inputs(
+        P094FaultMode.NONE,
+        run_id,
+    )
+
+    _require_intervention(
+        intervention
+    )
+
+    return _execute_p09_4_multistep_incident(
+        P094FaultMode.NONE,
+        run_id=run_id,
+        intervention=intervention,
+        report_assembly_fault=True,
+    )
+
+
 __all__ = [
     "P094DiagnosticIntervention",
     "P094FaultMode",
@@ -1257,5 +1321,6 @@ __all__ = [
     "P094Report",
     "expected_incident_ids",
     "run_p09_4_multistep_incident",
+    "run_p09_4_out_of_rfs_control",
     "shared_faulty_incident_ids",
 ]
