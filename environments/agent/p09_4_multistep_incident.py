@@ -20,6 +20,7 @@ from packages.core.hetren_diagnosis.contracts import (
     AgentTrace,
     ContractError,
     EventKind,
+    InterventionKind,
     TraceEvent,
     canonical_sha256,
 )
@@ -83,6 +84,33 @@ class P094FaultMode(StrEnum):
     SEQUENCING_ORCHESTRATION = "sequencing_orchestration"
     STATE_CONTEXT = "state_context"
     ENVIRONMENT_INTERACTION = "environment_interaction"
+
+
+@dataclass(frozen=True)
+class P094DiagnosticIntervention:
+    """Treatment-visible intervention applied to one isolated workflow run."""
+
+    kind: InterventionKind
+    target: str
+
+    def __post_init__(
+        self,
+    ) -> None:
+        if not isinstance(
+            self.kind,
+            InterventionKind,
+        ):
+            raise ContractError(
+                "intervention kind must be an InterventionKind"
+            )
+
+        if not isinstance(
+            self.target,
+            str,
+        ) or not self.target:
+            raise ContractError(
+                "intervention target is required"
+            )
 
 
 @dataclass(frozen=True)
@@ -272,6 +300,54 @@ def _require_inputs(
         )
 
 
+def _require_intervention(
+    intervention: P094DiagnosticIntervention | None,
+) -> None:
+    if intervention is None:
+        return
+
+    if not isinstance(
+        intervention,
+        P094DiagnosticIntervention,
+    ):
+        raise ContractError(
+            "intervention must be a P094DiagnosticIntervention or None"
+        )
+
+    allowed = {
+        (
+            InterventionKind.REPLACE_TOOL,
+            "strategy/tool-selection",
+        ),
+        (
+            InterventionKind.OVERRIDE_PARAMETER,
+            "strategy/parameter-transformation",
+        ),
+        (
+            InterventionKind.REPLAY,
+            "orchestration/prerequisite-order",
+        ),
+        (
+            InterventionKind.REPLAY,
+            "context/fresh-state",
+        ),
+        (
+            InterventionKind.REPLAY,
+            "environment/response-contract",
+        ),
+    }
+
+    pair = (
+        intervention.kind,
+        intervention.target,
+    )
+
+    if pair not in allowed:
+        raise ContractError(
+            "unsupported P09.4 diagnostic intervention"
+        )
+
+
 def _load_incidents(
 ) -> tuple[
     tuple[
@@ -311,10 +387,21 @@ def _scope_service(
 
 def _load_context(
     fault_mode: P094FaultMode,
+    *,
+    intervention: P094DiagnosticIntervention | None,
 ) -> dict[str, object]:
+    fresh_context_probe = (
+        intervention is not None
+        and intervention.kind
+        is InterventionKind.REPLAY
+        and intervention.target
+        == "context/fresh-state"
+    )
+
     if (
         fault_mode
         is P094FaultMode.STATE_CONTEXT
+        and not fresh_context_probe
     ):
         return {
             "version":
@@ -333,28 +420,54 @@ def _load_context(
 
 def _select_strategy(
     fault_mode: P094FaultMode,
+    *,
+    intervention: P094DiagnosticIntervention | None,
 ) -> tuple[str, int]:
+    canonical_tool_probe = (
+        intervention is not None
+        and intervention.kind
+        is InterventionKind.REPLACE_TOOL
+        and intervention.target
+        == "strategy/tool-selection"
+    )
+
+    canonical_parameter_probe = (
+        intervention is not None
+        and intervention.kind
+        is InterventionKind.OVERRIDE_PARAMETER
+        and intervention.target
+        == "strategy/parameter-transformation"
+    )
+
+    tool_name = (
+        _CANONICAL_FILTER_TOOL
+    )
+
+    threshold = (
+        _CANONICAL_THRESHOLD
+    )
+
     if (
         fault_mode
         is P094FaultMode.TOOL_SELECTION
+        and not canonical_tool_probe
     ):
-        return (
-            _STRICT_FILTER_TOOL,
-            _CANONICAL_THRESHOLD,
+        tool_name = (
+            _STRICT_FILTER_TOOL
         )
 
     if (
         fault_mode
         is P094FaultMode.PARAMETER_TRANSFORMATION
+        and not canonical_parameter_probe
     ):
-        return (
-            _CANONICAL_FILTER_TOOL,
-            _CANONICAL_THRESHOLD + 1,
+        threshold = (
+            _CANONICAL_THRESHOLD + 1
         )
 
     return (
-        _CANONICAL_FILTER_TOOL,
-        _CANONICAL_THRESHOLD,
+        tool_name,
+        threshold,
     )
 
 
@@ -414,6 +527,7 @@ def _enrich_incidents(
     ],
     *,
     fault_mode: P094FaultMode,
+    intervention: P094DiagnosticIntervention | None,
 ) -> tuple[
     tuple[
         str,
@@ -434,11 +548,20 @@ def _enrich_incidents(
             _CONFIRMED_ENVIRONMENT_STATUS
         )
 
+        canonical_environment_probe = (
+            intervention is not None
+            and intervention.kind
+            is InterventionKind.REPLAY
+            and intervention.target
+            == "environment/response-contract"
+        )
+
         if (
             fault_mode
             is P094FaultMode.ENVIRONMENT_INTERACTION
             and incident_id
             == "INC-2002"
+            and not canonical_environment_probe
         ):
             environment_status = (
                 _UNKNOWN_ENVIRONMENT_STATUS
@@ -478,6 +601,7 @@ def _normalize_incidents(
         ...,
     ],
     fault_mode: P094FaultMode,
+    intervention: P094DiagnosticIntervention | None,
 ) -> tuple[
     tuple[
         str,
@@ -487,9 +611,18 @@ def _normalize_incidents(
     ],
     ...,
 ]:
+    canonical_order_probe = (
+        intervention is not None
+        and intervention.kind
+        is InterventionKind.REPLAY
+        and intervention.target
+        == "orchestration/prerequisite-order"
+    )
+
     if (
         fault_mode
         is P094FaultMode.SEQUENCING_ORCHESTRATION
+        and not canonical_order_probe
     ):
         return tuple(
             (
@@ -662,6 +795,7 @@ def _build_trace(
     ],
     report: P094Report,
     fault_mode: P094FaultMode,
+    intervention: P094DiagnosticIntervention | None,
 ) -> AgentTrace:
     all_ids = tuple(
         row[0]
@@ -683,11 +817,20 @@ def _build_trace(
         for row in validated_rows
     )
 
+    canonical_order_probe = (
+        intervention is not None
+        and intervention.kind
+        is InterventionKind.REPLAY
+        and intervention.target
+        == "orchestration/prerequisite-order"
+    )
+
     normalization_source = (
         "filtered-pre-enrichment"
         if (
             fault_mode
             is P094FaultMode.SEQUENCING_ORCHESTRATION
+            and not canonical_order_probe
         )
         else "enriched"
     )
@@ -1021,11 +1164,16 @@ def run_p09_4_multistep_incident(
     fault_mode: P094FaultMode,
     *,
     run_id: str,
+    intervention: P094DiagnosticIntervention | None = None,
 ) -> P094IncidentRun:
     """Execute one deterministic development-only P09.4 workflow."""
     _require_inputs(
         fault_mode,
         run_id,
+    )
+
+    _require_intervention(
+        intervention
     )
 
     incidents = _load_incidents()
@@ -1035,14 +1183,16 @@ def run_p09_4_multistep_incident(
     )
 
     context = _load_context(
-        fault_mode
+        fault_mode,
+        intervention=intervention,
     )
 
     (
         tool_name,
         threshold,
     ) = _select_strategy(
-        fault_mode
+        fault_mode,
+        intervention=intervention,
     )
 
     filtered_rows = _filter_incidents(
@@ -1054,6 +1204,7 @@ def run_p09_4_multistep_incident(
     enriched_rows = _enrich_incidents(
         filtered_rows,
         fault_mode=fault_mode,
+        intervention=intervention,
     )
 
     normalized_rows = (
@@ -1061,6 +1212,7 @@ def run_p09_4_multistep_incident(
             filtered_rows=filtered_rows,
             enriched_rows=enriched_rows,
             fault_mode=fault_mode,
+            intervention=intervention,
         )
     )
 
@@ -1088,6 +1240,7 @@ def run_p09_4_multistep_incident(
         validated_rows=validated_rows,
         report=report,
         fault_mode=fault_mode,
+        intervention=intervention,
     )
 
     return P094IncidentRun(
@@ -1098,6 +1251,7 @@ def run_p09_4_multistep_incident(
 
 
 __all__ = [
+    "P094DiagnosticIntervention",
     "P094FaultMode",
     "P094IncidentRun",
     "P094Report",
