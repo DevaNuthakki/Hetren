@@ -22,6 +22,7 @@ from packages.core.hetren_diagnosis.adaptive_two_probe_development import (
 )
 from packages.core.hetren_diagnosis.contracts import (
     AgentTrace,
+    DiagnosisStatus,
     EventKind,
     InterventionKind,
     Observation,
@@ -390,4 +391,241 @@ def diagnose_captured_addition_development(
         baseline_run=baseline,
         source_capture_sha256=capture.capture_sha256,
         policy_result=policy,
+    )
+
+
+@dataclass(frozen=True)
+class CandidateDevelopmentCase:
+    """One separately captured development case, not fresh inference."""
+
+    case_id: str
+    request: ModelRequest
+    capture: ModelCapture
+    left: int
+    right: int
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.case_id) is not str
+            or re.fullmatch(
+                r"[a-z][a-z0-9_-]{0,11}",
+                self.case_id,
+            ) is None
+        ):
+            raise ContractError("invalid candidate case_id")
+
+
+@dataclass(frozen=True)
+class CandidateDevelopmentOutcome:
+    case_id: str
+    baseline_run: CapturedAdditionRun
+    candidate_run: CounterfactualAdditionRun
+
+    @property
+    def preserves_success(self) -> bool:
+        if not self.baseline_run.passed:
+            return True
+
+        return (
+            self.candidate_run.passed
+            and self.baseline_run.selected_tool
+            == self.candidate_run.selected_tool
+            and self.baseline_run.arguments
+            == self.candidate_run.arguments
+            and self.baseline_run.output
+            == self.candidate_run.output
+        )
+
+    @property
+    def improves_failure(self) -> bool:
+        return (
+            not self.baseline_run.passed
+            and self.candidate_run.passed
+        )
+
+
+@dataclass(frozen=True)
+class CandidateDevelopmentEvaluation:
+    """Cross-case development regression, not independent verification."""
+
+    diagnosis_baseline_evidence_sha256: str
+    diagnosed_hypothesis_key: str
+    intervention: InterventionKind
+    outcomes: tuple[CandidateDevelopmentOutcome, ...]
+
+    @property
+    def passed(self) -> bool:
+        return (
+            any(item.improves_failure for item in self.outcomes)
+            and any(item.baseline_run.passed for item in self.outcomes)
+            and all(
+                item.candidate_run.passed and item.preserves_success
+                for item in self.outcomes
+            )
+        )
+
+    @property
+    def evidence_sha256(self) -> str:
+        return canonical_sha256({
+            "record_type": "CandidateDevelopmentEvaluation",
+            "schema_version": 1,
+            "diagnosis_baseline_evidence_sha256":
+                self.diagnosis_baseline_evidence_sha256,
+            "diagnosed_hypothesis_key":
+                self.diagnosed_hypothesis_key,
+            "intervention": self.intervention.value,
+            "outcomes": [
+                {
+                    "case_id": item.case_id,
+                    "baseline_sha256":
+                        item.baseline_run.execution_evidence_sha256,
+                    "candidate_sha256":
+                        item.candidate_run.execution_evidence_sha256,
+                    "preserves_success": item.preserves_success,
+                    "improves_failure": item.improves_failure,
+                }
+                for item in self.outcomes
+            ],
+        })
+
+    @property
+    def limitations(self) -> tuple[str, ...]:
+        return (
+            "cases are selected development observations",
+            "counterfactual execution does not modify the model",
+            "previously captured model outputs are replayed",
+            "cross-case regression is not independent scientific verification",
+            "a passing gate does not authorize deployment",
+        )
+
+
+def evaluate_diagnosed_candidate_development(
+    *,
+    diagnosis: ModelActionDiagnosisDevelopmentResult,
+    cases: tuple[CandidateDevelopmentCase, ...],
+) -> CandidateDevelopmentEvaluation:
+    """Evaluate one diagnosed intervention on distinct captured cases.
+
+    Requires at least one previously failing case and one passing
+    control. Never re-infers model outputs or modifies source captures.
+    The result is a development regression gate only.
+    """
+    if not isinstance(
+        diagnosis, ModelActionDiagnosisDevelopmentResult
+    ):
+        raise ContractError("invalid candidate diagnosis")
+
+    policy = diagnosis.policy_result
+
+    if (
+        policy.policy_status is not DiagnosisStatus.DIAGNOSED
+        or diagnosis.baseline_run.passed
+        or diagnosis.source_capture_sha256
+        != diagnosis.baseline_run.capture_sha256
+    ):
+        raise ContractError(
+            "candidate evaluation requires a failed, diagnosed baseline"
+        )
+
+    mapping = {
+        "tool_selection_fault": InterventionKind.REPLACE_TOOL,
+        "parameter_transformation_fault":
+            InterventionKind.OVERRIDE_PARAMETER,
+    }
+
+    intervention = mapping.get(policy.diagnosed_hypothesis_key)
+    if intervention is None:
+        raise ContractError("unsupported diagnosis for candidate evaluation")
+
+    if (
+        not policy.observations
+        or len(policy.observations) != len(policy.diagnostic_runs)
+    ):
+        raise ContractError("missing diagnostic execution evidence")
+
+    for observation, run in zip(
+        policy.observations,
+        policy.diagnostic_runs,
+    ):
+        if (
+            observation.evidence_sha256
+            != run.execution_evidence_sha256
+        ):
+            raise ContractError("diagnostic evidence mismatch")
+
+    if type(cases) is not tuple or not 2 <= len(cases) <= 4:
+        raise ContractError("candidate evaluation requires 2-4 cases")
+
+    seen_ids = set()
+    seen_requests = set()
+    outcomes = []
+
+    for index, case in enumerate(cases):
+        if not isinstance(case, CandidateDevelopmentCase):
+            raise ContractError("invalid candidate case")
+
+        if case.case_id in seen_ids:
+            raise ContractError("duplicate candidate case_id")
+        seen_ids.add(case.case_id)
+
+        if (
+            case.request.request_sha256 in seen_requests
+            or case.request.request_sha256
+            == diagnosis.baseline_run.request_sha256
+        ):
+            raise ContractError(
+                "candidate cases must use distinct model requests"
+            )
+        seen_requests.add(case.request.request_sha256)
+
+        baseline = run_captured_addition_agent(
+            request=case.request,
+            capture=case.capture,
+            run_id=f"a59d-{index}-baseline",
+            left=case.left,
+            right=case.right,
+        )
+
+        candidate = _execute_counterfactual(
+            request=case.request,
+            capture=case.capture,
+            run_id=f"a59d-{index}-candidate",
+            left=case.left,
+            right=case.right,
+            intervention=intervention,
+        )
+
+        if (
+            baseline.request_sha256
+            != candidate.source_request_sha256
+            or baseline.capture_sha256
+            != candidate.source_capture_sha256
+            or baseline.proposal_sha256
+            != candidate.source_proposal_sha256
+        ):
+            raise ContractError("candidate source evidence mismatch")
+
+        outcomes.append(
+            CandidateDevelopmentOutcome(
+                case_id=case.case_id,
+                baseline_run=baseline,
+                candidate_run=candidate,
+            )
+        )
+
+    if not (
+        any(item.baseline_run.passed for item in outcomes)
+        and any(not item.baseline_run.passed for item in outcomes)
+    ):
+        raise ContractError(
+            "candidate evaluation requires failing and passing controls"
+        )
+
+    return CandidateDevelopmentEvaluation(
+        diagnosis_baseline_evidence_sha256=(
+            diagnosis.baseline_run.execution_evidence_sha256
+        ),
+        diagnosed_hypothesis_key=policy.diagnosed_hypothesis_key,
+        intervention=intervention,
+        outcomes=tuple(outcomes),
     )
