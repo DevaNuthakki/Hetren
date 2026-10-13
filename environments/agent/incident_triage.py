@@ -548,3 +548,71 @@ __all__ = [
     "expected_incident_ids",
     "run_incident_triage",
 ]
+
+
+def incident_triage_task_spec(
+) -> tuple[str, int, tuple[tuple[str, str, int], ...]]:
+    """Return the immutable synthetic task specification.
+
+    This development fixture must not be represented as production
+    incident data or an independent evaluation dataset.
+    """
+    return _TARGET_SERVICE, _EXPECTED_THRESHOLD, _INCIDENTS
+
+
+def run_configured_incident_triage(
+    *,
+    tool_name: str,
+    threshold: int,
+    run_id: str,
+) -> IncidentTriageRun:
+    """Execute a validated tool choice using the existing environment.
+
+    Unlike run_incident_triage(), the caller supplies the selected
+    action. This function does not synthesize a fault mode.
+    """
+    allowed = (
+        "inclusive_severity_filter",
+        "strict_severity_filter",
+    )
+
+    if type(tool_name) is not str or tool_name not in allowed:
+        raise ContractError("unsupported configured severity tool")
+
+    max_severity = max(row[2] for row in _INCIDENTS)
+
+    if (
+        type(threshold) is not int
+        or threshold < 0
+        or threshold > max_severity
+    ):
+        raise ContractError("invalid configured severity threshold")
+
+    if (
+        type(run_id) is not str
+        or not run_id.strip()
+        or len(run_id) > 64
+    ):
+        raise ContractError("invalid configured run_id")
+
+    service_rows, selected, report = _execute_workflow(
+        tool_name,
+        threshold,
+    )
+
+    trace = _build_trace(
+        run_id=run_id,
+        tool_name=tool_name,
+        threshold=threshold,
+        service_rows=service_rows,
+        selected=selected,
+        report=report,
+    )
+
+    return IncidentTriageRun(
+        run_id=run_id,
+        selected_filter_tool=tool_name,
+        threshold=threshold,
+        report=report,
+        trace=trace,
+    )
