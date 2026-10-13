@@ -27,6 +27,11 @@ from packages.core.hetren_diagnosis.contracts import (
     TraceEvent,
     canonical_sha256,
 )
+from packages.openai_responses import (
+    OpenAIResponsesResult,
+    Transport,
+    call_openai_responses,
+)
 from packages.model_capture import (
     ModelCapture,
     ModelRequest,
@@ -299,4 +304,54 @@ def run_captured_incident_triage(
         threshold=threshold,
         environment_run=environment_run,
         trace=trace,
+    )
+
+
+@dataclass(frozen=True)
+class InjectedOpenAIIncidentExecution:
+    """Offline provider-shaped response and its local incident execution."""
+
+    provider_result: OpenAIResponsesResult
+    agent_run: CapturedIncidentTriageRun
+
+
+def run_injected_openai_incident_triage(
+    *,
+    model: str,
+    run_id: str,
+    api_key: str,
+    transport: Transport,
+) -> InjectedOpenAIIncidentExecution:
+    """Use an explicit injected transport; never fall back to live HTTPS.
+
+    Offline transports return provider-shaped bytes for testing the real
+    Responses parsing, capture validation, and local tool execution path.
+    This is not a claim that a provider produced those bytes in reality.
+    """
+    if not callable(transport):
+        raise ContractError("injected transport is required")
+
+    # Validate run identity BEFORE invoking even the injected transport.
+    if (
+        type(run_id) is not str
+        or re.fullmatch(
+            r"[A-Za-z0-9][A-Za-z0-9_.-]{0,47}", run_id
+        ) is None
+    ):
+        raise ContractError("invalid model incident run_id")
+
+    request = build_incident_triage_request(model=model)
+    provider_result = call_openai_responses(
+        request=request,
+        api_key=api_key,
+        transport=transport,
+    )
+    agent_run = run_captured_incident_triage(
+        request=request,
+        capture=provider_result.capture,
+        run_id=run_id,
+    )
+    return InjectedOpenAIIncidentExecution(
+        provider_result=provider_result,
+        agent_run=agent_run,
     )
