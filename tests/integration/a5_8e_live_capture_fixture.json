@@ -1,0 +1,89 @@
+{
+  "capture": {
+    "capture_sha256": "0dafc9f8c0f5d5260d37eb2a3225a3d3fb9450b382ab354e9133db8d73de6ebe",
+    "limitations": [
+      "capture does not prove provider identity",
+      "capture does not prove model-response correctness",
+      "capture contains no authorization decision",
+      "replay is not a fresh model inference"
+    ],
+    "model": "gpt-5-mini",
+    "normalized_response": {
+      "a": 3,
+      "b": 4,
+      "tool": "add_ints"
+    },
+    "normalizer_id": "openai-responses-structured-output",
+    "normalizer_version": "1",
+    "provider": "openai",
+    "raw_response_text": "{\"a\":3,\"b\":4,\"tool\":\"add_ints\"}",
+    "request_sha256": "2de74c6234f15df5ee23a8132933cab944801b1f90a85129fab2a9f2477ae195"
+  },
+  "claims": {
+    "deployment_authorized": false,
+    "independent_scientific_evaluation": false,
+    "statistical_generalization_established": false
+  },
+  "execution": {
+    "arguments": [
+      3,
+      4
+    ],
+    "execution_evidence_sha256": "f7facc19e08f178a64e6c64a0df8cab546b07989fc36c956ffd215e5bef46437",
+    "expected_output": 7,
+    "output": 7,
+    "run_id": "a58e-live-001",
+    "selected_tool": "add_ints",
+    "status": "executed",
+    "task_passed": true,
+    "trace": {
+      "events": [
+        {
+          "component": "model_capture",
+          "input_sha256": "7ff4ca35fb35460b67d88872b13e77dca897dc8415e770bc0489ad7ef0d19ea8",
+          "kind": "decision",
+          "operation": "propose_tool",
+          "output_sha256": "a142882ef2da5f5998e5806bce42e7934a39d69d654803cccd8b8b27c55e7148",
+          "sequence": 0,
+          "state_after_sha256": "8362b6d6dca04529217a29713e8842ce7627ba3ada374e4ca32be436d65c1d34",
+          "state_before_sha256": "89de03ed840925ece73c6e276029bd3ba642b630a85f40351b5040963eb311e3"
+        },
+        {
+          "component": "add_ints",
+          "input_sha256": "598355a25bccdfd81714fc353d7675c02a9f350aa00a477373bbdb2b165e86bd",
+          "kind": "tool_call",
+          "operation": "invoke",
+          "output_sha256": "8916318a666e9f37d9ce1e86f282a2a15d8233325a0385db0ea52a4677f637c9",
+          "sequence": 1,
+          "state_after_sha256": "8a5eacd54038845a7a922ff77ed0f59375f8c9a59dddad9399fff63e01e20d2a",
+          "state_before_sha256": "8362b6d6dca04529217a29713e8842ce7627ba3ada374e4ca32be436d65c1d34"
+        },
+        {
+          "component": "evaluator",
+          "input_sha256": "8916318a666e9f37d9ce1e86f282a2a15d8233325a0385db0ea52a4677f637c9",
+          "kind": "termination",
+          "operation": "evaluate_addition",
+          "output_sha256": "f0bb5762a0f35c7a0ce10a8fe3fca73abe57cd5f174177ef0228678a63d092f2",
+          "sequence": 2,
+          "state_after_sha256": "8000e3f49936b2f24417246f89631dd6c1c089b46de7d61b2af5343a13991c10",
+          "state_before_sha256": "8a5eacd54038845a7a922ff77ed0f59375f8c9a59dddad9399fff63e01e20d2a"
+        }
+      ],
+      "run_id": "a58e-live-001"
+    }
+  },
+  "provenance": {
+    "provider_reported_input_tokens": 123,
+    "provider_reported_model": "gpt-5-mini-2025-08-07",
+    "provider_reported_output_tokens": 147,
+    "source_artifact_sha256": "323bc982b0b335efa2c061378763961bb4524be12ff351de175cc1e9d653f4e0"
+  },
+  "request": {
+    "left": 3,
+    "model": "gpt-5-mini",
+    "request_sha256": "2de74c6234f15df5ee23a8132933cab944801b1f90a85129fab2a9f2477ae195",
+    "right": 4
+  },
+  "schema": "hetren.dev.a5-8f-live-replay.v1",
+  "source_type": "single_live_provider_observation"
+}
