@@ -200,37 +200,12 @@ def _execute_workflow(
     tuple[tuple[str, str, int], ...],
     TriageReport,
 ]:
-    service_rows = tuple(
-        row
-        for row in _INCIDENTS
-        if row[1] == _TARGET_SERVICE
+    service_rows, selected = filter_incident_rows(
+        records=_INCIDENTS,
+        target_service=_TARGET_SERVICE,
+        tool_name=tool_name,
+        threshold=threshold,
     )
-
-    if (
-        tool_name
-        == "inclusive_severity_filter"
-    ):
-        selected = tuple(
-            row
-            for row in service_rows
-            if row[2] >= threshold
-        )
-
-    elif (
-        tool_name
-        == "strict_severity_filter"
-    ):
-        selected = tuple(
-            row
-            for row in service_rows
-            if row[2] > threshold
-        )
-
-    else:
-        raise ContractError(
-            "unknown severity filter tool: "
-            f"{tool_name}"
-        )
 
     ids = tuple(
         row[0]
@@ -616,3 +591,75 @@ def run_configured_incident_triage(
         report=report,
         trace=trace,
     )
+
+
+def filter_incident_rows(
+    *,
+    records: tuple[tuple[str, str, int], ...],
+    target_service: str,
+    tool_name: str,
+    threshold: int,
+) -> tuple[
+    tuple[tuple[str, str, int], ...],
+    tuple[tuple[str, str, int], ...],
+]:
+    """Execute the shared, allowlisted incident-filter operations.
+
+    Both the legacy incident environment and new development
+    scenarios execute these same filtering semantics.
+
+    This function performs local filtering only. It does not
+    compute the task's expected answer or evaluation verdict.
+    """
+    if type(records) is not tuple:
+        raise ContractError("incident records must be a tuple")
+
+    if (
+        type(target_service) is not str
+        or not target_service
+    ):
+        raise ContractError("invalid target service")
+
+    if (
+        type(tool_name) is not str
+        or tool_name not in (
+            "inclusive_severity_filter",
+            "strict_severity_filter",
+        )
+    ):
+        raise ContractError(
+            "unknown severity filter tool: "
+            f"{tool_name}"
+        )
+
+    if type(threshold) is not int or threshold < 0:
+        raise ContractError("invalid severity threshold")
+
+    for row in records:
+        if (
+            type(row) is not tuple
+            or len(row) != 3
+            or type(row[0]) is not str
+            or type(row[1]) is not str
+            or type(row[2]) is not int
+            or row[2] < 0
+        ):
+            raise ContractError("invalid incident record")
+
+    service_rows = tuple(
+        row for row in records
+        if row[1] == target_service
+    )
+
+    if tool_name == "inclusive_severity_filter":
+        selected = tuple(
+            row for row in service_rows
+            if row[2] >= threshold
+        )
+    else:
+        selected = tuple(
+            row for row in service_rows
+            if row[2] > threshold
+        )
+
+    return service_rows, selected
