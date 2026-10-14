@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import json
+import re
 from typing import Callable
 
 from packages.contracts import ContractError
@@ -111,6 +112,55 @@ class RecoveryAttempt:
 
 
 @dataclass(frozen=True)
+class CaptureSourceInterruption:
+    """Immutable evidence for a pending capture call that did not complete.
+
+    Never contains exception messages, credentials or fabricated tool results.
+    An interrupted capture is NOT an executed or counted model action.
+    """
+    workflow_before_sha256: str
+    pending_request_sha256: str
+    attempt_number: int
+    prior_success_observation_sha256: str | None
+    prior_failure_sha256: str | None
+    origin: str = "capture_source_exception"
+
+    def __post_init__(self) -> None:
+        if type(self.attempt_number) is not int or not 1 <= self.attempt_number <= 12:
+            raise ContractError("invalid interrupted attempt number")
+        if self.origin != "capture_source_exception":
+            raise ContractError("invalid interruption origin")
+        for name in ("workflow_before_sha256", "pending_request_sha256"):
+            value = getattr(self, name)
+            if type(value) is not str or re.fullmatch(r"[0-9a-f]{64}", value) is None:
+                raise ContractError("invalid required interruption fingerprint")
+        for name in ("prior_success_observation_sha256", "prior_failure_sha256"):
+            value = getattr(self, name)
+            if value is not None and (
+                type(value) is not str
+                or re.fullmatch(r"[0-9a-f]{64}", value) is None
+            ):
+                raise ContractError("invalid optional interruption fingerprint")
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "record_type": "CaptureSourceInterruption",
+            "schema_version": 1,
+            "development_only": True,
+            "workflow_before_sha256": self.workflow_before_sha256,
+            "pending_request_sha256": self.pending_request_sha256,
+            "attempt_number": self.attempt_number,
+            "prior_success_observation_sha256": self.prior_success_observation_sha256,
+            "prior_failure_sha256": self.prior_failure_sha256,
+            "origin": self.origin,
+        }
+
+    @property
+    def interruption_evidence_sha256(self) -> str:
+        return canonical_sha256(self.canonical_payload())
+
+
+@dataclass(frozen=True)
 class ResilientMultistepIncidentRun:
     state: IncidentWorkflowState
     attempts: tuple[RecoveryAttempt, ...]
@@ -118,6 +168,27 @@ class ResilientMultistepIncidentRun:
     termination_reason: str | None
     max_attempts: int
     max_recoveries: int
+    interruption: CaptureSourceInterruption | None = None
+
+    def __post_init__(self) -> None:
+        interrupted = self.status == "interrupted"
+        if interrupted != (self.interruption is not None):
+            raise ContractError("interruption status requires matching evidence")
+        if self.interruption is not None:
+            evidence = self.interruption
+            previous = self.state.steps[-1].observation if self.state.steps else None
+            previous_sha = None if previous is None else previous.observation_sha256
+            last_fault = self.attempts[-1].injected_failure if self.attempts else None
+            failure_sha = None if last_fault is None else last_fault.observation_sha256
+            if (
+                self.termination_reason != "capture_source_interrupted"
+                or self.state.completed
+                or evidence.workflow_before_sha256 != self.state.execution_evidence_sha256
+                or evidence.attempt_number != len(self.attempts) + 1
+                or evidence.prior_success_observation_sha256 != previous_sha
+                or evidence.prior_failure_sha256 != failure_sha
+            ):
+                raise ContractError("inconsistent partial-run interruption evidence")
 
     @property
     def passed(self) -> bool:
@@ -132,7 +203,7 @@ class ResilientMultistepIncidentRun:
 
     @property
     def execution_evidence_sha256(self) -> str:
-        return canonical_sha256({
+        payload = {
             "record_type": "ResilientMultistepIncidentRun",
             "schema_version": 1,
             "development_only": True,
@@ -145,7 +216,12 @@ class ResilientMultistepIncidentRun:
                 item.attempt_evidence_sha256 for item in self.attempts
             ],
             "passed": self.passed,
-        })
+        }
+        if self.interruption is not None:
+            payload["capture_interruption_sha256"] = (
+                self.interruption.interruption_evidence_sha256
+            )
+        return canonical_sha256(payload)
 
     @property
     def limitations(self) -> tuple[str, ...]:
@@ -230,11 +306,14 @@ def run_resilient_multistep_incident(
     last_failed_action: IncidentWorkflowAction | None = None
     failure_count = 0
 
-    def result(status: str, reason: str | None = None) -> ResilientMultistepIncidentRun:
+    def result(
+        status: str, reason: str | None = None,
+        *, interruption: CaptureSourceInterruption | None = None,
+    ) -> ResilientMultistepIncidentRun:
         return ResilientMultistepIncidentRun(
             state=state, attempts=tuple(attempts), status=status,
             termination_reason=reason, max_attempts=max_attempts,
-            max_recoveries=max_recoveries,
+            max_recoveries=max_recoveries, interruption=interruption,
         )
 
     while not state.completed and state.remaining_steps and len(attempts) < max_attempts:
@@ -242,7 +321,31 @@ def run_resilient_multistep_incident(
             scenario=scenario, state=state, model=model,
             prior_failure=pending_failure,
         )
-        capture = capture_source(request)
+        try:
+            capture = capture_source(request)
+        except (ContractError, AssertionError):
+            # Do not turn a violated contract or developer invariant into a
+            # benign provider interruption. Both remain fail-closed.
+            raise
+        except Exception:
+            # Capture-source failure is an interrupted RUN, not a valid action.
+            # Intentionally omit exception messages and secrets from evidence.
+            previous = state.steps[-1].observation if state.steps else None
+            prior_fault = pending_failure
+            return result(
+                "interrupted", "capture_source_interrupted",
+                interruption=CaptureSourceInterruption(
+                    workflow_before_sha256=state.execution_evidence_sha256,
+                    pending_request_sha256=request.request_sha256,
+                    attempt_number=len(attempts) + 1,
+                    prior_success_observation_sha256=(
+                        None if previous is None else previous.observation_sha256
+                    ),
+                    prior_failure_sha256=(
+                        None if prior_fault is None else prior_fault.observation_sha256
+                    ),
+                ),
+            )
         # Cryptographic request binding; mismatched or tampered captures raise.
         proposal = replay_json_capture(request=request, capture=capture)
         before = state.execution_evidence_sha256
