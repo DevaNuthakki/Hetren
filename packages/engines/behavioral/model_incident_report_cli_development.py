@@ -190,6 +190,26 @@ def main(argv: Sequence[str] | None = None) -> int:
         selected = commands.add_parser(command, help="Read an existing report without rerunning controls")
         selected.add_argument("--input", required=True, help=REPORT_PREFIX + "NAME.json")
         selected.add_argument("--sha256", default=None, help="Externally trusted document SHA-256")
+    paired_generate = commands.add_parser(
+        "generate-pair",
+        help="Run offline controls and publish a replay-verifiable evidence pair",
+    )
+    paired_generate.add_argument(
+        "--output", required=True, help=REPORT_PREFIX + "NAME.json",
+    )
+    paired_verify = commands.add_parser(
+        "verify-pair",
+        help="Verify a completed evidence pair without rerunning controls",
+    )
+    paired_verify.add_argument(
+        "--input", required=True, help=REPORT_PREFIX + "NAME.json",
+    )
+    for part in ("marker", "report", "source"):
+        paired_verify.add_argument(
+            f"--{part}-sha256",
+            default=None,
+            help=f"Externally trusted {part} SHA-256",
+        )
     args = parser.parse_args(argv)
     try:
         if args.command == "generate":
@@ -206,6 +226,53 @@ def main(argv: Sequence[str] | None = None) -> int:
             print("Cases:", verified.case_count)
             print("Correct cases:", verified.correct_count)
             print("Externally anchored:", args.sha256 is not None)
+        elif args.command == "generate-pair":
+            # Lazy import avoids the paired-export module's CLI dependency cycle.
+            from packages.engines.behavioral import (
+                model_incident_paired_export_development as paired_export,
+            )
+            verified = paired_export.export_paired_development_evidence(
+                args.output,
+            )
+            print("EXPORTED: replay-verifiable synthetic evidence pair")
+            print("Report:", args.output)
+            print("Source:", REPORT_PREFIX + verified.source_filename)
+            print("Completion marker:", REPORT_PREFIX + verified.marker_filename)
+            print("Report SHA256:", verified.report_sha256)
+            print("Source SHA256:", verified.source_sha256)
+            print("Completion marker SHA256:", verified.marker_sha256)
+            print("Provider authenticated: False")
+        elif args.command == "verify-pair":
+            from packages.engines.behavioral import (
+                model_incident_paired_export_development as paired_export,
+            )
+            verified = paired_export.verify_paired_development_evidence(
+                args.input,
+                expected_marker_sha256=args.marker_sha256,
+                expected_report_sha256=args.report_sha256,
+                expected_source_sha256=args.source_sha256,
+            )
+            print(
+                "SOURCE REPLAY PASS: synthetic development evidence pair "
+                "(not provider authentication)"
+            )
+            print("Report SHA256:", verified.report_sha256)
+            print("Source SHA256:", verified.source_sha256)
+            print("Completion marker SHA256:", verified.marker_sha256)
+            print("Cases:", verified.case_count)
+            print("Correct cases:", verified.correct_count)
+            print("Provider authenticated: False")
+            print(
+                "Externally anchored:",
+                any(
+                    value is not None
+                    for value in (
+                        args.marker_sha256,
+                        args.report_sha256,
+                        args.source_sha256,
+                    )
+                ),
+            )
         else:
             inspection = inspect_development_report_file(
                 args.input, trusted_sha256=args.sha256,
