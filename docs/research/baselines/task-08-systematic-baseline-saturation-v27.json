@@ -1,0 +1,177 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 27,
+  "state": "SATURATION_V27_FOUND_NEW_DIRECT_MEMORY_COMPARATOR",
+  "recorded_at_utc": "2026-09-26T21:39:21Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "scope_definition": {
+    "environment": "E1_AGENT",
+    "role": "DIRECT_LONG_TERM_AGENT_MEMORY_COMPARATOR",
+    "applicability_tuple": "Agent experiment materially depends on external long-term memory over prior interactions or trajectories, with comparable memory input, retrieval opportunity, evaluator, and downstream decision context.",
+    "non_applicable_examples": [
+      "Pure stateless agent experiment",
+      "Memory-free tool-policy comparison",
+      "E2 structured-data ML without agent memory",
+      "E3 vision adaptation without agent memory"
+    ]
+  },
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v29_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v29.json",
+      "sha256": "bc165832d2515a763714d9a65aeac09c14ac09f8f0debf4c797b3dcc01d8bf76"
+    },
+    "systematic_saturation_v26": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+      "sha256": "7860cd07d24bddcd489e265cd2157c2fb5ec1941e49440ea208dc56d3ea36163"
+    }
+  },
+  "queries_executed": [
+    "ACL 2026 agent memory episodic semantic official code",
+    "ACL 2026 long term memory LLM agents LoCoMo github",
+    "NeurIPS 2025 agentic memory LLM official implementation",
+    "EMNLP 2025 agent memory MemoryOS official code",
+    "SYNAPSE episodic semantic memory ACL 2026 github",
+    "HeLa-Mem ACL 2026 github license",
+    "Memory-R1 ACL 2026 github implementation",
+    "adaptive memory multi agent collaboration ACL 2026 code",
+    "long term agent memory benchmark LongMemEval 2026 github",
+    "self evolving agent hierarchical memory ACL 2026 github",
+    "agent memory experience following ACL 2026",
+    "direct memory comparator LLM agents 2026 executable"
+  ],
+  "query_count": 12,
+  "preexisting_or_duplicate": [],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SYNAPSE-MEMORY",
+      "name": "SYNAPSE: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DIRECT_AGENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_NON_PARAMETER_UPDATING_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_MIT_CLEAN_ROOM_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1108/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION_CLEAN_ROOM_RELEASE",
+          "url": "https://github.com/hq0709/synapse"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_TERM_EPISODIC_SEMANTIC_MEMORY_ROLE_AND_INFORMATION_ACCESS_MATCH",
+      "material_reason": "Uses a unified episodic-semantic graph with spreading activation, temporal decay, lateral inhibition, and hybrid retrieval, providing a materially distinct direct long-term-memory mechanism.",
+      "limits": [
+        "PUBLIC_IMPLEMENTATION_IS_DESCRIBED_AS_A_CLEAN_ROOM_RELEASE",
+        "REPOSITORY_NOTES_REPRODUCED_NUMBERS_MAY_DIFFER_FROM_CAMERA_READY_RESULTS",
+        "FINAL_BASELINE_IDENTITY_MUST_BIND_THE_EXACT_REPOSITORY_REVISION",
+        "LOCOMO_STYLE_LONG_TERM_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "EMBEDDING_LLM_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "HeLa-Mem",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.625/",
+        "https://github.com/ReinerBRO/HeLa-Mem"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_AND_PUBLIC_EXECUTABLE_CODE_WITHOUT_VERIFIED_EXPLICIT_LICENSE",
+      "relevance": "Direct long-term memory comparator using episodic and semantic memory with Hebbian-style association.",
+      "disposition": "NOT_PROMOTED_LICENSE_GATE_REMAINS_UNRESOLVED",
+      "reason": "Executable public code is verifiable, but no explicit LICENSE file or license declaration was verified in the repository during this bounded review."
+    },
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_WITH_PUBLIC_REPOSITORY_BUT_EXECUTABLE_CODE_NOT_RELEASED",
+      "relevance": "RL-trained memory manager and answer agent provide a highly direct learned-memory comparison.",
+      "disposition": "NOT_PROMOTED_EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The public repository explicitly states that code is coming soon and does not currently provide the required executable research implementation."
+    },
+    {
+      "name": "MUSE",
+      "sources": [
+        "https://arxiv.org/abs/2510.08002",
+        "https://github.com/KnowledgeXLab/MUSE"
+      ],
+      "evidence_state": "PUBLIC_RESEARCH_WITH_EXECUTABLE_MIT_IMPLEMENTATION",
+      "relevance": "Uses hierarchical memory and interaction reflection to improve long-horizon agent behavior over time.",
+      "disposition": "ADJACENT_SELF_EVOLVING_AGENT_REFERENCE_NOT_DIRECT_MEMORY_COMPONENT_COMPARATOR_THIS_ROUND",
+      "reason": "Its principal comparison object is the full self-evolving long-horizon agent rather than a direct memory subsystem under the current bounded memory-comparator tuple."
+    },
+    {
+      "name": "LongMemEval-V2",
+      "sources": [
+        "https://github.com/xiaowu0162/LongMemEval-V2"
+      ],
+      "evidence_state": "PUBLIC_BENCHMARK_AND_EVALUATION_HARNESS",
+      "relevance": "Provides long-term agent-memory evaluation infrastructure and reported memory baselines.",
+      "disposition": "BENCHMARK_SOURCE_NOT_A_NEW_STANDALONE_BASELINE_IDENTITY",
+      "reason": "Evaluation infrastructure and bundled reference baselines do not by themselves define a new claim-bearing comparator identity."
+    },
+    {
+      "name": "How Memory Management Impacts LLM Agents",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.27/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_EMPIRICAL_STUDY",
+      "relevance": "Identifies memory error propagation and misaligned experience replay as material agent-memory failure modes.",
+      "disposition": "METHODOLOGY_AND_FAILURE_MODE_REFERENCE_NOT_STANDALONE_BASELINE",
+      "reason": "The work is primarily an empirical analysis of memory-management behavior rather than a new standalone comparator implementation."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_methods_are_within_e1": true,
+    "forcing_memory_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V27"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "SYNAPSE is materially distinct and was not previously promoted, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "synapse_is_automatically_strongest": false,
+    "clean_room_implementation_is_identical_to_camera_ready_code": false,
+    "hela_mem_is_license_cleared": false,
+    "memory_r1_has_executable_code": false,
+    "memory_methods_establish_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B32_VERIFY_ADDENDUM_V30_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 2,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:26:33Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v1": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v1.json",
+      "sha256": "f0976fbb139bfdc2e2c1db888bc4e77cf2700bc8a7d786b92b318ba9b4a8f36b"
+    },
+    "refinement_v3": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v3.json",
+      "sha256": "2271a5fe745712a12b10e96c15ee62be59308bd9dc58c453ea44604c5ed3ba2a"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E3-UHERDING",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Uncertainty Herding",
+      "implementation_identity": "https://github.com/BorealisAI/uherding",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ACTIVE_LEARNING_COMPARATOR_CANDIDATE",
+        "N_H1_BUDGET_ROBUST_ACQUISITION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/0302fb83c62991efbccf0a003e4f5a92-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BorealisAI/uherding"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_CANDIDATE_PENDING_MATCHED_TASK_AND_STRENGTH_REVIEW",
+        "Unlike low-budget-only methods, the published method explicitly targets performance across low and high label-budget regimes."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_CANDIDATE_PENDING_MATCHED_TASK_AND_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-TTT-ICL-TABPFN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Test-Time Training for In-Context Learning / TabPFN empirical instantiation",
+      "implementation_identity": "OFFICIAL_IMPLEMENTATION_NOT_LOCATED",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_TEST_TIME_TRAINING_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/gozeten25a.html"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "BLOCKED_PENDING_REPRODUCIBLE_IMPLEMENTATION_AND_EXACT_INFORMATION_PARITY_REVIEW",
+        "The paper empirically applies gradient-based test-time training to TabPFN, making it relevant to structured-ML adaptation when the experiment surface matches."
+      ],
+      "eligibility_status": "BLOCKED_PENDING_REPRODUCIBLE_IMPLEMENTATION_AND_EXACT_INFORMATION_PARITY_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

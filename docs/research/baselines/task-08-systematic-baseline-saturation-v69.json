@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 69,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "state": "DISPLACEMENT_ONLY_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T03:54:08Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "dynamic_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v71_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v71.json",
+      "sha256": "01e41cfe90fcd9986f24eed763eaf4db03f1d40859e3cba95cab3139e2b0b67c"
+    },
+    "systematic_saturation_v68": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v68.json",
+      "sha256": "a957f842f24d4f414deec287ef7980ebd94cdb07f6d5f89940b7e497d26566b5"
+    }
+  },
+  "queries_executed": [
+    "\"AtomicVLA\" vision language action 2026 paper github",
+    "\"AtomicVLA\" CVPR 2026 official implementation",
+    "\"BehaviorVLA\" ICML 2026 official implementation",
+    "\"From Abstraction to Instantiation\" \"ICML 2026\"",
+    "\"EventVLA\" long-horizon vision-language-action github",
+    "\"EventVLA\" \"CoRL 2026\"",
+    "2026 long-horizon VLA behavioral representation official code",
+    "2026 non-Markovian VLA memory long-horizon manipulation official code",
+    "2026 vision-language-action distribution shift behavior representation",
+    "2026 vision-language-action event-driven visual memory manipulation",
+    "\"LaMem-VLA\" github",
+    "\"Dual Latent Memory\" vision-language-action code"
+  ],
+  "query_count": 12,
+  "displacement_proposal_count": 2,
+  "displacement_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+      "name": "BehaviorVLA: From Abstraction to Instantiation",
+      "disposition": "PREEXISTING_OR_ALIAS_MATCH_NOT_RECOUNTED",
+      "id_already_present": true,
+      "prior_identity_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+          "name": "BehaviorVLA: From Abstraction to Instantiation",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v69.json"
+        }
+      ],
+      "material_reason": "BehaviorVLA learns a temporally coherent behavior representation and dynamically aligns task-level behavior priors with the current execution phase, making it a direct displacement candidate for matched long-horizon/generalization VLA experiments.",
+      "role_limit": "It is not automatically a direct replacement for AtomicVLA when the experiment specifically tests continual addition of new atomic skills."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "name": "EventVLA: Event-Driven Visual Evidence Memory for Long-Horizon Vision-Language-Action Policies",
+      "disposition": "PREEXISTING_OR_ALIAS_MATCH_NOT_RECOUNTED",
+      "id_already_present": true,
+      "prior_identity_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-EVENTVLA",
+          "name": "EventVLA",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v68.json"
+        }
+      ],
+      "material_reason": "EventVLA uses event-driven sparse visual evidence memory for non-Markovian long-horizon manipulation and provides executable training and evaluation infrastructure, making it a plausible displacer of retained memory-dependent VLA comparators.",
+      "role_limit": "Its direct role is memory-dependent long-horizon manipulation, not AtomicVLA's exact continual atomic-skill acquisition contract."
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "LaMem-VLA",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2607.07608"
+        },
+        {
+          "class": "PUBLIC_PROJECT_REPOSITORY",
+          "url": "https://github.com/quhongyu/LaMem-VLA"
+        }
+      ],
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The public repository states that code will be released later, so this review does not promote LaMem-VLA as a reproducible displacement baseline."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_generalization_or_memory_references_exist": true,
+    "forcing_within_e1_evidence_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_DISPLACEMENT_SATURATION_V69"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "No genuinely new role-matched displacement candidate survived dynamic prior-identity resolution. This is the first consecutive qualifying no-new-material round."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "conference_or_acceptance_status_alone_establishes_displacement": false,
+    "behaviorvla_establishes_general_n_h2": false,
+    "eventvla_establishes_general_n_h2": false,
+    "eventvla_is_atomicvla_continual_skill_equivalent": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B74_SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_CONFIRMATION"
+}

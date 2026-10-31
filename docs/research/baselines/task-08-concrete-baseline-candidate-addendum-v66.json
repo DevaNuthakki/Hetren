@@ -1,0 +1,240 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 66,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T03:15:23Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v65": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v65.json",
+      "sha256": "790062c2253624fc960bb4debf6a5c93c4c6a8f3a68740083ad8ae19028de05a"
+    },
+    "systematic_saturation_v63": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v63.json",
+      "sha256": "ecceb4fc41a05554e9b34e24b582b9f0571485c537fd62fb912f7ebd7de67f62"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TRM-VLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TRM-VLA: Temporal-Aware Chain-of-Thought Reasoning and Memorization for Vision-Language-Action Models",
+      "implementation_identity": "https://github.com/Serenos/TRM-VLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TEMPORAL_REASONING_MEMORY_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LONG_HORIZON_REASONING_VLA_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://openaccess.thecvf.com/CVPR2026?day=2026-06-05"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Serenos/TRM-VLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "COGACT_BASE_IDENTITY_AND_PRETRAINED_WEIGHTS_MUST_BE BOUND",
+        "KEYFRAME_TRIGGER_POLICY_MUST_BE BOUND",
+        "CONTEXT_MEMORY_GRANULARITY_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "LIBERO_SIMPLER_AND_REAL_ROBOT_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "REASONING_COMPUTE_AND_LATENCY_REQUIRE_RESOURCE_PARITY_REVIEW",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V63"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMORYVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemoryVLA: Perceptual-Cognitive Memory in Vision-Language-Action Models for Robotic Manipulation",
+      "implementation_identity": "https://github.com/shihao1895/MemoryVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HISTORY_AWARE_MEMORY_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LONG_HORIZON_TEMPORAL_POLICY_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=54U3XHf7qq"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.19236"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/shihao1895/MemoryVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MEMORYVLA_AND_MEMORYVLA_PLUS_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "BASE_VLA_AND_DIFFUSION_ACTION_EXPERT_IDENTITY_MUST_BE BOUND",
+        "MEMORY_BANK_CAPACITY_RETRIEVAL_AND_UPDATE_RULES_MUST_BE BOUND",
+        "TRAINING_DATA_AND_HISTORY_INFORMATION_OPPORTUNITY_MUST_BE PARITY_AUDITED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "TRAINED_HISTORY_AWARE_POLICY_IS_NOT_AUTOMATICALLY_A_H1_TEST_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V63"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-CRONUSVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CronusVLA: Towards Efficient and Robust Manipulation via Multi-Frame Vision-Language-Action Modeling",
+      "implementation_identity": "https://github.com/InternRobotics/CronusVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_MULTI_FRAME_TEMPORAL_VLA_DISPLACER_CANDIDATE",
+        "N_H1_ROBUST_TEMPORAL_POLICY_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38903"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/CronusVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MODEL_SCALE_7B_AND_0_5B_MUST_NOT_BE COLLAPSED",
+        "PRETRAIN_POSTTRAIN_AND_TASK_FINETUNE_STAGES_MUST_BE BOUND",
+        "PAST_ACTION_WINDOW_AND_ACTION_CHUNK_CONFIGURATION_MUST_BE BOUND",
+        "SIMPLERENV_LIBERO_AND_REAL_ROBOT_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "HARDWARE_AND_INFERENCE_RATE_REQUIRE_PARITY_REVIEW",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V63"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-HAMLET-VLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "HAMLET: Switch Your Vision-Language-Action Model into a History-Aware Policy",
+      "implementation_identity": "https://github.com/myungkyuKoo/HAMLET-Isaac-GR00T",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HISTORY_AWARE_FINE_TUNED_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LIGHTWEIGHT_TEMPORAL_MEMORY_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=KcJ9U0x6kO"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2510.00695"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://myungkyukoo.github.io/hamlet/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/myungkyuKoo/HAMLET-Isaac-GR00T"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "BASE_GROOT_VERSION_MUST_BE BOUND",
+        "N1_5_AND_N1_6_IMPLEMENTATION_BRANCHES_MUST_NOT_BE COLLAPSED",
+        "MEMORY_WINDOW_AND_STRIDE_MUST_BE BOUND",
+        "ROBOMME_RMBENCH_ROBOCASA_AND_LIBERO_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "HISTORY_AWARE_FINETUNING_IS_NOT_AUTOMATICALLY_A_H1_DEPLOYMENT_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V63"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 38,
+  "state": "ADDENDUM_V38_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T23:21:50Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v38": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v38.json",
+      "sha256": "472817ff6311ca10bc28c097c5463605fa3ffa835c25bbf865b910d8de5fa968"
+    },
+    "systematic_saturation_v35": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v35.json",
+      "sha256": "dc9b89b7518f098348590092493d6eaa23d259906035ab29c76713a3e4d65f06"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+      "verification_state": "ACL_2026_SYSTEM_DEMONSTRATION_AND_OPEN_SOURCE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_STRUCTURED_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Hindsight appears in the ACL 2026 System Demonstrations proceedings.",
+        "It separates long-term memory into world, experience, observation, and opinion networks.",
+        "Its retain, recall, and reflect operations provide explicit ingestion, retrieval, and reasoning interfaces.",
+        "Its retrieval pipeline combines vector search, keyword matching, graph traversal, and temporal filtering.",
+        "The system is released as an open-source implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_SYSTEM_DEMONSTRATION",
+          "url": "https://aclanthology.org/2026.acl-demo.27/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vectorize-io/hindsight"
+        }
+      ],
+      "limits": [
+        "SYSTEM_DEMONSTRATION_EVIDENCE_MUST_NOT_BE_OVERSTATED_AS_A_FULL_MAIN_TRACK_METHOD_PAPER",
+        "MEMORY_BACKEND_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "LONGMEMEVAL_AND_LOCOMO_MEMORY_RESULTS_DO_NOT_BY_THEMSELVES_ESTABLISH_GENERAL_AGENT_DECISION_VALUE",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REME-PROCEDURAL",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_PROCEDURAL_MEMORY_AND_EXPERIENCE_REUSE_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "ReMe is published in Findings of ACL 2026.",
+        "It manages procedural memory through multi-faceted distillation, context-adaptive reuse, and utility-based refinement.",
+        "Its evaluation includes BFCL-V3 and AppWorld agent settings.",
+        "The public AgentScope ReMe implementation exposes procedural, tool, and persistent memory functionality."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "limits": [
+        "BFCL_AND_APPWORLD_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "MEMORY_DISTILLATION_REUSE_AND_REFINEMENT_CONFIGURATION_MUST_BE BOUND",
+        "PUBLIC_REPOSITORY_HEAD_IS_NOT_YET_A_FINAL_IMMUTABLE_VERSION",
+        "WITHIN_E1_EXPERIENCE_REUSE_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v38_candidates_have_role_level_external_review": true,
+    "all_addendum_v38_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "system_demo_is_main_track_method_paper": false,
+    "memory_benchmark_result_establishes_general_agent_intelligence": false,
+    "reme_establishes_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

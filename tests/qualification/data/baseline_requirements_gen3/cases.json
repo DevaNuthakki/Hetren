@@ -1,0 +1,963 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_QUALIFICATION_CASES",
+  "state": "DEVELOPMENT_QUALIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_generation": 3,
+  "target_artifact": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+  "case_source_class": "KNOWN_DEVELOPMENT_CASE",
+  "cases": [
+    {
+      "id": "G3-Q-001",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-001",
+      "requirement_key": "baseline.identity-version",
+      "environment": "CROSS_ENV",
+      "title": "Floating provider alias claimed as immutable",
+      "scenario": "Floating provider alias claimed as immutable",
+      "facts": {
+        "provider_alias": "latest",
+        "backend_revision_known": false,
+        "claims_exact_version_pin": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-001 (baseline.identity-version) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-002",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-001",
+      "requirement_key": "baseline.identity-version",
+      "environment": "CROSS_ENV",
+      "title": "Floating provider uncertainty represented honestly",
+      "scenario": "Floating provider uncertainty represented honestly",
+      "facts": {
+        "provider_alias": "latest",
+        "backend_revision_known": false,
+        "claims_exact_version_pin": false,
+        "revision_state": "UNKNOWN",
+        "reproducibility_limitation_recorded": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-001 (baseline.identity-version) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-003",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-002",
+      "requirement_key": "baseline.pre-protected-binding",
+      "environment": "CROSS_ENV",
+      "title": "Comparator changed after protected outcomes and old evidence rewritten",
+      "scenario": "Comparator changed after protected outcomes and old evidence rewritten",
+      "facts": {
+        "baseline_bound_before_protected": true,
+        "baseline_changed_after_protected": true,
+        "successor_evidence_created": false,
+        "prior_result_preserved": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-002 (baseline.pre-protected-binding) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-004",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-002",
+      "requirement_key": "baseline.pre-protected-binding",
+      "environment": "CROSS_ENV",
+      "title": "Post-protected baseline change creates successor evidence",
+      "scenario": "Post-protected baseline change creates successor evidence",
+      "facts": {
+        "baseline_bound_before_protected": true,
+        "baseline_changed_after_protected": true,
+        "successor_evidence_created": true,
+        "prior_result_preserved": true,
+        "task7_lineage_applied": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-002 (baseline.pre-protected-binding) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-005",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-003",
+      "requirement_key": "baseline.strongest-applicable-selection",
+      "environment": "CROSS_ENV",
+      "title": "Known stronger comparator excluded without governed search provenance",
+      "scenario": "Known stronger comparator excluded without governed search provenance",
+      "facts": {
+        "search_scope_predeclared": false,
+        "search_cutoff_predeclared": false,
+        "stronger_comparator_known": true,
+        "exclusion_reason_preserved": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-003 (baseline.strongest-applicable-selection) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-006",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-003",
+      "requirement_key": "baseline.strongest-applicable-selection",
+      "environment": "CROSS_ENV",
+      "title": "Comparator search scope and exclusions frozen before protected results",
+      "scenario": "Comparator search scope and exclusions frozen before protected results",
+      "facts": {
+        "search_scope_predeclared": true,
+        "search_cutoff_predeclared": true,
+        "material_comparators_preserved": true,
+        "exclusion_reasons_preserved": true,
+        "protected_outcomes_used_for_selection": false
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-003 (baseline.strongest-applicable-selection) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-007",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-004",
+      "requirement_key": "baseline.comparator-role-separation",
+      "environment": "CROSS_ENV",
+      "title": "Diagnostic anchor win presented as strongest-baseline superiority",
+      "scenario": "Diagnostic anchor win presented as strongest-baseline superiority",
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-004 (baseline.comparator-role-separation) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-008",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-004",
+      "requirement_key": "baseline.comparator-role-separation",
+      "environment": "CROSS_ENV",
+      "title": "Diagnostic anchor and claim-bearing comparator reported separately",
+      "scenario": "Diagnostic anchor and claim-bearing comparator reported separately",
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": false,
+        "strongest_comparator_result_preserved": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-004 (baseline.comparator-role-separation) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-009",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-005",
+      "requirement_key": "comparison.information-opportunity-parity",
+      "environment": "E1",
+      "title": "Candidate starts with warm retrieval state while baseline starts cold",
+      "scenario": "Candidate starts with warm retrieval state while baseline starts cold",
+      "facts": {
+        "candidate_retrieval_cache": "WARM",
+        "baseline_retrieval_cache": "COLD",
+        "state_difference_is_treatment": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-005 (comparison.information-opportunity-parity) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-010",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-005",
+      "requirement_key": "comparison.information-opportunity-parity",
+      "environment": "E1",
+      "title": "Persistent information state is matched",
+      "scenario": "Persistent information state is matched",
+      "facts": {
+        "candidate_retrieval_cache": "COLD",
+        "baseline_retrieval_cache": "COLD",
+        "persistent_state_matched": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-005 (comparison.information-opportunity-parity) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-011",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-006",
+      "requirement_key": "comparison.evaluation-parity",
+      "environment": "E1",
+      "title": "Systems evaluated against mutable environment on different days",
+      "scenario": "Systems evaluated against mutable environment on different days",
+      "facts": {
+        "environment_mutable": true,
+        "same_snapshot": false,
+        "paired_execution": false,
+        "controlled_replay": false,
+        "temporal_drift_qualified": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-006 (comparison.evaluation-parity) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-012",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-006",
+      "requirement_key": "comparison.evaluation-parity",
+      "environment": "E1",
+      "title": "Mutable environment controlled through a common snapshot",
+      "scenario": "Mutable environment controlled through a common snapshot",
+      "facts": {
+        "environment_mutable": true,
+        "same_snapshot": true,
+        "paired_execution": false,
+        "temporal_drift_qualified": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-006 (comparison.evaluation-parity) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-013",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-007",
+      "requirement_key": "comparison.declared-asymmetry",
+      "environment": "E1",
+      "title": "Unrelated candidate-only tool advantage labeled as treatment",
+      "scenario": "Unrelated candidate-only tool advantage labeled as treatment",
+      "facts": {
+        "material_asymmetry": true,
+        "asymmetry_predeclared": true,
+        "asymmetry_matches_claimed_treatment": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-007 (comparison.declared-asymmetry) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-014",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-007",
+      "requirement_key": "comparison.declared-asymmetry",
+      "environment": "E1",
+      "title": "Method-specific asymmetry corresponds to the treatment being tested",
+      "scenario": "Method-specific asymmetry corresponds to the treatment being tested",
+      "facts": {
+        "material_asymmetry": true,
+        "asymmetry_predeclared": true,
+        "asymmetry_matches_claimed_treatment": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-007 (comparison.declared-asymmetry) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-015",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-008",
+      "requirement_key": "comparison.tuning-selection-governance",
+      "environment": "CROSS_ENV",
+      "title": "Candidate receives far greater manual tuning opportunity",
+      "scenario": "Candidate receives far greater manual tuning opportunity",
+      "facts": {
+        "candidate_manual_iterations": 40,
+        "baseline_manual_iterations": 2,
+        "asymmetry_scientifically_justified": false,
+        "effort_handoff_to_task9": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-008 (comparison.tuning-selection-governance) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-016",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-008",
+      "requirement_key": "comparison.tuning-selection-governance",
+      "environment": "CROSS_ENV",
+      "title": "Tuning opportunity policy is governed and effort handed to Task 9",
+      "scenario": "Tuning opportunity policy is governed and effort handed to Task 9",
+      "facts": {
+        "candidate_manual_iterations": 20,
+        "baseline_manual_iterations": 20,
+        "tuning_policy_predeclared": true,
+        "effort_handoff_to_task9": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-008 (comparison.tuning-selection-governance) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-017",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-009",
+      "requirement_key": "comparison.provenance",
+      "environment": "CROSS_ENV",
+      "title": "Unavailable evaluator revision silently omitted",
+      "scenario": "Unavailable evaluator revision silently omitted",
+      "facts": {
+        "evaluator_revision_available": false,
+        "evaluator_revision_field_present": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-009 (comparison.provenance) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-018",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-009",
+      "requirement_key": "comparison.provenance",
+      "environment": "CROSS_ENV",
+      "title": "Unavailable provenance is represented explicitly",
+      "scenario": "Unavailable provenance is represented explicitly",
+      "facts": {
+        "evaluator_revision_available": false,
+        "evaluator_revision_field_present": true,
+        "evaluator_revision": "UNKNOWN"
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-009 (comparison.provenance) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-019",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-010",
+      "requirement_key": "comparison.reproducible-manifest",
+      "environment": "CROSS_ENV",
+      "title": "Manifest claims exact reconstruction for unpinned external API",
+      "scenario": "Manifest claims exact reconstruction for unpinned external API",
+      "facts": {
+        "external_api_unpinned": true,
+        "reproducibility_class": "EXACT_RECONSTRUCTION"
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-010 (comparison.reproducible-manifest) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-020",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-010",
+      "requirement_key": "comparison.reproducible-manifest",
+      "environment": "CROSS_ENV",
+      "title": "Unpinned external API classified as behavioral replay",
+      "scenario": "Unpinned external API classified as behavioral replay",
+      "facts": {
+        "external_api_unpinned": true,
+        "reproducibility_class": "BEHAVIORAL_REPLAY",
+        "limitation_recorded": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-010 (comparison.reproducible-manifest) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-021",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-011",
+      "requirement_key": "comparison.stochastic-replication",
+      "environment": "CROSS_ENV",
+      "title": "Replication stops only after candidate obtains favorable result",
+      "scenario": "Replication stops only after candidate obtains favorable result",
+      "facts": {
+        "stopping_rule_predeclared": false,
+        "outcome_driven_stopping": true,
+        "repeated_runs_claimed_independent": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-011 (comparison.stochastic-replication) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-022",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-011",
+      "requirement_key": "comparison.stochastic-replication",
+      "environment": "CROSS_ENV",
+      "title": "Replication count fixed and dependency preserved",
+      "scenario": "Replication count fixed and dependency preserved",
+      "facts": {
+        "stopping_rule_predeclared": true,
+        "outcome_driven_stopping": false,
+        "repeated_runs_claimed_independent": false,
+        "dependency_sources_recorded": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-011 (comparison.stochastic-replication) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-023",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-012",
+      "requirement_key": "comparison.effect-uncertainty",
+      "environment": "CROSS_ENV",
+      "title": "Repeated seeds treated as independent scientific units",
+      "scenario": "Repeated seeds treated as independent scientific units",
+      "facts": {
+        "analysis_uses_task7_evaluation_units": false,
+        "analysis_uses_independence_groups": false,
+        "repeated_seeds_treated_independent": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-012 (comparison.effect-uncertainty) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-024",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-012",
+      "requirement_key": "comparison.effect-uncertainty",
+      "environment": "CROSS_ENV",
+      "title": "Statistical analysis follows Task 7 dependency semantics",
+      "scenario": "Statistical analysis follows Task 7 dependency semantics",
+      "facts": {
+        "analysis_uses_task7_evaluation_units": true,
+        "analysis_uses_independence_groups": true,
+        "repeated_seeds_treated_independent": false
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-012 (comparison.effect-uncertainty) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-025",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-013",
+      "requirement_key": "comparison.primary-measures-reporting",
+      "environment": "CROSS_ENV",
+      "title": "Secondary metric promoted after primary metric fails",
+      "scenario": "Secondary metric promoted after primary metric fails",
+      "facts": {
+        "primary_metric_passed": false,
+        "secondary_metric_passed": true,
+        "secondary_promoted_after_outcome": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-013 (comparison.primary-measures-reporting) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-026",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-013",
+      "requirement_key": "comparison.primary-measures-reporting",
+      "environment": "CROSS_ENV",
+      "title": "Secondary result remains diagnostic after primary failure",
+      "scenario": "Secondary result remains diagnostic after primary failure",
+      "facts": {
+        "primary_metric_passed": false,
+        "secondary_metric_passed": true,
+        "secondary_promoted_after_outcome": false,
+        "primary_claim_remains_failed": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-013 (comparison.primary-measures-reporting) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-027",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-014",
+      "requirement_key": "comparison.hard-constraints",
+      "environment": "CROSS_ENV",
+      "title": "Hard constraint chosen after seeing which constraint candidate satisfies",
+      "scenario": "Hard constraint chosen after seeing which constraint candidate satisfies",
+      "facts": {
+        "hard_constraint_bound_before_protected": false,
+        "constraint_affects_claim": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-014 (comparison.hard-constraints) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-028",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-014",
+      "requirement_key": "comparison.hard-constraints",
+      "environment": "CROSS_ENV",
+      "title": "Claim-affecting hard constraints frozen before protected evaluation",
+      "scenario": "Claim-affecting hard constraints frozen before protected evaluation",
+      "facts": {
+        "hard_constraint_bound_before_protected": true,
+        "constraint_violation_blocks_pass": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-014 (comparison.hard-constraints) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-029",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-015",
+      "requirement_key": "benchmark.construct-coverage",
+      "environment": "CROSS_ENV",
+      "title": "Benchmark sampling weights changed after observing favorable subset",
+      "scenario": "Benchmark sampling weights changed after observing favorable subset",
+      "facts": {
+        "sampling_rule_predeclared": false,
+        "weights_changed_after_outcomes": true,
+        "difficulty_distribution_preserved": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-015 (benchmark.construct-coverage) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-030",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-015",
+      "requirement_key": "benchmark.construct-coverage",
+      "environment": "CROSS_ENV",
+      "title": "Benchmark distribution and difficulty rules frozen in advance",
+      "scenario": "Benchmark distribution and difficulty rules frozen in advance",
+      "facts": {
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": false,
+        "difficulty_distribution_preserved": true,
+        "generator_identity_recorded": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-015 (benchmark.construct-coverage) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-031",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-016",
+      "requirement_key": "benchmark.contamination-exposure",
+      "environment": "CROSS_ENV",
+      "title": "Freshly generated benchmark assumed uncontaminated",
+      "scenario": "Freshly generated benchmark assumed uncontaminated",
+      "facts": {
+        "benchmark_dynamic": true,
+        "contamination_state": "CLEAN",
+        "cleanliness_evidence_available": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-016 (benchmark.contamination-exposure) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-032",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-016",
+      "requirement_key": "benchmark.contamination-exposure",
+      "environment": "CROSS_ENV",
+      "title": "Dynamic benchmark preserves uncertain exposure status",
+      "scenario": "Dynamic benchmark preserves uncertain exposure status",
+      "facts": {
+        "benchmark_dynamic": true,
+        "contamination_state": "UNKNOWN",
+        "cleanliness_evidence_available": false,
+        "dynamic_implies_clean": false
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-016 (benchmark.contamination-exposure) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-033",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-017",
+      "requirement_key": "evaluation.evaluator-validity",
+      "environment": "E1",
+      "title": "Same-family LLM judge used without self-preference analysis",
+      "scenario": "Same-family LLM judge used without self-preference analysis",
+      "facts": {
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": false,
+        "bias_control_performed": false,
+        "claim_depends_on_judge": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-017 (evaluation.evaluator-validity) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-034",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-017",
+      "requirement_key": "evaluation.evaluator-validity",
+      "environment": "E1",
+      "title": "Evaluator relationship and material bias risk are controlled",
+      "scenario": "Evaluator relationship and material bias risk are controlled",
+      "facts": {
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true,
+        "bias_control_performed": true,
+        "alternative_crosscheck_present": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-017 (evaluation.evaluator-validity) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-035",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-018",
+      "requirement_key": "e1.observable-trajectory-evidence",
+      "environment": "E1",
+      "title": "Trajectory claims no side effects although logging boundary cannot observe them",
+      "scenario": "Trajectory claims no side effects although logging boundary cannot observe them",
+      "facts": {
+        "observation_boundary_declared": false,
+        "hidden_side_effects_observable": false,
+        "claims_absence_of_side_effects": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-018 (e1.observable-trajectory-evidence) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-036",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-018",
+      "requirement_key": "e1.observable-trajectory-evidence",
+      "environment": "E1",
+      "title": "Trajectory evidence declares unobservable boundary",
+      "scenario": "Trajectory evidence declares unobservable boundary",
+      "facts": {
+        "observation_boundary_declared": true,
+        "hidden_side_effects_observable": false,
+        "unobservable_state_disposition": "UNKNOWN",
+        "claims_absence_of_side_effects": false
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-018 (e1.observable-trajectory-evidence) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-037",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-019",
+      "requirement_key": "native.transfer-comparator-isolation",
+      "environment": "E3",
+      "title": "Manual target-specific prompt engineering presented as learned transfer",
+      "scenario": "Manual target-specific prompt engineering presented as learned transfer",
+      "facts": {
+        "target_specific_prompt_engineering": true,
+        "channel_classified_separately": false,
+        "claimed_as_learned_transfer": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-019 (native.transfer-comparator-isolation) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-038",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-019",
+      "requirement_key": "native.transfer-comparator-isolation",
+      "environment": "E3",
+      "title": "Target-specific information channels separated from learned transfer",
+      "scenario": "Target-specific information channels separated from learned transfer",
+      "facts": {
+        "target_specific_prompt_engineering": true,
+        "channel_classified_separately": true,
+        "claimed_as_learned_transfer": false,
+        "source_side_learned_advantage_preserved": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-019 (native.transfer-comparator-isolation) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-039",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-020",
+      "requirement_key": "adaptive.ah1-comparator-set",
+      "environment": "E2",
+      "title": "Candidate adaptation receives richer adaptation data than baseline",
+      "scenario": "Candidate adaptation receives richer adaptation data than baseline",
+      "facts": {
+        "candidate_adaptation_input": "FULL",
+        "baseline_adaptation_input": "LIMITED",
+        "difference_is_declared_treatment": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-020 (adaptive.ah1-comparator-set) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-040",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-020",
+      "requirement_key": "adaptive.ah1-comparator-set",
+      "environment": "E2",
+      "title": "Adaptation comparator receives matched information opportunity",
+      "scenario": "Adaptation comparator receives matched information opportunity",
+      "facts": {
+        "candidate_adaptation_input": "FULL",
+        "baseline_adaptation_input": "FULL",
+        "adaptation_input_parity": true,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-020 (adaptive.ah1-comparator-set) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-041",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-021",
+      "requirement_key": "adaptive.ah2-retention-locality-rollback",
+      "environment": "E3",
+      "title": "Rollback command succeeds but persistent indexes remain altered",
+      "scenario": "Rollback command succeeds but persistent indexes remain altered",
+      "facts": {
+        "rollback_command_succeeded": true,
+        "persistent_index_restored": false,
+        "behavioral_restoration_checked": false,
+        "declared_rollback_success": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-021 (adaptive.ah2-retention-locality-rollback) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-042",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-021",
+      "requirement_key": "adaptive.ah2-retention-locality-rollback",
+      "environment": "E3",
+      "title": "Rollback verifies state surfaces and protected behavior",
+      "scenario": "Rollback verifies state surfaces and protected behavior",
+      "facts": {
+        "rollback_command_succeeded": true,
+        "persistent_index_restored": true,
+        "behavioral_restoration_checked": true,
+        "unobservable_state": "UNKNOWN"
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-021 (adaptive.ah2-retention-locality-rollback) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-043",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-022",
+      "requirement_key": "resources.comparison-regime",
+      "environment": "CROSS_ENV",
+      "title": "Resource regime selected after results and quality-cost tradeoff collapsed",
+      "scenario": "Resource regime selected after results and quality-cost tradeoff collapsed",
+      "facts": {
+        "resource_regime_frozen_before_protected": false,
+        "quality_and_resource_reported_separately": false,
+        "single_weighted_score_only": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-022 (resources.comparison-regime) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-044",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-022",
+      "requirement_key": "resources.comparison-regime",
+      "environment": "CROSS_ENV",
+      "title": "Resource regime frozen and quality-resource evidence remains separate",
+      "scenario": "Resource regime frozen and quality-resource evidence remains separate",
+      "facts": {
+        "resource_regime_frozen_before_protected": true,
+        "quality_and_resource_reported_separately": true,
+        "task9_values_deferred": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-022 (resources.comparison-regime) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-045",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-023",
+      "requirement_key": "baseline.supersession-recomparison",
+      "environment": "CROSS_ENV",
+      "title": "Credible stronger comparator ignored without dated reassessment",
+      "scenario": "Credible stronger comparator ignored without dated reassessment",
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "reassessment_triggered": false,
+        "review_as_of_date_recorded": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-023 (baseline.supersession-recomparison) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-046",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-023",
+      "requirement_key": "baseline.supersession-recomparison",
+      "environment": "CROSS_ENV",
+      "title": "Stronger comparator evidence triggers governed dated reassessment",
+      "scenario": "Stronger comparator evidence triggers governed dated reassessment",
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "reassessment_triggered": true,
+        "review_as_of_date_recorded": true,
+        "historical_result_preserved": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-023 (baseline.supersession-recomparison) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-047",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-024",
+      "requirement_key": "baseline.missing-comparator-disposition",
+      "environment": "CROSS_ENV",
+      "title": "Missing comparator converted into narrow wording that implies original superiority",
+      "scenario": "Missing comparator converted into narrow wording that implies original superiority",
+      "facts": {
+        "required_comparator_available": false,
+        "broader_claim_blocked": false,
+        "narrow_claim_implies_broader_superiority": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-024 (baseline.missing-comparator-disposition) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-048",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-024",
+      "requirement_key": "baseline.missing-comparator-disposition",
+      "environment": "CROSS_ENV",
+      "title": "Missing comparator blocks broader claim while narrow evidence remains explicit",
+      "scenario": "Missing comparator blocks broader claim while narrow evidence remains explicit",
+      "facts": {
+        "required_comparator_available": false,
+        "broader_claim_blocked": true,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-024 (baseline.missing-comparator-disposition) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-049",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-025",
+      "requirement_key": "evaluation.real-world-validity",
+      "environment": "E1",
+      "title": "Real-world validation cherry-picks favorable users and time window",
+      "scenario": "Real-world validation cherry-picks favorable users and time window",
+      "facts": {
+        "population_scope_declared": false,
+        "sampling_method_declared": false,
+        "time_window_declared": false,
+        "selection_based_on_favorable_results": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-025 (evaluation.real-world-validity) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-050",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-025",
+      "requirement_key": "evaluation.real-world-validity",
+      "environment": "E1",
+      "title": "Real-world validation preserves population and sampling scope",
+      "scenario": "Real-world validation preserves population and sampling scope",
+      "facts": {
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "time_window_declared": true,
+        "deployment_scope_declared": true,
+        "selection_based_on_favorable_results": false
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-025 (evaluation.real-world-validity) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-051",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-026",
+      "requirement_key": "evaluation.independent-verification",
+      "environment": "CROSS_ENV",
+      "title": "Verification reuses same judge and faulty preprocessing without disclosure",
+      "scenario": "Verification reuses same judge and faulty preprocessing without disclosure",
+      "facts": {
+        "same_judge_model": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": false,
+        "material_independent_path_present": false
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-026 (evaluation.independent-verification) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-052",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-026",
+      "requirement_key": "evaluation.independent-verification",
+      "environment": "CROSS_ENV",
+      "title": "Verification discloses dependencies and separates material failure modes",
+      "scenario": "Verification discloses dependencies and separates material failure modes",
+      "facts": {
+        "same_judge_model": false,
+        "same_preprocessing": false,
+        "shared_dependencies_disclosed": true,
+        "material_independent_path_present": true
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-026 (evaluation.independent-verification) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-053",
+      "expectation": "MUST_REJECT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-027",
+      "requirement_key": "comparison.environment-applicability-binding",
+      "environment": "CROSS_ENV",
+      "title": "Required comparison control marked NOT_APPLICABLE because it is inconvenient",
+      "scenario": "Required comparison control marked NOT_APPLICABLE because it is inconvenient",
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "governed_reason_present": true,
+        "control_genuinely_inapplicable": false,
+        "omission_changes_claim_meaning": true
+      },
+      "rationale": "The scenario violates the comparison semantics of G3-BR-027 (comparison.environment-applicability-binding) and must not be accepted as a valid governed baseline comparison.",
+      "protected_outcomes_observed": false
+    },
+    {
+      "id": "G3-Q-054",
+      "expectation": "MUST_ACCEPT",
+      "source_class": "KNOWN_DEVELOPMENT_CASE",
+      "primary_requirement": "G3-BR-027",
+      "requirement_key": "comparison.environment-applicability-binding",
+      "environment": "CROSS_ENV",
+      "title": "Environment-specific NOT_APPLICABLE is justified and harmless to claim meaning",
+      "scenario": "Environment-specific NOT_APPLICABLE is justified and harmless to claim meaning",
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "governed_reason_present": true,
+        "control_genuinely_inapplicable": true,
+        "omission_changes_claim_meaning": false,
+        "environment_binding": "E2"
+      },
+      "rationale": "The scenario satisfies the intended comparison semantics of G3-BR-027 (comparison.environment-applicability-binding) without relying on a prohibited shortcut or hidden evidence claim.",
+      "protected_outcomes_observed": false
+    }
+  ]
+}

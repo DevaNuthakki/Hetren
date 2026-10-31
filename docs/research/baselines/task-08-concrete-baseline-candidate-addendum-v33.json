@@ -1,0 +1,195 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 33,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T22:43:38Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v32": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json",
+      "sha256": "13cddc4504f6e13ac17f5deb8a4da71c311b9dfaade23387bb874c2920e4eaab"
+    },
+    "systematic_saturation_v30": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v30.json",
+      "sha256": "687734cb9d36d873c63f775c1f27bcbc2e71f02cf111849c9e9f86671d265ee4"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-NEMORI",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Nemori \u2014 What Deserves Memory: Adaptive Memory Distillation for LLM Agents",
+      "implementation_identity": "https://github.com/nemori-ai/nemori",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ADAPTIVE_MEMORY_DISTILLATION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_EPISODIC_SEMANTIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1607/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/nemori-ai/nemori"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_LATER_BOUND_TO_ADAPTATION_ROLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_STORAGE",
+        "RETRIEVAL_COMPUTE",
+        "LATENCY"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MEMORY_DISTILLATION_AND_LONG_HORIZON_DIALOGUE_ROLE_MATCH",
+        "PAPER_ALIGNED_REPOSITORY_REVISION_MUST_BE BOUND",
+        "SEGMENTATION_AND_DISTILLATION_CONFIGURATION_MUST_BE BOUND",
+        "STORAGE_AND_RETRIEVAL_BACKEND_ACCESS_MUST_BE PARITY_MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Uses episodic integration plus prediction-error-driven semantic knowledge distillation to determine what interaction information deserves durable retention rather than relying on fixed importance heuristics."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MEMORY_DISTILLATION_AND_LONG_HORIZON_DIALOGUE_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V30"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-EMA-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "EMA \u2014 An Episodic Memory Agent for Efficient and Selective Memory",
+      "implementation_identity": "https://github.com/Hongyi4221/EMA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_EPISODIC_MEMORY_UNIT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_FILTERING_DECISION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.250/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hongyi4221/EMA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_LATER_BOUND_TO_ADAPTATION_ROLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_STORAGE",
+        "RETRIEVAL_COMPUTE",
+        "LATENCY"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_EPISODIC_MEMORY_AND_SELECTIVE_WRITE_FILTER_ROLE_MATCH",
+        "MEMDECIDER_MODEL_AND_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "EPISODIC_MEMORY_UNIT_CONSTRUCTION_MUST_BE BOUND",
+        "DATASET_AND_BACKBONE_CONFIGURATION_MUST_BE MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Abstracts interactions into episodic memory units and adds MemDecider as a learned selective filtering module that controls low-value information before long-term storage."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EPISODIC_MEMORY_AND_SELECTIVE_WRITE_FILTER_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V30"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-STRUCTMEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "StructMem \u2014 Structured Memory for Long-Horizon Behavior in LLMs",
+      "implementation_identity": "https://github.com/zjunlp/LightMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STRUCTURED_EVENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_CROSS_EVENT_CONSOLIDATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-short.12/"
+        },
+        {
+          "class": "OFFICIAL_SHARED_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        },
+        {
+          "class": "OFFICIAL_METHOD_DOCUMENTATION",
+          "url": "https://github.com/zjunlp/LightMem/blob/main/StructMem.md"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_LATER_BOUND_TO_ADAPTATION_ROLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_STORAGE",
+        "RETRIEVAL_COMPUTE",
+        "LATENCY"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_EVENT_LEVEL_RELATIONAL_MEMORY_AND_CROSS_EVENT_CONSOLIDATION_ROLE_MATCH",
+        "STRUCTMEM_MUST_REMAIN_A_SEPARATE_LOGICAL_IDENTITY_FROM_ICLR_LIGHTMEM",
+        "EVENT_EXTRACTION_AND_SUMMARY_CONFIGURATION_MUST_BE BOUND",
+        "SHARED_REPOSITORY_REVISION_MUST_BE PINNED_TO_STRUCTMEM_BEHAVIOR",
+        "LOCOMO_STYLE_TEMPORAL_AND_MULTI_HOP_ROLE_MUST_MATCH",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Preserves factual and relational event bindings with temporal anchors and periodically synthesizes cross-event summaries, providing a distinct hierarchical structured-memory mechanism."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EVENT_LEVEL_RELATIONAL_MEMORY_AND_CROSS_EVENT_CONSOLIDATION_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V30"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

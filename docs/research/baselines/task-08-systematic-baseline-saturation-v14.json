@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 14,
+  "state": "SATURATION_V14_DAS_DUPLICATE_RESOLVED_AND_NEW_E1_RIMRULE_FOUND",
+  "recorded_at_utc": "2026-09-26T20:18:34Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v16_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v16.json",
+      "sha256": "4015da27629794eecc2ea1a9a2c50eae3dd9e3625c5a38ab5b4d7370a07eee64"
+    },
+    "systematic_saturation_v13": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v13.json",
+      "sha256": "2ec64b4cbd77056548cd1096aecebe15d3bb2c59aa85adc7bde276d91493ddf8"
+    },
+    "das_identity_resolution": {
+      "path": "docs/research/baselines/task-08-dynamic-style-bridging-identity-resolution-v1.json",
+      "sha256": "4a79e2adb7c6a10abbe3a971ba5e6e51b4dcfb61c7344a19b0c5394d439376b1"
+    }
+  },
+  "focus": [
+    "E1_RULE_LEARNING_AND_TOOL_ADAPTATION",
+    "E2_POST_DRIFT_RESILIENT_TABPFN",
+    "E3_CONTINUAL_AND_ACTIVATION_LEVEL_TTA",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"RIMRULE\" ACL 2026 github tool using agents",
+    "\"RIMRULE\" official implementation Intuit AI Research",
+    "\"Dynamic Style Bridging\" CVPR 2026 github DAS",
+    "\"Dance Across Shifts\" CVPR 2026 continual test-time adaptation",
+    "\"AcTTA\" CVPR 2026 dynamic activation code",
+    "\"Efficient Test-Time Adaptation in Human-Agent Interaction\" github",
+    "site:aclanthology.org/2026 tool agent rule learning adaptation failure traces",
+    "site:aclanthology.org/2026 agent adaptation tool use learned rules",
+    "site:proceedings.iclr.cc 2026 agent test-time adaptation tool use",
+    "site:proceedings.mlr.press 2026 tabular temporal shift adaptation",
+    "site:openaccess.thecvf.com/content/CVPR2026 continual test-time adaptation code",
+    "2026 cross family learned decision transfer agent tabular vision"
+  ],
+  "query_count": 12,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RIMRULE",
+      "name": "RIMRULE \u2014 Improving Tool-Using Language Agents via MDL-Guided Rule Learning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_TOOL_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_SYMBOLIC_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1599/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/intuit-ai-research/RimRule"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.00086"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_USE_FAILURE_TRACE_AND_RULE_LEARNING_INFORMATION_OPPORTUNITY_MATCHED",
+      "material_reason": "Provides a distinct neuro-symbolic learned adaptation mechanism: compact rules are induced from tool-use failure traces, canonicalized symbolically, consolidated under an MDL objective, and retrieved for inference.",
+      "limits": [
+        "FAILURE_TRACE_ACCESS_MUST_BE PARITY_MATCHED",
+        "TOOLHOP_OR_OTHER_TOOL_ENVIRONMENT_MUST_BE DECLARED",
+        "RULE_GENERATION_MODEL_AND_CONFIGURATION_MUST_BE BOUND",
+        "RULE_LIBRARY_TRAINING_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "RULE_TRANSFER_ACROSS_LLMS_REMAINS_WITHIN_E1_AND_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "duplicate_identity_resolutions": [
+    {
+      "name": "Dynamic Style Bridging",
+      "new_candidate_required": false,
+      "resolution_artifact": "docs/research/baselines/task-08-dynamic-style-bridging-identity-resolution-v1.json"
+    }
+  ],
+  "reference_or_screened": [
+    {
+      "name": "Dynamic Style Bridging / DAS",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Zhu_Dance_Across_Shifts_Forward-Facilitation_Continual_Test-Time_Adaptation_through_Dynamic_Style_CVPR_2026_paper.html",
+        "https://github.com/z1358/DAS"
+      ],
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_WITH_CODE",
+      "disposition": "ALREADY_PROMOTED_PRIOR_IDENTITY_NOT_NEW",
+      "reason": "I4B18 preflight found the same Dynamic Style Bridging method already represented in the governed candidate-addendum history.",
+      "identity_resolution_binding": "docs/research/baselines/task-08-dynamic-style-bridging-identity-resolution-v1.json"
+    },
+    {
+      "name": "AcTTA \u2014 Rethinking Test-Time Adaptation via Dynamic Activation",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Kim_AcTTA_Rethinking_Test-Time_Adaptation_via_Dynamic_Activation_CVPR_2026_paper.html"
+      ],
+      "evidence_state": "PEER_REVIEWED_CVPR_2026",
+      "disposition": "E3_RESEARCH_REFERENCE_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED_THIS_PASS",
+      "reason": "The method is materially relevant activation-level TTA research, but this bounded review did not independently verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "Efficient Test-Time Adaptation in Human-Agent Interaction",
+      "sources": [
+        "https://arxiv.org/abs/2609.04141",
+        "https://github.com/zorazrw/tahi-agent-adaptation"
+      ],
+      "evidence_state": "PREPRINT_WITH_OFFICIAL_PUBLIC_IMPLEMENTATION",
+      "disposition": "E1_INFORMATION_OPPORTUNITY_GATED_REFERENCE",
+      "reason": "Human-agent interaction supplies feedback and editing opportunities unavailable to ordinary autonomous-agent baselines unless the experiment explicitly grants matched human information access."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "RIMRULE",
+      "evidence_state": "ACL_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Learned symbolic rules can be reused across different language models and unseen tools.",
+      "disposition": "WITHIN_E1_SYMBOLIC_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The demonstrated transfer remains within tool-using language-agent systems and does not establish one learned decision mechanism spanning E1, E2, and E3."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_symbolic_rule_transfer_reference_found": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V14"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_EXECUTABLE_RIMRULE_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "DAS_REDISCOVERY_RESOLVED_AS_DUPLICATE_AND_NO_NEW_E3_IDENTITY_PROMOTED",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "Dynamic Style Bridging was a duplicate prior identity, but RIMRULE is a materially distinct peer-reviewed executable E1 comparator absent from prior governed candidate identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "das_may_be_counted_twice": false,
+    "human_feedback_reference_is_automatically_eligible": false,
+    "rimrule_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B19_VERIFY_ADDENDUM_V17_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

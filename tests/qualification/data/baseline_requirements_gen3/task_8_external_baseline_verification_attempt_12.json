@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 12,
+  "state": "SOURCE_CORRECTION_PRESERVED_AND_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:15:58Z",
+  "task": 8,
+  "bindings": {
+    "attempt_11": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_11.json",
+      "sha256": "eb4949f96336622df1fd765fe7033a7c53cabc989d74902e337a7050b9a72a66"
+    },
+    "source_correction_v1": {
+      "path": "docs/research/baselines/task-08-research-source-correction-v1.json",
+      "sha256": "8aea15af934301779711e151bd4050296734e43d29782f7944d998e29e9b998a"
+    },
+    "addendum_v10_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v10.json",
+      "sha256": "013be923f98a065886e6cb1bc60e8f11f66dfc72fd72fb01b22afe9766a14ee7"
+    },
+    "systematic_saturation_v8": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v8.json",
+      "sha256": "4230c93e848148f98b478894def58a52abd92057229caf6424dc48309670b914"
+    },
+    "candidate_addendum_v11": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v11.json",
+      "sha256": "6a75410cf33242ec22e1a6d82754d29bfc1bf9c202fea080f1647ed8d2b19c7e"
+    }
+  },
+  "state_summary": {
+    "source_correction_preserved_without_history_rewrite": true,
+    "addendum_v10_role_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v11_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "Saturation v8 discovered WebFactory and STAR as materially relevant peer-reviewed candidates absent from the prior governed Task-8 pool.",
+  "next_gate": "I4B13_VERIFY_ADDENDUM_V11_AND_RUN_NEXT_REASONABLE_SATURATION_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 35,
+  "state": "ADDENDUM_V35_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T23:04:52Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v35": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v35.json",
+      "sha256": "7620bd751e991b50466974e0d998132715b05386604eb0277caad711cbbe805b"
+    },
+    "systematic_saturation_v32": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v32.json",
+      "sha256": "9a6501adfb5123e7aafcac630288ba2984f12360f5eff4c5c378ba98939012e0"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "verification_state": "PEER_REVIEWED_ICML_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TASK_AGNOSTIC_KNOWLEDGE_GRAPH_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "PlugMem is reported as an ICML 2026 publication.",
+        "It is a task-agnostic plug-in long-term memory module for LLM agents.",
+        "It structures episodic experience into a compact knowledge-centric memory graph containing propositional and prescriptive knowledge.",
+        "The official implementation includes memory construction, retrieval, reasoning, tests, benchmark paths, and released research artifacts.",
+        "The published evaluation spans long-horizon conversational QA, multi-hop retrieval, and a web-agent setting."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PUBLICATION_RECORD",
+          "url": "https://invite.illinois.edu/publications/"
+        },
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH_LOCATOR",
+          "url": "https://openreview.net/pdf?id=NWKaQIKoGp"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TIMAN-group/PlugMem"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.03296"
+        }
+      ],
+      "limits": [
+        "FINAL_IMMUTABLE_REPOSITORY_REVISION_NOT_YET_BOUND",
+        "TASK_AND_INFORMATION_ACCESS_MUST_MATCH_GOVERNED_EXPERIMENT",
+        "MEMORY_GRAPH_BUILD_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "BACKBONE_EMBEDDING_MODEL_AND_REASONING_PROMPTS_MUST_BE BOUND",
+        "TASK_AGNOSTIC_DESIGN_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMQ",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_EXECUTABLE_MIT_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_RUNTIME_LEARNED_EPISODIC_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "MemQ is publicly available as a 2026 arXiv preprint.",
+        "It assigns Q-values to episodic memories while keeping the LLM backbone frozen.",
+        "It records memory-creation dependencies in a provenance DAG.",
+        "TD-lambda eligibility traces propagate credit backward through the provenance graph.",
+        "The official implementation contains runnable benchmark adapters for OS interaction, function calling, code generation, embodied reasoning, multimodal understanding, and expert QA.",
+        "The public implementation is MIT licensed."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.08374"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/jwliao-ai/MemQ"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "FINAL_IMMUTABLE_REPOSITORY_REVISION_NOT_YET_BOUND",
+        "Q_LEARNING_HYPERPARAMETERS_AND_RETRIEVAL_POLICY_MUST_BE BOUND",
+        "TASK_STREAM_AND_REWARD_DEFINITION_MUST_BE BOUND",
+        "RUNTIME_MEMORY_VALUE_LEARNING_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v35_candidates_have_role_level_external_review": true,
+    "plugmem_archival_peer_review_verified": true,
+    "memq_archival_peer_review_verified": false,
+    "all_addendum_v35_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "memq_is_peer_reviewed": false,
+    "publication_or_preprint_status_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

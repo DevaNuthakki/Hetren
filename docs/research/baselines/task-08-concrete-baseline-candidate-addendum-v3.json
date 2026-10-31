@@ -1,0 +1,429 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 3,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:32:40Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v2": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v2.json",
+      "sha256": "afb505296bfe1f5366386ec3e7d515166c92aa677217f953520c96f248adea6a"
+    },
+    "refinement_v4": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v4.json",
+      "sha256": "e363bb3b4bc595ff71581240b2fb6ed5b90f5bfc75d0714512290ff5bbe97a48"
+    }
+  },
+  "candidate_count": 9,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E3-LCOTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "LCoTTA",
+      "implementation_identity": "https://github.com/ThunderDavid/LCoTTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_LONG_TERM_RETENTION_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/1b6f528fe522a956dce80d5b98be8cd5-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ThunderDavid/LCoTTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_LONG_TERM_TTA_REVIEW",
+        "Directly addresses lifelong continual test-time adaptation and long-run degeneration."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_LONG_TERM_TTA_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-COME",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "COME",
+      "implementation_identity": "https://github.com/BlueWhaleLab/COME",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/2ea18fdc667e0ef2ad82b2b4d65147ad-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BlueWhaleLab/COME"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+        "Targets adaptation stability under standard, lifelong, and open-world TTA settings."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-POEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Protected Online Entropy Matching",
+      "implementation_identity": "https://github.com/yarinbar/poem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_ONLINE_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_NO_SHIFT_PRESERVATION_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/9b35a0a20d617dc68ae98a7a57df2f51-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yarinbar/poem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_STABILITY_REVIEW",
+        "Explicitly targets shift-triggered online adaptation while preserving accuracy and calibration in no-shift conditions."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STABILITY_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-LINEARTCA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "LinearTCA / LinearTCA+",
+      "implementation_identity": "https://github.com/youlj109/TCA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_LOW_COMPUTE_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/you25c.html"
+        },
+        {
+          "class": "IMPLEMENTATION_LINKED_BY_PRIMARY_PAPER",
+          "url": "https://github.com/youlj109/TCA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_VARIANT_AND_MATCHED_RESOURCE_REVIEW",
+        "Provides correlation-alignment TTA with an explicitly low-compute variant and a plug-in variant."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_VARIANT_AND_MATCHED_RESOURCE_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-PASLE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PASLE",
+      "implementation_identity": "https://github.com/palm-ml/PASLE",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_PSEUDO_LABEL_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/ac662d74829e4407ce1d126477f4a03a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/palm-ml/PASLE"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+        "Addresses uncertain pseudo-label handling during TTA and was absent from earlier candidate evidence."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-AEA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Adaptive Energy Alignment",
+      "implementation_identity": "OFFICIAL_IMPLEMENTATION_NOT_BOUND",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_FAST_ONLINE_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/36636f1009939960aa2f9e28d28c8a7d-Abstract-Conference.html"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_CANDIDATE_BLOCKED_PENDING_OFFICIAL_IMPLEMENTATION_BINDING",
+        "Targets fast online TTA through source-target energy alignment."
+      ],
+      "eligibility_status": "MATERIAL_CANDIDATE_BLOCKED_PENDING_OFFICIAL_IMPLEMENTATION_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-TTE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Test-Time Ensemble",
+      "implementation_identity": "OFFICIAL_IMPLEMENTATION_NOT_BOUND",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_TTA_ENHANCEMENT_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c242f2b7f60d8c685b6481939330e241-Abstract-Conference.html"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_CANDIDATE_BLOCKED_PENDING_IMPLEMENTATION_AND_BASE_METHOD_BINDING",
+        "Wraps existing TTA methods through parameter averaging and distillation, so exact baseline identity depends on the underlying method."
+      ],
+      "eligibility_status": "MATERIAL_CANDIDATE_BLOCKED_PENDING_IMPLEMENTATION_AND_BASE_METHOD_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-NCTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "NCTTA",
+      "implementation_identity": "https://github.com/Cevaaa/NCTTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_VISION_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Cevaaa/NCTTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+        "Current CVPR 2026 TTA method evaluated across common corruption and domain-shift benchmarks."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-DEYO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "DeYO",
+      "implementation_identity": "https://github.com/Jhyun17/DeYO",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/cd0665986c1e9c15f6569ac944bcf88a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jhyun17/DeYO"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+        "Established TTA comparator designed to avoid entropy-based sample-selection failure under biased settings."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FOURTH_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

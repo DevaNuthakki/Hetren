@@ -1,0 +1,114 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 48,
+  "state": "ADDENDUM_V48_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T00:28:06Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v48": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v48.json",
+      "sha256": "3962dc08567b0e5d80435f41a78e62f60e2d45a538ff3f48ec8c14fccf15e5a5"
+    },
+    "systematic_saturation_v45": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v45.json",
+      "sha256": "1d5b1acbd0f957c408fc762bae1c1e8b38a8c48523c3d3337e716e4fd508fbe1"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMACT-DCPO",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNED_WORKING_MEMORY_CONTEXT_CURATION_COMPARATOR",
+      "verified_facts": [
+        "MemAct is published in Findings of ACL 2026.",
+        "MemAct treats working-memory management as learnable policy actions.",
+        "Its memory actions perform in-place context editing including deletion and insertion.",
+        "Dynamic Context Policy Optimization is used to train the context-management policy.",
+        "The authors provide a public MemAct implementation based on verl with DCPO configuration and memory-management tools."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.956/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ADaM-BJTU/MemAct"
+        }
+      ],
+      "limits": [
+        "BASE_MODEL_AND_TRAINING_RECIPE_MUST_BE BOUND",
+        "MEMORY_ACTION_TOOL_SURFACE_MUST_BE BOUND",
+        "CONTEXT_BUDGET_AND_LONG_HORIZON_TASK_CONTRACT_MUST_BE MATCHED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "MEMACT_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LTS-SHARED-MEMORY",
+      "verification_state": "ICML_2026_CONFERENCE_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNED_SELECTIVE_SHARED_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Learning to Share is listed in the ICML 2026 conference program.",
+        "LTS introduces a global memory bank shared across parallel agent teams.",
+        "A learned lightweight controller decides whether intermediate agent steps are admitted to shared memory.",
+        "The controller is trained using stepwise reinforcement learning with usage-aware credit assignment.",
+        "The public UCF-CRCV implementation is an AutoGen fork containing shared-memory team support, controller training code, and AssistantBench and GAIA experiment templates."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "AUTHOR_INSTITUTION_PUBLICATION_RECORD",
+          "url": "https://www.crcv.ucf.edu/publications/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/UCF-CRCV/autogen-lts"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.05965"
+        }
+      ],
+      "limits": [
+        "PARALLEL_MULTI_AGENT_INFORMATION_OPPORTUNITY_REQUIRED",
+        "SHARED_MEMORY_BANK_AND_TEAM_TOPOLOGY_MUST_BE BOUND",
+        "CONTROLLER_CHECKPOINT_AND_TRAINING_RECIPE_MUST_BE BOUND",
+        "ASSISTANTBENCH_AND_GAIA_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "WITHIN_E1_SHARED_MEMORY_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v48_candidates_have_role_level_external_review": true,
+    "memact_archival_peer_review_verified": true,
+    "memact_public_implementation_verified": true,
+    "lts_icml_2026_status_verified": true,
+    "lts_public_research_implementation_verified": true,
+    "all_candidates_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "current_repository_head_is_final_version": false,
+    "within_e1_memory_transfer_establishes_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

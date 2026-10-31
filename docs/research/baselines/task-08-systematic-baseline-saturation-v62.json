@@ -1,0 +1,214 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 62,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:52:18Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_canonical_enumeration_reopened": false,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "dynamic_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_be_resolved_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v64_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v64.json",
+      "sha256": "2845fc07dd82acb696825438f17463d71566dd29ab5d4dddfbe2df5b874330ee"
+    },
+    "systematic_saturation_v61": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v61.json",
+      "sha256": "73daf20b19b35381edb273b8444b989fff17a751dae0eea31acd0686c24d2a16"
+    }
+  },
+  "targeted_displacement_identities": [
+    "\u03c40-VLA: a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation",
+    "OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning",
+    "Xiaomi-Robotics-0: An Open-Sourced Vision-Language-Action Model with Real-Time Execution"
+  ],
+  "targeted_displacement_identity_count": 3,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TAU0-VLA",
+      "name": "\u03c40-VLA: a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "prior_matches": [],
+      "displacement_case": "Can plausibly displace a retained long-horizon hierarchical manipulation comparator because it combines memory-augmented high-level subtask generation with world-model-guided test-time search and released executable components."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ONETWOVLA",
+      "name": "OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "prior_matches": [],
+      "displacement_case": "Can plausibly displace a retained reasoning-augmented manipulation comparator because one policy adaptively switches between reasoning and acting and is evaluated on long-horizon planning, recovery, interaction, and visual grounding."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-XIAOMI-ROBOTICS-0",
+      "name": "Xiaomi-Robotics-0: An Open-Sourced Vision-Language-Action Model with Real-Time Execution",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "prior_matches": [],
+      "displacement_case": "Can plausibly displace a retained real-time or resource-constrained VLA comparator because it explicitly targets asynchronous low-latency execution while providing pretrained and benchmark-specific weights plus post-training code."
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TAU0-VLA",
+      "name": "\u03c40-VLA: a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LONG_HORIZON_HIERARCHICAL_VLA_DISPLACER_CANDIDATE",
+        "A_H1_WORLD_MODEL_GUIDED_TEST_TIME_COMPUTE_ROLE_CONDITIONAL"
+      ],
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2608.16885"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://tau0-vla.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/sii-research/tau-0-vla"
+        }
+      ],
+      "evidence_state": "PUBLIC_RESEARCH_WITH_CUTOFF_PRECEDING_HIGH_LEVEL_WORLD_MODEL_AND_LIBERO_RELEASES",
+      "displacement_case": "Can plausibly displace a retained long-horizon hierarchical manipulation comparator because it combines memory-augmented high-level subtask generation with world-model-guided test-time search and released executable components.",
+      "eligibility_limits": [
+        "HIGH_LEVEL_AND_LOW_LEVEL_COMPONENT_IDENTITIES_MUST_BE BOUND",
+        "WORLD_MODEL_AND_TEST_TIME_SEARCH_BUDGET_MUST_BE PARITY_AUDITED",
+        "LIBERO_AND_LONG_HORIZON_REAL_WORLD_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ONETWOVLA",
+      "name": "OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ADAPTIVE_REASONING_AND_ACTING_VLA_DISPLACER_CANDIDATE"
+      ],
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=tWMfhoP3as"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2505.11917"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Fanqi-Lin/OneTwoVLA"
+        }
+      ],
+      "evidence_state": "PEER_REVIEWED_ICLR_2026_WITH_PUBLIC_TRAINING_DEPLOYMENT_AND_DATA_ASSETS",
+      "displacement_case": "Can plausibly displace a retained reasoning-augmented manipulation comparator because one policy adaptively switches between reasoning and acting and is evaluated on long-horizon planning, recovery, interaction, and visual grounding.",
+      "eligibility_limits": [
+        "REASONING_TRIGGER_POLICY_MUST_BE BOUND",
+        "BASE_POLICY_DATASET_AND_SYNTHETIC_REASONING_DATA_MUST_BE BOUND",
+        "HARDWARE_AND_TASK_CONTRACT_MUST_BE MATCHED",
+        "TRAINING_CODE_AVAILABILITY_DOES_NOT_BY_ITSELF_ESTABLISH_RESOURCE_PARITY",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-XIAOMI-ROBOTICS-0",
+      "name": "Xiaomi-Robotics-0: An Open-Sourced Vision-Language-Action Model with Real-Time Execution",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_REAL_TIME_CROSS_EMBODIMENT_VLA_DISPLACER_CANDIDATE",
+        "N_H1_RUNTIME_CONSTRAINED_ROBOT_POLICY_ROLE_CONDITIONAL"
+      ],
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.12684"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://robotics.xiaomi.com/xiaomi-robotics-0.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/XiaomiRobotics/Xiaomi-Robotics-0"
+        }
+      ],
+      "evidence_state": "PUBLIC_RESEARCH_WITH_PRE_CUTOFF_CODE_WEIGHTS_EVALUATION_AND_POSTTRAINING_PIPELINE",
+      "displacement_case": "Can plausibly displace a retained real-time or resource-constrained VLA comparator because it explicitly targets asynchronous low-latency execution while providing pretrained and benchmark-specific weights plus post-training code.",
+      "eligibility_limits": [
+        "REAL_TIME_RUNTIME_HARDWARE_AND_CONTROL_RATE_MUST_BE MATCHED",
+        "ASYNCHRONOUS_ACTION_CHUNK_CONFIGURATION_MUST_BE BOUND",
+        "PRETRAINED_AND_TASK_SPECIFIC_CHECKPOINTS_MUST_NOT_BE COLLAPSED",
+        "POSTTRAINING_INFORMATION_AND_DATA_BUDGET_REQUIRE_PARITY_REVIEW",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_not_promoted": [
+    {
+      "name": "Qwen-RobotManip",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.17846"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_REPOSITORY",
+          "url": "https://github.com/QwenLM/Qwen-RobotManip"
+        }
+      ],
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_IN_THIS_DISPLACEMENT_ROUND",
+      "reason": "The official repository explicitly states that model weights for Qwen-RobotManip are not planned for release, preventing a clean reproducible candidate binding under the current Task-8 reproducibility gate."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_cross_embodiment_and_long_horizon_transfer_evidence_exists": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one targeted, previously unpromoted role-matched displacement candidate was found."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "cross_embodiment_transfer_establishes_general_n_h2": false,
+    "test_time_computation_establishes_a_h1": false,
+    "real_time_execution_establishes_resource_parity": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B67_VERIFY_ADDENDUM_V65_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

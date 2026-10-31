@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_POST_DISCOVERY_APPLICABILITY_RESOLUTION_ATTEMPT",
+  "attempt": 1,
+  "state": "CANONICAL_ROLE_METADATA_FRONTIER_COMPLETE_CONCRETE_EXPERIMENT_TUPLES_PENDING",
+  "recorded_at_utc": "2026-09-27T19:55:18Z",
+  "task": 8,
+  "bindings": {
+    "applicability_resolution_frontier_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-resolution-frontier-v1.json",
+      "sha256": "f6982ad5ed1716fffea85478b6bc8bff4e8209a6a22c004786c160c1b19b1ac5"
+    }
+  },
+  "state_summary": {
+    "canonical_candidate_count": 222,
+    "historical_mapping_entry_count": 223,
+    "missing_explicit_hypothesis_before_derivation": 9,
+    "still_unresolved_hypothesis_after_derivation": 0,
+    "canonical_role_metadata_frontier_created": true,
+    "concrete_applicability_tuple_resolution_complete": false,
+    "information_opportunity_parity_complete": false,
+    "tuning_opportunity_parity_complete": false,
+    "immutable_version_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I5A2R5_CONCRETE_EXPERIMENT_APPLICABILITY_TUPLE_RESOLUTION",
+  "claim_limits": {
+    "establishes_final_applicability": false,
+    "selects_strongest_comparator": false,
+    "freezes_concrete_baseline": false,
+    "authorizes_protected_execution": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

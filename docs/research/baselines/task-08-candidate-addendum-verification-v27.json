@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 27,
+  "state": "ADDENDUM_V27_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:25:54Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v27": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v27.json",
+      "sha256": "ae31a9d3e6044b099fe73289f5d37f27fe3925e29029920e8061d5d3e2467b73"
+    },
+    "systematic_saturation_v24": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v24.json",
+      "sha256": "2b218d83870f24b931995a90520f676722b8ef1b94b9b9a7878cdb772c3b8a4b"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AEC",
+      "candidate_name": "Agentic Episodic Control",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_PUBLIC_CODE_VERIFIED",
+      "role_disposition": "E1_EPISODIC_CONTROL_AND_MEMORY_AUGMENTED_RL_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Agentic Episodic Control is published in Findings of ACL 2026.",
+        "AEC integrates an LLM-derived semantic representation mechanism with episodic reinforcement learning.",
+        "AEC selectively retrieves valuable experiences rather than indiscriminately accessing episodic memory.",
+        "The published evaluation uses BabyAI-Text environments and reports cross-task and cross-environment generalization experiments.",
+        "The peer-reviewed publication identifies a public implementation repository."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.654/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Xidong-Yang/Agentic_Episodic_Control"
+        }
+      ],
+      "limits": [
+        "BABYAI_TEXT_OR_SEMANTICALLY_MATCHED_EPISODIC_CONTROL_SETTING_REQUIRED",
+        "SEMANTIC_AUGMENTER_AND_MEMORY_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "LLM_BACKBONE_AND_RL_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_TASK_OR_CROSS_ENVIRONMENT_GENERALIZATION_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "FINAL_IMMUTABLE_CUTOFF_CONSISTENT_IMPLEMENTATION_REVISION_NOT_YET_BOUND"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v27_candidates_have_role_level_external_review": true,
+    "all_addendum_v27_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "aec_establishes_general_n_h2": false,
+    "publication_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

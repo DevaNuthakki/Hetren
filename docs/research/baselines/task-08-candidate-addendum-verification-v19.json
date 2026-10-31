@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 19,
+  "state": "ADDENDUM_V19_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:39:40Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v19": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v19.json",
+      "sha256": "78b19da4b667035a32d92374d57af59995c88355363e30ef534805dcdda46cee"
+    },
+    "systematic_saturation_v16": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v16.json",
+      "sha256": "f94d149ecdb963b854b849f62221144fda2b8f38c6cf7f089a1f7b4b66139b35"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVOTOOL",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_SELF_EVOLVING_MODULAR_TOOL_POLICY_COMPARATOR",
+      "verified_facts": [
+        "EVOTOOL is published as an ACL 2026 long paper.",
+        "It decomposes tool-use behavior into Planner, Selector, Caller, and Synthesizer modules.",
+        "Trajectory-grounded blame attribution localizes failures to the responsible module.",
+        "Feedback-guided targeted mutation updates the implicated module rather than rewriting the entire policy indiscriminately.",
+        "Diversity-aware population selection retains complementary evolved policy candidates.",
+        "The official repository provides runnable code, benchmark preparation utilities, evaluators, evolution logic, tests, and reference evolved policies."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.2016/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SYang2000/ACL_2026_EvoTool"
+        }
+      ],
+      "limits": [
+        "TOOL_USE_TASK_AND_TOOL_SCHEMA_MUST_BE MATCHED",
+        "EVOLUTION_MODEL_AND_ACTOR_MODEL_IDENTITIES_MUST_BE BOUND",
+        "MODULE_PROMPTS_MUTATION_POLICY_AND_SELECTION_CONFIGURATION_MUST_BE BOUND",
+        "DEVELOPMENT_OR_EVOLUTION_TRAJECTORIES_MUST_NOT_OVERLAP_PROTECTED_EVALUATION",
+        "TRANSFER_WITHIN_TOOL_USE_DATASETS_OR_MODELS_DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v19_candidates_have_role_level_external_review": true,
+    "all_addendum_v19_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "published_performance_is_hetren_performance": false,
+    "dataset_or_model_transfer_proves_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

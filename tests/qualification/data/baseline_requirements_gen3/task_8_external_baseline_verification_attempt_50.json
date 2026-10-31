@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 50,
+  "state": "SATURATION_V46_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T00:28:06Z",
+  "task": 8,
+  "bindings": {
+    "attempt_49": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_49.json",
+      "sha256": "1eb90cd2a6d71baf2ff4e9ae516cbc71213ca5935c0d043cffc71327d9c412fb"
+    },
+    "addendum_v48_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v48.json",
+      "sha256": "01f0208a83f067e1114c23ca03e8397738b84bf6210d86de08e03a3efb9bef74"
+    },
+    "systematic_saturation_v46": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v46.json",
+      "sha256": "1249ed4de9df554f6f9fc12b58aaf5df6590320190dae242c4338ea4d808b30b"
+    },
+    "candidate_addendum_v49": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v49.json",
+      "sha256": "41d50f77fe7490f69c3317abb892ad59a24c21ce6aedcb389a7965daceb2df48"
+    }
+  },
+  "state_summary": {
+    "addendum_v48_role_review_complete": true,
+    "new_material_candidates_found": 0,
+    "candidate_addendum_v49_count": 0,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 1,
+    "first_qualifying_no_new_material_round": true,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "The first post-I4B49 bounded direct-memory refinement produced zero materially new eligible comparators, but the preregistered stopping rule requires two consecutive such refinements.",
+  "next_gate": "I4B51_SECOND_CONSECUTIVE_BOUNDED_NO_NEW_MATERIAL_CONFIRMATION_REFINEMENT",
+  "claim_limits": {
+    "discovery_stopping_rule_satisfied": false,
+    "final_selection_authorized": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

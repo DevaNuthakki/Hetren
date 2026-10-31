@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 68,
+  "state": "ADDENDUM_V68_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T03:37:47Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v68": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v68.json",
+      "sha256": "c6767942be64c254097a60e58941e631432354b19ebd66d653ca5b83990e1ee2"
+    },
+    "systematic_saturation_v65": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v65.json",
+      "sha256": "3b2c26cb79b81f1aae7402dd18c67a9733e4a82ceae9659ae0f77facf8e3f72c"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DUAL_MEMORY_LONG_HORIZON_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "OptimusVLA is published in the CVPR 2026 proceedings.",
+        "It combines Global Prior Memory with Local Consistency Memory.",
+        "Global Prior Memory retrieves task-level action priors from semantically related trajectories.",
+        "Local Consistency Memory models executed action history to estimate task progress and constrain subsequent action generation.",
+        "The official implementation contains runnable LIBERO evaluation support and released memory/checkpoint assets."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/CVPR26-OptimusVLA"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.20200"
+        }
+      ],
+      "limits": [
+        "VLA_ROBOTIC_MANIPULATION_SETTING_REQUIRED",
+        "BASE_PI05_OR_OTHER_POLICY_IDENTITY_MUST_BE_BOUND",
+        "GLOBAL_PRIOR_MEMORY_ASSETS_MUST_BE BOUND",
+        "LOCAL_CONSISTENCY_MEMORY_CONFIGURATION_MUST_BE BOUND",
+        "LIBERO_AND_REAL_WORLD_RESULTS_MUST_NOT_BE_COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "verification_state": "PUBLIC_PREPRINT_OFFICIAL_IMPLEMENTATION_AND_AUTHOR_REPORTED_CORL_2026_ACCEPTANCE_VERIFIED",
+      "role_disposition": "E1_EVENT_DRIVEN_VISUAL_MEMORY_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "EventVLA was publicly released before the Task-8 external-evidence cutoff.",
+        "It uses foundational visual anchors plus a dynamic Keyframe Evidence Memory.",
+        "The memory mechanism predicts the future utility of observations and stores sparse task-critical visual evidence.",
+        "The project releases the RoboTwin-MeM memory-dependent manipulation benchmark.",
+        "The official repository contains training and evaluation code and reports acceptance to CoRL 2026."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.20092"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/EventVLA"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://ganlin-yang.github.io/EventVLA.github.io/"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_CORL_PROCEEDINGS_RECORD_NOT_INDEPENDENTLY_BOUND_IN_THIS_REVIEW",
+        "CORL_ACCEPTANCE_WORDING_IS_FROM_THE_OFFICIAL_RESEARCH_REPOSITORY",
+        "MEMORY_DEPENDENT_LONG_HORIZON_VLA_SETTING_REQUIRED",
+        "KEYFRAME_MEMORY_CAPACITY_AND_SELECTION_CONFIGURATION_MUST_BE BOUND",
+        "ROBOWTIN_MEM_AND_RMBENCH_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v68_candidates_have_role_level_external_review": true,
+    "optimusvla_peer_review_verified": true,
+    "eventvla_public_preprint_and_executable_implementation_verified": true,
+    "eventvla_archival_corl_proceedings_record_independently_bound": false,
+    "all_addendum_v68_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "author_repository_acceptance_statement_is_archival_proceedings_verification": false,
+    "publication_status_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

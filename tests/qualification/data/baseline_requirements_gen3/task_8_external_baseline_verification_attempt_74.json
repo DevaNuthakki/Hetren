@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 74,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:59:44Z",
+  "task": 8,
+  "bindings": {
+    "attempt_73": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_73.json",
+      "sha256": "dc2e8c26f2865112ba2d127d272ee16f3d3a24bc3b3dfaedb02a3aaf61d7da5c"
+    },
+    "addendum_v72_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v72.json",
+      "sha256": "67eeb6310d2cbfb06412df1018567e68237e678bc182cba1417d3b49762599cd"
+    },
+    "systematic_saturation_v70": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v70.json",
+      "sha256": "1367f395b27c7f16c8e33c62dbc4bff9858451e671362c2163ce671265cf8160"
+    },
+    "candidate_addendum_v73": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v73.json",
+      "sha256": "c4bb2442a378c77ce2e8e3c6c2a88eba9d9c177530b815dfb8f9889790eb00f5"
+    }
+  },
+  "state_summary": {
+    "addendum_v72_empty_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v73_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B75_VERIFY_ADDENDUM_V73_AND_CONTINUE_BOUNDED_DISPLACEMENT_REFINEMENT",
+  "claim_limits": {
+    "discovery_stopping_satisfies_task_8": false,
+    "final_selection_authorized": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

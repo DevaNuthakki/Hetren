@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_ACCOUNTING_CONTRACT_ATTEMPT",
+  "attempt": 2,
+  "state": "DRAFT_ACCOUNTING_CONTRACT_HARDENED_NO_VALUES_RECORDED",
+  "recorded_at_utc": "2026-09-28T23:25:58Z",
+  "task": 9,
+  "bindings": {
+    "ledger_contract_v1": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "sha256": "44662f31243d3817a68b2613637c32874482b58d434f976581f100c462d5b620"
+    },
+    "measurement_contract_v1": {
+      "path": "docs/research/accounting/task-09-resource-measurement-contract-v1.json",
+      "sha256": "82d750776c8b2938d882c29985be5680e940b26576851477c56c8e126cc6eede"
+    },
+    "attempt_1": {
+      "path": "tests/qualification/data/task_9_accounting/task_9_accounting_contract_attempt_1.json",
+      "sha256": "871d5c1ae1ba7bdf8e3c39caa30723c8557833f4c434c13f05866a6bc2c9c532"
+    },
+    "red_team_review": {
+      "path": "docs/research/accounting/task-09-accounting-contract-red-team-v1.json",
+      "sha256": "472a22a04be317df4c9c5e5bbd65e9700f39b539be400efe919b2d1f1839105a"
+    },
+    "ledger_hardening": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-hardening-v1.json",
+      "sha256": "5b4f37fe3d0d61a5f9c6e77530fb4f16cab64709bcb8d5570be4a44189db01a2"
+    },
+    "measurement_hardening": {
+      "path": "docs/research/accounting/task-09-resource-measurement-hardening-v1.json",
+      "sha256": "7b9f560ccbda56936fa815282cd8f9baf6b6f112226ee8fbd02cf7e85142a21c"
+    }
+  },
+  "state_summary": {
+    "red_team_findings": 18,
+    "ledger_hardening_created": true,
+    "measurement_hardening_created": true,
+    "double_counting_control_defined": true,
+    "shared_resource_attribution_defined": true,
+    "retry_and_failure_accounting_defined": true,
+    "cache_and_warm_start_control_defined": true,
+    "provider_pricing_drift_control_defined": true,
+    "currency_conversion_control_defined": true,
+    "concurrency_control_defined": true,
+    "human_active_vs_elapsed_control_defined": true,
+    "retrospective_effort_control_defined": true,
+    "adaptation_phase_control_defined": true,
+    "task8_regime_boundary_preserved": true,
+    "post_result_change_control_defined": true,
+    "pareto_and_aggregation_control_defined": true,
+    "missing_zero_na_semantics_hardened": true,
+    "setup_amortization_control_defined": true,
+    "credits_and_discounts_control_defined": true,
+    "observed_values_recorded": 0,
+    "observed_measurements_recorded": 0,
+    "real_comparison_contract_instantiated": false,
+    "task8_baseline_selected": false,
+    "protected_execution_authorized": false
+  },
+  "effective_draft_contract_set": {
+    "ledger": [
+      "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "docs/research/accounting/task-09-cost-effort-ledger-hardening-v1.json"
+    ],
+    "measurement": [
+      "docs/research/accounting/task-09-resource-measurement-contract-v1.json",
+      "docs/research/accounting/task-09-resource-measurement-hardening-v1.json"
+    ],
+    "interpretation": "The v1 contracts remain frozen history. The hardening artifacts are additive draft overlays."
+  },
+  "next_gate": "T9A3_STATIC_CONTRACT_COHERENCE_AND_TASK8_HANDOFF_COMPATIBILITY_REVIEW",
+  "claim_limits": {
+    "governing_task9_contract_established": false,
+    "observed_cost_established": false,
+    "observed_effort_established": false,
+    "practical_value_established": false,
+    "task9_authority_established": false,
+    "scientific_support_established": false
+  }
+}

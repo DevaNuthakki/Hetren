@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Hetren Task 8 Generation 3 Qualification Cases",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "state",
+    "authoritative",
+    "scientific_support_established",
+    "target_generation",
+    "target_artifact",
+    "case_source_class",
+    "cases"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "artifact_type": {
+      "const": "TASK_8_GEN3_QUALIFICATION_CASES"
+    },
+    "state": {
+      "const": "DEVELOPMENT_QUALIFICATION"
+    },
+    "authoritative": {
+      "const": false
+    },
+    "scientific_support_established": {
+      "const": false
+    },
+    "target_generation": {
+      "const": 3
+    },
+    "target_artifact": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_source_class": {
+      "const": "KNOWN_DEVELOPMENT_CASE"
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 54,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "expectation",
+          "source_class",
+          "primary_requirement",
+          "requirement_key",
+          "environment",
+          "title",
+          "scenario",
+          "facts",
+          "rationale",
+          "protected_outcomes_observed"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^G3-Q-[0-9]{3}$"
+          },
+          "expectation": {
+            "enum": [
+              "MUST_ACCEPT",
+              "MUST_REJECT"
+            ]
+          },
+          "source_class": {
+            "const": "KNOWN_DEVELOPMENT_CASE"
+          },
+          "primary_requirement": {
+            "type": "string",
+            "pattern": "^G3-BR-[0-9]{3}$"
+          },
+          "requirement_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "environment": {
+            "enum": [
+              "E1",
+              "E2",
+              "E3",
+              "CROSS_ENV"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scenario": {
+            "type": "string",
+            "minLength": 1
+          },
+          "facts": {
+            "type": "object",
+            "minProperties": 1
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "protected_outcomes_observed": {
+            "const": false
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

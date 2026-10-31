@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 68,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T03:27:21Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v67": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v67.json",
+      "sha256": "1374ffcb2a1812a288360ee3785620782caecb7e5ada5d514b4600eaaa9b3251"
+    },
+    "systematic_saturation_v65": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v65.json",
+      "sha256": "3b2c26cb79b81f1aae7402dd18c67a9733e4a82ceae9659ae0f77facf8e3f72c"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "OptimusVLA",
+      "implementation_identity": "https://github.com/iLearn-Lab/CVPR26-OptimusVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_DUAL_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_HISTORY_CONDITIONED_VLA_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/CVPR26-OptimusVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW",
+        "Combines retrieval-based global prior memory with dynamically encoded local action-history consistency, giving it a materially different long-horizon memory mechanism from scratchpad, recurrent-token, and associative-memory candidates."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V65"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "EventVLA",
+      "implementation_identity": "https://github.com/InternRobotics/EventVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_EVENT_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_TEST_STREAM_VISUAL_MEMORY_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.20092"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/EventVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW",
+        "Uses learned future-keyframe probability to retain sparse task-critical visual evidence, a distinct memory-selection mechanism directly relevant to non-Markovian long-horizon manipulation."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V65"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

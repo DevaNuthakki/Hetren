@@ -1,0 +1,163 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_POST_DISCOVERY_CONCRETE_EXPERIMENT_CONTRACT_BINDING_READINESS",
+  "state": "BLOCKED_PENDING_CONCRETE_GOVERNED_EXPERIMENT_CONTRACT_INSTANTIATION",
+  "recorded_at_utc": "2026-09-27T20:14:19Z",
+  "task": 8,
+  "bindings": {
+    "canonical_reconciliation_v2": {
+      "path": "docs/research/baselines/task-08-post-discovery-canonical-identity-reconciliation-v2.json",
+      "sha256": "f7bf0a40591d1bab76e411f3a0d83058ab3a7298f710161acf7560756a8eb65e"
+    },
+    "applicability_framework_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-framework-v1.json",
+      "sha256": "d18f36cb450a1503c9e000effdc7a90b77a8cfc3829f931ffe25652504936952"
+    },
+    "concrete_tuple_resolution_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-applicability-tuple-resolution-v1.json",
+      "sha256": "4b0bac8b75b414e4e6474e80e0bfe23feabaab11b0c46d09ae11ffda0c779f9b"
+    },
+    "task_6_hypotheses": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7_split_protocol": {
+      "path": "docs/mvp/07-initial-splits.md",
+      "sha256": "d392120c20a6a829b6807e8217331ddd9b8a8f479722b204ae39edd17084ea46"
+    }
+  },
+  "canonical_inventory": {
+    "historical_candidate_ids": 223,
+    "canonical_candidate_identities": 222,
+    "candidate_to_canonical_id_schema_key": "candidate_to_canonical_id"
+  },
+  "required_concrete_tuple_fields": [
+    "environment_family",
+    "hypothesis_id",
+    "claim_or_decision_surface",
+    "concrete_experiment_or_task",
+    "comparison_role",
+    "candidate_information_access",
+    "baseline_information_access",
+    "candidate_interaction_opportunity",
+    "baseline_interaction_opportunity",
+    "candidate_tuning_opportunity",
+    "baseline_tuning_opportunity",
+    "adaptation_input_access_if_applicable",
+    "evaluator_contract",
+    "resource_match_class",
+    "required_model_or_system_family_match",
+    "required_data_or_environment_match",
+    "required_external_service_or_tool_match",
+    "applicability_exclusions"
+  ],
+  "required_concrete_tuple_field_count": 18,
+  "upstream_contract_templates": {
+    "N-H1": {
+      "split_plan": "SPLIT-NH1-DECISION",
+      "required_claim_surface": [
+        "experiment selection",
+        "action ranking",
+        "evidence-gap prioritization",
+        "hypothesis revision",
+        "stopping",
+        "abstention",
+        "next-action recommendation"
+      ],
+      "minimum_protected_structure": {
+        "evaluation_units": "AT_LEAST_TWO",
+        "independence": "DIFFERENT_APPLICABLE_INDEPENDENCE_GROUPS",
+        "partition_purpose": "PRIMARY_OUTCOME"
+      },
+      "baseline_semantics": [
+        "STRONGEST_APPLICABLE_MATCHED_BASELINE",
+        "DECLARED_RESOURCE_MATCHING_RULE"
+      ],
+      "candidate_specific_binding_ready": false
+    },
+    "N-H2": {
+      "split_plan": "SPLIT-NH2-XFAM",
+      "governed_boundaries": [
+        "NH2-XFAM-E1-V1",
+        "NH2-XFAM-E2-V1",
+        "NH2-XFAM-E3-V1"
+      ],
+      "minimum_protected_structure": {
+        "primary_boundary": "PREDECLARED",
+        "partition_purpose": "TRANSFER_TARGET",
+        "protected_target_outcome_tuning": "PROHIBITED"
+      },
+      "baseline_semantics": [
+        "STRONGEST_APPLICABLE_TRANSFER_COMPARATOR",
+        "MATCHED_SOURCE_COMPARATOR",
+        "NON_TRANSFER_OR_NON_LEARNED_TARGET_COMPARATOR"
+      ],
+      "candidate_specific_binding_ready": false
+    },
+    "A-H1": {
+      "split_plan": "SPLIT-AH1-ADAPT",
+      "minimum_structure": {
+        "adaptation_input": "GOVERNED_AND_SEPARATELY_IDENTIFIED",
+        "protected_primary_outcome": "REQUIRED",
+        "critical_invariant": "WHERE_APPLICABLE",
+        "pre_adaptation_candidate": "PRESERVED",
+        "post_adaptation_candidate": "FROZEN"
+      },
+      "baseline_semantics": [
+        "FROZEN_PRE_ADAPTATION_REFERENCE",
+        "NO_ADAPTATION_REFERENCE",
+        "STRONGEST_APPLICABLE_ADAPTATION_BASELINE"
+      ],
+      "candidate_specific_binding_ready": false
+    },
+    "A-H2": {
+      "split_plan": "SPLIT-AH2-RETENTION",
+      "minimum_structure": {
+        "prior_capability": "PROTECTED",
+        "locality": "PROTECTED",
+        "critical_invariant": "WHERE_APPLICABLE",
+        "pre_adaptation_state": "PRESERVED",
+        "post_adaptation_state": "PRESERVED",
+        "rollback_target": "EXPLICIT",
+        "post_rollback_state": "PRESERVED",
+        "paired_unit_identity": "PRESERVED_WHERE_APPLICABLE"
+      },
+      "baseline_semantics": [
+        "PRE_ADAPTATION_REFERENCE",
+        "ROLLBACK_TARGET_REFERENCE"
+      ],
+      "candidate_specific_binding_ready": false
+    }
+  },
+  "repository_contract_scan": {
+    "potential_structured_contract_artifacts": [],
+    "potential_structured_contract_artifact_count": 0,
+    "structurally_complete_contract_candidates": [],
+    "structurally_complete_contract_candidate_count": 0,
+    "scan_is_not_scientific_validation": true
+  },
+  "binding_state": {
+    "candidate_specific_concrete_bindings_created": 0,
+    "canonical_candidates_pending_concrete_binding": 222,
+    "mechanical_role_cross_product_used": false,
+    "experiment_specific_applicability_required": true,
+    "protected_outcomes_used": false
+  },
+  "blocking_reason": "No structurally complete concrete research experiment contract was found that simultaneously binds a SplitVersion, actual evaluation units or membership, evaluator, and concrete task identity.",
+  "ownership_guard": {
+    "task_6_owns": "hypothesis meaning, thresholds, falsification and claim scope",
+    "task_7_owns": "concrete split versions, partition identities, evaluation units, membership, provenance and leakage controls",
+    "task_8_owns": "baseline identity, implementation, version, role and comparison configuration",
+    "task_9_owns": "concrete resource measurement definitions and observed accounting values"
+  },
+  "claim_limits": {
+    "concrete_applicability_complete": false,
+    "comparable_candidate_sets_partitioned": false,
+    "strongest_applicable_ordering_started": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I5A2R7_INSTANTIATE_OR_IMPORT_GOVERNED_EXPERIMENT_CONTRACTS_BEFORE_TASK8_BINDING"
+}

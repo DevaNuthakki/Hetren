@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 34,
+  "state": "SATURATION_V34_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T23:10:24Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v36_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v36.json",
+      "sha256": "0007c07f363f0d644f102645bc7a9908bcd5ad48a6426dc9f7fcd80d247d996f"
+    },
+    "systematic_saturation_v33": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v33.json",
+      "sha256": "5c19202a5499d3546394abc388d65a1b8273e5f439b98ca643b2e69a40917be2"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_LONG_TERM_MEMORY",
+    "E1_EPISODIC_MEMORY_FILTERING",
+    "E1_STRUCTURED_MEMORY_AUGMENTATION",
+    "E1_PERSISTENT_AGENT_MEMORY",
+    "N_H1_ROLE_APPLICABILITY_ONLY"
+  ],
+  "queries_executed": [
+    "\"Agentic Memory\" AgeMem ACL 2026 official github",
+    "\"MemInsight\" EMNLP 2025 official github",
+    "\"EMA\" \"Episodic Memory Agent\" ACL 2026 github",
+    "\"Mem0\" scalable long-term memory agents paper github",
+    "\"Memory-R1\" ACL 2026 github memory agents",
+    "\"Fine-Mem\" ACL 2026 memory management github",
+    "\"Towards Autonomous Memory Agents\" U-Mem code",
+    "\"EvolveMem\" self-evolving memory architecture github",
+    "\"Steerable Memory Agent\" ACL 2026 code",
+    "\"memory management impacts LLM agents\" ACL 2026 memory deletion addition",
+    "2026 peer reviewed long-term memory LLM agent official code episodic memory",
+    "2026 learned memory manager LLM agents reinforcement learning official implementation",
+    "2025 EMNLP long-term memory agent retrieval official github",
+    "2026 ACL selective memory agent filtering official github",
+    "2026 direct memory architecture LLM agents executable code",
+    "2026 autonomous memory augmentation LLM agents executable implementation"
+  ],
+  "query_count": 16,
+  "proposed_mechanism_count": 3,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMINSIGHT",
+      "name": "MemInsight: Autonomous Memory Augmentation for LLM Agents",
+      "candidate_id_already_present": false,
+      "promoted_name_or_alias_matches": [],
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EMA-EPISODIC",
+      "name": "EMA: An Episodic Memory Agent for Efficient and Selective Memory",
+      "candidate_id_already_present": false,
+      "promoted_name_or_alias_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-EMA-MEMORY",
+          "name": "EMA \u2014 An Episodic Memory Agent for Efficient and Selective Memory"
+        }
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM0",
+      "name": "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory",
+      "candidate_id_already_present": false,
+      "promoted_name_or_alias_matches": [],
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMINSIGHT",
+      "name": "MemInsight: Autonomous Memory Augmentation for LLM Agents",
+      "aliases": [
+        "MemInsight",
+        "MemInsight: Autonomous Memory Augmentation for LLM Agents"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRUCTURED_MEMORY_AUGMENTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_EMNLP_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1683/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/MemInsight"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2503.21760"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_STRUCTURED_MEMORY_AUGMENTATION_AND_RETRIEVAL_SETTING_MATCHED",
+      "material_reason": "Autonomously augments historical interactions with structured semantic attributes and combines attribute-aware and embedding-based retrieval.",
+      "limits": [
+        "CONVERSATIONAL_RECOMMENDATION_QA_OR_SUMMARIZATION_ROLE_MUST_MATCH",
+        "ATTRIBUTE_GENERATION_MODEL_AND_PROMPTS_MUST_BE BOUND",
+        "RETRIEVAL_BACKEND_AND_EMBEDDING_CONFIGURATION_MUST_BE BOUND",
+        "NOT_AUTOMATICALLY_A_LEARNED_DECISION_POLICY_BASELINE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM0",
+      "name": "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory",
+      "aliases": [
+        "Mem0",
+        "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_PERSISTENT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PUBLISHED_RESEARCH_AND_OFFICIAL_OPEN_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2504.19413"
+        },
+        {
+          "class": "PUBLISHED_PROCEEDINGS_RECORD",
+          "url": "https://journals.sagepub.com/doi/10.3233/FAIA251160"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mem0ai/mem0"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_PERSISTENT_CONVERSATIONAL_OR_AGENT_MEMORY_SETTING_MATCHED",
+      "material_reason": "Provides a persistent memory architecture that extracts, consolidates, stores, and retrieves salient information across interactions, including a graph-memory variant.",
+      "limits": [
+        "OPEN_SOURCE_RESEARCH_CONFIGURATION_MUST_BE DISTINGUISHED_FROM_MANAGED_SERVICE_BEHAVIOR",
+        "EXTRACTION_RETRIEVAL_AND_GRAPH_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_MUST_NOT_DEFINE_FINAL_CUTOFF_VERSION",
+        "CONVERSATIONAL_MEMORY_RESULTS_MUST_NOT_BE GENERALIZED_TO_UNMATCHED_INTERACTIVE_AGENT_TASKS"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_BUT_EXECUTABLE_RELEASE_NOT_VERIFIED",
+      "relevance": "Learns ADD, UPDATE, DELETE and NOOP memory-management behavior with reinforcement learning.",
+      "disposition": "DIRECT_MEMORY_REFERENCE_BEHIND_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "The public repository observed during this review still states that code is coming soon; Task 8 must not fabricate reproducibility."
+    },
+    {
+      "name": "Fine-Mem",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.900/",
+        "https://arxiv.org/abs/2601.08435"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "relevance": "Uses chunk-level step rewards and evidence-anchored reward attribution to train long-horizon memory-management behavior.",
+      "disposition": "DIRECT_MEMORY_REFERENCE_BEHIND_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "This bounded review verified the peer-reviewed method but did not independently verify an official executable implementation."
+    },
+    {
+      "name": "U-Mem \u2014 Towards Autonomous Memory Agents",
+      "sources": [
+        "https://arxiv.org/abs/2602.22406"
+      ],
+      "evidence_state": "PREPRINT_WITH_RESEARCH_CODE_REFERENCE",
+      "relevance": "Actively acquires, validates and curates memory using escalating external information sources.",
+      "disposition": "RESEARCH_REFERENCE_BEHIND_INFORMATION_OPPORTUNITY_AND_PEER_REVIEW_GATES",
+      "reason": "Its active acquisition can access teacher, tool-research and expert-feedback channels that must not be compared against a baseline lacking the same information opportunity."
+    },
+    {
+      "name": "EvolveMem",
+      "sources": [
+        "https://arxiv.org/abs/2605.13941",
+        "https://github.com/aiming-lab/SimpleMem"
+      ],
+      "evidence_state": "PREPRINT_WITH_EXECUTABLE_RESEARCH_IMPLEMENTATION",
+      "relevance": "Autonomously changes retrieval configuration through evaluation, failure diagnosis, proposal and regression-guard cycles.",
+      "disposition": "RESEARCH_REFERENCE_BEHIND_EVALUATION_INFORMATION_BOUNDARY",
+      "reason": "Failure-log-driven architecture evolution requires an explicit non-protected development/evaluation boundary before it can be a matched comparator."
+    },
+    {
+      "name": "How Memory Management Impacts LLM Agents",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.27/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_EMPIRICAL_STUDY",
+      "relevance": "Studies memory addition/deletion, error propagation, experience following and memory quality.",
+      "disposition": "DIAGNOSTIC_EVIDENCE_NOT_STANDALONE_BASELINE",
+      "reason": "The paper provides empirical design evidence rather than one standalone memory policy to reproduce as a concrete baseline."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_search_is_not_n_h2_search": true,
+    "status": "UNCHANGED_GENERAL_CROSS_FAMILY_GAP"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unpromoted materially relevant direct-memory comparator was identified."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "direct_memory_candidate_is_automatically_strongest": false,
+    "reference_only_method_is_claim_bearing": false,
+    "memory_benchmark_result_establishes_general_agent_transfer": false,
+    "active_external_information_is_parity_equivalent": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B39_VERIFY_ADDENDUM_V37_AND_RUN_NEXT_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONTRACT_ADJUDICATION_STRUCTURAL_REPAIR_ATTEMPT",
+  "attempt": 1,
+  "state": "STRUCTURAL_REPAIR_COMPLETE_EXTERNAL_REAL_EXPERIMENT_AND_TASK9_DEPENDENCY_REMAINS",
+  "recorded_at_utc": "2026-09-28T23:13:00Z",
+  "task": 8,
+  "bindings": {
+    "structural_repair": {
+      "path": "docs/research/baselines/task-08-real-contract-adjudication-structural-repair-v1.json",
+      "sha256": "f81afc9077ea25f4e66cadfeeeedae3771d2dc7bbfcc9c44b3e5a196b84aa625"
+    },
+    "eligibility_adjudication": {
+      "path": "docs/research/baselines/task-08-real-contract-instantiation-eligibility-adjudication-v1.json",
+      "sha256": "872573dd4929ea79ac236f7b3765d1671318c92c9f9a17800ff9ffa639707bc7"
+    },
+    "dependency_block_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_real_experiment_task9_dependency_block_attempt_1.json",
+      "sha256": "9a05fac364f992bdfd06820a86f5b77e93014696caae2aeaac9070d2d1ae29b9"
+    }
+  },
+  "state_summary": {
+    "failed_schema_assumption_repaired": true,
+    "historical_artifacts_rewritten": false,
+    "fully_grounded_source_records": 0,
+    "explicit_true_real_execution_intent_found": false,
+    "real_contract_instantiation_authorized": false,
+    "baseline_selection_authorized": false,
+    "immutable_version_pinning_authorized": false,
+    "protected_execution_authorized": false,
+    "task8_lifecycle_transition_authorized": false
+  },
+  "next_gate": "I5A2R13G_RESUME_ONLY_AFTER_GOVERNED_REAL_EXPERIMENT_AND_TASK9_INPUTS_EXIST",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 14,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T05:31:59Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v13": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v13.json",
+      "sha256": "7f266fea80b452ac65197491640a7d1de0503f0ed7e1d0b8003cd376ce7b2291"
+    },
+    "systematic_saturation_v11": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v11.json",
+      "sha256": "cf466531eb1891f224926c9fafd056f41d88eb2e2671ac73e476ac21b0e8d10e"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-FTRL-TOOLUSE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FTRL \u2014 Feedback-Driven Tool-Use Improvements in Large Language Models via Automated Build Environments",
+      "implementation_identity": "https://github.com/bytedance/FTRL",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_TOOL_USE_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_VERIFIABLE_REWARD_TOOL_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.109/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bytedance/FTRL"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.08791"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_TOOL_USE_RL_AND_VERIFIABLE_ENVIRONMENT_SETTING_MATCHED",
+        "TOOL_SCHEMA_AND_ENVIRONMENT_GENERATION_CONFIGURATION_MUST_BE BOUND",
+        "VERIFIABLE_REWARD_DEFINITION_MUST_BE BOUND",
+        "BASE_MODEL_RL_ALGORITHM_AND_TRAINING_DATA_MUST_BE BOUND",
+        "AUTOMATED_BUILD_ENVIRONMENT_IS_TRAINING_INFRASTRUCTURE_AND_MUST_NOT_BE CONFUSED_WITH_DEPLOYMENT_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Provides an executable learned tool-use comparator built around automated training-environment construction, verifiable rewards for tool precision and task completion, trajectory collection, and reinforcement-learning updates."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_USE_RL_AND_VERIFIABLE_ENVIRONMENT_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V11"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

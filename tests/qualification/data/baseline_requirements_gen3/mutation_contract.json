@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_MUTATION_QUALIFICATION_CONTRACT",
+  "state": "DEVELOPMENT_MUTATION_QUALIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout": false,
+  "protected_evaluation": false,
+  "case_source_class": "KNOWN_DEVELOPMENT_MUTATION",
+  "target_generation": 3,
+  "target_evaluator": "scripts/baseline_requirements_gen3_semantics.py",
+  "source_case_registry": "tests/qualification/data/baseline_requirements_gen3/cases.json",
+  "expected_mutation_count": 34,
+  "expected_must_accept": 16,
+  "expected_must_reject": 18,
+  "require_all_g3_requirements_covered": true,
+  "allowed_expectations": [
+    "MUST_ACCEPT",
+    "MUST_REJECT"
+  ],
+  "allowed_operations": [
+    "set",
+    "delete"
+  ],
+  "interpretation": "These are known development adversarial mutations created after the 54-case first semantic wall. They test semantic robustness and over-rejection. They are not fresh holdout evidence, protected evaluation, independent verification, scientific support, or Task 8 authority."
+}

@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 55,
+  "state": "DISPLACEMENT_ONLY_V55_FOUND_NEW_MATERIAL_CANDIDATE",
+  "recorded_at_utc": "2026-09-27T02:03:33Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "discovery_mode_contract": {
+    "open_ended_canonical_enumeration_prohibited": true,
+    "new_candidate_requires_concrete_role_gap_or_plausible_displacement": true,
+    "matched_experiment_evidence_required_for_displacement": true,
+    "information_opportunity_mismatch_blocks_direct_displacement": true,
+    "resource_parity_remains_task_9_owned": true,
+    "protected_hetren_outcomes_prohibited": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v57_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v57.json",
+      "sha256": "43788f7a2b80bd339a0304e02041628b2c0929a8b574cfce063670c6f4cd1976"
+    },
+    "systematic_saturation_v54": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v54.json",
+      "sha256": "2f6baa55ba7bffdaf60095a30a4f017117fdb9da18f0b82fce970c959fbcc567"
+    }
+  },
+  "queries_executed": [
+    "OpenVLA-OFT RSS 2025 OpenVLA LIBERO direct comparison official code",
+    "OpenVLA-OFT ACT Diffusion Policy ALOHA direct comparison",
+    "OpenVLA-OFT Octo LIBERO benchmark direct comparison",
+    "OpenVLA-OFT RDT-1B pi0 ALOHA direct comparison",
+    "Embodied Chain-of-Thought OpenVLA direct generalization comparison official code",
+    "ECoT OpenVLA synthetic reasoning supervision information opportunity",
+    "ConRFT Octo reinforced fine tuning RSS 2025 official code",
+    "ConRFT human intervention online fine tuning Octo information opportunity"
+  ],
+  "query_count": 8,
+  "displacement_probes": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA-OFT",
+      "name": "OpenVLA-OFT",
+      "prior_promoted_identity_found": false,
+      "prior_identity_matches": [],
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "target_candidate_ids": [
+        "DISCOVERY:T8-E1-OPENVLA",
+        "DISCOVERY:T8-E1-OCTO",
+        "DISCOVERY:T8-E1-DIFFUSION-POLICY",
+        "DISCOVERY:T8-E1-ACT"
+      ],
+      "basis": [
+        "The RSS 2025 paper evaluates OpenVLA-OFT on all four LIBERO task suites and directly compares against OpenVLA and other learned robot policies.",
+        "The same work evaluates bimanual ALOHA tasks against VLA and imitation-learning policies including RDT-1B, pi0, Diffusion Policy, and ACT.",
+        "Because these are head-to-head evaluations on matched benchmark or robot/task settings, OpenVLA-OFT can plausibly alter the retained comparator set for those specific contracts."
+      ]
+    }
+  ],
+  "screened_not_promoted": [
+    {
+      "name": "Robotic Control via Embodied Chain-of-Thought Reasoning / ECoT",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v270/zawalski25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MichalZawalski/embodied-CoT"
+        }
+      ],
+      "disposition": "SCREENED_INFORMATION_OPPORTUNITY_NOT_ASSUMED_MATCHED",
+      "reason": "ECoT directly improves an OpenVLA-derived policy on generalization tasks, but its training adds generated embodied-reasoning supervision. Task 8 must not call that a direct displacement unless the matched experiment explicitly permits and accounts for that supervision opportunity."
+    },
+    {
+      "name": "ConRFT",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss21/p019.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/cccedric/conrft"
+        }
+      ],
+      "disposition": "SCREENED_ONLINE_INTERACTION_AND_HUMAN_INTERVENTION_INFORMATION_GATE",
+      "reason": "ConRFT is a real peer-reviewed reinforced fine-tuning method built around Octo, but its online stage uses environment interaction and human intervention. It cannot displace an offline comparator unless that information opportunity is explicitly permitted and parity-accounted."
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA-OFT",
+      "name": "OpenVLA-OFT",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING",
+        "N_H1_LEARNED_COMPARATOR"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2025_WITH_OFFICIAL_IMPLEMENTATION_AND_DIRECT_MATCHED_COMPARISONS",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss21/p017.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/moojink/openvla-oft"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://openvla-oft.github.io/"
+        }
+      ],
+      "displacement_targets": [
+        "DISCOVERY:T8-E1-OPENVLA",
+        "DISCOVERY:T8-E1-OCTO",
+        "DISCOVERY:T8-E1-DIFFUSION-POLICY",
+        "DISCOVERY:T8-E1-ACT"
+      ],
+      "direct_matched_evidence": [
+        "The RSS 2025 paper evaluates OpenVLA-OFT on all four LIBERO task suites and directly compares against OpenVLA and other learned robot policies.",
+        "The same work evaluates bimanual ALOHA tasks against VLA and imitation-learning policies including RDT-1B, pi0, Diffusion Policy, and ACT.",
+        "Because these are head-to-head evaluations on matched benchmark or robot/task settings, OpenVLA-OFT can plausibly alter the retained comparator set for those specific contracts."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_PENDING_CONFIGURATION_INFORMATION_AND_RESOURCE_PARITY",
+      "limits": [
+        "NOT_AUTOMATICALLY_STRONGEST_OUTSIDE_MATCHED_LIBERO_OR_ALOHA_CONTRACTS",
+        "INPUT_VARIANT_WRIST_CAMERA_AND_PROPRIOCEPTION_MUST_BE MATCHED",
+        "OPENVLA_BASE_CHECKPOINT_AND_OFT_RECIPE_MUST_BE PINNED",
+        "FINETUNING_DATA_AND_TRAINING_BUDGET_REQUIRE_TASK_9_ACCOUNTING",
+        "HEAD_TO_HEAD_PUBLIC_RESULTS_ARE_SELECTION_EVIDENCE_NOT_PROTECTED_HETREN_OUTCOMES"
+      ],
+      "materiality_basis": "DIRECT_HEAD_TO_HEAD_DISPLACEMENT_EVIDENCE_AGAINST_ALREADY_GOVERNED_E1_COMPARATORS"
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "status": "UNRESOLVED",
+    "displacement_only_search_did_not_reinterpret_within_family_robot_policy_generalization_as_general_n_h2": true
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "OpenVLA-OFT is a genuinely new direct-displacement candidate, so the counter remains zero."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "direct_public_benchmark_result_is_protected_hetren_outcome": false,
+    "openvla_oft_is_automatically_strongest_for_all_e1_experiments": false,
+    "ecot_is_directly_parity_matched_without_supervision_review": false,
+    "conrft_is_directly_parity_matched_without_online_interaction_review": false,
+    "global_literature_exhaustion_claimed": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I4B60_VERIFY_ADDENDUM_V58_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

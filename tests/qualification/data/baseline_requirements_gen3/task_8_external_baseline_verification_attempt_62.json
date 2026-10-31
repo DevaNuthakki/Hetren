@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 62,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:28:49Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "attempt_61": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_61.json",
+      "sha256": "e7309115564e703f3f0b82a5a03d7cb318c2ced8f54dd616b9dea32bff816eb9"
+    },
+    "addendum_v60_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v60.json",
+      "sha256": "628b63e26f3c0125fb78e434e2ce8a0f991cecbbcc0679c162bdafe8a79fa556"
+    },
+    "systematic_saturation_v58": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v58.json",
+      "sha256": "ff13be596239a987f2c73d8259fb36f7889e6144df6da78a456aa49300b5f125"
+    },
+    "candidate_addendum_v61": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v61.json",
+      "sha256": "b77401d4efd83fd5175a75bef8c08e22f32d91072565c4f94dddea3938060702"
+    }
+  },
+  "state_summary": {
+    "addendum_v60_role_review_complete": true,
+    "new_material_candidates_found": 4,
+    "candidate_addendum_v61_count": 4,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason": "At least one new role-matched displacement candidate survived structured identity review; the stopping counter therefore remains zero.",
+  "next_gate": "I4B63_VERIFY_ADDENDUM_V61_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false,
+    "final_selection_authorized": false
+  }
+}

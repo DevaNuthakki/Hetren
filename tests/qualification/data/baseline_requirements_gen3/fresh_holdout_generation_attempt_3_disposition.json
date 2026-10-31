@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_ATTEMPT_3_DISPOSITION",
+  "state": "ABORTED_PRE_CASE_GENERATION_HANDOFF_SCOPE_MISMATCH",
+  "generation_attempt": 3,
+  "generation_failure_artifact_sha256": "626f272c0c4142c8677fcc73dd400794ef1842e054fef7a616fe2f9ec4ece241",
+  "generation_package_v3_sha256": "0d55267ee6b40ac69fd07470dcf09e5714ba3002686f62d4cc6a5a9625ebe8ff",
+  "generation_package_v3_manifest_sha256": "b92572819c2ae9b63e69c1e9314132f9ad998d478825d158a316a72cf74bf269",
+  "generation_package_v3_checker_sha256": "7a7ed51a888432d805612c5531e9b91748bf2e5485c953c4da58853b1887550f",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "target_freshness_consumed": false,
+  "protected_evidence_leakage_proven": false,
+  "nonpackage_hetren_context_detected": false,
+  "generation_package_semantic_defect_established": false,
+  "generation_package_interface_defect_established": false,
+  "target_evaluator_defect_established": false,
+  "holdout_case_defect_established": false,
+  "generator_failure_established": false,
+  "handoff_instruction_scope_defect_established": true,
+  "rejection_stage": "PRE_CASE_GENERATION_ISOLATION_GATE",
+  "primary_finding": {
+    "code": "HANDOFF_INSTRUCTION_SCOPE_BROADER_THAN_PACKAGE_ISOLATION_SCOPE",
+    "classification": "OPERATIONAL_HANDOFF_SCOPE_DEFECT",
+    "blocking_for_attempt_3": true,
+    "package_required_scope": "Abort when non-package Hetren-specific context is present.",
+    "handoff_instruction_scope": "Abort when any non-file project-specific context is present.",
+    "observed_result": "The generator detected unrelated project, memory, and prior-chat context, detected no non-package Hetren-specific context, and therefore failed closed under the broader handoff instruction before generating any cases.",
+    "interpretation": "Attempt 3 is not eligible to continue because its generation session terminated before case generation. The termination does not establish a Package-v3 semantic defect, target-evaluator defect, case defect, generator defect, contamination event, or protected-evidence leak."
+  },
+  "non_findings": {
+    "nonpackage_hetren_context_exposure_proven": false,
+    "prior_generation_attempt_exposure_proven": false,
+    "repository_material_exposure_proven": false,
+    "target_evaluator_information_exposure_proven": false,
+    "prior_cases_mutations_predictions_results_exposure_proven": false,
+    "remediation_history_exposure_proven": false,
+    "protected_evidence_leakage_proven": false
+  },
+  "preservation_rules": {
+    "attempt_3_failure_bytes_are_immutable_historical_evidence": true,
+    "attempt_3_session_must_not_be_reused_for_generation": true,
+    "attempt_3_must_not_be_reclassified_as_fresh_success": true,
+    "attempt_3_is_not_regression_evidence": true,
+    "attempt_3_is_generation_boundary_evidence_only": true,
+    "package_v3_history_must_remain_preserved": true
+  },
+  "freshness_consequence": {
+    "target_freshness_consumed": false,
+    "reason": "No cases were generated and the target evaluator was not accessed, executed, simulated, or used to produce predictions.",
+    "successor_generation_attempt_permitted": true
+  },
+  "successor_requirement": {
+    "next_attempt": 4,
+    "preserve_generation_3_semantics": true,
+    "preserve_preregistration_contract": true,
+    "preserve_public_evaluator_contract": true,
+    "preserve_frozen_target_evaluator": true,
+    "do_not_supply_attempt_3_failure_to_generator": true,
+    "do_not_supply_attempt_3_disposition_to_generator": true,
+    "isolation_scope_must_be_hetren_specific": true,
+    "unrelated_non_hetren_context_must_not_trigger_abort": true,
+    "nonpackage_hetren_context_must_trigger_abort": true,
+    "handoff_instruction_must_not_broaden_package_scope": true
+  },
+  "claim_limits": {
+    "attempt_3_establishes_no_scientific_support": true,
+    "attempt_3_establishes_no_task_8_authority": true,
+    "attempt_3_establishes_no_task_5_support": true,
+    "attempt_3_establishes_no_generalization": true
+  },
+  "interpretation": "Generation Attempt 3 is preserved as a valid fail-closed pre-case-generation isolation event. It aborted because the external handoff instruction broadened the isolation trigger from non-package Hetren-specific context to any non-file project-specific context. The artifact explicitly reports that no non-package Hetren-specific context was identified. No cases or target predictions were produced, so target freshness remains unconsumed. Attempt 4 is the governed successor."
+}

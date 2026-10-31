@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 64,
+  "state": "ADDENDUM_V64_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:52:18Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v64": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v64.json",
+      "sha256": "52bbbce4758e454631e598017e2e2cca2864190f5f0246ac5f2e1c6474975ad9"
+    },
+    "systematic_saturation_v61": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v61.json",
+      "sha256": "73daf20b19b35381edb273b8444b989fff17a751dae0eea31acd0686c24d2a16"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LINGBOT-VLA-2",
+      "candidate_name": "LingBot-VLA 2.0",
+      "verification_state": "PUBLIC_TECHNICAL_REPORT_OFFICIAL_CODE_AND_RELEASED_WEIGHTS_VERIFIED",
+      "role_disposition": "E1_CROSS_EMBODIMENT_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "LingBot-VLA 2.0 has a public 2026 technical report.",
+        "Its design uses heterogeneous cross-embodiment robot and egocentric data.",
+        "Its action representation covers arms, end effectors, grippers, dexterous hands, waist, head, and mobile-base signals.",
+        "The official repository provides pretrained weights, training configuration, RoboTwin post-training examples, and deployment code.",
+        "The work reports long-horizon mobile-manipulation evaluation across more than one robot embodiment."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2607.06403"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Robbyant/lingbot-vla-v2"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_REQUIRED_OR_ASSERTED_BY_THIS_RECORD",
+        "MATCHED_EMBODIMENT_TASK_AND_DATA_REGIME_REQUIRED",
+        "PRETRAINING_AND_POSTTRAINING_DATA_OPPORTUNITY_MUST_BE AUDITED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "CROSS_EMBODIMENT_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HEX-HUMANOID",
+      "candidate_name": "HEX",
+      "verification_state": "PUBLIC_RESEARCH_OFFICIAL_PRETRAIN_FINETUNE_CODE_AND_DATA_VERIFIED",
+      "role_disposition": "E1_HUMANOID_CROSS_EMBODIMENT_WHOLE_BODY_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "HEX is a whole-body vision-language-action framework for full-sized humanoid robots.",
+        "Its architecture aligns heterogeneous humanoid states into shared body-part slots.",
+        "It combines visual-language processing, proprioceptive prediction, and continuous action generation.",
+        "The official repository provides pretraining and fine-tuning code.",
+        "The official repository reports release of its pretraining and fine-tuning datasets before the frozen Task-8 evidence cutoff."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.07993"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Open-X-Humanoid/HEX"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_ASSERTED_BY_THIS_RECORD",
+        "HUMANOID_WHOLE_BODY_TASK_MATCH_REQUIRED",
+        "BASE_VLM_DATASET_AND_WHOLE_BODY_CONTROLLER_IDENTITIES_MUST_BE BOUND",
+        "SIMULATION_AND_REAL_HUMANOID_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CROSS_EMBODIMENT_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENHLM",
+      "candidate_name": "OpenHLM",
+      "verification_state": "PUBLIC_RESEARCH_FULL_STACK_CODE_DATA_AND_CHECKPOINTS_VERIFIED",
+      "role_disposition": "E1_WHOLE_BODY_HUMANOID_LOCO_MANIPULATION_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "OpenHLM is a whole-body native VLA system for humanoid loco-manipulation.",
+        "It maps language and camera observations to coordinated whole-body humanoid actions.",
+        "The official project reports controlled studies of teleoperation interface, VLA design, and heterogeneous co-training.",
+        "Its public repository contains hardware, data-processing, policy-training, and deployment components.",
+        "Public model checkpoints are available."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.22174"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHLM-project/OpenHLM"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://openhlm-project.github.io/"
+        }
+      ],
+      "limits": [
+        "FINAL_ARCHIVAL_PUBLICATION_IDENTITY_NOT_REQUIRED_OR_ASSERTED_HERE",
+        "WHOLE_BODY_HUMANOID_LOCO_MANIPULATION_SETTING_REQUIRED",
+        "DEMONSTRATION_BUDGET_AND_COTRAINING_DATA_MUST_BE PARITY_AUDITED",
+        "HIGH_LEVEL_POLICY_AND_LOW_LEVEL_CONTROL_STACK_MUST_BE VERSION_BOUND",
+        "HUMANOID_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v64_candidates_have_role_level_external_review": true,
+    "all_addendum_v64_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "technical_report_is_peer_reviewed": false,
+    "cross_embodiment_transfer_is_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

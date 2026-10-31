@@ -1,0 +1,292 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_SELECTION_PREREGISTRATION",
+  "state": "FROZEN_BEFORE_EXTERNAL_BASELINE_DISCOVERY",
+  "created_at_utc": "2026-09-26T02:47:25Z",
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "task": 8,
+  "scope": "Discovery, comparison, retention, exclusion, and later concrete selection of initial Task-8 baseline implementations for the governed Native and Adaptive MVP research programs.",
+  "input_boundary": {
+    "gap_classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_gap_classification.json",
+      "sha256": "6ad2c2e93326513c7a26be2490a1b63892b996db372eb83047949148fac2d1ff"
+    },
+    "generation_3": {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    "task_6": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7": {
+      "path": "docs/mvp/07-initial-splits.md",
+      "sha256": "d392120c20a6a829b6807e8217331ddd9b8a8f479722b204ae39edd17084ea46"
+    }
+  },
+  "environment_mapping": {
+    "E1": "E1_AGENT",
+    "E2": "E2_STRUCTURED_ML",
+    "E3": "E3_VISION"
+  },
+  "research_role_matrix": [
+    {
+      "role": "N_H1_STRONGEST_MATCHED_CLAIM_BEARING",
+      "hypothesis": "N-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "N_H1_NON_LEARNED_COMPARATOR",
+      "hypothesis": "N-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "N_H1_LEARNED_COMPARATOR",
+      "hypothesis": "N-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "N_H2_TRANSFER_COMPARATOR",
+      "hypothesis": "N-H2",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "N_H2_TARGET_STARTING_REFERENCE",
+      "hypothesis": "N-H2",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "N_H2_FIXED_OR_NON_LEARNED_REFERENCE",
+      "hypothesis": "N-H2",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "A_H1_FROZEN_PRE_ADAPTATION_REFERENCE",
+      "hypothesis": "A-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "A_H1_NO_ADAPTATION_REFERENCE",
+      "hypothesis": "A-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "A_H1_STRONGEST_MATCHED_ADAPTATION_BASELINE",
+      "hypothesis": "A-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    },
+    {
+      "role": "A_H1_CONVENTIONAL_UPDATE_COMPARATOR_IF_REQUIRED",
+      "hypothesis": "A-H1",
+      "environments": [
+        "E1",
+        "E2",
+        "E3"
+      ]
+    }
+  ],
+  "a_h2_control_obligation": {
+    "hypothesis": "A-H2",
+    "note": "A-H2 primarily requires governed pre/post prior-capability, locality, critical-invariant, rollback, and state-restoration bindings. It must not be forced into an invented external baseline role merely for symmetry."
+  },
+  "eligible_candidate_classes": [
+    "deterministic or explicitly non-learned comparator",
+    "fixed learned comparator",
+    "strong externally implemented learned comparator",
+    "target-starting or no-transfer reference",
+    "standard conventional adaptation or update method",
+    "no-adaptation reference",
+    "pre-adaptation state reference",
+    "other materially relevant comparator justified by the governed role"
+  ],
+  "external_source_classes": [
+    {
+      "class": "PRIMARY_RESEARCH",
+      "acceptable": "Peer-reviewed paper or archival research paper with stable identifier."
+    },
+    {
+      "class": "OFFICIAL_BENCHMARK",
+      "acceptable": "Official benchmark paper, specification, documentation, or maintained leaderboard methodology."
+    },
+    {
+      "class": "OFFICIAL_IMPLEMENTATION",
+      "acceptable": "Official implementation repository, immutable release, commit, package release, weights release, or model card."
+    },
+    {
+      "class": "OFFICIAL_PROVIDER",
+      "acceptable": "Official provider documentation for an externally hosted model or service."
+    },
+    {
+      "class": "INDEPENDENT_EVALUATION",
+      "acceptable": "Independent replication or comparative evaluation used as supporting evidence."
+    }
+  ],
+  "weak_source_policy": {
+    "marketing_page_as_sole_strength_evidence": false,
+    "unsourced_blog_as_sole_strength_evidence": false,
+    "social_media_as_sole_strength_evidence": false,
+    "aggregator_without_methodology_as_sole_strength_evidence": false,
+    "weak_sources_may_be_used_for_navigation_only": true
+  },
+  "search_query_templates": [
+    "{environment} {role} strong baseline benchmark",
+    "{environment} {role} comparator research",
+    "{environment} {role} reproducible implementation",
+    "{environment} {mechanism_class} baseline benchmark",
+    "{hypothesis_role} baseline implementation {environment}"
+  ],
+  "search_procedure": [
+    "Execute discovery independently for every materially applicable environment-role combination.",
+    "Log every exact search query and source consulted.",
+    "Preserve every materially considered candidate, including candidates later excluded.",
+    "For every retained candidate, locate a primary paper or official implementation/provider source where available.",
+    "Record implementation identity, version or revision, configuration surface, and reproducibility status.",
+    "Record public evidence supporting strength or relevance without consulting Hetren protected outcomes.",
+    "Record information-access, tuning, adaptation-input, tool, permission, and evaluator compatibility relevant to parity.",
+    "Record known limitations, licensing or access constraints, and exclusion reasons.",
+    "Do not select a globally universal comparator merely because one method appears across multiple environments.",
+    "Apply NOT_APPLICABLE only when the governed requirement is genuinely inapplicable and omission does not change claim meaning."
+  ],
+  "search_stopping_rule": {
+    "rule": "For each environment-role combination, discovery may stop only after the declared query families and materially relevant mechanism classes have been searched, retained candidates have primary or official provenance where available, and two consecutive reasonable query refinements add no materially new eligible comparator.",
+    "protected_outcome_driven_stopping_prohibited": true
+  },
+  "eligibility_gates": [
+    "The candidate genuinely satisfies the required comparison role.",
+    "The candidate is applicable to the governed environment and experiment type.",
+    "Its implementation or hosted behavior can be identified with sufficient provenance.",
+    "Its configuration and information opportunity can be governed under Task-8 parity semantics.",
+    "Its evaluator relationship can be disclosed and controlled.",
+    "Its use does not require protected Hetren outcomes for tuning, discovery, eligibility, exclusion, or selection.",
+    "Its resource regime can be represented without Task 8 inventing Task-9 concrete accounting values.",
+    "Its access or licensing conditions permit the intended governed evaluation."
+  ],
+  "strength_evidence_rule": {
+    "principle": "Strongest applicable means strongest within the governed eligible matched set discovered under this preregistered search contract, not globally optimal.",
+    "allowed_evidence": [
+      "public benchmark evidence",
+      "peer-reviewed or archival comparative evidence",
+      "official benchmark results with disclosed methodology",
+      "independent replication evidence",
+      "domain-appropriate documented performance evidence"
+    ],
+    "prohibited_evidence": [
+      "Hetren protected evaluation outcomes",
+      "future protected candidate-versus-baseline outcomes",
+      "post-hoc exclusion because a comparator is difficult to beat"
+    ]
+  },
+  "selection_rule": [
+    "First apply applicability and governance eligibility gates.",
+    "Do not compare methods across materially incomparable tasks as though a single numerical ranking were meaningful.",
+    "Within a defensibly comparable eligible set, retain the comparator supported as strongest by pre-protected public evidence.",
+    "If public evidence cannot defensibly order materially tied eligible comparators, preserve all tied comparators as claim-bearing rather than arbitrarily choosing the easiest one.",
+    "A governed claim must survive every retained claim-bearing comparator required by the frozen experiment contract.",
+    "Diagnostic anchors must remain explicitly separate from claim-bearing comparators."
+  ],
+  "tie_policy": {
+    "arbitrary_single_winner_selection": false,
+    "retain_material_ties": true,
+    "claim_must_not_hide_failure_against_retained_tied_comparator": true
+  },
+  "version_and_reproducibility_policy": {
+    "open_or_local_implementation": "Bind repository or package identity, immutable commit/release, weights or artifact digest where applicable, and behavior-relevant configuration.",
+    "externally_hosted_service": "Bind provider identity, advertised model/revision, timestamp, configuration, captured outputs where required, and explicitly record inability to guarantee immutable backend behavior.",
+    "material_behavior_change_requires_new_baseline_version": true
+  },
+  "candidate_registry_required_fields": [
+    "baseline_id",
+    "baseline_version",
+    "name",
+    "implementation_identity",
+    "implementation_version_or_revision",
+    "environment_families",
+    "hypothesis_roles",
+    "comparison_role",
+    "claim_bearing_or_diagnostic",
+    "source_references",
+    "selection_evidence",
+    "configuration",
+    "information_access",
+    "tuning_and_selection_policy",
+    "adaptation_input_access_if_applicable",
+    "resource_dimensions_requiring_task_9_values",
+    "evaluator_relationship",
+    "reproducibility_and_pinning",
+    "license_or_access_status",
+    "known_limitations",
+    "eligibility_status",
+    "exclusion_reason_if_excluded",
+    "provenance"
+  ],
+  "planned_research_outputs": [
+    "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+    "docs/research/baselines/task-08-concrete-baseline-selection-review.md"
+  ],
+  "later_governance_outputs_not_created_by_this_step": [
+    "Task-8 governing MVP baseline specification",
+    "accepted concrete baseline registry",
+    "Task-8 lifecycle decision",
+    "Task-8 qualification record"
+  ],
+  "completion_gate_before_governing_specification": [
+    "Every required environment-role combination has at least one retained eligible concrete comparator or a governed NOT_APPLICABLE disposition.",
+    "Every retained comparator has stable identity and version semantics.",
+    "Every retained comparator has reproducible or explicitly limitation-bounded provenance.",
+    "Every materially considered excluded comparator has an exclusion reason.",
+    "No selection used protected Hetren outcomes.",
+    "Role separation between diagnostic and claim-bearing comparators is explicit.",
+    "Task-9-owned numerical resource values remain uninvented.",
+    "Candidate registry and selection review are frozen before lifecycle acceptance work begins."
+  ],
+  "claim_limits": {
+    "this_preregistration_selects_a_concrete_baseline": false,
+    "this_preregistration_establishes_task_8_authority": false,
+    "this_preregistration_establishes_scientific_support": false,
+    "this_preregistration_completes_task_8": false,
+    "semantic_qualification_history_remains_unchanged": true
+  },
+  "execution_state": {
+    "external_baseline_research_started": false,
+    "candidate_registry_created": false,
+    "concrete_baseline_selected": false,
+    "task_8_governing_specification_created": false,
+    "lifecycle_decision_created": false
+  }
+}

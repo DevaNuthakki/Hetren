@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 55,
+  "state": "ADDENDUM_V55_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:48:36Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v55": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v55.json",
+      "sha256": "2fb32403720056dc13b741d8e05196026e572888862a634c42251cd5c5ae00c3"
+    },
+    "systematic_saturation_v52": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v52.json",
+      "sha256": "569c6d3aaefb6a9ed9d6dca52322b4fdc0b1b665da64422c08fc334b36afffb7"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLM-PLANNER",
+      "verification_state": "PEER_REVIEWED_ICCV_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_FEW_SHOT_GROUNDED_PLANNING_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "LLM-Planner is published at ICCV 2023.",
+        "It uses a large language model for few-shot grounded planning in embodied environments.",
+        "Its planning loop incorporates current-environment grounding and plan updates.",
+        "The official repository contains both a high-level planner component and an end-to-end agent implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Song_LLM-Planner_Few-Shot_Grounded_Planning_for_Embodied_Agents_with_Large_Language_ICCV_2023_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OSU-NLP-Group/LLM-Planner"
+        }
+      ],
+      "limits": [
+        "MATCHED_EMBODIED_ENVIRONMENT_REQUIRED",
+        "LLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "HIGH_LEVEL_AND_END_TO_END_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "LOW_LEVEL_CONTROLLER_INFORMATION_ACCESS_MUST_BE AUDITED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VIMA",
+      "verification_state": "PEER_REVIEWED_ICML_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_MULTIMODAL_PROMPT_ROBOT_POLICY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "VIMA is published at ICML 2023.",
+        "It expresses robot manipulation tasks through interleaved textual and visual prompts.",
+        "Its policy autoregressively predicts robot control actions for environment interaction steps.",
+        "The official implementation provides model code, pretrained checkpoints, demonstration and evaluation scripts.",
+        "VIMA-Bench provides a Gym-style interactive task suite with multiple generalization levels."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v202/jiang23b"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vimalabs/VIMA"
+        },
+        {
+          "class": "OFFICIAL_BENCHMARK_IMPLEMENTATION",
+          "url": "https://github.com/vimalabs/VimaBench"
+        }
+      ],
+      "limits": [
+        "VIMA_BENCH_TASK_AND_GENERALIZATION_LEVEL_MUST_BE BOUND",
+        "CHECKPOINT_SIZE_AND_TRAINING_DATA_REGIME_MUST_BE BOUND",
+        "OBJECT_DETECTOR_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "MULTIMODAL_GENERALIZATION_WITHIN_ROBOTICS_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RT1",
+      "verification_state": "PRIMARY_RESEARCH_AND_GOOGLE_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LARGE_SCALE_LEARNED_ROBOT_CONTROL_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "RT-1 is a large-scale Robotics Transformer for real-world multi-task robot control.",
+        "Its policy tokenizes robot observations, language instructions, and motor actions for end-to-end control.",
+        "Google Research publicly released RT-1 implementation artifacts and trained checkpoints.",
+        "The public RT-1 repository includes checkpoints for multiple training regimes."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2212.06817"
+        },
+        {
+          "class": "OFFICIAL_PROVIDER_RESEARCH_PAGE",
+          "url": "https://robotics-transformer1.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/robotics_transformer"
+        }
+      ],
+      "limits": [
+        "RT1_CHECKPOINT_AND_TRAINING_REGIME_MUST_BE BOUND",
+        "ROBOT_EMBODIMENT_AND_ACTION_SPACE_MUST_BE MATCHED",
+        "REAL_WORLD_DATA_ACCESS_AND_INFORMATION_PARITY_MUST_BE AUDITED",
+        "RT1_AND_RT1X_MUST_NOT_BE COLLAPSED",
+        "CROSS_TASK_GENERALIZATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v55_candidates_have_role_level_external_review": true,
+    "all_addendum_v55_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "publication_or_public_code_establishes_strongest_status": false,
+    "cross_task_robot_generalization_establishes_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 1,
+  "state": "PARTIAL_EXTERNAL_VERIFICATION_COMPLETE_MORE_REVIEW_REQUIRED",
+  "recorded_at_utc": "2026-09-26T03:03:58Z",
+  "task": 8,
+  "bindings": {
+    "i4a_registry": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+      "sha256": "83235e3348fa7afbc774fa0335d535f966f2a8a67cc8db46f47803ad37318d36"
+    },
+    "i4a_discovery_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_discovery_attempt_1.json",
+      "sha256": "6584367b3ff4e10f76a22cbe715fdedf377d7c96ecd18a8b547157bd7ddb90c3"
+    },
+    "verification_v1": {
+      "path": "docs/research/baselines/task-08-candidate-external-verification-v1.json",
+      "sha256": "8cba21662988be395464034a435bafad3ad0d6253a659c63200a6bbdee135f09"
+    }
+  },
+  "verification_counts": {
+    "release_facts": 8,
+    "implementation_status_findings": 4,
+    "role_fit_findings": 16,
+    "remaining_partial_or_unreviewed": 15
+  },
+  "registry_rewrite_authorized": false,
+  "final_selection_authorized": false,
+  "search_stopping_rule_satisfied": false,
+  "concrete_baseline_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false,
+  "next_gate": "I4B2_REMAINING_CANDIDATE_VERIFICATION_AND_FULL_REVISION_PINNING"
+}

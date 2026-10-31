@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_IDENTITY_RESOLUTION",
+  "resolution_generation": 1,
+  "state": "PRIOR_PROMOTED_IDENTITY_CONFIRMED_NO_NEW_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:18:34Z",
+  "task": 8,
+  "subject": {
+    "name": "Dynamic Style Bridging",
+    "paper_title": "Dance Across Shifts: Forward-Facilitation Continual Test-Time Adaptation through Dynamic Style Bridging",
+    "arxiv_id": "2605.18608",
+    "implementation": "https://github.com/z1358/DAS"
+  },
+  "prior_promoted_matches": [
+    {
+      "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v5.json",
+      "source_file_sha256": "707358ee9925f4c679ddb7b56da8f0e105401fa16147cd3af0a5667fce8cd8f3",
+      "candidate_id": "DISCOVERY:T8-E3-DAS",
+      "name": "Dance Across Shifts / Dynamic Style Bridging"
+    }
+  ],
+  "prior_promoted_match_count": 1,
+  "resolution": {
+    "already_represented_in_candidate_history": true,
+    "new_candidate_identity_required": false,
+    "may_be_counted_as_new_material_candidate_in_i4b18": false,
+    "scientific_reason": "Re-discovery of the same method and implementation does not constitute a new comparator identity."
+  },
+  "history_policy": {
+    "rewrite_prior_artifacts": false,
+    "preserve_failed_i4b18_preflight_as_console_history": true,
+    "corrected_i4b18_must_not_duplicate_das": true
+  },
+  "claim_limits": {
+    "duplicate_resolution_selects_strongest_baseline": false,
+    "duplicate_resolution_freezes_baseline": false,
+    "duplicate_resolution_establishes_task_8_authority": false
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_BASELINE_QUALIFICATION_READINESS",
+  "state": "READY_FOR_FINAL_LIFECYCLE_QUALIFICATION",
+  "created_at_utc": "2026-09-26T02:23:36.795985Z",
+  "regression_classification_sha256": "9131a4f6ddf1793d0bb67e49f55096a5225b2695ef8c37f2819bb7a5c54e0025",
+  "technical_evidence_state": {
+    "generation_3_requirements_exist": true,
+    "development_semantic_wall_exists": true,
+    "mutation_qualification_exists": true,
+    "historical_development_and_mutation_regression_pass_exists": true,
+    "protected_holdout_generation_completed": true,
+    "protected_first_execution_completed": true,
+    "protected_first_execution_result": "FAIL_52_OF_54",
+    "protected_failure_classified": true,
+    "protected_failure_classification": "EVALUATOR_DEFECT",
+    "holdout_oracles_upheld": true,
+    "minimal_remediation_predeclared": true,
+    "minimal_remediation_applied": true,
+    "post_remediation_regression_result": "PASS",
+    "consumed_holdout_regression": "54_OF_54",
+    "development_regression": "54_OF_54",
+    "mutation_regression": "34_OF_34",
+    "targeted_remediation_checks": "4_OF_4",
+    "new_regressions_detected": false
+  },
+  "evidence_interpretation": {
+    "protected_first_run_remains_authoritative_history": true,
+    "protected_first_run_result_remains_fail": true,
+    "freshness_consumed": true,
+    "post_remediation_result_is_regression_only": true,
+    "regression_pass_repairs_classified_evaluator_defects": true,
+    "regression_pass_is_not_new_fresh_holdout_evidence": true
+  },
+  "task_8_state": {
+    "task_8_complete": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "final_lifecycle_qualification_required": true,
+    "decision_or_specification_acceptance_performed": false,
+    "decision_register_transition_performed": false,
+    "final_accepted_state_regression_performed": false
+  },
+  "next_gate": {
+    "name": "TASK_8_FINAL_LIFECYCLE_QUALIFICATION",
+    "purpose": "Audit the current Task-8 specification, decision/register state, qualification-record requirements, regression requirements, and accepted-state mutations before making any lifecycle transition.",
+    "must_be_read_only_first": true,
+    "must_not_rewrite_historical_protected_result": true,
+    "must_not_label_regression_as_fresh": true,
+    "must_not_manufacture_scientific_support": true
+  }
+}

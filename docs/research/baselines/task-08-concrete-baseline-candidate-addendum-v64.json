@@ -1,0 +1,182 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 64,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T02:45:29Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "candidate_addendum_v63": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v63.json",
+      "sha256": "68e853ddb8ebccf6e4d450207accdee79065599f8f85dc6c43dbdcfb39c0f097"
+    },
+    "systematic_saturation_v61": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v61.json",
+      "sha256": "73daf20b19b35381edb273b8444b989fff17a751dae0eea31acd0686c24d2a16"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LINGBOT-VLA-2",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "LingBot-VLA 2.0",
+      "implementation_identity": "https://github.com/Robbyant/lingbot-vla-v2",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_GENERALIST_CROSS_EMBODIMENT_VLA_DISPLACER_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_EMBODIMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2607.06403"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Robbyant/lingbot-vla-v2"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_DISPLACEMENT_CANDIDATE_IF_GENERALIST_OR_CROSS_EMBODIMENT_ROBOT_ROLE_MATCHED",
+        "PREPRINT_OR_TECHNICAL_REPORT_STATUS_MUST_NOT_BE_MISLABELED_AS_ARCHIVAL_PEER_REVIEW",
+        "EXACT_6B_CHECKPOINT_AND_REPOSITORY_REVISION_MUST_BE BOUND",
+        "GM100_ROBOTWIN_AND_LONG_HORIZON_RESULTS_MUST_NOT_BE COLLAPSED_ACROSS_INCOMPARABLE_TASKS",
+        "DIRECT_GR00T_N17_COMPARISON_IS_TASK_SPECIFIC_NOT_GLOBAL_STRONGEST_EVIDENCE",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "The official research evaluates a generalist cross-embodiment VLA with released weights and executable training/deployment code, and includes direct benchmark comparison against GR00T N1.7."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_IF_GENERALIST_OR_CROSS_EMBODIMENT_ROBOT_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V61"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-HEX-HUMANOID",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "HEX",
+      "implementation_identity": "https://github.com/Open-X-Humanoid/HEX",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_WHOLE_BODY_HUMANOID_VLA_DISPLACER_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_EMBODIMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.07993"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Open-X-Humanoid/HEX"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_DISPLACEMENT_CANDIDATE_IF_WHOLE_BODY_HUMANOID_OR_CROSS_EMBODIMENT_ROLE_MATCHED",
+        "ARXIV_RESEARCH_STATUS_MUST_NOT_BE_MISLABELED_AS_PEER_REVIEWED_WITHOUT_SEPARATE_EVIDENCE",
+        "EXACT_CHECKPOINT_AND_CUTOFF_CONSISTENT_REPOSITORY_REVISION_MUST_BE BOUND",
+        "LOW_LEVEL_TIENKUNG_CONTROLLER_IS_NOT_FULLY_OPEN_SOURCE",
+        "WHOLE_BODY_HUMANOID_SCOPE_MUST_NOT_BE_GENERALIZED_TO_ALL_E1_AGENT_TASKS",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "HEX exposes an executable whole-body humanoid VLA, a released checkpoint, cross-embodiment training data, and a unified body-state representation that could alter the retained comparator set for matched humanoid whole-body experiments."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_IF_WHOLE_BODY_HUMANOID_OR_CROSS_EMBODIMENT_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V61"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-OPENHLM",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "OpenHLM",
+      "implementation_identity": "https://github.com/OpenHLM-project/OpenHLM",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_WHOLE_BODY_LOCO_MANIPULATION_DISPLACER_CANDIDATE",
+        "N_H2_WITHIN_E1_ACTION_SPACE_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.22174"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHLM-project/OpenHLM"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_DISPLACEMENT_CANDIDATE_IF_WHOLE_BODY_HUMANOID_LOCO_MANIPULATION_ROLE_MATCHED",
+        "EXACT_CHECKPOINT_DATASET_AND_CONTROL_STACK_MUST_BE BOUND",
+        "PUBLISHED_COMPARISON_TO_GR00T_N16_MUST_NOT_BE_RESTATED_AS_DIRECT_COMPARISON_TO_N17",
+        "UNITREE_G1_AND_LONG_HORIZON_TASK_SCOPE_MUST_BE MATCHED",
+        "HETEROGENEOUS_COTRAINING_TRANSFER_REMAINS_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "OpenHLM provides code, training data, checkpoints, policy training and deployment for whole-body humanoid loco-manipulation and reports controlled comparison against established humanoid VLA baselines."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_IF_WHOLE_BODY_HUMANOID_LOCO_MANIPULATION_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V61"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

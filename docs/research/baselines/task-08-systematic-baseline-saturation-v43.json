@@ -1,0 +1,208 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 43,
+  "state": "SATURATION_V43_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:08:37Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_version_identity": true,
+    "retained_candidate_must_later_resolve_to_cutoff_consistent_revision": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v45_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v45.json",
+      "sha256": "004d49571ab151bba4d67d8a99c78a89ae5e78c03233aa0fc8f981a8252a2e0d"
+    },
+    "systematic_saturation_v42": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v42.json",
+      "sha256": "3f75599f34e585539cb28f78f8b0dc09acd9fd50894d5ef7418be3c4bb044bb8"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_MEMORY_STATE_ADAPTIVE_RECALL",
+    "E1_DIRECT_MEMORY_CONTEXT_VALIDITY",
+    "E1_EXECUTABLE_RELEASE_GATE_RECHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"SAM\" \"State-Adaptive Memory for Long-Horizon Reasoning Agent\"",
+    "\"State-Adaptive Memory\" long-horizon agent memory github",
+    "\"SAM\" long-horizon reasoning agent memory 2026 code",
+    "\"RaMem\" \"Contextual Reinstatement for Long-term Agentic Memory\"",
+    "\"RaMem\" agent memory github",
+    "\"context collapse\" agent memory 2026",
+    "\"Fine-Mem\" ACL 2026 github implementation",
+    "\"Memory-R1\" ACL 2026 github code",
+    "\"OCR-Memory\" ACL 2026 implementation",
+    "\"MemForest\" hierarchical temporal indexing agent memory github",
+    "\"TiMem\" ACL 2026 Findings github",
+    "\"MemPO\" ACL 2026 Findings github",
+    "\"MCMA\" ACL 2026 agent memory github",
+    "\"Proactive Memory Agent\" long-horizon agents github"
+  ],
+  "query_count": 14,
+  "proposed_candidate_count": 2,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAM-STATE-ADAPTIVE",
+      "name": "SAM: State-Adaptive Memory for Long-Horizon Reasoning Agent",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RAMEM-CONTEXTUAL-REINSTATEMENT",
+      "name": "RaMem: Contextual Reinstatement for Long-term Agentic Memory",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAM-STATE-ADAPTIVE",
+      "name": "SAM: State-Adaptive Memory for Long-Horizon Reasoning Agent",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STATE_ADAPTIVE_LONG_HORIZON_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_WITH_PAPER_LINKED_EXECUTABLE_IMPLEMENTATION_LINEAGE_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.24468"
+        },
+        {
+          "class": "PAPER_LINKED_IMPLEMENTATION_LINEAGE",
+          "url": "https://github.com/qhjqhj00/cabeza"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_HORIZON_AGENT_REASONING_AND_MEMORY_INFORMATION_OPPORTUNITY_MATCH",
+      "material_reason": "SAM explicitly makes access to long interaction history depend on the agent's evolving state, using compact memory cues while preserving raw trajectory pages for intent-driven recall.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "CURRENT_CABEZA_REPOSITORY_IS_A_REFACTOR_OF_THE_EXPERIMENTAL_SAM_TOOLKIT",
+        "CUTOFF_CONSISTENT_SAM_IMPLEMENTATION_COMMIT_MUST_BE_RESOLVED_IF_RETAINED",
+        "AGENT_BACKBONE_AND_SEARCH_TOOL_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_CUE_AND_PAGE_RECALL_CONFIGURATION_MUST_BE BOUND",
+        "PREPRINT_STATUS_MUST_NOT_BE_UPGRADED_WITHOUT_ARCHIVAL_EVIDENCE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RAMEM-CONTEXTUAL-REINSTATEMENT",
+      "name": "RaMem: Contextual Reinstatement for Long-term Agentic Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_CONTEXT_VALIDITY_AWARE_LONG_TERM_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_AUTHOR_PUBLIC_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.22844"
+        },
+        {
+          "class": "AUTHOR_PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/weiyang930/RaMem-Release"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_TERM_CONTEXT_VALIDITY_AND_RETRIEVAL_SETTING_MATCH",
+      "material_reason": "RaMem addresses context collapse by grounding memories in episodic conditions, inducing query-specific recall conditions, performing validity-aware retrieval, and preserving context through answer synthesis.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "EPISODIC_METADATA_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "RETRIEVER_AND_EMBEDDING_MODEL_IDENTITIES_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "PREPRINT_STATUS_MUST_NOT_BE_UPGRADED_WITHOUT_ARCHIVAL_EVIDENCE"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_not_promoted": [
+    {
+      "name": "Fine-Mem: Fine-Grained Feedback Alignment for Long-Horizon Memory Management",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.900/",
+        "https://github.com/LVYUERLVR/Fine-Mem"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_OFFICIAL_REPOSITORY_PRESENT",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "The archival paper is verified, but the currently observable official repository contains only README and license material rather than the executable training and evaluation implementation required for governed reproduction."
+    },
+    {
+      "name": "Memory-R1: Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement Learning",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_OFFICIAL_REPOSITORY_CODE_NOT_RELEASED",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "The archival paper is verified, but the official repository currently states that code is coming soon and therefore does not provide the executable research implementation needed for governed reproduction."
+    },
+    {
+      "name": "OCR-Memory: Optical Context Retrieval for Long-Horizon Agent Memory",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.474/",
+        "https://arxiv.org/abs/2604.26622"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "The method is directly relevant to E1 long-horizon memory, but an official executable implementation was not independently verified in this bounded pass."
+    },
+    {
+      "name": "MemForest: An Efficient Agent Memory System with Hierarchical Temporal Indexing",
+      "sources": [
+        "https://arxiv.org/abs/2605.23986",
+        "https://github.com/Concyclics/MemForest"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_WITH_PUBLIC_IMPLEMENTATION",
+      "disposition": "SUBSTRATE_EFFICIENCY_REFERENCE_NOT_PROMOTED",
+      "reason": "Prior Task-8 evidence already retained MemForest as a write-path and memory-substrate efficiency reference; this refinement found no basis for silently changing that role into a new claim-bearing direct-memory decision comparator."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "mcma_within_e1_transfer_evidence_exists": true,
+    "sam_if_new_is_within_e1_memory_evidence": true,
+    "ramem_if_new_is_within_e1_memory_evidence": true,
+    "forcing_within_e1_memory_transfer_or_retrieval_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V43"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unpromoted direct-memory candidate survived dynamic identity and role review; the no-new-material counter therefore remains zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "sam_is_peer_reviewed": false,
+    "ramem_is_peer_reviewed": false,
+    "current_repository_head_is_final_version_identity": false,
+    "within_e1_memory_transfer_proves_general_n_h2": false,
+    "screened_reference_is_automatically_claim_bearing": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B48_VERIFY_ADDENDUM_V46_AND_RUN_NEXT_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

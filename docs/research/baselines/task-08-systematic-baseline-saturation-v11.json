@@ -1,0 +1,217 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 11,
+  "state": "SATURATION_V11_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T05:31:59Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "all_promoted_material_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v13_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v13.json",
+      "sha256": "7afa0df839cf2cab64bc2e6f1d55666c0115d0be521b0f979c7f7a6973eab282"
+    },
+    "systematic_saturation_v10": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v10.json",
+      "sha256": "880c234abf22e12fe749e7d748c379b1ce1acee89139f121e92b818f5f459e56"
+    }
+  },
+  "focus": [
+    "E1_TOOL_USE_RL_AND_AGENT_TRAINING",
+    "E2_POST_PFT3A_STRUCTURED_ML",
+    "E3_POST_FOZO_VLM_AND_BLACK_BOX_TTA",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Feedback-Driven Tool-Use Improvements\" ACL 2026 github",
+    "\"CoEvolve\" ACL 2026 agent data mutual evolution github",
+    "\"Mock Worlds, Real Skills\" ACL 2026 github SYNTHAGENT",
+    "\"EnvScaler\" ACL 2026 github tool interactive environments",
+    "site:aclanthology.org/2026 reinforcement learning tool use agent environment code",
+    "site:aclanthology.org/2026 agent data evolution tool interaction reinforcement learning",
+    "site:proceedings.iclr.cc 2026 agent tool use reinforcement learning environment code",
+    "site:proceedings.mlr.press 2026 active feature acquisition structured tabular code",
+    "site:ojs.aaai.org 2026 tabular test-time adaptation structured data",
+    "\"CANDI\" AAAI 2026 github test-time adaptation time series",
+    "site:openaccess.thecvf.com/content/CVPR2026 \"test-time prompt tuning\" vision-language filtering",
+    "\"Dual-Modality Anchor-Guided Filtering\" github",
+    "\"Adapting in the Dark\" ICLR 2026 test-time adaptation black-box github",
+    "2026 cross environment family learned decision transfer agent tabular vision",
+    "2026 common learned policy transfer language agent structured data vision"
+  ],
+  "query_count": 15,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-FTRL-TOOLUSE",
+      "name": "FTRL \u2014 Feedback-Driven Tool-Use Improvements in Large Language Models via Automated Build Environments",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_TOOL_USE_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_VERIFIABLE_REWARD_TOOL_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.109/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bytedance/FTRL"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.08791"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_USE_RL_AND_VERIFIABLE_ENVIRONMENT_SETTING_MATCHED",
+      "material_reason": "Provides an executable learned tool-use comparator built around automated training-environment construction, verifiable rewards for tool precision and task completion, trajectory collection, and reinforcement-learning updates.",
+      "limits": [
+        "TOOL_SCHEMA_AND_ENVIRONMENT_GENERATION_CONFIGURATION_MUST_BE BOUND",
+        "VERIFIABLE_REWARD_DEFINITION_MUST_BE BOUND",
+        "BASE_MODEL_RL_ALGORITHM_AND_TRAINING_DATA_MUST_BE BOUND",
+        "AUTOMATED_BUILD_ENVIRONMENT_IS_TRAINING_INFRASTRUCTURE_AND_MUST_NOT_BE CONFUSED_WITH_DEPLOYMENT_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "CoEvolve",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.1055/",
+        "https://github.com/StoneHanaMori/CoEvolve"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_WITH_PUBLIC_PROJECT_REPOSITORY",
+      "relevance": "Closes the loop between agent rollouts and the training-data distribution by extracting failure signals, synthesizing targeted tasks, validating them through interaction, and retraining the policy.",
+      "disposition": "STRONG_E1_RESEARCH_REFERENCE_EXECUTABLE_REPRODUCTION_NOT_VERIFIED",
+      "reason": "The public repository verified in this bounded pass primarily exposes project documentation rather than a complete executable implementation sufficient for governed baseline reproduction."
+    },
+    {
+      "name": "SYNTHAGENT",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.570/",
+        "https://github.com/haruhi-sudo/SYNTHAGENT"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Synthesizes tool-use tasks and simulated environments and uses rubric-based rewards for agent training.",
+      "disposition": "TRAINING_DATA_AND_ENVIRONMENT_SYNTHESIS_REFERENCE_NOT_SEPARATE_CLAIM_BEARING_AGENT_POLICY_THIS_ROUND",
+      "reason": "Its primary distinguishing contribution is synthesis of tasks, tools and environments; adding it as a second policy comparator would require demonstrating a materially different matched policy identity beyond the already preserved WebFactory/FTRL-style training pipelines."
+    },
+    {
+      "name": "CANDI",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/38524",
+        "https://github.com/kimanki/CANDI"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026_WITH_EXECUTABLE_CODE",
+      "relevance": "Performs selective test-time adaptation for multivariate time-series anomaly detection under distribution shift.",
+      "disposition": "E2_SCENARIO_SPECIFIC_REFERENCE_NOT_PROMOTED",
+      "reason": "The governed E2 candidate pool is centered on structured/tabular prediction, acquisition, optimization and tabular adaptation; multivariate anomaly-detection streams require a separately declared matched E2 experiment before becoming claim-bearing."
+    },
+    {
+      "name": "BETA",
+      "sources": [
+        "https://arxiv.org/abs/2604.15609",
+        "https://github.com/yunbeizhang/BETA"
+      ],
+      "evidence_state": "ICLR_2026_TTU_WORKSHOP_BEST_PAPER_WITH_EXECUTABLE_CODE",
+      "relevance": "Provides black-box test-time adaptation using a local steering model and prediction harmonization.",
+      "disposition": "WORKSHOP_E3_REFERENCE_NOT_PROMOTED_TO_CURRENT_CLAIM_BEARING_POOL",
+      "reason": "Useful black-box TTA evidence, but it is workshop-level rather than archival main-conference evidence and does not currently displace the extensive peer-reviewed E3 claim-bearing pool."
+    },
+    {
+      "name": "Dual-Modality Anchor-Guided Filtering",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026F/html/Choi_Dual-Modality_Anchor-Guided_Filtering_for_Test-Time_Prompt_Tuning_CVPRF_2026_paper.html",
+        "https://arxiv.org/abs/2604.12403"
+      ],
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_FINDINGS",
+      "relevance": "Uses text and adaptive image anchors to filter informative augmented views for VLM test-time prompt tuning.",
+      "disposition": "E3_RESEARCH_REFERENCE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "No official executable implementation was independently verified during this bounded pass."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "CoEvolve",
+      "evidence_state": "ACL_2026_PEER_REVIEWED",
+      "relevance": "Demonstrates closed-loop evolution of an agent policy and its training-data distribution from interaction feedback.",
+      "disposition": "WITHIN_E1_AGENT_EVOLUTION_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The evidence concerns agent-policy improvement within AppWorld/BFCL-style agent environments, not one learned decision mechanism transferred across E1, E2, and E3."
+    },
+    {
+      "name": "FTRL",
+      "evidence_state": "ACL_2026_FINDINGS_WITH_OFFICIAL_CODE",
+      "relevance": "Learns stronger tool-use behavior through stable generated environments and verifiable RL feedback.",
+      "disposition": "E1_LEARNED_POLICY_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No evidence establishes transfer of the learned tool-use policy into structured-ML or vision decision families."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "evidence_state": "ICML_2026_REFERENCE_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Learns relational task transformations for extrapolation.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No verified result demonstrates one common learned decision mechanism spanning E1, E2, and E3."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "evidence_state": "ICML_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Meta-learns feature-acquisition behavior across structured-data tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its demonstrated transfer remains within structured-data active feature acquisition."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "additional_agent_evolution_reference_found": true,
+    "within_environment_transfer_or_evolution_references_exist": true,
+    "forcing_agent_evolution_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V11"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_EXECUTABLE_TOOL_USE_RL_COMPARATOR_FOUND",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_ARCHIVAL_EXECUTABLE_ROLE_MATCH_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The bounded refinement discovered FTRL as a materially distinct, peer-reviewed, executable E1 tool-use RL comparator absent from prior governed Task-8 candidate identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "coevolve_is_executable_baseline": false,
+    "scenario_specific_e2_reference_is_automatically_claim_bearing": false,
+    "workshop_e3_reference_is_automatically_claim_bearing": false,
+    "ftrl_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B16_VERIFY_ADDENDUM_V14_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_PRE_GENERATION_ENVIRONMENT_ATTESTATION",
+  "state": "ATTESTED_BEFORE_FIRST_GENERATOR_MESSAGE",
+  "generation_attempt": 10,
+  "attestation_scope": "USER_OBSERVABLE_APPLICATION_STATE_ONLY",
+  "observation_method": "MANUAL_USER_CONFIRMATION_OF_VISIBLE_CHATGPT_UI_AND_USER_CONTROLLABLE_APPLICATION_SETTINGS",
+  "observed_at_utc": "2026-09-26T01:27:05.325801Z",
+  "environment": {
+    "provider": "OpenAI",
+    "product": "ChatGPT",
+    "conversation_type": "TEMPORARY_CHAT",
+    "personalization_mode": "UNPERSONALIZED",
+    "generation_session": "NEW_SESSION_NOT_ATTEMPT_9",
+    "outside_all_projects": true,
+    "ordinary_chatgpt_not_custom_gpt": true,
+    "work_mode_selected": false,
+    "codex_mode_selected": false,
+    "automatic_library_search_enabled": false
+  },
+  "package_binding": {
+    "package_sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+    "manifest_sha256": "dc0893e5bb155cbcd8f9ad7822d99ece872eff6f1ca90f641049693fa77d8edd",
+    "handoff_filename": "generation_package_v10_f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009.json",
+    "handoff_sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+    "handoff_byte_identical_to_repository_package": true,
+    "attachment_source": "LOCAL_DISK_ONLY"
+  },
+  "governance_binding": {
+    "generation_environment_decision_sha256": "d16b7fcbc61fd562700d7bfae3d0d73f3343a16b207a286966e04585242246d6",
+    "successor_design_sha256": "0dc572c1e0af16aee893dab05d39863086f6be9e64ce848cc65a7cd3c0f0adc3",
+    "package_checker_sha256": "d83bb83faa26a3b80096379960f589bb0a0e9542e4f995e4b0f0bc7c6944c8a6",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "observations": {
+    "temporary_chat_selected": true,
+    "unpersonalized_selected_before_first_message": true,
+    "outside_all_projects": true,
+    "new_conversation_not_attempt_9": true,
+    "zero_prior_messages": true,
+    "ordinary_chatgpt_not_custom_gpt": true,
+    "work_mode_not_selected": true,
+    "codex_mode_not_selected": true,
+    "automatic_library_search_off": true,
+    "exact_local_handoff_attached": true,
+    "exactly_one_visible_attachment": true,
+    "no_library_or_connected_source_attachment": true,
+    "web_search_not_selected": true,
+    "no_plugin_connector_app_selected": true,
+    "no_other_external_tool_or_special_mode_selected": true,
+    "first_message_not_yet_sent": true
+  },
+  "observable_boundary_result": {
+    "passed": true,
+    "visible_prior_message_count": 0,
+    "visible_attachment_count": 1,
+    "package_v10_is_only_visible_attachment": true,
+    "attempt_9_session_reuse_detected": false,
+    "project_context_selected": false,
+    "library_search_enabled": false,
+    "web_search_selected": false,
+    "external_tool_or_connected_source_selected": false
+  },
+  "authority_separation": {
+    "observable_ui_state_attested_by_orchestration": true,
+    "generator_is_not_required_to_verify_this_attestation": true,
+    "generator_is_not_required_to_self_audit_chat_history": true,
+    "generator_is_not_required_to_self_audit_attachment_count": true,
+    "generator_is_not_required_to_self_audit_project_state": true,
+    "generator_is_not_required_to_self_audit_memory_or_personalization_state": true,
+    "generator_is_not_required_to_self_audit_provider_internal_state": true,
+    "this_attestation_must_not_be_supplied_to_generator": true
+  },
+  "claim_limits": {
+    "does_not_claim_provider_internal_statelessness": true,
+    "does_not_claim_complete_model_visible_context": true,
+    "does_not_claim_absence_of_provider_system_context": true,
+    "does_not_claim_absence_of_provider_safety_processing": true,
+    "does_not_claim_model_pretraining_nonexposure": true,
+    "does_not_claim_zero_provider_retention": true,
+    "does_not_claim_independent_third_party_generation": true
+  },
+  "generation_state_at_attestation": {
+    "first_generator_message_sent": false,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 60,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:40:13Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_canonical_enumeration_reopened": false,
+  "role_binding_source": {
+    "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v61.json",
+    "derived_from_candidate": {
+      "baseline_id": "DISCOVERY:T8-E1-PI05",
+      "name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization"
+    },
+    "role_binding": {
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+      ]
+    }
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "empty_addendum_v62_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v62.json",
+      "sha256": "a143ba50dacc12df3f2972d8b554c320feac5ff6b7a3ee1f5ae7c7049f2663de"
+    },
+    "systematic_saturation_v59": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v59.json",
+      "sha256": "8cd0dedb0b0412aaf071f94bb997df146aa1bbebe210de7bea26383989c2667d"
+    }
+  },
+  "queries_executed": [
+    "Being-H0.5 pi0.5 OpenVLA-OFT LIBERO cross-embodiment official implementation",
+    "Being-H0.5 LIBERO RoboCasa official code",
+    "GR00T N1.7 LIBERO official release checkpoint",
+    "GR00T N1.7 versus pi0.5 LIBERO reproducible implementation"
+  ],
+  "query_count": 4,
+  "targeted_displacement_identities": [
+    "Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization",
+    "NVIDIA Isaac GR00T N1.7"
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-VLA-BEING-H05",
+      "name": "Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization",
+      "role_binding_inherited_from_existing_vla_lineage": {
+        "environment_families": [
+          "E1_AGENT"
+        ],
+        "hypothesis_roles": [
+          "N-H1",
+          "N-H2"
+        ],
+        "comparison_role": [
+          "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+          "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+        ]
+      },
+      "evidence_status": "PRIMARY_RESEARCH_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.12993"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BeingBeyond/Being-H"
+        }
+      ],
+      "public_strength_evidence": [
+        "The primary paper reports evaluation on LIBERO and RoboCasa.",
+        "The method is explicitly designed for cross-embodiment VLA generalization.",
+        "The official repository exposes Being-H0.5 model and implementation resources."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_PENDING_FULL_ELIGIBILITY_AND_VERSION_PINNING",
+      "material_reason": "Same broad instruction-conditioned manipulation/VLA lineage as the retained pi0.5/OpenVLA-style comparison surface, with directly overlapping public simulation benchmarks and a distinct cross-embodiment training/action-space design.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "REPORTED_RESULTS_MUST_NOT_BE NUMERICALLY_RANKED_ACROSS_UNMATCHED_CONFIGURATIONS",
+        "EXACT_BEING_H05_CHECKPOINT_AND_POSTTRAIN_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "LIBERO_AND_ROBOCASA_SETTINGS_MUST_BE MATCHED_BEFORE_ANY_STRENGTH_ORDERING"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-VLA-GR00T-N1.7",
+      "name": "NVIDIA Isaac GR00T N1.7",
+      "role_binding_inherited_from_existing_vla_lineage": {
+        "environment_families": [
+          "E1_AGENT"
+        ],
+        "hypothesis_roles": [
+          "N-H1",
+          "N-H2"
+        ],
+        "comparison_role": [
+          "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+          "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+        ]
+      },
+      "evidence_status": "OFFICIAL_PROVIDER_RELEASE_AND_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_PROVIDER_RELEASE",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T/releases/tag/n1.7-release"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T"
+        }
+      ],
+      "public_strength_evidence": [
+        "The official release provides N1.7 model weights and reference code.",
+        "The official repository exposes a dedicated GR00T-N1.7-LIBERO checkpoint.",
+        "The repository provides LIBERO fine-tuning and evaluation paths.",
+        "N1.7 is a materially changed model stack relative to N1/N1.6, including a new VLM backbone and changed action/interface configuration."
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_PENDING_FULL_ELIGIBILITY_AND_VERSION_PINNING",
+      "material_reason": "A distinct released VLA version with a directly executable LIBERO checkpoint and same broad manipulation-policy comparison surface; it cannot be collapsed into the earlier GR00T N1 identity without explicit version analysis.",
+      "limits": [
+        "N1_7_MUST_NOT_BE_CONFLATED_WITH_PRIOR_GR00T_N1_IDENTITY",
+        "ARCHIVAL_PAPER_SPECIFIC_TO_N1_7_NOT_INDEPENDENTLY_VERIFIED",
+        "EXACT_RELEASE_COMMIT_CHECKPOINT_AND_LIBERO_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "screened_not_promoted": [],
+  "new_candidate_counts_by_environment": {
+    "DERIVED_EXISTING_VLA_ROLE": 2
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "status": "UNCHANGED_NOT_TARGET_OF_THIS_DISPLACEMENT_ONLY_REFINEMENT"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "required_consecutive_rounds": 2,
+    "reason": "At least one targeted same-lineage displacement candidate was not previously promoted, so the consecutive no-new counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false,
+    "final_version_pinning_started": false
+  },
+  "claim_limits": {
+    "discovery_stopping_implies_baseline_selected": false,
+    "reported_external_benchmark_number_is_cross_configuration_rank": false,
+    "new_displacement_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

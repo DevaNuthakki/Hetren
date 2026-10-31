@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 27,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T21:20:22Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v26": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v26.json",
+      "sha256": "d1a08fb0b90f342ee18aff956dd4fa4b6e6ae3fad764070c3fa80799cc51f4c8"
+    },
+    "systematic_saturation_v24": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v24.json",
+      "sha256": "2b218d83870f24b931995a90520f676722b8ef1b94b9b9a7878cdb772c3b8a4b"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AEC",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Agentic Episodic Control",
+      "implementation_identity": "https://github.com/Xidong-Yang/Agentic_Episodic_Control",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_EPISODIC_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_ENVIRONMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.654/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Xidong-Yang/Agentic_Episodic_Control"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2506.01442"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_EPISODIC_MEMORY_TEXT_NAVIGATION_OR_MATERIAL_EQUIVALENT_E1_SETTING_IS_APPLICABLE",
+        "BABYAI_TEXT_OR_MATERIALLY_EQUIVALENT_SEQUENTIAL_DECISION_SETTING_REQUIRED",
+        "LLM_SEMANTIC_AUGMENTER_IDENTITY_MUST_BE BOUND",
+        "SENTENCE_EMBEDDING_MODEL_MUST_BE BOUND",
+        "EPISODIC_MEMORY_AND_WORLD_GRAPH_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_FRAME_BUDGET_REMAINS_TASK_9_OWNED",
+        "CROSS_TASK_AND_CROSS_ENVIRONMENT_RESULTS_REMAIN_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER",
+        "AEC adds an LLM-semantic episodic-control mechanism with selective critical-state retrieval and structured working memory, materially distinct from the web-navigation, tool-use, workflow-search, and verifier-driven E1 mechanisms already represented."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_EPISODIC_MEMORY_TEXT_NAVIGATION_OR_MATERIAL_EQUIVALENT_E1_SETTING_IS_APPLICABLE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V24"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

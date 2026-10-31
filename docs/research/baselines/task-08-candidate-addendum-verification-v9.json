@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 9,
+  "state": "ADDENDUM_V9_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:10:55Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v9": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v9.json",
+      "sha256": "19f2fc2414c3221b28ab0d2a63911a65e6618a6685d39197bcf3bbad74dcdcb3"
+    },
+    "systematic_saturation_v6": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v6.json",
+      "sha256": "d9ccfb390cd7fbfb6b74d703a63fe6331b31dee80e0cf68e8b34062afd0443f1"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GTTA",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_AGENT_TEST_TIME_ADAPTATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "GTTA is published as an ICLR 2026 conference paper.",
+        "The work separates environment mismatch into syntactic and dynamics-related adaptation problems.",
+        "Its Syntactic Alignment component performs lightweight deployment-time parametric adaptation.",
+        "Its Dynamics Grounding component explores the environment and constructs a non-parametric representation of environment dynamics.",
+        "The official repository contains reproduction paths for WebArena, BFCLv3, and Tau-Bench."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=OH4PE0TDo0"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/r2llab/GTTA"
+        }
+      ],
+      "limits": [
+        "AGENT_ENVIRONMENT_AND_TASK_FAMILY_MUST_BE_MATCHED",
+        "SYNTACTIC_ALIGNMENT_AND_DYNAMICS_GROUNDING_MUST_NOT_BE_COLLAPSED_INTO_ONE_UNVERSIONED_BEHAVIOR",
+        "UNDERLYING_LLM_AND_ENVIRONMENT_EXPLORATION_CONFIGURATION_MUST_BE_BOUND",
+        "INTERACTION_INFORMATION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "WITHIN_E1_ENVIRONMENT_ADAPTATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-PFT3A",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_PRIOR_FREE_TABULAR_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "PFT3A is published at ICLR 2026.",
+        "It studies tabular test-time adaptation without access to source data or source-domain prior knowledge.",
+        "Its design addresses both label shift and feature shift.",
+        "The primary publication identifies an official public implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rundohe/PFT3A"
+        }
+      ],
+      "limits": [
+        "PRIOR_FREE_INFORMATION_REGIME_MUST_BE MATCHED",
+        "TABLESHIFT_DATASET_AND_BACKBONE_CONFIGURATION_MUST_BE BOUND",
+        "LABEL_SHIFT_AND_FEATURE_SHIFT_SETTING_MUST_BE DECLARED",
+        "MUST_NOT_BE COMPARED_AS_IF_SOURCE_PRIOR_ACCESS_WERE AVAILABLE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-RAMEN",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_MIXED_DOMAIN_VLM_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Ramen is published in CVPR 2026 Findings.",
+        "It targets mixed-domain test-time adaptation for vision-language models.",
+        "For each incoming test sample it retrieves previously seen samples using domain-consistency and prediction-balance criteria.",
+        "It stores embeddings and sample-level gradients in an embedding-gradient cache for efficient updates.",
+        "The official repository provides executable experiment configuration."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Bao_Ramen_Robust_Test-Time_Adaptation_of_Vision-Language_Models_with_Active_Sample_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/baowenxuan/Ramen"
+        }
+      ],
+      "limits": [
+        "MIXED_DOMAIN_STREAM_SETTING_REQUIRED",
+        "VLM_BACKBONE_AND_DATASET_IDENTITY_MUST_BE BOUND",
+        "CACHE_CONTENT_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "SINGLE_DOMAIN_AND_MIXED_DOMAIN_RESULTS_MUST_NOT_BE COLLAPSED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v9_candidates_have_role_level_external_review": true,
+    "all_addendum_v9_candidates_are_peer_reviewed": true,
+    "all_addendum_v9_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

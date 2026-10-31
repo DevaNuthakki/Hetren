@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 13,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T05:27:35Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v12": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v12.json",
+      "sha256": "4b7582b6ce77ff746af2981afa3a8cbb28c5937f7b52357653652932b8a4d431"
+    },
+    "systematic_saturation_v10": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v10.json",
+      "sha256": "880c234abf22e12fe749e7d748c379b1ce1acee89139f121e92b818f5f459e56"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TIMELY-RL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Timely Machine / Timely-RL",
+      "implementation_identity": "https://github.com/Entarochuan/Timely-Machine",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_TIME_BUDGET_AWARE_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_RESOURCE_CONSTRAINED_AGENT_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.211/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Entarochuan/Timely-Machine"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.16486"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_TOOL_LATENCY_OR_WALL_CLOCK_BUDGET_IS_PART_OF_MATCHED_E1_CONTRACT",
+        "TIME_BUDGET_AND_TOOL_LATENCY_CONTRACT_MUST_BE DECLARED",
+        "TRAINED_MODEL_CHECKPOINT_AND_BASE_MODEL_MUST_BE BOUND",
+        "SFT_AND_RL_TRAINING_DATA_AND_RECIPE_MUST_BE BOUND",
+        "EVALUATION_ONLY_CONFIGURATION_MUST_NOT_BE CONFUSED_WITH_TIMELY_RL_POLICY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Learns temporal planning through supervised cold start plus reinforcement learning and evaluates behavior under explicit wall-clock budgets in tool-heavy, agentic-ML, and interactive settings."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_LATENCY_OR_WALL_CLOCK_BUDGET_IS_PART_OF_MATCHED_E1_CONTRACT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V10"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-FOZO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FOZO \u2014 Forward-Only Zeroth-Order Prompt Optimization",
+      "implementation_identity": "https://github.com/eVI-group-SCU/FOZO",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_FORWARD_ONLY_VISION_TTA_COMPARATOR_CANDIDATE",
+        "A_H1_RESOURCE_CONSTRAINED_PROMPT_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Wang_FOZO_Forward-Only_Zeroth-Order_Prompt_Optimization_for_Test-Time_Adaptation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/eVI-group-SCU/FOZO"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.04733"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_VIT_PROMPT_TTA_AND_FORWARD_ONLY_INFORMATION_REGIME_MATCHED",
+        "VISION_TRANSFORMER_AND_PROMPT_ADAPTATION_SURFACE_MUST_BE MATCHED",
+        "SOURCE_STATISTICS_ACCESS_MUST_BE AUDITED",
+        "ZEROTH_ORDER_FORWARD_PASS_BUDGET_MUST_BE ACCOUNTED_BY_TASK_9",
+        "QUANTIZED_AND_FULL_PRECISION_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "RESOURCE_EFFICIENCY_DOES_NOT_BY_ITSELF_ESTABLISH_A_H2",
+        "Uses forward-only zeroth-order optimization of visual prompts for continual TTA and explicitly studies low-memory and quantized deployment regimes."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_VIT_PROMPT_TTA_AND_FORWARD_ONLY_INFORMATION_REGIME_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V10"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

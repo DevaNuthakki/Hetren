@@ -1,0 +1,922 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_EVALUATOR_REMEDIATION_REGRESSION",
+  "state": "DEVELOPMENT_REMEDIATION_REGRESSION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout": false,
+  "protected_evaluation": false,
+  "regression_only": true,
+  "historical_first_mutation_wall_preserved": true,
+  "historical_first_mutation_status": "FAIL",
+  "historical_first_mutation_match_count": 25,
+  "historical_first_mutation_mismatch_count": 9,
+  "input_hashes": {
+    "boundary_sha256": "bda981cd777b6e92c6d6d026888b0907f0da46577659c0c773502bdc4039434a",
+    "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+    "cases_sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d",
+    "mutations_sha256": "f86885033501c61136fdfbdf34c639665e26a6936522ad03cb100cd41675796e",
+    "remediated_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+    "historical_evaluator_sha256": "919807fb2d06af44ed0fbc83b9b89d7c3c4f97fa86303fde2999d823bc82b061",
+    "historical_54_case_run_sha256": "8a8ac61d823bd0370426bac0ad26d1aae6edc7f48eb981821870ef9298f2c28e",
+    "historical_first_mutation_run_sha256": "775fc3249e6b20e4a27787396e3fec492f126ada173e40fe26c7d14a6dfe88f5",
+    "classification_sha256": "e8701ea2f76756740d556730598eb3a27acee62f2bb2314990dbe9e873e29468",
+    "runner_sha256": "cc714ccddfddcc54c1bdd2a74f8bf9d5a4424edec793de7360d281f2282b02cb"
+  },
+  "summary": {
+    "status": "PASS",
+    "development_case_count": 54,
+    "development_match_count": 54,
+    "development_mismatch_ids": [],
+    "mutation_count": 34,
+    "mutation_match_count": 34,
+    "mutation_mismatch_ids": []
+  },
+  "development_results": [
+    {
+      "case_id": "G3-Q-001",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "FALSE_EXACT_VERSION_CLAIM",
+        "UNKNOWN_REVISION_NOT_RECORDED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-002",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-003",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "SUCCESSOR_EVIDENCE_MISSING",
+        "PRIOR_RESULT_NOT_PRESERVED",
+        "TASK7_LINEAGE_NOT_APPLIED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-004",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-005",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "SEARCH_SCOPE_NOT_PREDECLARED",
+        "SEARCH_CUTOFF_NOT_PREDECLARED",
+        "COMPARATOR_PROVENANCE_MISSING",
+        "EXCLUSION_REASONS_MISSING"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-006",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-007",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-008",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-009",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "PERSISTENT_INFORMATION_ASYMMETRY"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-010",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-011",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-012",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-013",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "ASYMMETRY_NOT_CAUSALLY_RELEVANT"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-014",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-015",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "TUNING_OPPORTUNITY_ASYMMETRY",
+        "TUNING_POLICY_NOT_PREDECLARED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-016",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-017",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "MATERIAL_PROVENANCE_FIELD_OMITTED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-018",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-019",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "FALSE_EXACT_RECONSTRUCTION"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-020",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-021",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "OPTIONAL_STOPPING",
+        "PSEUDOREPLICATION"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-022",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-023",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "TASK7_EVALUATION_UNIT_IGNORED",
+        "INDEPENDENCE_GROUP_IGNORED",
+        "REPEATED_SEEDS_TREATED_INDEPENDENT"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-024",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-025",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "POST_HOC_SECONDARY_PROMOTION",
+        "FAILED_PRIMARY_CLAIM_NOT_PRESERVED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-026",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-027",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "HARD_CONSTRAINT_NOT_FROZEN"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-028",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-029",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "BENCHMARK_SAMPLING_NOT_PREDECLARED",
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING",
+        "DIFFICULTY_DISTRIBUTION_NOT_PRESERVED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-030",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-031",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM",
+        "DYNAMIC_BENCHMARK_FALSE_CLEANLINESS"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-032",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-033",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "EVALUATOR_RELATIONSHIP_UNDISCLOSED",
+        "SELF_PREFERENCE_NOT_CONTROLLED",
+        "ALTERNATIVE_EVALUATION_PATH_MISSING"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-034",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-035",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "OBSERVATION_BOUNDARY_UNDECLARED",
+        "UNOBSERVED_TREATED_AS_ABSENT",
+        "UNOBSERVABLE_STATE_NOT_EXPLICIT"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-036",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-037",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN",
+        "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-038",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-039",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "ADAPTATION_INPUT_ASYMMETRY",
+        "STRONG_ADAPTATION_BASELINE_MISSING"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-040",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-041",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "ROLLBACK_STATE_NOT_RESTORED",
+        "ROLLBACK_BEHAVIOR_NOT_VERIFIED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-042",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-043",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "RESOURCE_REGIME_NOT_FROZEN",
+        "QUALITY_RESOURCE_TRADEOFF_COLLAPSED",
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-044",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-045",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "BASELINE_REASSESSMENT_NOT_TRIGGERED",
+        "BASELINE_REVIEW_DATE_MISSING",
+        "HISTORICAL_BASELINE_RESULT_REWRITTEN"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-046",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-047",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "BROADER_CLAIM_NOT_BLOCKED",
+        "NARROW_CLAIM_IMPLIES_BLOCKED_SUPERIORITY",
+        "ORIGINAL_EVIDENCE_GAP_LOST"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-048",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-049",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "REAL_WORLD_SCOPE_MISSING:population_scope_declared",
+        "REAL_WORLD_SCOPE_MISSING:sampling_method_declared",
+        "REAL_WORLD_SCOPE_MISSING:time_window_declared",
+        "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared",
+        "REAL_WORLD_SELECTION_CHERRY_PICKED"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-050",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-051",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "COMMON_MODE_DEPENDENCY_UNDISCLOSED",
+        "MATERIAL_INDEPENDENT_PATH_MISSING"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-052",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-053",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "violations": [
+        "NOT_APPLICABLE_USED_AS_ESCAPE",
+        "NOT_APPLICABLE_CHANGES_CLAIM_MEANING",
+        "ENVIRONMENT_BINDING_MISSING"
+      ],
+      "matched": true
+    },
+    {
+      "case_id": "G3-Q-054",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "violations": [],
+      "matched": true
+    }
+  ],
+  "mutation_results": [
+    {
+      "mutation_id": "G3-M-001",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-002",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ],
+      "actual_violation_codes": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-003",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-004",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "TASK7_LINEAGE_NOT_APPLIED"
+      ],
+      "actual_violation_codes": [
+        "TASK7_LINEAGE_NOT_APPLIED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-005",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ],
+      "actual_violation_codes": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-006",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-007",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-008",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-009",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-010",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "TUNING_POLICY_NOT_PREDECLARED"
+      ],
+      "actual_violation_codes": [
+        "TUNING_POLICY_NOT_PREDECLARED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-011",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ],
+      "actual_violation_codes": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-012",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-013",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "PSEUDOREPLICATION"
+      ],
+      "actual_violation_codes": [
+        "PSEUDOREPLICATION"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-014",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "INDEPENDENCE_GROUP_IGNORED"
+      ],
+      "actual_violation_codes": [
+        "INDEPENDENCE_GROUP_IGNORED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-015",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-016",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-017",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ],
+      "actual_violation_codes": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-018",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM"
+      ],
+      "actual_violation_codes": [
+        "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-019",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-020",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "EVALUATOR_IDENTITY_MISSING"
+      ],
+      "actual_violation_codes": [
+        "EVALUATOR_IDENTITY_MISSING",
+        "EVALUATOR_VERSION_MISSING",
+        "EVALUATOR_SCORING_PROCEDURE_MISSING"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-021",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-022",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ],
+      "actual_violation_codes": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN",
+        "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-023",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-024",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "ROLLBACK_MATERIAL_STATE_NOT_RESTORED"
+      ],
+      "actual_violation_codes": [
+        "ROLLBACK_MATERIAL_STATE_NOT_RESTORED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-025",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ],
+      "actual_violation_codes": [
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-026",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "BASELINE_REVIEW_DATE_MISSING"
+      ],
+      "actual_violation_codes": [
+        "BASELINE_REVIEW_DATE_MISSING"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-027",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-028",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared"
+      ],
+      "actual_violation_codes": [
+        "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-029",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "COMMON_MODE_MODEL_FAMILY_UNDISCLOSED"
+      ],
+      "actual_violation_codes": [
+        "COMMON_MODE_MODEL_FAMILY_UNDISCLOSED",
+        "COMMON_MODE_DEPENDENCY_UNDISCLOSED"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-030",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "INVALID_APPLICABILITY_STATE"
+      ],
+      "actual_violation_codes": [
+        "INVALID_APPLICABILITY_STATE"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-031",
+      "expected_decision": "REJECT",
+      "predicted_decision": "REJECT",
+      "expected_violation_codes": [
+        "PERSISTENT_INFORMATION_ASYMMETRY"
+      ],
+      "actual_violation_codes": [
+        "PERSISTENT_INFORMATION_ASYMMETRY"
+      ],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-032",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-033",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    },
+    {
+      "mutation_id": "G3-M-034",
+      "expected_decision": "ACCEPT",
+      "predicted_decision": "ACCEPT",
+      "expected_violation_codes": [],
+      "actual_violation_codes": [],
+      "decision_match": true,
+      "violation_contract_match": true,
+      "matched": true
+    }
+  ],
+  "interpretation": "This is regression evidence after remediation of the nine classified semantic-evaluator defects. The original 54 cases and 34 mutations are already known development evidence. Neither section is a fresh holdout or new independent scientific evaluation."
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_PROTECTED_EXECUTION_AUTHORIZATION",
+  "state": "AUTHORIZED_NOT_EXECUTED",
+  "generation_attempt": 10,
+  "authorized_at_utc": "2026-09-26T01:54:57.470983Z",
+  "authorization_scope": "Exactly one protected first execution of the frozen Attempt-10 cases against the frozen target evaluator using the exact frozen runner.",
+  "runner": {
+    "path": "scripts/run_baseline_requirements_gen3_fresh_holdout_attempt_10.py",
+    "sha256": "a91d7665b333979a8956e8a33a717b80485e836cb04b0d8f49d78aab036ad2d2",
+    "statically_inspected": true,
+    "source_compiled_without_execution": true,
+    "target_imported_during_validation": false,
+    "target_executed_during_validation": false
+  },
+  "frozen_inputs": {
+    "cases_sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+    "freeze_manifest_sha256": "64c3e69417e74dda898109f324573fa7d15924f479e426804363fb15eb622d48",
+    "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "evaluator_interface": {
+    "call_protocol": "evaluate(primary_requirement, facts, environment)",
+    "return_shape": {
+      "type": "DICT",
+      "required_keys": [
+        "decision",
+        "violations"
+      ],
+      "decision_values": [
+        "ACCEPT",
+        "REJECT"
+      ],
+      "violations_type": "LIST_OF_STRINGS"
+    }
+  },
+  "oracle_separation": {
+    "evaluator_input_fields": [
+      "primary_requirement",
+      "facts",
+      "environment"
+    ],
+    "case_id_used_only_for_prediction_alignment": true,
+    "expectation_passed_to_evaluator": false,
+    "expected_violation_codes_passed_to_evaluator": false,
+    "secondary_requirements_trigger_additional_calls": false,
+    "all_predictions_collected_before_scoring": true,
+    "raw_predictions_preserved_before_scoring": true
+  },
+  "execution_contract": {
+    "maximum_fresh_execution_attempts": 1,
+    "calls_per_case": 1,
+    "case_count": 54,
+    "expected_total_target_calls": 54,
+    "all_predictions_before_scoring": true,
+    "single_use_start_receipt_required_before_target_import": true,
+    "start_receipt_is_never_deleted": true,
+    "rerun_if_process_fails_after_start_receipt": false,
+    "preserve_partial_failure_evidence": true,
+    "preserve_complete_raw_predictions_before_scoring": true,
+    "preserve_full_scored_first_result": true,
+    "case_rewrite_after_execution": false,
+    "rerun_as_fresh": false
+  },
+  "output_contract": {
+    "start_receipt": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run_started.json",
+    "raw_predictions": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_predictions.json",
+    "full_first_run_result": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run.json"
+  },
+  "scoring_contract": {
+    "must_accept": {
+      "required_decision": "ACCEPT",
+      "required_violations": []
+    },
+    "must_reject": {
+      "required_decision": "REJECT",
+      "required_violation_relation": "EXPECTED_CODES_SUBSET_OF_ACTUAL_CODES",
+      "additional_actual_codes_allowed": true
+    },
+    "false_accepts_allowed": 0,
+    "false_rejects_allowed": 0,
+    "all_expected_violation_contracts_required": true
+  },
+  "failure_policy": {
+    "execution_failure_is_valid_evidence": true,
+    "first_result_preserved_regardless_of_pass_or_fail": true,
+    "classification_before_remediation": true,
+    "rerun_after_first_execution_is_regression_only": true,
+    "interrupted_execution_after_start_receipt_must_not_be_retried_as_fresh": true
+  },
+  "claim_limits": {
+    "authorization_does_not_itself_consume_freshness": true,
+    "authorization_does_not_establish_holdout_pass": true,
+    "authorization_does_not_establish_scientific_support": true,
+    "authorization_does_not_establish_task_8_authority": true,
+    "future_pass_does_not_establish_task_5_support": true,
+    "future_pass_does_not_prove_universal_generalization": true
+  },
+  "execution_state": {
+    "protected_execution_authorized": true,
+    "runner_executed": false,
+    "start_receipt_exists": false,
+    "target_evaluator_imported": false,
+    "target_evaluator_executed": false,
+    "target_predictions_available": false,
+    "scoring_started": false,
+    "first_run_result_exists": false,
+    "target_freshness_consumed": false
+  },
+  "authorized_command": "python3 scripts/run_baseline_requirements_gen3_fresh_holdout_attempt_10.py",
+  "next_required_action": "EXECUTE_EXACT_FROZEN_RUNNER_ONCE_AND_PRESERVE_RESULT"
+}

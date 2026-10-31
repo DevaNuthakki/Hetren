@@ -1,0 +1,195 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 4,
+  "state": "ADDENDUM_V4_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:45:57Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v4": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v4.json",
+      "sha256": "5e19de3c813b651ab3dac242de931b3194395c099531165942c1fb16b5bd12a8"
+    },
+    "systematic_saturation_v1": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v1.json",
+      "sha256": "3663b99d234da93a088c768c1a4d973026d99c0bc986373c730e8b13a8046271"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTEVOL",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_AND_MODEL_ASSET_VERIFIED",
+      "role_disposition": "E1_LEARNED_MULTI_ENVIRONMENT_AGENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "AgentGym is published at ACL 2025.",
+        "The framework spans 14 interactive environments covering web, games, household tasks, tools, programming, and related agent settings.",
+        "AgentEvol is the learned self-evolution method included in the AgentGym work.",
+        "The official project exposes AgentEvol-7B, trajectories, benchmark data, training and evaluation infrastructure."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.acl-long.1355/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hsch22/AgentGym"
+        }
+      ],
+      "limits": [
+        "EXACT_AGENTEVOL_CHECKPOINT_MUST_BE_BOUND",
+        "TRAINING_TRAJECTORY_IDENTITY_AND_ENVIRONMENT_SET_MUST_BE_BOUND",
+        "AGENTGYM_WITHIN_E1_TRANSFER_DOES_NOT_ESTABLISH_N_H2_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SWERL",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_REPOSITORY_VERIFIED_WITH_REPRODUCIBILITY_CAVEAT",
+      "role_disposition": "E1_LEARNED_SOFTWARE_ENGINEERING_COMPARATOR_IF_TASK_MATCHED",
+      "verified_facts": [
+        "SWE-RL is a NeurIPS 2025 paper on reinforcement-learning-based LLM reasoning for software engineering.",
+        "The method trains on open-source software-evolution data.",
+        "The official public repository states that significant refactoring may introduce inconsistencies relative to the authors' internal implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/7107d4d2e837bde2171c6b71b5bde954-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/facebookresearch/swe-rl"
+        }
+      ],
+      "limits": [
+        "SOFTWARE_ENGINEERING_TASK_MATCH_REQUIRED",
+        "PUBLIC_REPOSITORY_INTERNAL_IMPLEMENTATION_DIVERGENCE_WARNING_MUST_BE_PRESERVED",
+        "TRAINED_MODEL_AND_CHECKPOINT_IDENTITY_MUST_BE_BOUND",
+        "TRAINING_DATA_AND_REWARD_CONFIGURATION_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-GOLD",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "GOLD is a CVPR 2026 continual test-time adaptation method.",
+        "It uses a low-rank golden-subspace formulation with online AGOP-based subspace maintenance.",
+        "The paper evaluates classification and segmentation settings and explicitly studies efficiency as well as adaptation behavior."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Lai_The_Golden_Subspace_Where_Efficiency_Meets_Generalization_in_Continual_Test-Time_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIGNLAI/GOLD"
+        }
+      ],
+      "limits": [
+        "TASK_AND_MODEL_FAMILY_MATCH_REQUIRED",
+        "EFFICIENCY_VALUES_REMAIN_TASK_9_OWNED",
+        "FULL_IMMUTABLE_IMPLEMENTATION_REVISION_REQUIRED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-CODIRE",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_CONTINUAL_TTA_EXTERNAL_TEACHER_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Test-Time Distillation / CoDiRe is published in CVPR 2026 Findings.",
+        "The method uses a frozen Vision-Language Model as an external supervisory signal during continual adaptation.",
+        "It blends the external VLM signal with target-model predictions and performs rectification during adaptation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Chen_Test-Time_Distillation_for_Continual_Model_Adaptation_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/walawalagoose/TTD"
+        }
+      ],
+      "limits": [
+        "EXTERNAL_FROZEN_VLM_IDENTITY_MUST_BE_BOUND",
+        "EXTERNAL_SUPERVISORY_INFORMATION_CHANNEL_MUST_BE_EXPLICIT",
+        "INFORMATION_OPPORTUNITY_PARITY_REQUIRED",
+        "MUST_NOT_BE_COMPARED_AS_IF_SELF_SUPERVISION_ONLY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-BITTA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "BITTA is published at ICLR 2026.",
+        "The method targets test-time adaptation of pretrained CLIP-style vision-language models.",
+        "The official implementation includes CIFAR-10-C, CIFAR-100-C, and ImageNet-C support."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=vv8EcCoBfr"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tmlr-group/BITTA"
+        }
+      ],
+      "limits": [
+        "MATCHED_VLM_CLASSIFICATION_SETTING_REQUIRED",
+        "CLIP_MODEL_IDENTITY_MUST_BE_BOUND",
+        "GPU_RESOURCE_VALUES_REMAIN_TASK_9_OWNED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-D2O",
+      "verification_state": "ICML_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_TRAINING_FREE_VLM_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "D2O is an ICML 2026 training-free test-time adaptation method for CLIP-style vision-language models.",
+        "The public implementation exposes the D2O plus ADAPT host combination in online and transductive configurations.",
+        "The repository states that generated features, checkpoints and run artifacts can be regenerated rather than being bundled."
+      ],
+      "sources": [
+        {
+          "class": "ICML_2026_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MAiTL-Group/D2O"
+        }
+      ],
+      "limits": [
+        "D2O_OPERATOR_AND_HOST_ADAPTER_MUST_BE_VERSIONED_TOGETHER",
+        "ONLINE_AND_TRANSDUCTIVE_SETTINGS_MUST_NOT_BE_COLLAPSED",
+        "CLIP_MODEL_AND_PREEXTRACTED_FEATURE_REGENERATION_CONFIGURATION_MUST_BE_BOUND"
+      ]
+    }
+  ],
+  "candidate_findings_count": 6,
+  "interpretation": {
+    "all_addendum_v4_candidates_have_role_level_external_review": true,
+    "all_addendum_v4_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "n_h2_observation": "No addendum-v4 candidate independently establishes a general learned-decision transfer comparator across Hetren E1, E2, and E3 environment-family boundaries.",
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

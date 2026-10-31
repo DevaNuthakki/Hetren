@@ -1,0 +1,22 @@
+{
+ "schema_version": "7.0.0",
+ "artifact_type": "TASK_8_GEN3_GENERATION_ISOLATION_FAILURE_ATTEMPT_7",
+ "state": "ABORTED_BEFORE_CASE_GENERATION",
+ "generation_attempt": 7,
+ "generation_package_sha256": "990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6",
+ "generation_session_isolation": {
+ "gate_checked_before_case_generation": true,
+ "isolation_gate_passed_before_case_generation": false,
+ "ambiguous_potentially_hetren_specific_context_detected": true,
+ "unrelated_non_hetren_context_present": true,
+ "unrelated_non_hetren_context_used_for_case_design": false,
+ "prior_generation_files_retrieved": false
+ },
+ "abort_reason": "Ambient saved context contains prior-file breadcrumbs named generation_package_v3_0d55267e.json, generation_package_v4_5dbf26ff.json, and generation_package_v5_ff785b10.json. These may convey prior Hetren generation workflow state, but their relationship cannot be safely determined from the supplied context. The package requires failing closed for ambiguous potentially Hetren-specific context. No outside information was retrieved to resolve this ambiguity. Unrelated non-Hetren context did not cause the abort.",
+ "generation_package_hash_verified_against_exact_bytes": true,
+ "cases_generated": false,
+ "target_evaluator_executed": false,
+ "target_evaluator_simulated": false,
+ "target_predictions_produced": false,
+ "target_freshness_consumed": false
+ }

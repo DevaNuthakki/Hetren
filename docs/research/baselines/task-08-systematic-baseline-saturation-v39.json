@@ -1,0 +1,320 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 39,
+  "state": "DIRECT_MEMORY_SATURATION_V39_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-26T23:40:52Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_version_identity": true,
+    "final_retained_revision_must_be_cutoff_consistent": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v41_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v41.json",
+      "sha256": "114cf5229db0769f9676e85bef6a2be7bd5ceae72f7a2366ca7c82e92c89f4ed"
+    },
+    "systematic_saturation_v38": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v38.json",
+      "sha256": "ca035e9ea526dd5e3f5683f8cd2d17803f7bd289e77861d878f8621ed9580c73"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_LONG_TERM_AGENT_MEMORY",
+    "E1_PROCEDURAL_MEMORY",
+    "E1_REASONING_MEMORY",
+    "E1_STRUCTURED_MEMORY_SYSTEMS",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"AMA: Adaptive Memory via Multi-Agent Collaboration\" ACL 2026 code",
+    "\"Memp: Exploring Agent Procedural Memory\" ACL 2026 github",
+    "\"ReasoningBank\" ICLR 2026 official code",
+    "\"Hindsight\" structured agent memory ACL 2026 github",
+    "\"Lightweight LLM Agent Memory with Small Language Models\" ACL 2026",
+    "\"OCR-Memory\" ACL 2026 long horizon agent memory",
+    "\"Memory is Reconstructed, Not Retrieved\" 2026 MRAgent github",
+    "ACL 2026 direct agent memory adaptive retrieval procedural memory",
+    "ICLR 2026 agent reasoning memory self evolving",
+    "2026 executable long term agent memory retrieval reflection",
+    "2026 procedural memory agent TravelPlanner ALFWorld",
+    "2026 multi agent collaborative memory LoCoMo LongMemEval"
+  ],
+  "query_count": 12,
+  "proposed_direct_memory_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ADAPTIVE_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+        "A_H1_DYNAMIC_MEMORY_MAINTENANCE_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.152/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/AMA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_TERM_DIALOGUE_MEMORY_AND_MULTI_GRANULARITY_RETRIEVAL_SETTING_MATCHED",
+      "material_reason": "Uses coordinated constructor, retriever, judge, and refresher roles to construct, retrieve, validate, and repair long-term memory across multiple granularities.",
+      "limits": [
+        "MULTI_AGENT_MEMORY_ORCHESTRATION_COST_MUST_BE ACCOUNTED",
+        "RETRIEVAL_RETRY_BOUND_AND_REFRESH_POLICY_MUST_BE BOUND",
+        "LONG_CONTEXT_DIALOGUE_SETTING_MUST_BE MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP",
+      "name": "Memp: Exploring Agent Procedural Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_PROCEDURAL_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_ONLINE_PROCEDURAL_MEMORY_UPDATE_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_MEMORY_MIGRATION_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1185/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/MemP"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_PROCEDURAL_MEMORY_AND_ANALOGOUS_AGENT_TASK_SETTING_MATCHED",
+      "material_reason": "Maintains learnable and updatable procedural memory distilled from trajectories, with both offline and online memory-building modes and evidence of procedural-memory reuse across agent models.",
+      "limits": [
+        "TRAVELPLANNER_OR_ALFWORLD_STYLE_AGENT_SETTING_REQUIRED_FOR_DIRECT_MATCH",
+        "OFFLINE_AND_ONLINE_MEMORY_BUILDING_MODES_MUST_NOT_BE COLLAPSED",
+        "PROCEDURAL_MEMORY_MIGRATION_WITHIN_AGENT_MODELS_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+      "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_REASONING_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_RUNTIME_EXPERIENCE_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_REASONING_MEMORY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=jL7fwchScm"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/reasoning-bank"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_PERSISTENT_AGENT_EXPERIENCE_AND_REASONING_MEMORY_SETTING_MATCHED",
+      "material_reason": "Distills generalizable reasoning strategies from both successful and failed agent experiences and reuses them at test time, with executable WebArena and SWE-Bench paths.",
+      "limits": [
+        "MEMORY_AWARE_TEST_TIME_SCALING_BUDGET_MUST_BE BOUND",
+        "REASONINGBANK_AND_MATTS_MUST_NOT_BE COLLAPSED",
+        "WEB_AND_SOFTWARE_AGENT_SETTINGS_REQUIRE_EXPERIMENT_SPECIFIC_APPLICABILITY",
+        "WITHIN_E1_EXPERIENCE_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRUCTURED_AGENT_MEMORY_SYSTEM_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ACL_2026_SYSTEM_DEMONSTRATION_AND_OPEN_SOURCE_EXECUTABLE_SYSTEM_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_SYSTEM_DEMONSTRATION",
+          "url": "https://aclanthology.org/2026.acl-demo.27/"
+        },
+        {
+          "class": "OPEN_SOURCE_IMPLEMENTATION",
+          "url": "https://github.com/vectorize-io/hindsight"
+        }
+      ],
+      "eligibility_status": "MATERIAL_SYSTEM_BASELINE_IF_STRUCTURED_LONG_TERM_AGENT_MEMORY_SETTING_MATCHED",
+      "material_reason": "Provides an executable retain-recall-reflect memory system with separate world, experience, observation, and opinion networks plus temporal and graph retrieval.",
+      "limits": [
+        "SYSTEM_DEMO_EVIDENCE_MUST_NOT_BE_EQUATED_WITH_A_NEW_LEARNED_ALGORITHM",
+        "EXACT_PRE_CUTOFF_RELEASE_AND_CONFIGURATION_MUST_BE BOUND",
+        "HOSTED_OR_POST_CUTOFF_FEATURES_MUST_NOT_LEAK_INTO_FINAL_BASELINE"
+      ]
+    }
+  ],
+  "proposed_candidate_count": 4,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP",
+      "name": "Memp: Exploring Agent Procedural Memory",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-MEMP-PROCEDURAL",
+          "name": "Memp: Exploring Agent Procedural Memory",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v40.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+      "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+          "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v31.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+          "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v38.json"
+        }
+      ]
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "LightMem \u2014 Lightweight LLM Agent Memory with Small Language Models",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.588/",
+        "https://arxiv.org/abs/2604.07798"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "REFERENCE_ONLY_IMPLEMENTATION_IDENTITY_NOT_INDEPENDENTLY_VERIFIED_THIS_PASS",
+      "reason": "The memory architecture is directly relevant and peer-reviewed, but this bounded review did not independently establish the exact official executable implementation identity needed for a reproducible Task-8 baseline."
+    },
+    {
+      "name": "OCR-Memory: Optical Context Retrieval for Long-Horizon Agent Memory",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.474/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "REFERENCE_ONLY_IMPLEMENTATION_GATE_AND_ENVIRONMENT_INTERPRETATION",
+      "reason": "OCR-Memory uses visual encoding as an E1 memory representation for agent history; visual storage does not by itself make it an E3 vision-task comparator, and an official executable implementation was not independently bound in this pass."
+    },
+    {
+      "name": "MRAgent \u2014 Memory is Reconstructed, Not Retrieved",
+      "sources": [
+        "https://arxiv.org/abs/2606.06036",
+        "https://github.com/Ji-shuo/MRAgent",
+        "https://openreview.net/forum?id=YPoHy6lgKP"
+      ],
+      "evidence_state": "PRIMARY_RESEARCH_AND_EXECUTABLE_IMPLEMENTATION_WITH_PUBLICATION_VENUE_BINDING_AMBIGUITY",
+      "disposition": "REFERENCE_PENDING_VENUE_IDENTITY_RESOLUTION",
+      "reason": "The method and executable repository are clear, but the public evidence reviewed in this pass exposes conflicting ICLR-versus-ICML publication signals; final promotion should wait for explicit venue-identity resolution rather than silently choosing one."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "ReasoningBank",
+      "relevance": "Distills reusable reasoning strategies from successful and failed agent trajectories and reuses them across later agent tasks.",
+      "disposition": "WITHIN_E1_REASONING_MEMORY_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The demonstrated transfer and self-evolution remain within language-agent task families."
+    },
+    {
+      "name": "MemP",
+      "relevance": "Procedural memory can be reused and migrated between agent-model strengths.",
+      "disposition": "WITHIN_E1_PROCEDURAL_MEMORY_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No evidence establishes the same learned decision mechanism across E1 agents, E2 structured ML, and E3 vision."
+    },
+    {
+      "name": "MetaMem",
+      "relevance": "Meta-memory distills transferable knowledge-utilization experience across memory tasks.",
+      "disposition": "WITHIN_E1_META_MEMORY_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Memory-task transfer is not equivalent to cross-environment-family decision transfer."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_memory_transfer_references_exist": true,
+    "forcing_memory_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_DIRECT_MEMORY_SATURATION_V39"
+  },
+  "coverage_observations": {
+    "E1": "NO_NEW_DIRECT_MEMORY_IDENTITY_AFTER_DYNAMIC_DEDUPLICATION",
+    "E2": "OUTSIDE_THIS_DIRECT_MEMORY_REFINEMENT",
+    "E3": "OUTSIDE_THIS_DIRECT_MEMORY_REFINEMENT",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "This complete bounded direct-memory refinement produced no materially new eligible comparator after dynamic identity resolution; this is the first qualifying no-new-material round, so a second consecutive confirmation round is still required."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "system_demo_is_automatically_strongest": false,
+    "within_e1_memory_transfer_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B44_SECOND_CONSECUTIVE_NO_NEW_MATERIAL_CONFIRMATION"
+}

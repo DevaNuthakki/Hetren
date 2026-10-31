@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 28,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T21:25:54Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v27": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v27.json",
+      "sha256": "ae31a9d3e6044b099fe73289f5d37f27fe3925e29029920e8061d5d3e2467b73"
+    },
+    "systematic_saturation_v25": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+      "sha256": "ec3a7e3836ac3633a9669ec05276cdbf50118eb32a645ee0d19127a0e1c9ec31"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGEMEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AgeMem \u2014 Agentic Memory",
+      "implementation_identity": "https://github.com/y1y5/AgeMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_LONG_HORIZON_MEMORY_MANAGEMENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_TOOL_ACTION_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.981/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/y1y5/AgeMem"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.01885"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_LONG_HORIZON_MEMORY_OPERATIONS_ARE_PART_OF_MATCHED_E1_DECISION_SURFACE",
+        "MEMORY_OPERATIONS_MUST_BE PART_OF_GOVERNED_AGENT_BEHAVIOR",
+        "HOT_POT_QA_STYLE_TRAINING_DOES_NOT_AUTOMATICALLY_MATCH_ARBITRARY_TOOL_AGENT_TASKS",
+        "BASE_MODEL_RL_CHECKPOINT_TOOL_SCHEMA_AND_MEMORY_STORE_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "AgeMem learns unified short-term and long-term memory operations as agent-callable actions using progressive reinforcement learning, a materially different learned control mechanism from AEC episodic retrieval."
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_HORIZON_MEMORY_OPERATIONS_ARE_PART_OF_MATCHED_E1_DECISION_SURFACE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V25"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-EFFICIENT-TTS-SMALL-VLM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Efficient Test-Time Scaling for Small Vision-Language Models",
+      "implementation_identity": "https://github.com/monurcan/efficient_test_time_scaling",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_SMALL_VLM_TEST_TIME_AUGMENTATION_REFERENCE_ROLE_CONDITIONAL",
+        "A_H1_SMALL_VLM_PARAMETER_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://iclr.cc/virtual/2026/papers.html"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2510.03574"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/monurcan/efficient_test_time_scaling"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_SMALL_VLM_MULTIMODAL_TEST_TIME_SCALING_SETTING_MATCHED",
+        "TTAUG_AND_TTADAPT_MUST_BE_BOUND_AS_SEPARATE_CONFIGURED_VARIANTS",
+        "SMALL_VLM_MODEL_IDENTITY_AND_SCALE_MUST_BE MATCHED",
+        "AUGMENTATION_COUNT_AND_FORWARD_COMPUTE_REQUIRE_TASK_9_ACCOUNTING",
+        "TTADAPT_UPDATE_STEPS_AND_PARAMETER_SURFACE_MUST_BE BOUND",
+        "TEST_TIME_SCALING_EFFICIENCY_DOES_NOT_ESTABLISH_A_H2_ROLLBACK",
+        "Defines two efficient inference-time mechanisms for small VLMs: augmentation with token-level aggregation and pseudo-label-driven parameter adaptation."
+      ],
+      "eligibility_status": "MATERIAL_IF_SMALL_VLM_MULTIMODAL_TEST_TIME_SCALING_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V25"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

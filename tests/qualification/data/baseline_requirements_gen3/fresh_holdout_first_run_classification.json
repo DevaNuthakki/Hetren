@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_FIRST_RUN_CLASSIFICATION",
+  "state": "CLASSIFIED_BEFORE_REMEDIATION",
+  "generation_attempt": 10,
+  "classified_at_utc": "2026-09-26T02:05:54.803249Z",
+  "evidence_bindings": {
+    "generation_package_v10_sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+    "fresh_holdout_cases_attempt_10_sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+    "freeze_manifest_sha256": "64c3e69417e74dda898109f324573fa7d15924f479e426804363fb15eb622d48",
+    "execution_authorization_sha256": "af1080540676cb13d57795197ef729d161cd3637a1a5c2f6238b1164da104466",
+    "first_run_start_receipt_sha256": "e43a1706ebcfe9f671f39e54f1dc981d56fa7c2da64ebefd70421e40621190dd",
+    "raw_first_predictions_sha256": "d0e8bbb549363239bb300912f646fdfeed48c8587218468a0e7ec9d31a079fae",
+    "authoritative_first_run_sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028",
+    "first_run_evidence_manifest_sha256": "20518aa04480f1aec4628bd6b452afd7387b92ff481721faa8844a1789edc3f4",
+    "failed_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "authoritative_first_run": {
+    "qualification_result": "FAIL",
+    "case_count": 54,
+    "passed_case_count": 52,
+    "failed_case_count": 2,
+    "false_accept_count": 0,
+    "false_reject_count": 2,
+    "false_reject_ids": [
+      "G3-H10-009",
+      "G3-H10-037"
+    ],
+    "violation_contract_failure_count": 0
+  },
+  "case_classifications": [
+    {
+      "case_id": "G3-H10-009",
+      "primary_requirement": "G3-BR-005",
+      "classification": "EVALUATOR_DEFECT_FALSE_REJECT",
+      "oracle_status": "UPHELD",
+      "requirement_ambiguity_detected": false,
+      "actual_decision": "REJECT",
+      "actual_violations": [
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ],
+      "semantic_basis": "G3-BR-005 explicitly permits a material candidate/baseline information-state difference when that difference is the predeclared treatment.",
+      "case_basis": "The frozen case sets persistent_state_matched=false and state_difference_is_treatment=true.",
+      "defect": "The evaluator's PERSISTENT_STATE_NOT_MATCHED condition rejects whenever persistent_state_matched is false and omits the state_difference_is_treatment exemption that the same branch applies to cache/transcript asymmetry.",
+      "remediation_scope": "TARGET_EVALUATOR_LOGIC_ONLY"
+    },
+    {
+      "case_id": "G3-H10-037",
+      "primary_requirement": "G3-BR-019",
+      "classification": "EVALUATOR_DEFECT_FALSE_REJECT",
+      "oracle_status": "UPHELD",
+      "requirement_ambiguity_detected": false,
+      "actual_decision": "REJECT",
+      "actual_violations": [
+        "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER"
+      ],
+      "semantic_basis": "G3-BR-019 requires learned transfer to be distinguished from retrieval, target-specific information channels, and manual target engineering; it does not say that the mere presence of a separately classified retrieval channel invalidates a learned-transfer claim.",
+      "case_basis": "The frozen case sets channel_classified_separately=true, manual_target_engineering=false, and target_specific_retrieval=true.",
+      "defect": "The evaluator emits MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER whenever any target-information channel exists and claimed_as_learned_transfer is true. The violation condition ignores both channel_classified_separately and manual_target_engineering.",
+      "remediation_scope": "TARGET_EVALUATOR_LOGIC_ONLY"
+    }
+  ],
+  "aggregate_classification": {
+    "classification": "EVALUATOR_DEFECT",
+    "evaluator_defect_count": 2,
+    "holdout_oracle_defect_count": 0,
+    "generation_defect_count": 0,
+    "requirement_ambiguity_count": 0,
+    "execution_harness_defect_count": 0,
+    "evidence_integrity_defect_count": 0
+  },
+  "historical_evidence_policy": {
+    "authoritative_first_run_remains_FAIL": true,
+    "first_run_must_never_be_rewritten": true,
+    "raw_predictions_must_never_be_rewritten": true,
+    "frozen_cases_must_never_be_rewritten": true,
+    "failed_evaluator_snapshot_must_never_be_rewritten": true,
+    "attempt_10_must_never_be_rerun_as_fresh": true,
+    "freshness_consumed": true,
+    "future_execution_class": "REGRESSION_EVIDENCE_ONLY"
+  },
+  "remediation_state": {
+    "classification_completed_before_remediation": true,
+    "remediation_performed": false,
+    "remediation_planning_permitted": true,
+    "remediation_implementation_authorized": false,
+    "required_next_action": "DESIGN_EVALUATOR_REMEDIATION_BOUNDARY_FOR_TWO_CLASSIFIED_FALSE_REJECTS"
+  },
+  "claim_limits": {
+    "classification_does_not_convert_first_run_to_pass": true,
+    "classification_does_not_restore_freshness": true,
+    "classification_does_not_establish_task_8_completion": true,
+    "classification_does_not_establish_scientific_support": true,
+    "classification_does_not_establish_task_5_support": true
+  }
+}

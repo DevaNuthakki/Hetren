@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 31,
+  "state": "ADDENDUM_V31_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T22:38:11Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v31": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v31.json",
+      "sha256": "bad154f3605646a2dcd359a4c2a4c9d6f5a803a7617bee6829b1b43874769088"
+    },
+    "systematic_saturation_v28": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v28.json",
+      "sha256": "00537a95a1c8ed5ad521d371b1982bd360392582be5182d707738e9d39364fc3"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_REASONING_MEMORY_SELF_EVOLUTION_COMPARATOR",
+      "verified_facts": [
+        "ReasoningBank is published at ICLR 2026.",
+        "It stores reusable reasoning abstractions derived from both successful and failed agent trajectories.",
+        "Memory-aware test-time scaling uses repeated trajectories or refinement together with accumulated reasoning memory.",
+        "The official Google Research implementation contains SWE-Bench and WebArena experiment paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=jL7fwchScm"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/reasoning-bank"
+        }
+      ],
+      "limits": [
+        "EXACT_REASONINGBANK_VARIANT_MUST_BE_BOUND",
+        "MATTs_PARALLEL_AND_SEQUENTIAL_VARIANTS_MUST_NOT_BE_COLLAPSED",
+        "BASE_MODEL_AND_TRAJECTORY_GENERATION_BUDGET_MUST_BE BOUND",
+        "MEMORY_GENERATION_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REME-PROCEDURAL-MEMORY",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DYNAMIC_PROCEDURAL_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "Remember Me, Refine Me is published in Findings of ACL 2026.",
+        "ReMe extracts experiences from successful and failed trajectories into procedural memory.",
+        "Its memory lifecycle includes context-adaptive reuse and utility-based refinement of stored experience.",
+        "The AgentScope ReMe project provides executable memory infrastructure and research-facing benchmark support."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "limits": [
+        "PROCEDURAL_MEMORY_EXPERIMENT_VARIANT_MUST_BE BOUND",
+        "CURRENT_REME_PRODUCT_REPOSITORY_CONTAINS_POST_PAPER_EVOLUTION",
+        "FINAL_VERSION_PIN_MUST_RESOLVE_TO_CUTOFF_CONSISTENT_RESEARCH_STATE",
+        "BFCL_AND_APPWORLD_INFORMATION_OPPORTUNITIES_MUST_NOT_BE COLLAPSED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-THOUGHT-RETRIEVER",
+      "verification_state": "PEER_REVIEWED_TMLR_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_THOUGHT_MEMORY_RETRIEVAL_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Thought-Retriever is published in Transactions on Machine Learning Research in April 2026.",
+        "It preserves selected intermediate model thoughts as persistent memory rather than retrieving only raw source chunks.",
+        "Its inference loop retrieves from both external knowledge and accumulated thought memory, then validates and merges new thoughts.",
+        "The public research implementation provides executable experiment scripts and benchmark preparation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=emCcuhtENL"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ulab-uiuc/Thought-Retriever"
+        }
+      ],
+      "limits": [
+        "ULTRA_LONG_KNOWLEDGE_AND_QUERY_MEMORY_SETTING_MUST_MATCH",
+        "THOUGHT_VALIDATION_AND_SIMILARITY_THRESHOLD_MUST_BE BOUND",
+        "ACADEMICEVAL_AND_OTHER_RETRIEVAL_TASKS_MUST_NOT_BE TREATED_AS_TOOL_AGENT_TASKS",
+        "ROLE_IS_CONDITIONAL_ON_GOVERNED_EXPERIMENT_REQUIRING_REUSABLE_REASONING_OR_THOUGHT_MEMORY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v31_candidates_have_role_level_external_review": true,
+    "all_addendum_v31_candidates_are_peer_reviewed": true,
+    "all_addendum_v31_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "publication_status_establishes_strongest_status": false,
+    "memory_improvement_establishes_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

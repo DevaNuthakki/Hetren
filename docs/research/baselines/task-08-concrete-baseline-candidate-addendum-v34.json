@@ -1,0 +1,235 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 34,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T22:51:08Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v33": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v33.json",
+      "sha256": "5027bb686b2e296d40206293b804a515dec0c25ea3eb20be13d7d3f9f146d9c5"
+    },
+    "systematic_saturation_v31": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v31.json",
+      "sha256": "1a7933194f10dbb68ea03a19c3ff93b47dde790578f0e6daceafc1753f791324"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMORY-R2",
+      "baseline_version": "UNPINNED_ONGOING_RESEARCH_CANDIDATE",
+      "name": "Memory-R2: Fair Credit Assignment for Long-Horizon Memory-Augmented LLM Agents",
+      "implementation_identity": "https://github.com/ahmedehabb/Memory-R2",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MULTI_SESSION_MEMORY_MANAGER_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_RL_MEMORY_OPERATION_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.21768"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ahmedehabb/Memory-R2"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_MULTI_SESSION_LEARNED_MEMORY_MANAGEMENT_ROLE_MATCHES",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MULTI_SESSION_MEMORY_BANK_AND_OPERATION_SET_MUST_MATCH",
+        "TRAINING_CURRICULUM_AND_CREDIT_ASSIGNMENT_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Trains a persistent multi-session memory extractor and manager with explicit INSERT, UPDATE, and DELETE operations and a long-horizon credit-assignment algorithm."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_MULTI_SESSION_LEARNED_MEMORY_MANAGEMENT_ROLE_MATCHES",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_REFINEMENT_SATURATION_V31"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMEX-RL",
+      "baseline_version": "UNPINNED_ONGOING_RESEARCH_CANDIDATE",
+      "name": "Memex(RL): Scaling Long-Horizon LLM Agents via Indexed Experience Memory",
+      "implementation_identity": "https://github.com/Accenture/MemexRL",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_INDEXED_EXPERIENCE_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_LEARNED_MEMORY_READ_WRITE_DEREFERENCE_POLICY_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.04257"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Accenture/MemexRL"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_INDEXED_EXTERNAL_EXPERIENCE_MEMORY_ROLE_MATCHES",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "INDEXED_EXTERNAL_DATABASE_INFORMATION_ACCESS_MUST_BE MATCHED",
+        "WRITE_READ_AND_DEREFERENCE_POLICY_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_RESOURCE_REQUIREMENTS_REQUIRE_TASK_9_ACCOUNTING",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Maintains compact structured summaries and stable indices while preserving full-fidelity interactions externally, and learns memory writing, indexing, and dereferencing behavior with reinforcement learning."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_INDEXED_EXTERNAL_EXPERIENCE_MEMORY_ROLE_MATCHES",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_REFINEMENT_SATURATION_V31"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMRL-RUNTIME",
+      "baseline_version": "UNPINNED_ONGOING_RESEARCH_CANDIDATE",
+      "name": "MemRL: Self-Evolving Agents via Runtime Reinforcement Learning on Episodic Memory",
+      "implementation_identity": "https://github.com/MemTensor/MemRL",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_RUNTIME_EPISODIC_MEMORY_UTILITY_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_NON_PARAMETRIC_RUNTIME_MEMORY_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.03192"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MemTensor/MemRL"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_RUNTIME_EPISODIC_MEMORY_FEEDBACK_ROLE_MATCHES",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "SOURCE_USE_OF_SELF_EVOLVING_TERMINOLOGY_DOES_NOT_ESTABLISH_HETREN_SELF_IMPROVEMENT",
+        "SEMANTIC_FILTER_AND_Q_VALUE_UPDATE_RULES_MUST_BE BOUND",
+        "ENVIRONMENTAL_FEEDBACK_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Keeps the base LLM frozen while adapting episodic-memory utility from environmental feedback through semantic filtering followed by learned utility-based retrieval."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_RUNTIME_EPISODIC_MEMORY_FEEDBACK_ROLE_MATCHES",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_REFINEMENT_SATURATION_V31"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ATOMMEM-CRUD",
+      "baseline_version": "UNPINNED_ONGOING_RESEARCH_CANDIDATE",
+      "name": "AtomMem: Learnable Dynamic Agentic Memory with Atomic Memory Operation",
+      "implementation_identity": "https://github.com/RUCBM/AtomMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_CRUD_MEMORY_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.08323"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/RUCBM/AtomMem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_LEARNED_CRUD_MEMORY_OPERATION_ROLE_MATCHES",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_BE IDENTIFIED_BY_ARXIV_2601_08323_AND_RUCBM_REPOSITORY_TO_AVOID_ATOMMEM_NAME_COLLISION",
+        "CRUD_ACTION_SPACE_AND_TRAINING_POLICY_MUST_BE BOUND",
+        "LONG_CONTEXT_BENCHMARK_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Recasts memory management as a learned decision process over atomic Create, Read, Update, and Delete operations trained with supervised fine-tuning and reinforcement learning."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_MATERIAL_CANDIDATE_IF_LEARNED_CRUD_MEMORY_OPERATION_ROLE_MATCHES",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_REFINEMENT_SATURATION_V31"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

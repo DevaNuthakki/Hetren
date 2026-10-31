@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_EXPERIMENT_CONTRACT_INSTANTIATION_BOUNDARY",
+  "state": "NON_GOVERNING_CONTRACT_STRUCTURE_DEFINED_NO_EXPERIMENT_INSTANCES_CREATED",
+  "recorded_at_utc": "2026-09-27T21:15:27Z",
+  "task": 8,
+  "purpose": "Define the minimum evidence-bearing structure that a real concrete comparison contract must satisfy before Task 8 may perform candidate-specific applicability, comparator selection, implementation/version/configuration binding, or immutable baseline pinning.",
+  "bindings": {
+    "catalog_boundary_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_baseline_catalog_later_binding_boundary_attempt_1.json",
+      "sha256": "20c46fd0ef9ecf09e3fa34068494745e1e01e37eca58dec3b4ef4abee3227563"
+    },
+    "catalog_projection_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_non_governing_baseline_catalog_projection_attempt_1.json",
+      "sha256": "6c06ecb53a5f7125732d0e931338c2f6a9d5803e57d2af1dd87a85026ce32692"
+    },
+    "catalog_projection": {
+      "path": "docs/research/baselines/task-08-non-governing-baseline-catalog-projection-v1.json",
+      "sha256": "6deb2af5d704cd467010f13fe4bc81907bf620391d75b30c24fee6903cf07ca3"
+    },
+    "concrete_contract_binding_readiness": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-contract-binding-readiness-v1.json",
+      "sha256": "509ef389e306793ab046289b19f968cf231f620562f82b24d333414ce1230021"
+    },
+    "concrete_contract_binding_readiness_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_post_discovery_concrete_experiment_contract_binding_readiness_attempt_1.json",
+      "sha256": "d9ee7d02e3128d665101f830bac79e88b2bac4090867d3527094e11772d71896"
+    },
+    "task_6_research_contract": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7_split_and_baseline_handoff_contract": {
+      "path": "docs/decisions/qualification/evidence/0008-pre-lifecycle-transition-snapshot/docs/mvp/07-initial-splits.md",
+      "sha256": "937dac0a6e8664768e2ef2b1f92e08a9fadae8bcb200bf0fc5ce4134c4c912bd"
+    }
+  },
+  "catalog_prestate": {
+    "canonical_candidate_count": 222,
+    "experiment_specific_baseline_bindings_created": 0,
+    "split_versions_created": 0,
+    "comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false
+  },
+  "concrete_experiment_contract_definition": {
+    "definition": "A real concrete comparison contract is an immutable/versioned execution-intent record that binds an already-governed scientific hypothesis to an actual system/task, candidate-under-test, evaluator/metric, real Task-7 split identities, information-opportunity regime, required comparator roles, applicable Task-9 resource regime, and pre-protected freeze/change-control semantics.",
+    "universal_required_sections": [
+      {
+        "section": "CONTRACT_IDENTITY",
+        "owner": "EXPERIMENT_CONTRACT",
+        "required_fields": [
+          "experiment_contract_id",
+          "experiment_contract_version",
+          "contract_status",
+          "created_from_real_execution_intent"
+        ],
+        "rule": "The contract has a stable logical identity and an immutable behavior-relevant version. A material comparison change creates a successor version rather than rewriting prior evidence."
+      },
+      {
+        "section": "SCIENTIFIC_CLAIM_BINDING",
+        "owner": "TASK_6",
+        "required_fields": [
+          "research_program",
+          "hypothesis_id",
+          "hypothesis_version",
+          "exact_claim_scope",
+          "exact_decision_or_adaptation_behavior"
+        ],
+        "rule": "The concrete experiment must instantiate an already-governed hypothesis and must not silently broaden its claim."
+      },
+      {
+        "section": "SYSTEM_AND_ENVIRONMENT_BINDING",
+        "owner": "TASK_4_TASK_5_EXECUTION_INPUT",
+        "required_fields": [
+          "environment_family",
+          "concrete_system_identity",
+          "concrete_system_version_or_snapshot",
+          "task_or_problem_identity",
+          "capability_profile_or_support_reference"
+        ],
+        "rule": "Environment-family taxonomy alone is insufficient. The contract must identify the actual system/task being compared."
+      },
+      {
+        "section": "CANDIDATE_UNDER_TEST_BINDING",
+        "owner": "EXPERIMENT_EXECUTION",
+        "required_fields": [
+          "candidate_identity",
+          "candidate_version_or_lineage",
+          "candidate_configuration_identity",
+          "candidate_freeze_rule"
+        ],
+        "rule": "A baseline cannot be meaningfully matched without knowing the actual candidate behavior and configuration being compared."
+      },
+      {
+        "section": "EVALUATOR_BINDING",
+        "owner": "TASK_6_PLUS_ENVIRONMENT_EVALUATOR",
+        "required_fields": [
+          "evaluator_identity_or_binding_rule",
+          "evaluator_version_or_revision",
+          "evaluation_protocol_identity",
+          "primary_metric_identity",
+          "primary_metric_meaning",
+          "metric_direction",
+          "aggregation_rule"
+        ],
+        "rule": "The evaluation measure and evaluator must be concrete enough that candidate and baseline are judged under the same declared semantics."
+      },
+      {
+        "section": "SUCCESS_FAILURE_AND_CONSTRAINT_BINDING",
+        "owner": "TASK_6",
+        "required_fields": [
+          "success_threshold",
+          "failure_threshold",
+          "hard_constraints",
+          "invalidation_conditions"
+        ],
+        "rule": "Protected-result interpretation cannot be invented after execution."
+      },
+      {
+        "section": "SPLIT_AND_EVIDENCE_BINDING",
+        "owner": "TASK_7",
+        "required_fields": [
+          "split_plan_identity",
+          "split_version_identity",
+          "development_partition_identity_if_applicable",
+          "validation_partition_identity_if_applicable",
+          "protected_partition_identity",
+          "evaluation_unit_definition",
+          "independence_group_definition_if_applicable",
+          "leakage_control_reference"
+        ],
+        "rule": "The contract must bind real Task-7 split identities and evidence boundaries. A hypothetical or placeholder split does not qualify."
+      },
+      {
+        "section": "INFORMATION_OPPORTUNITY_BINDING",
+        "owner": "TASK_8_COMPARISON_CONFIGURATION",
+        "required_fields": [
+          "candidate_allowed_information",
+          "baseline_allowed_information",
+          "candidate_feedback_access",
+          "baseline_feedback_access",
+          "tool_or_api_access",
+          "retrieval_or_memory_access",
+          "adaptation_input_access_if_applicable",
+          "protected_outcome_access_rule"
+        ],
+        "rule": "Applicability and fairness depend on what each compared system is permitted to observe and use."
+      },
+      {
+        "section": "BASELINE_ROLE_REQUIREMENT_BINDING",
+        "owner": "TASK_6_REQUIREMENT_TASK_8_IMPLEMENTATION",
+        "required_fields": [
+          "required_comparison_roles",
+          "strongest_applicable_required",
+          "diagnostic_anchor_roles_if_any",
+          "non_learned_role_if_required",
+          "learned_role_if_required",
+          "transfer_role_if_required",
+          "adaptation_role_if_required"
+        ],
+        "rule": "This section declares roles only. It must not contain a selected candidate ID until Task-8 applicability and selection are executed for this concrete contract."
+      },
+      {
+        "section": "RESOURCE_COMPARISON_BINDING",
+        "owner": "TASK_9_VALUES_TASK_8_COMPARISON_RULE",
+        "required_fields": [
+          "resource_matching_rule",
+          "resource_accounting_reference",
+          "compute_budget_binding_if_applicable",
+          "execution_budget_binding_if_applicable",
+          "engineering_effort_binding_if_applicable",
+          "adaptation_cost_binding_if_applicable"
+        ],
+        "rule": "Where the scientific claim requires matched resources or bounded adaptation cost, the concrete accounting regime must exist before claim-bearing comparison."
+      },
+      {
+        "section": "REPRODUCIBILITY_AND_EXECUTION_BINDING",
+        "owner": "EXPERIMENT_EXECUTION",
+        "required_fields": [
+          "execution_harness_identity",
+          "runtime_or_environment_identity",
+          "dependency_or_container_identity",
+          "seed_or_replication_policy_if_applicable",
+          "external_service_revision_capture_rule_if_applicable"
+        ],
+        "rule": "The contract must define enough execution identity to distinguish a reproducible comparison from a conceptual comparison."
+      },
+      {
+        "section": "PRE_PROTECTED_FREEZE_AND_CHANGE_CONTROL",
+        "owner": "TASK_7_TASK_8_GOVERNANCE",
+        "required_fields": [
+          "protected_outcomes_inspected_before_freeze",
+          "contract_freeze_state",
+          "freeze_timestamp_or_receipt",
+          "material_change_rule",
+          "successor_contract_rule"
+        ],
+        "rule": "Baseline selection and comparison configuration must be frozen before applicable protected outcomes are inspected. Material later changes create successor evidence."
+      }
+    ],
+    "hypothesis_specific_requirements": {
+      "N-H1": {
+        "required_fields": [
+          "exact_investigation_decision_behavior",
+          "strongest_matched_baseline_role",
+          "resource_matching_rule",
+          "independent_governed_evaluation_unit_requirement"
+        ],
+        "allowed_behavior_examples": [
+          "test_or_experiment_selection",
+          "action_ranking",
+          "evidence_gap_prioritization",
+          "hypothesis_revision",
+          "stopping",
+          "abstention",
+          "next_action_recommendation"
+        ],
+        "note": "Evidence for one decision behavior must not be generalized to the others."
+      },
+      "N-H2": {
+        "required_fields": [
+          "source_environment_family_or_families",
+          "protected_target_environment_family",
+          "transfer_boundary_identity",
+          "transferred_mechanism_identity",
+          "source_side_incremental_reference_rule",
+          "target_starting_reference_rule",
+          "transfer_comparator_role",
+          "target_protected_partition_identity",
+          "source_and_target_information_separation_rule"
+        ],
+        "note": "Within-family transfer is not a substitute for the governed cross-family transfer boundary."
+      },
+      "A-H1": {
+        "required_fields": [
+          "pre_adaptation_state_identity",
+          "adaptation_input_partition_identity",
+          "protected_primary_outcome_partition_identity",
+          "critical_invariant_partition_identity_if_applicable",
+          "no_adaptation_reference_role",
+          "strongest_matched_adaptation_baseline_role",
+          "adaptation_stop_or_budget_rule"
+        ],
+        "note": "Adaptation input and protected outcome evidence must remain separated."
+      },
+      "A-H2": {
+        "required_fields": [
+          "pre_adaptation_prior_capability_state_identity",
+          "post_adaptation_state_identity",
+          "locality_evaluation_identity",
+          "critical_invariant_evaluation_identity_if_applicable",
+          "rollback_procedure_identity",
+          "post_rollback_state_identity",
+          "restoration_measure_identity"
+        ],
+        "external_baseline_required_for_symmetry": false,
+        "note": "A-H2 retention, locality, invariant, rollback, and restoration evidence cannot be replaced by an arbitrary external comparator."
+      }
+    },
+    "realness_criteria": [
+      "Every required identity resolves to an existing governed or executable artifact rather than an invented placeholder.",
+      "The concrete system/task identity is real and versioned or snapshot-bound.",
+      "The evaluator and primary metric are executable or governed by an explicit binding rule.",
+      "The Task-7 split version and applicable partitions actually exist.",
+      "Required Task-9 resource accounting references exist when the hypothesis requires resource matching or bounded adaptation cost.",
+      "The candidate-under-test identity and configuration are concrete.",
+      "Information opportunity is explicit for both candidate and future comparator.",
+      "Required comparator roles are declared before candidate-specific baseline selection.",
+      "Protected outcomes have not been inspected before the contract and applicable baseline binding freeze.",
+      "Required fields do not use placeholder values such as TODO, TBA, UNKNOWN, DUMMY, or HYPOTHETICAL."
+    ],
+    "task8_binding_prerequisites": [
+      "contract_validation_state == CONCRETE_READY_FOR_TASK8_BASELINE_BINDING",
+      "all universally applicable required sections are complete",
+      "all hypothesis-specific required fields are complete",
+      "all referenced artifacts resolve and pass identity/hash/version validation where applicable",
+      "protected_outcomes_inspected_before_freeze == false",
+      "required comparison roles are fixed",
+      "candidate and comparator information-opportunity regime is fixed",
+      "applicable resource-comparison rule is fixed",
+      "selection must operate only over candidates applicable to this concrete contract"
+    ],
+    "prohibitions": [
+      "Do not mechanically cross-product all 222 catalog candidates with hypothetical experiments.",
+      "Do not rank the 222-candidate catalog globally.",
+      "Do not select a comparator before a real concrete experiment contract is structurally validated.",
+      "Do not create split versions owned by Task 7 inside this boundary artifact.",
+      "Do not invent Task-9 accounting values.",
+      "Do not pin immutable candidate versions before experiment-specific applicability and retention are determined.",
+      "Do not inspect protected outcomes to decide applicability, exclusion, ranking, or baseline selection.",
+      "Do not manufacture N-H2 cross-family applicability from within-family transfer evidence.",
+      "Do not create a Task-8 governing specification or Decision 0009 from this boundary alone."
+    ]
+  },
+  "validation_states": {
+    "DRAFT": "May contain unresolved required fields. No Task-8 candidate-specific binding allowed.",
+    "STRUCTURALLY_COMPLETE_UNVALIDATED": "All fields present, but referenced identities have not all been validated. No Task-8 candidate-specific binding allowed.",
+    "CONCRETE_READY_FOR_TASK8_BASELINE_BINDING": "All applicable required fields are concrete, referenced artifacts resolve, protected outcomes remain uninspected, and Task 8 may begin experiment-specific applicability and comparator selection.",
+    "FROZEN_FOR_PROTECTED_COMPARISON": "Task-8 baseline identity/version/configuration and applicable Task-9 resource regime have subsequently been bound and frozen before protected outcome inspection. This state is NOT created by R12.",
+    "INVALID": "The contract is structurally or scientifically invalid and cannot authorize baseline binding."
+  },
+  "instance_state": {
+    "concrete_experiment_contract_instances_created": 0,
+    "candidate_specific_applicability_bindings_created": 0,
+    "candidate_specific_baseline_bindings_created": 0,
+    "split_versions_created": 0,
+    "comparator_rankings_created": 0,
+    "immutable_baseline_pins_created": 0,
+    "protected_outcomes_inspected": false
+  },
+  "authority_boundary": {
+    "defines_contract_structure": true,
+    "instantiates_experiment": false,
+    "selects_candidate": false,
+    "selects_comparator": false,
+    "ranks_catalog": false,
+    "pins_baseline_version": false,
+    "creates_split_version": false,
+    "creates_task9_accounting_values": false,
+    "creates_governing_task8_specification": false,
+    "creates_decision_0009": false
+  },
+  "claim_limits": {
+    "contract_schema_is_an_experiment": false,
+    "contract_schema_authorizes_baseline_selection": false,
+    "catalog_candidate_is_finally_applicable": false,
+    "catalog_candidate_is_finally_eligible": false,
+    "catalog_candidate_is_strongest": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I5A2R13_INSTANTIATE_OR_IMPORT_REAL_CONCRETE_EXPERIMENT_CONTRACTS_WITHOUT_BASELINE_SELECTION"
+}

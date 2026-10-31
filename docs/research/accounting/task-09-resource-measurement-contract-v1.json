@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_RESOURCE_MEASUREMENT_CONTRACT",
+  "contract_generation": 1,
+  "state": "DRAFT_MEASUREMENT_PROCEDURE_NO_OBSERVED_VALUES",
+  "recorded_at_utc": "2026-09-28T23:21:34Z",
+  "task": 9,
+  "purpose": "Define how Task-9 resource and effort fields are measured, attributed, preserved, and reported before concrete values or practical-value conclusions are produced.",
+  "bindings": {
+    "cost_effort_ledger_contract": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "sha256": "44662f31243d3817a68b2613637c32874482b58d434f976581f100c462d5b620"
+    },
+    "task_8_task9_input_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    }
+  },
+  "general_measurement_rules": {
+    "measure_per_run_before_aggregation": true,
+    "measurement_window_boundaries_must_be_explicit": true,
+    "measurement_source_must_be_recorded": true,
+    "instrument_version_or_identity_must_be_recorded": true,
+    "estimated_and_directly_measured_values_must_be_distinguishable": true,
+    "failed_measurement_must_not_be_substituted_with_zero": true,
+    "shared_resource_attribution_method_must_be_declared": true,
+    "concurrent_workloads_must_not_be_silently_attributed": true,
+    "warm_cache_and_cold_cache_states_must_not_be_silently_mixed": true,
+    "setup_training_adaptation_evaluation_and_verification_costs_must_remain_phase_separable": true
+  },
+  "time_measurement": {
+    "elapsed_runtime": "MONOTONIC_CLOCK",
+    "audit_timestamps": "UTC_WALL_CLOCK",
+    "required_boundaries": [
+      "measurement_start",
+      "measurement_end"
+    ],
+    "rules": [
+      "Do not derive elapsed duration solely from non-monotonic wall-clock timestamps when monotonic timing is available.",
+      "Record timeout and interruption outcomes explicitly.",
+      "Preserve runtime spent by failed executions if resources were actually consumed."
+    ]
+  },
+  "compute_measurement": {
+    "preferred_sources": [
+      "runtime_telemetry",
+      "scheduler_or_cloud_job_telemetry",
+      "device_monitoring"
+    ],
+    "required_context_if_applicable": [
+      "device_type",
+      "device_model",
+      "device_count",
+      "execution_host_or_provider_identity"
+    ],
+    "rules": [
+      "Direct telemetry is preferred over reconstructed estimates.",
+      "If utilization-adjusted compute cannot be measured, preserve device-time separately rather than invent utilization.",
+      "Shared-device attribution requires an explicit allocation rule.",
+      "Current hardware pricing must not be retroactively applied as historical observed cost without explicit estimation labeling."
+    ]
+  },
+  "token_measurement": {
+    "preferred_source_order": [
+      "provider_usage_record",
+      "runtime_model_usage_record",
+      "declared_tokenizer_reconstruction"
+    ],
+    "rules": [
+      "Provider-reported token counts take precedence when they define billing.",
+      "Tokenizer reconstruction must record tokenizer identity and version.",
+      "Input, output, and cache-related token categories remain separate when the provider distinguishes them.",
+      "Unknown token usage remains unknown rather than zero."
+    ]
+  },
+  "api_and_tool_measurement": {
+    "preferred_sources": [
+      "structured_runtime_logs",
+      "provider_usage_logs",
+      "environment_event_logs"
+    ],
+    "rules": [
+      "Retries are preserved rather than removed from cost accounting.",
+      "Failed calls that consume billable or execution resources remain counted.",
+      "Tool calls and model calls remain separate fields."
+    ]
+  },
+  "memory_and_storage_measurement": {
+    "preferred_sources": [
+      "runtime_peak_memory_telemetry",
+      "scheduler_metrics",
+      "filesystem_or_object_store_measurement"
+    ],
+    "rules": [
+      "Peak and cumulative quantities must not be conflated.",
+      "Temporary artifacts may be separately classified but must not be silently excluded when materially relevant."
+    ]
+  },
+  "monetary_measurement": {
+    "preferred_sources": [
+      "provider_invoice_or_usage_export",
+      "captured_provider_rate_schedule",
+      "captured_internal_compute_rate_schedule"
+    ],
+    "required_rate_provenance": [
+      "rate_schedule_identity",
+      "currency",
+      "effective_timestamp_or_period",
+      "usage_quantity_source"
+    ],
+    "rules": [
+      "Observed provider charges and reconstructed charges must be labeled separately.",
+      "A later rate card must not silently replace the rate applicable to an earlier run.",
+      "Currency conversion requires a separately preserved FX source and timestamp when conversion is performed.",
+      "Human effort is not monetized by default."
+    ]
+  },
+  "engineering_effort_measurement": {
+    "preferred_source": "CONTEMPORANEOUS_EVENT_LOG",
+    "event_categories": [
+      "implementation",
+      "configuration",
+      "prompt_iteration",
+      "debugging",
+      "manual_data_work",
+      "experiment_setup",
+      "failed_search_or_tuning",
+      "analysis",
+      "verification"
+    ],
+    "rules": [
+      "Active effort and elapsed session time remain separate.",
+      "Automated waiting time is not silently counted as active human effort.",
+      "Manual interventions must be recorded for both candidate and comparator sides.",
+      "Failed tuning attempts remain part of opportunity accounting.",
+      "Retrospective estimates are allowed only when clearly labeled and must not be represented as direct measurements."
+    ]
+  },
+  "adaptation_measurement": {
+    "required_boundaries": [
+      "pre_adaptation_state_identity",
+      "adaptation_start",
+      "adaptation_end",
+      "post_adaptation_state_identity"
+    ],
+    "required_access_provenance_if_applicable": [
+      "target_examples_seen",
+      "target_labels_seen",
+      "unlabeled_target_examples_seen",
+      "feedback_channels_used",
+      "external_model_or_tool_access"
+    ],
+    "rules": [
+      "Adaptation cost remains separate from ordinary evaluation cost.",
+      "Rollback cost is measured separately when rollback is executed.",
+      "Pre-existing training cost is not silently reclassified as deployment adaptation cost.",
+      "Adaptation examples and labels are information-opportunity evidence as well as resource evidence."
+    ]
+  },
+  "shared_resource_attribution": {
+    "allowed_methods": [
+      "DIRECT_ISOLATED_MEASUREMENT",
+      "EXCLUSIVE_JOB_ACCOUNTING",
+      "DECLARED_PROPORTIONAL_ALLOCATION",
+      "UNRESOLVED_SHARED_RESOURCE"
+    ],
+    "rules": [
+      "Allocation method must be frozen before using shared-resource values in a consequential comparison.",
+      "UNRESOLVED_SHARED_RESOURCE cannot be converted to zero."
+    ]
+  },
+  "aggregation_and_reporting": {
+    "raw_per_run_records_required": true,
+    "raw_records_preserved": true,
+    "aggregation_must_identify_run_population": true,
+    "aggregation_method_must_be_predeclared_for_consequential_comparison": true,
+    "quality_and_resource_outputs_remain_separate": true,
+    "single_favorable_aggregate_score_required": false,
+    "pareto_relationship_may_be_reported": true,
+    "missing_dimensions_must_be_visible": true
+  },
+  "practical_value_measurement": {
+    "default_interpretation": "MULTI_AXIS_NO_DEFAULT_COMPOSITE",
+    "axes": [
+      "quality_or_task_outcome",
+      "compute",
+      "execution_time",
+      "token_or_api_usage",
+      "memory_and_storage",
+      "monetary_cost",
+      "engineering_effort",
+      "adaptation_cost"
+    ],
+    "rules": [
+      "A quality improvement does not automatically imply practical value.",
+      "A lower resource value does not automatically compensate for a failed hard quality or safety requirement.",
+      "Pareto domination may be reported only over explicitly comparable measured dimensions.",
+      "A weighted utility or cost-benefit score requires a predeclared formula and weights before applicable protected outcomes.",
+      "Missing values remain visible and cannot improve a practical-value conclusion by omission."
+    ],
+    "observed_practical_value_result": null
+  },
+  "anti_hindsight_enforcement": {
+    "post_result_resource_dimension_deletion_prohibited": true,
+    "post_result_measurement_method_switch_prohibited_without_new_version": true,
+    "post_result_rate_rule_switch_prohibited_without_new_version": true,
+    "post_result_human_effort_exclusion_prohibited": true,
+    "material_contract_change_requires_new_contract_version": true
+  },
+  "observed_measurements": [],
+  "claim_limits": {
+    "contains_observed_measurements": false,
+    "contains_cost_result": false,
+    "contains_practical_value_result": false,
+    "establishes_baseline_parity": false,
+    "authorizes_protected_execution": false,
+    "establishes_task_9_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "T9A_2_ADVERSARIAL_REVIEW_AND_MEASUREMENT_CONTRACT_HARDENING"
+}

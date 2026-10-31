@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 65,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:27:21Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v67_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v67.json",
+      "sha256": "92118a6ba3d972ad04dbe83551c2eecfd9778db21c3e2ba2ddfbcd86047ed3dd"
+    },
+    "systematic_saturation_v64": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v64.json",
+      "sha256": "8bbb4f6cac712e8e2e5ad47f5d5585bfbd5890f4fa5ba294a4696c3a6eb58188"
+    }
+  },
+  "search_mode": "BOUNDED_ROLE_MATCHED_DISPLACEMENT_ONLY",
+  "focus": [
+    "E1_MEMORY_DEPENDENT_VLA_POLICY",
+    "E1_PARTIALLY_OBSERVABLE_LONG_HORIZON_MANIPULATION",
+    "E1_HISTORY_SELECTION_OR_COMPRESSION_MECHANISMS",
+    "E1_WORLD_MODEL_OR_TEST_TIME_REASONING_WHERE_ROLE_MATCHED",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER_GAP_CHECK"
+  ],
+  "queries_executed": [
+    "\"Notes-to-Self\" scratchpad augmented VLA official code",
+    "\"muVLA\" recurrent memory partially observable manipulation official code",
+    "\"MemBodied\" recurrent associative memory VLA official implementation",
+    "\"OptimusVLA\" CVPR 2026 official implementation",
+    "\"EventVLA\" CoRL 2026 official implementation",
+    "\"tau0-VLA\" world-model-guided test-time computation official implementation",
+    "2026 VLA episodic memory long-horizon manipulation official code",
+    "2026 VLA recurrent memory partial observability official code",
+    "2026 event memory vision-language-action manipulation official code",
+    "2026 hierarchical VLA test-time computation memory official code",
+    "\"NativeMEM\" VLA official implementation",
+    "\"ReMem-VLA\" official implementation",
+    "\"Explicit Language Memory\" VLA code",
+    "2026 memory VLA displacement long-horizon manipulation",
+    "2026 VLA world model memory manipulation long horizon",
+    "2026 VLA memory benchmark executable comparator"
+  ],
+  "query_count": 16,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "name": "OptimusVLA",
+      "aliases": [
+        "Global Prior Meets Local Consistency",
+        "Dual-Memory Augmented Vision-Language-Action Model for Efficient Robotic Manipulation"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DUAL_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_HISTORY_CONDITIONED_VLA_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/CVPR26-OptimusVLA"
+        }
+      ],
+      "material_reason": "Combines retrieval-based global prior memory with dynamically encoded local action-history consistency, giving it a materially different long-horizon memory mechanism from scratchpad, recurrent-token, and associative-memory candidates.",
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "name": "EventVLA",
+      "aliases": [
+        "Event-Driven Visual Evidence Memory for Long-Horizon Vision-Language-Action Policies",
+        "RoboTwin-MeM"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EVENT_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_TEST_STREAM_VISUAL_MEMORY_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "CORL_2026_ACCEPTANCE_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.20092"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/EventVLA"
+        }
+      ],
+      "material_reason": "Uses learned future-keyframe probability to retain sparse task-critical visual evidence, a distinct memory-selection mechanism directly relevant to non-Markovian long-horizon manipulation.",
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TAU0-VLA",
+      "name": "tau0-VLA",
+      "aliases": [
+        "\u03c40-VLA",
+        "a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation",
+        "Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HIERARCHICAL_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_TEST_TIME_COMPUTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_WITH_OFFICIAL_IMPLEMENTATION_AND_WEIGHTS_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.16885"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/sii-research/tau-0-vla"
+        }
+      ],
+      "material_reason": "Combines memory-augmented high-level planning with world-model-guided test-time search and a generalist low-level VLA, making it a distinct deployment-time reasoning mechanism for long-horizon manipulation.",
+      "eligibility_status": "ONGOING_RESEARCH_ROLE_CONDITIONAL_PENDING_PEER_REVIEW_PARITY_AND_FINAL_VERSION_REVIEW"
+    }
+  ],
+  "displacement_proposal_count": 3,
+  "identity_disposition": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "name": "OptimusVLA",
+      "id_already_present": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "name": "EventVLA",
+      "id_already_present": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TAU0-VLA",
+      "name": "tau0-VLA",
+      "id_already_present": true,
+      "normalized_alias_matches": [],
+      "disposition": "PREEXISTING_OR_ALIAS_DUPLICATE_NOT_RECOUNTED"
+    }
+  ],
+  "preexisting_or_duplicate_count": 1,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "name": "OptimusVLA",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DUAL_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_HISTORY_CONDITIONED_VLA_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_Global_Prior_Meets_Local_Consistency_Dual-Memory_Augmented_Vision-Language-Action_Model_for_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/CVPR26-OptimusVLA"
+        }
+      ],
+      "material_reason": "Combines retrieval-based global prior memory with dynamically encoded local action-history consistency, giving it a materially different long-horizon memory mechanism from scratchpad, recurrent-token, and associative-memory candidates.",
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVENTVLA",
+      "name": "EventVLA",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EVENT_MEMORY_VLA_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_TEST_STREAM_VISUAL_MEMORY_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "CORL_2026_ACCEPTANCE_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.20092"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/EventVLA"
+        }
+      ],
+      "material_reason": "Uses learned future-keyframe probability to retain sparse task-critical visual evidence, a distinct memory-selection mechanism directly relevant to non-Markovian long-horizon manipulation.",
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_APPLICABILITY_PARITY_AND_VERSION_REVIEW"
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "NativeMEM",
+      "sources": [
+        "https://arxiv.org/abs/2607.06678",
+        "https://github.com/OpenDriveLab/NativeMEM"
+      ],
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The public repository explicitly describes itself as a work-in-progress release; it is therefore retained as relevant research rather than treated as a settled reproducible displacement baseline."
+    },
+    {
+      "name": "ReMem-VLA",
+      "sources": [
+        "https://arxiv.org/abs/2603.12942"
+      ],
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The paper is under review and this bounded pass did not independently verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "Explicit Language Memory for Long-Horizon Planning in Vision-Language-Action Models",
+      "sources": [
+        "https://arxiv.org/abs/2608.04765"
+      ],
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The preprint is directly relevant to long-horizon VLA memory, but this pass did not verify an official executable implementation."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "memory_vla_candidates_are_within_e1": true,
+    "forcing_embodied_vla_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V65"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unrepresented role-matched displacement candidate was found."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "duplicate_candidate_is_new": false,
+    "preprint_is_peer_reviewed": false,
+    "work_in_progress_repository_is_final_reproducible_version": false,
+    "within_e1_memory_transfer_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B70_VERIFY_ADDENDUM_V68_AND_CONTINUE_DISPLACEMENT_REFINEMENT"
+}

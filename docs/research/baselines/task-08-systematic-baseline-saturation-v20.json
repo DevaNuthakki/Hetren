@@ -1,0 +1,182 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 20,
+  "state": "SATURATION_V20_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-26T20:57:25Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "applicability_rule": {
+    "material_candidate_definition": "A candidate counts as materially new only when it is not already represented by candidate identity, alias, or primary implementation provenance and could change the retained comparator set for a governed environment plus hypothesis-role plus task/mechanism plus information-opportunity tuple.",
+    "related_but_incomparable_method_resets_counter": false,
+    "scenario_specific_method_requires_matching_experiment": true,
+    "duplicate_or_alias_resets_counter": false
+  },
+  "cutoff_policy": {
+    "public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v22_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v22.json",
+      "sha256": "6cac898a61fee3d99ef50109d275f847ee9ec90407322bf55c8c091957b341d5"
+    },
+    "systematic_saturation_v19": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v19.json",
+      "sha256": "0819f75ccc191f8e2f80ce9a0dd0b86420371aa8889f3643304cf90f1a375464"
+    }
+  },
+  "focus": [
+    "E1_MODULAR_TOOL_POLICY_EVOLUTION",
+    "E1_RL_SKILL_LIBRARY_SELF_IMPROVEMENT",
+    "E2_POST_TABULAR_TTA_AND_ACTIVE_ACQUISITION",
+    "E3_POST_LARGE_TTA_POOL_ROLE_APPLICABILITY_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "EVOTOOL ACL 2026 self evolving tool use policy official implementation",
+    "Skill Augmented GRPO SAGE ACL 2026 official implementation AppWorld",
+    "Evolving Agents ACL 2026 adaptive reasoning implementation",
+    "HFlow ACL 2026 evolving agentic workflow human preference implementation",
+    "2026 ACL agent self evolution skill library reinforcement learning executable code",
+    "2026 ACL tool policy evolution blame attribution mutation agent code",
+    "2026 agent experience abstraction mid episode adaptation official implementation",
+    "2026 agent workflow evolution human feedback official implementation",
+    "2026 ICML structured data active feature acquisition official implementation",
+    "2026 ICLR tabular test time adaptation official implementation",
+    "2026 structured ML adaptation sequential acquisition distribution shift code",
+    "2026 CVPR generic vision test time adaptation official implementation",
+    "2026 ICLR vision language test time adaptation official implementation",
+    "2026 open set continual vision test time adaptation official implementation",
+    "2026 learned decision transfer agent structured data vision cross family",
+    "2026 common learned policy transfer across agent tabular vision"
+  ],
+  "query_count": 16,
+  "planned_candidates": [
+    "DISCOVERY:T8-E1-EVOTOOL",
+    "DISCOVERY:T8-E1-SAGE-SKILL-GRPO"
+  ],
+  "preexisting_or_duplicate": [
+    {
+      "planned_candidate_id": "DISCOVERY:T8-E1-EVOTOOL",
+      "planned_name": "EVOTOOL \u2014 Self-Evolving Tool-Use Policy Optimization",
+      "matches": [
+        {
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v19.json",
+          "candidate_id": "DISCOVERY:T8-E1-EVOTOOL",
+          "name": "EVOTOOL \u2014 Self-Evolving Tool-Use Policy Optimization"
+        }
+      ],
+      "disposition": "PREEXISTING_NOT_COUNTED_AS_NEW"
+    },
+    {
+      "planned_candidate_id": "DISCOVERY:T8-E1-SAGE-SKILL-GRPO",
+      "planned_name": "SAGE \u2014 Skill Augmented GRPO for self-Evolution",
+      "matches": [
+        {
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v20.json",
+          "candidate_id": "DISCOVERY:T8-E1-SAGE-SKILL-GRPO",
+          "name": "SAGE \u2014 Reinforcement Learning for Self-Improving Agent with Skill Library"
+        },
+        {
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v6.json",
+          "candidate_id": "DISCOVERY:T8-E1-SAGE",
+          "name": "SAGE"
+        }
+      ],
+      "disposition": "PREEXISTING_NOT_COUNTED_AS_NEW"
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "EvA \u2014 Evolving Agents",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.754/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "relevance": "Learns and refines reusable quasi-symbolic abstractions from prior trajectories and uses them for adaptive reasoning and meta-control.",
+      "disposition": "STRONG_E1_RESEARCH_REFERENCE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The paper is materially relevant, but this bounded review did not verify an official executable implementation sufficient for governed baseline reproduction."
+    },
+    {
+      "name": "HFlow",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1250/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "relevance": "Uses evolutionary search over agentic workflow structures, prompts, and model backbones with hierarchical experience memory.",
+      "disposition": "HUMAN_PREFERENCE_GATED_E1_RESEARCH_REFERENCE",
+      "reason": "Published optimization is guided by human preferences; it is not a matched claim-bearing comparator unless the governed experiment grants equivalent human-preference information opportunity."
+    },
+    {
+      "name": "PFT3A",
+      "sources": [
+        "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html"
+      ],
+      "evidence_state": "PEER_REVIEWED_ICLR_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "disposition": "ALREADY_REPRESENTED_IN_PRIOR_E2_CANDIDATE_POOL",
+      "reason": "Previously promoted Task-8 candidate; not a new discovery."
+    },
+    {
+      "name": "AdapTable",
+      "sources": [
+        "https://github.com/drumpt/AdapTable"
+      ],
+      "evidence_state": "WORKSHOP_RESEARCH_WITH_OFFICIAL_IMPLEMENTATION",
+      "disposition": "ALREADY_REPRESENTED_OR_LOWER_EVIDENCE_E2_REFERENCE",
+      "reason": "Does not create a new role/applicability tuple beyond the existing tabular-TTA candidate pool."
+    },
+    {
+      "name": "DOCO \u2014 Domain Compensation",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Yang_Back_to_Source_Open-Set_Continual_Test-Time_Adaptation_via_Domain_Compensation_CVPR_2026_paper.html"
+      ],
+      "evidence_state": "PEER_REVIEWED_CVPR_2026",
+      "disposition": "OPEN_SET_CONTINUAL_E3_SCENARIO_REFERENCE_NOT_PROMOTED",
+      "reason": "Open-set continual adaptation plus OOD detection is a narrower experiment contract and should become claim-bearing only if that E3 scenario is actually governed."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "additional_within_e1_self_improvement_references_found": true,
+    "forcing_within_e1_skill_or_tool_policy_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V20"
+  },
+  "coverage_observations": {
+    "E1": "NO_NEW_MATERIAL_E1_CANDIDATE",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_E2_CANDIDATE_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_DIRECTLY_MATCHED_GENERIC_E3_CANDIDATE_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "This is the first complete reasonable role/applicability-specific refinement with no materially new eligible comparator; one additional consecutive no-new round is required."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "within_e1_self_improvement_proves_n_h2": false,
+    "human_preference_method_is_automatically_matched": false,
+    "scenario_specific_method_is_automatically_generic_baseline": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B25_SECOND_CONSECUTIVE_NO_NEW_MATERIAL_CONFIRMATION_REFINEMENT"
+}

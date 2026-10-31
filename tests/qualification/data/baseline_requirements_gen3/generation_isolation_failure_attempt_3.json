@@ -1,0 +1,23 @@
+{
+  "schema_version": "3.0.0",
+  "artifact_type": "TASK_8_GEN3_GENERATION_ISOLATION_FAILURE_ATTEMPT_3",
+  "state": "ABORTED_BEFORE_CASE_GENERATION",
+  "generation_attempt": 3,
+  "generation_package_sha256": "0d55267ee6b40ac69fd07470dcf09e5714ba3002686f62d4cc6a5a9625ebe8ff",
+  "generation_session_isolation": {
+    "nonpackage_hetren_context_detected": false,
+    "project_context_detected": true,
+    "memory_or_saved_context_detected": true,
+    "prior_chat_or_summary_detected": true,
+    "prior_generation_request_excerpt_detected": false,
+    "prior_generation_attempt_detected": false,
+    "repository_material_detected": false,
+    "target_evaluator_information_detected": false,
+    "prior_cases_mutations_predictions_results_detected": false,
+    "remediation_history_detected": false,
+    "isolation_gate_passed_before_case_generation": false
+  },
+  "abort_reason": "Non-file project-specific saved context and prior-conversation summaries are available in this session. No non-package Hetren-specific context was identified. The user explicitly requires failing closed if ANY non-file project-specific context is available, which is broader than the package's Hetren-specific isolation rule. Generation is therefore aborted under that broader instruction before any cases or target predictions are produced.",
+  "target_evaluator_executed": false,
+  "target_predictions_produced": false
+}

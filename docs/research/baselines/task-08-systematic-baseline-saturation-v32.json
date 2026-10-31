@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 32,
+  "state": "SATURATION_V32_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T22:58:15Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v34_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v34.json",
+      "sha256": "9fda98169e0f561aa0f3610e6437e78d0792c7b71b5855b85ce8cb5e1ea304a1"
+    },
+    "systematic_saturation_v31": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v31.json",
+      "sha256": "1a7933194f10dbb68ea03a19c3ff93b47dde790578f0e6daceafc1753f791324"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_LONG_HORIZON_MEMORY",
+    "E1_LEARNED_MEMORY_MANAGEMENT",
+    "E1_RUNTIME_MEMORY_CREDIT_ASSIGNMENT",
+    "E1_TASK_AGNOSTIC_AGENT_MEMORY",
+    "N_H1_DIRECT_MEMORY_COMPARATOR_CLOSURE"
+  ],
+  "queries_executed": [
+    "\"Memory-R2\" long-horizon memory augmented LLM agents code",
+    "\"Memex(RL)\" indexed experience memory official code",
+    "\"MemRL\" runtime reinforcement learning episodic memory official code",
+    "\"AtomMem\" learnable dynamic agentic memory official code",
+    "\"PlugMem\" ICML 2026 agent memory WebArena official code",
+    "\"MemQ\" self-evolving memory provenance DAG official code",
+    "2026 peer reviewed agent memory WebArena long term memory official implementation",
+    "2026 runtime reinforcement learning episodic memory agent official github",
+    "2026 provenance memory q learning LLM agent official github",
+    "2026 long horizon agent memory learned retrieval write policy official code",
+    "2026 agent memory ICML ACL learned memory official implementation",
+    "2026 task agnostic memory agent WebArena ICML",
+    "\"SYNAPSE\" ACL 2026 episodic semantic memory agent code",
+    "\"TMEM\" parametric memory self evolving agent code",
+    "\"MemoryCPT\" end to end agent memory official code",
+    "\"SimpleMem\" lifelong memory LLM agent official code"
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 2,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+      "prior_matches": [],
+      "disposition": "NEW_MATERIAL_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMQ",
+      "name": "MemQ: Integrating Q-Learning into Self-Evolving Memory Agents over Provenance DAGs",
+      "prior_matches": [],
+      "disposition": "NEW_MATERIAL_CANDIDATE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TASK_AGNOSTIC_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_NON_LEARNED_OR_LIGHTLY_ADAPTED_MEMORY_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "ICML_2026_CONFERENCE_LISTED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.03296"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TIMAN-group/PlugMem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TASK_AGNOSTIC_LONG_TERM_MEMORY_OR_WEB_AGENT_MEMORY_SETTING_MATCHED",
+      "material_reason": "Uses a compact knowledge-centric memory graph as a reusable task-agnostic memory module and evaluates the same memory design across heterogeneous tasks including WebArena, making it a materially relevant direct-memory comparator rather than a conversational-memory-only system.",
+      "limits": [
+        "WEB_AGENT_OR_OTHER_MATCHED_AGENT_TASK_REQUIRED_FOR_E1_CLAIM_BEARING_USE",
+        "MEMORY_GRAPH_EXTRACTION_RETRIEVAL_AND_REASONING_CONFIGURATION_MUST_BE BOUND",
+        "LIGHT_TASK_ADAPTATION_IF_USED_MUST_BE SEPARATELY BOUND",
+        "CONVERSATIONAL_QA_ONLY_RESULTS_MUST_NOT_BE USED_AS_E1_AGENT_EVIDENCE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMQ",
+      "name": "MemQ: Integrating Q-Learning into Self-Evolving Memory Agents over Provenance DAGs",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_RUNTIME_MEMORY_CREDIT_ASSIGNMENT_COMPARATOR_CANDIDATE",
+        "A_H1_NONPARAMETRIC_RUNTIME_MEMORY_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.08374"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/jwliao-ai/MemQ"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_RUNTIME_EPISODIC_MEMORY_CREDIT_ASSIGNMENT_SETTING_MATCHED",
+      "material_reason": "Uses provenance-DAG TD-lambda credit propagation over episodic memories rather than treating retrieved memories independently, and evaluates runtime learning across OS interaction, function calling, code generation, multimodal reasoning and embodied reasoning.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "PROVENANCE_DAG_CONSTRUCTION_GAMMA_LAMBDA_AND_MEMORY_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "FROZEN_MODEL_AND_NONPARAMETRIC_MEMORY_LEARNING_MUST_BE DISTINGUISHED_FROM_WEIGHT_ADAPTATION"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "SYNAPSE",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1108/",
+        "https://github.com/hq0709/synapse"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_REIMPLEMENTATION",
+      "disposition": "DIRECT_MEMORY_RETRIEVAL_REFERENCE_NOT_PROMOTED_TO_E1_CLAIM_BEARING_BASELINE",
+      "reason": "The verified published evaluation is LoCoMo conversational-memory QA. That does not by itself satisfy Hetren E1's materially multi-step action/tool/state interaction requirement."
+    },
+    {
+      "name": "TMEM \u2014 Scaling Self-Evolving Agents via Parametric Memory",
+      "sources": [
+        "https://arxiv.org/abs/2606.04536"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_IMPLEMENTATION_NOT_VERIFIED",
+      "disposition": "PARAMETRIC_MEMORY_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "TMEM is scientifically relevant fast-weight memory research, but this bounded pass did not verify an official executable implementation suitable for governed baseline reproduction."
+    },
+    {
+      "name": "MemoryCPT",
+      "sources": [
+        "https://arxiv.org/abs/2608.04843"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_ORIGINAL_AUTHOR_IMPLEMENTATION_NOT_VERIFIED",
+      "disposition": "COST_AWARE_MEMORY_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "The framework is directly relevant to trainable memory and cost-performance trade-offs, but no original author implementation was independently verified in this pass."
+    },
+    {
+      "name": "SimpleMem",
+      "sources": [
+        "https://arxiv.org/abs/2601.02553",
+        "https://github.com/aiming-lab/SimpleMem"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_WITH_EXECUTABLE_CODE",
+      "disposition": "LONG_TERM_MEMORY_EFFICIENCY_REFERENCE_NOT_PROMOTED_TO_E1_CLAIM_BEARING_BASELINE",
+      "reason": "The verified evidence primarily concerns memory QA and retrieval efficiency; no materially matched interactive E1 decision contract was established in this bounded review."
+    }
+  ],
+  "scope_boundary": {
+    "direct_memory_closure_environment": "E1_AGENT",
+    "primary_hypothesis_scope": "N-H1",
+    "related_A_H1_references_may_be_preserved": true,
+    "does_not_reopen_general_E2_or_E3_search": true,
+    "does_not_convert_memory_QA_into_E1_agent_evidence": true
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "memory_mechanisms_do_not_establish_general_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_DIRECT_MEMORY_SATURATION_V32"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "This bounded direct-memory refinement found materially new comparator identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "memory_QA_is_automatically_E1_agent_evidence": false,
+    "new_candidate_is_automatically_strongest": false,
+    "direct_memory_closure_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B37_VERIFY_ADDENDUM_V35_AND_CONTINUE_DIRECT_MEMORY_REFINEMENT"
+}

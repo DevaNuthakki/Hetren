@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 8,
+  "state": "ADDENDUM_V8_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:06:43Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v8": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v8.json",
+      "sha256": "aa6431f199aa868e5d4ec4a6a7eb93eaeb263b4186afe8607978b4c736d17042"
+    },
+    "systematic_saturation_v5": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v5.json",
+      "sha256": "4f3b8c8cb2afeca058fef807359a38087d9cf2a5680f2fd816c124c7fe48b092"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-META-TTL",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_ONGOING_RESEARCH_LEARNED_ADAPTATION_POLICY_REFERENCE",
+      "verified_facts": [
+        "Meta-TTL formulates language-agent test-time learning as a bi-level meta-learning problem over adaptation policies.",
+        "Its outer loop uses evolutionary optimization over training tasks to learn a natural-language meta-policy.",
+        "At test time the learned meta-prompt is frozen and applied to unseen tasks.",
+        "The public implementation contains Jericho and WebArena training and evaluation workflows."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2604.00830"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zzzlou/meta-ttl"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "EXACT_META_PROMPT_AND_OUTER_LOOP_TRAINING_DISTRIBUTION_MUST_BE_BOUND_IF_LATER_RETAINED",
+        "WITHIN_LANGUAGE_AGENT_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TTED",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_DATA_AND_MODEL_ASSETS_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_ONGOING_RESEARCH_WEB_AGENT_TEST_TIME_LEARNING_REFERENCE",
+      "verified_facts": [
+        "TTED is a test-time learning framework for LLM web agents.",
+        "It decomposes complex web environments into simpler task-relevant sub-environments.",
+        "The public repository exposes training, inference, evaluation, trajectory, dataset and trained-model resources.",
+        "The repository describes label-free adaptation and compositional generalization experiments."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.29305"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/THUNLP-MT/TTED"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "WEB_ENVIRONMENT_AND_MODEL_ASSET_IDENTITY_MUST_BE_BOUND_IF_LATER_RETAINED",
+        "WITHIN_WEB_AGENT_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TTRV",
+      "verification_state": "PEER_REVIEWED_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_TEST_TIME_REINFORCEMENT_LEARNING_VLM_COMPARATOR",
+      "verified_facts": [
+        "TTRV is published at CVPR 2026.",
+        "It performs reinforcement-learning updates directly at inference time on unlabeled VLM test examples.",
+        "Its rewards use output-frequency behavior and empirical output-distribution entropy.",
+        "The published evaluation includes object recognition and visual question answering."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Singh_TTRV_Test-Time_Reinforcement_Learning_for_Vision_Language_Models_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Akshit21112002/TTRV"
+        }
+      ],
+      "limits": [
+        "VLM_TASK_AND_MODEL_FAMILY_MATCH_REQUIRED",
+        "TEST_TIME_RL_UPDATE_BUDGET_MUST_BE PARITY_MATCHED",
+        "SELF_DERIVED_REWARD_INFORMATION_OPPORTUNITY_MUST_BE EXPLICIT",
+        "OBJECT_RECOGNITION_AND_VQA_SETTINGS_MUST_NOT_BE COLLAPSED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v8_candidates_have_role_level_external_review": true,
+    "all_addendum_v8_candidates_are_peer_reviewed": false,
+    "all_addendum_v8_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

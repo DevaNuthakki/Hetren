@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 67,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:15:24Z",
+  "task": 8,
+  "bindings": {
+    "attempt_66": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_66.json",
+      "sha256": "6d5aa84bbeda6e822957bb516bf710b4facc4be0942434d8d75231f66a417425"
+    },
+    "addendum_v65_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v65.json",
+      "sha256": "9dedc05f315f4355e1a238f243f8ffc1da02b0970178a0445a2a88a4fbc12035"
+    },
+    "systematic_saturation_v63": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v63.json",
+      "sha256": "ecceb4fc41a05554e9b34e24b582b9f0571485c537fd62fb912f7ebd7de67f62"
+    },
+    "candidate_addendum_v66": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v66.json",
+      "sha256": "772d26243ff3d1a8bd67853e576adfa6c5fca4927c4af91ff75f2cb04ee2bbf3"
+    }
+  },
+  "state_summary": {
+    "addendum_v65_role_review_complete": true,
+    "candidate_addendum_v66_count": 4,
+    "new_material_candidates_found": 4,
+    "consecutive_no_new_candidate_refinements": 0,
+    "search_stopping_rule_satisfied": false,
+    "strength_ordering_complete": false,
+    "full_immutable_revision_pinning_complete": false,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B68_VERIFY_ADDENDUM_V66_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT",
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "discovery_stopping_condition_satisfied": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

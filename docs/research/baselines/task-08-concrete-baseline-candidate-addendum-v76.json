@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 76,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T05:03:59Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "candidate_addendum_v75": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v75.json",
+      "sha256": "1fbe6ecf3cf417e6b97e0dbe6ad320ac8bcac6f0fa4987a47cced9f16a42ec18"
+    },
+    "systematic_saturation_v73": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v73.json",
+      "sha256": "36f69cc32837232ddbdb11f1926a441f2f7c45b80add9bdb7d3682129d00a49d"
+    }
+  },
+  "candidate_count": 0,
+  "candidates": [],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 1,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

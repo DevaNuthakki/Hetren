@@ -1,0 +1,227 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 73,
+  "state": "FIRST_DISPLACEMENT_ONLY_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T05:03:59Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_canonical_enumeration_reopened": false,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v75_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v75.json",
+      "sha256": "73d961a5e4e34fc64ef0fb4217d86830bec7b9bcda60ea1eac00d481d555e663"
+    },
+    "systematic_saturation_v72": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v72.json",
+      "sha256": "829a9f3ba3b5b7dee6dac2feaba6ea043b23cdb16d31fa0f3801842c8cfa889c"
+    }
+  },
+  "focus": [
+    "E1_CONTINUAL_VLA_ROLE_DISPLACEMENT",
+    "E1_CONTINUAL_ROBOT_LEARNING_ROLE_GAP_CHECK",
+    "E2_DISPLACEMENT_SPOT_CHECK",
+    "E3_DISPLACEMENT_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"SkillsCrafter\" lifelong language-conditioned robotic manipulation learning AAAI 2026 github",
+    "\"PackVLA\" scalable consolidation task-specialized vision-language-action models github",
+    "\"LifelongVLA\" continual vision-language-action learning robotic manipulation github",
+    "\"Stellar VLA\" continual learning code",
+    "\"Skill-Compositional Experts\" continual robotic manipulation code",
+    "\"When Robots Sleep\" continual learning robot manipulation code",
+    "\"LEGION\" robotic lifelong reinforcement learning github nature machine intelligence",
+    "\"PackVLA: Scalable Consolidation of Task-Specialized Vision-Language-Action Models\"",
+    "\"PackVLA\" \"Chao Zou\"",
+    "\"PackVLA\" \"Shenghua Wan\"",
+    "\"PackVLA\" \"RoboTwin\"",
+    "2026 tabular structured data test-time adaptation active feature acquisition comparator official code strongest",
+    "2026 vision test-time adaptation VLM continual prompt tuning comparator official code",
+    "2026 cross family learned decision transfer agent tabular vision policy meta learning"
+  ],
+  "query_count": 14,
+  "identity_dispositions": [
+    {
+      "name": "LifelongVLA \u2014 Towards Human-like Physical Intelligence: Lifelong Vision-Language-Action Learning for Robotic Manipulation",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-LIFELONGVLA",
+      "identity_state": "NOT_PRIOR_PROMOTED_BY_THIS_REVIEW",
+      "evidence_state": "PUBLIC_PREPRINT_VERIFIED_OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2607.14852"
+        }
+      ],
+      "disposition": "NOT_PROMOTED_EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The continual-VLA mechanism is role-relevant, but this bounded pass did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "Stellar VLA \u2014 Continually Evolving Skill Knowledge in Vision Language Action Model",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-STELLAR-VLA",
+      "identity_state": "NOT_PRIOR_PROMOTED_BY_THIS_REVIEW",
+      "evidence_state": "PUBLIC_PREPRINT_AND_PROJECT_PAGE_CODE_NOT_YET_RELEASED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2511.18085"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://stellarvla.github.io/"
+        }
+      ],
+      "disposition": "NOT_PROMOTED_CODE_RELEASE_GATE_UNRESOLVED",
+      "reason": "The official project page explicitly reports Code Coming Soon, so no executable baseline identity is currently governable."
+    },
+    {
+      "name": "SCE \u2014 Learning New Tasks via Reusable Skills: Skill-Compositional Experts for Embodied Continual Learning",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-SCE",
+      "identity_state": "NOT_PRIOR_PROMOTED_BY_THIS_REVIEW",
+      "evidence_state": "PUBLIC_PREPRINT_AND_PROJECT_PAGE_CODE_NOT_YET_RELEASED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.15685"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://eqcy.github.io/sce/"
+        }
+      ],
+      "disposition": "NOT_PROMOTED_CODE_RELEASE_GATE_UNRESOLVED",
+      "reason": "The official project page states Code coming soon; therefore a cutoff-consistent executable baseline cannot yet be bound."
+    },
+    {
+      "name": "LEGION \u2014 Preserving and Combining Knowledge in Robotic Lifelong Reinforcement Learning",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-LEGION",
+      "identity_state": "ROLE_ADJACENT_NOT_PROMOTED_IN_THIS_PASS",
+      "evidence_state": "PEER_REVIEWED_NATURE_MACHINE_INTELLIGENCE_2025_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.nature.com/articles/s42256-025-00983-2"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Ghiara/LEGION"
+        }
+      ],
+      "disposition": "NOT_PROMOTED_CURRENT_CONTINUAL_VLA_ROLE_MISMATCH",
+      "reason": "LEGION is a reproducible lifelong off-policy reinforcement-learning framework with language embeddings, but its state-observation, policy-learning, and information-access contract is materially different from the currently refined continual-VLA role. It becomes eligible only if a matched experiment explicitly declares that regime."
+    },
+    {
+      "name": "PackVLA \u2014 Scalable Consolidation of Task-Specialized Vision-Language-Action Models",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-PACKVLA",
+      "identity_state": "EXACT_PRIMARY_AND_IMPLEMENTATION_IDENTITY_UNRESOLVED",
+      "evidence_state": "AUTHOR_PUBLICATION_PAGE_LEAD_ONLY",
+      "sources": [
+        {
+          "class": "AUTHOR_PUBLICATION_PAGE",
+          "url": "https://www.lamda.nju.edu.cn/wansh/"
+        }
+      ],
+      "cutoff_consistency": "UNRESOLVED",
+      "disposition": "NOT_PROMOTED_PRIMARY_AND_CODE_IDENTITY_GATE_UNRESOLVED",
+      "reason": "The author publication page lists PackVLA with Paper and Code links and describes a role-relevant VLA consolidation mechanism, but this pass did not independently resolve the exact primary-paper URL, exact executable repository identity, or cutoff-consistent release state. Those facts must not be invented."
+    },
+    {
+      "name": "When Robots Sleep \u2014 Offline Skill Consolidation for Shared-Policy Robot Learning",
+      "candidate_id_if_promoted": "DISCOVERY:T8-E1-WHEN-ROBOTS-SLEEP",
+      "identity_state": "NOT_PRIOR_PROMOTED_BY_THIS_REVIEW",
+      "evidence_state": "PUBLIC_PREPRINT_VERIFIED_OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.17493"
+        }
+      ],
+      "disposition": "NOT_PROMOTED_EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The wake-sleep consolidation mechanism is directly relevant to continual robot learning, but no official executable implementation was verified during this bounded pass."
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "LifelongVLA \u2014 Towards Human-like Physical Intelligence: Lifelong Vision-Language-Action Learning for Robotic Manipulation",
+      "evidence_state": "PUBLIC_PREPRINT_VERIFIED_OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "disposition": "NOT_PROMOTED_EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The continual-VLA mechanism is role-relevant, but this bounded pass did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "Stellar VLA \u2014 Continually Evolving Skill Knowledge in Vision Language Action Model",
+      "evidence_state": "PUBLIC_PREPRINT_AND_PROJECT_PAGE_CODE_NOT_YET_RELEASED",
+      "disposition": "NOT_PROMOTED_CODE_RELEASE_GATE_UNRESOLVED",
+      "reason": "The official project page explicitly reports Code Coming Soon, so no executable baseline identity is currently governable."
+    },
+    {
+      "name": "SCE \u2014 Learning New Tasks via Reusable Skills: Skill-Compositional Experts for Embodied Continual Learning",
+      "evidence_state": "PUBLIC_PREPRINT_AND_PROJECT_PAGE_CODE_NOT_YET_RELEASED",
+      "disposition": "NOT_PROMOTED_CODE_RELEASE_GATE_UNRESOLVED",
+      "reason": "The official project page states Code coming soon; therefore a cutoff-consistent executable baseline cannot yet be bound."
+    },
+    {
+      "name": "LEGION \u2014 Preserving and Combining Knowledge in Robotic Lifelong Reinforcement Learning",
+      "evidence_state": "PEER_REVIEWED_NATURE_MACHINE_INTELLIGENCE_2025_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "disposition": "NOT_PROMOTED_CURRENT_CONTINUAL_VLA_ROLE_MISMATCH",
+      "reason": "LEGION is a reproducible lifelong off-policy reinforcement-learning framework with language embeddings, but its state-observation, policy-learning, and information-access contract is materially different from the currently refined continual-VLA role. It becomes eligible only if a matched experiment explicitly declares that regime."
+    },
+    {
+      "name": "PackVLA \u2014 Scalable Consolidation of Task-Specialized Vision-Language-Action Models",
+      "evidence_state": "AUTHOR_PUBLICATION_PAGE_LEAD_ONLY",
+      "disposition": "NOT_PROMOTED_PRIMARY_AND_CODE_IDENTITY_GATE_UNRESOLVED",
+      "reason": "The author publication page lists PackVLA with Paper and Code links and describes a role-relevant VLA consolidation mechanism, but this pass did not independently resolve the exact primary-paper URL, exact executable repository identity, or cutoff-consistent release state. Those facts must not be invented."
+    },
+    {
+      "name": "When Robots Sleep \u2014 Offline Skill Consolidation for Shared-Policy Robot Learning",
+      "evidence_state": "PUBLIC_PREPRINT_VERIFIED_OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "disposition": "NOT_PROMOTED_EXECUTABLE_IMPLEMENTATION_GATE_UNRESOLVED",
+      "reason": "The wake-sleep consolidation mechanism is directly relevant to continual robot learning, but no official executable implementation was verified during this bounded pass."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "NO_NEW_ELIGIBLE_ROLE_MATCHED_DISPLACER_AFTER_SKILLSCRAFTER_REVIEW",
+    "E2": "NO_NEW_ROLE_GAP_FILLING_OR_DISPLACING_COMPARATOR_FOUND_IN_BOUNDED_SPOT_CHECK",
+    "E3": "NO_NEW_ROLE_GAP_FILLING_OR_DISPLACING_COMPARATOR_FOUND_IN_BOUNDED_SPOT_CHECK",
+    "PACKVLA": "MATERIAL_LEAD_RETAINED_BEHIND_EXACT_PRIMARY_IMPLEMENTATION_AND_CUTOFF_IDENTITY_GATE"
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_continual_learning_references_exist": true,
+    "forcing_within_e1_continual_learning_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_DISPLACEMENT_ONLY_SATURATION_V73"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "This bounded displacement-only refinement found no new eligible comparator that both satisfies the relevant evidence gates and fills a concrete role gap or plausibly displaces a current role-matched candidate. This is the first qualifying no-new-material round; a second consecutive reasonable no-new-material refinement is still required."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "search_stopping_condition_already_satisfied": false,
+    "absence_of_new_candidate_proves_global_exhaustiveness": false,
+    "packvla_is_eligible_without_exact_source_identity": false,
+    "legion_is_automatically_same_role_as_continual_vla": false,
+    "preprint_without_executable_code_is_automatically_claim_bearing": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B78_SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_CONFIRMATION"
+}

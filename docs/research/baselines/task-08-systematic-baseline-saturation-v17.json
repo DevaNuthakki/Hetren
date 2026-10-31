@@ -1,0 +1,261 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 17,
+  "state": "SATURATION_V17_FOUND_NEW_MATERIAL_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T20:39:40Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_publication_or_public_research_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_commit_or_release": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v19_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v19.json",
+      "sha256": "7f9ee3a02cc577040fcd1d340a1c47ba30d2d1599ee2da0bb66b5c06fabd560e"
+    },
+    "systematic_saturation_v16": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v16.json",
+      "sha256": "f94d149ecdb963b854b849f62221144fda2b8f38c6cf7f089a1f7b4b66139b35"
+    }
+  },
+  "focus": [
+    "E1_SELF_IMPROVING_SKILL_AND_TEST_TIME_AGENT_METHODS",
+    "E2_POST_DRIFT_RESILIENT_TABPFN_ROLE_SPECIFIC_SPOT_CHECK",
+    "E3_POST_PTA_FOZO_AND_EXISTING_VLM_TTA_POOL_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Reinforcement Learning for Self-Improving Agent with Skill Library\" ACL 2026 github",
+    "\"Skill Augmented GRPO for self-Evolution\" github",
+    "\"Skill-Pro\" ICML 2026 github",
+    "\"ProcMEM\" \"Non-Parametric PPO\" ICML 2026",
+    "\"EvoTest\" ICLR 2026 github",
+    "\"Evolutionary Test-Time Learning for Self-Improving Agentic Systems\"",
+    "\"EvolveR\" ICML 2026 official implementation proceedings",
+    "\"A2Memory\" ICML 2026 vision language test-time adaptation code",
+    "site:aclanthology.org/2026 self-improving agent skill library reinforcement learning",
+    "site:aclanthology.org/2026 self-evolving agent procedural skills code",
+    "site:openreview.net 2026 agent test-time learning evolutionary environment",
+    "site:openreview.net 2026 reusable skills LLM agents experience learning",
+    "site:proceedings.mlr.press 2026 active feature acquisition tabular",
+    "site:proceedings.mlr.press 2026 tabular test-time adaptation",
+    "site:openaccess.thecvf.com/content/CVPR2026 test-time adaptation vision-language official code",
+    "2026 cross-family learned decision transfer agent tabular vision policy",
+    "2026 common meta policy transfer agent structured data vision"
+  ],
+  "query_count": 17,
+  "planned_candidate_count": 3,
+  "preexisting_or_alias_resolved": [],
+  "preexisting_or_alias_resolved_count": 0,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAGE-SKILL-GRPO",
+      "name": "SAGE \u2014 Reinforcement Learning for Self-Improving Agent with Skill Library",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_SKILL_AUGMENTED_RL_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_SKILL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_ARCHIVED_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_APPWORLD_STYLE_SKILL_LIBRARY_RL_AND_INFORMATION_OPPORTUNITY_MATCH",
+      "material_reason": "Introduces a parameter-trained self-improvement mechanism in which skills accumulate across sequential rollouts and are incorporated into GRPO through a skill-integrated reward.",
+      "limits": [
+        "APPWORLD_OR_EQUIVALENT_INTERACTIVE_TASK_CONTRACT_MUST_BE MATCHED",
+        "BASE_MODEL_SUPERVISED_INITIALIZATION_GRPO_RECIPE_AND_CHECKPOINT_MUST_BE BOUND",
+        "SKILL_GENERATION_VALIDATION_AND_LIBRARY_ACCESS_MUST_BE PARITY_MATCHED",
+        "MODIFIED_APPWORLD_AND_LLAM\u0410_FACTORY_DEPENDENCY_REVISIONS_MUST_BE BOUND",
+        "WITHIN_E1_SKILL_ACCUMULATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SKILL-PRO",
+      "name": "Skill-Pro \u2014 Learning Reusable Skills from Experience via Non-Parametric PPO for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_REUSABLE_PROCEDURAL_SKILL_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_NON_PARAMETRIC_SKILL_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_TASK_OR_CROSS_AGENT_SKILL_TRANSFER_REFERENCE"
+      ],
+      "evidence_status": "ICML_2026_SPOTLIGHT_ACCEPTANCE_AND_OFFICIAL_IMPLEMENTATION_CORROBORATED",
+      "sources": [
+        {
+          "class": "PRIMARY_CONFERENCE_RECORD",
+          "url": "https://openreview.net/forum?id=9kJQjx2B80"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Miracle1207/Skill-Pro"
+        },
+        {
+          "class": "INSTITUTIONAL_ACCEPTANCE_RECORD",
+          "url": "https://ia.cas.cn/xwzx/ttxw/202606/t20260603_8213499.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.01869"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ONLINE_PROCEDURAL_SKILL_EVOLUTION_WITHOUT_BASE_MODEL_PARAMETER_UPDATES_IS_MATCHED",
+      "material_reason": "Formalizes reusable procedural skills through a Skill-MDP and updates the skill pool using semantic-gradient candidate generation plus a PPO-style verification gate without updating base-model parameters.",
+      "limits": [
+        "SKILL_MDP_STATE_ACTION_AND_SKILL_SCHEMA_MUST_BE MATCHED",
+        "PPO_GATE_AND_SKILL_SCORE_MAINTENANCE_CONFIGURATION_MUST_BE BOUND",
+        "TEXTARENA_OR_ALFWORLD_TASK_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_TASK_AND_CROSS_AGENT_RESULTS_REMAIN_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVOTEST",
+      "name": "EvoTest \u2014 Evolutionary Test-Time Learning for Self-Improving Agentic Systems",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_WHOLE_AGENT_TEST_TIME_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H1_EVOLUTIONARY_AGENT_CONFIGURATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=JFnnajbkvP"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_RECORD",
+          "url": "https://microsoft.com/en-us/research/publication/evotest-evolutionary-test-time-learning-for-self-improving-agentic-systems/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yf-he/EvoTest"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_TEST_TIME_AGENT_EVOLUTION_SETTING_MATCHED",
+      "material_reason": "Evolves prompts, cross-episode memory, hyperparameters, and tool-use routines between repeated environment episodes without gradient-based fine-tuning.",
+      "limits": [
+        "REPEATED_EPISODES_OF_THE_SAME_OR_MATCHED_ENVIRONMENT_REQUIRED",
+        "EVOLVER_MODEL_ACTOR_MODEL_AND_EVOLUTION_PROMPT_MUST_BE BOUND",
+        "MEMORY_UCB_SELECTION_STATE_EXTRACTOR_AND_FREEZE_LOGIC_MUST_BE BOUND",
+        "JERICHO_INFORMATION_OPPORTUNITY_MUST_NOT_BE ASSUMED FOR_OTHER_E1_TASKS",
+        "EVOLUTION_AND_FREEZE_BEHAVIOR_DO_NOT_BY_THEMSELVES_ESTABLISH_A_H2_ROLLBACK_REQUIREMENTS"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "EvolveR",
+      "sources": [
+        "https://github.com/KnowledgeXLab/EvolveR",
+        "https://arxiv.org/abs/2510.16079"
+      ],
+      "evidence_state": "ICML_2026_ACCEPTANCE_CORROBORATED_BY_OFFICIAL_REPOSITORY_AND_AUTHOR_OR_LAB_RECORDS",
+      "disposition": "PRIOR_RESEARCH_REFERENCE_REMAINS_BEHIND_CANONICAL_ARCHIVAL_PUBLICATION_BINDING_GATE",
+      "reason": "This pass corroborated ICML 2026 acceptance and executable implementation but did not establish a canonical archival proceedings locator strongly enough to silently convert the prior gated disposition."
+    },
+    {
+      "name": "A2Memory \u2014 Attributive-Associative Memory",
+      "sources": [
+        "https://openreview.net/forum"
+      ],
+      "evidence_state": "ICML_2026_RESEARCH_IDENTITY_SUPPORTED",
+      "disposition": "E3_RESEARCH_REFERENCE_REMAINS_BEHIND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "The method is materially relevant to online VLM test-time adaptation, but an official executable implementation was not independently verified in this bounded pass."
+    },
+    {
+      "name": "OPD-Evolver",
+      "sources": [
+        "https://arxiv.org/abs/2606.17628"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT",
+      "disposition": "ONGOING_E1_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "The work is highly relevant to agent memory evolution, but this bounded pass did not verify archival peer review plus an official executable implementation sufficient to alter the governed comparator pool."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "SAGE",
+      "disposition": "WITHIN_E1_SKILL_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Skill accumulation and reuse remain inside interactive agent tasks."
+    },
+    {
+      "name": "Skill-Pro",
+      "disposition": "WITHIN_E1_CROSS_TASK_AND_CROSS_AGENT_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Cross-task and cross-agent reuse do not demonstrate transfer into E2 structured ML and E3 vision."
+    },
+    {
+      "name": "EvoTest",
+      "disposition": "WITHIN_E1_TEST_TIME_EVOLUTION_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Whole-agent evolution is demonstrated within repeated agent environments rather than across Hetren environment families."
+    },
+    {
+      "name": "EVOTOOL",
+      "disposition": "WITHIN_E1_DATASET_AND_MODEL_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Policy transfer across tool-use datasets or backbone models remains an E1-family result."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "strong_within_e1_skill_and_test_time_evolution_references_exist": true,
+    "forcing_within_e1_transfer_or_evolution_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V17"
+  },
+  "coverage_observations": {
+    "E1": "NEW_MATERIAL_CANDIDATES_FOUND",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_DIRECTLY_MATCHED_E3_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "One or more materially distinct candidates survived the prior-candidate identity screen, so this round cannot count toward the no-new-material stopping sequence."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "skill_reuse_or_agent_transfer_proves_general_n_h2": false,
+    "whole_agent_test_time_evolution_establishes_a_h2": false,
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B22_VERIFY_ADDENDUM_V20_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 51,
+  "state": "ADDENDUM_V51_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:25:50Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v51": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v51.json",
+      "sha256": "d6789519017073971ce6cd97750017e767200831c533faa79861251c4ac6999a"
+    },
+    "systematic_saturation_v48": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v48.json",
+      "sha256": "1327cca5f3fb293d64b4b14343c1e7b14d11c960bc341b20cf6b05036e4468e9"
+    },
+    "legacy_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-legacy-agent-memory-identity-resolution-v1.json",
+      "sha256": "d630664f13c5c6bc8da4970ce68f90d273d82e2d5af289cbc3ac093d87583bf6"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EXPEL",
+      "candidate_name": "ExpeL: LLM Agents Are Experiential Learners",
+      "verification_state": "PEER_REVIEWED_AAAI_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EXPERIENTIAL_LEARNING_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "ExpeL is published in the AAAI 2024 technical track.",
+        "It gathers trial-and-error experiences over training tasks and extracts natural-language insights from them.",
+        "At inference it recalls both extracted insights and successful experiences for decision making.",
+        "The official implementation exposes the training and evaluation environments used by the research."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/29936"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LeapLabTHU/ExpeL"
+        }
+      ],
+      "limits": [
+        "TRAINING_TASK_COLLECTION_AND_TEST_TASK_BOUNDARY_MUST_BE BOUND",
+        "EXTRACTED_INSIGHTS_AND_EXPERIENCE_STORE_MUST_BE FROZEN FOR PROTECTED_EVALUATION",
+        "BASE_LLM_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "FORWARD_TRANSFER_WITHIN_AGENT_TASKS_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENT-PRO",
+      "candidate_name": "Agent-Pro: Learning to Evolve via Policy-Level Reflection and Optimization",
+      "verification_state": "PEER_REVIEWED_ACL_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_POLICY_LEVEL_REFLECTION_AND_OPTIMIZATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Agent-Pro is published as an ACL 2024 main-conference long paper.",
+        "It performs policy-level reflection over trajectories and beliefs rather than only action-level correction.",
+        "Its optimization process iteratively revises beliefs and searches for improved behavioral policies.",
+        "The official implementation contains Blackjack and Limit Texas Hold'em environments and training examples."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2024.acl-long.292/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ZJU-OmniAI/Agent-Pro"
+        }
+      ],
+      "limits": [
+        "GAME_ENVIRONMENT_AND_POLICY_REPRESENTATION_MUST_BE MATCHED",
+        "REFLECTION_HISTORY_AND_BELIEF_STATE_MUST_BE BOUND",
+        "SEARCH_DEPTH_AND_OPTIMIZATION_CONFIGURATION_MUST_BE BOUND",
+        "WITHIN_E1_POLICY_EVOLUTION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VOYAGER",
+      "candidate_name": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+      "verification_state": "PEER_REVIEWED_TMLR_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EMBODIED_LIFELONG_SKILL_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Voyager is published in Transactions on Machine Learning Research in 2024.",
+        "It combines an automatic curriculum, an accumulating executable skill library, and iterative prompting from environment feedback and execution errors.",
+        "The learned skill library can be loaded into a new Minecraft world for evaluation on new tasks.",
+        "The official MineDojo repository provides executable Voyager code and learned-skill-library support."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=ehfRiF0R3a"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MineDojo/Voyager"
+        }
+      ],
+      "limits": [
+        "MINECRAFT_ENVIRONMENT_VERSION_AND_SKILL_LIBRARY_MUST_BE BOUND",
+        "GPT4_PROVIDER_MODEL_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "AUTOMATIC_CURRICULUM_AND_ITERATIVE_PROMPT_LIMITS_MUST_BE BOUND",
+        "SKILL_LIBRARY_TRANSFER_WITHIN_MINECRAFT_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v51_candidates_have_role_level_external_review": true,
+    "all_addendum_v51_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 16,
+  "state": "SATURATION_V16_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:32:10Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "promoted_evotool_publication_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v18_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v18.json",
+      "sha256": "b4b7dea333ed5ddc7da5394c8f51491c29aba020867271eca4dbf6ba664d8a7e"
+    },
+    "systematic_saturation_v15": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v15.json",
+      "sha256": "c00f2d711a74444909cf730ffea5475cf1b9c3a2717e015a763297d84d328653"
+    }
+  },
+  "focus": [
+    "E1_SELF_EVOLVING_TOOL_POLICY_AND_EXPERIENCE_MEMORY",
+    "E2_POST_TABPFN_AND_DIRECT_TABULAR_TTA",
+    "E3_POST_PTA_ONLINE_MEMORY_AND_VLM_TTA",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"EVOTOOL\" ACL 2026 self-evolving tool-use policy official code",
+    "\"EVOTOOL\" blame-aware mutation diversity-aware selection github",
+    "\"EvolveR\" self-evolving LLM agents ICML 2026 official code",
+    "\"Learning on the Job\" self-evolving agent MUSE ACL 2026 code",
+    "site:aclanthology.org/2026 self-evolving tool-use agent policy code",
+    "site:aclanthology.org/2026 continual tool agent adaptation executable",
+    "site:aclanthology.org/2026 experience-driven agent self-evolving tool",
+    "site:proceedings.mlr.press 2026 tabular test-time adaptation",
+    "site:proceedings.mlr.press 2026 active feature acquisition tabular",
+    "site:proceedings.iclr.cc 2026 tabular test-time adaptation",
+    "\"Drift-Resilient TabPFN\" official code",
+    "\"PFT3A\" ICLR 2026 official code",
+    "\"A2Memory\" ICML 2026 test-time adaptation code",
+    "\"Learning to Memorize with Attributive and Associative Memory\" code",
+    "\"FGA\" flatness guided test-time adaptation VLM code",
+    "\"OATTA\" order-aware test-time adaptation code",
+    "\"GOLD\" continual test-time adaptation CVPR 2026 code",
+    "\"Prototype-Based Test-Time Adaptation\" ICML 2026 code",
+    "2026 learned decision transfer agent tabular vision common policy",
+    "2026 cross-family adaptation agent structured-data vision learned comparator"
+  ],
+  "query_count": 20,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVOTOOL",
+      "name": "EVOTOOL \u2014 Self-Evolving Tool-Use Policy Optimization",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MODULAR_TOOL_POLICY_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_POLICY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_MAIN_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.2016/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SYang2000/ACL_2026_EvoTool"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_USE_POLICY_OPTIMIZATION_SETTING_AND_DEVELOPMENT_FEEDBACK_OPPORTUNITY_MATCH",
+      "material_reason": "EVOTOOL is materially distinct from existing tool-agent candidates because it explicitly decomposes the agent policy into Planner, Selector, Caller, and Synthesizer modules and optimizes them through trajectory-grounded blame attribution, targeted natural-language mutation, and diversity-aware evolutionary selection.",
+      "n_h2_limit": "TRANSFER_ACROSS_TOOL_DATASETS_OR_AGENT_BACKBONES_REMAINS_WITHIN_E1_AND_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_TRANSFER",
+      "limits": [
+        "EVOLUTION_DATA_AND_DIAGNOSTIC_TRACE_ACCESS_MUST_BE BOUND",
+        "MUTATION_MODEL_AND_CRITIQUE_CONFIGURATION_MUST_BE BOUND",
+        "POPULATION_SIZE_SELECTION_RULE_AND_STOPPING_RULE_MUST_BE BOUND",
+        "TOOL_BENCHMARK_ENVIRONMENT_AND_BACKBONE_MUST_BE MATCHED",
+        "EVOLUTION_OPPORTUNITY_AND_TOKEN_COST_REQUIRE_TASK_9_ACCOUNTING"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "EvolveR",
+      "sources": [
+        "https://arxiv.org/abs/2510.16079",
+        "https://github.com/KnowledgeXLab/EvolveR"
+      ],
+      "evidence_state": "PUBLIC_RESEARCH_AND_EXECUTABLE_IMPLEMENTATION_WITH_ICML_2026_ACCEPTANCE_CLAIM",
+      "relevance": "Implements a closed-loop experience lifecycle with offline trajectory distillation, online retrieval of reusable principles, and policy reinforcement.",
+      "disposition": "STRONG_E1_RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "An official executable repository and public manuscript were verified, but this bounded pass did not independently bind a primary archival ICML proceedings record; final claim-bearing promotion should not rely only on repository acceptance metadata."
+    },
+    {
+      "name": "MUSE \u2014 Learning on the Job",
+      "sources": [
+        "https://arxiv.org/abs/2510.08002",
+        "https://github.com/KnowledgeXLab/MUSE"
+      ],
+      "evidence_state": "PUBLIC_LONG_HORIZON_SELF_EVOLVING_AGENT_RESEARCH_WITH_EXECUTABLE_CODE",
+      "relevance": "Uses hierarchical memory and post-execution experience refinement to accumulate reusable experience across long-horizon productivity tasks.",
+      "disposition": "STRONG_E1_MEMORY_EVOLUTION_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The research is highly relevant, but this pass did not bind a direct primary ACL Anthology paper record strongly enough to promote it as an additional claim-bearing comparator."
+    },
+    {
+      "name": "A2Memory",
+      "sources": [
+        "https://icml.cc/Downloads/2026"
+      ],
+      "evidence_state": "ICML_2026_RESEARCH_IDENTITY_VERIFIED_IMPLEMENTATION_NOT_BOUND",
+      "relevance": "Uses attributive and associative memory for online VLM test-time adaptation.",
+      "disposition": "E3_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "No official executable implementation suitable for governed reproduction was independently verified in this bounded pass."
+    },
+    {
+      "name": "FGA",
+      "sources": [
+        "https://github.com/Test-Time-Learning/adaptation"
+      ],
+      "evidence_state": "ICLR_2026_INDEXED_VLM_TTA_RESEARCH",
+      "relevance": "Flatness-guided VLM test-time adaptation.",
+      "disposition": "E3_REFERENCE_NOT_PROMOTED",
+      "reason": "A primary official executable implementation was not independently verified in this pass."
+    },
+    {
+      "name": "OATTA",
+      "sources": [
+        "https://arxiv.org/abs/2601.21012"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT",
+      "relevance": "Uses temporal-order information and recursive Bayesian estimation for streaming adaptation.",
+      "disposition": "CROSS_MODAL_TEMPORAL_TTA_REFERENCE_NOT_PROMOTED",
+      "reason": "Archival peer review and an official reproducible implementation were not both verified."
+    },
+    {
+      "name": "GOLD",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Lai_The_Golden_Subspace_Where_Efficiency_Meets_Generalization_in_Continual_Test-Time_CVPR_2026_paper.html",
+        "https://github.com/AIGNLAI/GOLD"
+      ],
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_WITH_OFFICIAL_CODE",
+      "disposition": "PREEXISTING_TASK8_CANDIDATE_NOT_NEW",
+      "reason": "GOLD was already preserved in the governed Task-8 candidate history and must not be double-counted."
+    },
+    {
+      "name": "TabLog",
+      "sources": [
+        "https://proceedings.mlr.press/v235/ren24b.html",
+        "https://github.com/WeijieyingRen/TabLog"
+      ],
+      "evidence_state": "PEER_REVIEWED_ICML_2024_CODE_REPOSITORY_WITH_EXECUTABLE_RELEASE_LIMITATION",
+      "disposition": "PREEXISTING_BLOCKED_E2_REFERENCE_NOT_NEW",
+      "reason": "TabLog was already considered in prior governed Task-8 research and its public repository does not presently provide the full executable implementation promised by the paper."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "EVOTOOL",
+      "evidence_state": "ACL_2026_MAIN_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Evolves modular tool-use policies and reports transfer across tool-use datasets and backbone models.",
+      "disposition": "WITHIN_E1_POLICY_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The transferred object remains a tool-use agent policy; no evidence transfers the same learned decision mechanism into E2 structured ML and E3 vision."
+    },
+    {
+      "name": "EvolveR",
+      "evidence_state": "PUBLIC_RESEARCH_WITH_EXECUTABLE_IMPLEMENTATION",
+      "relevance": "Distills reusable strategic principles from agent trajectories and retrieves them during future interaction.",
+      "disposition": "WITHIN_E1_EXPERIENCE_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The verified evidence remains in language-agent/search-style tasks."
+    },
+    {
+      "name": "MUSE",
+      "evidence_state": "PUBLIC_RESEARCH_WITH_EXECUTABLE_IMPLEMENTATION",
+      "relevance": "Accumulates hierarchical experience memory for long-horizon agent tasks.",
+      "disposition": "WITHIN_E1_MEMORY_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Experience reuse within long-horizon agents does not establish a cross-family E1-E2-E3 learned transfer mechanism."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "strong_within_e1_policy_transfer_reference_verified": true,
+    "additional_within_e1_experience_and_memory_references_found": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V16"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_EXECUTABLE_MODULAR_POLICY_EVOLUTION_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED",
+    "E3": "NO_NEW_REPRODUCIBLE_ROLE_MATCH_PROMOTED_BEYOND_PTA_AND_EXISTING_POOL",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "EVOTOOL is a materially distinct, peer-reviewed, executable E1 comparator absent from the prior governed candidate set, so this refinement cannot count as a no-new-material round."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "evolver_or_muse_are_promoted_without_archival_binding": false,
+    "a2memory_is_promoted_without_executable_binding": false,
+    "evotool_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B21_VERIFY_ADDENDUM_V19_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

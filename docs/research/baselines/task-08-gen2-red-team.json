@@ -1,0 +1,395 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GENERATION_2_RED_TEAM",
+  "state": "RESEARCH_ONLY",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_generation": 2,
+  "target_artifact": "docs/research/baselines/task-08-baseline-requirements-gen2.json",
+  "purpose": "Second-pass adversarial review using attack surfaces not limited to the first-generation remediation set.",
+  "attacks": [
+    {
+      "id": "G2-AF-001",
+      "targets": [
+        "G2-BR-001"
+      ],
+      "attack": "A hosted provider can retain the same advertised model alias while changing backend routing or behavior, making nominal version identity look stronger than actual behavioral pinning.",
+      "hardening_question": "What evidence distinguishes logical provider identity from behavioral reproducibility when exact backend revision is unavailable?",
+      "source_refs": [
+        "S001",
+        "S008"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-002",
+      "targets": [
+        "G2-BR-002",
+        "G2-BR-023"
+      ],
+      "attack": "A team can repeatedly update baselines after protected results and call each run a new successor while still adapting the research program to the same protected evidence.",
+      "hardening_question": "Does the contract explicitly inherit Task 7 freshness and repeated-peeking consequences across successor baseline lineages?",
+      "source_refs": [
+        "S022"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-003",
+      "targets": [
+        "G2-BR-003"
+      ],
+      "attack": "The eligible comparator universe can be bounded using a convenient literature-search date, source set, or implementation availability rule that quietly excludes a stronger competitor.",
+      "hardening_question": "How is comparator search scope, search cutoff, and exclusion provenance made auditable without claiming knowledge of every method in existence?",
+      "source_refs": [
+        "S004",
+        "S005",
+        "S006",
+        "S025"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-004",
+      "targets": [
+        "G2-BR-004"
+      ],
+      "attack": "A diagnostic anchor can dominate the narrative or headline even when the candidate loses to the actual claim-bearing comparator.",
+      "hardening_question": "Must reporting make comparator role explicit and prohibit anchor wins from being summarized as general baseline superiority?",
+      "source_refs": [
+        "S005",
+        "S006"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-005",
+      "targets": [
+        "G2-BR-005",
+        "G2-BR-019"
+      ],
+      "attack": "Candidate-only caches, retrieval stores, tool memory, hidden context, prior transcripts, or warmed state can leak information while surface-level task inputs appear matched.",
+      "hardening_question": "Does information parity include persistent and indirect state, not only explicit prompt or dataset inputs?",
+      "source_refs": [
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-006",
+      "targets": [
+        "G2-BR-006"
+      ],
+      "attack": "Candidate and baseline can run against nominally the same environment at different times while the environment, external service, repository, web content, or tool result has changed.",
+      "hardening_question": "How does evaluation parity handle temporal drift, snapshots, paired execution, or controlled replay?",
+      "source_refs": [
+        "S001",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-007",
+      "targets": [
+        "G2-BR-007"
+      ],
+      "attack": "A material unfair advantage can be labeled a legitimate 'treatment' after design review, effectively laundering incomparability through terminology.",
+      "hardening_question": "What objective criterion distinguishes legitimate treatment from an asymmetry that changes the meaning of the comparison?",
+      "source_refs": [
+        "S001",
+        "S005"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-008",
+      "targets": [
+        "G2-BR-008",
+        "G2-BR-022"
+      ],
+      "attack": "The candidate can receive substantially more expert iteration, prompt engineering, failed experiments, or manual debugging than the baseline even when the declared automated search procedure looks symmetric.",
+      "hardening_question": "Which opportunity semantics belong in Task 8, and which human effort measurements must be handed to Task 9?",
+      "source_refs": [
+        "S005",
+        "S006",
+        "S017"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-009",
+      "targets": [
+        "G2-BR-009"
+      ],
+      "attack": "A provenance schema can appear comprehensive while silently allowing unknown material fields to be omitted rather than recorded as UNKNOWN.",
+      "hardening_question": "Must material-but-unavailable provenance be represented explicitly rather than disappearing from the record?",
+      "source_refs": [
+        "S001",
+        "S008"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-010",
+      "targets": [
+        "G2-BR-010"
+      ],
+      "attack": "A manifest can reproduce configuration text while an external API, package repository, tool endpoint, or environment dependency has changed enough that the execution is no longer equivalent.",
+      "hardening_question": "Does replay distinguish exact reproduction, controlled reproduction, behavioral replay, and irreproducible dependency?",
+      "source_refs": [
+        "S001",
+        "S008",
+        "S017"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-011",
+      "targets": [
+        "G2-BR-011"
+      ],
+      "attack": "Many repeated runs can share correlated randomness, common environment state, provider routing, or identical latent failure conditions, producing falsely narrow uncertainty.",
+      "hardening_question": "Does the replication contract identify dependence sources and prevent repeated attempts from being treated as independent?",
+      "source_refs": [
+        "S007",
+        "S001"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-012",
+      "targets": [
+        "G2-BR-012"
+      ],
+      "attack": "A mathematically correct confidence interval can still be wrong for the claim if the analysis treats dependent cases, repeated runs, or clustered environments as independent observations.",
+      "hardening_question": "Must the statistical unit and dependency model resolve directly to Task 7 EvaluationUnit and IndependenceGroup semantics?",
+      "source_refs": [
+        "S001",
+        "S007"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-013",
+      "targets": [
+        "G2-BR-013"
+      ],
+      "attack": "A secondary metric can be promoted into the narrative after the primary measure disappoints, without formally changing the registered primary measure.",
+      "hardening_question": "Does reporting preserve primary-versus-secondary status and prevent post-hoc diagnostic promotion from supporting the original claim?",
+      "source_refs": [
+        "S001",
+        "S007",
+        "S009"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-014",
+      "targets": [
+        "G2-BR-014"
+      ],
+      "attack": "A safety, retention, authorization, or invariance condition can be declared a hard constraint only after seeing which conditions the candidate happens to satisfy.",
+      "hardening_question": "Are claim-affecting hard constraints frozen by the governing contract before protected evaluation?",
+      "source_refs": [
+        "S001",
+        "S003"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-015",
+      "targets": [
+        "G2-BR-015"
+      ],
+      "attack": "A benchmark portfolio can satisfy broad construct labels while its generator, sampling weights, difficulty distribution, or task mix systematically favors one method.",
+      "hardening_question": "Does construct coverage include distribution and sampling provenance rather than only benchmark names and descriptions?",
+      "source_refs": [
+        "S004",
+        "S025",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-016",
+      "targets": [
+        "G2-BR-016"
+      ],
+      "attack": "Recently collected or dynamically generated examples can still contain knowledge already known to the evaluated model or leak through semantically equivalent material.",
+      "hardening_question": "Does the contamination model distinguish recency from actual exposure evidence and preserve UNKNOWN when cleanliness cannot be established?",
+      "source_refs": [
+        "S014",
+        "S029"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-017",
+      "targets": [
+        "G2-BR-017"
+      ],
+      "attack": "An LLM judge can systematically prefer outputs from itself or a closely related model family even when human or objective evaluation does not justify the preference.",
+      "hardening_question": "Must evaluator qualification consider evaluator-candidate and evaluator-baseline relationship, including self/family preference?",
+      "source_refs": [
+        "S023",
+        "S024",
+        "S027"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-018",
+      "targets": [
+        "G2-BR-018"
+      ],
+      "attack": "Recorded trajectories can omit hidden environment side effects, tool-side state, partial failures, or events outside the logging boundary, creating a clean but incomplete explanation.",
+      "hardening_question": "Must trajectory evidence declare its observation boundary and distinguish unobserved behavior from evidence of absence?",
+      "source_refs": [
+        "S013",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-019",
+      "targets": [
+        "G2-BR-019"
+      ],
+      "attack": "Target-family information can enter through retrieval indexes, manual onboarding, demonstrations, prompt templates, metadata, or human debugging while the learned transfer mechanism itself contributes little.",
+      "hardening_question": "Does transfer provenance classify all target-specific information channels rather than only training labels or protected outcomes?",
+      "source_refs": [
+        "S004",
+        "S005",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-020",
+      "targets": [
+        "G2-BR-020"
+      ],
+      "attack": "The strongest adaptation comparator can be obsolete, under-tuned, or mismatched to the same adaptation information, making Hetren's adaptation advantage artificial.",
+      "hardening_question": "Do strongest-applicable selection, tuning parity, and adaptation input parity all apply explicitly to A-H1 comparators?",
+      "source_refs": [
+        "S005",
+        "S006",
+        "S015",
+        "S030"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-021",
+      "targets": [
+        "G2-BR-021"
+      ],
+      "attack": "Rollback can restore the protected metrics while leaving hidden state, optimizer state, memory, indexes, policies, caches, or unmeasured capabilities altered.",
+      "hardening_question": "Does rollback verification define relevant state surfaces, behavioral restoration, and UNKNOWN status for unobservable state?",
+      "source_refs": [
+        "S015",
+        "S030"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-022",
+      "targets": [
+        "G2-BR-022"
+      ],
+      "attack": "A team can choose a resource regime that favors its method or report quality and cost separately in a way that hides Pareto domination by another comparator.",
+      "hardening_question": "Does Task 8 freeze interpretation semantics while Task 9 later provides enough values to expose quality-resource tradeoffs without collapsing them into one favorable score?",
+      "source_refs": [
+        "S001",
+        "S009",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-023",
+      "targets": [
+        "G2-BR-023"
+      ],
+      "attack": "Baseline reassessment can depend on a selective or stale search for newer comparators, allowing superiority claims to remain current long after credible alternatives exist.",
+      "hardening_question": "Does reassessment have an explicit evidence/search trigger and evaluation-date scope without demanding impossible continuous state-of-the-art surveillance?",
+      "source_refs": [
+        "S004",
+        "S006",
+        "S025"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-024",
+      "targets": [
+        "G2-BR-024"
+      ],
+      "attack": "Repeatedly narrowing a blocked claim can yield a technically true but commercially or scientifically misleading micro-claim that sounds like the original superiority claim.",
+      "hardening_question": "Must reporting preserve the relationship between narrowed claims and the original blocked claim?",
+      "source_refs": [
+        "S001",
+        "S025"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-025",
+      "targets": [
+        "G2-BR-025"
+      ],
+      "attack": "A real-world validation can cherry-pick users, workflows, organizations, time windows, or deployment conditions just as a benchmark can cherry-pick tasks.",
+      "hardening_question": "Do additional real-world evaluations require scoped sampling, population, environment, and claim boundaries?",
+      "source_refs": [
+        "S003",
+        "S028"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-026",
+      "targets": [
+        "G2-BR-026"
+      ],
+      "attack": "An allegedly independent verifier can share the same judge model, vendor, preprocessing, benchmark generator, environment image, aggregation library, or faulty assumption as the primary path.",
+      "hardening_question": "Does verification record common-mode dependencies and require separation specifically against the material failure modes of the claim?",
+      "source_refs": [
+        "S008",
+        "S023",
+        "S027"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-027",
+      "targets": [
+        "G2-BR-017",
+        "G2-BR-026"
+      ],
+      "attack": "The same model family can generate the candidate behavior, grade the behavior, and participate in verification, creating a correlated self-preference or shared blind spot across all three layers.",
+      "hardening_question": "When model-family coupling is material, must the comparison declare it and introduce an appropriately different verification or objective evaluation path?",
+      "source_refs": [
+        "S023",
+        "S024",
+        "S027"
+      ],
+      "status": "OPEN"
+    },
+    {
+      "id": "G2-AF-028",
+      "targets": [
+        "G2-BR-005",
+        "G2-BR-006",
+        "G2-BR-007",
+        "G2-BR-022"
+      ],
+      "attack": "A single universal matching rule can be impossible or misleading across E1 agents, E2 structured-data ML, and E3 vision systems; conversely, excessive NOT_APPLICABLE usage can remove every hard comparison requirement from a difficult environment.",
+      "hardening_question": "Does Task 8 define shared semantics plus typed environment-specific bindings, with explicit justification for NOT_APPLICABLE rather than either universal forcing or silent escape?",
+      "source_refs": [
+        "S002",
+        "S028"
+      ],
+      "status": "OPEN"
+    }
+  ]
+}

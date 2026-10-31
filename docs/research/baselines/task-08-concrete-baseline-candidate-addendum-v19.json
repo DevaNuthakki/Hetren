@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 19,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T20:32:10Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v18": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v18.json",
+      "sha256": "2628eaf1634ac49b5b8b0e4e5d90ff4afb52ba47c7c8a8dd8e0304b6b8e2670b"
+    },
+    "systematic_saturation_v16": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v16.json",
+      "sha256": "f94d149ecdb963b854b849f62221144fda2b8f38c6cf7f089a1f7b4b66139b35"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-EVOTOOL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "EVOTOOL \u2014 Self-Evolving Tool-Use Policy Optimization",
+      "implementation_identity": "https://github.com/SYang2000/ACL_2026_EvoTool",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MODULAR_TOOL_POLICY_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_POLICY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.2016/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SYang2000/ACL_2026_EvoTool"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_TOOL_USE_POLICY_OPTIMIZATION_SETTING_AND_DEVELOPMENT_FEEDBACK_OPPORTUNITY_MATCH",
+        "EVOLUTION_DATA_AND_DIAGNOSTIC_TRACE_ACCESS_MUST_BE BOUND",
+        "MUTATION_MODEL_AND_CRITIQUE_CONFIGURATION_MUST_BE BOUND",
+        "POPULATION_SIZE_SELECTION_RULE_AND_STOPPING_RULE_MUST_BE BOUND",
+        "TOOL_BENCHMARK_ENVIRONMENT_AND_BACKBONE_MUST_BE MATCHED",
+        "EVOLUTION_OPPORTUNITY_AND_TOKEN_COST_REQUIRE_TASK_9_ACCOUNTING",
+        "EVOTOOL is materially distinct from existing tool-agent candidates because it explicitly decomposes the agent policy into Planner, Selector, Caller, and Synthesizer modules and optimizes them through trajectory-grounded blame attribution, targeted natural-language mutation, and diversity-aware evolutionary selection."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_USE_POLICY_OPTIMIZATION_SETTING_AND_DEVELOPMENT_FEEDBACK_OPPORTUNITY_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V16"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

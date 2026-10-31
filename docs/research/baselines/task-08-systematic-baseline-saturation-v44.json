@@ -1,0 +1,165 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 44,
+  "state": "SATURATION_V44_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:13:09Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v46_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v46.json",
+      "sha256": "2634385b972b212a3eb5142696c2e5452d64f129ce73f1c1b8529761d12c57e2"
+    },
+    "systematic_saturation_v43": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v43.json",
+      "sha256": "66a9af94b79bfa920fa667928fbcabcb2a5fbc8c6f7dfe9d57f2471ac850b3b1"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_MEMORY_CONTEXT_VALIDITY",
+    "E1_DIRECT_MEMORY_MULTI_COMPONENT_ARCHITECTURE",
+    "N_H1_LONG_HORIZON_AGENT_MEMORY"
+  ],
+  "scope_boundary": {
+    "environment": "E1_AGENT",
+    "hypothesis": "N-H1",
+    "broad_memory_literature_expansion_prohibited": true,
+    "new_candidate_requires_material_role_difference": true
+  },
+  "queries_executed": [
+    "\"SAM: State-Adaptive Memory\" agent memory implementation",
+    "\"RaMem\" contextual reinstatement agent memory code",
+    "\"Grounding Agent Memory in Contextual Intent\" STITCH code",
+    "\"Structured Intent Tracking in Contextual History\" agent memory",
+    "\"BMAM\" brain-inspired multi-agent memory ACL 2026 code",
+    "\"Brain-inspired Multi-Agent Memory Framework\" github",
+    "ACL 2026 agent memory contextual intent long horizon code",
+    "ACL 2026 long-term agent memory multi-agent memory code",
+    "2026 direct agent memory intent-aware retrieval official implementation",
+    "2026 long-horizon agent memory temporal episodic semantic implementation",
+    "\"Agent Memory: Characterization and System Implications\" memory systems",
+    "\"Memory-R2\" long-horizon memory agent code",
+    "\"OCR-Memory\" long-horizon agent memory ACL 2026",
+    "\"AMA\" \"Adaptive Memory via Multi-Agent Collaboration\" ACL 2026"
+  ],
+  "query_count": 14,
+  "proposed_candidate_count": 2,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STITCH-CONTEXTUAL-INTENT",
+      "name": "Grounding Agent Memory in Contextual Intent / STITCH",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BMAM",
+      "name": "BMAM: Brain-inspired Multi-Agent Memory Framework",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-BMAM",
+          "name": "BMAM: Brain-inspired Multi-Agent Memory Framework",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STITCH-CONTEXTUAL-INTENT",
+      "name": "Grounding Agent Memory in Contextual Intent / STITCH",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_CONTEXT_AWARE_DIRECT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_STRUCTURED_INTENT_RETRIEVAL_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.584/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Seattleyrz/contextual-intent"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_CONTEXT_AWARE_LONG_HORIZON_RETRIEVAL_ROLE_IS_MATCHED",
+      "material_reason": "STITCH indexes trajectory steps using structured contextual intent and retrieves memory by intent compatibility before semantic similarity, directly targeting interference from context-mismatched long-horizon memories.",
+      "limits": [
+        "CAME_BENCH_OR_MATCHED_GOAL_ORIENTED_MEMORY_SETTING_REQUIRED",
+        "INTENT_SCHEMA_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_DATASET_AND_JUDGE_CONFIGURATION_MUST_BE BOUND",
+        "RETRIEVAL_QUALITY_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_or_preexisting": [
+    {
+      "name": "Agent Memory: Characterization and System Implications of Stateful Long-Horizon Workloads",
+      "disposition": "SYSTEMS_CHARACTERIZATION_AND_BENCHMARKING_REFERENCE_NOT_STANDALONE_MEMORY_BASELINE",
+      "reason": "The work profiles existing memory systems and resource behavior rather than introducing one new memory policy to promote as a separate claim-bearing comparator.",
+      "sources": [
+        "https://arxiv.org/abs/2606.06448",
+        "https://github.com/Tambe-Lab/agent-memory-profiling"
+      ]
+    },
+    {
+      "name": "Memory-R2",
+      "disposition": "PREEXISTING_PROMOTED_TASK8_CANDIDATE_NOT_NEW",
+      "reason": "Memory-R2 was already promoted in earlier governed Task-8 direct-memory discovery and cannot be counted again."
+    },
+    {
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "disposition": "PREEXISTING_PROMOTED_TASK8_CANDIDATE_NOT_NEW",
+      "reason": "AMA was already promoted in earlier governed Task-8 direct-memory discovery."
+    },
+    {
+      "name": "OCR-Memory",
+      "disposition": "PREVIOUSLY_REVIEWED_EXECUTABLE_GATE_OR_ROLE_DISPOSITION_PRESERVED",
+      "reason": "OCR-Memory has already been explicitly handled in prior governed direct-memory evidence and is not recounted."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_scope_does_not_attempt_to_fill_general_n_h2": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one proposed direct-memory identity was not previously promoted and is materially role-distinct."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "peer_review_establishes_final_eligibility": false,
+    "memory_result_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B49_VERIFY_ADDENDUM_V47_AND_RUN_NEXT_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 59,
+  "state": "DISPLACEMENT_ONLY_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T02:34:44Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_canonical_enumeration_performed": false,
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v61_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v61.json",
+      "sha256": "a2cd507dd85a3ade7decb31c99ae91ba33aed97cd96c36466f615d241910b958"
+    },
+    "systematic_saturation_v58": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v58.json",
+      "sha256": "ff13be596239a987f2c73d8259fb36f7889e6144df6da78a456aa49300b5f125"
+    }
+  },
+  "focus": [
+    "ONLY_PLAUSIBLE_DISPLACERS_OF_RETAINED_EMBODIED_VLA_COMPARATORS",
+    "NO_GENERAL_ROBOTICS_LITERATURE_ENUMERATION",
+    "NO_CROSS_INCOMPARABLE_NUMERIC_RANKING",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_GAP_CHECK"
+  ],
+  "queries_executed": [
+    "pi0 OpenVLA-OFT matched bimanual ALOHA comparison",
+    "pi0 openpi official executable robot foundation policy",
+    "GR00T N1 open foundation model generalist humanoid official implementation",
+    "GR00T N1 matched benchmark OpenVLA SpatialVLA robot manipulation",
+    "SmolVLA efficient open VLA official LeRobot implementation",
+    "SmolVLA matched LIBERO Meta-World comparison OpenVLA-OFT SpatialVLA"
+  ],
+  "query_count": 6,
+  "screened_displacement_candidates": [
+    {
+      "name": "pi0 \u2014 Our First Generalist Policy",
+      "identity_state": "PRIOR_PROMOTED_IDENTITY_NOT_NEW",
+      "prior_matches": [
+        {
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v61.json",
+          "baseline_id": "DISCOVERY:T8-E1-PI05",
+          "name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization"
+        }
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_PRIMARY_RESEARCH",
+          "url": "https://www.physicalintelligence.company/blog/pi0"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Physical-Intelligence/openpi"
+        },
+        {
+          "class": "PEER_REVIEWED_MATCHED_COMPARISON",
+          "url": "https://www.roboticsproceedings.org/rss21/p017.html"
+        }
+      ],
+      "displacement_surface": "GENERALIST_VLA_AND_BIMANUAL_FINE_TUNING",
+      "reason": "A prior Task-8 candidate identity already covers pi0.",
+      "promoted": false
+    },
+    {
+      "name": "GR00T N1",
+      "identity_state": "SCREENED_ROLE_ADJACENT_NO_MATCHED_DISPLACEMENT",
+      "prior_matches": [],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2503.14734"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T"
+        }
+      ],
+      "displacement_surface": "CROSS_EMBODIMENT_HUMANOID_VLA",
+      "reason": "GR00T N1 is an executable cross-embodiment humanoid VLA, but its verified evaluation surface is not directly matched to a declared Task-8 humanoid comparison tuple that would allow defensible displacement of the retained OpenVLA, SpatialVLA, RDT, pi0.5, or related manipulation comparators. Cross-incomparable benchmark strength is not used to promote it.",
+      "promoted": false
+    },
+    {
+      "name": "SmolVLA",
+      "identity_state": "SCREENED_ROLE_ADJACENT_NO_MATCHED_DISPLACEMENT",
+      "prior_matches": [],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2506.01844"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huggingface/lerobot"
+        }
+      ],
+      "displacement_surface": "RESOURCE_EFFICIENT_GENERALIST_VLA",
+      "reason": "SmolVLA is an executable compact VLA whose strongest distinguishing surface is affordable/resource-efficient training and deployment. The current displacement-only pass has no declared matched resource-constrained embodied comparison tuple on which it is evidenced to displace a retained comparator. It is therefore preserved as a reference rather than promoted merely because it is smaller.",
+      "promoted": false
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_generalization_evidence_exists": true,
+    "within_e1_generalization_must_not_be_relabeled_cross_family_transfer": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "This is the first consecutive bounded DISPLACEMENT-ONLY refinement after I4B62 that produced no materially new eligible displacer or role-gap-filling comparator. One additional consecutive no-new-material displacement-only refinement is required by the preregistered rule."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "screened_reference_is_claim_bearing_baseline": false,
+    "absence_of_new_candidate_proves_global_literature_exhaustion": false,
+    "first_no_new_round_satisfies_stopping_rule": false,
+    "within_e1_generalization_proves_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B64_SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_CONFIRMATION"
+}

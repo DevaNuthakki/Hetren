@@ -1,0 +1,259 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 15,
+  "state": "SATURATION_V15_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T20:25:52Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v17_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v17.json",
+      "sha256": "e20b33f3e201c8b18ef41b179e48e6fe9f328b2cecd469278006a559ec3dcc9d"
+    },
+    "systematic_saturation_v14": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v14.json",
+      "sha256": "bd45b7d88a660054c5b5a77e26e89e7af7bb3d7bff4b1da71e3007577e6247a5"
+    }
+  },
+  "materiality_definition": {
+    "unit": "environment + hypothesis role + concrete task/mechanism + information opportunity + evaluator comparability",
+    "new_candidate_resets_counter_only_if": "The candidate is not a prior identity and could alter the retained comparator set for at least one applicable role/task tuple.",
+    "merely_related_or_newer_work_resets_counter": false
+  },
+  "focus": [
+    "E1_EVOLVING_TOOLSET_ADAPTATION",
+    "E1_OPEN_WORLD_TOOL_RETRIEVAL_AND_EXECUTION",
+    "E2_POST_DRIFT_RESILIENT_TABPFN_SPOT_CHECK",
+    "E3_BACKPROP_FREE_VLM_TTA",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"RIMRULE\" ACL 2026 github",
+    "\"Beyond Static Toolsets\" ACL 2026 ContDa github",
+    "\"ContDa\" continual documentation adaptation github",
+    "\"ToolOmni\" ACL 2026 github open-world tool use",
+    "\"Prototype-Based Test-Time Adaptation of Vision-Language Models\" ICML 2026 github",
+    "site:aclanthology.org/2026 evolving tool agents continual adaptation code",
+    "site:aclanthology.org/2026 open-world tool use agent reinforcement learning code",
+    "site:proceedings.iclr.cc 2026 tool agent continual adaptation code",
+    "site:proceedings.mlr.press 2026 tabular test-time adaptation structured data",
+    "site:icml.cc/Downloads/2026 tabular test-time adaptation structured data",
+    "site:icml.cc/Downloads/2026 active feature acquisition structured data",
+    "site:openaccess.thecvf.com/content/CVPR2026 vision language test-time adaptation official code",
+    "site:icml.cc/Downloads/2026 vision language test-time adaptation prototype",
+    "2026 learned decision transfer across agent structured data vision",
+    "2026 cross-modal policy transfer agent tabular vision learned decision mechanism",
+    "\"Towards Preference Following in Tool Calling Language Agents\" github",
+    "\"Reading is not Reasoning\" cross-modal agentic policy self-distillation"
+  ],
+  "query_count": 17,
+  "planned_candidates": [
+    "DISCOVERY:T8-E1-CONTDA",
+    "DISCOVERY:T8-E1-TOOLOMNI",
+    "DISCOVERY:T8-E3-PTA-PROTOTYPE"
+  ],
+  "duplicate_or_preexisting": [],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CONTDA",
+      "canonical_name": "Beyond Static Toolsets / ContDa",
+      "aliases": [
+        "contda",
+        "continual documentation adaptation",
+        "beyond static toolsets"
+      ],
+      "name": "ContDa \u2014 Continual Documentation Adaptation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_EVOLVING_TOOLSET_ADAPTATION_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RETENTION_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1082/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Bingo-W/ContDa"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_DYNAMIC_TOOL_ADDITION_CHANGE_OR_DEPRECATION_IS_PART_OF_MATCHED_E1_EXPERIMENT",
+      "material_reason": "Directly addresses continual agent adaptation when tool APIs and documentation evolve, using relation-guided exploration and relation-aware documentation adjustment while explicitly measuring both adaptation and retention.",
+      "limits": [
+        "DYNAMIC_TOOL_EVOLUTION_CONTRACT_MUST_BE DECLARED",
+        "TOOL_RELATION_RETRIEVAL_AND_CLUSTERING_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_AND_TOOL_ENDPOINT_ACCESS_MUST_BE BOUND",
+        "RETENTION_METRICS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION",
+        "WITHIN_TOOL_AGENT_ADAPTATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TOOLOMNI",
+      "canonical_name": "ToolOmni",
+      "aliases": [
+        "toolomni",
+        "enabling open-world tool use via agentic learning"
+      ],
+      "name": "ToolOmni",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_OPEN_WORLD_LEARNED_TOOL_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_UNSEEN_TOOL_GENERALIZATION_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_CODE_MODEL_ASSETS_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1736/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Huangsz2021/ToolOmni"
+        },
+        {
+          "class": "OFFICIAL_MODEL_ASSET",
+          "url": "https://huggingface.co/bue0912/ToolOmni-Qwen3-4B"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_OPEN_WORLD_TOOL_RETRIEVAL_AND_EXECUTION_SETTING_MATCHED",
+      "material_reason": "Provides a released learned open-world tool-use agent with proactive retrieval, grounded execution, supervised cold start, and multi-objective reinforcement learning over retrieval and execution.",
+      "limits": [
+        "OPEN_WORLD_TOOL_CORPUS_AND_RETRIEVER_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_CHECKPOINT_AND_BASE_MODEL_MUST_BE BOUND",
+        "SFT_DATA_GRPO_CONFIGURATION_AND_EXECUTION_ENVIRONMENT_MUST_BE BOUND",
+        "GOLDEN_TOOL_LIST_AND_OPEN_DOMAIN_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "UNSEEN_TOOL_GENERALIZATION_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-PTA-PROTOTYPE",
+      "canonical_name": "Prototype-Based Test-Time Adaptation of Vision-Language Models",
+      "aliases": [
+        "prototype-based test-time adaptation of vision-language models"
+      ],
+      "name": "PTA \u2014 Prototype-Based Test-Time Adaptation of Vision-Language Models",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_BACKPROP_FREE_PROTOTYPE_VLM_TTA_COMPARATOR_CANDIDATE",
+        "A_H1_RESOURCE_EFFICIENT_VLM_TTA_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "ICML_2026_CONFERENCE_LISTING_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.21360"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/hzhxmu/PTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BACKPROP_FREE_VLM_TEST_STREAM_AND_PROTOTYPE_UPDATE_SETTING_MATCHED",
+      "material_reason": "Uses class-specific knowledge prototypes to accumulate information from test samples without backpropagation or growing retrieval caches, creating a materially distinct adaptation and resource profile.",
+      "limits": [
+        "CLIP_OR_MATCHED_VLM_BACKBONE_MUST_BE BOUND",
+        "PROTOTYPE_INITIALIZATION_AND_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "IMAGE_AND_POINT_CLOUD_EXPERIMENTS_MUST_NOT_BE COLLAPSED",
+        "BACKPROP_FREE_RESOURCE_ADVANTAGE_REQUIRES_TASK_9_ACCOUNTING",
+        "RESOURCE_EFFICIENCY_DOES_NOT_BY_ITSELF_ESTABLISH_A_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "reference_or_screened": [
+    {
+      "name": "APOLLO \u2014 Preference Following in Tool Calling Language Agents",
+      "source": "https://aclanthology.org/2026.findings-acl.1676/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_CODE",
+      "disposition": "E1_PREFERENCE_FOLLOWING_REFERENCE_NOT_GENERIC_COMPARATOR",
+      "reason": "Its distinguishing decision contract requires explicit or implicit user preferences from interaction histories; it becomes claim-bearing only for a matched preference-conditioned tool-use experiment."
+    },
+    {
+      "name": "CAPS \u2014 Cross-modal Agentic Policy Self-distillation",
+      "source": "https://arxiv.org/abs/2608.08960",
+      "evidence_state": "PUBLIC_PREPRINT_CODE_FUTURE_RELEASE_IN_REVIEWED_VERSION",
+      "disposition": "N_H2_RELATED_REFERENCE_NOT_PROMOTED",
+      "reason": "It transfers policy behavior between text-history and visual-history representations inside agent tasks; this is not one learned decision mechanism spanning Hetren E1, E2, and E3, and executable code was not verified."
+    },
+    {
+      "name": "TTP \u2014 Test-Time Padding",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_TTP_Test-Time_Padding_for_Adversarial_Detection_and_Robust_Adaptation_on_CVPR_2026_paper.html",
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_CODE_ANNOUNCED_NOT_VERIFIED_AVAILABLE",
+      "disposition": "ADVERSARIAL_E3_SCENARIO_REFERENCE_NOT_PROMOTED",
+      "reason": "Its primary contract is adversarial detection plus targeted adaptation, and the CVPR page states code release rather than supplying a verified executable implementation."
+    },
+    {
+      "name": "IMA and TMA",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026W/Viscale/html/Vempati_IMA__TMA_Efficient_Test-Time_Adaptation_for_VLMs_via_Linear_CVPRW_2026_paper.html",
+      "evidence_state": "CVPR_2026_WORKSHOP",
+      "disposition": "WORKSHOP_E3_REFERENCE_NOT_PROMOTED",
+      "reason": "Useful lightweight embedding-space adaptation evidence, but it does not presently alter the claim-bearing archival E3 pool."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_tool_generalization_and_adaptation_references_exist": true,
+    "cross_modal_agent_policy_reference_exists": true,
+    "cross_modal_agent_reference_is_not_general_e1_e2_e3_transfer": true,
+    "forcing_within_environment_or_representation_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V15"
+  },
+  "coverage_observations": {
+    "E1": "NEW_ROLE_MATCHED_CANDIDATES_FOUND",
+    "E2": "NO_NEW_ROLE_MATCHED_CANDIDATE",
+    "E3": "NEW_ROLE_MATCHED_CANDIDATE_FOUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially new applicable comparator was found, so the no-new-material counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "contda_establishes_a_h2_rollback": false,
+    "toolomni_establishes_general_n_h2": false,
+    "pta_establishes_a_h2": false,
+    "reference_only_method_is_claim_bearing": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B20_VERIFY_ADDENDUM_V18_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

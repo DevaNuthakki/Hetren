@@ -1,0 +1,226 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 32,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T22:38:11Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v31": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v31.json",
+      "sha256": "bad154f3605646a2dcd359a4c2a4c9d6f5a803a7617bee6829b1b43874769088"
+    },
+    "systematic_saturation_v29": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json",
+      "sha256": "c5e27973b25a08262c358738a05dec153988ca10d067693d434d08dd79f13836"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+      "implementation_identity": "https://github.com/ReinerBRO/HeLa-Mem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ASSOCIATIVE_EPISODIC_SEMANTIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.625/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ReinerBRO/HeLa-Mem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_ASSOCIATIVE_LONG_TERM_EPISODIC_SEMANTIC_MEMORY_ROLE_MATCH",
+        "LOCOMO_STYLE_LONG_TERM_MEMORY_ROLE_MUST MATCH",
+        "GRAPH_UPDATE_AND_DISTILLATION_CONFIGURATION_MUST_BE BOUND",
+        "ASSOCIATION_AND_CONSOLIDATION_COSTS_REQUIRE_RESOURCE_ACCOUNTING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Combines a Hebbian episodic graph with reflective semantic-memory distillation and associative retrieval, a distinct mechanism from flat vector memory or procedural-only memory."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ASSOCIATIVE_LONG_TERM_EPISODIC_SEMANTIC_MEMORY_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "MEMORY_MECHANISM_CLOSURE_SATURATION_V29"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "implementation_identity": "https://github.com/zjunlp/LightMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TIERED_EFFICIENT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/a05b72653ec5b473732129829ae04195-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LONG_TERM_MEMORY_EFFICIENCY_AND_OFFLINE_CONSOLIDATION_ROLE_MATCH",
+        "MEMORY_STAGE_CONFIGURATION_MUST_BE BOUND",
+        "OFFLINE_CONSOLIDATION_INFORMATION_ACCESS_MUST_BE MATCHED",
+        "TOKEN_API_AND_RUNTIME_RESOURCE_DIMENSIONS_REQUIRE_TASK_9_ACCOUNTING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Uses sensory filtering, topic-aware short-term memory, and offline sleep-time long-term consolidation, explicitly separating online retrieval from heavier consolidation."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_TERM_MEMORY_EFFICIENCY_AND_OFFLINE_CONSOLIDATION_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "MEMORY_MECHANISM_CLOSURE_SATURATION_V29"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-RECMEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "RecMem: Recurrence-based Memory Consolidation for Efficient and Effective Long-Running LLM Agents",
+      "implementation_identity": "https://github.com/CaiusDai/RecMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_RECURRENCE_BASED_MEMORY_CONSOLIDATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1619/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CaiusDai/RecMem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LONG_RUNNING_INTERACTION_MEMORY_CONSOLIDATION_ROLE_MATCH",
+        "CONSOLIDATION_TRIGGER_AND_RECURRENCE_CONFIGURATION_MUST_BE BOUND",
+        "LONG_RUNNING_DIALOGUE_OR_INTERACTION_ROLE_MUST MATCH",
+        "CONSOLIDATION_COSTS_REQUIRE_TASK_9_ACCOUNTING",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2_TRANSFER",
+        "Targets long-running agent memory with recurrence-based consolidation designed to avoid the cost of eagerly processing every interaction into long-term memory."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_RUNNING_INTERACTION_MEMORY_CONSOLIDATION_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "MEMORY_MECHANISM_CLOSURE_SATURATION_V29"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-BMAM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "BMAM: Brain-inspired Multi-Agent Memory Framework",
+      "implementation_identity": "https://github.com/innovation64/BMAM",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "N_H1_SPECIALIZED_MULTI_COMPONENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_MEMORY_EXPORT_RESTORE_DIAGNOSTIC_REFERENCE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1973/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/innovation64/BMAM"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MULTI_COMPONENT_LONG_TERM_MEMORY_AND_TEMPORAL_REASONING_ROLE_MATCH",
+        "MULTI_AGENT_MEMORY_COMPONENT_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_OR_LONGMEMEVAL_ROLE_MUST MATCH",
+        "MEMORY_EXPORT_RESTORE_IS_NOT_EQUIVALENT_TO_HETREN_A_H2_MODEL_ROLLBACK",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Separates episodic, semantic, salience-aware, control, temporal, and procedural responsibilities and includes explicit memory export/restore evaluation."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_COMPONENT_LONG_TERM_MEMORY_AND_TEMPORAL_REASONING_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "MEMORY_MECHANISM_CLOSURE_SATURATION_V29"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

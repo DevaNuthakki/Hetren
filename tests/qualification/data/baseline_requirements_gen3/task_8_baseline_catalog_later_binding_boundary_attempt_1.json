@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_BASELINE_CATALOG_LATER_BINDING_BOUNDARY_ATTEMPT",
+  "attempt": 1,
+  "state": "CATALOG_LATER_BINDING_BOUNDARY_FORMALIZED_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T20:38:00Z",
+  "task": 8,
+  "bindings": {
+    "catalog_later_binding_boundary_v1": {
+      "path": "docs/research/baselines/task-08-baseline-catalog-later-binding-boundary-v1.json",
+      "sha256": "f1c69ca222d3f8ff5f01516165144c75eb4617d3215681c9f20b389e609d5637"
+    },
+    "concrete_contract_binding_readiness_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-contract-binding-readiness-v1.json",
+      "sha256": "509ef389e306793ab046289b19f968cf231f620562f82b24d333414ce1230021"
+    },
+    "concrete_tuple_resolution_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-applicability-tuple-resolution-v1.json",
+      "sha256": "4b0bac8b75b414e4e6474e80e0bfe23feabaab11b0c46d09ae11ffda0c779f9b"
+    }
+  },
+  "state_summary": {
+    "catalog_boundary_formalized": true,
+    "canonical_candidate_catalog_reference_count": 222,
+    "concrete_baseline_variants_created": 0,
+    "candidate_specific_experiment_bindings_created": 0,
+    "splitversions_created": 0,
+    "partition_memberships_created": 0,
+    "comparator_ranking_started": false,
+    "immutable_version_pinning_started": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false,
+    "governing_task_8_specification_created": false,
+    "decision_0009_created": false
+  },
+  "boundary_interpretation": {
+    "candidate_catalog_can_exist_before_concrete_execution": true,
+    "concrete_experiment_binding_requires_real_execution_contract": true,
+    "global_comparator_ranking_prohibited": true,
+    "experiment_specific_selection_remains_deferred": true,
+    "fabricated_execution_prohibited": true
+  },
+  "claim_limits": {
+    "task_8_complete": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "baseline_selection_authorized": false,
+    "protected_execution_authorized": false
+  },
+  "next_gate": "I5A2R10_PROJECT_CANONICAL_FRONTIER_INTO_NON_GOVERNING_BASELINE_CATALOG_WITHOUT_SELECTION_OR_VERSION_PINNING"
+}

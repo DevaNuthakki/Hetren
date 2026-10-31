@@ -1,0 +1,270 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 61,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T02:28:49Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "candidate_addendum_v60": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v60.json",
+      "sha256": "d7caf3e89584a2df8f4d589be35b81b71737ebff57847a9b9a37a670a0fe8bb0"
+    },
+    "systematic_saturation_v58": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v58.json",
+      "sha256": "ff13be596239a987f2c73d8259fb36f7889e6144df6da78a456aa49300b5f125"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SPATIALVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Models",
+      "implementation_identity": "https://github.com/SpatialVLA/SpatialVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_SPATIAL_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.roboticsproceedings.org/rss21/p011.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SpatialVLA/SpatialVLA"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_SPATIAL_CROSS_ROBOT_GENERALIZATION_OR_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA spatial-transfer policies"
+        ],
+        "why_material": "Its spatial position encoding and adaptive action grids directly target cross-robot spatial generalization and fine-tuning to new robot setups."
+      },
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_SPATIAL_OR_CROSS_ROBOT_GENERALIZATION_SURFACE_MATCHED",
+        "PRETRAINED_MODEL_AND_ACTION_GRID_CONFIGURATION_MUST_BE BOUND",
+        "ZERO_SHOT_AND_FINETUNED_NEW_SETUP_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "MATERIAL_IF_SPATIAL_OR_CROSS_ROBOT_GENERALIZATION_SURFACE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V58"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-RDT-1B",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+      "implementation_identity": "https://github.com/thu-ml/RoboticsDiffusionTransformer",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_BIMANUAL_DIFFUSION_POLICY_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_FEW_SHOT_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/49f80e4d2471ad4f2edf4f5f1ab62339-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/thu-ml/RoboticsDiffusionTransformer"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_BIMANUAL_OR_FEW_SHOT_ROBOT_MANIPULATION",
+        "plausibly_displaces": [
+          "ACT",
+          "Diffusion Policy",
+          "OpenVLA",
+          "other matched bimanual imitation policies"
+        ],
+        "why_material": "Peer-reviewed diffusion foundation policy with official checkpoints, training scripts and bimanual deployment paths directly overlaps existing bimanual and few-shot policy roles."
+      },
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_BIMANUAL_OR_FEW_SHOT_MANIPULATION_SURFACE_MATCHED",
+        "MODEL_SCALE_AND_PRETRAINING_DATA_ACCESS_MUST_BE PARITY_AUDITED",
+        "PRETRAINED_CHECKPOINT_AND_FINETUNING_RECIPE_MUST_BE BOUND",
+        "ZERO_SHOT_AND_FEW_SHOT_SETTINGS_MUST_BE SEPARATED",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ],
+      "eligibility_status": "MATERIAL_IF_BIMANUAL_OR_FEW_SHOT_MANIPULATION_SURFACE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V58"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-PI05",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization",
+      "implementation_identity": "https://github.com/Physical-Intelligence/openpi",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_RESEARCH_RECORD",
+          "url": "https://openreview.net/forum?id=vlhoswksBO"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2504.16054"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Physical-Intelligence/openpi"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_OPEN_WORLD_OR_LANGUAGE_CONDITIONED_GENERALIST_ROBOT_POLICY",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA policies"
+        ],
+        "why_material": "Open-world generalization plus an official released implementation and checkpoints make \u03c00.5 a direct challenger when the governed experiment includes analogous generalization and robot-policy access."
+      },
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_OPEN_WORLD_GENERALIST_VLA_INFORMATION_AND_RESOURCE_REGIME_MATCHED",
+        "OFFICIAL_OPENPI_IMPLEMENTATION_DOES_NOT_EXPOSE_EVERY_INTERNAL_TRAINING_COMPONENT_FROM_THE_RESEARCH_PAPER",
+        "BASE_CHECKPOINT_FINE_TUNED_CHECKPOINT_AND_HEAD_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_DATA_INFORMATION_OPPORTUNITY_AND_COMPUTE_MUST_BE PARITY_AUDITED",
+        "WITHIN_ROBOTICS_GENERALIZATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ],
+      "eligibility_status": "MATERIAL_IF_OPEN_WORLD_GENERALIST_VLA_INFORMATION_AND_RESOURCE_REGIME_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V58"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-COGACT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CogACT: A Foundational Vision-Language-Action Model for Synergizing Cognition and Action in Robotic Manipulation",
+      "implementation_identity": "https://github.com/microsoft/CogACT",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_DIFFUSION_ACTION_EXPERT_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_NEW_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2411.19650"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/microsoft/CogACT"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_VLA_ACTION_GENERATION_GENERALIZATION_AND_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "RT-2-style VLA policies",
+          "other matched VLA action-generation policies"
+        ],
+        "why_material": "Its specialized diffusion action module changes both action-sequence generation and cross-robot adaptation while retaining an executable official implementation."
+      },
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_RESEARCH_CANDIDATE_IF_MATCHED_VLA_ACTION_SURFACE_AND_PREPRINT_EVIDENCE_CLASS_ALLOWED",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELED_PEER_REVIEWED",
+        "MODEL_CHECKPOINT_ACTION_MODULE_AND_DIFFUSION_CONFIGURATION_MUST_BE BOUND",
+        "PAPER_REPORTED_ADVANTAGES_ARE_NOT_HETREN_RESULTS",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ],
+      "eligibility_status": "MATERIAL_RESEARCH_CANDIDATE_IF_MATCHED_VLA_ACTION_SURFACE_AND_PREPRINT_EVIDENCE_CLASS_ALLOWED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V58"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

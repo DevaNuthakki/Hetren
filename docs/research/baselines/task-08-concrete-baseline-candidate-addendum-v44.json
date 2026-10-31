@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 44,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T23:52:33Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v43": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v43.json",
+      "sha256": "9e2d0ae1aebf219aad4d214f82391b81d067fcca72dc2163cb23c0e42310ba54"
+    },
+    "systematic_saturation_v41": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v41.json",
+      "sha256": "9cc941e27e17b55b406e78b316159759c47f36cb1115ebb34249bd544854497e"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMOBRAIN-EXEC",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemoBrain: Executive Memory as an Agentic Brain for Reasoning",
+      "implementation_identity": "https://github.com/qhjqhj00/MemoBrain",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_EXECUTIVE_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_CONTEXT_MANAGEMENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.127/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/qhjqhj00/MemoBrain"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+        "TOOL_AUGMENTED_LONG_HORIZON_REASONING_SETTING_REQUIRED",
+        "MEMOBRAIN_MODEL_VARIANT_AND_FOUNDATION_MODEL_MUST_BE BOUND",
+        "CONTEXT_BUDGET_AND_FLUSH_FOLD_POLICY_MUST_BE BOUND",
+        "GAIA_WEBWALKER_OR_OTHER_BENCHMARK_SCOPE_MUST_NOT_BE GENERALIZED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Provides dependency-aware executive memory for tool-augmented long-horizon reasoning, explicitly pruning invalid steps, folding completed sub-trajectories, and maintaining a bounded reasoning backbone."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V41"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-HIMEM-HIERARCHICAL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "HiMem: Hierarchical Long-Term Memory for LLM Long-Horizon Agents",
+      "implementation_identity": "https://github.com/jojopdq/HiMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HIERARCHICAL_LONG_TERM_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.06377"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/jojopdq/HiMem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "LONG_HORIZON_DIALOGUE_SETTING_MUST_BE MATCHED",
+        "SEGMENTATION_RETRIEVAL_AND_RECONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Combines hierarchical Episode and Note memory with topic-aware segmentation, hybrid retrieval, and conflict-aware memory reconsolidation during sustained interaction."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V41"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

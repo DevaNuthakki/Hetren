@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 29,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T21:33:02Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v28": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json",
+      "sha256": "c4f1de84fd13a2709b6d3596e234f3cc18bef6d443692064fe92c7cddcb623dd"
+    },
+    "systematic_saturation_v26": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+      "sha256": "7860cd07d24bddcd489e265cd2157c2fb5ec1941e49440ea208dc56d3ea36163"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-A-MEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "A-Mem: Agentic Memory for LLM Agents",
+      "implementation_identity": "https://github.com/WujiangXu/A-mem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_DYNAMIC_MEMORY_ORGANIZATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/19909c36f51abc4856b4560aff3d36d6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_REPRODUCTION_IMPLEMENTATION",
+          "url": "https://github.com/WujiangXu/A-mem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_BOUND_BEFORE_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_LONG_HORIZON_AGENT_MEMORY_SYSTEM_IS_PART_OF_MATCHED_E1_CONTRACT",
+        "Provides a peer-reviewed executable non-RL memory-management comparator using dynamic indexing, linking, and memory evolution rather than AgeMem's learned memory-operation policy.",
+        "RETRIEVAL_K_AND_MEMORY_EVOLUTION_CONFIGURATION_MUST_BE BOUND",
+        "LLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE MATCHED",
+        "NON_LEARNED_MEMORY_SYSTEM_MUST_NOT_BE MISLABELED_AS_LEARNED_POLICY"
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_HORIZON_AGENT_MEMORY_SYSTEM_IS_PART_OF_MATCHED_E1_CONTRACT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V26_DIRECT_COMPARATOR_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "implementation_identity": "https://github.com/Sherlockwz/AMA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_MULTI_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_ADAPTIVE_RETRIEVAL_AND_MEMORY_REFRESH_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.152/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/AMA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_BOUND_BEFORE_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_LONG_TERM_AGENT_MEMORY_RETRIEVAL_AND_CONSISTENCY_SETTING_MATCHED",
+        "Provides a reproducible multi-agent memory comparator with multi-granularity construction, adaptive query routing, evidence sufficiency checks, and explicit refresh or deletion of conflicting memories.",
+        "RELEASED_RESEARCH_CODE_DATE_IS_2026_08_22_AND_PRECEDES_TASK8_CUTOFF",
+        "LLM_AND_EMBEDDING_PROVIDER_IDENTITIES_MUST_BE BOUND",
+        "RETRIEVAL_ROUND_AND_MEMORY_GRANULARITY_SETTINGS_MUST_BE BOUND",
+        "MULTI_AGENT_MEMORY_ORCHESTRATION_IS_NOT_ITSELF_A_LEARNED_POLICY"
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_TERM_AGENT_MEMORY_RETRIEVAL_AND_CONSISTENCY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V26_DIRECT_COMPARATOR_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Memory OS of AI Agent",
+      "implementation_identity": "https://github.com/BAI-LAB/MemoryOS",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_HIERARCHICAL_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1318/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BAI-LAB/MemoryOS"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_BOUND_BEFORE_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_HIERARCHICAL_LONG_TERM_PERSONAL_MEMORY_SETTING_MATCHED",
+        "Provides an executable hierarchical short-, mid-, and long-term memory system with explicit storage, update, retrieval, and generation mechanisms.",
+        "PERSONALIZATION_AND_LONG_CONVERSATION_SETTING_MUST_BE MATCHED",
+        "MEMORY_PROMOTION_UPDATE_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_PROVIDER_AND_EMBEDDING_CONFIGURATION_MUST_BE PARITY_MATCHED"
+      ],
+      "eligibility_status": "MATERIAL_IF_HIERARCHICAL_LONG_TERM_PERSONAL_MEMORY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V26_DIRECT_COMPARATOR_REFINEMENT"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

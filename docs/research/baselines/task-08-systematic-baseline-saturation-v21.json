@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 21,
+  "state": "SATURATION_V21_FOUND_NEW_MATERIAL_E2_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:02:53Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "distpfn_public_research_predates_cutoff": true,
+    "distpfn_publication_record_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v23_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v23.json",
+      "sha256": "9a53dea872e2f7904cbbd871af00d96a97a69d84cd9be0d8263c755ac2d7f171"
+    },
+    "distpfn_identity_resolution": {
+      "path": "docs/research/baselines/task-08-distpfn-identity-resolution-v1.json",
+      "sha256": "f43ec9b774cde7f3668872126ebcf9e68f1693f578bffaa06a2ae7b717236b7f"
+    },
+    "systematic_saturation_v20": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v20.json",
+      "sha256": "94a54b44183788cb5f9330971bb878fe19de64a5472aeffa6fae5f49ac38e8d5"
+    }
+  },
+  "focus": [
+    "E1_AGENT_POST_SATURATION_CONFIRMATION",
+    "E2_TABULAR_SHIFT_AND_ACTIVE_DECISION_CONFIRMATION",
+    "E3_VISION_TTA_POST_SATURATION_CONFIRMATION",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "2026 agent tool use reinforcement learning code ACL ICLR agent comparator",
+    "2026 self improving agent tool environment official implementation",
+    "2026 web agent reinforcement learning official implementation",
+    "2026 tabular test-time adaptation official code ICML ICLR AAAI",
+    "2026 active feature acquisition structured data official implementation",
+    "2026 TabPFN test-time adaptation label shift official code",
+    "DistPFN test-time posterior adjustment ICML 2026 official code",
+    "2026 vision-language test-time adaptation official code CVPR ICLR",
+    "2026 test-time prompt tuning vision language official implementation",
+    "2026 continual test-time adaptation VLM official implementation",
+    "2026 open-set continual test-time adaptation vision official implementation",
+    "2026 adaptive visual acquisition VLM official implementation",
+    "2026 federated prompt learning test-time vision language",
+    "2026 vision-language-action test-time adaptation delayed feedback",
+    "2026 cross-family learned decision transfer agent tabular vision",
+    "2026 general transfer learned policy agent structured data vision",
+    "2026 meta-learning common decision policy across modalities",
+    "2026 learned transfer comparator agent structured ML vision"
+  ],
+  "query_count": 18,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-DISTPFN",
+      "name": "DistPFN \u2014 Test-Time Posterior Adjustment for Tabular In-Context Learning",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_TABULAR_LABEL_SHIFT_TEST_TIME_ADAPTATION_COMPARATOR_CANDIDATE",
+        "A_H1_TABPFN_POSTERIOR_ADJUSTMENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "ICML_2026_PUBLICATION_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "INSTITUTIONAL_PUBLICATION_RECORD",
+          "url": "https://www.lgresearch.ai/publication/view?seq=178"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2605.04363"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/seunghan96/DistPFN"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TABPFN_FAMILY_CLASSIFICATION_AND_LABEL_SHIFT_SETTING_MATCHED",
+      "material_reason": "Provides a distinct test-time posterior-adjustment mechanism for TabPFN-family classifiers under label shift without additional model training or architectural modification.",
+      "limits": [
+        "TABPFN_OR_COMPATIBLE_TABULAR_FOUNDATION_MODEL_SETTING_REQUIRED",
+        "LABEL_SHIFT_SETTING_REQUIRED_FOR_PRIMARY_ROLE",
+        "TRAIN_CONTEXT_CLASS_PRIOR_ACCESS_MUST_BE MATCHED",
+        "DISTPFN_AND_DISTPFN_T_CONFIGURATION_MUST_NOT_BE COLLAPSED",
+        "DOES_NOT_ADDRESS_FEATURE_SHIFT_BY_ITSELF",
+        "DOES_NOT_ESTABLISH_A_H2_RETENTION_LOCALITY_OR_ROLLBACK"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 1,
+    "E3_VISION": 0
+  },
+  "screened_or_preexisting": [
+    {
+      "name": "AutoTool",
+      "disposition": "PREVIOUSLY_SCREENED_OR_REPRESENTED_E1_NOT_NEW",
+      "reason": "Tool-use RL evidence does not create a new candidate identity when the same method or role-equivalent governed candidate is already represented."
+    },
+    {
+      "name": "ContDa \u2014 Beyond Static Toolsets",
+      "disposition": "PREEXISTING_E1_CANDIDATE_NOT_NEW",
+      "reason": "Already promoted in prior governed Task-8 discovery."
+    },
+    {
+      "name": "SAGE",
+      "disposition": "PREEXISTING_E1_CANDIDATE_NOT_NEW",
+      "reason": "Already represented by prior governed SAGE identities."
+    },
+    {
+      "name": "CodeGym",
+      "disposition": "PREEXISTING_E1_CANDIDATE_NOT_NEW",
+      "reason": "Already promoted in prior governed Task-8 discovery."
+    },
+    {
+      "name": "FPP",
+      "disposition": "E3_CALIBRATION_INITIALIZATION_REFERENCE_NOT_NEW_GENERIC_TTA_COMPARATOR",
+      "reason": "Its principal contribution is flatness-aware prompt initialization/calibration within TPT rather than a distinct generic adaptation contract."
+    },
+    {
+      "name": "GOLD \u2014 The Golden Subspace",
+      "disposition": "PREEXISTING_E3_CANDIDATE_NOT_NEW",
+      "reason": "Already represented by prior governed continual-TTA discovery."
+    },
+    {
+      "name": "DLAE",
+      "disposition": "PREEXISTING_E3_CANDIDATE_NOT_NEW",
+      "reason": "Already represented in the governed E3 candidate pool."
+    },
+    {
+      "name": "STAR",
+      "disposition": "PREEXISTING_E3_CANDIDATE_NOT_NEW",
+      "reason": "Already represented in the governed E3 candidate pool."
+    },
+    {
+      "name": "Ramen",
+      "disposition": "PREEXISTING_E3_CANDIDATE_NOT_NEW",
+      "reason": "Already represented in the governed E3 candidate pool."
+    },
+    {
+      "name": "FOZO",
+      "disposition": "PREEXISTING_E3_CANDIDATE_NOT_NEW",
+      "reason": "Already represented in the governed E3 candidate pool."
+    },
+    {
+      "name": "DOCO \u2014 Open-Set Continual Test-Time Adaptation",
+      "disposition": "OPEN_SET_CTTA_SCENARIO_SPECIFIC_REFERENCE",
+      "reason": "Requires a matched open-set continual adaptation experiment and must not be promoted as a generic E3 comparator."
+    },
+    {
+      "name": "COTE \u2014 Controllable Federated Prompt Learning at Test Time",
+      "disposition": "FEDERATED_VLM_SCENARIO_SPECIFIC_REFERENCE",
+      "reason": "Requires a federated client/global-prompt experiment that is not implied by generic E3 taxonomy."
+    },
+    {
+      "name": "Test-Time Perturbation Tuning with Delayed Feedback",
+      "disposition": "VISION_LANGUAGE_ACTION_SCENARIO_SPECIFIC_REFERENCE",
+      "reason": "Requires a VLA control/action setting with delayed feedback and must not be forced into generic E3 adaptation."
+    },
+    {
+      "name": "AdaptVision",
+      "disposition": "ADAPTIVE_VISUAL_ACQUISITION_REFERENCE_BEHIND_TASK_APPLICABILITY_GATE",
+      "reason": "Adaptive visual acquisition is materially different from a generic classification/TTA experiment and becomes claim-bearing only if a matched visual-acquisition decision problem is declared."
+    },
+    {
+      "name": "NeuroAdapt-Bench",
+      "disposition": "EEG_DOMAIN_BENCHMARK_REFERENCE_NOT_NEW_GENERIC_E2_OR_E3_BASELINE",
+      "reason": "Its EEG foundation-model setting is domain-specific and primarily benchmark-oriented."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "new_cross_family_comparator_found_this_round": false,
+    "forcing_domain_specific_or_within_family_methods_into_n_h2_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V21"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "prior_round_counter": 1,
+    "reason": "DistPFN was not represented by a prior promoted candidate identity and is a materially distinct E2 label-shift test-time adaptation comparator; therefore the consecutive no-new-material counter resets to zero."
+  },
+  "history_semantics": {
+    "i4b24_first_no_new_round_rewritten": false,
+    "later_discovery_can_reset_counter_without_invalidating_i4b24": true
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "distpfn_is_automatically_strongest": false,
+    "distpfn_is_generic_to_all_e2_experiments": false,
+    "scenario_specific_reference_is_automatically_claim_bearing": false,
+    "two_no_new_rounds_authorize_protected_execution": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B26_VERIFY_ADDENDUM_V24_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

@@ -1,0 +1,258 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 53,
+  "state": "SATURATION_V53_FOUND_NEW_CANONICAL_EMBODIED_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:48:36Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v55_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v55.json",
+      "sha256": "ad83be8ab2924e0ed6ca100f454a7119df1fbc4b876feea3973b45c9274bc01e"
+    },
+    "systematic_saturation_v52": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v52.json",
+      "sha256": "569c6d3aaefb6a9ed9d6dca52322b4fdc0b1b665da64422c08fc334b36afffb7"
+    }
+  },
+  "focus": [
+    "CANONICAL_E1_LANGUAGE_GROUNDED_MANIPULATION",
+    "CANONICAL_E1_LEARNED_MULTI_TASK_ROBOT_CONTROL",
+    "CANONICAL_E1_3D_MANIPULATION",
+    "DYNAMIC_PRIOR_IDENTITY_DEDUPLICATION"
+  ],
+  "queries_executed": [
+    "VoxPoser CoRL 2023 official code zero-shot robotic manipulation",
+    "PerAct CoRL 2022 official code pretrained checkpoint RLBench",
+    "CLIPort CoRL 2021 official code language conditioned manipulation",
+    "RVT CoRL 2023 official NVIDIA code 3D robotic manipulation",
+    "canonical language conditioned robot manipulation baseline PerAct CLIPort RVT",
+    "canonical LLM embodied manipulation VoxPoser implementation",
+    "PaLM-E official executable model weights robotics",
+    "RT-2 official executable checkpoint robotics",
+    "SayPlan official executable implementation",
+    "Inner Monologue official executable implementation"
+  ],
+  "query_count": 10,
+  "canonical_candidates_checked": 4,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VOXPOSER",
+      "name": "VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models",
+      "exact_prior_id_match": false,
+      "exact_prior_alias_matches": [],
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PERACT",
+      "name": "PerAct: Perceiver-Actor for Multi-Task Robotic Manipulation",
+      "exact_prior_id_match": false,
+      "exact_prior_alias_matches": [],
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CLIPORT",
+      "name": "CLIPort: What and Where Pathways for Robotic Manipulation",
+      "exact_prior_id_match": false,
+      "exact_prior_alias_matches": [],
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RVT",
+      "name": "RVT: Robotic View Transformer for 3D Object Manipulation",
+      "exact_prior_id_match": false,
+      "exact_prior_alias_matches": [],
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VOXPOSER",
+      "name": "VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ZERO_SHOT_LANGUAGE_GROUNDED_CONTROL_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2023_ORAL_AND_OFFICIAL_DEMO_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://voxposer.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/VoxPoser"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_OR_MATCHED_LANGUAGE_GROUNDED_MANIPULATION_SETTING",
+      "material_reason": "Zero-shot LLM/VLM-based manipulation method that composes 3D value maps and passes them to motion planners rather than learning a task-specific control policy.",
+      "limits": [
+        "PUBLIC_RLBENCH_CODE_IS_DESCRIBED_BY_AUTHORS_AS_DEMO_IMPLEMENTATION_NOT_EVALUATION_BENCHMARK",
+        "PUBLIC_RLBENCH_IMPLEMENTATION_USES_SIMULATOR_OBJECT_MASKS_INSTEAD_OF_REAL_WORLD_PERCEPTION_PIPELINE",
+        "LLM_VLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "MOTION_PLANNER_AND_ENVIRONMENT_CONFIGURATION_MUST_BE BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PERACT",
+      "name": "PerAct: Perceiver-Actor for Multi-Task Robotic Manipulation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LANGUAGE_CONDITIONED_3D_MANIPULATION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2022_AND_OFFICIAL_REPRODUCIBLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://peract.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/peract/peract"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_MULTI_STEP_MANIPULATION_SETTING_MATCHED",
+      "material_reason": "End-to-end behavior-cloning agent using 3D voxel representations and a Perceiver-style policy over language-conditioned manipulation tasks, with released datasets, checkpoints, training, and evaluation code.",
+      "limits": [
+        "RLBENCH_TASK_SET_AND_VARIATIONS_MUST_BE BOUND",
+        "PRETRAINED_CHECKPOINT_ID_AND_LATENT_CONFIGURATION_MUST_BE BOUND",
+        "CAMERA_SET_VOXEL_SIZE_AND_DATA_AUGMENTATION_MUST_BE BOUND",
+        "TRAINING_DEMONSTRATION_BUDGET_MUST_BE RESOURCE_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CLIPORT",
+      "name": "CLIPort: What and Where Pathways for Robotic Manipulation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LANGUAGE_CONDITIONED_TABLETOP_POLICY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2021_AND_OFFICIAL_REPRODUCIBLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://cliport.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/cliport/cliport"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_LANGUAGE_CONDITIONED_TABLETOP_ACTION_SEQUENCE_SETTING_MATCHED",
+      "material_reason": "Executable imitation-learning policy combining CLIP semantic grounding with Transporter-style spatial action prediction for language-conditioned tabletop tasks.",
+      "limits": [
+        "TASK_MUST_REQUIRE_MATERIALLY_SEQUENTIAL_ENVIRONMENT_INTERACTION_TO_QUALIFY_AS_E1",
+        "TRAINING_DEMONSTRATION_COUNT_MUST_BE BOUND",
+        "PRETRAINED_CHECKPOINT_AND_MODEL_VARIANT_MUST_BE BOUND",
+        "CLIP_AND_TRANSPORTER_CONFIGURATION_MUST_BE BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RVT",
+      "name": "RVT: Robotic View Transformer for 3D Object Manipulation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MULTI_VIEW_3D_MANIPULATION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2023_AND_OFFICIAL_NVIDIA_REPRODUCTION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_PROVIDER_RESEARCH_PAGE",
+          "url": "https://research.nvidia.com/publication/2023-11_rvt-robotic-view-transformer-3d-object-manipulation"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/nvlabs/rvt"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_3D_MANIPULATION_SETTING_MATCHED",
+      "material_reason": "Multi-view transformer policy for 3D manipulation with official reproduction code and trained-model support, representing a distinct learned-control architecture from voxel-heavy PerAct.",
+      "limits": [
+        "RVT_AND_RVT2_IDENTITIES_MUST_NOT_BE COLLAPSED",
+        "RLBENCH_TASK_AND_DEMONSTRATION_REGIME_MUST_BE BOUND",
+        "MODEL_VARIANT_AND_CHECKPOINT_MUST_BE BOUND",
+        "MULTI_VIEW_RENDERING_AND_CAMERA_CONFIGURATION_MUST_BE BOUND"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Inner Monologue",
+      "sources": [
+        "https://innermonologue.github.io/",
+        "https://proceedings.mlr.press/v205/huang23c.html"
+      ],
+      "disposition": "CANONICAL_E1_REFERENCE_REMAINS_BEHIND_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "Peer-reviewed embodied feedback/replanning evidence exists, but this governed discovery history has not yet bound an independently verified executable implementation suitable for exact reproduction."
+    },
+    {
+      "name": "SayPlan",
+      "source": "https://sayplan.github.io/",
+      "disposition": "CANONICAL_E1_REFERENCE_REMAINS_BEHIND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "Peer-reviewed grounded 3D-scene-graph planning evidence exists, but no official executable implementation has yet been promoted by the governed Task-8 discovery process."
+    },
+    {
+      "name": "PaLM-E",
+      "source": "https://palm-e.github.io/",
+      "disposition": "FOUNDATION_MODEL_REFERENCE_NOT_PROMOTED",
+      "reason": "The primary project establishes embodied multimodal-model research, but the reviewed official source does not provide a reproducible official model release sufficient for a governed concrete baseline; third-party reimplementations are not treated as official evidence."
+    },
+    {
+      "name": "RT-2",
+      "source": "https://deepmind.google/blog/rt-2-new-model-translates-vision-and-language-into-action/",
+      "disposition": "CANONICAL_VLA_REFERENCE_NOT_PROMOTED_WITHOUT_GOVERNABLE_OFFICIAL_MODEL_IDENTITY",
+      "reason": "The primary provider documents the VLA method and results, but this pass does not bind a publicly reproducible official RT-2 model/checkpoint suitable for exact governed comparison."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "robotics_cross_task_or_cross_object_generalization_is_not_general_n_h2": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V53"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unrepresented canonical embodied E1 identity was found."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "robotics_generalization_establishes_n_h2": false,
+    "reference_only_method_is_claim_bearing": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B58_VERIFY_ADDENDUM_V56_AND_CONTINUE_BOUNDED_CANONICAL_COVERAGE"
+}

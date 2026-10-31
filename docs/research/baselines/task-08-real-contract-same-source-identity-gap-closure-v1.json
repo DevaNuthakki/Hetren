@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONTRACT_SAME_SOURCE_IDENTITY_GAP_CLOSURE",
+  "state": "SAME_SOURCE_IDENTITY_SEARCH_EXHAUSTED_NO_CONTRACT_READY_EXTERNAL_INPUTS_REQUIRED",
+  "recorded_at_utc": "2026-09-27T21:50:07Z",
+  "task": 8,
+  "bindings": {
+    "r13c_explicit_binding_resolution": {
+      "path": "docs/research/baselines/task-08-real-contract-explicit-binding-resolution-v1.json",
+      "sha256": "1bd6bafe8a77448d7d0321a38371768fed911a9ee2a55e1b59532154fff88491"
+    },
+    "contract_instantiation_boundary": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "canonical_catalog": {
+      "path": "docs/research/baselines/task-08-non-governing-baseline-catalog-projection-v1.json",
+      "sha256": "6deb2af5d704cd467010f13fe4bc81907bf620391d75b30c24fee6903cf07ca3"
+    }
+  },
+  "source_count": 5,
+  "source_results": [
+    {
+      "source_file": "tests/qualification/data/initial_splits/historical_cases.json",
+      "source_sha256": "aa6d662ebc486535a59f1f84ea0ed4fc7cc90cb322eb5922dc34fdd3723fe5a7",
+      "paired_schema_file": "tests/qualification/data/initial_splits/historical_cases.schema.json",
+      "paired_schema_sha256": "91be85d45d8c73e6eb8ec4065304ac473cae7d511088d2b0575373fe776a81ff",
+      "dataset_id": "TASK7-INITIAL-SPLITS-HISTORICAL-CASES",
+      "dataset_identity_state": "EXPLICIT_DATASET_ID_PRESENT",
+      "contract_identity_interpretation": "DATASET_ID_IS_REAL_SPLIT_DATA_IDENTITY_BUT_NOT_RUNTIME_OR_ENVIRONMENT_IDENTITY",
+      "required_contract_key_presence": {
+        "runtime_or_environment_identity": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "resource_matching_rule": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "engineering_effort_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "adaptation_cost_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        }
+      },
+      "missing_required_contract_keys": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "related_source_keys_not_promoted": [],
+      "related_schema_keys_not_promoted": [],
+      "same_source_resolution_state": "EXHAUSTED_NO_EXPLICIT_REQUIRED_CONTRACT_BINDINGS",
+      "cross_source_merge_performed": false,
+      "contract_promoted": false
+    },
+    {
+      "source_file": "tests/qualification/data/initial_splits/positive_cases.json",
+      "source_sha256": "ea223d8a814efd4c6ded331f42b73aacca2192bea730e77c5afddf10135c994a",
+      "paired_schema_file": "tests/qualification/data/initial_splits/positive_cases.schema.json",
+      "paired_schema_sha256": "b210c46ccfac695c248163b59331f71c75daf96275107819d662f64cbae40b5f",
+      "dataset_id": "TASK7-INITIAL-SPLITS-POSITIVE-CASES",
+      "dataset_identity_state": "EXPLICIT_DATASET_ID_PRESENT",
+      "contract_identity_interpretation": "DATASET_ID_IS_REAL_SPLIT_DATA_IDENTITY_BUT_NOT_RUNTIME_OR_ENVIRONMENT_IDENTITY",
+      "required_contract_key_presence": {
+        "runtime_or_environment_identity": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "resource_matching_rule": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "engineering_effort_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "adaptation_cost_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        }
+      },
+      "missing_required_contract_keys": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "related_source_keys_not_promoted": [],
+      "related_schema_keys_not_promoted": [],
+      "same_source_resolution_state": "EXHAUSTED_NO_EXPLICIT_REQUIRED_CONTRACT_BINDINGS",
+      "cross_source_merge_performed": false,
+      "contract_promoted": false
+    },
+    {
+      "source_file": "tests/qualification/data/initial_splits/qualification_cases.json",
+      "source_sha256": "1863184c2d608259c90de63d785d1d93831754d419b7e1f8216987d425e4cc58",
+      "paired_schema_file": "tests/qualification/data/initial_splits/qualification_cases.schema.json",
+      "paired_schema_sha256": "5bd9a967a1e1e9b37e9b95f7e93e1f6086b8abc9bffa4f91b9f1b4b0b1e26f7d",
+      "dataset_id": "TASK7-INITIAL-SPLITS-QUALIFICATION-CASES",
+      "dataset_identity_state": "EXPLICIT_DATASET_ID_PRESENT",
+      "contract_identity_interpretation": "DATASET_ID_IS_REAL_SPLIT_DATA_IDENTITY_BUT_NOT_RUNTIME_OR_ENVIRONMENT_IDENTITY",
+      "required_contract_key_presence": {
+        "runtime_or_environment_identity": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "resource_matching_rule": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "engineering_effort_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "adaptation_cost_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        }
+      },
+      "missing_required_contract_keys": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "related_source_keys_not_promoted": [],
+      "related_schema_keys_not_promoted": [],
+      "same_source_resolution_state": "EXHAUSTED_NO_EXPLICIT_REQUIRED_CONTRACT_BINDINGS",
+      "cross_source_merge_performed": false,
+      "contract_promoted": false
+    },
+    {
+      "source_file": "tests/qualification/data/initial_splits/set_d_cases.json",
+      "source_sha256": "7285d45f7dd10979f8b1a975a4ca4e8144efd0108c72d4e2c4c290955f5f6bfe",
+      "paired_schema_file": "tests/qualification/data/initial_splits/set_d_cases.schema.json",
+      "paired_schema_sha256": "dc78e4bbe5f8e1ac6b351aee1f9611b29f5278ed98148da98595cd5718163d33",
+      "dataset_id": "TASK7-INITIAL-SPLITS-SET-D",
+      "dataset_identity_state": "EXPLICIT_DATASET_ID_PRESENT",
+      "contract_identity_interpretation": "DATASET_ID_IS_REAL_SPLIT_DATA_IDENTITY_BUT_NOT_RUNTIME_OR_ENVIRONMENT_IDENTITY",
+      "required_contract_key_presence": {
+        "runtime_or_environment_identity": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "resource_matching_rule": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "engineering_effort_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "adaptation_cost_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        }
+      },
+      "missing_required_contract_keys": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "related_source_keys_not_promoted": [],
+      "related_schema_keys_not_promoted": [],
+      "same_source_resolution_state": "EXHAUSTED_NO_EXPLICIT_REQUIRED_CONTRACT_BINDINGS",
+      "cross_source_merge_performed": false,
+      "contract_promoted": false
+    },
+    {
+      "source_file": "tests/qualification/data/initial_splits/set_e_cases.json",
+      "source_sha256": "1e51bd3ba1eb3436a3812cc93973c3a9cd7c21df25c587ac916c83f9a967f3ae",
+      "paired_schema_file": "tests/qualification/data/initial_splits/set_e_cases.schema.json",
+      "paired_schema_sha256": "9e905bcb17bd403077e3c4b164d6bff270b705b14387884f9d7db96ddfbcb88b",
+      "dataset_id": "TASK7-INITIAL-SPLITS-SET-E",
+      "dataset_identity_state": "EXPLICIT_DATASET_ID_PRESENT",
+      "contract_identity_interpretation": "DATASET_ID_IS_REAL_SPLIT_DATA_IDENTITY_BUT_NOT_RUNTIME_OR_ENVIRONMENT_IDENTITY",
+      "required_contract_key_presence": {
+        "runtime_or_environment_identity": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "resource_matching_rule": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "engineering_effort_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        },
+        "adaptation_cost_binding_if_applicable": {
+          "present_in_source": false,
+          "present_in_paired_schema": false
+        }
+      },
+      "missing_required_contract_keys": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "related_source_keys_not_promoted": [],
+      "related_schema_keys_not_promoted": [],
+      "same_source_resolution_state": "EXHAUSTED_NO_EXPLICIT_REQUIRED_CONTRACT_BINDINGS",
+      "cross_source_merge_performed": false,
+      "contract_promoted": false
+    }
+  ],
+  "same_source_search_summary": {
+    "sources_examined": 5,
+    "sources_with_explicit_dataset_id": 5,
+    "sources_with_explicit_runtime_or_environment_identity": 0,
+    "sources_with_explicit_resource_matching_rule": 0,
+    "sources_with_explicit_engineering_effort_binding": 0,
+    "sources_with_explicit_adaptation_cost_binding": 0,
+    "sources_reaching_non_resource_identity_complete": 0,
+    "sources_reaching_full_contract_schema": 0,
+    "concrete_ready_contract_count": 0
+  },
+  "canonical_candidate_state": {
+    "canonical_candidate_count": 222,
+    "candidate_specific_applicability_binding_started": false,
+    "candidate_specific_comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false
+  },
+  "gap_classification": {
+    "runtime_or_environment_identity": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "REAL_EXPERIMENT_OR_RUNTIME_IDENTITY_INPUT_REQUIRED",
+      "task8_may_invent_value": false,
+      "owner_inferred_by_r13d": false
+    },
+    "resource_matching_rule": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "GOVERNED_RESOURCE_RULE_AND_TASK9_CONCRETE_ACCOUNTING_INPUT_REQUIRED",
+      "task8_may_invent_value": false
+    },
+    "engineering_effort_binding_if_applicable": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "TASK9_HANDOFF_REQUIRED",
+      "task8_may_invent_value": false
+    },
+    "adaptation_cost_binding_if_applicable": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "TASK9_HANDOFF_REQUIRED",
+      "task8_may_invent_value": false
+    }
+  },
+  "task9_handoff": {
+    "canonical_candidates_still_requiring_task9_resolution": 222,
+    "task9_values_created_by_r13d": false,
+    "task9_values_inferred_by_r13d": false
+  },
+  "scientific_interpretation": {
+    "dataset_identity_is_sufficient_for_runtime_identity": false,
+    "paired_schema_is_sufficient_to_manufacture_missing_values": false,
+    "absence_of_same_source_binding_authorizes_cross_source_merge": false,
+    "absence_of_contract_authorizes_candidate_selection": false,
+    "blocked_state_is_preserved_evidence": true
+  },
+  "selection_boundary": {
+    "candidate_specific_applicability_binding_authorized": false,
+    "comparator_ranking_authorized": false,
+    "immutable_baseline_version_pinning_authorized": false,
+    "concrete_baseline_freeze_authorized": false,
+    "protected_outcome_inspection_authorized": false
+  },
+  "claim_limits": {
+    "creates_real_experiment_contract": false,
+    "creates_task9_values": false,
+    "merges_unrelated_sources": false,
+    "establishes_task8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I5A2R13E_FORMALIZE_EXTERNAL_CONTRACT_INPUT_HANDOFF_WITHOUT_FABRICATING_RUNTIME_OR_TASK9_VALUES"
+}

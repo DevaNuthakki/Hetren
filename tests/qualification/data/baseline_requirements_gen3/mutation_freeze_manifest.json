@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_MUTATION_FREEZE_MANIFEST",
+  "state": "DEVELOPMENT_MUTATION_QUALIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout": false,
+  "protected_evaluation": false,
+  "created_before_first_mutation_execution": true,
+  "historical_mutation_set": true,
+  "may_not_be_rewritten_to_satisfy_evaluator": true,
+  "mutation_count": 34,
+  "must_accept_count": 16,
+  "must_reject_count": 18,
+  "artifacts": [
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/cases.json",
+      "sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/semantic_wall_first_run.json",
+      "sha256": "8a8ac61d823bd0370426bac0ad26d1aae6edc7f48eb981821870ef9298f2c28e"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "919807fb2d06af44ed0fbc83b9b89d7c3c4f97fa86303fde2999d823bc82b061"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/mutation_contract.json",
+      "sha256": "0aca9cbc998b821fbd89c7534977207947cddcdce5a39a1883f96c614ea2d97e"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/mutations.json",
+      "sha256": "f86885033501c61136fdfbdf34c639665e26a6936522ad03cb100cd41675796e"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_mutations.py",
+      "sha256": "1bda183ecc4b6e9a47514a22518f4e2fb055ed39c92b99feca80da9e15471983"
+    }
+  ],
+  "interpretation": "This manifest freezes the known-development mutation corpus and semantic evaluator before the first mutation-wall execution. A later failure must be preserved and classified before remediation; the historical mutation set must not be rewritten to make the evaluator pass."
+}

@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 33,
+  "state": "ADDENDUM_V33_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T22:51:08Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v33": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v33.json",
+      "sha256": "5027bb686b2e296d40206293b804a515dec0c25ea3eb20be13d7d3f9f146d9c5"
+    },
+    "systematic_saturation_v30": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v30.json",
+      "sha256": "687734cb9d36d873c63f775c1f27bcbc2e71f02cf111849c9e9f86671d265ee4"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NEMORI",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DIRECT_AGENT_MEMORY_DISTILLATION_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Nemori is published in the ACL 2026 main proceedings.",
+        "Its memory pipeline combines Episodic Memory Integration with Semantic Knowledge Distillation.",
+        "Prediction error is used as a signal for identifying information with future memory utility.",
+        "A public executable implementation exists in the nemori-ai/nemori repository.",
+        "The current repository explicitly states that its present release is a rewrite aligned with the paper and that the legacy MVP remains separately available."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1607/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/nemori-ai/nemori"
+        }
+      ],
+      "limits": [
+        "LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "EPISODE_SEGMENTATION_LLM_AND_EMBEDDING_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_MUST_NOT_BE TREATED_AS_THE_FINAL_CUTOFF_CONSISTENT_VERSION",
+        "FINAL_RETENTION_REQUIRES_AN_IMMUTABLE_CUTOFF_CONSISTENT_REVISION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EMA-MEMORY",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EPISODIC_MEMORY_FILTERING_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "EMA is published in Findings of ACL 2026.",
+        "EMA abstracts conversational context into Episodic Memory Units.",
+        "MemDecider selectively filters information before long-term storage.",
+        "The official repository contains the core EMA and MemDecider implementation together with datasets, training, and evaluation paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.250/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hongyi4221/EMA"
+        }
+      ],
+      "limits": [
+        "EPISODIC_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "MEMDECIDER_CONFIGURATION_AND_TRAINING_IDENTITY_MUST_BE BOUND",
+        "BACKBONE_MODELS_AND_DATA_SPLITS_MUST_BE BOUND",
+        "FINAL_RETENTION_REQUIRES_AN_IMMUTABLE_CUTOFF_CONSISTENT_REVISION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STRUCTMEM",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_STRUCTURED_LONG_HORIZON_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "StructMem is published in the ACL 2026 short-paper proceedings.",
+        "It preserves event-level memory bindings and induces cross-event connections.",
+        "Its mechanism includes temporally anchored perspectives and periodic semantic consolidation.",
+        "The public implementation is maintained inside the zjunlp/LightMem repository.",
+        "StructMem is a distinct method identity even though its implementation shares a repository with LightMem."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-short.12/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem/blob/main/StructMem.md"
+        }
+      ],
+      "limits": [
+        "STRUCTMEM_MUST_NOT_BE CONFLATED_WITH_ICLR_LIGHTMEM",
+        "EVENT_EXTRACTION_MODE_AND_SEMANTIC_CONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_STYLE_LONG_HORIZON_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "SHARED_REPOSITORY_DOES_NOT_DEFINE_A_FINAL_METHOD_VERSION",
+        "FINAL_RETENTION_REQUIRES_AN_IMMUTABLE_CUTOFF_CONSISTENT_REVISION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v33_candidates_have_role_level_external_review": true,
+    "all_addendum_v33_candidates_are_peer_reviewed": true,
+    "all_addendum_v33_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "shared_repository_means_same_method_identity": false,
+    "current_repository_head_is_final_version_identity": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_general_n_h2": false
+  }
+}

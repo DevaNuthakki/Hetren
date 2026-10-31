@@ -1,0 +1,159 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 61,
+  "state": "ADDENDUM_V61_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:34:44Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v61": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v61.json",
+      "sha256": "b77401d4efd83fd5175a75bef8c08e22f32d91072565c4f94dddea3938060702"
+    },
+    "systematic_saturation_v58": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v58.json",
+      "sha256": "ff13be596239a987f2c73d8259fb36f7889e6144df6da78a456aa49300b5f125"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SPATIALVLA",
+      "candidate_name": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Models",
+      "verification_state": "PEER_REVIEWED_RSS_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_GENERALIST_SPATIAL_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "SpatialVLA is published in the 2025 Robotics: Science and Systems proceedings.",
+        "Its architecture introduces Ego3D Position Encoding and Adaptive Action Grids for spatially grounded robot action prediction.",
+        "The official implementation exposes pretrained models, fine-tuning, evaluation, and deployment-oriented code.",
+        "Its published evaluation includes simulation and real-robot generalization and adaptation settings."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.roboticsproceedings.org/rss21/p011.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SpatialVLA/SpatialVLA"
+        }
+      ],
+      "limits": [
+        "MATCHED_ROBOT_EMBODIMENT_AND_DATA_REGIME_REQUIRED",
+        "ZERO_SHOT_AND_FINE_TUNED_RESULTS_MUST_NOT_BE_COLLAPSED",
+        "ACTION_GRID_AND_BACKBONE_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RDT-1B",
+      "candidate_name": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+      "verification_state": "PRIMARY_RESEARCH_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_BIMANUAL_DIFFUSION_FOUNDATION_POLICY_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "RDT-1B is a diffusion-transformer foundation policy designed for bimanual manipulation.",
+        "The work defines a physically interpretable unified action space for heterogeneous robot embodiments.",
+        "The official implementation provides model code, checkpoints, training and sampling scripts, simulation evaluation, and real-robot deployment support.",
+        "This review does not independently establish an archival peer-reviewed venue for RDT-1B itself."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2410.07864"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/thu-ml/RoboticsDiffusionTransformer"
+        }
+      ],
+      "limits": [
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED_WITHOUT_STRONGER_EVIDENCE",
+        "BIMANUAL_OR_MATCHED_CROSS_EMBODIMENT_SETTING_REQUIRED",
+        "CHECKPOINT_ACTION_SPACE_AND_FINE_TUNING_RECIPE_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PI05",
+      "candidate_name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization",
+      "verification_state": "PRIMARY_RESEARCH_AND_OFFICIAL_OPENPI_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "pi0.5 is a Physical Intelligence VLA focused on open-world robotic generalization.",
+        "Its training combines heterogeneous robot data with semantic prediction, web-derived information, and other multimodal supervision.",
+        "The official openpi repository supports pi0.5 model training and inference.",
+        "This review does not independently establish an archival peer-reviewed venue for pi0.5."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://www.physicalintelligence.company/download/pi05.pdf"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Physical-Intelligence/openpi"
+        }
+      ],
+      "limits": [
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED_WITHOUT_STRONGER_EVIDENCE",
+        "OPEN_WORLD_HOME_GENERALIZATION_SETTING_MUST_BE MATCHED",
+        "CHECKPOINT_DATA_MIXTURE_AND_ACTION_HEAD_CONFIGURATION_MUST_BE BOUND",
+        "FINAL_VERSION_PIN_MUST_RESOLVE_TO_PRE_CUTOFF_REPOSITORY_STATE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-COGACT",
+      "candidate_name": "CogACT: A Foundational Vision-Language-Action Model for Synergizing Cognition and Action in Robotic Manipulation",
+      "verification_state": "PRIMARY_RESEARCH_AND_MICROSOFT_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_INDEPENDENTLY_ESTABLISHED",
+      "role_disposition": "E1_COGNITION_ACTION_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "CogACT is a vision-language-action model for robotic manipulation that separates high-level visual-language cognition from a diffusion-style action module.",
+        "Microsoft's official repository provides training, SIMPLER evaluation, real-world deployment, and model resources.",
+        "The repository was publicly released before the Task-8 evidence cutoff.",
+        "This review does not infer archival peer-review status solely from repository or publication-profile metadata."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2411.19650"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/microsoft/CogACT"
+        },
+        {
+          "class": "OFFICIAL_AUTHOR_PUBLICATION_RECORD",
+          "url": "https://www.microsoft.com/en-us/research/people/yizzhan/publications/"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_STATUS_NOT_INDEPENDENTLY_ESTABLISHED",
+        "MATCHED_MANIPULATION_AND_ACTION_CHUNKING_SETTING_REQUIRED",
+        "BASE_MODEL_ACTION_MODULE_AND_FINE_TUNING_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v61_candidates_have_role_level_external_review": true,
+    "all_addendum_v61_candidates_are_peer_reviewed": false,
+    "all_addendum_v61_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "non_peer_reviewed_candidate_is_peer_reviewed": false,
+    "role_review_establishes_displacement": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

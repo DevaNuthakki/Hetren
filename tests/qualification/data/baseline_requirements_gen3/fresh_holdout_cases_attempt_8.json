@@ -1,0 +1,1333 @@
+{
+  "schema_version": "8.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CASES_ATTEMPT_8",
+  "state": "GENERATED_NOT_EXECUTED",
+  "generation_attempt": 8,
+  "fresh_holdout": true,
+  "protected_evaluation": true,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_sha256": "383753fc816ea1a6a2ffb264fb0d2325f0b45276fc74c75a902c7f090908b02a",
+  "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+  "generator_provenance": {
+    "semantic_authority": "embedded_generation_3_requirements",
+    "holdout_lifecycle_contract": "embedded_preregistration_contract",
+    "executable_encoding_interface": "embedded_public_evaluator_contract",
+    "generation_method": "Semantic situations were authored from G3 first and then encoded only with the public fact keys and public violation-code vocabulary for each primary requirement."
+  },
+  "generator_attestations": {
+    "received_generation_package_v8_as_only_hetren_specific_attachment": true,
+    "received_only_minimal_governed_handoff_as_other_hetren_specific_text": true,
+    "observable_input_gate_checked_before_case_generation": true,
+    "no_observable_nonpackage_hetren_context_received": true,
+    "no_additional_attachment_visible": true,
+    "no_earlier_conversation_message_visible": true,
+    "did_not_read_any_prior_hetren_generation_attempt": true,
+    "did_not_read_target_hetren_evaluator_source": true,
+    "did_not_read_target_hetren_evaluator_branch_conditions": true,
+    "did_not_read_known_hetren_development_cases": true,
+    "did_not_read_known_hetren_mutations": true,
+    "did_not_read_prior_hetren_predictions_or_results": true,
+    "did_not_read_hetren_remediation_history": true,
+    "did_not_use_web_or_external_retrieval": true,
+    "did_not_attempt_hidden_provider_state_introspection": true,
+    "generated_all_54_cases_before_target_execution": true,
+    "did_not_execute_or_simulate_target_evaluator": true,
+    "completed_generator_output_preflight_before_returning_success_artifact": true,
+    "generator_output_preflight_passed_all_required_assertions": true,
+    "generation_package_sha256_copied_from_verified_handoff_filename_sha256": true
+  },
+  "external_sources": [],
+  "cases": [
+    {
+      "id": "G3-H8-001",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": false,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNAVAILABLE"
+      },
+      "rationale": "An external baseline may be legitimate even when its backend revision cannot be pinned, provided the unknown/unavailable revision and resulting reproducibility limitation are recorded and no exact-version claim is made.",
+      "adversarial_dimension": "Unusual-valid external service with unavailable immutable backend revision; tests that explicit limitation disclosure is not over-rejected.",
+      "generation_provenance": [
+        "G3-BR-001",
+        "G3-BR-009"
+      ]
+    },
+    {
+      "id": "G3-H8-002",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": true,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNKNOWN"
+      },
+      "rationale": "Claiming an exact immutable version while the backend revision is unknown contradicts the stable-identity/version requirement, even when the reproducibility limitation is otherwise disclosed.",
+      "adversarial_dimension": "Contradictory exact-pinning claim in the presence of explicitly unknown revision state.",
+      "generation_provenance": [
+        "G3-BR-001",
+        "G3-BR-009"
+      ]
+    },
+    {
+      "id": "G3-H8-003",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": true,
+        "task7_lineage_applied": true
+      },
+      "rationale": "A post-protected baseline change is allowed only as successor evidence with the original result preserved and Task 7 lineage semantics applied; it must not rewrite the earlier comparison.",
+      "adversarial_dimension": "Legitimate post-protected baseline evolution with full historical preservation and successor lineage.",
+      "generation_provenance": [
+        "G3-BR-002",
+        "G3-BR-023"
+      ]
+    },
+    {
+      "id": "G3-H8-004",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SUCCESSOR_EVIDENCE_MISSING"
+      ],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": false,
+        "task7_lineage_applied": true
+      },
+      "rationale": "A material baseline change after protected inspection cannot be folded into the original evidence; successor evidence is required even if the earlier result and lineage are preserved.",
+      "adversarial_dimension": "Post-protected modification that preserves history but silently lacks successor evidence.",
+      "generation_provenance": [
+        "G3-BR-002",
+        "G3-BR-023"
+      ]
+    },
+    {
+      "id": "G3-H8-005",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [
+        "G3-BR-024"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": false,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "The strongest-applicable claim is bounded to a predeclared search contract whose scope and cutoff are fixed before protected outcomes, with considered comparators and exclusions preserved.",
+      "adversarial_dimension": "Bounded strongest-applicable selection that explicitly avoids any claim of global optimality.",
+      "generation_provenance": [
+        "G3-BR-003",
+        "G3-BR-024"
+      ]
+    },
+    {
+      "id": "G3-H8-006",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [
+        "G3-BR-024"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": true,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "Using protected outcomes to decide comparator selection violates the predeclared strongest-applicable selection contract even when search scope, cutoff, and provenance are otherwise complete.",
+      "adversarial_dimension": "Outcome-dependent comparator selection hidden inside an otherwise well-documented search process.",
+      "generation_provenance": [
+        "G3-BR-003",
+        "G3-BR-024"
+      ]
+    },
+    {
+      "id": "G3-H8-007",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": false
+      },
+      "rationale": "A simple diagnostic anchor may be beaten while the strongest comparator is not; that result is legitimate if it remains diagnostic and is not reported as general superiority.",
+      "adversarial_dimension": "Favorable anchor result coexisting with an unfavorable stronger-comparator result without claim inflation.",
+      "generation_provenance": [
+        "G3-BR-004",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-008",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+      ],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": true
+      },
+      "rationale": "A favorable result against a diagnostic anchor cannot stand in for failure against the stronger comparator required by the claim.",
+      "adversarial_dimension": "Diagnostic anchor is promoted into claim-bearing evidence despite failure against the strongest comparator.",
+      "generation_provenance": [
+        "G3-BR-004",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-009",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_prior_transcript_available": true,
+        "baseline_retrieval_cache": "shared-cache-v7",
+        "candidate_prior_transcript_available": true,
+        "candidate_retrieval_cache": "shared-cache-v7",
+        "persistent_state_matched": true,
+        "state_difference_is_treatment": false
+      },
+      "rationale": "Both sides may legitimately receive warmed persistent information when the transcript and retrieval state are materially matched; fairness requires parity, not necessarily a cold start.",
+      "adversarial_dimension": "Unusual-valid warmed-state comparison with equal persistent information on both sides.",
+      "generation_provenance": [
+        "G3-BR-005",
+        "G3-BR-007"
+      ]
+    },
+    {
+      "id": "G3-H8-010",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PERSISTENT_INFORMATION_ASYMMETRY"
+      ],
+      "facts": {
+        "baseline_prior_transcript_available": false,
+        "baseline_retrieval_cache": "cold",
+        "candidate_prior_transcript_available": true,
+        "candidate_retrieval_cache": "warm-target-index",
+        "persistent_state_matched": false,
+        "state_difference_is_treatment": false
+      },
+      "rationale": "Giving only the candidate materially useful prior transcript and warmed retrieval state creates an undeclared information advantage and violates information/opportunity parity.",
+      "adversarial_dimension": "Indirect persistent-state leakage through transcript and retrieval cache rather than the nominal task input.",
+      "generation_provenance": [
+        "G3-BR-005",
+        "G3-BR-007"
+      ]
+    },
+    {
+      "id": "G3-H8-011",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [
+        "G3-BR-027"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "controlled_replay": true,
+        "environment_mutable": true,
+        "paired_execution": true,
+        "same_snapshot": true,
+        "temporal_drift_qualified": true
+      },
+      "rationale": "A mutable environment can support a valid comparison when drift is actively controlled through snapshotting, paired execution or replay and any residual limitation is explicitly qualified.",
+      "adversarial_dimension": "Legitimate evaluation in a mutable external environment with multiple redundant drift controls.",
+      "generation_provenance": [
+        "G3-BR-006",
+        "G3-BR-027"
+      ]
+    },
+    {
+      "id": "G3-H8-012",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [
+        "G3-BR-027"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+      ],
+      "facts": {
+        "controlled_replay": false,
+        "environment_mutable": true,
+        "paired_execution": false,
+        "same_snapshot": false,
+        "temporal_drift_qualified": false
+      },
+      "rationale": "When the environment can change over time, an unpaired, unsnapshotted, unreplayed comparison with no drift qualification cannot establish evaluation parity.",
+      "adversarial_dimension": "Temporal drift confound in an otherwise nominally identical comparison.",
+      "generation_provenance": [
+        "G3-BR-006",
+        "G3-BR-027"
+      ]
+    },
+    {
+      "id": "G3-H8-013",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": true,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "A material asymmetry is legitimate when it is predeclared and is exactly the causal treatment the comparison claims to evaluate; fairness does not require identical algorithms.",
+      "adversarial_dimension": "Material but scientifically legitimate treatment asymmetry.",
+      "generation_provenance": [
+        "G3-BR-007",
+        "G3-BR-005"
+      ]
+    },
+    {
+      "id": "G3-H8-014",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ASYMMETRY_NOT_CAUSALLY_RELEVANT"
+      ],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": false,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "Predeclaring an asymmetry does not make it valid when the asymmetry is unrelated to the scientific distinction being claimed and simply advantages one side.",
+      "adversarial_dimension": "Declared but causally irrelevant advantage masquerading as the treatment.",
+      "generation_provenance": [
+        "G3-BR-007",
+        "G3-BR-005"
+      ]
+    },
+    {
+      "id": "G3-H8-015",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-022"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_scientifically_justified": true,
+        "baseline_manual_iterations": 4,
+        "candidate_manual_iterations": 12,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "Unequal manual iteration counts can be legitimate when the tuning policy is predeclared and the difference is scientifically justified rather than used to weaken the comparator.",
+      "adversarial_dimension": "Unusual-valid asymmetric tuning opportunity justified by the scientific design.",
+      "generation_provenance": [
+        "G3-BR-008",
+        "G3-BR-022"
+      ]
+    },
+    {
+      "id": "G3-H8-016",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-022"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TUNING_OPPORTUNITY_ASYMMETRY"
+      ],
+      "facts": {
+        "asymmetry_scientifically_justified": false,
+        "baseline_manual_iterations": 4,
+        "candidate_manual_iterations": 12,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "Systematically giving the candidate more manual tuning iterations without scientific justification weakens comparison fairness even under a documented policy.",
+      "adversarial_dimension": "Quantified tuning-opportunity imbalance under an otherwise predeclared policy.",
+      "generation_provenance": [
+        "G3-BR-008",
+        "G3-BR-022"
+      ]
+    },
+    {
+      "id": "G3-H8-017",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-010"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "evaluator_revision": "UNAVAILABLE",
+        "evaluator_revision_available": false,
+        "evaluator_revision_field_present": true
+      },
+      "rationale": "Material provenance may be unavailable, but the field must remain explicit as UNAVAILABLE or UNKNOWN rather than being silently omitted or invented.",
+      "adversarial_dimension": "Legitimate explicit unavailable provenance rather than fabricated precision.",
+      "generation_provenance": [
+        "G3-BR-009",
+        "G3-BR-010"
+      ]
+    },
+    {
+      "id": "G3-H8-018",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-010"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ],
+      "facts": {
+        "evaluator_revision_available": true,
+        "evaluator_revision_field_present": false
+      },
+      "rationale": "When the evaluator revision is available, omitting that material provenance prevents faithful interpretation and replay of the comparison.",
+      "adversarial_dimension": "Known provenance is silently dropped despite being obtainable.",
+      "generation_provenance": [
+        "G3-BR-009",
+        "G3-BR-010"
+      ]
+    },
+    {
+      "id": "G3-H8-019",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-001"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "IRREPRODUCIBLE_EXTERNAL_DEPENDENCY"
+      },
+      "rationale": "An unpinned external API can be represented honestly as an irreproducible external dependency when the limitation is explicit; exact reconstruction is not required where the system cannot support it.",
+      "adversarial_dimension": "Unusual-valid irreproducible dependency with truthful reproducibility classification.",
+      "generation_provenance": [
+        "G3-BR-010",
+        "G3-BR-001"
+      ]
+    },
+    {
+      "id": "G3-H8-020",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-001"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_RECONSTRUCTION"
+      ],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "EXACT_RECONSTRUCTION"
+      },
+      "rationale": "An unpinned external dependency is incompatible with a claim of exact reconstruction even if the dependency limitation is separately noted.",
+      "adversarial_dimension": "Contradictory exact-reconstruction label for an unpinned external API.",
+      "generation_provenance": [
+        "G3-BR-010",
+        "G3-BR-001"
+      ]
+    },
+    {
+      "id": "G3-H8-021",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "outcome_driven_stopping": false,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": true
+      },
+      "rationale": "Stochastic replication is legitimate when stopping is governed in advance and repeated runs are not misrepresented as independent Task 7 evaluation units.",
+      "adversarial_dimension": "Valid repeated stochastic runs with preregistered stopping and no pseudoreplication claim.",
+      "generation_provenance": [
+        "G3-BR-011",
+        "G3-BR-012"
+      ]
+    },
+    {
+      "id": "G3-H8-022",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "OPTIONAL_STOPPING"
+      ],
+      "facts": {
+        "outcome_driven_stopping": true,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": false
+      },
+      "rationale": "Continuing or stopping protected runs in response to favorable outcomes is outcome-driven optional stopping when no governing rule was preregistered.",
+      "adversarial_dimension": "Outcome-dependent stopping without pseudoreplication, isolating stopping governance.",
+      "generation_provenance": [
+        "G3-BR-011",
+        "G3-BR-012"
+      ]
+    },
+    {
+      "id": "G3-H8-023",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-011"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "analysis_uses_independence_groups": true,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": false
+      },
+      "rationale": "Effect uncertainty is valid when analysis respects Task 7 evaluation units and independence groups and does not inflate sample size by treating repeated seeds as new independent units.",
+      "adversarial_dimension": "Dependency-aware uncertainty analysis under repeated stochastic seeds.",
+      "generation_provenance": [
+        "G3-BR-012",
+        "G3-BR-011"
+      ]
+    },
+    {
+      "id": "G3-H8-024",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-011"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "REPEATED_SEEDS_TREATED_INDEPENDENT"
+      ],
+      "facts": {
+        "analysis_uses_independence_groups": true,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": true
+      },
+      "rationale": "Repeated seeds from the same underlying evaluation units cannot be counted as independent scientific evidence merely because the executions differ.",
+      "adversarial_dimension": "Pseudoreplication introduced only at the statistical-analysis layer.",
+      "generation_provenance": [
+        "G3-BR-012",
+        "G3-BR-011"
+      ]
+    },
+    {
+      "id": "G3-H8-025",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [
+        "G3-BR-014"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "primary_claim_remains_failed": true,
+        "primary_metric_passed": false,
+        "secondary_promoted_after_outcome": false
+      },
+      "rationale": "A failed primary claim may coexist with reportable secondary findings, provided the primary failure remains explicit and no secondary measure is promoted post hoc into support for the original claim.",
+      "adversarial_dimension": "Legitimate negative primary result with secondary evidence kept in its preregistered role.",
+      "generation_provenance": [
+        "G3-BR-013",
+        "G3-BR-014"
+      ]
+    },
+    {
+      "id": "G3-H8-026",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [
+        "G3-BR-014"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_HOC_SECONDARY_PROMOTION"
+      ],
+      "facts": {
+        "primary_claim_remains_failed": true,
+        "primary_metric_passed": false,
+        "secondary_promoted_after_outcome": true
+      },
+      "rationale": "Promoting a secondary measure after observing failure of the primary measure violates selective-reporting control even if the primary failure is still recorded.",
+      "adversarial_dimension": "Outcome-driven metric-role reassignment without erasing the failed primary result.",
+      "generation_provenance": [
+        "G3-BR-013",
+        "G3-BR-014"
+      ]
+    },
+    {
+      "id": "G3-H8-027",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": true,
+        "hard_constraint_bound_before_protected": true
+      },
+      "rationale": "A claim-affecting hard constraint is validly governed when frozen before protected inspection and independently capable of blocking PASS regardless of aggregate performance.",
+      "adversarial_dimension": "Hard-constraint gate kept separate from favorable aggregate metrics.",
+      "generation_provenance": [
+        "G3-BR-014",
+        "G3-BR-013"
+      ]
+    },
+    {
+      "id": "G3-H8-028",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "HARD_CONSTRAINT_CAN_BE_AVERAGED_AWAY"
+      ],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": false,
+        "hard_constraint_bound_before_protected": true
+      },
+      "rationale": "A claim-affecting hard-constraint violation cannot be neutralized by a favorable mean, composite, or secondary metric once the constraint applies.",
+      "adversarial_dimension": "A predeclared hard constraint is improperly converted into a soft contribution to an aggregate.",
+      "generation_provenance": [
+        "G3-BR-014",
+        "G3-BR-013"
+      ]
+    },
+    {
+      "id": "G3-H8-029",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-025"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": false
+      },
+      "rationale": "Benchmark sampling and weighting are legitimate when their rules are frozen before protected outcomes and the intended difficulty distribution is preserved.",
+      "adversarial_dimension": "Stable benchmark portfolio despite heterogeneous difficulty.",
+      "generation_provenance": [
+        "G3-BR-015",
+        "G3-BR-025"
+      ]
+    },
+    {
+      "id": "G3-H8-030",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-025"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": true
+      },
+      "rationale": "Changing benchmark weights after protected outcomes can change the conclusion and violates the requirement to freeze conclusion-sensitive portfolio rules in advance.",
+      "adversarial_dimension": "Post-outcome weighting manipulation while leaving the nominal task set unchanged.",
+      "generation_provenance": [
+        "G3-BR-015",
+        "G3-BR-025"
+      ]
+    },
+    {
+      "id": "G3-H8-031",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "benchmark_dynamic": true,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "UNKNOWN",
+        "dynamic_implies_clean": false
+      },
+      "rationale": "A dynamically generated benchmark may have unknown contamination status; dynamism itself is not cleanliness evidence, and uncertainty may be represented explicitly.",
+      "adversarial_dimension": "Unusual-valid dynamic benchmark with contamination left UNKNOWN rather than assumed CLEAN.",
+      "generation_provenance": [
+        "G3-BR-016",
+        "G3-BR-015"
+      ]
+    },
+    {
+      "id": "G3-H8-032",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "DYNAMISM_USED_AS_CLEANLINESS_PROOF"
+      ],
+      "facts": {
+        "benchmark_dynamic": true,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "CLEAN",
+        "dynamic_implies_clean": true
+      },
+      "rationale": "Declaring a dynamic benchmark clean solely because it is dynamically generated substitutes generation method for actual contamination evidence.",
+      "adversarial_dimension": "False cleanliness inference from benchmark dynamism in the absence of supporting provenance.",
+      "generation_provenance": [
+        "G3-BR-016",
+        "G3-BR-015"
+      ]
+    },
+    {
+      "id": "G3-H8-033",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-026"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "alternative_crosscheck_present": true,
+        "bias_control_performed": true,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": true,
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true
+      },
+      "rationale": "A same-family evaluator can be claim-bearing when its identity, version, scoring, relationship, bias controls, and an appropriate alternative cross-check are all explicit.",
+      "adversarial_dimension": "Unusual-valid same-family judge with correlated-bias controls rather than automatic disqualification.",
+      "generation_provenance": [
+        "G3-BR-017",
+        "G3-BR-026"
+      ]
+    },
+    {
+      "id": "G3-H8-034",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-026"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SELF_PREFERENCE_NOT_CONTROLLED"
+      ],
+      "facts": {
+        "alternative_crosscheck_present": false,
+        "bias_control_performed": false,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": true,
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true
+      },
+      "rationale": "When the scientific claim depends on a judge from the candidate's model family, leaving self-preference or correlated bias uncontrolled can invalidate the affected comparison.",
+      "adversarial_dimension": "Evaluator metadata is complete, but the material same-family bias channel is left uncontrolled.",
+      "generation_provenance": [
+        "G3-BR-017",
+        "G3-BR-026"
+      ]
+    },
+    {
+      "id": "G3-H8-035",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-027"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "claims_absence_of_side_effects": false,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "E1 trajectory evidence may legitimately leave hidden side effects UNKNOWN when the observation boundary is explicit; unobservable behavior is not required to be proven absent.",
+      "adversarial_dimension": "Legitimate explicit ignorance about hidden E1 state rather than forced favorable classification.",
+      "generation_provenance": [
+        "G3-BR-018",
+        "G3-BR-027"
+      ]
+    },
+    {
+      "id": "G3-H8-036",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-027"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "UNOBSERVED_TREATED_AS_ABSENT"
+      ],
+      "facts": {
+        "claims_absence_of_side_effects": true,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "Claiming that no side effects occurred from a channel known to be unobservable converts missing evidence into evidence of absence.",
+      "adversarial_dimension": "Explicit observation boundary is acknowledged but then contradicted by an absence claim.",
+      "generation_provenance": [
+        "G3-BR-018",
+        "G3-BR-027"
+      ]
+    },
+    {
+      "id": "G3-H8-037",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "channel_classified_separately": true,
+        "claimed_as_learned_transfer": false,
+        "manual_target_engineering": false,
+        "target_specific_demonstrations": false,
+        "target_specific_onboarding": false,
+        "target_specific_prompt_engineering": false,
+        "target_specific_retrieval": true
+      },
+      "rationale": "Target-specific retrieval may be used as a separately classified information channel so long as it is not represented as learned cross-family transfer.",
+      "adversarial_dimension": "Legitimate target-specific information channel explicitly kept outside the learned-transfer claim.",
+      "generation_provenance": [
+        "G3-BR-019",
+        "G3-BR-005"
+      ]
+    },
+    {
+      "id": "G3-H8-038",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ],
+      "facts": {
+        "channel_classified_separately": false,
+        "claimed_as_learned_transfer": true,
+        "manual_target_engineering": false,
+        "target_specific_demonstrations": false,
+        "target_specific_onboarding": false,
+        "target_specific_prompt_engineering": true,
+        "target_specific_retrieval": false
+      },
+      "rationale": "Target-specific prompt engineering must be separated from learned transfer; hiding it while claiming learned transfer confounds the transfer interpretation.",
+      "adversarial_dimension": "Alternate target-information channel masquerading as source-learned transfer.",
+      "generation_provenance": [
+        "G3-BR-019",
+        "G3-BR-005"
+      ]
+    },
+    {
+      "id": "G3-H8-039",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-003",
+        "G3-BR-007"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_adaptation_input": "summary-only",
+        "candidate_adaptation_input": "full-feedback",
+        "difference_is_declared_treatment": true,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "Different adaptation inputs can be legitimate when the input difference is itself the predeclared treatment under study and the strongest applicable matched baseline is still used.",
+      "adversarial_dimension": "Unusual-valid adaptation-input asymmetry that is the causal treatment rather than a fairness defect.",
+      "generation_provenance": [
+        "G3-BR-020",
+        "G3-BR-003",
+        "G3-BR-007"
+      ]
+    },
+    {
+      "id": "G3-H8-040",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-003",
+        "G3-BR-007"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ADAPTATION_INPUT_ASYMMETRY"
+      ],
+      "facts": {
+        "baseline_adaptation_input": "summary-only",
+        "candidate_adaptation_input": "full-feedback",
+        "difference_is_declared_treatment": false,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "Giving candidate and baseline materially different adaptation inputs without declaring that difference as the treatment breaks A-H1 adaptation-comparator parity.",
+      "adversarial_dimension": "Strong comparator retained, but adaptation information opportunity is asymmetrical.",
+      "generation_provenance": [
+        "G3-BR-020",
+        "G3-BR-003",
+        "G3-BR-007"
+      ]
+    },
+    {
+      "id": "G3-H8-041",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-014",
+        "G3-BR-018"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "behavioral_restoration_checked": true,
+        "declared_rollback_success": true,
+        "persistent_index_restored": true,
+        "persistent_memory_material": true,
+        "persistent_memory_restored": true,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "Rollback success requires more than command completion: applicable material persistent state and post-rollback behavior are both verified as restored.",
+      "adversarial_dimension": "Full state-and-behavior rollback verification across multiple persistent surfaces.",
+      "generation_provenance": [
+        "G3-BR-021",
+        "G3-BR-014",
+        "G3-BR-018"
+      ]
+    },
+    {
+      "id": "G3-H8-042",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-014",
+        "G3-BR-018"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ROLLBACK_MATERIAL_STATE_NOT_RESTORED"
+      ],
+      "facts": {
+        "behavioral_restoration_checked": true,
+        "declared_rollback_success": true,
+        "persistent_index_restored": false,
+        "persistent_memory_material": true,
+        "persistent_memory_restored": false,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "A successful rollback invocation and behavioral check do not justify declaring rollback success when material persistent memory and index state remain unrestored.",
+      "adversarial_dimension": "Command-level rollback success hides unresolved persistent state.",
+      "generation_provenance": [
+        "G3-BR-021",
+        "G3-BR-014",
+        "G3-BR-018"
+      ]
+    },
+    {
+      "id": "G3-H8-043",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-008"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "quality_and_resource_reported_separately": true,
+        "resource_regime_frozen_before_protected": true,
+        "single_weighted_score_only": false
+      },
+      "rationale": "A valid resource comparison freezes the semantic regime before protected inspection and reports quality and resource evidence separately rather than collapsing them into one opaque number.",
+      "adversarial_dimension": "Joint performance/resource reporting without forcing a single scalar tradeoff.",
+      "generation_provenance": [
+        "G3-BR-022",
+        "G3-BR-008"
+      ]
+    },
+    {
+      "id": "G3-H8-044",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-008"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ],
+      "facts": {
+        "quality_and_resource_reported_separately": false,
+        "resource_regime_frozen_before_protected": true,
+        "single_weighted_score_only": true
+      },
+      "rationale": "A single weighted score can hide quality-resource tradeoffs and Pareto domination, so it cannot be the only reported comparison evidence.",
+      "adversarial_dimension": "Frozen resource regime followed by opaque scalarization that conceals the tradeoff.",
+      "generation_provenance": [
+        "G3-BR-022",
+        "G3-BR-008"
+      ]
+    },
+    {
+      "id": "G3-H8-045",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-003"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": true,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "Credible evidence of a stronger comparator triggers governed reassessment while preserving the historical result and an explicit as-of review date.",
+      "adversarial_dimension": "Baseline supersession handled as successor evidence rather than retroactive rewriting.",
+      "generation_provenance": [
+        "G3-BR-023",
+        "G3-BR-002",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-046",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-003"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "BASELINE_REASSESSMENT_NOT_TRIGGERED"
+      ],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": false,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "Once credible stronger-comparator evidence appears, merely recording it and preserving history is insufficient; the applicable baseline consequence requires reassessment.",
+      "adversarial_dimension": "Known stronger-comparator trigger is documented but operationally ignored.",
+      "generation_provenance": [
+        "G3-BR-023",
+        "G3-BR-002",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-047",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "broader_claim_blocked": true,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "When the required meaningful comparator cannot be implemented, the broad superiority claim may be blocked while a narrower claim remains possible if the evidence gap stays explicit and no broader superiority is implied.",
+      "adversarial_dimension": "Legitimate narrow successor claim under an irreducible comparator gap.",
+      "generation_provenance": [
+        "G3-BR-024",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-048",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "BROADER_CLAIM_NOT_BLOCKED"
+      ],
+      "facts": {
+        "broader_claim_blocked": false,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "If a required comparator is unavailable, the broader claim cannot remain unblocked merely because the gap is documented.",
+      "adversarial_dimension": "Comparator absence is acknowledged but not allowed to constrain the claim.",
+      "generation_provenance": [
+        "G3-BR-024",
+        "G3-BR-003"
+      ]
+    },
+    {
+      "id": "G3-H8-049",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": false,
+        "time_window_declared": true
+      },
+      "rationale": "Real-world evidence is interpretable when deployment, population, sampling, and time scope are declared and cases are not selected based on favorable observed results.",
+      "adversarial_dimension": "Scoped real-world validation whose evidentiary reach is explicitly bounded.",
+      "generation_provenance": [
+        "G3-BR-025",
+        "G3-BR-015"
+      ]
+    },
+    {
+      "id": "G3-H8-050",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "REAL_WORLD_SCOPE_MISSING:time_window_declared"
+      ],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": false,
+        "time_window_declared": false
+      },
+      "rationale": "Real-world evidence without a declared time window lacks a material scope dimension needed to interpret behavior in changing environments.",
+      "adversarial_dimension": "All real-world scope fields are present except the temporal boundary.",
+      "generation_provenance": [
+        "G3-BR-025",
+        "G3-BR-015"
+      ]
+    },
+    {
+      "id": "G3-H8-051",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "material_independent_path_present": true,
+        "same_judge_model": true,
+        "same_model_family": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "Verification can share some dependencies if those common modes are explicitly disclosed and an appropriately different material verification path is also present for the claim consequence.",
+      "adversarial_dimension": "Unusual-valid verification with disclosed common-mode dependencies plus a genuinely independent path.",
+      "generation_provenance": [
+        "G3-BR-026",
+        "G3-BR-017"
+      ]
+    },
+    {
+      "id": "G3-H8-052",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "MATERIAL_INDEPENDENT_PATH_MISSING"
+      ],
+      "facts": {
+        "material_independent_path_present": false,
+        "same_judge_model": true,
+        "same_model_family": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "Disclosure of shared judge, model-family, and preprocessing dependencies does not by itself establish independent verification when no materially independent path exists.",
+      "adversarial_dimension": "Nominal verification transparency without substantive independence.",
+      "generation_provenance": [
+        "G3-BR-026",
+        "G3-BR-017"
+      ]
+    },
+    {
+      "id": "G3-H8-053",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-018"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": true,
+        "environment_binding": "E3 vision-only offline scoring; no agent trajectory surface",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": false
+      },
+      "rationale": "An environment-specific control may be NOT_APPLICABLE when a governed reason identifies the environment binding, the control is genuinely irrelevant, and omitting it does not change the scientific meaning of the claim.",
+      "adversarial_dimension": "Legitimate NOT_APPLICABLE disposition for an E1-style trajectory control in a vision-only setting.",
+      "generation_provenance": [
+        "G3-BR-027",
+        "G3-BR-018"
+      ]
+    },
+    {
+      "id": "G3-H8-054",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-018"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "NOT_APPLICABLE_USED_AS_ESCAPE"
+      ],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": false,
+        "environment_binding": "E3 vision system",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": true
+      },
+      "rationale": "NOT_APPLICABLE cannot be used to remove a control that is actually relevant and whose omission changes the scientific meaning of the claim, even when a reason and environment label are supplied.",
+      "adversarial_dimension": "Governed-looking NOT_APPLICABLE record used as an escape from a scientifically necessary control.",
+      "generation_provenance": [
+        "G3-BR-027",
+        "G3-BR-018"
+      ]
+    }
+  ],
+  "generation_session_isolation": {
+    "observable_nonpackage_hetren_context_detected": false,
+    "additional_attachment_detected": false,
+    "earlier_conversation_message_detected": false,
+    "isolation_gate_passed_before_case_generation": true
+  },
+  "generator_output_preflight": {
+    "performed_before_return": true,
+    "passed": true,
+    "generation_package_sha256_matches_handoff_filename": true,
+    "case_count": 54,
+    "unique_case_id_count": 54,
+    "exact_case_identity_set": true,
+    "must_accept_count": 27,
+    "must_reject_count": 27,
+    "primary_requirement_pairing_valid": true,
+    "environment_minimums_satisfied": true,
+    "interaction_case_count": 54,
+    "minimum_interaction_requirement_satisfied": true,
+    "all_case_schema_checks_passed": true,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false
+  }
+}

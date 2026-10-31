@@ -1,0 +1,359 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_DISCOVERY_LOG",
+  "state": "DISCOVERY_IN_PROGRESS",
+  "recorded_at_utc": "2026-09-26T02:58:26Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "research_authorization": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "research_boundary": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_selection_research_boundary.json",
+      "sha256": "f42d61e99ba4ca64543fb7a0cd2050654b2dcd3d9f24c127954e988e6835c63d"
+    },
+    "gap_classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_gap_classification.json",
+      "sha256": "6ad2c2e93326513c7a26be2490a1b63892b996db372eb83047949148fac2d1ff"
+    }
+  },
+  "search_queries_executed": [
+    "ReAct Synergizing Reasoning and Acting in Language Models official paper arxiv github",
+    "Reflexion Language Agents with Verbal Reinforcement Learning official paper github",
+    "OpenHands platform AI software developers official paper github benchmark SWE-bench",
+    "SWE-agent official paper github Princeton",
+    "Agent Lightning train AI agents reinforcement learning official paper github Microsoft",
+    "Agent Q advanced reasoning planning autonomous AI agents arxiv official github",
+    "WebArena benchmark autonomous agents official paper github",
+    "BrowserGym benchmark web agents official paper github",
+    "Auto-sklearn 2.0 official paper github meta-learning portfolio SMAC structured tabular AutoML",
+    "FLAML official paper github cost-frugal AutoML structured data",
+    "SMAC3 official paper github Bayesian optimization algorithm configuration",
+    "Optuna official paper github hyperparameter optimization framework",
+    "AutoGluon Tabular official paper github tabular AutoML",
+    "TabPFN official paper github tabular foundation model 2025",
+    "MAML official paper github model agnostic meta learning",
+    "learned optimizer tabular AutoML meta-learning hyperparameter optimization paper",
+    "FLAML A Fast and Lightweight AutoML Library official arxiv github Microsoft",
+    "SMAC3 A versatile Bayesian optimization package official github paper",
+    "TabPFN official nature 2025 github prior-data fitted network tabular",
+    "Tent fully test-time adaptation official paper github ICLR 2021",
+    "EATA efficient test-time model adaptation official paper github ICML 2022",
+    "CoTTA continual test-time adaptation official paper github CVPR 2022",
+    "SAR Towards Stable Test-time Adaptation in Dynamic Wild World official paper github ICLR 2023",
+    "MEMO test time robustness adaptation official paper github",
+    "SHOT source hypothesis transfer domain adaptation official paper github ICML 2020",
+    "TENT EATA SAR benchmark strongest test-time adaptation vision 2024 survey",
+    "2025 test-time adaptation vision official paper github continual test time adaptation strongest benchmark",
+    "2024 test-time adaptation vision benchmark official paper github ImageNet-C source-free adaptation",
+    "2026 test-time adaptation vision official paper github",
+    "2026 tabular test-time adaptation PFT3A official paper github ICLR 2026",
+    "2025 tabular continual adaptation domain shift official paper github",
+    "tabular foundation model adaptation domain shift official paper github 2025 2026",
+    "site:github.com/ysymyth/ReAct ReAct official github",
+    "react-lm github official ReAct code",
+    "Agent Lightning v1.0 arxiv 2608.17528",
+    "Agent Q official implementation repository authors Sentient 2024",
+    "SWE-agent paper official github Princeton release version",
+    "deep active learning image classification benchmark strongest reproducible methods BADGE CoreSet TypiClust official github",
+    "TypiClust deep active learning official paper github ICLR 2023",
+    "BADGE deep batch active learning by diverse gradient embeddings official paper github",
+    "ProbCover active learning official paper github",
+    "deep active learning benchmark image classification 2024 2025 reproducible official github",
+    "meta learning transferable active learning acquisition function cross domain official paper github",
+    "learning active learning policy transfer across datasets official paper github",
+    "meta active learning cross-domain acquisition official github",
+    "transferable active learning deep neural networks cross domain acquisition function",
+    "GEPA reflective prompt evolution official paper github DSPy 2025",
+    "MIPROv2 DSPy official paper prompt optimization github",
+    "TextGrad automatic differentiation via text official paper github 2024",
+    "OPRO optimization by prompting official paper github 2024",
+    "language agent online adaptation memory reinforcement Reflexion official benchmark",
+    "learned agent policy transfer across tasks domains tool-use agents official paper github 2025 2026",
+    "meta reinforcement learning language agent transfer across tasks official paper github",
+    "cross-domain agentic reinforcement learning transfer tool agents paper github",
+    "generalizable agent policy learned across environments tool use official paper github",
+    "2025 meta Bayesian optimization transfer learning acquisition function official paper github",
+    "2026 meta Bayesian optimization cross task transfer official github",
+    "Auto-sklearn 2.0 meta-learning transfer across datasets official paper",
+    "transfer learning hyperparameter optimization across datasets meta learning official paper github 2024 2025",
+    "IALE Imitating Active Learner Ensembles JMLR datasets CIFAR MNIST transferable active learning policy",
+    "Meta-Learning Transferable Active Learning Policies deep reinforcement learning datasets image tabular"
+  ],
+  "search_query_count": 61,
+  "material_sources_consulted": [
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://arxiv.org/abs/2210.03629",
+      "subject": "ReAct"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/ysymyth/ReAct",
+      "subject": "ReAct"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://papers.neurips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html",
+      "subject": "Reflexion"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/noahshinn/reflexion",
+      "subject": "Reflexion"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://arxiv.org/abs/2608.17528",
+      "subject": "Agent Lightning v1.0"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/microsoft/agent-lightning",
+      "subject": "Agent Lightning"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://arxiv.org/abs/2408.07199",
+      "subject": "Agent Q"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/sentient-engineering/agent-q",
+      "subject": "Agent Q"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "subject": "SWE-agent"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://arxiv.org/abs/2507.19457",
+      "subject": "GEPA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/gepa-ai/gepa",
+      "subject": "GEPA"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3339f19c5fcee3ad74502947a32be9e6-Abstract-Conference.html",
+      "subject": "OPRO"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/google-deepmind/opro",
+      "subject": "OPRO"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/zou-group/textgrad",
+      "subject": "TextGrad"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1e4322fddd833f83c855660ac65e428d-Abstract-Conference.html",
+      "subject": "CodeGym"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/StigLidu/CodeGym",
+      "subject": "CodeGym"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/optuna/optuna",
+      "subject": "Optuna"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/automl/SMAC3",
+      "subject": "SMAC3"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://www.microsoft.com/en-us/research/publication/flaml-a-fast-and-lightweight-automl-library/",
+      "subject": "FLAML"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/microsoft/FLAML",
+      "subject": "FLAML"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://jmlr.org/beta/papers/v23/21-0992.html",
+      "subject": "Auto-sklearn 2.0"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/automl/auto-sklearn",
+      "subject": "Auto-sklearn"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/autogluon/autogluon",
+      "subject": "AutoGluon"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/soda-inria/tabicl",
+      "subject": "TabICLv2"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://www.nature.com/articles/s41586-024-08328-6",
+      "subject": "TabPFN"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html",
+      "subject": "PFT3A"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/rundohe/PFT3A",
+      "subject": "PFT3A"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34466",
+      "subject": "FTAT"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.mlr.press/v235/ren24b.html",
+      "subject": "TabLog"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/boschresearch/MetaBO",
+      "subject": "MetaBO"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://arxiv.org/abs/1906.03671",
+      "subject": "BADGE"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/JordanAsh/badge",
+      "subject": "BADGE"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.mlr.press/v162/hacohen22a.html",
+      "subject": "TypiClust"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/avihu111/TypiClust",
+      "subject": "TypiClust / ProbCover"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://www.jmlr.org/papers/v23/21-0387.html",
+      "subject": "IALE"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/crispchris/IALE",
+      "subject": "IALE"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/DequanWang/tent",
+      "subject": "Tent"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.mlr.press/v162/niu22a.html",
+      "subject": "EATA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/mr-eggplant/EATA",
+      "subject": "EATA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/qinenergy/cotta",
+      "subject": "CoTTA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/mr-eggplant/SAR",
+      "subject": "SAR"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.mlr.press/v235/niu24a.html",
+      "subject": "FOA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/zhangmarvin/memo",
+      "subject": "MEMO"
+    },
+    {
+      "source_class": "PRIMARY_RESEARCH",
+      "url": "https://proceedings.mlr.press/v119/liang20a.html",
+      "subject": "SHOT"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/tim-learn/SHOT",
+      "subject": "SHOT"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/hzhxmu/PTA",
+      "subject": "PTA"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/LeapLabTHU/ViTTT",
+      "subject": "ViT3"
+    },
+    {
+      "source_class": "OFFICIAL_IMPLEMENTATION",
+      "url": "https://github.com/MaxZanella/StatA",
+      "subject": "StatA"
+    },
+    {
+      "source_class": "DISCOVERY_RESOURCE",
+      "url": "https://github.com/Test-Time-Learning/adaptation",
+      "subject": "Test-time adaptation discovery index"
+    },
+    {
+      "source_class": "DISCOVERY_RESOURCE",
+      "url": "https://github.com/LAMDA-Tabular/TALENT",
+      "subject": "Tabular benchmark discovery"
+    }
+  ],
+  "material_source_count": 50,
+  "research_findings_status": {
+    "E1": "MATERIAL_CANDIDATES_FOUND_MORE_ROLE_BINDING_REQUIRED",
+    "E2": "MATERIAL_CANDIDATES_FOUND_MORE_ROLE_BINDING_REQUIRED",
+    "E3": "MATERIAL_CANDIDATES_FOUND_MORE_STRENGTH_COMPARISON_REQUIRED",
+    "N_H2": "TRANSFER_CANDIDATES_FOUND_DIRECT_CROSS_FAMILY_FIT_UNRESOLVED"
+  },
+  "search_stopping_rule": {
+    "satisfied": false,
+    "reason": "Materially new eligible or role-relevant candidates continued to appear during query refinement, especially for E2/E3 adaptation and cross-task transfer."
+  },
+  "selection_state": {
+    "strongest_baseline_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "this_log_establishes_task_8_authority": false,
+    "this_log_establishes_scientific_support": false,
+    "this_log_selects_a_winner": false
+  }
+}

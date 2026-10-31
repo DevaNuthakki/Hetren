@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 28,
+  "state": "ADDENDUM_V28_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:33:02Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v28": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json",
+      "sha256": "c4f1de84fd13a2709b6d3596e234f3cc18bef6d443692064fe92c7cddcb623dd"
+    },
+    "systematic_saturation_v25": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+      "sha256": "ec3a7e3836ac3633a9669ec05276cdbf50118eb32a645ee0d19127a0e1c9ec31"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNED_AGENT_MEMORY_MANAGEMENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "AgeMem is published in the ACL 2026 main long-paper proceedings.",
+        "It integrates long-term and short-term memory operations directly into the agent policy.",
+        "Its memory operations include storing, retrieving, updating, summarizing, clearing, and deleting memory or context state.",
+        "The method trains memory-management behavior using progressive reinforcement learning and step-wise GRPO.",
+        "A public research implementation with training and evaluation paths is available."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.981/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/y1y5/AgeMem"
+        }
+      ],
+      "limits": [
+        "EXACT_CUTOFF_CONSISTENT_IMPLEMENTATION_COMMIT_REMAINS_TO_BE PINNED",
+        "BASE_MODEL_TRAINING_DATA_AND_REINFORCEMENT_LEARNING_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_TOOL_SCHEMA_AND_CONTEXT_LIMIT_MUST_BE MATCHED",
+        "MEMORY_MANAGEMENT_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-EFFICIENT-TTS-SMALL-VLM",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_SMALL_VLM_TEST_TIME_SCALING_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Efficient Test-Time Scaling for Small Vision-Language Models is published at ICLR 2026.",
+        "The work defines a parameter-free Test-Time Augmentation pipeline that aggregates augmented-input output distributions at token level.",
+        "It separately defines Test-Time Adaptation using consensus pseudo-labels from the augmentation pipeline to update model parameters.",
+        "The official implementation provides executable benchmark configuration and inference paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf/7cc7c48e3fa905bc77791b1d3213db2341099fcd.pdf"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/monurcan/efficient_test_time_scaling"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2510.03574"
+        }
+      ],
+      "limits": [
+        "TTAUG_AND_TTADAPT_ARE_DISTINCT_COMPARATOR_CONFIGURATIONS_AND_MUST_NOT_BE COLLAPSED",
+        "SMALL_VLM_MODEL_IDENTITY_AND_BENCHMARK_TASK_MUST_BE MATCHED",
+        "TEST_TIME_AUGMENTATION_COUNT_AND_ADAPTATION_COMPUTE_REQUIRE_TASK_9_ACCOUNTING",
+        "PARAMETER_FREE_SCALING_AND_PARAMETER_UPDATING_ADAPTATION_HAVE_DIFFERENT_INFORMATION_AND_RESOURCE_SEMANTICS"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v28_candidates_have_role_level_external_review": true,
+    "all_addendum_v28_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "publication_or_code_availability_establishes_strongest_status": false,
+    "age_mem_establishes_general_n_h2": false,
+    "test_time_scaling_establishes_a_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

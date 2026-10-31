@@ -1,0 +1,285 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 42,
+  "state": "SATURATION_V42_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:00:24Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_research_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_view_is_used_only_for_implementation_identity": true,
+    "current_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_resolve_to_cutoff_consistent_commit_or_release": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v44_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v44.json",
+      "sha256": "ac7dcbd7bdf84bca459e806dc59bfa86e2bd371e0b15413e1d16507b0a0245ed"
+    },
+    "systematic_saturation_v41": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v41.json",
+      "sha256": "9cc941e27e17b55b406e78b316159759c47f36cb1115ebb34249bd544854497e"
+    }
+  },
+  "focus": [
+    "E1_POST_T_MEM_DIRECT_MEMORY",
+    "E1_TEMPORAL_HIERARCHICAL_MEMORY",
+    "E1_PROACTIVE_MEMORY_INTERVENTION",
+    "E1_LEARNED_MEMORY_POLICY",
+    "E1_TRANSFERABLE_MEMORY_MANAGEMENT"
+  ],
+  "queries_executed": [
+    "ACL 2026 agent memory long horizon executable TiMem",
+    "ACL 2026 self memory policy optimization MemPO code",
+    "ACL 2026 transferable structured agent memory MCMA code",
+    "proactive memory agent long horizon 2026 code",
+    "ACL 2026 hierarchical memory self evolving agent MUSE",
+    "2026 agent memory learned memory policy official implementation",
+    "2026 long horizon memory consolidation conversational agents code",
+    "2026 memory copilot transfer agent tasks code",
+    "2026 selective memory intervention long horizon agents implementation",
+    "2026 executive memory hierarchical memory agent comparison",
+    "2026 memory execution state agent MAGE implementation",
+    "ACL 2026 memory operation language Text2Mem",
+    "ACL 2026 self evolving agent hierarchical memory",
+    "ACL 2026 memory policy long horizon agent reinforcement learning",
+    "2026 memory abstraction transfer ALFWorld ScienceWorld BabyAI",
+    "2026 proactive agent memory Terminal-Bench tau benchmark"
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 4,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TIMEM-TEMPORAL",
+      "name": "TiMem: Temporal-Hierarchical Memory Consolidation for Long-Horizon Conversational Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PROACTIVE-MEMORY",
+      "name": "Remember When It Matters: Proactive Memory Agent for Long-Horizon Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMPO",
+      "name": "MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MCMA",
+      "name": "Learning How to Remember: A Meta-Cognitive Management Method for Structured and Transferable Agent Memory",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "promoted_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TIMEM-TEMPORAL",
+      "name": "TiMem: Temporal-Hierarchical Memory Consolidation for Long-Horizon Conversational Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TEMPORAL_HIERARCHICAL_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_NON_PARAMETER_UPDATING_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1091/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TiMEM-AI/timem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_HORIZON_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+      "material_reason": "Introduces a temporal memory tree with semantic-guided cross-level consolidation and complexity-aware recall, a materially distinct memory organization and recall mechanism.",
+      "limits": [
+        "CONVERSATIONAL_LONG_HORIZON_ROLE_MUST_MATCH",
+        "TMT_HIERARCHY_AND_CONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "RECALL_CONFIGURATION_AND_LLM_PROVIDER_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PROACTIVE-MEMORY",
+      "name": "Remember When It Matters: Proactive Memory Agent for Long-Horizon Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_PROACTIVE_MEMORY_INTERVENTION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_SIDECAR_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PRIMARY_PREPRINT_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2607.08716"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yifannnwu/proactive-memory-agent"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_PROACTIVE_MEMORY_INTERVENTION_ROLE_MATCHED",
+      "material_reason": "Separates memory from the action policy and explicitly learns or applies a decision over when memory should intervene, rather than exposing retrieved memory on every step.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "MEMORY_AGENT_AND_ACTION_AGENT_MODEL_IDENTITIES_MUST_BE BOUND",
+        "INTERVENTION_INTERVAL_AND_MEMORY_BANK_SCHEMA_MUST_BE BOUND",
+        "TERMINAL_OR_TOOL_AGENT_INFORMATION_OPPORTUNITY_MUST_MATCH",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMPO",
+      "name": "MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MEMORY_POLICY_COMPARATOR_CANDIDATE",
+        "N_H1_REINFORCEMENT_LEARNED_MEMORY_MANAGEMENT_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1166/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TheNewBeeKing/MemPO"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LEARNED_LONG_HORIZON_MEMORY_POLICY_ROLE_MATCHED",
+      "material_reason": "Optimizes a learned memory policy that autonomously summarizes, manages, and selectively retains memory during long-horizon interaction, with released RL training and evaluation code.",
+      "limits": [
+        "POLICY_MODEL_AND_BASE_MODEL_MUST_BE BOUND",
+        "RL_TRAINING_RECIPE_AND_TRAINING_DATA_MUST_BE BOUND",
+        "RETRIEVER_AND_RAG_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_ACTION_SPACE_AND_RETENTION_POLICY_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MCMA",
+      "name": "Learning How to Remember: A Meta-Cognitive Management Method for Structured and Transferable Agent Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MEMORY_COPILOT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_MEMORY_MANAGEMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1535/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LiangThree/MCMA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LEARNED_MEMORY_ABSTRACTION_AND_AGENT_TRANSFER_ROLE_MATCHED",
+      "material_reason": "Learns a separate memory copilot that structures and abstracts experience and explicitly studies transfer of the learned memory-management capability across agent tasks.",
+      "limits": [
+        "TASK_MODEL_AND_MEMORY_COPILOT_IDENTITIES_MUST_BE BOUND",
+        "DPO_TRAINING_CONFIGURATION_AND_PREFERENCE_DATA_MUST_BE BOUND",
+        "ABSTRACTION_LEVEL_SELECTION_POLICY_MUST_BE BOUND",
+        "TRANSFER_RESULTS_ARE_WITHIN_AGENT_TASK_FAMILIES",
+        "DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "MUSE \u2014 Towards Self-Evolving Agents: Enabling Autonomy through Interactive Experience Refinement",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_EXECUTABLE_REPOSITORY",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1522/",
+        "https://github.com/KnowledgeXLab/MUSE"
+      ],
+      "disposition": "ROLE_ADJACENT_FULL_AGENT_EVOLUTION_REFERENCE_NOT_PROMOTED_AS_DIRECT_MEMORY_MODULE_THIS_ROUND",
+      "reason": "MUSE combines hierarchical memory with post-execution critique and a broader self-evolving agent workflow. Its applicability as a whole-agent comparator should be evaluated separately from narrowly matched direct-memory interventions."
+    },
+    {
+      "name": "MAGE \u2014 Beyond Semantic Organization: Memory as Execution State Management for Long-Horizon Agents",
+      "evidence_state": "PRIMARY_PREPRINT_PUBLIC_BEFORE_CUTOFF",
+      "sources": [
+        "https://arxiv.org/abs/2606.06090"
+      ],
+      "disposition": "DIRECT_MEMORY_RESEARCH_REFERENCE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "The execution-state memory mechanism is materially relevant, but an official executable implementation suitable for governed reproduction was not independently verified in this review."
+    },
+    {
+      "name": "Text2Mem: A Unified Memory Operation Language for Memory Operating System",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "sources": [
+        "https://aclanthology.org/volumes/2026.findings-acl/"
+      ],
+      "disposition": "MEMORY_CONTROL_AND_EXECUTION_INFRASTRUCTURE_REFERENCE_NOT_STANDALONE_PERFORMANCE_COMPARATOR",
+      "reason": "Text2Mem standardizes executable memory operations and schemas; its primary contribution is memory-control infrastructure rather than a standalone agent policy or memory-performance comparator."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "mcma_within_e1_transfer_reference_reviewed": true,
+    "within_e1_memory_management_transfer_is_not_general_cross_family_transfer": true,
+    "forcing_within_e1_transfer_into_general_n_h2_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V42"
+  },
+  "coverage_observations": {
+    "E1": "NEW_DIRECT_MEMORY_CANDIDATES_FOUND",
+    "E2": "NOT_EXPANDED_THIS_DIRECT_MEMORY_REFINEMENT",
+    "E3": "NOT_EXPANDED_THIS_DIRECT_MEMORY_REFINEMENT",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unpromoted materially relevant direct-memory candidate survived dynamic identity review, so the counter remains zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "muse_is_promoted_direct_memory_comparator_this_round": false,
+    "mcma_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "discovery_saturation_establishes_final_eligibility": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B47_VERIFY_ADDENDUM_V45_AND_RUN_ANOTHER_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

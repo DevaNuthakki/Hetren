@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_ATTEMPT_4_DISPOSITION",
+  "state": "ABORTED_PRE_CASE_GENERATION_AMBIGUOUS_PRIOR_PACKAGE_BREADCRUMB",
+  "generation_attempt": 4,
+  "generation_package_version": "v4",
+  "generation_failure_sha256": "f0215c24848ad985f0ee52ed954ec7ee0d309bd1df419ccf4714cdfc8d2932ff",
+  "generation_package_sha256": "5dbf26fffa27c1b02112d296a6f566023b080f733afae54d363e2df09cb866de",
+  "generation_package_checker_sha256": "7aac664aa1230c5ed112721b7c8bfea19d57bd531ad35ccb59ea4794f56b4247",
+  "generation_package_manifest_sha256": "f7971ad87122ff02bbadba8265fd0eaf7650411a37b85fac2619690830251a1b",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "classification": {
+    "category": "GENERATION_ENVIRONMENT_ISOLATION_ABORT",
+    "package_v4_semantic_contract_defect_established": false,
+    "package_v4_public_interface_defect_established": false,
+    "target_evaluator_defect_established": false,
+    "generated_case_defect_established": false,
+    "generator_case_design_defect_established": false,
+    "handoff_instruction_scope_defect_established": false,
+    "external_environment_cleanliness_satisfied": false,
+    "blocking_condition": "AMBIGUOUS_POTENTIALLY_HETREN_SPECIFIC_SAVED_PRIOR_PACKAGE_BREADCRUMB"
+  },
+  "observed_isolation_state": {
+    "nonpackage_hetren_context_detected": false,
+    "ambiguous_potentially_hetren_specific_context_detected": true,
+    "isolation_gate_passed_before_case_generation": false,
+    "unrelated_non_hetren_context_present": true,
+    "unrelated_non_hetren_context_used_for_case_design": false,
+    "ambiguous_breadcrumb_name": "generation_package_v3_0d55267e.json",
+    "prior_file_opened": false
+  },
+  "cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_predictions_produced": false,
+  "target_freshness_consumed": false,
+  "protected_evidence_leakage_proven": false,
+  "fresh_holdout_result_established": false,
+  "scientific_support_established": false,
+  "authoritative": false,
+  "interpretation": "Generation Attempt 4 terminated at the package-defined pre-generation isolation gate because the external generation environment exposed a saved recent-activity breadcrumb naming a prior generation-package file. The generator did not affirmatively classify that breadcrumb as non-package Hetren context; it classified the condition as ambiguous potentially Hetren-specific context and failed closed. No prior file was opened, no cases were generated, the target evaluator was not executed or simulated, no target predictions were produced, and target freshness was not consumed. This attempt therefore does not establish a case-generation result, evaluator result, or scientific result.",
+  "package_v4_interpretation": {
+    "isolation_rule_triggered_as_specified": true,
+    "semantic_revision_required_by_attempt_4": false,
+    "public_evaluator_contract_revision_required_by_attempt_4": false,
+    "target_evaluator_revision_required_by_attempt_4": false,
+    "case_contract_revision_required_by_attempt_4": false
+  },
+  "successor_requirement": {
+    "next_attempt": 5,
+    "new_generation_session_required": true,
+    "attempt_4_session_must_not_be_reused": true,
+    "generation_environment_must_not_expose_prior_hetren_breadcrumbs": true,
+    "generation_environment_must_not_expose_nonpackage_hetren_context": true,
+    "generation_environment_must_not_expose_ambiguous_potentially_hetren_specific_context": true,
+    "unrelated_non_hetren_context_remains_permitted": true,
+    "package_v4_semantics_should_remain_unchanged_unless_separately_invalidated": true,
+    "target_evaluator_must_remain_frozen": true,
+    "prior_attempt_artifacts_must_not_be_supplied_to_generator": true,
+    "freshness_available_for_successor_attempt": true
+  }
+}

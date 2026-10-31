@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_ATTEMPT_6_DISPOSITION",
+  "state": "REJECTED_PRE_EXECUTION_GENERATED_ARTIFACT_CONTRACT_FAILURE",
+  "generation_attempt": 6,
+  "generation_package_version": "v6",
+  "generated_artifact_sha256": "8b8c408517d6cb653b9a69b1a1ae184ca638b44e60b15524e2cf8d6dcea1ef54",
+  "generation_package_sha256": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8",
+  "generation_package_checker_sha256": "ba0a8f59ce4cbe2c411e09435f5252c7acf13cb7ec1bb443615dcb7aad4a50e1",
+  "generation_package_manifest_sha256": "84d91709ba4b0d4980faeebe919e8e141dea7f4c51240dab5e5dc7e8ee18b090",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "classification": {
+    "category": "PRE_EXECUTION_GENERATED_ARTIFACT_CONTRACT_FAILURE",
+    "generation_environment_isolation_failure": false,
+    "package_v6_semantic_contract_defect_established": false,
+    "package_v6_public_interface_defect_established": false,
+    "target_evaluator_defect_established": false,
+    "generated_artifact_contract_defect_established": true,
+    "generated_case_structure_defect_established": true,
+    "generated_case_design_defect_established": true,
+    "target_execution_occurred": false
+  },
+  "isolation_interpretation": {
+    "isolation_gate_passed_before_case_generation": true,
+    "nonpackage_hetren_context_detected": false,
+    "ambiguous_potentially_hetren_specific_context_detected": false,
+    "attempt_6_generation_environment_qualified_for_generation": true
+  },
+  "observed_contract_failures": [
+    {
+      "defect_id": "A6-D001",
+      "category": "PACKAGE_BINDING_MISMATCH",
+      "field": "generation_package_sha256",
+      "observed_value": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+      "required_value": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8",
+      "effect": "generated artifact does not bind the frozen Package-v6 bytes"
+    },
+    {
+      "defect_id": "A6-D002",
+      "category": "CASE_ID_UNIQUENESS_AND_COVERAGE_FAILURE",
+      "duplicate_case_ids": [
+        "G3-H6-002"
+      ],
+      "missing_case_ids": [
+        "G3-H6-003"
+      ],
+      "total_case_objects": 54,
+      "unique_case_ids": 53,
+      "effect": "required exact G3-H6-001 through G3-H6-054 identity set is violated"
+    },
+    {
+      "defect_id": "A6-D003",
+      "category": "CROSS_REQUIREMENT_INTERACTION_COVERAGE_FAILURE",
+      "observed_interaction_cases": 8,
+      "required_minimum_interaction_cases": 12,
+      "effect": "generated holdout does not meet preregistered interaction coverage"
+    }
+  ],
+  "preserved_valid_properties": {
+    "total_case_objects": 54,
+    "must_accept_count": 27,
+    "must_reject_count": 27,
+    "primary_requirement_count": 27,
+    "each_primary_requirement_has_accept_and_reject_case": true,
+    "isolation_gate_passed": true,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false
+  },
+  "cases_generated": true,
+  "generated_cases_accepted_for_protected_execution": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "target_freshness_consumed": false,
+  "fresh_holdout_result_established": false,
+  "scientific_support_established": false,
+  "authoritative": false,
+  "interpretation": "Generation Attempt 6 passed the pre-generation isolation gate and produced 54 case objects without executing or simulating the target evaluator. Static pre-execution qualification then rejected the generated artifact because it bound the wrong generation-package SHA, contained a duplicate G3-H6-002 with G3-H6-003 missing, and contained only eight cross-requirement interaction cases against the required minimum of twelve. The generated artifact must remain preserved unchanged and must not be repaired, promoted, or target-evaluated. These failures establish defects in the generated artifact, not in the frozen Package-v6 semantics or target evaluator. Because no target execution occurred, target freshness remains unconsumed.",
+  "package_v6_interpretation": {
+    "semantic_revision_required_by_attempt_6": false,
+    "public_evaluator_contract_revision_required_by_attempt_6": false,
+    "target_evaluator_revision_required_by_attempt_6": false,
+    "generation_output_must_be_rejected": true
+  },
+  "successor_requirement": {
+    "next_attempt": 7,
+    "new_generation_session_required": true,
+    "new_generation_environment_or_clean_session_required": true,
+    "attempt_6_generation_session_must_not_be_reused": true,
+    "attempt_6_generated_cases_must_not_be_supplied_to_successor_generator": true,
+    "attempt_6_generated_artifact_must_not_be_repaired_for_protected_use": true,
+    "prior_attempt_artifacts_must_not_be_supplied_to_successor_generator": true,
+    "package_v6_semantics_should_remain_unchanged_unless_separately_invalidated": true,
+    "target_evaluator_must_remain_frozen": true,
+    "successor_package_must_preserve_same_scientific_contract": true,
+    "successor_generation_must_satisfy_exact_case_identity_set": true,
+    "successor_generation_must_satisfy_minimum_12_interaction_cases": true,
+    "successor_generation_must_bind_its_exact_package_sha256": true,
+    "freshness_available_for_successor_attempt": true
+  }
+}

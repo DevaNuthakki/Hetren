@@ -1,0 +1,258 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 30,
+  "state": "SATURATION_V30_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T22:43:38Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v32_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v32.json",
+      "sha256": "d4d8e109d0738c4e293879fc4eaf61fb2426b09c64c878fb15cb3fae63aac8ac"
+    },
+    "systematic_saturation_v29": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json",
+      "sha256": "c5e27973b25a08262c358738a05dec153988ca10d067693d434d08dd79f13836"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_AGENT_MEMORY_POLICY",
+    "E1_ADAPTIVE_MEMORY_DISTILLATION",
+    "E1_SELECTIVE_EPISODIC_MEMORY",
+    "E1_STRUCTURED_CROSS_EVENT_MEMORY",
+    "DIRECT_MEMORY_IDENTITY_DEDUPLICATION"
+  ],
+  "queries_executed": [
+    "ACL 2026 agentic memory learned long-term short-term memory AgeMem code",
+    "ACL 2026 adaptive memory distillation Nemori official implementation",
+    "ACL 2026 episodic memory agent selective memory EMA official code",
+    "ACL 2026 StructMem structured memory long-horizon official implementation",
+    "ACL 2026 Lightweight LLM Agent Memory small language models code",
+    "ACL 2026 temporal semantic memory personalized agents implementation",
+    "ACL 2026 Memory-R1 implementation status",
+    "2026 direct agent memory learned store retrieve update delete policy",
+    "2026 direct agent memory selective write filtering code",
+    "2026 structured event memory cross-event consolidation LLM agent",
+    "2026 long-term memory agent episodic semantic executable baseline",
+    "2026 memory management agent reinforcement learning executable"
+  ],
+  "query_count": 12,
+  "proposed_mechanism_count": 4,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM",
+      "name": "AgeMem \u2014 Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+      "aliases_checked": [
+        "AgeMem",
+        "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_RECOUNTED",
+      "prior_matches": [
+        {
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json",
+          "baseline_id": "DISCOVERY:T8-E1-AGEMEM",
+          "name": "AgeMem \u2014 Agentic Memory"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NEMORI",
+      "name": "Nemori \u2014 What Deserves Memory: Adaptive Memory Distillation for LLM Agents",
+      "aliases_checked": [
+        "Nemori",
+        "What Deserves Memory: Adaptive Memory Distillation for LLM Agents"
+      ],
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EMA-MEMORY",
+      "name": "EMA \u2014 An Episodic Memory Agent for Efficient and Selective Memory",
+      "aliases_checked": [
+        "EMA: An Episodic Memory Agent for Efficient and Selective Memory",
+        "An Episodic Memory Agent for Efficient and Selective Memory",
+        "Episodic Memory Agent"
+      ],
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STRUCTMEM",
+      "name": "StructMem \u2014 Structured Memory for Long-Horizon Behavior in LLMs",
+      "aliases_checked": [
+        "StructMem",
+        "Structured Memory for Long-Horizon Behavior in LLMs"
+      ],
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NEMORI",
+      "name": "Nemori \u2014 What Deserves Memory: Adaptive Memory Distillation for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ADAPTIVE_MEMORY_DISTILLATION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_EPISODIC_SEMANTIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_WITH_PUBLIC_MIT_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1607/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/nemori-ai/nemori"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MEMORY_DISTILLATION_AND_LONG_HORIZON_DIALOGUE_ROLE_MATCH",
+      "material_reason": "Uses episodic integration plus prediction-error-driven semantic knowledge distillation to determine what interaction information deserves durable retention rather than relying on fixed importance heuristics.",
+      "limits": [
+        "PAPER_ALIGNED_REPOSITORY_REVISION_MUST_BE BOUND",
+        "SEGMENTATION_AND_DISTILLATION_CONFIGURATION_MUST_BE BOUND",
+        "STORAGE_AND_RETRIEVAL_BACKEND_ACCESS_MUST_BE PARITY_MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EMA-MEMORY",
+      "name": "EMA \u2014 An Episodic Memory Agent for Efficient and Selective Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EPISODIC_MEMORY_UNIT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_FILTERING_DECISION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_OFFICIAL_EXECUTABLE_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.250/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hongyi4221/EMA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EPISODIC_MEMORY_AND_SELECTIVE_WRITE_FILTER_ROLE_MATCH",
+      "material_reason": "Abstracts interactions into episodic memory units and adds MemDecider as a learned selective filtering module that controls low-value information before long-term storage.",
+      "limits": [
+        "MEMDECIDER_MODEL_AND_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "EPISODIC_MEMORY_UNIT_CONSTRUCTION_MUST_BE BOUND",
+        "DATASET_AND_BACKBONE_CONFIGURATION_MUST_BE MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STRUCTMEM",
+      "name": "StructMem \u2014 Structured Memory for Long-Horizon Behavior in LLMs",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRUCTURED_EVENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_CROSS_EVENT_CONSOLIDATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_WITH_EXECUTABLE_SHARED_REPOSITORY_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-short.12/"
+        },
+        {
+          "class": "OFFICIAL_SHARED_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        },
+        {
+          "class": "OFFICIAL_METHOD_DOCUMENTATION",
+          "url": "https://github.com/zjunlp/LightMem/blob/main/StructMem.md"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EVENT_LEVEL_RELATIONAL_MEMORY_AND_CROSS_EVENT_CONSOLIDATION_ROLE_MATCH",
+      "material_reason": "Preserves factual and relational event bindings with temporal anchors and periodically synthesizes cross-event summaries, providing a distinct hierarchical structured-memory mechanism.",
+      "limits": [
+        "STRUCTMEM_MUST_REMAIN_A_SEPARATE_LOGICAL_IDENTITY_FROM_ICLR_LIGHTMEM",
+        "EVENT_EXTRACTION_AND_SUMMARY_CONFIGURATION_MUST_BE BOUND",
+        "SHARED_REPOSITORY_REVISION_MUST_BE PINNED_TO_STRUCTMEM_BEHAVIOR",
+        "LOCOMO_STYLE_TEMPORAL_AND_MULTI_HOP_ROLE_MUST_MATCH",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Lightweight LLM Agent Memory with Small Language Models",
+      "identity_note": "DISTINCT_FROM_ICLR_2026_LIGHTMEM_DESPITE_SHARED_SHORT_NAME",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.588/",
+        "https://arxiv.org/abs/2604.07798"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "DISTINCT_LIGHTMEM_IDENTITY_REFERENCE_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED_THIS_PASS",
+      "reason": "This ACL paper uses the same short name LightMem but describes an SLM-driven STM/MTM/LTM design distinct from the ICLR 2026 zjunlp LightMem identity. An official executable repository was not independently verified in this bounded pass, so it is not promoted here."
+    },
+    {
+      "name": "Temporal Semantic Memory",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1496/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "TEMPORAL_PERSONALIZATION_MEMORY_REFERENCE_IMPLEMENTATION_NOT_VERIFIED",
+      "reason": "The method is materially relevant to temporally valid personalized memory, but an official executable implementation was not independently verified during this bounded pass."
+    },
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "LEARNED_MEMORY_MANAGEMENT_REFERENCE_EXECUTABLE_GATE_REMAINS_UNRESOLVED",
+      "reason": "The method remains a highly direct RL-based memory-management reference, but it is not promoted here without a verified executable implementation."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_methods_are_within_e1": true,
+    "forcing_memory_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V30"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially distinct direct-memory candidate was not present in prior governed candidate artifacts, so the stopping counter remains zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "duplicate_identity_is_new_candidate": false,
+    "bmam_is_peer_reviewed": false,
+    "same_short_name_means_same_lightmem_identity": false,
+    "direct_memory_method_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B35_VERIFY_ADDENDUM_V33_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

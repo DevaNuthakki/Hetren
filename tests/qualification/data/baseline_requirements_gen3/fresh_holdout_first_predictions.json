@@ -1,0 +1,466 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_FIRST_TARGET_PREDICTIONS_ATTEMPT_10",
+  "state": "ALL_PREDICTIONS_COLLECTED_BEFORE_SCORING",
+  "generation_attempt": 10,
+  "evidence_class": "FRESH_PROTECTED_HOLDOUT_FIRST_EXECUTION",
+  "created_at_utc": "2026-09-26T01:58:42.717575Z",
+  "fresh_holdout_cases_sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+  "freeze_manifest_sha256": "64c3e69417e74dda898109f324573fa7d15924f479e426804363fb15eb622d48",
+  "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "runner_sha256": "a91d7665b333979a8956e8a33a717b80485e836cb04b0d8f49d78aab036ad2d2",
+  "authorization_sha256": "af1080540676cb13d57795197ef729d161cd3637a1a5c2f6238b1164da104466",
+  "start_receipt_sha256": "e43a1706ebcfe9f671f39e54f1dc981d56fa7c2da64ebefd70421e40621190dd",
+  "target_evaluator_imported": true,
+  "evaluator_calls_attempted": 54,
+  "evaluator_calls_completed": 54,
+  "all_predictions_collected": true,
+  "scoring_started": false,
+  "predictions": [
+    {
+      "id": "G3-H10-001",
+      "primary_requirement": "G3-BR-001",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-002",
+      "primary_requirement": "G3-BR-001",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ]
+    },
+    {
+      "id": "G3-H10-003",
+      "primary_requirement": "G3-BR-002",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-004",
+      "primary_requirement": "G3-BR-002",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "SUCCESSOR_EVIDENCE_MISSING"
+      ]
+    },
+    {
+      "id": "G3-H10-005",
+      "primary_requirement": "G3-BR-003",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-006",
+      "primary_requirement": "G3-BR-003",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ]
+    },
+    {
+      "id": "G3-H10-007",
+      "primary_requirement": "G3-BR-004",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-008",
+      "primary_requirement": "G3-BR-004",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+      ]
+    },
+    {
+      "id": "G3-H10-009",
+      "primary_requirement": "G3-BR-005",
+      "environment": "E1",
+      "decision": "REJECT",
+      "violations": [
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ]
+    },
+    {
+      "id": "G3-H10-010",
+      "primary_requirement": "G3-BR-005",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "PERSISTENT_INFORMATION_ASYMMETRY",
+        "PERSISTENT_INFORMATION_ASYMMETRY",
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ]
+    },
+    {
+      "id": "G3-H10-011",
+      "primary_requirement": "G3-BR-006",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-012",
+      "primary_requirement": "G3-BR-006",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+      ]
+    },
+    {
+      "id": "G3-H10-013",
+      "primary_requirement": "G3-BR-007",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-014",
+      "primary_requirement": "G3-BR-007",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "ASYMMETRY_NOT_CAUSALLY_RELEVANT"
+      ]
+    },
+    {
+      "id": "G3-H10-015",
+      "primary_requirement": "G3-BR-008",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-016",
+      "primary_requirement": "G3-BR-008",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "TUNING_OPPORTUNITY_ASYMMETRY"
+      ]
+    },
+    {
+      "id": "G3-H10-017",
+      "primary_requirement": "G3-BR-009",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-018",
+      "primary_requirement": "G3-BR-009",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ]
+    },
+    {
+      "id": "G3-H10-019",
+      "primary_requirement": "G3-BR-010",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-020",
+      "primary_requirement": "G3-BR-010",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "FALSE_EXACT_RECONSTRUCTION"
+      ]
+    },
+    {
+      "id": "G3-H10-021",
+      "primary_requirement": "G3-BR-011",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-022",
+      "primary_requirement": "G3-BR-011",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "OPTIONAL_STOPPING"
+      ]
+    },
+    {
+      "id": "G3-H10-023",
+      "primary_requirement": "G3-BR-012",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-024",
+      "primary_requirement": "G3-BR-012",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "REPEATED_SEEDS_TREATED_INDEPENDENT"
+      ]
+    },
+    {
+      "id": "G3-H10-025",
+      "primary_requirement": "G3-BR-013",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-026",
+      "primary_requirement": "G3-BR-013",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "POST_HOC_SECONDARY_PROMOTION",
+        "FAILED_PRIMARY_CLAIM_NOT_PRESERVED"
+      ]
+    },
+    {
+      "id": "G3-H10-027",
+      "primary_requirement": "G3-BR-014",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-028",
+      "primary_requirement": "G3-BR-014",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "HARD_CONSTRAINT_CAN_BE_AVERAGED_AWAY"
+      ]
+    },
+    {
+      "id": "G3-H10-029",
+      "primary_requirement": "G3-BR-015",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-030",
+      "primary_requirement": "G3-BR-015",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ]
+    },
+    {
+      "id": "G3-H10-031",
+      "primary_requirement": "G3-BR-016",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-032",
+      "primary_requirement": "G3-BR-016",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM",
+        "DYNAMIC_BENCHMARK_FALSE_CLEANLINESS",
+        "DYNAMISM_USED_AS_CLEANLINESS_PROOF"
+      ]
+    },
+    {
+      "id": "G3-H10-033",
+      "primary_requirement": "G3-BR-017",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-034",
+      "primary_requirement": "G3-BR-017",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "SELF_PREFERENCE_NOT_CONTROLLED",
+        "ALTERNATIVE_EVALUATION_PATH_MISSING"
+      ]
+    },
+    {
+      "id": "G3-H10-035",
+      "primary_requirement": "G3-BR-018",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-036",
+      "primary_requirement": "G3-BR-018",
+      "environment": "E1",
+      "decision": "REJECT",
+      "violations": [
+        "UNOBSERVED_TREATED_AS_ABSENT"
+      ]
+    },
+    {
+      "id": "G3-H10-037",
+      "primary_requirement": "G3-BR-019",
+      "environment": "E1",
+      "decision": "REJECT",
+      "violations": [
+        "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER"
+      ]
+    },
+    {
+      "id": "G3-H10-038",
+      "primary_requirement": "G3-BR-019",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN",
+        "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER"
+      ]
+    },
+    {
+      "id": "G3-H10-039",
+      "primary_requirement": "G3-BR-020",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-040",
+      "primary_requirement": "G3-BR-020",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "ADAPTATION_INPUT_ASYMMETRY"
+      ]
+    },
+    {
+      "id": "G3-H10-041",
+      "primary_requirement": "G3-BR-021",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-042",
+      "primary_requirement": "G3-BR-021",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "ROLLBACK_MATERIAL_STATE_NOT_RESTORED"
+      ]
+    },
+    {
+      "id": "G3-H10-043",
+      "primary_requirement": "G3-BR-022",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-044",
+      "primary_requirement": "G3-BR-022",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "QUALITY_RESOURCE_TRADEOFF_COLLAPSED",
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ]
+    },
+    {
+      "id": "G3-H10-045",
+      "primary_requirement": "G3-BR-023",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-046",
+      "primary_requirement": "G3-BR-023",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "BASELINE_REASSESSMENT_NOT_TRIGGERED"
+      ]
+    },
+    {
+      "id": "G3-H10-047",
+      "primary_requirement": "G3-BR-024",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-048",
+      "primary_requirement": "G3-BR-024",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "BROADER_CLAIM_NOT_BLOCKED"
+      ]
+    },
+    {
+      "id": "G3-H10-049",
+      "primary_requirement": "G3-BR-025",
+      "environment": "E1",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-050",
+      "primary_requirement": "G3-BR-025",
+      "environment": "E2",
+      "decision": "REJECT",
+      "violations": [
+        "REAL_WORLD_SELECTION_CHERRY_PICKED"
+      ]
+    },
+    {
+      "id": "G3-H10-051",
+      "primary_requirement": "G3-BR-026",
+      "environment": "E3",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-052",
+      "primary_requirement": "G3-BR-026",
+      "environment": "CROSS_ENV",
+      "decision": "REJECT",
+      "violations": [
+        "MATERIAL_INDEPENDENT_PATH_MISSING"
+      ]
+    },
+    {
+      "id": "G3-H10-053",
+      "primary_requirement": "G3-BR-027",
+      "environment": "E2",
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    {
+      "id": "G3-H10-054",
+      "primary_requirement": "G3-BR-027",
+      "environment": "E3",
+      "decision": "REJECT",
+      "violations": [
+        "NOT_APPLICABLE_USED_AS_ESCAPE",
+        "NOT_APPLICABLE_CHANGES_CLAIM_MEANING"
+      ]
+    }
+  ]
+}

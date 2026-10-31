@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 52,
+  "state": "SATURATION_V48_FOUND_NEW_LEGACY_E1_EXPERIENCE_AND_SKILL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:18:16Z",
+  "task": 8,
+  "bindings": {
+    "attempt_51": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_51.json",
+      "sha256": "1eec0337653f15263096ec85dedfa515bc161d090e4684232d373e90107c8978"
+    },
+    "legacy_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-legacy-agent-memory-identity-resolution-v1.json",
+      "sha256": "d630664f13c5c6bc8da4970ce68f90d273d82e2d5af289cbc3ac093d87583bf6"
+    },
+    "addendum_v50_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v50.json",
+      "sha256": "b44d6583d00ca5365f5237ea81b971b419c4916e2c768d84b2d067b14231de15"
+    },
+    "systematic_saturation_v48": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v48.json",
+      "sha256": "1327cca5f3fb293d64b4b14343c1e7b14d11c960bc341b20cf6b05036e4468e9"
+    },
+    "candidate_addendum_v51": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v51.json",
+      "sha256": "d6789519017073971ce6cd97750017e767200831c533faa79861251c4ac6999a"
+    }
+  },
+  "state_summary": {
+    "addendum_v50_role_review_complete": true,
+    "new_material_candidates_found": 3,
+    "candidate_addendum_v51_count": 3,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "Legacy E1 memory and agent-learning audit discovered ExpeL, Agent-Pro, and Voyager as materially distinct peer-reviewed executable comparator identities not previously promoted in the governed Task-8 pool.",
+  "next_gate": "I4B53_VERIFY_ADDENDUM_V51_AND_CONTINUE_BOUNDED_LEGACY_MEMORY_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

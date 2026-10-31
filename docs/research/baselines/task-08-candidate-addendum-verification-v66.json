@@ -1,0 +1,144 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 66,
+  "state": "ADDENDUM_V66_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T03:21:45Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v66": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v66.json",
+      "sha256": "772d26243ff3d1a8bd67853e576adfa6c5fca4927c4af91ff75f2cb04ee2bbf3"
+    },
+    "systematic_saturation_v63": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v63.json",
+      "sha256": "ecceb4fc41a05554e9b34e24b582b9f0571485c537fd62fb912f7ebd7de67f62"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRM-VLA",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TEMPORAL_REASONING_AND_MEMORY_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "TRM-VLA is published at CVPR 2026.",
+        "It combines Keyframe-Triggered Reasoning with Granularity-adaptable Context Memory.",
+        "Its context memory stores and retrieves historical reasoning features for temporal consistency.",
+        "The official repository provides training, inference, data-annotation, SIMPLER, and real-robot experiment paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/CVPR2026?day=2026-06-05"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Serenos/TRM-VLA"
+        }
+      ],
+      "limits": [
+        "COGACT_BASE_AND_REASONING_DATA_CONFIGURATION_MUST_BE_BOUND",
+        "KEYFRAME_SELECTION_AND_MEMORY_CONFIGURATION_MUST_BE BOUND",
+        "LONG_HORIZON_VLA_ROLE_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYVLA",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_PERCEPTUAL_COGNITIVE_MEMORY_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "MemoryVLA is published as an ICLR 2026 conference paper.",
+        "It uses working memory plus a Perceptual-Cognitive Memory Bank for long-horizon manipulation.",
+        "The memory bank preserves low-level perceptual details and higher-level cognitive semantics.",
+        "The official implementation provides training, evaluation, deployment, model, and log resources."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=54U3XHf7qq"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/shihao1895/MemoryVLA"
+        }
+      ],
+      "limits": [
+        "MEMORYVLA_AND_MEMORYVLA_PLUS_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "BASE_VLA_DATA_AND_MEMORY_BANK_CONFIGURATION_MUST_BE BOUND",
+        "LONG_HORIZON_MEMORY_SUCCESS_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CRONUSVLA",
+      "verification_state": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_MULTI_FRAME_TEMPORAL_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "CronusVLA is published in the AAAI 2026 proceedings.",
+        "It extends single-frame VLA policies to multi-frame modeling through feature-based temporal aggregation.",
+        "Its evaluation includes manipulation performance and observational robustness.",
+        "The official implementation exposes training and evaluation code plus released checkpoints."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38903"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/CronusVLA"
+        }
+      ],
+      "limits": [
+        "SINGLE_FRAME_PRETRAINING_AND_MULTI_FRAME_POST_TRAINING_MUST_BE DISTINGUISHED",
+        "MODEL_SIZE_AND_HISTORY_WINDOW_MUST_BE BOUND",
+        "ROBUSTNESS_BENCHMARK_RESULTS_DO_NOT AUTOMATICALLY DEFINE HETREN_APPLICABILITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HAMLET-VLA",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_HISTORY_AWARE_VLA_MEMORY_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "HAMLET is published as an ICLR 2026 conference paper.",
+        "It converts pretrained VLAs into history-aware policies using moment tokens and a lightweight memory module.",
+        "Historical representations are integrated into action prediction while preserving the pretrained VLA backbone.",
+        "The official implementation provides GR00T-based evaluation paths for RoboMME, RMBench, and RoboCasa-related settings."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=KcJ9U0x6kO"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/myungkyuKoo/HAMLET-Isaac-GR00T"
+        }
+      ],
+      "limits": [
+        "GROOT_VERSION_AND_BRANCH_MUST_BE BOUND",
+        "MOMENT_TOKEN_AND_MEMORY_WINDOW_CONFIGURATION_MUST_BE BOUND",
+        "HISTORY_AWARE_VLA_RESULTS_DO_NOT ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v66_candidates_have_role_level_external_review": true,
+    "all_addendum_v66_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

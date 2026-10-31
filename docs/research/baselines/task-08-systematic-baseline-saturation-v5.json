@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 5,
+  "state": "SECOND_FOCUSED_POST_EXPANSION_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:00:35Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v7_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v7.json",
+      "sha256": "3a65f07a7caa014eba906f3dce808773cc86278e32bf58cc5c7124b7be271226"
+    },
+    "systematic_saturation_v4": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v4.json",
+      "sha256": "1c6f8112aee0a8e958ae3107bb73c6d62442db6c65baff0e24321b165abcb9c0"
+    }
+  },
+  "focus": [
+    "E1_AGENT_POST_EXPANSION",
+    "E2_STRUCTURED_ML_POST_EXPANSION",
+    "N_H2_GENERAL_CROSS_FAMILY_TRANSFER",
+    "BOUNDED_E3_SPOT_CHECK"
+  ],
+  "queries_executed": [
+    "2026 language agent test-time learning learned adaptation policy official code Meta-TTL",
+    "2026 LLM web agent test-time learning environment decomposition official code TTED",
+    "2026 agent adaptation policy meta learning unseen environments official paper github",
+    "2026 active feature acquisition ICML ICLR sequential measurement official code",
+    "2026 meta active feature acquisition cross task official github",
+    "2026 zero shot Bayesian optimization meta transfer TabPFN official github",
+    "2026 task extrapolation learned policy transfer across modalities official code",
+    "2026 learned transfer policy agents structured data vision cross family meta learning",
+    "2026 test-time reinforcement learning vision language models CVPR code",
+    "2026 VLM test-time adaptation reinforcement learning official github TTRV",
+    "2026 active learning transferable acquisition function cross domain official implementation",
+    "2026 general test time adaptation policy transferable across tasks modalities official research"
+  ],
+  "query_count": 12,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-META-TTL",
+      "name": "Meta-TTL",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_LEARNED_AGENT_ADAPTATION_POLICY_REFERENCE_CANDIDATE",
+        "N_H2_WITHIN_E1_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_NOT_PEER_REVIEWED_BY_THIS_REVIEW",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2604.00830"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zzzlou/meta-ttl"
+        }
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_ROLE_REVIEW",
+      "material_reason": "Explicitly meta-learns a test-time adaptation policy for language agents and reports zero-shot application to unseen agent tasks.",
+      "n_h2_limit": "TRANSFER_IS_WITHIN_LANGUAGE_AGENT_TASK_FAMILIES_AND_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_CROSS_FAMILY_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TTED",
+      "name": "Test-Time Environment Decomposition",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_WEB_AGENT_TEST_TIME_LEARNING_REFERENCE_CANDIDATE",
+        "N_H1_TEST_TIME_TRAINED_WEB_AGENT_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_DATA_AND_MODEL_ASSETS_VERIFIED_NOT_PEER_REVIEWED_BY_THIS_REVIEW",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.29305"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/THUNLP-MT/TTED"
+        }
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_WEB_AGENT_REVIEW",
+      "material_reason": "Introduces label-free test-time environment decomposition and releases training, evaluation, trajectories, and trained-model assets for realistic web-agent adaptation.",
+      "n_h2_limit": "COMPOSITIONAL_GENERALIZATION_WITHIN_WEB_AGENT_ENVIRONMENTS_DOES_NOT_ESTABLISH_GENERAL_CROSS_FAMILY_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TTRV",
+      "name": "TTRV",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_TEST_TIME_REINFORCEMENT_LEARNING_VLM_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Singh_TTRV_Test-Time_Reinforcement_Learning_for_Vision_Language_Models_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Akshit21112002/TTRV"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_VLM_TEST_TIME_RL_SETTING_AND_INFORMATION_OPPORTUNITY_MATCH",
+      "material_reason": "Applies reinforcement learning directly at inference time to unlabeled VLM test examples using self-derived reward signals, a materially distinct adaptation mechanism absent from the existing pool."
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "peer_review_state": {
+    "peer_reviewed_new_candidates": [
+      "DISCOVERY:T8-E3-TTRV"
+    ],
+    "ongoing_research_preprint_candidates": [
+      "DISCOVERY:T8-E1-META-TTL",
+      "DISCOVERY:T8-E1-TTED"
+    ],
+    "preprints_must_not_be_mislabeled_peer_reviewed": true
+  },
+  "n_h2_reference_research": [
+    {
+      "name": "Meta-TTL",
+      "source": "https://arxiv.org/abs/2604.00830",
+      "evidence_state": "PREPRINT_WITH_OFFICIAL_CODE",
+      "relevance": "Learns an adaptation policy over training tasks and applies the learned meta-prompt to unseen language-agent tasks.",
+      "disposition": "WITHIN_E1_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The demonstrated transfer remains within language-agent environments and does not span Hetren E1, E2, and E3."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "source": "https://github.com/yixinw-lab/TaskExtrapolation",
+      "evidence_state": "ICML_2026_REFERENCE_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Learns relational task transformations for structured task extrapolation.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The verified experiments do not establish one common decision-transfer mechanism across Hetren's three environment families."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "source": "https://github.com/reAIM-Lab/Learning-To-Measure",
+      "evidence_state": "ICML_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Meta-learns active feature acquisition behavior over structured-data tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its transfer scope remains structured-data active feature acquisition."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "strong_within_family_transfer_references_exist": true,
+    "ongoing_meta_ttl_research_is_not_general_cross_family_evidence": true,
+    "forcing_reference_or_preprint_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SECOND_FOCUSED_POST_EXPANSION_SATURATION"
+  },
+  "screened_not_promoted": [
+    {
+      "name": "Learning to Learn-at-Test-Time / Meta-TTL",
+      "disposition": "PROMOTED_AS_ONGOING_RESEARCH_REFERENCE_NOT_AS_PEER_REVIEWED_CLAIM_BEARING_WINNER",
+      "reason": "Primary preprint and official code are available, but this review did not verify an archival peer-reviewed publication."
+    },
+    {
+      "name": "TTED",
+      "disposition": "PROMOTED_AS_ONGOING_RESEARCH_REFERENCE_NOT_AS_PEER_REVIEWED_CLAIM_BEARING_WINNER",
+      "reason": "The August 2026 work has an arXiv preprint plus released code/data/models, but no peer-reviewed archival venue was verified."
+    },
+    {
+      "name": "Additional E2 AFA methods",
+      "disposition": "NO_ADDITIONAL_CANDIDATE_PROMOTED_THIS_ROUND",
+      "reason": "Focused searches did not establish a new materially distinct, sufficiently evidenced E2 comparator beyond the already expanded L2M, SEFA, explainability-driven AFA, and related pool."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "TWO_ADDITIONAL_ONGOING_TEST_TIME_LEARNING_RESEARCH_CANDIDATES_FOUND",
+    "E2": "NO_NEW_MATERIAL_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "ONE_NEW_PEER_REVIEWED_TEST_TIME_RL_COMPARATOR_FOUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "A peer-reviewed materially distinct E3 comparator was discovered and additional materially relevant ongoing E1 research was identified; therefore this round cannot count as a no-new-material-candidate saturation round."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "ongoing_research_is_automatically_claim_bearing": false,
+    "within_family_transfer_evidence_proves_n_h2": false,
+    "new_candidates_are_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B10_VERIFY_ADDENDUM_V8_AND_RUN_NEXT_FOCUSED_SATURATION"
+}

@@ -1,0 +1,264 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REMEDIATION_MAP",
+  "state": "RESEARCH_ONLY",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "source_review": "docs/research/baselines/task-08-baseline-methodology-review.md",
+  "allowed_actions": [
+    "KEEP",
+    "REVISE",
+    "SPLIT",
+    "ADD",
+    "DEFER",
+    "REJECT"
+  ],
+  "generation": {
+    "input_requirement_generation": 1,
+    "output_requirement_generation": 2,
+    "output_not_yet_created": false,
+    "output_artifact": "docs/research/baselines/task-08-baseline-requirements-gen2.json"
+  },
+  "entries": [
+    {
+      "id": "RM-001",
+      "finding_id": "AF-001",
+      "action": "REVISE",
+      "targets": [
+        "BR-003"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Require a predeclared comparator eligibility rule, preserve material comparators considered, and record exclusion reasons."
+    },
+    {
+      "id": "RM-002",
+      "finding_id": "AF-002",
+      "action": "REVISE",
+      "targets": [
+        "BR-003",
+        "BR-020"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Make comparator applicability testable and preserve the reason a materially stronger comparator is classified inapplicable."
+    },
+    {
+      "id": "RM-003",
+      "finding_id": "AF-003",
+      "action": "SPLIT",
+      "targets": [
+        "BR-005"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Separate information parity, opportunity parity, evaluation parity, and resource regime from legitimate algorithmic implementation differences."
+    },
+    {
+      "id": "RM-004",
+      "finding_id": "AF-004",
+      "action": "REVISE",
+      "targets": [
+        "BR-006",
+        "BR-018"
+      ],
+      "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+      "generation_2_intent": "Govern tuning opportunity and search-policy symmetry in Task 8 while leaving concrete effort and resource values to Task 9."
+    },
+    {
+      "id": "RM-005",
+      "finding_id": "AF-005",
+      "action": "ADD",
+      "targets": [],
+      "owner": "TASK_8",
+      "new_requirement_key": "evaluation.evaluator-validity",
+      "generation_2_intent": "Add an explicit evaluator-validity requirement covering identity, version, bias risks, order effects, qualification, cross-checking where material, and limitation reporting."
+    },
+    {
+      "id": "RM-006",
+      "finding_id": "AF-006",
+      "action": "REVISE",
+      "targets": [
+        "BR-007",
+        "BR-008",
+        "BR-022"
+      ],
+      "owner": "TASK_8",
+      "depends_on_new_requirement_key": "evaluation.evaluator-validity",
+      "generation_2_intent": "Make evaluator model, prompt, scoring implementation, provider revision, and material configuration first-class provenance."
+    },
+    {
+      "id": "RM-007",
+      "finding_id": "AF-007",
+      "action": "REVISE",
+      "targets": [
+        "BR-002",
+        "BR-003",
+        "BR-006",
+        "BR-019"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "generation_2_intent": "Explicitly inherit Task 7 protected-access, freshness, repeated peeking, lineage, disclosure, and invalidation semantics. Do not create a second holdout policy."
+    },
+    {
+      "id": "RM-008",
+      "finding_id": "AF-008",
+      "action": "REVISE",
+      "targets": [
+        "BR-011"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Require predeclared benchmark-portfolio, task-sampling, subset, and difficulty-selection rules when those choices affect the claim."
+    },
+    {
+      "id": "RM-009",
+      "finding_id": "AF-009",
+      "action": "REVISE",
+      "targets": [
+        "BR-012"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Require dynamic benchmarks to satisfy the same construct, difficulty, provenance, evaluator, leakage, and reproducibility requirements rather than treating dynamism as automatic safety."
+    },
+    {
+      "id": "RM-010",
+      "finding_id": "AF-010",
+      "action": "KEEP",
+      "targets": [
+        "BR-001",
+        "BR-007",
+        "BR-008"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Preserve the existing external-service caveats and provenance requirements; Generation 2 should cross-reference them clearly without inventing false exact reproducibility."
+    },
+    {
+      "id": "RM-011",
+      "finding_id": "AF-011",
+      "action": "REVISE",
+      "targets": [
+        "BR-009",
+        "BR-010"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Require replication count or outcome-sensitive stopping rules to be frozen before protected results when optional stopping could change the conclusion."
+    },
+    {
+      "id": "RM-012",
+      "finding_id": "AF-012",
+      "action": "SPLIT",
+      "targets": [
+        "BR-010",
+        "BR-013"
+      ],
+      "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+      "generation_2_intent": "Separate primary-measure and selective-reporting governance from hard-constraint preservation. Do not invent statistical corrections that override Task 6."
+    },
+    {
+      "id": "RM-013",
+      "finding_id": "AF-013",
+      "action": "REVISE",
+      "targets": [
+        "BR-014"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Predeclare claim-affecting trajectory categories and classification rules; preserve UNKNOWN or ambiguous cases instead of forcing favorable post-hoc attribution."
+    },
+    {
+      "id": "RM-014",
+      "finding_id": "AF-014",
+      "action": "REVISE",
+      "targets": [
+        "BR-015"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Record target-specific engineering, prompts, retrieval, onboarding, and information transfer separately from learned cross-family decision transfer."
+    },
+    {
+      "id": "RM-015",
+      "finding_id": "AF-015",
+      "action": "REVISE",
+      "targets": [
+        "BR-016"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Apply strongest-applicable comparator semantics explicitly to adaptation methods and preserve adaptation-baseline tuning and eligibility provenance."
+    },
+    {
+      "id": "RM-016",
+      "finding_id": "AF-016",
+      "action": "REVISE",
+      "targets": [
+        "BR-017"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Define rollback evidence as restored relevant state plus protected post-rollback behavior, not successful invocation of a rollback command."
+    },
+    {
+      "id": "RM-017",
+      "finding_id": "AF-017",
+      "action": "REVISE",
+      "targets": [
+        "BR-018"
+      ],
+      "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+      "generation_2_intent": "Freeze the resource-comparison regime before protected outcomes while keeping concrete resource definitions and measurements under Task 9."
+    },
+    {
+      "id": "RM-018",
+      "finding_id": "AF-018",
+      "action": "REVISE",
+      "targets": [
+        "BR-019"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Define a governed reassessment trigger based on credible evidence that a materially relevant stronger comparator exists, without claiming continuous knowledge of every method."
+    },
+    {
+      "id": "RM-019",
+      "finding_id": "AF-019",
+      "action": "REVISE",
+      "targets": [
+        "BR-020"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Require a narrowed claim to preserve the original blocked or unsupported broader claim and its evidence gap."
+    },
+    {
+      "id": "RM-020",
+      "finding_id": "AF-020",
+      "action": "REVISE",
+      "targets": [
+        "BR-021"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Trigger additional real-world evaluation from the exact claim and deployment assumptions rather than requiring universal production testing."
+    },
+    {
+      "id": "RM-021",
+      "finding_id": "AF-021",
+      "action": "REVISE",
+      "targets": [
+        "BR-022"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "generation_2_intent": "Define claim-proportionate independence dimensions and require shared evaluator, code, data, transformation, aggregation, and assumption dependencies to be disclosed."
+    },
+    {
+      "id": "RM-022",
+      "finding_id": "AF-022",
+      "action": "ADD",
+      "targets": [],
+      "owner": "TASK_8",
+      "new_requirement_key": "evaluation.evaluator-validity",
+      "generation_2_intent": "Use the same new evaluator-validity requirement as AF-005 so evaluation artifacts, grading rules, answer parsing, ordering, and scoring behavior cannot manufacture a comparison advantage."
+    },
+    {
+      "id": "RM-023",
+      "finding_id": "AF-023",
+      "action": "REVISE",
+      "targets": [
+        "BR-004"
+      ],
+      "owner": "TASK_8",
+      "generation_2_intent": "Make diagnostic anchors, ordinary claim-bearing comparators, and strongest-applicable comparators explicit roles; favorable anchor results must not obscure failure against the required strong comparator."
+    }
+  ]
+}

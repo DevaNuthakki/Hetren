@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 63,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T02:40:13Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v62": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v62.json",
+      "sha256": "5ab59bc5974bbf25724021e2c9c240221fa93cb558cc7da9e15749da4ff756ce"
+    },
+    "systematic_saturation_v60": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v60.json",
+      "sha256": "d2c077eb52f105c188c81dd1afe46ab9012241f23921617fb09f8169ee4f5cd2"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-VLA-BEING-H05",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization",
+      "implementation_identity": "https://github.com/BeingBeyond/Being-H",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.12993"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BeingBeyond/Being-H"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "REPORTED_RESULTS_MUST_NOT_BE NUMERICALLY_RANKED_ACROSS_UNMATCHED_CONFIGURATIONS",
+        "EXACT_BEING_H05_CHECKPOINT_AND_POSTTRAIN_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "LIBERO_AND_ROBOCASA_SETTINGS_MUST_BE MATCHED_BEFORE_ANY_STRENGTH_ORDERING"
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_PENDING_FULL_ELIGIBILITY_AND_VERSION_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V60"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-VLA-GR00T-N1.7",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "NVIDIA Isaac GR00T N1.7",
+      "implementation_identity": "https://github.com/NVIDIA/Isaac-GR00T/releases/tag/n1.7-release",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_PROVIDER_RELEASE",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T/releases/tag/n1.7-release"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "N1_7_MUST_NOT_BE_CONFLATED_WITH_PRIOR_GR00T_N1_IDENTITY",
+        "ARCHIVAL_PAPER_SPECIFIC_TO_N1_7_NOT_INDEPENDENTLY_VERIFIED",
+        "EXACT_RELEASE_COMMIT_CHECKPOINT_AND_LIBERO_CONFIGURATION_MUST_BE BOUND_IF_RETAINED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ],
+      "eligibility_status": "MATERIAL_DISPLACEMENT_CANDIDATE_PENDING_FULL_ELIGIBILITY_AND_VERSION_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V60"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

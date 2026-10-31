@@ -1,0 +1,132 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 38,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T23:16:13Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v37": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v37.json",
+      "sha256": "513634e672d825e85a91af215e628af669a8d22b0f2092574f000cdd65dd4d01"
+    },
+    "systematic_saturation_v35": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v35.json",
+      "sha256": "dc9b89b7518f098348590092493d6eaa23d259906035ab29c76713a3e4d65f06"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "aliases": [
+        "Hindsight",
+        "Hindsight Agent Memory"
+      ],
+      "implementation_identity": "https://github.com/vectorize-io/hindsight",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STRUCTURED_RETAIN_RECALL_REFLECT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DIRECT_MEMORY_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_SYSTEM_DEMONSTRATION",
+          "url": "https://aclanthology.org/2026.acl-demo.27/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vectorize-io/hindsight"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_DIRECT_MEMORY_SYSTEM_CANDIDATE_IF_SYSTEM_DEMO_EVIDENCE_AND_MATCHED_TASK_ARE_ACCEPTABLE",
+        "SYSTEM_DEMO_PUBLICATION_MUST_NOT_BE TREATED_AS_IDENTICAL_TO_FULL_RESEARCH_TRACK_EVIDENCE",
+        "MODEL_AND_STORAGE_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_PRODUCT_REPOSITORY_HEAD_MUST_NOT_BE USED_AS_CUTOFF_VERSION_IDENTITY",
+        "Separates world, experience, observation, and opinion memory networks and exposes explicit retain, recall, and reflect operations."
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_SYSTEM_CANDIDATE_IF_SYSTEM_DEMO_EVIDENCE_AND_MATCHED_TASK_ARE_ACCEPTABLE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V35"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-REME-PROCEDURAL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Remember Me, Refine Me: A Dynamic Procedural Memory Framework for Experience-Driven Agent Evolution",
+      "aliases": [
+        "ReMe",
+        "Remember Me Refine Me"
+      ],
+      "implementation_identity": "https://github.com/agentscope-ai/ReMe",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_PROCEDURAL_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_EXPERIENCE_REUSE_REFERENCE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DIRECT_MEMORY_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_DIRECT_PROCEDURAL_MEMORY_CANDIDATE_IF_AGENT_TOOL_TASK_MATCHED",
+        "CURRENT_REPOSITORY_HAS_CONTINUED_EVOLVING_AFTER_PUBLICATION_AND_CUTOFF",
+        "FINAL_RETAINED_REVISION_MUST_BE CUTOFF_CONSISTENT",
+        "WITHIN_E1_PROCEDURAL_REUSE_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER",
+        "Uses success/failure distillation, scenario-adaptive reuse, and utility-based refinement of procedural memories on agent-oriented BFCL-V3 and AppWorld evaluations."
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_PROCEDURAL_MEMORY_CANDIDATE_IF_AGENT_TOOL_TASK_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V35"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

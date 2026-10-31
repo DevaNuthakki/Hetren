@@ -1,0 +1,191 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 18,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T20:25:52Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v17": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v17.json",
+      "sha256": "758c21681d805c73e5460da55cd41a18e5a777c59e5d7c49597e6ac6ab752f80"
+    },
+    "systematic_saturation_v15": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v15.json",
+      "sha256": "c00f2d711a74444909cf730ffea5475cf1b9c3a2717e015a763297d84d328653"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-CONTDA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ContDa \u2014 Continual Documentation Adaptation",
+      "implementation_identity": "https://github.com/Bingo-W/ContDa",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_EVOLVING_TOOLSET_ADAPTATION_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RETENTION_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1082/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Bingo-W/ContDa"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_DYNAMIC_TOOL_ADDITION_CHANGE_OR_DEPRECATION_IS_PART_OF_MATCHED_E1_EXPERIMENT",
+        "DYNAMIC_TOOL_EVOLUTION_CONTRACT_MUST_BE DECLARED",
+        "TOOL_RELATION_RETRIEVAL_AND_CLUSTERING_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_AND_TOOL_ENDPOINT_ACCESS_MUST_BE BOUND",
+        "RETENTION_METRICS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION",
+        "WITHIN_TOOL_AGENT_ADAPTATION_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "Directly addresses continual agent adaptation when tool APIs and documentation evolve, using relation-guided exploration and relation-aware documentation adjustment while explicitly measuring both adaptation and retention."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_DYNAMIC_TOOL_ADDITION_CHANGE_OR_DEPRECATION_IS_PART_OF_MATCHED_E1_EXPERIMENT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V15"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TOOLOMNI",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ToolOmni",
+      "implementation_identity": "https://github.com/Huangsz2021/ToolOmni",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_OPEN_WORLD_LEARNED_TOOL_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_UNSEEN_TOOL_GENERALIZATION_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1736/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Huangsz2021/ToolOmni"
+        },
+        {
+          "class": "OFFICIAL_MODEL_ASSET",
+          "url": "https://huggingface.co/bue0912/ToolOmni-Qwen3-4B"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_OPEN_WORLD_TOOL_RETRIEVAL_AND_EXECUTION_SETTING_MATCHED",
+        "OPEN_WORLD_TOOL_CORPUS_AND_RETRIEVER_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_CHECKPOINT_AND_BASE_MODEL_MUST_BE BOUND",
+        "SFT_DATA_GRPO_CONFIGURATION_AND_EXECUTION_ENVIRONMENT_MUST_BE BOUND",
+        "GOLDEN_TOOL_LIST_AND_OPEN_DOMAIN_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "UNSEEN_TOOL_GENERALIZATION_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "Provides a released learned open-world tool-use agent with proactive retrieval, grounded execution, supervised cold start, and multi-objective reinforcement learning over retrieval and execution."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_OPEN_WORLD_TOOL_RETRIEVAL_AND_EXECUTION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V15"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-PTA-PROTOTYPE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PTA \u2014 Prototype-Based Test-Time Adaptation of Vision-Language Models",
+      "implementation_identity": "https://github.com/hzhxmu/PTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_BACKPROP_FREE_PROTOTYPE_VLM_TTA_COMPARATOR_CANDIDATE",
+        "A_H1_RESOURCE_EFFICIENT_VLM_TTA_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.21360"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/hzhxmu/PTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_BACKPROP_FREE_VLM_TEST_STREAM_AND_PROTOTYPE_UPDATE_SETTING_MATCHED",
+        "CLIP_OR_MATCHED_VLM_BACKBONE_MUST_BE BOUND",
+        "PROTOTYPE_INITIALIZATION_AND_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "IMAGE_AND_POINT_CLOUD_EXPERIMENTS_MUST_NOT_BE COLLAPSED",
+        "BACKPROP_FREE_RESOURCE_ADVANTAGE_REQUIRES_TASK_9_ACCOUNTING",
+        "RESOURCE_EFFICIENCY_DOES_NOT_BY_ITSELF_ESTABLISH_A_H2",
+        "Uses class-specific knowledge prototypes to accumulate information from test samples without backpropagation or growing retrieval caches, creating a materially distinct adaptation and resource profile."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BACKPROP_FREE_VLM_TEST_STREAM_AND_PROTOTYPE_UPDATE_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V15"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

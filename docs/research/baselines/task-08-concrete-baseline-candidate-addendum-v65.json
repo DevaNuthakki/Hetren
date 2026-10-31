@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 65,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T02:52:18Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "candidate_addendum_v64": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v64.json",
+      "sha256": "52bbbce4758e454631e598017e2e2cca2864190f5f0246ac5f2e1c6474975ad9"
+    },
+    "systematic_saturation_v62": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v62.json",
+      "sha256": "9d75cbaddf1dce2e863620d76053be7b536a8b0249950c189259c9d6113dd9d2"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TAU0-VLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "\u03c40-VLA: a Hierarchical Robot Foundation Model with World-Model-Guided Test-Time Computation",
+      "implementation_identity": "https://github.com/sii-research/tau-0-vla",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LONG_HORIZON_HIERARCHICAL_VLA_DISPLACER_CANDIDATE",
+        "A_H1_WORLD_MODEL_GUIDED_TEST_TIME_COMPUTE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2608.16885"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://tau0-vla.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/sii-research/tau-0-vla"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "HIGH_LEVEL_AND_LOW_LEVEL_COMPONENT_IDENTITIES_MUST_BE BOUND",
+        "WORLD_MODEL_AND_TEST_TIME_SEARCH_BUDGET_MUST_BE PARITY_AUDITED",
+        "LIBERO_AND_LONG_HORIZON_REAL_WORLD_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V62"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ONETWOVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning",
+      "implementation_identity": "https://github.com/Fanqi-Lin/OneTwoVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ADAPTIVE_REASONING_AND_ACTING_VLA_DISPLACER_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=tWMfhoP3as"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2505.11917"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Fanqi-Lin/OneTwoVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "REASONING_TRIGGER_POLICY_MUST_BE BOUND",
+        "BASE_POLICY_DATASET_AND_SYNTHETIC_REASONING_DATA_MUST_BE BOUND",
+        "HARDWARE_AND_TASK_CONTRACT_MUST_BE MATCHED",
+        "TRAINING_CODE_AVAILABILITY_DOES_NOT_BY_ITSELF_ESTABLISH_RESOURCE_PARITY",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V62"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-XIAOMI-ROBOTICS-0",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Xiaomi-Robotics-0: An Open-Sourced Vision-Language-Action Model with Real-Time Execution",
+      "implementation_identity": "https://github.com/XiaomiRobotics/Xiaomi-Robotics-0",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_REAL_TIME_CROSS_EMBODIMENT_VLA_DISPLACER_CANDIDATE",
+        "N_H1_RUNTIME_CONSTRAINED_ROBOT_POLICY_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.12684"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://robotics.xiaomi.com/xiaomi-robotics-0.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/XiaomiRobotics/Xiaomi-Robotics-0"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "REAL_TIME_RUNTIME_HARDWARE_AND_CONTROL_RATE_MUST_BE MATCHED",
+        "ASYNCHRONOUS_ACTION_CHUNK_CONFIGURATION_MUST_BE BOUND",
+        "PRETRAINED_AND_TASK_SPECIFIC_CHECKPOINTS_MUST_NOT_BE COLLAPSED",
+        "POSTTRAINING_INFORMATION_AND_DATA_BUDGET_REQUIRE_PARITY_REVIEW",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_V62"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_PRE_EXECUTION_FREEZE_MANIFEST",
+  "state": "FROZEN_BEFORE_FIRST_TARGET_EXECUTION",
+  "generation_attempt": 10,
+  "frozen_at_utc": "2026-09-26T01:47:17.507929Z",
+  "evidence_class": "FRESH_PROTECTED_HOLDOUT_PRE_EXECUTION",
+  "frozen_inputs": {
+    "fresh_holdout_cases_attempt_10": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_cases_attempt_10.json",
+      "sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+      "size_bytes": 61241
+    },
+    "generation_package_v10": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v10.json",
+      "sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009"
+    },
+    "generation_package_v10_manifest": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v10_manifest.json",
+      "sha256": "dc0893e5bb155cbcd8f9ad7822d99ece872eff6f1ca90f641049693fa77d8edd"
+    },
+    "attempt_10_successor_design": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/generation_successor_design_attempt_10.json",
+      "sha256": "0dc572c1e0af16aee893dab05d39863086f6be9e64ce848cc65a7cd3c0f0adc3"
+    },
+    "attempt_10_environment_decision": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/generation_environment_decision_attempt_10.json",
+      "sha256": "d16b7fcbc61fd562700d7bfae3d0d73f3343a16b207a286966e04585242246d6"
+    },
+    "attempt_10_generation_environment_attestation": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/generation_environment_attestation_attempt_10.json",
+      "sha256": "95d1c934bf96992e1e72caffbe8519a1f3bd9b2e6d82c9fd87cf7b45ef30c9a2"
+    },
+    "package_v10_independent_checker": {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v10.py",
+      "sha256": "d83bb83faa26a3b80096379960f589bb0a0e9542e4f995e4b0f0bc7c6944c8a6"
+    },
+    "frozen_target_evaluator": {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    }
+  },
+  "scientific_contract_bindings": {
+    "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+    "preregistration_contract_sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037",
+    "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+    "public_evaluator_contract_manifest_sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e",
+    "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "frozen_case_identity": {
+    "case_count": 54,
+    "case_ids": [
+      "G3-H10-001",
+      "G3-H10-002",
+      "G3-H10-003",
+      "G3-H10-004",
+      "G3-H10-005",
+      "G3-H10-006",
+      "G3-H10-007",
+      "G3-H10-008",
+      "G3-H10-009",
+      "G3-H10-010",
+      "G3-H10-011",
+      "G3-H10-012",
+      "G3-H10-013",
+      "G3-H10-014",
+      "G3-H10-015",
+      "G3-H10-016",
+      "G3-H10-017",
+      "G3-H10-018",
+      "G3-H10-019",
+      "G3-H10-020",
+      "G3-H10-021",
+      "G3-H10-022",
+      "G3-H10-023",
+      "G3-H10-024",
+      "G3-H10-025",
+      "G3-H10-026",
+      "G3-H10-027",
+      "G3-H10-028",
+      "G3-H10-029",
+      "G3-H10-030",
+      "G3-H10-031",
+      "G3-H10-032",
+      "G3-H10-033",
+      "G3-H10-034",
+      "G3-H10-035",
+      "G3-H10-036",
+      "G3-H10-037",
+      "G3-H10-038",
+      "G3-H10-039",
+      "G3-H10-040",
+      "G3-H10-041",
+      "G3-H10-042",
+      "G3-H10-043",
+      "G3-H10-044",
+      "G3-H10-045",
+      "G3-H10-046",
+      "G3-H10-047",
+      "G3-H10-048",
+      "G3-H10-049",
+      "G3-H10-050",
+      "G3-H10-051",
+      "G3-H10-052",
+      "G3-H10-053",
+      "G3-H10-054"
+    ],
+    "must_accept_count": 27,
+    "must_reject_count": 27,
+    "one_accept_and_one_reject_per_primary_requirement": true,
+    "primary_requirements": [
+      "G3-BR-001",
+      "G3-BR-002",
+      "G3-BR-003",
+      "G3-BR-004",
+      "G3-BR-005",
+      "G3-BR-006",
+      "G3-BR-007",
+      "G3-BR-008",
+      "G3-BR-009",
+      "G3-BR-010",
+      "G3-BR-011",
+      "G3-BR-012",
+      "G3-BR-013",
+      "G3-BR-014",
+      "G3-BR-015",
+      "G3-BR-016",
+      "G3-BR-017",
+      "G3-BR-018",
+      "G3-BR-019",
+      "G3-BR-020",
+      "G3-BR-021",
+      "G3-BR-022",
+      "G3-BR-023",
+      "G3-BR-024",
+      "G3-BR-025",
+      "G3-BR-026",
+      "G3-BR-027"
+    ],
+    "environment_counts": {
+      "E1": 15,
+      "E2": 14,
+      "E3": 13,
+      "CROSS_ENV": 12
+    },
+    "interaction_case_count": 52,
+    "case_order_frozen": true,
+    "expectations_frozen": true,
+    "facts_frozen": true,
+    "expected_violation_codes_frozen": true,
+    "rationales_frozen": true,
+    "adversarial_dimensions_frozen": true,
+    "generation_provenance_frozen": true
+  },
+  "static_validation_state": {
+    "static_validation_completed_before_freeze": true,
+    "static_validation_passed": true,
+    "case_schema_passed": true,
+    "public_fact_interface_passed": true,
+    "public_violation_vocabulary_passed": true,
+    "environment_scope_passed": true,
+    "deterministic_environment_token_mismatch_count": 0,
+    "semantic_environment_consistency_review_passed": true,
+    "target_evaluator_imported_during_static_validation": false,
+    "target_evaluator_executed_during_static_validation": false,
+    "target_evaluator_simulated_during_static_validation": false
+  },
+  "protected_execution_contract": {
+    "first_target_execution_allowed_only_after_runner_is_created_and_frozen": true,
+    "first_target_execution_only_once": true,
+    "exact_frozen_case_artifact_required": true,
+    "exact_frozen_target_evaluator_required": true,
+    "evaluator_call_count_per_case": 1,
+    "call_protocol": "evaluate(primary_requirement, facts, environment)",
+    "secondary_requirements_do_not_trigger_additional_calls": true,
+    "expectation_must_not_be_passed_to_evaluator": true,
+    "expected_violation_codes_must_not_be_passed_to_evaluator": true,
+    "all_54_predictions_must_be_collected_before_scoring": true,
+    "full_first_result_must_be_preserved": true,
+    "false_accepts_must_be_preserved": true,
+    "false_rejects_must_be_preserved": true,
+    "actual_violation_codes_must_be_preserved": true,
+    "case_rewrite_after_first_execution_forbidden": true,
+    "rerun_as_fresh_forbidden": true
+  },
+  "success_rule": {
+    "must_accept_required_decision": "ACCEPT",
+    "must_accept_required_violations": [],
+    "must_reject_required_decision": "REJECT",
+    "must_reject_required_violation_relation": "EXPECTED_CODES_SUBSET_OF_ACTUAL_CODES",
+    "additional_actual_codes_allowed_for_must_reject": true,
+    "false_accepts_allowed": 0,
+    "false_rejects_allowed": 0,
+    "all_expected_violation_contracts_required": true
+  },
+  "failure_policy": {
+    "failure_is_valid_evidence": true,
+    "classification_required_before_remediation": true,
+    "historical_first_result_must_remain_preserved": true,
+    "remediated_rerun_is_regression_only": true,
+    "case_edits_after_outcome_visibility_do_not_restore_freshness": true
+  },
+  "claim_limits": {
+    "freeze_does_not_execute_target": true,
+    "freeze_does_not_consume_target_freshness": true,
+    "freeze_does_not_establish_holdout_pass": true,
+    "freeze_does_not_establish_scientific_support": true,
+    "freeze_does_not_establish_task_8_authority": true,
+    "future_pass_does_not_establish_task_5_support": true,
+    "future_pass_does_not_prove_universal_generalization": true
+  },
+  "execution_state_at_freeze": {
+    "runner_created": false,
+    "runner_frozen": false,
+    "protected_execution_authorized": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_available": false,
+    "first_run_result_exists": false,
+    "target_freshness_consumed": false
+  },
+  "next_required_gate": "CREATE_AND_FREEZE_SINGLE_USE_PROTECTED_EXECUTION_RUNNER"
+}

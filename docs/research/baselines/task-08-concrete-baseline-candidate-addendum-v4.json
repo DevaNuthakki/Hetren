@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 4,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:40:12Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v3": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v3.json",
+      "sha256": "843c6eadfade3bfb95e9b2dc21509d749072dc72f1126fa8c051c7f894e0a489"
+    },
+    "systematic_saturation_v1": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v1.json",
+      "sha256": "3663b99d234da93a088c768c1a4d973026d99c0bc986373c730e8b13a8046271"
+    }
+  },
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGENTEVOL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AgentEvol / AgentGym",
+      "implementation_identity": "https://github.com/Hsch22/AgentGym",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.acl-long.1355/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hsch22/AgentGym"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_AGENT_TASK_AND_CHECKPOINT_BINDING",
+        "Provides a learned agent-evolution method across diverse interactive agent environments rather than only a fixed prompting scaffold."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_AGENT_TASK_AND_CHECKPOINT_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SWERL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SWE-RL",
+      "implementation_identity": "https://github.com/facebookresearch/swe-rl",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_SOFTWARE_ENGINEERING_AGENT_COMPARATOR_IF_TASK_MATCHED"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/facebookresearch/swe-rl"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_TASK_CONDITIONAL_CANDIDATE",
+        "Provides reinforcement-learning-based software-engineering reasoning, relevant only if the governed E1 task is software engineering."
+      ],
+      "eligibility_status": "MATERIAL_TASK_CONDITIONAL_CANDIDATE",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-GOLD",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "GOLD",
+      "implementation_identity": "https://github.com/AIGNLAI/GOLD",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_AND_EFFICIENCY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Lai_The_Golden_Subspace_Where_Efficiency_Meets_Generalization_in_Continual_Test-Time_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIGNLAI/GOLD"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_STRENGTH_REVIEW",
+        "Current CVPR 2026 continual-TTA method with classification and segmentation evaluation and explicit efficiency focus."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_STRENGTH_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-CODIRE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Test-Time Distillation / CoDiRe",
+      "implementation_identity": "https://github.com/walawalagoose/TTD",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Chen_Test-Time_Distillation_for_Continual_Model_Adaptation_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/walawalagoose/TTD"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_ONLY_WITH_EXTERNAL_VLM_INFORMATION_PARITY",
+        "Uses an external frozen VLM supervisory signal during continual adaptation, so its information channel can materially affect comparator fairness."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_ONLY_WITH_EXTERNAL_VLM_INFORMATION_PARITY",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-BITTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "BITTA",
+      "implementation_identity": "https://github.com/super-jw/BITTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/super-jw/BITTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_CLIP_SETTING_AND_PRIMARY_PAPER_BINDING",
+        "Current ICLR 2026 VLM adaptation method evaluated with CLIP-style image classification."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CLIP_SETTING_AND_PRIMARY_PAPER_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-D2O",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "D2O",
+      "implementation_identity": "https://github.com/MAiTL-Group/D2O",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_TRAINING_FREE_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MAiTL-Group/D2O"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_PRIMARY_PAPER_AND_MATCHED_VLM_REVIEW",
+        "Training-free VLM test-time adaptation candidate surfaced through the current VLM-TTA systematic index."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_PRIMARY_PAPER_AND_MATCHED_VLM_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_SYSTEMATIC_SATURATION_PASS"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

@@ -1,0 +1,198 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 20,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T20:39:40Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v19": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v19.json",
+      "sha256": "78b19da4b667035a32d92374d57af59995c88355363e30ef534805dcdda46cee"
+    },
+    "systematic_saturation_v17": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v17.json",
+      "sha256": "972b5e5a697863bdda3fb6c9bfe27418e77f308754580dd65e527f7948fa8e29"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SAGE-SKILL-GRPO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SAGE \u2014 Reinforcement Learning for Self-Improving Agent with Skill Library",
+      "implementation_identity": "https://github.com/amazon-science/SAGE",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_SKILL_AUGMENTED_RL_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_SKILL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_APPWORLD_STYLE_SKILL_LIBRARY_RL_AND_INFORMATION_OPPORTUNITY_MATCH",
+        "APPWORLD_OR_EQUIVALENT_INTERACTIVE_TASK_CONTRACT_MUST_BE MATCHED",
+        "BASE_MODEL_SUPERVISED_INITIALIZATION_GRPO_RECIPE_AND_CHECKPOINT_MUST_BE BOUND",
+        "SKILL_GENERATION_VALIDATION_AND_LIBRARY_ACCESS_MUST_BE PARITY_MATCHED",
+        "MODIFIED_APPWORLD_AND_LLAM\u0410_FACTORY_DEPENDENCY_REVISIONS_MUST_BE BOUND",
+        "WITHIN_E1_SKILL_ACCUMULATION_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "Introduces a parameter-trained self-improvement mechanism in which skills accumulate across sequential rollouts and are incorporated into GRPO through a skill-integrated reward."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_APPWORLD_STYLE_SKILL_LIBRARY_RL_AND_INFORMATION_OPPORTUNITY_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V17"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SKILL-PRO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Skill-Pro \u2014 Learning Reusable Skills from Experience via Non-Parametric PPO for LLM Agents",
+      "implementation_identity": "https://github.com/Miracle1207/Skill-Pro",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_REUSABLE_PROCEDURAL_SKILL_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_NON_PARAMETRIC_SKILL_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_TASK_OR_CROSS_AGENT_SKILL_TRANSFER_REFERENCE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_CONFERENCE_RECORD",
+          "url": "https://openreview.net/forum?id=9kJQjx2B80"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Miracle1207/Skill-Pro"
+        },
+        {
+          "class": "INSTITUTIONAL_ACCEPTANCE_RECORD",
+          "url": "https://ia.cas.cn/xwzx/ttxw/202606/t20260603_8213499.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.01869"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_ONLINE_PROCEDURAL_SKILL_EVOLUTION_WITHOUT_BASE_MODEL_PARAMETER_UPDATES_IS_MATCHED",
+        "SKILL_MDP_STATE_ACTION_AND_SKILL_SCHEMA_MUST_BE MATCHED",
+        "PPO_GATE_AND_SKILL_SCORE_MAINTENANCE_CONFIGURATION_MUST_BE BOUND",
+        "TEXTARENA_OR_ALFWORLD_TASK_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_TASK_AND_CROSS_AGENT_RESULTS_REMAIN_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER",
+        "Formalizes reusable procedural skills through a Skill-MDP and updates the skill pool using semantic-gradient candidate generation plus a PPO-style verification gate without updating base-model parameters."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ONLINE_PROCEDURAL_SKILL_EVOLUTION_WITHOUT_BASE_MODEL_PARAMETER_UPDATES_IS_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V17"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-EVOTEST",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "EvoTest \u2014 Evolutionary Test-Time Learning for Self-Improving Agentic Systems",
+      "implementation_identity": "https://github.com/yf-he/EvoTest",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_role": [
+        "A_H1_WHOLE_AGENT_TEST_TIME_EVOLUTION_COMPARATOR_CANDIDATE",
+        "N_H1_EVOLUTIONARY_AGENT_CONFIGURATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=JFnnajbkvP"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_RECORD",
+          "url": "https://microsoft.com/en-us/research/publication/evotest-evolutionary-test-time-learning-for-self-improving-agentic-systems/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yf-he/EvoTest"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_TEST_TIME_AGENT_EVOLUTION_SETTING_MATCHED",
+        "REPEATED_EPISODES_OF_THE_SAME_OR_MATCHED_ENVIRONMENT_REQUIRED",
+        "EVOLVER_MODEL_ACTOR_MODEL_AND_EVOLUTION_PROMPT_MUST_BE BOUND",
+        "MEMORY_UCB_SELECTION_STATE_EXTRACTOR_AND_FREEZE_LOGIC_MUST_BE BOUND",
+        "JERICHO_INFORMATION_OPPORTUNITY_MUST_NOT_BE ASSUMED FOR_OTHER_E1_TASKS",
+        "EVOLUTION_AND_FREEZE_BEHAVIOR_DO_NOT_BY_THEMSELVES_ESTABLISH_A_H2_ROLLBACK_REQUIREMENTS",
+        "Evolves prompts, cross-episode memory, hyperparameters, and tool-use routines between repeated environment episodes without gradient-based fine-tuning."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_TEST_TIME_AGENT_EVOLUTION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V17"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

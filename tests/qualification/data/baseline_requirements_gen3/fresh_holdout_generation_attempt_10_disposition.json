@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_DISPOSITION",
+  "state": "PROTECTED_HOLDOUT_FAILED_EVALUATOR_DEFECT_CLASSIFIED",
+  "generation_attempt": 10,
+  "disposed_at_utc": "2026-09-26T02:05:54.895056Z",
+  "classification": "EVALUATOR_DEFECT",
+  "classification_sha256": "10163304c90625e24e1b4931867bd1257379aeb078b9be31ed753566c599ccfa",
+  "authoritative_result": {
+    "qualification_result": "FAIL",
+    "passed_case_count": 52,
+    "case_count": 54,
+    "false_accept_count": 0,
+    "false_reject_count": 2,
+    "false_reject_ids": [
+      "G3-H10-009",
+      "G3-H10-037"
+    ]
+  },
+  "case_dispositions": {
+    "G3-H10-009": "EVALUATOR_DEFECT_FALSE_REJECT",
+    "G3-H10-037": "EVALUATOR_DEFECT_FALSE_REJECT"
+  },
+  "oracle_disposition": {
+    "G3-H10-009": "UPHELD",
+    "G3-H10-037": "UPHELD",
+    "holdout_oracle_defect_detected": false
+  },
+  "freshness": {
+    "consumed": true,
+    "another_attempt_10_fresh_run_permitted": false,
+    "case_rewrite_restores_freshness": false,
+    "future_use": "REGRESSION_EVIDENCE_ONLY"
+  },
+  "historical_result_policy": {
+    "first_run_remains_authoritative_historical_result": true,
+    "first_run_result_remains_FAIL": true,
+    "first_run_result_must_not_be_rewritten": true,
+    "raw_predictions_must_not_be_rewritten": true,
+    "frozen_cases_must_not_be_rewritten": true,
+    "failed_evaluator_snapshot_must_not_be_rewritten": true
+  },
+  "successor_policy": {
+    "new_fresh_holdout_attempt_authorized": false,
+    "protected_holdout_regeneration_authorized": false,
+    "remediation_planning_permitted": true,
+    "remediation_implementation_authorized": false,
+    "remediation_target": "TARGET_EVALUATOR_LOGIC",
+    "post_remediation_execution_class": "REGRESSION_ONLY",
+    "required_next_gate": "PREDECLARE_MINIMAL_EVALUATOR_REMEDIATION_AND_REGRESSION_PLAN"
+  },
+  "interpretation": "Attempt 10 produced a valid protected first-run FAIL with 52 of 54 cases passing. Both failures are classified as evaluator false-rejection defects. The two frozen holdout oracles are upheld. Freshness is permanently consumed. Historical evidence must remain immutable; any evaluator remediation and subsequent execution are regression evidence only.",
+  "claim_limits": {
+    "disposition_does_not_reclassify_FAIL_as_PASS": true,
+    "disposition_does_not_restore_freshness": true,
+    "disposition_does_not_complete_task_8": true,
+    "disposition_does_not_establish_scientific_support": true
+  }
+}

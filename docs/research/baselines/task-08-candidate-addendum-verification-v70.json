@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 70,
+  "state": "ADDENDUM_V70_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T03:48:49Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v70": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v70.json",
+      "sha256": "de23501e8b3459df4daa7285170985ecbbd57395d6a9c595956aed9191cac4ca"
+    },
+    "systematic_saturation_v67": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v67.json",
+      "sha256": "e66189f7b7b25ef12e90593b5befb0e423d7b964b63792631b7fa4bfe415c543"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PALM-LONGHORIZON",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LONG_HORIZON_PROGRESS_AWARE_AFFORDANCE_POLICY_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "PALM is published at CVPR 2026.",
+        "PALM targets long-horizon multi-step robotic manipulation.",
+        "Its policy couples structured future affordance representations with continuous within-subtask progress estimation.",
+        "The official repository contains executable simulation and real-world training or evaluation instructions.",
+        "The official repository exposes checkpoints and PALM-specific implementation assets."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Liu_PALM_Progress-Aware_Policy_Learning_via_Affordance_Reasoning_for_Long-Horizon_Robotic_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/PLAN-Lab/PALM"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.07060"
+        }
+      ],
+      "limits": [
+        "LONG_HORIZON_MANIPULATION_SETTING_REQUIRED",
+        "AFFORDANCE_AND_PROGRESS_CONFIGURATION_MUST_BE_BOUND",
+        "BACKBONE_AND_ACTION_POLICY_CONFIGURATION_MUST_BE_BOUND",
+        "LIBERO_LONG_CALVIN_AND_REAL_WORLD_RESULTS_MUST_NOT_BE_COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v70_candidates_have_role_level_external_review": true,
+    "all_addendum_v70_candidates_are_finally_eligible": false,
+    "full_immutable_revision_pinning_complete": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "published_result_is_directly_portable_to_hetren": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

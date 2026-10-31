@@ -1,0 +1,80 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 17,
+  "state": "ADDENDUM_V17_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:25:52Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v17": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v17.json",
+      "sha256": "758c21681d805c73e5460da55cd41a18e5a777c59e5d7c49597e6ac6ab752f80"
+    },
+    "systematic_saturation_v14": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v14.json",
+      "sha256": "bd45b7d88a660054c5b5a77e26e89e7af7bb3d7bff4b1da71e3007577e6247a5"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RIMRULE",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TOOL_USE_RULE_ADAPTATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "RIMRULE is published in the ACL 2026 main long-paper proceedings.",
+        "It adapts tool-using language agents through dynamic injection of compact rules learned from failure traces.",
+        "Candidate rules are consolidated using a Minimum Description Length objective favoring concise and reusable rules.",
+        "Rules are stored in natural-language and structured symbolic forms and retrieved at inference time.",
+        "The publication reports evaluation on seen and unseen tools without modifying base-model weights.",
+        "A public Intuit AI Research implementation of RimRule exists with ToolHop as an included workflow."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1599/"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.00086"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/intuit-ai-research/RimRule"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_ORGANIZATION_RECORD",
+          "url": "https://www.intuit.com/ai/research/publications/"
+        }
+      ],
+      "limits": [
+        "FAILURE_TRACE_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "RULE_PROPOSAL_MODEL_AND_RULE_CONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "RETRIEVAL_AND_RULE_INJECTION_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_LLM_RULE_REUSE_IS_WITHIN_E1_TOOL_USE_AND_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "FINAL_IMMUTABLE_CUTOFF_CONSISTENT_IMPLEMENTATION_REVISION_NOT_YET_BOUND"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v17_candidates_have_role_level_external_review": true,
+    "all_addendum_v17_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "cross_llm_rule_portability_establishes_general_n_h2": false,
+    "publication_status_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 49,
+  "state": "SATURATION_V45_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:22:18Z",
+  "task": 8,
+  "bindings": {
+    "attempt_48": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_48.json",
+      "sha256": "439b51c4ac9ef2c559d24a5e447974b17101d3b0380ede92e3858e58eaa1b89a"
+    },
+    "addendum_v47_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v47.json",
+      "sha256": "a4ce594769315da09452647ce1f0186be13dab2e4c4419edc3d13c8d892e5ec7"
+    },
+    "systematic_saturation_v45": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v45.json",
+      "sha256": "1d5b1acbd0f957c408fc762bae1c1e8b38a8c48523c3d3337e716e4fd508fbe1"
+    },
+    "candidate_addendum_v48": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v48.json",
+      "sha256": "3962dc08567b0e5d80435f41a78e62f60e2d45a538ff3f48ec8c14fccf15e5a5"
+    }
+  },
+  "state_summary": {
+    "addendum_v47_role_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v48_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B50_VERIFY_ADDENDUM_V48_AND_RUN_NEXT_BOUNDED_DIRECT_MEMORY_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

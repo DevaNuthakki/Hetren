@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_EXPERIMENT_CONTRACT_INSTANTIATION_BOUNDARY_ATTEMPT",
+  "attempt": 1,
+  "state": "CONTRACT_STRUCTURE_DEFINED_NO_EXPERIMENT_INSTANCES_NO_BASELINE_BINDINGS",
+  "recorded_at_utc": "2026-09-27T21:15:27Z",
+  "task": 8,
+  "bindings": {
+    "contract_instantiation_boundary_v1": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "catalog_boundary_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_baseline_catalog_later_binding_boundary_attempt_1.json",
+      "sha256": "20c46fd0ef9ecf09e3fa34068494745e1e01e37eca58dec3b4ef4abee3227563"
+    },
+    "catalog_projection_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_non_governing_baseline_catalog_projection_attempt_1.json",
+      "sha256": "6c06ecb53a5f7125732d0e931338c2f6a9d5803e57d2af1dd87a85026ce32692"
+    },
+    "prior_binding_readiness_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_post_discovery_concrete_experiment_contract_binding_readiness_attempt_1.json",
+      "sha256": "d9ee7d02e3128d665101f830bac79e88b2bac4090867d3527094e11772d71896"
+    }
+  },
+  "state_summary": {
+    "canonical_candidate_count": 222,
+    "contract_structure_defined": true,
+    "concrete_experiment_contract_instances_created": 0,
+    "candidate_specific_applicability_bindings_created": 0,
+    "candidate_specific_baseline_bindings_created": 0,
+    "split_versions_created": 0,
+    "comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false,
+    "protected_outcomes_used": false,
+    "baseline_selection_authorized": false,
+    "lifecycle_transition_authorized": false
+  },
+  "next_gate": "I5A2R13_INSTANTIATE_OR_IMPORT_REAL_CONCRETE_EXPERIMENT_CONTRACTS_WITHOUT_BASELINE_SELECTION",
+  "claim_limits": {
+    "contract_schema_is_an_experiment": false,
+    "contract_schema_authorizes_baseline_selection": false,
+    "catalog_candidate_is_finally_applicable": false,
+    "catalog_candidate_is_finally_eligible": false,
+    "catalog_candidate_is_strongest": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  }
+}

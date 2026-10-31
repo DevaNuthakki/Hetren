@@ -1,0 +1,124 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 52,
+  "state": "ADDENDUM_V52_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:30:55Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v52": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v52.json",
+      "sha256": "53217cf6ef01a589794e2bb3810996b2c767f427ad420801f5f48cf75a721402"
+    },
+    "systematic_saturation_v49": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v49.json",
+      "sha256": "8f160f93352e5a9b294dd2d0c1ab5b493cf867db94c29435364b2dd3f186efc6"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RETROFORMER",
+      "verification_state": "PEER_REVIEWED_ICLR_2024_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_RETROSPECTIVE_POLICY_GRADIENT_AGENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Retroformer is published as an ICLR 2024 conference paper.",
+        "It learns a retrospective model from environment rewards using policy-gradient optimization.",
+        "The retrospective model summarizes causes of failed attempts and proposes improved action plans.",
+        "Its public implementation contains training and evaluation support for multiple language-agent tasks."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=KOZu91CzbK"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/weirayao/Retroformer"
+        }
+      ],
+      "limits": [
+        "RETROSPECTIVE_MODEL_AND_BASE_AGENT_MUST_BE BOUND",
+        "TRAINING_REWARD_AND_POLICY_GRADIENT_CONFIGURATION_MUST_BE BOUND",
+        "TASK_ENVIRONMENT_AND_FEEDBACK_OPPORTUNITY_MUST_BE MATCHED",
+        "WITHIN_E1_AGENT_LEARNING_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MINDFORGE",
+      "verification_state": "PEER_REVIEWED_NEURIPS_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LIFELONG_CULTURAL_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "MindForge is published in the NeurIPS 2025 main conference.",
+        "It combines structured theory-of-mind state, inter-agent communication, and multi-component memory.",
+        "Its experiments include instructive and collaborative lifelong-learning settings in Minecraft.",
+        "The official implementation provides single-agent, collaborative, and instructive execution paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://papers.nips.cc/paper_files/paper/2025/hash/f82cb74b5d40004cb96d1426fc12fccf-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tapri-lab/mindforge"
+        }
+      ],
+      "limits": [
+        "MINECRAFT_LIFELONG_LEARNING_SETTING_REQUIRED",
+        "SINGLE_AGENT_AND_MULTI_AGENT_MODES_MUST_NOT_BE COLLAPSED",
+        "LLM_PROVIDER_AND_COMMUNICATION_CONFIGURATION_MUST_BE BOUND",
+        "CULTURAL_TRANSFER_WITHIN_E1_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GITM",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_OPEN_WORLD_TEXT_KNOWLEDGE_AND_MEMORY_REFERENCE_CANDIDATE",
+      "verified_facts": [
+        "GITM is publicly documented as an arXiv research work from 2023.",
+        "It combines a decomposer, planner, interface, external text knowledge, and persistent text memory for Minecraft.",
+        "Successful action lists are summarized into text memory for later planning.",
+        "The official repository provides the research implementation and experimental documentation."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2305.17144"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenGVLab/GITM"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE MISLABELED_PEER_REVIEWED",
+        "MINECRAFT_ACTION_INTERFACE_AND_EXTERNAL_KNOWLEDGE_ACCESS_MUST_BE BOUND",
+        "TEXT_MEMORY_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "WITHIN_E1_OPEN_WORLD_GENERALIZATION_DOES_NOT ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v52_candidates_have_role_level_external_review": true,
+    "all_addendum_v52_candidates_are_peer_reviewed": false,
+    "all_addendum_v52_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "gitm_is_peer_reviewed": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

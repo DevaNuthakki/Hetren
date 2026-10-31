@@ -1,0 +1,200 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 72,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T04:54:45Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_heads_are_not_final_immutable_version_identities": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v74_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v74.json",
+      "sha256": "3bcb423515989af2ce6b4485f35857cfb531dca3f4ab4f6c7bc355a7277823b5"
+    },
+    "systematic_saturation_v71": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v71.json",
+      "sha256": "483a1fd99683fe72554c8dde6763788ace0fe03648fb8f6e3b9092949ab2655f"
+    }
+  },
+  "focus": [
+    "E1_CONTINUAL_VLA_ROLE_DISPLACEMENT",
+    "E2_DISPLACEMENT_SPOT_CHECK",
+    "E3_DISPLACEMENT_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"CLARE\" continual learning vision-language-action RA-L 2026 code",
+    "\"CLARE\" autonomous adapter routing expansion VLA github",
+    "\"AtomicVLA\" CVPR 2026 continual skill learning code",
+    "\"AtomicVLA\" atomic skill mixture experts continual learning github",
+    "\"SkillsCrafter\" AAAI 2026 lifelong manipulation code",
+    "\"Lifelong Language-Conditioned Robotic Manipulation Learning\" source code",
+    "\"Actions as Language\" VLM2VLA catastrophic forgetting ICLR 2026 code",
+    "\"Memory Anchors for Continual Robot Learning\" CoRL 2026 code",
+    "\"Multisensory Continual Learning\" CoRL 2026 force code",
+    "\"Learning New Tasks via Reusable Skills\" embodied continual learning code",
+    "2026 continual VLA skill learning official code",
+    "2026 continual robot learning VLA adapters replay routing",
+    "2026 tabular test-time adaptation structured data peer reviewed code",
+    "2026 vision test-time adaptation CVPR code continual prompt adaptation"
+  ],
+  "query_count": 14,
+  "candidate_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+      "name": "AtomicVLA: Unlocking the Potential of Atomic Skill Learning in Robots",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "promoted_matches": [
+        {
+          "baseline_id": "DISCOVERY:T8-E1-ATOMICVLA",
+          "name": "AtomicVLA",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v71.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SKILLSCRAFTER",
+      "name": "Lifelong Language-Conditioned Robotic Manipulation Learning",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "promoted_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SKILLSCRAFTER",
+      "name": "Lifelong Language-Conditioned Robotic Manipulation Learning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LIFELONG_MANIPULATION_COMPARATOR_CANDIDATE",
+        "A_H1_SEQUENTIAL_SKILL_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_RETENTION_DIAGNOSTIC_ONLY"
+      ],
+      "evidence_status": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38930"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://skillscrafter-lifelong.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/skillscrafter-lifelong/code"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LANGUAGE_CONDITIONED_SEQUENTIAL_MANIPULATION_CONTRACT_MATCHES",
+      "material_reason": "SkillsCrafter directly targets sequential manipulation-skill learning and forgetting through skill adaptation, common semantic subspaces, and specialization aggregation, yielding a materially different knowledge-preservation mechanism from adapter expansion, replay, subspace constraints, and sequential LoRA.",
+      "limits": [
+        "LANGUAGE_CONDITIONED_SEQUENTIAL_MANIPULATION_SETTING_REQUIRED",
+        "LLARVA_OR_EQUIVALENT_BASE_CHECKPOINT_MUST_BE BOUND",
+        "SKILL_ORDER_AND_TRAIN_TEST_SEQUENCE_MUST_BE BOUND",
+        "SVD_SKILL_SUBSPACE_AND_LORA_CONFIGURATION_MUST_BE BOUND",
+        "RLBench_AND_REAL_WORLD_RESULTS_MUST_NOT_BE COLLAPSED",
+        "RETENTION_DOES_NOT_ESTABLISH_HETREN_A_H2_ROLLBACK",
+        "WITHIN_E1_LIFELONG_SKILL_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Actions as Language / VLM2VLA",
+      "sources": [
+        "https://proceedings.iclr.cc/paper_files/paper/2026/hash/7a0f8055c838df8e62329a76c7c6403d-Abstract-Conference.html",
+        "https://vlm2vla.github.io/"
+      ],
+      "disposition": "FOUNDATION_CAPABILITY_RETENTION_REFERENCE_NOT_SEQUENTIAL_CONTINUAL_SKILL_DISPLACEMENT_CANDIDATE",
+      "reason": "VLM2VLA addresses preservation of VLM capabilities while adapting a VLM into a VLA; it does not establish the same sequential continual-task acquisition contract as CLARE, OrthoSkillVLA, or the continual-RL comparator."
+    },
+    {
+      "name": "Memory Anchors for Continual Robot Learning",
+      "sources": [
+        "https://arxiv.org/abs/2608.26545",
+        "https://robot-adaptation.github.io/MemoryAnchors"
+      ],
+      "disposition": "ROLE_RELEVANT_REPLAY_SELECTION_REFERENCE_IMPLEMENTATION_NOT_BOUND_FOR_GOVERNED_BASELINE",
+      "reason": "Memory Anchors is highly relevant to replay selection under continual robot learning, but this displacement pass does not bind a specific executable implementation identity suitable for final governed reproduction."
+    },
+    {
+      "name": "MuSe \u2014 Multisensory Continual Learning",
+      "sources": [
+        "https://arxiv.org/abs/2606.30988",
+        "https://jadenvc.github.io/multisensory-continual-learning/"
+      ],
+      "disposition": "NEW_MODALITY_SCENARIO_SPECIFIC_REFERENCE_NOT_GENERIC_CONTINUAL_VLA_DISPLACEMENT_CANDIDATE",
+      "reason": "MuSe adds force sensing to a previously vision-only policy; it becomes directly claim-bearing only when the governed information opportunity permits the new modality."
+    },
+    {
+      "name": "Skill-Compositional Experts",
+      "sources": [
+        "https://arxiv.org/abs/2606.15685",
+        "https://eqcy.github.io/sce/"
+      ],
+      "disposition": "CONTINUAL_MANIPULATION_REFERENCE_CODE_RELEASE_NOT_VERIFIED",
+      "reason": "SCE is strongly role-relevant, but its project page currently labels code as coming soon, so an executable governed baseline identity is not bound in this pass."
+    },
+    {
+      "name": "Flatness-aware Prompt Pretraining",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Jang_Improving_Calibration_in_Test-Time_Prompt_Tuning_for_Vision-Language_Models_via_CVPR_2026_paper.html",
+        "https://github.com/YonseiML/fpp"
+      ],
+      "disposition": "E3_CALIBRATION_INITIALIZATION_REFERENCE_NOT_GENERIC_DISPLACEMENT_CANDIDATE",
+      "reason": "FPP changes prompt initialization and calibration behavior rather than filling the current continual-VLA E1 displacement role."
+    },
+    {
+      "name": "Test-Time Perturbation Tuning with Delayed Feedback for VLA Models",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Zang_Test-Time_Perturbation_Tuning_with_Delayed_Feedback_for_Vision-Language-Action_Models_CVPR_2026_paper.html",
+      "disposition": "VLA_TEST_TIME_ENVIRONMENT_SHIFT_REFERENCE_NOT_CONTINUAL_SKILL_DISPLACEMENT_CANDIDATE",
+      "reason": "The method adapts behavior under deployment-time environmental perturbation and delayed feedback rather than sequential acquisition and retention of a continual skill sequence."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "continual_vla_methods_are_within_e1": true,
+    "forcing_within_e1_continual_learning_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V72"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "previous_consecutive_no_new_material_candidate_rounds": 0,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially distinct role-matched displacement candidate was not previously promoted."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "strength_ordering_complete": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "atomicvla_is_automatically_strongest": false,
+    "skillscrafter_is_automatically_strongest": false,
+    "continual_retention_establishes_a_h2": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "screened_reference_is_automatically_claim_bearing": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B77_VERIFY_ADDENDUM_V75_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

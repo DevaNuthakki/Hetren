@@ -1,0 +1,193 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 13,
+  "state": "SATURATION_V13_RESOLVED_NEW_DRIFT_RESILIENT_TABPFN_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:04:30Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v15_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v15.json",
+      "sha256": "85e515c4de5869c01301aa96420690afbecab87a8e5b60b7067121edae9a849c"
+    },
+    "tabpfn_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-drift-resilient-tabpfn-identity-resolution-v1.json",
+      "sha256": "af12e92ffec55d1e636302426b17d1afdd5cf230fb0d8c87c9a5e30051944191"
+    },
+    "systematic_saturation_v12": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v12.json",
+      "sha256": "48c75ebe8ad6531d68b36c3cf7eedc6edd6e434a58f26de9ba87a83cb45f71c9"
+    }
+  },
+  "focus": [
+    "TABPFN_IDENTITY_RESOLUTION",
+    "E1_LEARNED_TOOL_USE_ROLE_CHALLENGE",
+    "E2_TEMPORAL_SHIFT_TABULAR_ROLE_CHALLENGE",
+    "E3_POST_FOZO_CALIBRATION_AND_GENERIC_TTA_CHALLENGE",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Drift-Resilient TabPFN\" NeurIPS 2024 official github",
+    "\"Zero-Shot Bayesian Optimization with TabPFN\" AutoML 2026 official github",
+    "\"TARS\" tabular temporal shift Neural Networks 2026 official github",
+    "\"CodeGym\" ICLR 2026 tool use RL official github",
+    "\"AgenticQwen\" ACL 2026 official training code",
+    "\"AutoTool\" ICLR 2026 tool use reinforcement learning",
+    "\"ReTool\" ICLR 2026 strategic tool use reinforcement learning",
+    "\"ResT\" ICLR 2026 tool-use language models",
+    "\"R1-Code-Interpreter\" ICLR 2026 code interpreter RL",
+    "\"Agent-STAR\" EMNLP 2026 long-horizon tool using agents",
+    "\"ToolMaster\" environment interaction unfamiliar tools",
+    "\"ToolOrchestra\" model tool orchestration reinforcement learning",
+    "\"FPP\" CVPR 2026 test-time prompt tuning calibration",
+    "2026 peer reviewed tabular temporal shift adaptation TabPFN TARS",
+    "2026 cross-family decision transfer agent tabular vision learned policy"
+  ],
+  "query_count": 15,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-DRIFT-RESILIENT-TABPFN",
+      "name": "Drift-Resilient TabPFN",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TEMPORAL_SHIFT_TABULAR_PREDICTION_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_IN_CONTEXT_TEMPORAL_SHIFT_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/b2e2774c8e76afe191b5bf518f5cb727-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/Drift-Resilient_TabPFN"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_SMALL_TO_MODERATE_TABULAR_TEMPORAL_SHIFT_AND_IN_CONTEXT_INFORMATION_REGIME_MATCH",
+      "material_reason": "Provides a behaviorally distinct TabPFN variant pretrained specifically for temporal distribution shifts using evolving synthetic structural causal models, rather than using TabPFN as a Bayesian-optimization surrogate.",
+      "limits": [
+        "DATASET_SIZE_AND_TABULAR_PREDICTION_SETTING_MUST_BE MATCHED",
+        "TEMPORAL_ORDER_AND_CONTEXT_INFORMATION_ACCESS_MUST_BE PARITY_MATCHED",
+        "PRETRAINED_DRIFT_RESILIENT_MODEL_ARTIFACT_MUST_BE BOUND",
+        "IN_CONTEXT_INFERENCE_MUST_NOT_BE CONFLATED_WITH_ONLINE_PARAMETER_UPDATE",
+        "A_H1_ROLE_IS_ONLY_APPLICABLE_IF_THE_GOVERNED_ADAPTATION_CONTRACT_ACCEPTS_IN_CONTEXT_TEST_TIME_ADAPTATION",
+        "DISTINCT_FROM_ZERO_SHOT_BAYESIAN_OPTIMIZATION_WITH_TABPFN"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 1,
+    "E3_VISION": 0
+  },
+  "tabpfn_identity_resolution": {
+    "new_candidate_required": true,
+    "drift_resilient_tabpfn_same_as_zsbo_tabpfn": false,
+    "exact_prior_candidate_count": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "AutoTool",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/65ea878cb90b440e8b4cd34fe0959914-Abstract-Conference.html",
+      "disposition": "E1_TOOL_USE_RL_REFERENCE_NOT_NEW_ROLE_CANDIDATE_THIS_ROUND",
+      "reason": "Peer-reviewed tool-use RL, but its entropy-driven reasoning-length scaling does not introduce a new governed applicability role beyond the already populated learned tool-use RL comparator class absent a matching reasoning-scaling experiment."
+    },
+    {
+      "name": "ReTool",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/4038c9208dfc22644c60ad39c24e5c53-Abstract-Conference.html",
+      "disposition": "E1_CODE_INTERPRETER_TOOL_USE_REFERENCE_NOT_NEW_ROLE_CANDIDATE_THIS_ROUND",
+      "reason": "Peer-reviewed strategic code-tool RL, but its principal evaluation contract is code-augmented mathematical reasoning; it is not a distinct general E1 comparator unless a matched code-interpreter experiment is declared."
+    },
+    {
+      "name": "ResT",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/8730837e119f6b5d1b25f6da1dc2c28a-Abstract-Conference.html",
+      "disposition": "E1_TOOL_USE_RL_OPTIMIZATION_REFERENCE_NOT_NEW_ROLE_CANDIDATE_THIS_ROUND",
+      "reason": "Its primary novelty is token-level policy-gradient reshaping within tool-use RL; the governed E1 learned tool-use role is already represented by multiple executable peer-reviewed candidates."
+    },
+    {
+      "name": "R1-Code-Interpreter",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/90043ebd68500f9efe84fedf860a64f3-Abstract-Conference.html",
+      "disposition": "E1_CODE_INTERPRETER_REFERENCE_NOT_NEW_ROLE_CANDIDATE_THIS_ROUND",
+      "reason": "Provides strong code-interpreter training evidence but does not alter the retained general tool-use comparator class without a governed code-interpreter-specific experiment."
+    },
+    {
+      "name": "Agent-STAR",
+      "sources": [
+        "https://arxiv.org/abs/2603.21972",
+        "https://github.com/WxxShirley/Agent-STAR"
+      ],
+      "disposition": "E1_LONG_HORIZON_AGENT_RL_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Useful long-horizon agent-RL evidence, but it occupies an already represented tool-use RL mechanism class and does not create a new claim role merely because its training recipe differs."
+    },
+    {
+      "name": "ToolMaster",
+      "sources": [
+        "https://arxiv.org/abs/2601.12762",
+        "https://github.com/NEUIR/ToolMaster"
+      ],
+      "disposition": "E1_UNFAMILIAR_TOOL_ADAPTATION_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Relevant to unfamiliar-tool trial and execution, but absent a declared unfamiliar-tool transfer experiment it remains a narrower mechanism reference rather than a new generic E1 comparator."
+    },
+    {
+      "name": "FPP",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Jang_Improving_Calibration_in_Test-Time_Prompt_Tuning_for_Vision-Language_Models_via_CVPR_2026_paper.html",
+      "disposition": "E3_CALIBRATION_AND_INITIALIZATION_REFERENCE_NOT_GENERIC_NEW_TTA_CANDIDATE",
+      "reason": "FPP is a prompt-pretraining initialization intervention for test-time prompt tuning; it is valuable for calibration-specific comparisons but is not a separate generic TTA policy merely because it changes initialization."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_tool_use_and_transfer_references_exist": true,
+    "within_e2_transfer_or_meta_learning_references_exist": true,
+    "forcing_within_family_methods_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V13"
+  },
+  "materiality_policy_applied": {
+    "new_paper_alone_resets_stopping_counter": false,
+    "material_candidate_requires_potential_to_change_governed_comparator_set": true,
+    "redundant_mechanism_variant_without_new_matched_role_is_screened": true,
+    "scenario_specific_method_requires_matching_experiment": true
+  },
+  "coverage_observations": {
+    "E1": "NO_NEW_ROLE_DISTINCT_E1_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E2": "DRIFT_RESILIENT_TABPFN_PROMOTED_AFTER_DISTINCT_IDENTITY_RESOLUTION",
+    "E3": "NO_NEW_GENERIC_E3_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "Drift-Resilient TabPFN was confirmed as behaviorally distinct from the earlier Bayesian-optimization TabPFN candidate and was not already represented by an exact prior candidate identity."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "screened_method_is_excluded_from_all_future_experiments": false,
+    "drift_resilient_tabpfn_is_same_as_zsbo_tabpfn": false,
+    "in_context_temporal_prediction_automatically_satisfies_a_h1": false,
+    "within_family_transfer_evidence_proves_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B18_VERIFY_ADDENDUM_V16_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

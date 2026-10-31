@@ -1,0 +1,184 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 24,
+  "state": "SATURATION_V24_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:20:22Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "materiality_rule": {
+    "new_candidate_must_be_nonduplicate": true,
+    "new_candidate_must_change_a_governed_role_applicability_tuple": true,
+    "adjacent_method_without_matched_role_is_not_material": true,
+    "scenario_specific_method_requires_matching_information_opportunity": true,
+    "benchmark_reward_model_or_training_infrastructure_is_not_automatically_a_policy_baseline": true
+  },
+  "cutoff_policy": {
+    "publication_or_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_view_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v26_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v26.json",
+      "sha256": "af9247c893663bdf52dd0a33d2bac79c678a3ef9b3f688e5a7118cdce85c005d"
+    },
+    "systematic_saturation_v23": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v23.json",
+      "sha256": "cdb166588d255337def09a6c51941be44e6b97c7f1dc449ade126d7a886c84cc"
+    }
+  },
+  "focus": [
+    "E1_LEARNED_AGENT_POLICY_AND_MEMORY_CONTROL",
+    "E1_TOOL_AND_WEB_AGENT_POST_RL",
+    "E2_POST_DISTPFN_ROLE_MATCH",
+    "E3_EXISTING_GENERAL_TTA_POOL_DUPLICATE_AND_ROLE_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"WorkForceAgent-R1\" EACL 2026 official code",
+    "\"Agentic Episodic Control\" ACL 2026 code",
+    "\"Agentic Episodic Control\" BabyAI Text github",
+    "\"Towards Preference Following in Tool Calling Language Agents\" ACL 2026 code",
+    "\"APOLLO\" preference following tool calling reinforcement learning",
+    "\"ToolCPT\" ACL 2026 tool agents",
+    "\"ToolRM\" ACL 2026 reward model tool use",
+    "\"AgentV-RL\" ACL 2026 agentic verifier",
+    "2026 peer reviewed episodic memory reinforcement learning language agent official code",
+    "2026 peer reviewed web agent reinforcement learning official code",
+    "2026 tabular test-time adaptation official code after PFT3A Drift Resilient TabPFN",
+    "2026 active feature acquisition structured tabular official code",
+    "2026 vision continual test-time adaptation general classification official code",
+    "2026 cross-family learned decision transfer agent structured data vision"
+  ],
+  "query_count": 14,
+  "aec_duplicate_resolution": {
+    "planned_candidate_id": "DISCOVERY:T8-E1-AEC",
+    "planned_candidate_name": "Agentic Episodic Control",
+    "prior_promoted_matches": [],
+    "new_candidate_required": true
+  },
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AEC",
+      "name": "Agentic Episodic Control",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_EPISODIC_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_ENVIRONMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.654/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Xidong-Yang/Agentic_Episodic_Control"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2506.01442"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_EPISODIC_MEMORY_TEXT_NAVIGATION_OR_MATERIAL_EQUIVALENT_E1_SETTING_IS_APPLICABLE",
+      "material_reason": "AEC adds an LLM-semantic episodic-control mechanism with selective critical-state retrieval and structured working memory, materially distinct from the web-navigation, tool-use, workflow-search, and verifier-driven E1 mechanisms already represented.",
+      "limits": [
+        "BABYAI_TEXT_OR_MATERIALLY_EQUIVALENT_SEQUENTIAL_DECISION_SETTING_REQUIRED",
+        "LLM_SEMANTIC_AUGMENTER_IDENTITY_MUST_BE BOUND",
+        "SENTENCE_EMBEDDING_MODEL_MUST_BE BOUND",
+        "EPISODIC_MEMORY_AND_WORLD_GRAPH_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_FRAME_BUDGET_REMAINS_TASK_9_OWNED",
+        "CROSS_TASK_AND_CROSS_ENVIRONMENT_RESULTS_REMAIN_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "APOLLO preference-following tool agents",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1676/",
+        "https://github.com/zhiyuanc2001/APOLLO"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_EXECUTABLE_BENCHMARK_AND_RL_CODE",
+      "disposition": "PREFERENCE_INFORMATION_OPPORTUNITY_GATED_E1_REFERENCE",
+      "reason": "The distinguishing comparison requires explicit or implicit user-preference histories. Without that governed information opportunity, promoting it as a generic E1 comparator would change the task contract."
+    },
+    {
+      "name": "ToolCPT",
+      "source": "https://aclanthology.org/2026.findings-acl.776/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "PRETRAINING_REGIME_REFERENCE_NOT_GENERIC_E1_POLICY_BASELINE",
+      "reason": "Its primary intervention is continuous pretraining over a large tool-knowledge corpus rather than a matched agent-policy adaptation or deployment-time decision mechanism."
+    },
+    {
+      "name": "ToolRM",
+      "source": "https://aclanthology.org/2026.findings-acl.419/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "REWARD_MODEL_REFERENCE_NOT_STANDALONE_E1_POLICY_BASELINE",
+      "reason": "ToolRM evaluates and critiques tool-use trajectories and can support downstream RL, but it is principally a reward model rather than the compared autonomous policy."
+    },
+    {
+      "name": "AgentV-RL",
+      "source": "https://aclanthology.org/2026.findings-acl.1156/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "AGENTIC_VERIFIER_REFERENCE_NOT_STANDALONE_AGENT_POLICY_BASELINE",
+      "reason": "Its principal learned object is an agentic verifier/reward model used for evaluation and inference-time scaling rather than the task-solving policy itself."
+    },
+    {
+      "name": "GOLD",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Lai_The_Golden_Subspace_Where_Efficiency_Meets_Generalization_in_Continual_Test-Time_CVPR_2026_paper.html",
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_WITH_OFFICIAL_CODE",
+      "disposition": "PRIOR_TASK8_CANDIDATE_OR_DUPLICATE_CHECK_REQUIRED_NOT_NEW_BY_DISCOVERY_ALONE",
+      "reason": "GOLD was already encountered in earlier Task-8 discovery. It must not be counted again merely because this refinement surfaced it."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "aec_cross_task_or_cross_environment_generalization_is_within_e1": true,
+    "forcing_within_e1_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V24"
+  },
+  "coverage_observations": {
+    "E1": "NEW_ROLE_CONDITIONAL_EPISODIC_CONTROL_CANDIDATE_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_MATERIAL_E3_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "AEC is a materially distinct, peer-reviewed, executable, role-conditional E1 comparator absent from prior promoted candidate identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "aec_establishes_general_n_h2": false,
+    "preference_specific_agent_is_generic_e1_baseline": false,
+    "reward_model_is_standalone_agent_policy": false,
+    "continuous_pretraining_method_is_automatically_matched_policy_baseline": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B29_VERIFY_ADDENDUM_V27_AND_RUN_NEXT_BOUNDED_ROLE_APPLICABILITY_REFINEMENT"
+}

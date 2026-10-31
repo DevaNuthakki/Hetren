@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 33,
+  "state": "SATURATION_V33_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T23:04:52Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_publication_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v35_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v35.json",
+      "sha256": "be04064d0fd1e67f552c76e0a19f28cfa4aaca8ef03f76608e6605837c48ebe0"
+    },
+    "systematic_saturation_v32": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v32.json",
+      "sha256": "9a6501adfb5123e7aafcac630288ba2984f12360f5eff4c5c378ba98939012e0"
+    },
+    "candidate_addendum_v35": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v35.json",
+      "sha256": "7620bd751e991b50466974e0d998132715b05386604eb0277caad711cbbe805b"
+    }
+  },
+  "focus": [
+    "E1_AGENT_DIRECT_MEMORY",
+    "E1_LEARNED_MEMORY_MANAGEMENT",
+    "E1_MULTI_GRANULARITY_MEMORY_MAINTENANCE",
+    "N_H1_DIRECT_MEMORY_COMPARATOR"
+  ],
+  "queries_executed": [
+    "ACL 2026 unified short term long term memory LLM agent AgeMem code",
+    "Agentic Memory AgeMem ACL 2026 official github",
+    "ACL 2026 adaptive memory multi agent collaboration AMA official code",
+    "Adaptive Memory via Multi-Agent Collaboration official github",
+    "ACL 2026 event centric memory logic map CompassMem github",
+    "Memory Matters More CompassMem official implementation",
+    "ACL 2026 state aware memory LLM agents SAMem code",
+    "SAMem state aware memory ALFWorld ScienceWorld github",
+    "ACL 2026 personalized memory action agent PersonaAgent code",
+    "2026 learned memory management LLM agents reinforcement learning official code",
+    "2026 direct agent memory learned store retrieve update delete policy",
+    "2026 agent memory multi granularity consistency refresh official implementation",
+    "2026 event graph memory agent retrieval reasoning official code",
+    "2026 long horizon agent memory state conditioned decision making code",
+    "ICML 2026 agent memory learned management official implementation",
+    "ACL 2026 agent memory direct comparator executable"
+  ],
+  "query_count": 16,
+  "proposed_mechanism_count": 2,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM-UNIFIED",
+      "name": "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_matches": [],
+      "promoted_name_or_alias_matches": [],
+      "prior_reference_mentions": [
+        "docs/research/baselines/task-08-candidate-addendum-verification-v28.json",
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json",
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v30.json"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-ADAPTIVE-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_ID_NOT_NEW",
+      "exact_candidate_id_matches": [
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json"
+      ],
+      "promoted_name_or_alias_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-AMA-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+        },
+        {
+          "id": "DISCOVERY:T8-E1-AMA-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source": "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json"
+        },
+        {
+          "id": "DISCOVERY:T8-E1-AMA-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source": "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json"
+        },
+        {
+          "id": "DISCOVERY:T8-E1-AMA-ADAPTIVE-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source": "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json"
+        }
+      ],
+      "prior_reference_mentions": [
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json"
+      ]
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM-UNIFIED",
+      "name": "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_UNIFIED_MEMORY_POLICY_COMPARATOR_CANDIDATE",
+        "N_H1_MEMORY_OPERATION_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.981/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/y1y5/AgeMem"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.01885"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LEARNED_MEMORY_OPERATION_POLICY_AND_INFORMATION_ACCESS_MATCH",
+      "material_reason": "Learns unified short-term and long-term memory management directly as agent-callable actions, including retrieval, addition, update, deletion, summarization, and context filtering, using progressive reinforcement learning.",
+      "limits": [
+        "MUST_NOT_BE_CONFLATED_WITH_A_MEM_OR_OTHER_AGENTIC_MEMORY_NAMES",
+        "TRAINING_RECIPE_AND_CHECKPOINT_MUST_BE BOUND",
+        "MEMORY_TOOL_ACTION_SPACE_MUST_MATCH_THE_GOVERNED_ROLE",
+        "TRAINING_DATA_AND_REWARD_OPPORTUNITY_MUST_BE PARITY_AUDITED",
+        "FINAL_CUTOFF_CONSISTENT_REPOSITORY_REVISION_MUST_BE BOUND",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ],
+      "prior_reference_mentions": [
+        "docs/research/baselines/task-08-candidate-addendum-verification-v28.json",
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json",
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+        "docs/research/baselines/task-08-systematic-baseline-saturation-v30.json"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "CompassMem \u2014 Memory Matters More: Event-Centric Memory as a Logic Map for Agent Searching and Reasoning",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1123/",
+        "https://github.com/namespace-ERI/CompassMem"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_EXECUTABLE_CODE",
+      "relevance": "Builds an event graph with explicit logical relations and performs structured goal-directed memory navigation.",
+      "disposition": "DIRECT_MEMORY_REFERENCE_NOT_PROMOTED_TO_CURRENT_E1_DECISION_COMPARATOR",
+      "reason": "The verified published evaluation is LoCoMo and NarrativeQA retrieval/reasoning rather than a materially matched interactive E1 action-selection experiment; retain for role-specific comparison if a matching memory-reasoning contract is later bound."
+    },
+    {
+      "name": "SAMem \u2014 State-Aware Memory as a Fine-Grained Memory for LLM Agents in Decision-Making",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.722/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_EXECUTABLE_AUTHOR_IMPLEMENTATION_NOT_VERIFIED",
+      "relevance": "Uses state-conditioned reasoning memories for multi-step decision making and reports ALFWorld and ScienceWorld evaluation.",
+      "disposition": "DIRECT_E1_MEMORY_REFERENCE_BEHIND_IMPLEMENTATION_GATE",
+      "reason": "The paper is highly role-relevant, but this review did not independently verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "PersonaAgent",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1315/"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "relevance": "Combines personalized episodic/semantic memory with personalized actions and test-time preference alignment.",
+      "disposition": "PERSONALIZATION_SPECIFIC_MEMORY_REFERENCE_NOT_PROMOTED",
+      "reason": "Its material information opportunity includes user-personalization and simulated preference feedback that is not part of the current generic direct-memory comparison tuple."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_search_is_bounded_to_e1_n_h1": true,
+    "age_mem_or_ama_if_new_do_not_establish_cross_family_transfer": true,
+    "status": "GENERAL_N_H2_GAP_UNCHANGED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "incoming_consecutive_no_new_material_candidate_rounds": 0,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "required_consecutive_no_new_material_candidate_rounds": 2,
+    "reason": "At least one materially new promoted direct-memory identity was found, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "agemem_is_same_identity_as_a_mem": false,
+    "screened_reference_is_automatically_claim_bearing": false,
+    "samem_has_verified_executable_implementation": false,
+    "direct_memory_candidate_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B38_VERIFY_ADDENDUM_V36_AND_CONTINUE_DIRECT_MEMORY_REFINEMENT"
+}

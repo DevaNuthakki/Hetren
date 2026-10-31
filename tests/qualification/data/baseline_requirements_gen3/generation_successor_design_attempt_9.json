@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_9_SUCCESSOR_GENERATION_DESIGN",
+  "state": "DESIGNED_BEFORE_PACKAGE_V9",
+  "generation_attempt": 9,
+  "governed_predecessor": {
+    "generation_attempt": 8,
+    "disposition_sha256": "bc20d26f111c27eef3e45bf99f93167535e14ca0f221dd76c15099fb2814a1eb",
+    "predecessor_state": "REJECTED_PRE_EXECUTION_HOLDOUT_ORACLE_DEFECT",
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "frozen_boundary": {
+    "generation_3_requirements_change_allowed": false,
+    "preregistration_contract_change_allowed": false,
+    "public_evaluator_interface_change_allowed": false,
+    "scoring_contract_change_allowed": false,
+    "target_evaluator_change_allowed": false,
+    "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "generation_environment": {
+    "environment_class": "CHATGPT_TEMPORARY_UNPERSONALIZED_OBSERVABLE_ISOLATION",
+    "new_generation_session_required": true,
+    "attempt_8_session_reuse_prohibited": true,
+    "outside_all_projects_required": true,
+    "temporary_chat_required": true,
+    "unpersonalized_required": true,
+    "zero_prior_messages_required": true,
+    "automatic_library_search_off_required": true,
+    "local_disk_package_attachment_required": true,
+    "custom_gpt_prohibited": true,
+    "plugins_prohibited": true,
+    "connectors_prohibited": true,
+    "web_search_prohibited": true,
+    "external_retrieval_prohibited": true,
+    "external_tools_prohibited": true,
+    "new_pre_generation_attestation_required": true,
+    "one_shot_first_response_rule_required": true
+  },
+  "successor_generator_information_boundary": {
+    "package_v9_only_hetren_specific_attachment": true,
+    "minimal_governed_handoff_only_other_hetren_specific_text": true,
+    "attempt_8_generated_cases_prohibited": true,
+    "attempt_8_generated_artifact_prohibited": true,
+    "attempt_8_disposition_prohibited": true,
+    "attempt_8_defect_instance_prohibited": true,
+    "attempt_8_case_ids_prohibited": true,
+    "attempt_8_case_facts_prohibited": true,
+    "attempt_8_case_rationales_prohibited": true,
+    "prior_attempt_packages_prohibited": true,
+    "prior_attempt_results_prohibited": true,
+    "prior_predictions_prohibited": true,
+    "remediation_history_prohibited": true,
+    "target_evaluator_source_prohibited": true,
+    "target_evaluator_branch_conditions_prohibited": true
+  },
+  "generic_environment_self_consistency_hardening": {
+    "version": "1.0.0",
+    "purpose": "Reject internally inconsistent generated case descriptions before any protected target execution without exposing historical holdout cases or evaluator behavior.",
+    "timing": "AFTER_ALL_CASES_ARE_GENERATED_AND_BEFORE_RETURNING_SUCCESS_OUTPUT",
+    "target_evaluator_execution_required": false,
+    "target_evaluator_simulation_required": false,
+    "rules": [
+      "Every case must describe one internally coherent evaluated environment.",
+      "For a non-CROSS_ENV case, any explicit E1, E2, or E3 token used by environment-scoped facts to identify the concrete evaluated environment must agree with the case top-level environment.",
+      "For a CROSS_ENV case, explicit environment references may contain more than one of E1, E2, and E3 only when the cross-environment interaction is material and explicitly described.",
+      "If environment_binding is present and the case environment is not CROSS_ENV, an explicit environment identifier in environment_binding must not identify a different environment.",
+      "For G3-BR-027 NOT_APPLICABLE cases, the environment binding, applicability facts, rationale, and adversarial description must all support the same environment-scoped applicability interpretation.",
+      "Rationale and adversarial description must not contradict the environment represented by the structured case fields.",
+      "A case failing environment self-consistency must be revised inside the generation process before the single final success artifact is returned."
+    ],
+    "deterministic_preflight": {
+      "required": true,
+      "explicit_environment_tokens": [
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "non_cross_environment_binding_rule": "IF facts.environment_binding contains explicit E1/E2/E3 tokens AND case.environment is not CROSS_ENV, every such token that identifies the evaluated environment must equal case.environment.",
+      "mismatch_count_required_value": 0
+    },
+    "semantic_preflight": {
+      "required": true,
+      "review_surfaces": [
+        "environment",
+        "environment-scoped facts",
+        "environment_binding when present",
+        "rationale",
+        "adversarial_dimension"
+      ],
+      "required_result": "NO_INTERNAL_ENVIRONMENT_CONTRADICTION"
+    },
+    "required_success_preflight_evidence": {
+      "environment_self_consistency_checked": true,
+      "environment_self_consistency_passed": true,
+      "environment_binding_token_mismatch_count": 0,
+      "semantic_environment_consistency_review_passed": true
+    }
+  },
+  "preserved_v8_hardening": {
+    "observable_input_isolation": true,
+    "fail_closed_boundary_semantics": true,
+    "no_external_retrieval": true,
+    "exact_package_sha_handoff": true,
+    "exact_case_identity_set": true,
+    "case_id_uniqueness": true,
+    "exact_27_accept_27_reject": true,
+    "one_accept_one_reject_per_requirement": true,
+    "minimum_environment_coverage": true,
+    "minimum_12_interaction_cases": true,
+    "public_fact_key_validation": true,
+    "public_violation_code_validation": true,
+    "generator_output_preflight": true,
+    "target_execution_prohibited_during_generation": true
+  },
+  "package_v9_requirements": {
+    "package_v9_must_not_exist_before_this_design": true,
+    "construct_from_frozen_package_v8_lineage": true,
+    "preserve_frozen_scientific_contract": true,
+    "preserve_frozen_preregistration_contract": true,
+    "preserve_frozen_public_evaluator_contract": true,
+    "preserve_frozen_scoring_contract": true,
+    "preserve_frozen_target_evaluator": true,
+    "preserve_v8_environment_isolation_hardening": true,
+    "preserve_v8_handoff_integrity_hardening": true,
+    "preserve_v8_generator_output_preflight": true,
+    "add_only_generic_environment_self_consistency_hardening": true,
+    "must_not_embed_attempt_8_generated_cases": true,
+    "must_not_embed_attempt_8_generated_artifact": true,
+    "must_not_embed_attempt_8_disposition": true,
+    "must_not_embed_attempt_8_defect_instance": true
+  },
+  "attempt_9_state": {
+    "package_v9_created": false,
+    "generation_environment_attested": false,
+    "generation_started": false,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "claim_limits": {
+    "design_does_not_establish_scientific_support": true,
+    "design_does_not_establish_task_8_authority": true,
+    "design_does_not_establish_evaluator_correctness": true,
+    "design_does_not_establish_attempt_9_success": true,
+    "design_does_not_consume_target_freshness": true
+  }
+}

@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 8,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T05:00:35Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v7": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v7.json",
+      "sha256": "d77bc869199f3e40637bb00a3098b237c508272d70bb2f1b2c1b99d659a38146"
+    },
+    "systematic_saturation_v5": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v5.json",
+      "sha256": "4f3b8c8cb2afeca058fef807359a38087d9cf2a5680f2fd816c124c7fe48b092"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-META-TTL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Meta-TTL",
+      "implementation_identity": "https://github.com/zzzlou/meta-ttl",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "A_H1_LEARNED_AGENT_ADAPTATION_POLICY_REFERENCE_CANDIDATE",
+        "N_H2_WITHIN_E1_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_REFERENCE_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2604.00830"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zzzlou/meta-ttl"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_ROLE_REVIEW",
+        "Explicitly meta-learns a test-time adaptation policy for language agents and reports zero-shot application to unseen agent tasks."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_ROLE_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_FOCUSED_POST_EXPANSION_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TTED",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Test-Time Environment Decomposition",
+      "implementation_identity": "https://github.com/THUNLP-MT/TTED",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_role": [
+        "A_H1_WEB_AGENT_TEST_TIME_LEARNING_REFERENCE_CANDIDATE",
+        "N_H1_TEST_TIME_TRAINED_WEB_AGENT_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_REFERENCE_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.29305"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/THUNLP-MT/TTED"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_WEB_AGENT_REVIEW",
+        "Introduces label-free test-time environment decomposition and releases training, evaluation, trajectories, and trained-model assets for realistic web-agent adaptation."
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_REFERENCE_PENDING_ARCHIVAL_PEER_REVIEW_AND_MATCHED_WEB_AGENT_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_FOCUSED_POST_EXPANSION_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-TTRV",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TTRV",
+      "implementation_identity": "https://github.com/Akshit21112002/TTRV",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_TEST_TIME_REINFORCEMENT_LEARNING_VLM_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Singh_TTRV_Test-Time_Reinforcement_Learning_for_Vision_Language_Models_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Akshit21112002/TTRV"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_VLM_TEST_TIME_RL_SETTING_AND_INFORMATION_OPPORTUNITY_MATCH",
+        "Applies reinforcement learning directly at inference time to unlabeled VLM test examples using self-derived reward signals, a materially distinct adaptation mechanism absent from the existing pool."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_VLM_TEST_TIME_RL_SETTING_AND_INFORMATION_OPPORTUNITY_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_FOCUSED_POST_EXPANSION_SATURATION_PASS"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

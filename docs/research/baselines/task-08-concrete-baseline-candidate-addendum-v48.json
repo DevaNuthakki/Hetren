@@ -1,0 +1,138 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 48,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T00:22:18Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v47": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v47.json",
+      "sha256": "33f7662bf37b1c2355e250d9d53b4828b462dabf15336b92502d044deaebf387"
+    },
+    "systematic_saturation_v45": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v45.json",
+      "sha256": "1d5b1acbd0f957c408fc762bae1c1e8b38a8c48523c3d3337e716e4fd508fbe1"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMACT-DCPO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Memory as Action: Autonomous Context Curation for Long-Horizon Agentic Tasks",
+      "implementation_identity": "https://github.com/ADaM-BJTU/MemAct",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_WORKING_MEMORY_ACTION_COMPARATOR_CANDIDATE",
+        "N_H1_CONTEXT_MANAGEMENT_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.956/"
+        },
+        {
+          "class": "PUBLIC_EXECUTABLE_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ADaM-BJTU/MemAct"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_RETAINED_REVISION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_CANDIDATE_PENDING_FINAL_PARITY_AND_IMMUTABLE_PINNING",
+        "LONG_HORIZON_WORKING_MEMORY_ACTION_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "BASE_MODEL_AND_MEMACT_CHECKPOINT_MUST_BE BOUND",
+        "COLD_START_AND_DCPO_TRAINING_DATA_MUST_BE BOUND",
+        "SEARCH_AND_CONTEXT_PRUNING_TOOL_ACCESS_MUST_BE PARITY_MATCHED",
+        "MEMORY_EDIT_ACTION_SPACE_MUST_BE BOUND",
+        "TRAINING_COMPUTE_AND_TUNING_OPPORTUNITY_REQUIRE_TASK_9_ACCOUNTING",
+        "FINAL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_PINNED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Treats working-memory management itself as a learned policy action, using insertion and deletion operations trained end-to-end with reinforcement learning rather than an external fixed retrieval or summarization policy."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_CANDIDATE_PENDING_FINAL_PARITY_AND_IMMUTABLE_PINNING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V45"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LTS-SHARED-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Learning to Share: Selective Memory for Efficient Parallel Agentic Systems",
+      "implementation_identity": "https://github.com/UCF-CRCV/autogen-lts",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_SHARED_MEMORY_ADMISSION_COMPARATOR_CANDIDATE",
+        "N_H1_PARALLEL_MULTI_AGENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.05965"
+        },
+        {
+          "class": "PUBLIC_EXECUTABLE_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/UCF-CRCV/autogen-lts"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_RETAINED_REVISION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_CANDIDATE_PENDING_FINAL_CUTOFF_CONSISTENT_REVISION_AND_PARITY_REVIEW",
+        "PARALLEL_MULTI_AGENT_EXECUTION_MUST_BE PART_OF_THE_GOVERNED_E1_EXPERIMENT",
+        "ASSISTANTBENCH_OR_GAIA_RESULT_DOES_NOT_IMPLY_GENERIC_AGENT_SUPERIORITY",
+        "AUTOGEN_BASELINE_AND_PARALLEL_TEAM_CONFIGURATION_MUST_BE BOUND",
+        "DECISION_CONTROLLER_CHECKPOINT_AND_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "SHARED_MEMORY_READ_AND_WRITE_INFORMATION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "FINAL_RETAINED_REVISION_MUST_BE_PROVEN_CUTOFF_CONSISTENT",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Uses a learned reinforcement-trained controller to decide which intermediate steps from parallel agent teams enter a global shared memory, creating a materially distinct selective cross-team memory-admission mechanism."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_CANDIDATE_PENDING_FINAL_CUTOFF_CONSISTENT_REVISION_AND_PARITY_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V45"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

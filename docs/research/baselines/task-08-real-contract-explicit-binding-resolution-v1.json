@@ -1,0 +1,251 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONTRACT_EXPLICIT_BINDING_RESOLUTION",
+  "resolution_generation": 1,
+  "state": "EXPLICIT_BINDING_RESOLUTION_COMPLETE_NO_CONTRACT_READY_TASK9_AND_OR_IDENTITY_GAPS_REMAIN",
+  "recorded_at_utc": "2026-09-27T21:46:23Z",
+  "task": 8,
+  "bindings": {
+    "real_contract_instantiation_v1": {
+      "path": "docs/research/baselines/task-08-real-concrete-experiment-contract-instantiation-v1.json",
+      "sha256": "e2206cb08fb90b25950c6bdd8dcce0b9f1af04ee4bf6b95cc30d17ce46b20466"
+    },
+    "real_contract_attempt_1": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_real_concrete_experiment_contract_instantiation_attempt_1.json",
+      "sha256": "1456d97c9ff7421aa28795c3be79035f47148da3baf7a8343bb9348a5a7edacb"
+    },
+    "contract_instantiation_boundary": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "applicability_frontier": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-resolution-frontier-v1.json",
+      "sha256": "f6982ad5ed1716fffea85478b6bc8bff4e8209a6a22c004786c160c1b19b1ac5"
+    }
+  },
+  "resolution_policy": {
+    "only_r13b_admitted_source_files_used": true,
+    "cross_source_identity_merge_allowed": false,
+    "cross_source_identity_merge_performed": false,
+    "heuristic_identity_inference_allowed": false,
+    "missing_identity_fabrication_allowed": false,
+    "task9_accounting_values_created": false,
+    "candidate_specific_applicability_binding_started": false,
+    "comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false,
+    "protected_outcome_inspected": false
+  },
+  "required_contract_categories_from_frozen_schema": [
+    "runtime_or_environment_identity",
+    "resource_matching_rule",
+    "engineering_effort_binding_if_applicable",
+    "adaptation_cost_binding_if_applicable"
+  ],
+  "r13b_source_file_count": 5,
+  "r13b_source_files": [
+    "tests/qualification/data/initial_splits/historical_cases.json",
+    "tests/qualification/data/initial_splits/positive_cases.json",
+    "tests/qualification/data/initial_splits/qualification_cases.json",
+    "tests/qualification/data/initial_splits/set_d_cases.json",
+    "tests/qualification/data/initial_splits/set_e_cases.json"
+  ],
+  "source_resolution_results": [
+    {
+      "source_path": "tests/qualification/data/initial_splits/historical_cases.json",
+      "source_sha256": "aa6d662ebc486535a59f1f84ea0ed4fc7cc90cb322eb5922dc34fdd3723fe5a7",
+      "parse_state": "JSON_EXPLICIT_KEY_SCAN_COMPLETE",
+      "required_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "field_states": {
+        "runtime_or_environment_identity": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "resource_matching_rule": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "engineering_effort_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "adaptation_cost_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE"
+      },
+      "explicit_evidence": {
+        "runtime_or_environment_identity": [],
+        "resource_matching_rule": [],
+        "engineering_effort_binding_if_applicable": [],
+        "adaptation_cost_binding_if_applicable": []
+      },
+      "non_resource_identity_complete": false,
+      "resource_matching_rule_explicit": false,
+      "cross_source_merge_performed": false,
+      "contract_created": false,
+      "missing_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "admissibility_after_r13c": "BLOCKED_MISSING_EXPLICIT_SAME_SOURCE_BINDINGS",
+      "concrete_ready_for_task8_baseline_binding": false
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/positive_cases.json",
+      "source_sha256": "ea223d8a814efd4c6ded331f42b73aacca2192bea730e77c5afddf10135c994a",
+      "parse_state": "JSON_EXPLICIT_KEY_SCAN_COMPLETE",
+      "required_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "field_states": {
+        "runtime_or_environment_identity": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "resource_matching_rule": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "engineering_effort_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "adaptation_cost_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE"
+      },
+      "explicit_evidence": {
+        "runtime_or_environment_identity": [],
+        "resource_matching_rule": [],
+        "engineering_effort_binding_if_applicable": [],
+        "adaptation_cost_binding_if_applicable": []
+      },
+      "non_resource_identity_complete": false,
+      "resource_matching_rule_explicit": false,
+      "cross_source_merge_performed": false,
+      "contract_created": false,
+      "missing_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "admissibility_after_r13c": "BLOCKED_MISSING_EXPLICIT_SAME_SOURCE_BINDINGS",
+      "concrete_ready_for_task8_baseline_binding": false
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/qualification_cases.json",
+      "source_sha256": "1863184c2d608259c90de63d785d1d93831754d419b7e1f8216987d425e4cc58",
+      "parse_state": "JSON_EXPLICIT_KEY_SCAN_COMPLETE",
+      "required_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "field_states": {
+        "runtime_or_environment_identity": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "resource_matching_rule": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "engineering_effort_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "adaptation_cost_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE"
+      },
+      "explicit_evidence": {
+        "runtime_or_environment_identity": [],
+        "resource_matching_rule": [],
+        "engineering_effort_binding_if_applicable": [],
+        "adaptation_cost_binding_if_applicable": []
+      },
+      "non_resource_identity_complete": false,
+      "resource_matching_rule_explicit": false,
+      "cross_source_merge_performed": false,
+      "contract_created": false,
+      "missing_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "admissibility_after_r13c": "BLOCKED_MISSING_EXPLICIT_SAME_SOURCE_BINDINGS",
+      "concrete_ready_for_task8_baseline_binding": false
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/set_d_cases.json",
+      "source_sha256": "7285d45f7dd10979f8b1a975a4ca4e8144efd0108c72d4e2c4c290955f5f6bfe",
+      "parse_state": "JSON_EXPLICIT_KEY_SCAN_COMPLETE",
+      "required_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "field_states": {
+        "runtime_or_environment_identity": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "resource_matching_rule": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "engineering_effort_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "adaptation_cost_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE"
+      },
+      "explicit_evidence": {
+        "runtime_or_environment_identity": [],
+        "resource_matching_rule": [],
+        "engineering_effort_binding_if_applicable": [],
+        "adaptation_cost_binding_if_applicable": []
+      },
+      "non_resource_identity_complete": false,
+      "resource_matching_rule_explicit": false,
+      "cross_source_merge_performed": false,
+      "contract_created": false,
+      "missing_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "admissibility_after_r13c": "BLOCKED_MISSING_EXPLICIT_SAME_SOURCE_BINDINGS",
+      "concrete_ready_for_task8_baseline_binding": false
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/set_e_cases.json",
+      "source_sha256": "1e51bd3ba1eb3436a3812cc93973c3a9cd7c21df25c587ac916c83f9a967f3ae",
+      "parse_state": "JSON_EXPLICIT_KEY_SCAN_COMPLETE",
+      "required_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "field_states": {
+        "runtime_or_environment_identity": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "resource_matching_rule": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "engineering_effort_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE",
+        "adaptation_cost_binding_if_applicable": "MISSING_EXPLICIT_BINDING_IN_SAME_SOURCE"
+      },
+      "explicit_evidence": {
+        "runtime_or_environment_identity": [],
+        "resource_matching_rule": [],
+        "engineering_effort_binding_if_applicable": [],
+        "adaptation_cost_binding_if_applicable": []
+      },
+      "non_resource_identity_complete": false,
+      "resource_matching_rule_explicit": false,
+      "cross_source_merge_performed": false,
+      "contract_created": false,
+      "missing_categories": [
+        "runtime_or_environment_identity",
+        "resource_matching_rule",
+        "engineering_effort_binding_if_applicable",
+        "adaptation_cost_binding_if_applicable"
+      ],
+      "admissibility_after_r13c": "BLOCKED_MISSING_EXPLICIT_SAME_SOURCE_BINDINGS",
+      "concrete_ready_for_task8_baseline_binding": false
+    }
+  ],
+  "summary": {
+    "blocked_source_count": 5,
+    "non_resource_identity_complete_source_count": 0,
+    "fully_explicit_schema_source_count": 0,
+    "task9_resource_state_counts": {
+      "UNRESOLVED_TASK_9_HANDOFF_REQUIRED": 222
+    },
+    "unresolved_task9_handoff_entry_count": 222,
+    "concrete_ready_contract_count": 0
+  },
+  "claim_limits": {
+    "creates_contract_instance": false,
+    "establishes_candidate_applicability": false,
+    "selects_comparator": false,
+    "ranks_comparators": false,
+    "pins_baseline_version": false,
+    "freezes_concrete_baseline": false,
+    "creates_task9_accounting_values": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I5A2R13D_RESOLVE_REMAINING_EXPLICIT_SAME_SOURCE_IDENTITY_GAPS_WITHOUT_CROSS_SOURCE_MERGE_OR_BASELINE_SELECTION"
+}

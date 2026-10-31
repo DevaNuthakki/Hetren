@@ -1,0 +1,314 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 1,
+  "state": "SYSTEMATIC_SATURATION_IN_PROGRESS_NEW_MATERIAL_CANDIDATES_FOUND",
+  "recorded_at_utc": "2026-09-26T04:40:12Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "publication_or_public_evidence_must_preexist_cutoff": true,
+    "dynamic_repository_state_after_cutoff_must_not_be_used_as_final_version_identity": true,
+    "final_immutable_commit_or_release_must_resolve_to_an_allowed_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v3_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v3.json",
+      "sha256": "ebf8cf94ab061a90d51c7bdd56bf44cd77518873d815cc9e91be2695381ea091"
+    },
+    "refinement_v4": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v4.json",
+      "sha256": "e363bb3b4bc595ff71581240b2fb6ed5b90f5bfc75d0714512290ff5bbe97a48"
+    }
+  },
+  "systematic_sources": [
+    {
+      "scope": "E3_GENERAL_TTA",
+      "name": "Awesome Test-Time Adaptation Resources",
+      "source": "https://github.com/Test-Time-Learning/adaptation",
+      "verified_observation": "Curated task-organized index containing hundreds of TTA papers and explicit 2025-2026 entries.",
+      "source_role": "DISCOVERY_INDEX_ONLY_NOT_STRENGTH_AUTHORITY_BY_ITSELF"
+    },
+    {
+      "scope": "E3_ONLINE_TTA",
+      "name": "In Search of Lost Online Test-Time Adaptation",
+      "source": "https://link.springer.com/article/10.1007/s11263-024-02213-5",
+      "verified_observation": "Peer-reviewed IJCV survey and benchmarking work for online TTA.",
+      "source_role": "SURVEY_AND_BENCHMARK_EVIDENCE"
+    },
+    {
+      "scope": "E3_ONLINE_TTA",
+      "name": "Online Test-Time Adaptation benchmark repository",
+      "source": "https://github.com/mariodoebler/test-time-adaptation",
+      "verified_observation": "Provides an extensible benchmark containing multiple TTA methods, datasets, models, and settings.",
+      "source_role": "BENCHMARK_AND_REPRODUCTION_SOURCE"
+    },
+    {
+      "scope": "E3_VLM_TTA",
+      "name": "Awesome CLIP TTA",
+      "source": "https://github.com/xyjie37/Awesome-CLIP-TTA",
+      "verified_observation": "Tracks VLM test-time adaptation methods including 2026 methods.",
+      "source_role": "DISCOVERY_INDEX_ONLY_NOT_STRENGTH_AUTHORITY_BY_ITSELF"
+    },
+    {
+      "scope": "E3_ACTIVE_LEARNING",
+      "name": "Active Learning Benchmark",
+      "source": "https://github.com/ariapoy/active-learning-benchmark",
+      "verified_observation": "Reproducible classification active-learning benchmark with baseline and protocol support.",
+      "source_role": "BENCHMARK_SOURCE"
+    },
+    {
+      "scope": "E3_ACTIVE_LEARNING",
+      "name": "Realistic Evaluation of Deep Active Learning",
+      "source": "https://link.springer.com/article/10.1007/s11263-025-02372-z",
+      "verified_observation": "Peer-reviewed evaluation emphasizing realistic protocol sensitivity for active-learning comparisons.",
+      "source_role": "BENCHMARK_AND_METHODOLOGY_EVIDENCE"
+    },
+    {
+      "scope": "E2_TABULAR",
+      "name": "TabArena / BeyondArena",
+      "source": "https://github.com/autogluon/tabarena",
+      "verified_observation": "Living tabular benchmark with model/system separation and IID plus beyond-IID evaluation.",
+      "source_role": "STRENGTH_AND_MATCHED_BENCHMARK_SOURCE"
+    },
+    {
+      "scope": "E2_TABULAR",
+      "name": "TALENT",
+      "source": "https://github.com/LAMDA-Tabular/TALENT",
+      "verified_observation": "Large tabular benchmark/toolbox spanning classical and deep methods across hundreds of datasets.",
+      "source_role": "STRENGTH_AND_COVERAGE_SOURCE"
+    },
+    {
+      "scope": "E2_AUTOML",
+      "name": "OpenML AutoML Benchmark",
+      "source": "https://github.com/openml/automlbenchmark",
+      "verified_observation": "Extensible benchmark framework for comparing open-source AutoML systems.",
+      "source_role": "MATCHED_SYSTEM_BENCHMARK_SOURCE"
+    },
+    {
+      "scope": "E1_AGENT",
+      "name": "AgentGym",
+      "source": "https://github.com/Hsch22/AgentGym",
+      "verified_observation": "Multi-environment agent framework with training, trajectories, evaluation and AgentEvol.",
+      "source_role": "CANDIDATE_AND_BENCHMARK_SOURCE"
+    },
+    {
+      "scope": "E1_AGENT",
+      "name": "Toolathlon",
+      "source": "https://github.com/hkust-nlp/Toolathlon",
+      "verified_observation": "ICLR 2026 long-horizon realistic tool-use benchmark with hundreds of tools.",
+      "source_role": "BENCHMARK_NOT_BASELINE_IMPLEMENTATION"
+    },
+    {
+      "scope": "E1_AGENT",
+      "name": "OpenAgent",
+      "source": "https://github.com/LAMDA-NeSy/OpenAgent",
+      "verified_observation": "ICML 2026 controlled benchmark for open-world tool-use generalization under multiple forms of environment shift.",
+      "source_role": "BENCHMARK_NOT_BASELINE_IMPLEMENTATION"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTEVOL",
+      "name": "AgentEvol / AgentGym",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.acl-long.1355/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Hsch22/AgentGym"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_AGENT_TASK_AND_CHECKPOINT_BINDING",
+      "material_reason": "Provides a learned agent-evolution method across diverse interactive agent environments rather than only a fixed prompting scaffold.",
+      "n_h2_limit": "DOES_NOT_BY_ITSELF_ESTABLISH_HETREN_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SWERL",
+      "name": "SWE-RL",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_SOFTWARE_ENGINEERING_AGENT_COMPARATOR_IF_TASK_MATCHED"
+      ],
+      "evidence_status": "PEER_REVIEWED_VENUE_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/facebookresearch/swe-rl"
+        }
+      ],
+      "eligibility_status": "MATERIAL_TASK_CONDITIONAL_CANDIDATE",
+      "material_reason": "Provides reinforcement-learning-based software-engineering reasoning, relevant only if the governed E1 task is software engineering."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-GOLD",
+      "name": "GOLD",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_AND_EFFICIENCY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Lai_The_Golden_Subspace_Where_Efficiency_Meets_Generalization_in_Continual_Test-Time_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIGNLAI/GOLD"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_STRENGTH_REVIEW",
+      "material_reason": "Current CVPR 2026 continual-TTA method with classification and segmentation evaluation and explicit efficiency focus."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-CODIRE",
+      "name": "Test-Time Distillation / CoDiRe",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Chen_Test-Time_Distillation_for_Continual_Model_Adaptation_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/walawalagoose/TTD"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_ONLY_WITH_EXTERNAL_VLM_INFORMATION_PARITY",
+      "material_reason": "Uses an external frozen VLM supervisory signal during continual adaptation, so its information channel can materially affect comparator fairness."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-BITTA",
+      "name": "BITTA",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/super-jw/BITTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CLIP_SETTING_AND_PRIMARY_PAPER_BINDING",
+      "material_reason": "Current ICLR 2026 VLM adaptation method evaluated with CLIP-style image classification."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-D2O",
+      "name": "D2O",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_TRAINING_FREE_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_OFFICIAL_IMPLEMENTATION_VERIFIED_PRIMARY_PAPER_BINDING_PENDING",
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MAiTL-Group/D2O"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_PRIMARY_PAPER_AND_MATCHED_VLM_REVIEW",
+      "material_reason": "Training-free VLM test-time adaptation candidate surfaced through the current VLM-TTA systematic index."
+    }
+  ],
+  "new_material_candidate_count": 6,
+  "screened_not_promoted": [
+    {
+      "name": "Toolathlon",
+      "reason": "Benchmark and evaluation environment, not itself a learned or fixed baseline implementation."
+    },
+    {
+      "name": "OpenAgent",
+      "reason": "Benchmark for tool-use generalization under shift, not itself a comparison policy baseline."
+    },
+    {
+      "name": "TabArena",
+      "reason": "Strength and benchmarking infrastructure; individual models/systems must be bound separately as baselines."
+    },
+    {
+      "name": "TALENT",
+      "reason": "Benchmark/toolbox; individual methods must be separately selected and versioned."
+    },
+    {
+      "name": "TTA-VLM benchmark resources",
+      "reason": "Benchmark evidence used to judge progress, not a standalone adaptation baseline."
+    },
+    {
+      "name": "FGA",
+      "reason": "Material 2026 VLM-TTA paper surfaced by the systematic index, but this pass did not establish both the primary-paper binding and a reproducible official implementation sufficient for promotion."
+    },
+    {
+      "name": "A2Memory",
+      "reason": "Material 2026 VLM-TTA method surfaced by the index, but reproducible implementation and exact matched-role evidence were not completed in this pass."
+    }
+  ],
+  "operational_interpretation": {
+    "one_global_baseline_per_environment_required": false,
+    "concrete_catalog_with_experiment_specific_applicability_binding_required": true,
+    "materially_incomparable_tasks_must_not_be_force_ranked": true,
+    "experiment_manifest_must_bind_applicable_task8_identity_before_protected_outcomes": true
+  },
+  "coverage_observations": {
+    "E1": "SYSTEMATIC_AGENT_BENCHMARK_AND_TRAINED_AGENT_REVIEW_IN_PROGRESS",
+    "E2": "TABULAR_AND_AUTOML_BENCHMARK_COVERAGE_SYSTEMATICALLY_EXPANDED",
+    "E3": "TTA_ACTIVE_LEARNING_AND_VLM_TTA_INDEX_COVERAGE_SYSTEMATICALLY_EXPANDED",
+    "N_H2": "NO_DIRECT_EXTERNAL_METHOD_YET_VERIFIED_AS_A_GENERAL_HETREN_CROSS_ENVIRONMENT_FAMILY_TRANSFER_COMPARATOR"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "Systematic benchmark/index review produced multiple materially relevant candidate implementations absent from earlier Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "systematic_source_is_automatically_authoritative": false,
+    "every_indexed_method_is_automatically_eligible": false,
+    "new_candidates_are_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B6_VERIFY_SATURATION_ADDENDUM_AND_SCREEN_REMAINING_MATERIAL_QUEUE_BEFORE_FIRST_NO_NEW_CANDIDATE_ROUND"
+}

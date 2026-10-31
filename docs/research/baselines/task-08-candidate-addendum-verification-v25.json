@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 25,
+  "state": "ADDENDUM_V25_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:14:23Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v25": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v25.json",
+      "sha256": "e33ffbe943f19af967bede24f8595b4009500c687e460a08cd212a9a909e24f9"
+    },
+    "systematic_saturation_v22": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v22.json",
+      "sha256": "3aad5c14782827eae00973dd2f95c4eee89404c2cc02e8541632880d4da81ee1"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SOAR-OBSERVATION-RL",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_AGENTIC_RL_OBSERVATION_SUPERVISION_COMPARATOR",
+      "verified_facts": [
+        "SOAR is published as an ACL 2026 main-conference long paper.",
+        "SOAR changes agentic RL supervision by assigning positive advantages to environment-observation tokens based on the entropy of preceding actions.",
+        "The method is designed to make policy learning use environment responses rather than relying only on outcome rewards or external reward models.",
+        "The official public implementation contains SFT, GRPO-based RL, tool-server infrastructure, and evaluation code.",
+        "The implementation includes local-retrieval and web-search tool infrastructure for interactive agent training and evaluation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1624/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Mimasss2/SOAR"
+        }
+      ],
+      "limits": [
+        "BASE_MODEL_AND_TRAINING_CHECKPOINT_MUST_BE_BOUND",
+        "SFT_AND_GRPO_CONFIGURATION_MUST_BE BOUND",
+        "TOOL_ENVIRONMENT_AND_RETRIEVER_OR_WEB_SEARCH_CONFIGURATION_MUST_BE BOUND",
+        "OBSERVATION_ADVANTAGE_FORMULATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "SOAR_DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v25_candidates_have_role_level_external_review": true,
+    "all_addendum_v25_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "official_repository_head_is_final_version_identity": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

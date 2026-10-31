@@ -1,0 +1,216 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 5,
+  "state": "ADDENDUM_V5_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:51:39Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v5": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v5.json",
+      "sha256": "707358ee9925f4c679ddb7b56da8f0e105401fa16147cd3af0a5667fce8cd8f3"
+    },
+    "systematic_saturation_v2": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v2.json",
+      "sha256": "8171b257090d028a43f884060f4e86b42e89ec38b3ce6ea4ee0d82eab68c0488"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DAS",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Dance Across Shifts is a CVPR 2026 continual test-time adaptation method.",
+        "It constructs generated class exemplars before deployment and dynamically bridges their style toward incoming test data.",
+        "The primary paper links an official public implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhu_Dance_Across_Shifts_Forward-Facilitation_Continual_Test-Time_Adaptation_through_Dynamic_Style_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/z1358/DAS"
+        }
+      ],
+      "limits": [
+        "PREDEPLOYMENT_GENERATED_EXEMPLAR_ACCESS_MUST_BE_EXPLICIT",
+        "GENERATOR_AND_EXEMPLAR_CONFIGURATION_MUST_BE_BOUND",
+        "CONTINUAL_SHIFT_SETTING_MUST_BE_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FPP",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_PROMPT_PRETRAINING_PLUS_TPT_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "FPP is a CVPR 2026 method for calibration and performance in test-time prompt tuning.",
+        "It performs data-free flatness-aware prompt pretraining before deployment.",
+        "At test time it changes prompt initialization rather than adding an additional FPP optimization loop."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Jang_Improving_Calibration_in_Test-Time_Prompt_Tuning_for_Vision-Language_Models_via_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/fpp"
+        }
+      ],
+      "limits": [
+        "APPLICABLE_ONLY_WHEN_PROMPT_TUNING_IS_THE_MATCHED_ADAPTATION_SURFACE",
+        "PREDEPLOYMENT_PROMPT_PRETRAINING_OPPORTUNITY_MUST_BE_PARITY_MATCHED",
+        "HOST_TPT_PIPELINE_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ASR",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_LONG_TERM_TTA_RESET_AND_RETENTION_COMPARATOR",
+      "verified_facts": [
+        "Adaptive and Selective Reset is an ICLR 2026 long-term test-time adaptation method.",
+        "It dynamically determines when and where to reset rather than periodically resetting the complete model.",
+        "It includes an importance-aware regularizer and an adaptation-adjustment mechanism."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/79bdd6fe3f012befcc459ad13de65d13-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/asr"
+        }
+      ],
+      "limits": [
+        "LONG_TERM_STREAM_SETTING_REQUIRED",
+        "RESET_TRIGGER_AND_RESET_SCOPE_CONFIGURATION_MUST_BE_BOUND",
+        "ASR_RETENTION_BEHAVIOR_DOES_NOT_BY_ITSELF_SATISFY_HETREN_A_H2_ROLLBACK_SEMANTICS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LTTA",
+      "verification_state": "PEER_REVIEWED_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_LONG_TAILED_VLM_TTA_COMPARATOR",
+      "verified_facts": [
+        "L-TTA is an ICLR 2026 method for long-tailed test-time adaptation of vision-language models.",
+        "The method combines synergistic prototypes, rebalancing shortcuts, and balanced entropy minimization.",
+        "The publication provides a public implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf/477cebcf199080ed0bd1db50285564b26f57993a.pdf"
+        },
+        {
+          "class": "PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/xuc865/LTTA"
+        }
+      ],
+      "limits": [
+        "LONG_TAILED_TEST_STREAM_REQUIRED",
+        "CLASS_IMBALANCE_REGIME_MUST_BE_PREDECLARED",
+        "NOT_A_GENERIC_BALANCED_STREAM_COMPARATOR"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FGA",
+      "verification_state": "ICLR_2026_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_NOT_BOUND",
+      "role_disposition": "E3_VLM_FLATNESS_GUIDED_TTA_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "FGA is accepted at ICLR 2026.",
+        "Its framework couples a pre-test prompt-tuning stage with flatness-guided test-sample selection.",
+        "The method is specific to VLM adaptation and depends on the model's prior prompt-training history."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2501.18864"
+        },
+        {
+          "class": "ICLR_2026_PROGRAM",
+          "url": "https://iclr.cc/virtual/2026/papers.html"
+        }
+      ],
+      "limits": [
+        "OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_BOUND_IN_THIS_REVIEW",
+        "PROMPT_PRETRAINING_HISTORY_MUST_BE_PARITY_MATCHED",
+        "VLM_SETTING_REQUIRED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-A2MEMORY",
+      "verification_state": "ICML_2026_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_NOT_BOUND",
+      "role_disposition": "E3_ONLINE_VLM_MEMORY_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "A2Memory is accepted at ICML 2026.",
+        "It addresses online VLM test-time adaptation with attribute-centric soft assignment and class-wise associative memory.",
+        "The method is designed to reduce hard pseudo-label memory contamination and fixed-capacity eviction problems."
+      ],
+      "sources": [
+        {
+          "class": "ICML_2026_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_RECORD",
+          "url": "https://zhouchenlin.github.io/"
+        }
+      ],
+      "limits": [
+        "OFFICIAL_REPRODUCIBLE_IMPLEMENTATION_NOT_BOUND_IN_THIS_REVIEW",
+        "MEMORY_CAPACITY_AND_UPDATE_CONFIGURATION_MUST_BE_BOUND",
+        "VLM_ONLINE_STREAM_SETTING_REQUIRED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ACTTA",
+      "verification_state": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_PUBLIC_PROJECT_REPOSITORY_NOT_EXECUTABLE_BASELINE",
+      "role_disposition": "E3_ACTIVATION_PARAMETER_TTA_COMPARATOR",
+      "verified_facts": [
+        "AcTTA is a CVPR 2026 test-time adaptation method.",
+        "It adapts parameterized activation behavior rather than conventional normalization-affine parameters.",
+        "The paper reports source-free adaptation on corruption benchmarks."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Kim_AcTTA_Rethinking_Test-Time_Adaptation_via_Dynamic_Activation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "AUTHOR_PROJECT_REPOSITORY",
+          "url": "https://github.com/hyeongyu-kim/actta"
+        }
+      ],
+      "limits": [
+        "OBSERVED_REPOSITORY_IS_NOT_YET_A_SUFFICIENT_EXECUTABLE_RESEARCH_IMPLEMENTATION",
+        "ACTIVATION_REPARAMETERIZATION_AND_MODEL_ARCHITECTURE_MUST_BE_BOUND",
+        "BLOCKED_FOR_FINAL_REPRODUCIBLE_RETENTION_UNTIL_IMPLEMENTATION_RESOLVED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 7,
+  "interpretation": {
+    "all_addendum_v5_candidates_have_role_level_external_review": true,
+    "all_addendum_v5_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

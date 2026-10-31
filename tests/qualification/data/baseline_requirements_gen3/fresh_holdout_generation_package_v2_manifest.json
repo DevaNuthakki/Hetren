@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_HOLDOUT_GENERATION_PACKAGE_V2_MANIFEST",
+  "state": "FROZEN_BEFORE_ISOLATED_GENERATION_ATTEMPT_2",
+  "generation_attempt": 2,
+  "generation_attempt_2_started": false,
+  "attempt_2_cases_generated": false,
+  "target_evaluator_executed": false,
+  "fresh_holdout_result_established": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_v2_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+  "generation_package_v2_checker_sha256": "4b5f4b5b9534edda66213b97f9ea84525d2406488a0a5731240c0ef9939d69a3",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "artifacts": [
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v2.json",
+      "sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v2.py",
+      "sha256": "4b5f4b5b9534edda66213b97f9ea84525d2406488a0a5731240c0ef9939d69a3"
+    },
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract.json",
+      "sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract_manifest.json",
+      "sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    }
+  ],
+  "generator_handoff_boundary": {
+    "file_to_supply": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v2.json",
+    "supply_only_package_v2": true,
+    "do_not_supply_manifest": true,
+    "do_not_supply_checker": true,
+    "do_not_supply_repository": true,
+    "do_not_supply_target_evaluator": true,
+    "do_not_supply_attempt_1": true,
+    "do_not_supply_prior_cases_mutations_predictions_results": true,
+    "do_not_supply_remediation_history": true
+  },
+  "execution_boundary": {
+    "generate_all_cases_before_target_execution": true,
+    "freeze_generated_cases_before_target_execution": true,
+    "produce_all_predictions_before_scoring": true,
+    "one_target_call_per_case": true,
+    "target_call_uses_primary_requirement_only": true,
+    "secondary_requirements_are_context_only": true,
+    "first_target_execution_permanently_consumes_freshness": true
+  },
+  "interpretation": "This manifest freezes the exact Generation Package v2 before isolated Generation Attempt 2. No Attempt-2 case exists and the target evaluator has not executed on a fresh holdout. Only the Generation Package v2 itself may be supplied to the isolated generator."
+}

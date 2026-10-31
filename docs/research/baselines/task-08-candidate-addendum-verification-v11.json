@@ -1,0 +1,101 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 11,
+  "state": "ADDENDUM_V11_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:22:00Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v11": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v11.json",
+      "sha256": "6a75410cf33242ec22e1a6d82754d29bfc1bf9c202fea080f1647ed8d2b19c7e"
+    },
+    "systematic_saturation_v8": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v8.json",
+      "sha256": "4230c93e848148f98b478894def58a52abd92057229caf6424dc48309670b914"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-WEBFACTORY",
+      "verification_state": "ICLR_2026_CONFERENCE_LISTING_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNED_GUI_WEB_AGENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "WebFactory is listed in the official ICLR 2026 conference program.",
+        "Its research work defines a closed-loop framework for constructing offline web environments, generating tasks and trajectories, and training a grounded web agent with reinforcement learning.",
+        "The public research repository includes the WebFactory website suite and an executable browser-agent component.",
+        "The underlying research was publicly available before the Task-8 external-evidence cutoff."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://iclr.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.05044"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/sicheng-fan/WebFactory"
+        }
+      ],
+      "limits": [
+        "GUI_OR_WEB_AGENT_TASK_MATCH_REQUIRED",
+        "EXACT_STUDENT_MODEL_AND_TEACHER_MODELS_MUST_BE BOUND",
+        "SYNTHETIC_ENVIRONMENT_AND_TRAJECTORY_GENERATION_CONFIGURATION_MUST_BE BOUND",
+        "OFFLINE_TO_ONLINE_TRANSFER_REMAINS_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-STAR-UPL",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_UNIVERSAL_PROMPT_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "STAR is published at CVPR 2026.",
+        "It targets universal test-time prompt learning for vision-language models using unlabeled test data containing both ID and OOD samples.",
+        "Its mechanism combines separability-aware gating, conjugate pseudo-label optimization, and prototype-based retrieval.",
+        "The public research repository provides executable training and OOD-evaluation paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Fu_STAR_Test-Time_Adaptation_Can_Enhance_Universal_Prompt_Learning_for_Vision-Language_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/fuyw-aisw/STAR"
+        }
+      ],
+      "limits": [
+        "ID_OOD_MIXED_STREAM_SETTING_REQUIRED",
+        "VLM_BACKBONE_AND_PROMPT_INITIALIZATION_MUST_BE BOUND",
+        "FISHER_GATING_AND_MEMORY_CONFIGURATION_MUST_BE BOUND",
+        "NOT_AUTOMATICALLY_APPLICABLE_TO_CLOSED_SET_OR_NON_VLM_E3_TASKS"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v11_candidates_have_role_level_external_review": true,
+    "all_addendum_v11_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "conference_listing_alone_establishes_strongest_status": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

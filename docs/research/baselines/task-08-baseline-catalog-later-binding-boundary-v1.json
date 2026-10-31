@@ -1,0 +1,248 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_BASELINE_CATALOG_LATER_BINDING_BOUNDARY",
+  "boundary_generation": 1,
+  "state": "CATALOG_BOUNDARY_FORMALIZED_EXPERIMENT_BINDINGS_DEFERRED",
+  "proposal_status": "HETREN_GOVERNANCE_SYNTHESIS_NOT_YET_GOVERNING",
+  "recorded_at_utc": "2026-09-27T20:38:00Z",
+  "task": 8,
+  "purpose": "Separate the global Task-8 research/catalog layer from future concrete baseline-variant resolution and from Task-7 experiment-specific SplitVersion binding, so Task 8 can be specified without fabricating an execution.",
+  "research_basis": {
+    "classification": "HETREN_SYNTHESIS_FROM_FROZEN_INTERNAL_GOVERNANCE_EVIDENCE",
+    "not_external_validation_of_this_exact_model": true,
+    "task_6_basis": "Task 6 delegates concrete baseline implementation, identity, version, and comparison configuration to Task 8.",
+    "task_7_basis": "Task 7 retains split-side binding and requires the applicable Task-8 baseline identity to be bound before protected outcomes are inspected.",
+    "sequencing_basis": "The frozen post-discovery readiness frontier contains zero structurally complete concrete experiment contracts and zero candidate-specific concrete bindings."
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "candidate_inventory_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-candidate-inventory-v1.json",
+      "sha256": "5800ca28550e45dfcfdd02ff550632609b57c1dc23e6f76b53f39644539346e7"
+    },
+    "canonical_identity_reconciliation_v2": {
+      "path": "docs/research/baselines/task-08-post-discovery-canonical-identity-reconciliation-v2.json",
+      "sha256": "f7bf0a40591d1bab76e411f3a0d83058ab3a7298f710161acf7560756a8eb65e"
+    },
+    "applicability_framework_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-framework-v1.json",
+      "sha256": "d18f36cb450a1503c9e000effdc7a90b77a8cfc3829f931ffe25652504936952"
+    },
+    "applicability_resolution_frontier_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-resolution-frontier-v1.json",
+      "sha256": "f6982ad5ed1716fffea85478b6bc8bff4e8209a6a22c004786c160c1b19b1ac5"
+    },
+    "concrete_tuple_resolution_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-applicability-tuple-resolution-v1.json",
+      "sha256": "4b0bac8b75b414e4e6474e80e0bfe23feabaab11b0c46d09ae11ffda0c779f9b"
+    },
+    "selection_readiness_audit_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-selection-readiness-audit-v1.json",
+      "sha256": "0147dcd47ebd666bbddad76b0282e182c0ece2d0c54edbfe66c141e7d2e6ffa5"
+    },
+    "concrete_contract_binding_readiness_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-contract-binding-readiness-v1.json",
+      "sha256": "509ef389e306793ab046289b19f968cf231f620562f82b24d333414ce1230021"
+    },
+    "concrete_contract_binding_readiness_attempt_1": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_post_discovery_concrete_experiment_contract_binding_readiness_attempt_1.json",
+      "sha256": "d9ee7d02e3128d665101f830bac79e88b2bac4090867d3527094e11772d71896"
+    },
+    "task_6_research_hypotheses": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7_initial_splits": {
+      "path": "docs/mvp/07-initial-splits.md",
+      "sha256": "d392120c20a6a829b6807e8217331ddd9b8a8f479722b204ae39edd17084ea46"
+    }
+  },
+  "current_frontier": {
+    "canonical_research_candidate_count": 222,
+    "structurally_complete_concrete_experiment_contract_count": 0,
+    "candidate_specific_concrete_baseline_binding_count": 0,
+    "canonical_candidates_pending_concrete_binding": 222,
+    "comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false
+  },
+  "three_layer_model": {
+    "layer_1_candidate_catalog": {
+      "owner": "TASK_8_RESEARCH_CATALOG",
+      "current_state": "AVAILABLE_BY_REFERENCE_TO_CANONICAL_CANDIDATE_FRONTIER",
+      "canonical_candidate_count": 222,
+      "meaning": "A canonical research-candidate catalog containing identity, provenance, evidence, declared environment families, hypotheses, and possible comparison roles.",
+      "not_equivalent_to": [
+        "GOVERNED_BASELINE_VARIANT",
+        "EXPERIMENT_SPECIFIC_BASELINE_BINDING",
+        "STRONGEST_APPLICABLE_COMPARATOR",
+        "SCIENTIFIC_SUPPORT"
+      ],
+      "materialized_as_new_entries_in_this_step": false
+    },
+    "layer_2_baseline_variant": {
+      "owner": "TASK_8",
+      "current_count": 0,
+      "meaning": "A concrete reproducible baseline variant with a stable logical identity, behavior-relevant version, configuration, information-access contract, and comparison-role eligibility.",
+      "creation_rule": "May be resolved only from real reproducible implementation evidence and sufficient experiment context; it must not be fabricated solely to advance Task 8.",
+      "required_before_protected_use": true,
+      "created_in_this_step": false
+    },
+    "layer_3_experiment_binding": {
+      "owners": {
+        "task_8": "baseline implementation, identity, version, configuration, comparison role",
+        "task_7": "SplitVersion, partition membership, provenance, split-side binding, protected-access boundary"
+      },
+      "current_count": 0,
+      "meaning": "A concrete governed experiment manifest binding an applicable Task-8 baseline variant to an actual experiment and Task-7 SplitVersion before protected outcomes are inspected.",
+      "created_in_this_step": false
+    }
+  },
+  "candidate_catalog_entry_schema": {
+    "status": "NON_GOVERNING_SCHEMA_ONLY",
+    "fields": [
+      "canonical_candidate_identity",
+      "display_name",
+      "research_provenance",
+      "implementation_reference",
+      "implementation_resolution_state",
+      "declared_environment_families",
+      "declared_hypothesis_roles",
+      "declared_comparison_roles",
+      "evidence_status",
+      "known_limitations",
+      "license_or_access_state",
+      "reproducibility_state",
+      "catalog_status"
+    ],
+    "does_not_create_baseline_identity": true,
+    "does_not_create_baseline_version": true
+  },
+  "future_baseline_variant_schema": {
+    "status": "SCHEMA_BOUND_NOT_INSTANTIATED",
+    "required_fields": [
+      "logical_baseline_identity",
+      "canonical_candidate_identity_or_internal_method_identity",
+      "implementation_identity",
+      "implementation_class",
+      "behavior_relevant_version",
+      "version_resolution_evidence",
+      "configuration_contract",
+      "information_access_contract",
+      "tuning_and_selection_contract",
+      "eligible_environment_family",
+      "eligible_hypothesis_role",
+      "eligible_comparison_role",
+      "evaluator_relationship",
+      "reproducibility_status",
+      "license_or_access_status",
+      "provenance_bindings"
+    ],
+    "version_policy_source": "FROZEN_SELECTION_PREREGISTRATION_AND_TASK8_METHODOLOGY",
+    "no_variant_instantiated_now": true
+  },
+  "experiment_binding_schema_reference": {
+    "source": "TASK_8_POST_DISCOVERY_APPLICABILITY_FRAMEWORK",
+    "required_concrete_applicability_tuple_fields": [
+      "environment_family",
+      "hypothesis_id",
+      "claim_or_decision_surface",
+      "concrete_experiment_or_task",
+      "comparison_role",
+      "candidate_information_access",
+      "baseline_information_access",
+      "candidate_interaction_opportunity",
+      "baseline_interaction_opportunity",
+      "candidate_tuning_opportunity",
+      "baseline_tuning_opportunity",
+      "adaptation_input_access_if_applicable",
+      "evaluator_contract",
+      "resource_match_class",
+      "required_model_or_system_family_match",
+      "required_data_or_environment_match",
+      "required_external_service_or_tool_match",
+      "applicability_exclusions"
+    ],
+    "field_count": 18,
+    "values_instantiated_now": false
+  },
+  "later_binding_protocol": [
+    {
+      "order": 1,
+      "rule": "A real candidate system and governed experiment contract must exist; Task 8 must not fabricate one."
+    },
+    {
+      "order": 2,
+      "rule": "Task 7 resolves or imports the applicable concrete SplitVersion, membership, provenance, independence, and protected-access boundaries."
+    },
+    {
+      "order": 3,
+      "rule": "Task 8 evaluates only the candidate subset genuinely applicable to that experiment's environment, hypothesis role, mechanism, information opportunity, evaluator, and matching constraints."
+    },
+    {
+      "order": 4,
+      "rule": "Task 8 resolves reproducible baseline implementation, behavior-relevant version, and comparison configuration for the retained applicable set."
+    },
+    {
+      "order": 5,
+      "rule": "Where Task 6 requires strongest matched selection, selection occurs only within the defensibly comparable eligible set for that concrete experiment."
+    },
+    {
+      "order": 6,
+      "rule": "The experiment manifest freezes the selected baseline identity, version, role, selection rule, comparison configuration, and applicable resource regime before protected outcomes are inspected."
+    },
+    {
+      "order": 7,
+      "rule": "A material baseline change after protected inspection creates successor comparison evidence rather than rewriting the earlier result."
+    }
+  ],
+  "selection_boundary": {
+    "global_strongest_comparator_exists": false,
+    "environment_family_wide_winner_may_be_declared_without_experiment": false,
+    "cross_incomparable_numerical_ranking_allowed": false,
+    "mechanical_candidate_role_cross_product_allowed": false,
+    "protected_outcome_informed_selection_allowed": false,
+    "experiment_specific_applicability_required": true,
+    "material_ties_may_require_multiple_retained_comparators": true
+  },
+  "task_7_boundary": {
+    "task_8_may_create_splitversion": false,
+    "task_8_may_fabricate_partition_membership": false,
+    "task_8_may_fabricate_dataset_provenance": false,
+    "task_8_may_relabel_protocol_qualification_data_as_experiment_data": false
+  },
+  "task_9_boundary": {
+    "task_8_may_fill_concrete_cost_values": false,
+    "task_8_may_fill_concrete_effort_values": false,
+    "resource_dimensions_may_be_declared_before_task_9_values": true
+  },
+  "forbidden_shortcuts": [
+    "FABRICATE_EXPERIMENT_TO_UNBLOCK_TASK_8",
+    "FABRICATE_SPLITVERSION",
+    "FABRICATE_PARTITION_MEMBERSHIP",
+    "PROMOTE_ALL_222_CANDIDATES_TO_CONCRETE_BASELINES",
+    "PIN_ALL_222_CANDIDATES_WITHOUT_APPLICABILITY",
+    "SELECT_ONE_GLOBAL_STRONGEST_COMPARATOR",
+    "RANK_INCOMPARABLE_EXPERIMENT_MECHANISMS",
+    "USE_PROTECTED_OUTCOMES_FOR_BASELINE_SELECTION",
+    "CREATE_DECISION_0009_FROM_CATALOG_SCHEMA_ALONE"
+  ],
+  "claim_limits": {
+    "catalog_boundary_is_governing_task_8_specification": false,
+    "catalog_candidate_is_concrete_baseline": false,
+    "catalog_candidate_is_finally_eligible": false,
+    "catalog_candidate_is_strongest": false,
+    "baseline_variant_resolved": false,
+    "experiment_binding_resolved": false,
+    "splitversion_created": false,
+    "baseline_version_pinned": false,
+    "concrete_baseline_frozen": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I5A2R10_PROJECT_CANONICAL_FRONTIER_INTO_NON_GOVERNING_BASELINE_CATALOG_WITHOUT_SELECTION_OR_VERSION_PINNING"
+}

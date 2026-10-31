@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 37,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T23:10:24Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v36": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v36.json",
+      "sha256": "1d6cf4f9360c8481560bff4f4de02ecb4eb59c4980c986752bf6e9a59fe75d4d"
+    },
+    "systematic_saturation_v34": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v34.json",
+      "sha256": "075f0e8356b698a594ed9c159431a8f8bbe62f8113b022a581b20da3b62f5b29"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMINSIGHT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemInsight: Autonomous Memory Augmentation for LLM Agents",
+      "aliases": [
+        "MemInsight",
+        "MemInsight: Autonomous Memory Augmentation for LLM Agents"
+      ],
+      "implementation_identity": "https://github.com/amazon-science/MemInsight",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STRUCTURED_MEMORY_AUGMENTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1683/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/MemInsight"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2503.21760"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_STRUCTURED_MEMORY_AUGMENTATION_AND_RETRIEVAL_SETTING_MATCHED",
+        "CONVERSATIONAL_RECOMMENDATION_QA_OR_SUMMARIZATION_ROLE_MUST_MATCH",
+        "ATTRIBUTE_GENERATION_MODEL_AND_PROMPTS_MUST_BE BOUND",
+        "RETRIEVAL_BACKEND_AND_EMBEDDING_CONFIGURATION_MUST_BE BOUND",
+        "NOT_AUTOMATICALLY_A_LEARNED_DECISION_POLICY_BASELINE",
+        "Autonomously augments historical interactions with structured semantic attributes and combines attribute-aware and embedding-based retrieval."
+      ],
+      "eligibility_status": "MATERIAL_IF_STRUCTURED_MEMORY_AUGMENTATION_AND_RETRIEVAL_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V34"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEM0",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory",
+      "aliases": [
+        "Mem0",
+        "Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory"
+      ],
+      "implementation_identity": "https://github.com/mem0ai/mem0",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_PERSISTENT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2504.19413"
+        },
+        {
+          "class": "PUBLISHED_PROCEEDINGS_RECORD",
+          "url": "https://journals.sagepub.com/doi/10.3233/FAIA251160"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mem0ai/mem0"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_IF_PERSISTENT_CONVERSATIONAL_OR_AGENT_MEMORY_SETTING_MATCHED",
+        "OPEN_SOURCE_RESEARCH_CONFIGURATION_MUST_BE DISTINGUISHED_FROM_MANAGED_SERVICE_BEHAVIOR",
+        "EXTRACTION_RETRIEVAL_AND_GRAPH_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_MUST_NOT_DEFINE_FINAL_CUTOFF_VERSION",
+        "CONVERSATIONAL_MEMORY_RESULTS_MUST_NOT_BE GENERALIZED_TO_UNMATCHED_INTERACTIVE_AGENT_TASKS",
+        "Provides a persistent memory architecture that extracts, consolidates, stores, and retrieves salient information across interactions, including a graph-memory variant."
+      ],
+      "eligibility_status": "MATERIAL_IF_PERSISTENT_CONVERSATIONAL_OR_AGENT_MEMORY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V34"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

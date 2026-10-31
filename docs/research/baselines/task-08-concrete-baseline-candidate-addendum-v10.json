@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 10,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T05:10:55Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v9": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v9.json",
+      "sha256": "19f2fc2414c3221b28ab0d2a63911a65e6618a6685d39197bcf3bbad74dcdcb3"
+    },
+    "systematic_saturation_v7": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v7.json",
+      "sha256": "c0d7336a926fef0b66981265f4c3d5f49382eff883b8f899241fa8a23b17bc67"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LAMER-METARL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "LaMer \u2014 Meta-RL Induces Exploration in Language Agents",
+      "implementation_identity": "https://github.com/mlbio-epfl/LaMer",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_EXPLORATION_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_IN_CONTEXT_AGENT_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_META_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=Jq6N3B9QY7"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mlbio-epfl/LaMer"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_EXPLORATION_AND_FEEDBACK_SETTING_MATCHED",
+        "Peer-reviewed Meta-RL method that explicitly trains language agents for exploration across environments and performs in-context policy adaptation from test-time feedback without gradient updates."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_EXPLORATION_AND_FEEDBACK_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_BALANCED_SATURATION_PASS_V7"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-ADTE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Adaptive Debiasing Tsallis Entropy",
+      "implementation_identity": "https://github.com/Jinx630/ADTE",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_ENTROPY_ADAPTATION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=dHj8hC081K"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jinx630/ADTE"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_CLIP_STYLE_VLM_VIEW_SELECTION_AND_BIAS_SETTING_MATCHED",
+        "Introduces adaptive class-specific Tsallis entropy and label adjustment for VLM TTA, making its uncertainty-selection mechanism materially different from existing Shannon-entropy and cache-based candidates."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_CLIP_STYLE_VLM_VIEW_SELECTION_AND_BIAS_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_BALANCED_SATURATION_PASS_V7"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

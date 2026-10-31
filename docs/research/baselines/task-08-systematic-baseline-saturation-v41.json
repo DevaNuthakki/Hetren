@@ -1,0 +1,222 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 41,
+  "state": "SATURATION_V41_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T23:52:33Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_state_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v43_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v43.json",
+      "sha256": "08b8b0197a4cf63f98f5b7ef66f102bb3e30d4600e6b56af6c36442a7d51740d"
+    },
+    "systematic_saturation_v40": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v40.json",
+      "sha256": "268ce4ad2fbc579977711024a67f08d48b1dc4b744fe28d1c129e8d2911fbf98"
+    }
+  },
+  "focus": [
+    "POST_T_MEM_DIRECT_MEMORY",
+    "EXECUTIVE_MEMORY_FOR_TOOL_AUGMENTED_AGENTS",
+    "HIERARCHICAL_LONG_TERM_MEMORY",
+    "IMPLEMENTATION_AND_APPLICABILITY_GATES",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"MemoBrain\" \"Executive Memory\" ACL 2026",
+    "\"MemoBrain\" github agent memory",
+    "\"HiMem\" \"Hierarchical Long-Term Memory\" 2026",
+    "\"HiMem\" github long-horizon agents",
+    "\"H-MEM\" \"High-Efficiency Long-Term Reasoning\" EACL 2026",
+    "\"H-Mem\" \"Hybrid Multi-Dimensional Memory\" EACL 2026",
+    "\"Fine-Mem\" ACL 2026 code github",
+    "\"ARTEM\" episodic memory AAAI 2026 github",
+    "\"MemoryART\" AAAI 2026 github",
+    "\"FlashMem\" ACL 2026 agent memory code",
+    "\"long-term memory\" agent \"EACL 2026\" github",
+    "\"agent memory\" \"ACL 2026\" executive memory",
+    "\"hierarchical memory\" conversational agent 2026 code",
+    "\"episodic memory\" LLM agent 2026 official implementation",
+    "\"memory reconsolidation\" LLM agent 2026 github",
+    "\"direct memory\" LLM agent 2026 long horizon"
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 2,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOBRAIN-EXEC",
+      "name": "MemoBrain: Executive Memory as an Agentic Brain for Reasoning",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HIMEM-HIERARCHICAL",
+      "name": "HiMem: Hierarchical Long-Term Memory for LLM Long-Horizon Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOBRAIN-EXEC",
+      "name": "MemoBrain: Executive Memory as an Agentic Brain for Reasoning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EXECUTIVE_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_CONTEXT_MANAGEMENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_EXECUTABLE_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.127/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/qhjqhj00/MemoBrain"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "material_reason": "Provides dependency-aware executive memory for tool-augmented long-horizon reasoning, explicitly pruning invalid steps, folding completed sub-trajectories, and maintaining a bounded reasoning backbone.",
+      "limits": [
+        "TOOL_AUGMENTED_LONG_HORIZON_REASONING_SETTING_REQUIRED",
+        "MEMOBRAIN_MODEL_VARIANT_AND_FOUNDATION_MODEL_MUST_BE BOUND",
+        "CONTEXT_BUDGET_AND_FLUSH_FOLD_POLICY_MUST_BE BOUND",
+        "GAIA_WEBWALKER_OR_OTHER_BENCHMARK_SCOPE_MUST_NOT_BE GENERALIZED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HIMEM-HIERARCHICAL",
+      "name": "HiMem: Hierarchical Long-Term Memory for LLM Long-Horizon Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HIERARCHICAL_LONG_TERM_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PRIMARY_PREPRINT_AND_PUBLIC_IMPLEMENTATION_VERIFIED_NO_ARCHIVAL_PEER_REVIEW_VERIFIED",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.06377"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/jojopdq/HiMem"
+        }
+      ],
+      "eligibility_status": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "material_reason": "Combines hierarchical Episode and Note memory with topic-aware segmentation, hybrid retrieval, and conflict-aware memory reconsolidation during sustained interaction.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "LONG_HORIZON_DIALOGUE_SETTING_MUST_BE MATCHED",
+        "SEGMENTATION_RETRIEVAL_AND_RECONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Fine-Mem: Fine-Grained Feedback Alignment for Long-Horizon Memory Management",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.900/",
+        "https://arxiv.org/abs/2601.08435"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "Archival peer review is verified, but this bounded review still did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "ARTEM: Enhancing Large Language Model Agents with Spatial-Temporal Episodic Memory",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/39773",
+        "https://github.com/cassthm/ARTEM"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "disposition": "TEMPORAL_EPISODIC_APPLICABILITY_GATE_REMAINS",
+      "reason": "Its verified evaluation is centered on episodic-memory retrieval tasks; executable availability alone does not establish applicability to every governed E1 decision experiment."
+    },
+    {
+      "name": "MemoryART: Enhancing LLMs via Multi-Memory Models with Adaptive Resonance Theory for Healthcare Agents",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/39205",
+        "https://github.com/dairkkriad/MemoryART"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "disposition": "HEALTHCARE_SPECIFIC_APPLICABILITY_GATE_REMAINS",
+      "reason": "The verified benchmark and memory design are centered on long-horizon healthcare consultation; no generic E1 applicability is inferred."
+    },
+    {
+      "name": "H-MEM: Hierarchical Memory for High-Efficiency Long-Term Reasoning in LLM Agents",
+      "source": "https://aclanthology.org/2026.eacl-long.15/",
+      "evidence_state": "PEER_REVIEWED_EACL_2026",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The peer-reviewed memory architecture is relevant, but this bounded review did not independently verify an official executable implementation."
+    },
+    {
+      "name": "H-Mem: Hybrid Multi-Dimensional Memory Management for Long-Context Conversational Agents",
+      "sources": [
+        "https://aclanthology.org/2026.eacl-long.363/",
+        "https://www.researchwithrutgers.org/en/publications/h-mem-hybrid-multi-dimensional-memory-management-for-long-context/"
+      ],
+      "evidence_state": "PEER_REVIEWED_EACL_2026_WITH_AUTHOR_REPORTED_CODE_LOCATOR",
+      "disposition": "CURRENT_IMPLEMENTATION_ACCESS_UNRESOLVED_NOT_PROMOTED",
+      "reason": "The publication record names a code repository, but the repository could not be independently fetched in this review, so executable availability is not manufactured."
+    },
+    {
+      "name": "FlashMem: Distilling Intrinsic Latent Memory via Computation Reuse",
+      "source": "https://aclanthology.org/2026.findings-acl.230/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "LATENT_MEMORY_REFERENCE_IMPLEMENTATION_GATE_REMAINS",
+      "reason": "The method is materially relevant as intrinsic latent memory, but this review did not verify an official executable research implementation."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_candidates_remain_within_e1": true,
+    "forcing_memory_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V41"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially new post-T-Mem direct-memory identity survived dynamic deduplication."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "ongoing_research_is_peer_reviewed": false,
+    "author_reported_code_is_verified_executable_code": false,
+    "scenario_specific_memory_is_automatically_generic": false,
+    "new_candidate_is_automatically_strongest": false,
+    "direct_memory_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B46_VERIFY_ADDENDUM_V44_AND_CONTINUE_BOUNDED_REFINEMENT"
+}

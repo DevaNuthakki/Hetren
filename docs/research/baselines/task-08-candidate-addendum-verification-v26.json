@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 26,
+  "state": "ADDENDUM_V26_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:20:22Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v26": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v26.json",
+      "sha256": "d1a08fb0b90f342ee18aff956dd4fa4b6e6ae3fad764070c3fa80799cc51f4c8"
+    },
+    "systematic_saturation_v23": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v23.json",
+      "sha256": "cdb166588d255337def09a6c51941be44e6b97c7f1dc449ade126d7a886c84cc"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-WORKFORCEAGENT-R1",
+      "verification_state": "PEER_REVIEWED_EACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_WEB_AGENT_R1_STYLE_RL_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "WorkForceAgent-R1 is published in Findings of EACL 2026.",
+        "It trains an LLM-based web agent with a rule-based R1-style reinforcement-learning framework.",
+        "Its structured reward evaluates output-format adherence and action correctness.",
+        "The published experiments use the WorkArena workplace-oriented web-navigation benchmark.",
+        "The official repository contains data-processing, reward-function, and veRL-based training support for the WorkArena agent."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-eacl.3/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/night-chen/WorkForceAgent-R1"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2505.22942"
+        }
+      ],
+      "limits": [
+        "WORKARENA_OR_MATERIALLY_MATCHED_WEB_NAVIGATION_SETTING_REQUIRED",
+        "BASE_MODEL_AND_CHECKPOINT_MUST_BE_BOUND",
+        "RULE_BASED_REWARD_DEFINITION_MUST_BE BOUND",
+        "ACTION_SPACE_AND_OBSERVATION_FORMAT_MUST_BE MATCHED",
+        "TRAINING_RESOURCE_VALUES_REMAIN_TASK_9_OWNED",
+        "WEB_AGENT_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v26_candidates_have_role_level_external_review": true,
+    "workforceagent_r1_peer_reviewed": true,
+    "workforceagent_r1_official_implementation_identity_verified": true,
+    "all_addendum_v26_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "current_repository_head_is_final_version_identity": false,
+    "paper_performance_numbers_are_hetren_results": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

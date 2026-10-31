@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 8,
+  "state": "SATURATION_V8_FOUND_NEW_MATERIAL_E1_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:15:58Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "publication_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_page_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_commit_or_release": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v10_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v10.json",
+      "sha256": "013be923f98a065886e6cb1bc60e8f11f66dfc72fd72fb01b22afe9766a14ee7"
+    },
+    "source_correction_v1": {
+      "path": "docs/research/baselines/task-08-research-source-correction-v1.json",
+      "sha256": "8aea15af934301779711e151bd4050296734e43d29782f7944d998e29e9b998a"
+    },
+    "systematic_saturation_v7": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v7.json",
+      "sha256": "c0d7336a926fef0b66981265f4c3d5f49382eff883b8f899241fa8a23b17bc67"
+    }
+  },
+  "focus": [
+    "E1_LEARNED_WEB_AGENT",
+    "E2_POST_PFT3A_AND_ACTIVE_ACQUISITION",
+    "E3_VLM_TEST_TIME_ADAPTATION",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "ICLR 2026 web agent reinforcement learning grounded official code WebFactory",
+    "WebFactory ICLR 2026 grounded web agents official implementation",
+    "CVPR 2026 universal prompt learning test-time adaptation VLM OOD official code STAR",
+    "STAR test-time adaptation universal prompt learning CVPR 2026 github",
+    "ACL 2026 self improving multi-agent optimization meta learning TPGO code",
+    "Learning to Evolve Textual Parameter Graph Optimization official implementation",
+    "2026 peer reviewed tabular test-time adaptation after PFT3A official code",
+    "2026 active feature acquisition peer reviewed tabular sequential measurement official code",
+    "2026 cross-family learned decision transfer agent structured vision peer reviewed",
+    "2026 meta-learning one policy agent tabular vision cross modality official implementation",
+    "2026 web agent reward model guided search peer reviewed WebArbiter",
+    "2026 VLM test-time adaptation OOD universal prompt learning peer reviewed"
+  ],
+  "query_count": 12,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-WEBFACTORY",
+      "name": "WebFactory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_GUI_WEB_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_OFFLINE_TO_ONLINE_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=HaIEP2PD4S"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/sicheng-fan/WebFactory"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_GUI_OR_WEB_AGENT_TRAINING_AND_TRANSFER_SETTING_MATCHED",
+      "material_reason": "Provides a materially distinct learned web-agent comparator based on automated environment synthesis, task generation, trajectory collection and reinforcement learning, with reported transfer from synthetic offline environments to online web settings.",
+      "n_h2_limit": "OFFLINE_TO_ONLINE_TRANSFER_REMAINS_WITHIN_WEB_AGENT_ENVIRONMENTS_AND_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-STAR-UPL",
+      "name": "STAR \u2014 Test-Time Adaptation Can Enhance Universal Prompt Learning",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_UNIVERSAL_VLM_PROMPT_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Fu_STAR_Test-Time_Adaptation_Can_Enhance_Universal_Prompt_Learning_for_Vision-Language_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/fuyw-aisw/STAR"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ID_OOD_MIXED_TEST_STREAM_AND_PROMPT_LEARNING_SETTING_MATCHED",
+      "material_reason": "Adds separability-aware soft gating, conjugate pseudo-label optimization and prototype retrieval for unlabeled test streams containing both in-distribution and out-of-distribution samples."
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "reference_only": [
+    {
+      "name": "Textual Parameter Graph Optimization / Learning to Evolve",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.1534/",
+        "https://arxiv.org/abs/2604.20714"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "relevance": "Represents agents, tools and workflows as an optimizable textual parameter graph and uses historical optimization experience to improve future graph edits.",
+      "disposition": "MATERIAL_RESEARCH_REFERENCE_NOT_PROMOTED_TO_CLAIM_BEARING_BASELINE",
+      "reason": "This review did not verify an official executable implementation, and the demonstrated optimization target is multi-agent-system configuration rather than Hetren's exact cross-family learned decision-transfer contract."
+    },
+    {
+      "name": "WebArbiter",
+      "source": "https://github.com/YaoZ720/WebArbiterCode",
+      "evidence_state": "ICLR_2026_LABELLED_PUBLIC_IMPLEMENTATION",
+      "relevance": "Provides a learned reasoning process reward model and reward-guided web-agent search.",
+      "disposition": "EVALUATION_OR_SEARCH_AUGMENTATION_REFERENCE_NOT_STANDALONE_AGENT_POLICY_BASELINE",
+      "reason": "Its principal role is process reward modeling and guided selection rather than a standalone policy directly comparable to the current E1 decision-policy candidates."
+    }
+  ],
+  "screened_not_promoted": [
+    {
+      "name": "ConDA",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Ge_Condensed_Test-Time_Adaptation_of_VLMs_for_Action_Recognition_CVPR_2026_paper.html",
+      "disposition": "VIDEO_ACTION_RECOGNITION_SPECIFIC_NOT_PROMOTED",
+      "reason": "The current governed E3 candidate space has not declared a matched video action-recognition experiment."
+    },
+    {
+      "name": "InsCal",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Que_InsCal_Calibrated_Multi-Source_Fully_Test-Time_Prompt_Tuning_for_Object_Detection_CVPR_2026_paper.html",
+      "disposition": "OBJECT_DETECTION_SPECIFIC_NOT_PROMOTED",
+      "reason": "Multi-source object-detection adaptation is a distinct task contract that should only become claim-bearing if a matched E3 detection experiment is declared."
+    },
+    {
+      "name": "TTL",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Ye_TTL_Test-time_Textual_Learning_for_OOD_Detection_with_Pretrained_Vision-Language_CVPR_2026_paper.html",
+      "disposition": "OOD_DETECTION_SPECIFIC_NOT_PROMOTED",
+      "reason": "The method targets OOD detection rather than the generic classification/adaptation roles currently under comparison."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "webfactory_within_e1_transfer_reference_found": true,
+    "tpgo_agent_system_meta_optimization_reference_found": true,
+    "forcing_within_environment_or_system_optimization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V8"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_LEARNED_WEB_AGENT_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NEW_PEER_REVIEWED_UNIVERSAL_PROMPT_TTA_COMPARATOR_FOUND",
+    "N_H2": "RELEVANT_META_OPTIMIZATION_AND_WITHIN_E1_TRANSFER_EVIDENCE_FOUND_BUT_GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "This reasonable refinement discovered WebFactory and STAR, materially relevant peer-reviewed candidates absent from prior governed Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "webfactory_establishes_general_n_h2": false,
+    "tpgo_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B13_VERIFY_ADDENDUM_V11_AND_RUN_NEXT_REASONABLE_REFINEMENT"
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 15,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T19:57:25Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v14": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v14.json",
+      "sha256": "cd3cbc259eb77d04037b75443d321fc31b4236dca1a3224793d9906d4da80612"
+    },
+    "systematic_saturation_v12": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v12.json",
+      "sha256": "48c75ebe8ad6531d68b36c3cf7eedc6edd6e434a58f26de9ba87a83cb45f71c9"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-CODEGYM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CodeGym \u2014 Generalizable End-to-End Tool-Use RL with Synthetic CodeGym",
+      "implementation_identity": "https://github.com/StigLidu/CodeGym",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_TOOL_USE_RL_COMPARATOR_CANDIDATE",
+        "N_H1_OOD_TOOL_WORKFLOW_GENERALIZATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1e4322fddd833f83c855660ac65e428d-Abstract-Conference.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2509.17325"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/StigLidu/CodeGym"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MULTI_TURN_TOOL_USE_RL_AND_WORKFLOW_GENERALIZATION_SETTING_MATCHED",
+        "BASE_MODEL_AND_TRAINED_CHECKPOINT_MUST_BE BOUND",
+        "CODEGYM_SYNTHESIS_CONFIGURATION_AND_TRAINING_TASK_CORPUS_MUST_BE BOUND",
+        "RL_ALGORITHM_AND_TOOL_INTERFACE_MUST_BE BOUND",
+        "OOD_TOOL_WORKFLOW_GENERALIZATION_REMAINS_WITHIN_E1",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Converts static coding problems into diverse verifiable multi-turn tool environments for end-to-end agent RL and evaluates generalization to unseen tool-use workflows."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_TURN_TOOL_USE_RL_AND_WORKFLOW_GENERALIZATION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V12"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGENTICQWEN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AgenticQwen",
+      "implementation_identity": "https://github.com/haruhi-sudo/data_synth_and_rl",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_SMALL_AGENT_POLICY_COMPARATOR_CANDIDATE",
+        "N_H1_COST_LATENCY_CONSTRAINED_TOOL_AGENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-industry.37/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/haruhi-sudo/data_synth_and_rl"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_SMALL_AGENT_TOOL_USE_AND_RESOURCE_CONSTRAINED_SETTING_MATCHED",
+        "EXACT_AGENTICQWEN_MODEL_CHECKPOINT_MUST_BE BOUND",
+        "BASE_QWEN_MODEL_AND_THINKING_MODE_MUST_BE BOUND",
+        "SYNTHETIC_DATA_GENERATION_AND_RL_ROUND_CONFIGURATION_MUST_BE BOUND",
+        "COST_AND_LATENCY_VALUES_REMAIN_TASK_9_OWNED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Provides trained small agentic-model policies and reproducible data-synthesis plus multi-round RL pipelines using reasoning and agentic data flywheels for multi-step tool use."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_SMALL_AGENT_TOOL_USE_AND_RESOURCE_CONSTRAINED_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V12"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-TARS",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TARS \u2014 Multi-Timescale Representation with Adaptive Routing for Deep Tabular Learning under Temporal Shift",
+      "implementation_identity": "https://github.com/gunnerwang/TARS-Timescale-Tabular",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_TEMPORAL_TABULAR_SHIFT_COMPARATOR_CANDIDATE",
+        "A_H1_TEST_TIME_TEMPORAL_ADAPTATION_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0893608026001322"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/gunnerwang/TARS-Timescale-Tabular"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_TEMPORAL_STRUCTURED_DATA_SHIFT_AND_SELECTED_TEST_TIME_ADAPTATION_CONFIGURATION_MATCH",
+        "TEMPORAL_TABULAR_SHIFT_SETTING_REQUIRED",
+        "EXACT_BACKBONE_AND_TEMPORAL_FEATURE_CONFIGURATION_MUST_BE BOUND",
+        "TEST_TIME_ADAPTATION_OPTION_MUST_BE EXPLICITLY BOUND",
+        "IF_TEST_TIME_ADAPTATION_IS_DISABLED_TARS_MUST_NOT_BE MISLABELED_AS_AN_A_H1_ADAPTATION_BASELINE",
+        "TEMPORAL_ROBUSTNESS_ALONE_DOES_NOT_ESTABLISH_A_H2",
+        "Adds multi-timescale temporal representations and drift-aware routing for tabular temporal shift, while the official implementation exposes an explicit test_time_adaptation configuration."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_TEMPORAL_STRUCTURED_DATA_SHIFT_AND_SELECTED_TEST_TIME_ADAPTATION_CONFIGURATION_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V12"
+    }
+  ],
+  "pending_identity_resolution": [
+    "Drift-Resilient TabPFN versus prior Task-8 TabPFN-related candidate identity"
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

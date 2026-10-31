@@ -1,0 +1,126 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 60,
+  "state": "ADDENDUM_V60_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:28:49Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v60": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v60.json",
+      "sha256": "d7caf3e89584a2df8f4d589be35b81b71737ebff57847a9b9a37a670a0fe8bb0"
+    },
+    "systematic_saturation_v57": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v57.json",
+      "sha256": "b5dcb77cab45edb2b52ee622fe3bd0f479f27b2e04df4f4d3ebf66b74e6813fa"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-FLOWER-VLA",
+      "candidate_name": "FLOWER",
+      "verification_state": "PEER_REVIEWED_CORL_2025_PMLR_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EFFICIENT_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "FLOWER is published in the 2025 Conference on Robot Learning proceedings.",
+        "The method uses a sub-billion-parameter vision-language-flow architecture designed for efficient robotic manipulation.",
+        "The primary publication states that public code, pretrained weights, and training recipes are released.",
+        "The official research repository provides the VLA pretraining implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v305/reuss25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/intuitive-robots/flower_vla_pret"
+        }
+      ],
+      "limits": [
+        "MATCHED_ROBOT_TASK_AND_EMBODIMENT_REQUIRED",
+        "PRETRAINING_AND_FINETUNING_CONFIGURATIONS_MUST_BE BOUND_SEPARATELY",
+        "PARAMETER_COUNT_AND_COMPUTE_ADVANTAGE_DO_NOT_BY_THEMSELVES_ESTABLISH_STRONGEST_STATUS",
+        "FINAL_RETAINED_REPOSITORY_REVISION_MUST_BE_CUTOFF_CONSISTENT"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLAVA-VLA",
+      "candidate_name": "LLaVA-VLA",
+      "verification_state": "PRIMARY_RESEARCH_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_ICRA_2026_ACCEPTANCE_REPORTED_BY_OFFICIAL_REPOSITORY",
+      "role_disposition": "E1_PRACTICAL_VLA_ACTION_CHUNKING_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "LLaVA-VLA has a public primary research report on VLA practicality and cross-embodiment evaluation.",
+        "The official repository reports acceptance at ICRA 2026.",
+        "The repository releases training code, evaluation code, checkpoints, and CALVIN/RoboTwin-related workflows.",
+        "The architecture uses multi-view perception, proprioceptive input, and action chunking."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.22663"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHelix-Team/LLaVA-VLA"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_CONFERENCE_PROCEEDINGS_LOCATOR_NOT_USED_AS_FINAL_VERSION_IDENTITY_HERE",
+        "MATCHED_CALVIN_ROBOTWIN_OR_OTHER_DECLARED_EXPERIMENT_REQUIRED",
+        "MODEL_VARIANT_CHECKPOINT_AND_ACTION_REPRESENTATION_MUST_BE BOUND",
+        "FINAL_RETAINED_REPOSITORY_REVISION_MUST_BE_CUTOFF_CONSISTENT"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MOLE-VLA",
+      "candidate_name": "MoLe-VLA",
+      "verification_state": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DYNAMIC_LAYER_SKIPPING_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "MoLe-VLA is published in the AAAI 2026 technical track on intelligent robotics.",
+        "Its Mixture-of-Layers design dynamically activates a subset of language-model layers for robotic action generation.",
+        "The method includes a spatial-temporal-aware router and cognition self-knowledge distillation.",
+        "The official implementation exposes training and inference code for the method."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38945"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/RoyZry98/MoLe-VLA-Pytorch"
+        }
+      ],
+      "limits": [
+        "MATCHED_RLBENCH_OR_DECLARED_REAL_ROBOT_SETTING_REQUIRED",
+        "ROUTER_LAYER_SELECTION_AND_DISTILLATION_CONFIGURATION_MUST_BE BOUND",
+        "EFFICIENCY_AND_SUCCESS_METRICS_MUST_NOT_BE_COMBINED_ACROSS_INCOMPARABLE_TASKS",
+        "FINAL_RETAINED_REPOSITORY_REVISION_MUST_BE_CUTOFF_CONSISTENT"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v60_candidates_have_role_level_external_review": true,
+    "all_addendum_v60_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "paper_reported_benchmark_advantage_is_hetren_result": false,
+    "peer_review_or_acceptance_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

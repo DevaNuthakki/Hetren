@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_API_CAPABILITY_PREFLIGHT_DISPOSITION",
+  "state": "NOT_RUN_API_ACCESS_UNAVAILABLE",
+  "protected_generation_attempt": 10,
+  "evidence_bindings": {
+    "environment_comparison_sha256": "f40edb522176d7170834ad8c3592407466cee104341402ba4a2158c1656bdc99",
+    "attempt_9_isolation_investigation_sha256": "857af7583a1c95eedb628b45151dcb689153b72fdc4f3673f748f21003078577",
+    "attempt_9_disposition_sha256": "293a6be70c8afa1d1913f9a668d191f1cbdccb7bc222ae10487bad535eaf7c56",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "preflight_state": {
+    "api_key_available": false,
+    "api_billing_available_for_this_workflow": false,
+    "request_body_constructed": false,
+    "network_request_sent": false,
+    "hetren_material_transmitted": false,
+    "api_capability_verified": false
+  },
+  "classification": {
+    "category": "ENVIRONMENT_CAPABILITY_UNAVAILABLE",
+    "api_service_failure": false,
+    "api_model_failure": false,
+    "scientific_failure": false,
+    "package_failure": false,
+    "target_evaluator_failure": false,
+    "protected_generation_attempt_started": false
+  },
+  "effect_on_conditional_selection": {
+    "responses_api_candidate_was_conditional": true,
+    "required_capability_preflight_not_completed": true,
+    "responses_api_not_selected_for_protected_attempt_10": true,
+    "alternative_environment_design_required": true
+  },
+  "generation_state": {
+    "package_v10_created": false,
+    "protected_generation_started": false,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "claim_limits": {
+    "does_not_claim_api_would_have_failed": true,
+    "does_not_claim_api_model_unavailable": true,
+    "does_not_claim_api_environment_unsuitable": true,
+    "does_not_claim_scientific_result": true
+  },
+  "next_step": "DESIGN_ZERO_ADDITIONAL_COST_SUCCESSOR_ENVIRONMENT"
+}

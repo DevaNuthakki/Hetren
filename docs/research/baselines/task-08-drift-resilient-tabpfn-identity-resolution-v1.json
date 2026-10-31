@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_BASELINE_IDENTITY_RESOLUTION",
+  "resolution_generation": 1,
+  "state": "DISTINCT_METHOD_NOT_PREVIOUSLY_PROMOTED",
+  "recorded_at_utc": "2026-09-26T20:04:29Z",
+  "task": 8,
+  "subject": "Drift-Resilient TabPFN",
+  "identity_question": "Determine whether Drift-Resilient TabPFN is already represented by a prior Task-8 candidate, including prior TabPFN-related candidate identities.",
+  "external_identity_facts": {
+    "drift_resilient_tabpfn": {
+      "paper": "Drift-Resilient TabPFN: In-Context Learning Temporal Distribution Shifts on Tabular Data",
+      "venue": "NeurIPS 2024",
+      "primary_task": "tabular prediction under temporal distribution shift",
+      "implementation": "https://github.com/automl/Drift-Resilient_TabPFN",
+      "primary_source": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/b2e2774c8e76afe191b5bf518f5cb727-Abstract-Conference.html"
+    },
+    "zero_shot_bo_tabpfn": {
+      "paper": "Zero-Shot Bayesian Optimization with TabPFN: Competitive with State-of-the-Art without Per-Task Training",
+      "venue": "AutoML 2026",
+      "primary_task": "Bayesian optimization surrogate modeling",
+      "implementation": "https://github.com/amazon-science/tabpfn-automl2026",
+      "primary_source": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training"
+    }
+  },
+  "identity_conclusion": {
+    "drift_resilient_tabpfn_is_same_method_as_zero_shot_bo_tabpfn": false,
+    "reason": [
+      "The papers have different titles, authorship, publication venues, and implementation repositories.",
+      "Drift-Resilient TabPFN targets prediction under temporal distribution shift.",
+      "Zero-Shot Bayesian Optimization with TabPFN targets Bayesian optimization and uses TabPFN as a surrogate.",
+      "Sharing the TabPFN model family does not make the behavior-relevant baseline identities equivalent."
+    ]
+  },
+  "prior_candidate_scan": {
+    "candidate_record_count": 156,
+    "tabpfn_related_unique_candidate_count": 3,
+    "tabpfn_related_unique_candidates": [
+      {
+        "artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v2.json",
+        "candidate_id": "DISCOVERY:T8-E2-TTT-ICL-TABPFN",
+        "name": "Test-Time Training for In-Context Learning / TabPFN empirical instantiation",
+        "source_urls": [
+          "https://proceedings.mlr.press/v267/gozeten25a.html"
+        ]
+      },
+      {
+        "artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v6.json",
+        "candidate_id": "DISCOVERY:T8-E2-ZSBO-TABPFN",
+        "name": "Zero-Shot Bayesian Optimization with TabPFN",
+        "source_urls": [
+          "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training",
+          "https://github.com/amazon-science/tabpfn-automl2026"
+        ]
+      },
+      {
+        "artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+        "candidate_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+        "name": "TabPFN",
+        "source_urls": [
+          "https://www.nature.com/articles/s41586-024-08328-6"
+        ]
+      }
+    ],
+    "exact_drift_resilient_prior_candidate_count": 0,
+    "exact_drift_resilient_prior_candidates": []
+  },
+  "disposition": {
+    "new_candidate_required": true,
+    "reason": "No prior promoted candidate identity matches Drift-Resilient TabPFN."
+  },
+  "history_policy": {
+    "rewrite_prior_artifacts": false,
+    "manufacture_duplicate_candidate": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

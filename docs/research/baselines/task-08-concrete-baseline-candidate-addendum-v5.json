@@ -1,0 +1,343 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 5,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:45:58Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v4": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v4.json",
+      "sha256": "5e19de3c813b651ab3dac242de931b3194395c099531165942c1fb16b5bd12a8"
+    },
+    "systematic_saturation_v2": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v2.json",
+      "sha256": "8171b257090d028a43f884060f4e86b42e89ec38b3ce6ea4ee0d82eab68c0488"
+    }
+  },
+  "candidate_count": 7,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E3-DAS",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Dance Across Shifts / Dynamic Style Bridging",
+      "implementation_identity": "https://github.com/z1358/DAS",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_LONG_TERM_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhu_Dance_Across_Shifts_Forward-Facilitation_Continual_Test-Time_Adaptation_through_Dynamic_Style_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/z1358/DAS"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_REVIEW",
+        "Uses generated class exemplars and dynamic style bridging as a distinct continual-TTA supervisory mechanism absent from the prior governed candidate set."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-FPP",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Flatness-aware Prompt Pretraining",
+      "implementation_identity": "https://github.com/YonseiML/fpp",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_PROMPT_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Jang_Improving_Calibration_in_Test-Time_Prompt_Tuning_for_Vision-Language_Models_via_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/fpp"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_PENDING_PROMPT_TUNING_MATCH",
+        "Changes the pre-adaptation prompt initialization for TPT and is relevant only when the governed adaptation surface includes prompt tuning."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_PENDING_PROMPT_TUNING_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-ASR",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Adaptive and Selective Reset",
+      "implementation_identity": "https://github.com/YonseiML/asr",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_LONG_TERM_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_RESET_AND_RETENTION_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/79bdd6fe3f012befcc459ad13de65d13-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/asr"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_LONG_TERM_TTA_MATCH",
+        "Introduces adaptive and selective reset semantics directly relevant to long-term adaptation stability and retention."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_LONG_TERM_TTA_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-LTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Long-tailed Test-Time Adaptation for Vision-Language Models",
+      "implementation_identity": "https://github.com/xuc865/LTTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_LONG_TAILED_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "ICLR_2026_PROGRAM",
+          "url": "https://iclr.cc/virtual/2026/papers.html"
+        },
+        {
+          "class": "PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/xuc865/LTTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_ONLY_FOR_LONG_TAILED_VLM_STREAMS",
+        "Addresses the distinct long-tailed online VLM adaptation regime rather than balanced test streams."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_ONLY_FOR_LONG_TAILED_VLM_STREAMS",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-FGA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Flatness Guided Test-Time Adaptation for Vision-Language Models",
+      "implementation_identity": "REPRODUCIBLE_IMPLEMENTATION_NOT_BOUND",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf/fc239ac466f1026181d3aecf458d30bc1e635f6c.pdf"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "BLOCKED_PENDING_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+        "Peer-reviewed 2026 VLM-TTA method with distinct flatness-guided adaptation semantics; reproducible implementation identity was not located in this review."
+      ],
+      "eligibility_status": "BLOCKED_PENDING_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-A2MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "A2Memory",
+      "implementation_identity": "REPRODUCIBLE_IMPLEMENTATION_NOT_BOUND",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ONLINE_VLM_MEMORY_ADAPTATION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "ICML_2026_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_RECORD",
+          "url": "https://zhouchenlin.github.io/"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "BLOCKED_PENDING_PRIMARY_PAPER_AND_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+        "Introduces attributive and associative memory for online VLM TTA and is materially relevant to memory-based adaptation comparisons."
+      ],
+      "eligibility_status": "BLOCKED_PENDING_PRIMARY_PAPER_AND_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-ACTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AcTTA",
+      "implementation_identity": "https://github.com/hyeongyu-kim/actta",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_PARAMETER_EFFICIENT_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Kim_AcTTA_Rethinking_Test-Time_Adaptation_via_Dynamic_Activation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "AUTHOR_PUBLIC_REPOSITORY",
+          "url": "https://github.com/hyeongyu-kim/actta"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "BLOCKED_PENDING_EXECUTABLE_RESEARCH_IMPLEMENTATION_BINDING",
+        "Introduces activation-function adaptation rather than normalization or conventional weight adaptation, making it a materially distinct parameter-efficient mechanism."
+      ],
+      "eligibility_status": "BLOCKED_PENDING_EXECUTABLE_RESEARCH_IMPLEMENTATION_BINDING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_SYSTEMATIC_SATURATION_PASS"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

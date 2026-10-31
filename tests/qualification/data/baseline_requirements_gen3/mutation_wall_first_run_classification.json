@@ -1,0 +1,106 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FIRST_MUTATION_WALL_CLASSIFICATION",
+  "state": "DEVELOPMENT_MISMATCH_CLASSIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout": false,
+  "protected_evaluation": false,
+  "historical_mutation_result": "tests/qualification/data/baseline_requirements_gen3/mutation_wall_first_run.json",
+  "historical_mutation_result_sha256": "775fc3249e6b20e4a27787396e3fec492f126ada173e40fe26c7d14a6dfe88f5",
+  "historical_evaluator_snapshot": "tests/qualification/data/baseline_requirements_gen3/semantic_evaluator_first_mutation_run.py",
+  "historical_evaluator_sha256": "919807fb2d06af44ed0fbc83b9b89d7c3c4f97fa86303fde2999d823bc82b061",
+  "historical_result": {
+    "status": "FAIL",
+    "mutation_count": 34,
+    "match_count": 25,
+    "mismatch_count": 9,
+    "false_accept_count": 9,
+    "false_reject_count": 0,
+    "violation_contract_mismatch_count": 0
+  },
+  "classification_counts": {
+    "EVALUATOR_DEFECT": 9,
+    "G3_REQUIREMENT_AMBIGUITY": 0,
+    "MUTATION_ORACLE_DEFECT": 0
+  },
+  "generation_3_change_required": false,
+  "mutation_oracle_change_required": false,
+  "semantic_evaluator_change_required": true,
+  "rerun_historical_first_mutation_wall": false,
+  "entries": [
+    {
+      "mutation_id": "G3-M-011",
+      "requirement_id": "G3-BR-009",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "AVAILABLE_PROVENANCE_NOT_RECORDED",
+      "basis": "G3-BR-009 requires material evaluator provenance to be preserved. The live evaluator only handles unavailable revision provenance and does not reject explicitly available material provenance that is omitted.",
+      "remediation": "When evaluator revision is explicitly available but its material provenance field is explicitly absent, reject with AVAILABLE_PROVENANCE_NOT_RECORDED."
+    },
+    {
+      "mutation_id": "G3-M-018",
+      "requirement_id": "G3-BR-016",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM",
+      "basis": "G3-BR-016 inherits Task 7 contamination semantics and does not permit benchmark recency or generation mode to manufacture a cleanliness claim. The evaluator currently rejects unsupported CLEAN only when the benchmark is dynamic.",
+      "remediation": "Reject an explicit CLEAN contamination state when cleanliness evidence is explicitly absent, regardless of whether the benchmark is static or dynamic."
+    },
+    {
+      "mutation_id": "G3-M-020",
+      "requirement_id": "G3-BR-017",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "EVALUATOR_IDENTITY_MISSING",
+      "basis": "G3-BR-017 requires explicit evaluator identity, version, configuration, construct, scoring procedure, limitations, and material relationship provenance. The evaluator currently focuses on same-family bias and does not reject explicit absence of basic evaluator identity/scoring provenance.",
+      "remediation": "Reject explicitly missing evaluator identity, version, or scoring-procedure evidence. Preserve compatibility with older development cases by distinguishing an absent fact from a fact explicitly asserted false."
+    },
+    {
+      "mutation_id": "G3-M-022",
+      "requirement_id": "G3-BR-019",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "TARGET_INFORMATION_CHANNEL_HIDDEN",
+      "basis": "G3-BR-019 explicitly separates retrieval and other target-specific information channels from learned transfer. The evaluator currently recognizes target-specific prompt engineering but not target-specific retrieval.",
+      "remediation": "Generalize target-information-channel checks so explicit target-specific retrieval cannot be hidden or claimed as learned transfer."
+    },
+    {
+      "mutation_id": "G3-M-024",
+      "requirement_id": "G3-BR-021",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "ROLLBACK_MATERIAL_STATE_NOT_RESTORED",
+      "basis": "G3-BR-021 requires restoration across material state surfaces, including memory, indexes, caches, policies, and other persistent state. The evaluator currently checks the index and behavioral restoration but ignores an explicitly material persistent-memory surface.",
+      "remediation": "Reject when a state surface is explicitly marked material and explicitly not restored. Do not assume unmentioned state surfaces exist or are material."
+    },
+    {
+      "mutation_id": "G3-M-028",
+      "requirement_id": "G3-BR-025",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared",
+      "basis": "G3-BR-025 requires real-world evidence to preserve deployment assumptions/scope in addition to population, sampling, and time boundaries. The evaluator omits deployment scope from its required-scope checks.",
+      "remediation": "Add deployment_scope_declared to the explicit real-world scope checks."
+    },
+    {
+      "mutation_id": "G3-M-029",
+      "requirement_id": "G3-BR-026",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "COMMON_MODE_MODEL_FAMILY_UNDISCLOSED",
+      "basis": "G3-BR-026 explicitly includes model or model-family separation and common-mode dependency disclosure. The evaluator only treats the same judge instance and preprocessing as shared dependencies.",
+      "remediation": "Treat explicitly shared model-family dependence as a material common-mode dependency requiring disclosure."
+    },
+    {
+      "mutation_id": "G3-M-030",
+      "requirement_id": "G3-BR-027",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "INVALID_APPLICABILITY_STATE",
+      "basis": "G3-BR-027 defines governed environment applicability and requires an explicit NOT_APPLICABLE disposition when a control is omitted as inapplicable. An explicitly supplied undefined applicability state cannot satisfy that typed contract.",
+      "remediation": "When applicability_state is explicitly supplied, accept only recognized applicability states; reject an undefined value with INVALID_APPLICABILITY_STATE. Do not require the field in legacy development cases that do not supply it."
+    },
+    {
+      "mutation_id": "G3-M-031",
+      "requirement_id": "G3-BR-005",
+      "classification": "EVALUATOR_DEFECT",
+      "expected_violation_code": "PERSISTENT_INFORMATION_ASYMMETRY",
+      "basis": "G3-BR-005 explicitly includes prior transcripts and other persistent information-bearing state. The evaluator only compares retrieval-cache state, allowing a concrete transcript asymmetry to be hidden behind a coarse persistent_state_matched flag.",
+      "remediation": "Concrete information-channel evidence must dominate contradictory summary flags. Reject an explicit candidate/baseline prior-transcript mismatch unless that difference is a governed treatment."
+    }
+  ],
+  "interpretation": "All nine first-mutation-wall mismatches are false accepts caused by under-enforcement in the semantic evaluator. The frozen Generation 3 requirements and frozen mutation oracles are retained unchanged. The historical first mutation result must never be overwritten or reclassified as a fresh result."
+}

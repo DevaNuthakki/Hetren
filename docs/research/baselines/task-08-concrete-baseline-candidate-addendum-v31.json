@@ -1,0 +1,197 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 31,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T22:33:34Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v30": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v30.json",
+      "sha256": "673bb905027413e9bb1adce7737ad878f880d1d40bee0d4991296b6ff27c8a99"
+    },
+    "systematic_saturation_v28": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v28.json",
+      "sha256": "00537a95a1c8ed5ad521d371b1982bd360392582be5182d707738e9d39364fc3"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-REASONINGBANK",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+      "implementation_identity": "https://github.com/google-research/reasoning-bank",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_REASONING_MEMORY_AGENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_EXPERIENCE_DISTILLATION_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=jL7fwchScm"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/reasoning-bank"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_CONCRETE_EXPERIMENT_INTRODUCES_ADAPTATION_INPUT",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_BUILD_COST",
+        "RETRIEVAL_COST",
+        "STORAGE_OR_INDEX_COST",
+        "WALL_CLOCK_TIME"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "PUBLIC_IMPLEMENTATION_VERIFIED_FINAL_REVISION_LICENSE_RECHECK_REQUIRED",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_EXPERIENCE_DISTILLED_REASONING_MEMORY_AND_AGENT_TASK_SETTING_MATCH",
+        "WEBARENA_OR_SWE_BENCH_STYLE_AGENT_ROLE_MUST_MATCH",
+        "MEMORY_EXTRACTION_JUDGE_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MATTS_AND_PLAIN_REASONINGBANK_MUST_NOT_BE COLLAPSED",
+        "BASE_MODEL_AND_INTERACTION_BUDGET_MUST_BE PARITY_MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Stores distilled reasoning strategies learned from both successful and failed agent trajectories and retrieves them to guide future interaction, providing a direct experience-memory mechanism distinct from episodic-semantic graph retrieval."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EXPERIENCE_DISTILLED_REASONING_MEMORY_AND_AGENT_TASK_SETTING_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V28"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-REME-PROCEDURAL-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ReMe: Remember Me, Refine Me",
+      "implementation_identity": "https://github.com/agentscope-ai/ReMe",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_PROCEDURAL_MEMORY_AGENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_EXPERIENCE_REFINEMENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_CONCRETE_EXPERIMENT_INTRODUCES_ADAPTATION_INPUT",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_BUILD_COST",
+        "RETRIEVAL_COST",
+        "STORAGE_OR_INDEX_COST",
+        "WALL_CLOCK_TIME"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "PUBLIC_IMPLEMENTATION_VERIFIED_FINAL_REVISION_LICENSE_RECHECK_REQUIRED",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_PROCEDURAL_AGENT_MEMORY_AND_EXPERIENCE_REFINEMENT_ROLE_MATCH",
+        "CURRENT_REPOSITORY_HAS_EVOLVED_BEYOND_THE_ORIGINAL_PAPER_RELEASE",
+        "FINAL_RETENTION_MUST_BIND_A_CUTOFF_CONSISTENT_REVISION_AND_BEHAVIOR_CONFIGURATION",
+        "BFCL_OR_APPWORLD_STYLE_PROCEDURAL_MEMORY_ROLE_MUST_MATCH",
+        "MEMORY_DISTILLATION_REUSE_AND_PRUNING_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_PRODUCT_FEATURES_MUST_NOT_BE ATTRIBUTED_TO_THE_ACL_PAPER_WITHOUT_EVIDENCE",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Uses multi-faceted experience distillation, context-adaptive reuse, and utility-based memory refinement, providing a direct procedural-memory comparator for evolving agent behavior."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_PROCEDURAL_AGENT_MEMORY_AND_EXPERIENCE_REFINEMENT_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V28"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-THOUGHT-RETRIEVER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Thought-Retriever",
+      "implementation_identity": "https://github.com/ulab-uiuc/Thought-Retriever",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_THOUGHT_MEMORY_RETRIEVAL_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_SELF_EVOLVING_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=emCcuhtENL"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ulab-uiuc/Thought-Retriever"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "NOT_APPLICABLE_UNLESS_CONCRETE_EXPERIMENT_INTRODUCES_ADAPTATION_INPUT",
+      "resource_dimensions_requiring_task_9_values": [
+        "LLM_CALLS",
+        "TOKENS",
+        "MEMORY_BUILD_COST",
+        "RETRIEVAL_COST",
+        "STORAGE_OR_INDEX_COST",
+        "WALL_CLOCK_TIME"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "PUBLIC_IMPLEMENTATION_VERIFIED_FINAL_REVISION_LICENSE_RECHECK_REQUIRED",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_STORED_INTERMEDIATE_THOUGHT_MEMORY_AND_LONG_CONTEXT_RETRIEVAL_ROLE_MATCH",
+        "ACADEMIC_OR_ULTRA_LONG_EXTERNAL_KNOWLEDGE_ROLE_MUST_MATCH",
+        "PREQUERY_THOUGHT_FILTERING_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "LLM_GENERATED_THOUGHT_INFORMATION_ACCESS_MUST_BE PARITY_AUDITED",
+        "TASK_SCOPE_MUST_NOT_BE GENERALIZED_TO_ARBITRARY_INTERACTIVE_AGENTS",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Stores and retrieves filtered intermediate responses rather than only raw source chunks, yielding a materially distinct thought-memory mechanism for memory-augmented agentic systems."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_STORED_INTERMEDIATE_THOUGHT_MEMORY_AND_LONG_CONTEXT_RETRIEVAL_ROLE_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V28"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

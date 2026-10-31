@@ -1,0 +1,238 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 67,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:43:01Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_research_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v69_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v69.json",
+      "sha256": "dbc877fd7aba678f8f2fcad5ed5427623bc8f866b4180f1189e3f58076ee67a6"
+    },
+    "systematic_saturation_v66": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v66.json",
+      "sha256": "ccb5f988d1b1ac66a8b7b02703b42357c2d9c26313db4f34199432af5f1cc5eb"
+    }
+  },
+  "search_mode": "BOUNDED_DISPLACEMENT_ONLY",
+  "displacement_target": {
+    "candidate_id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+    "role": "LONG_HORIZON_VLA_BEHAVIOR_PROGRESS_AND_GROUNDING",
+    "materiality_rule": "A proposal counts only if it is not already a promoted candidate identity and could plausibly alter the retained comparator set for the same long-horizon VLA manipulation role under a matched information opportunity."
+  },
+  "queries_executed": [
+    "\"BehaviorVLA\" ICML 2026 official implementation",
+    "\"BehaviorVLA\" long horizon LIBERO CALVIN RoboTwin",
+    "\"PALM\" \"Progress-Aware Policy Learning\" CVPR 2026 github",
+    "\"PALM\" LIBERO CALVIN long-horizon robotic manipulation",
+    "\"Action-Sketcher\" CVPR 2026 github",
+    "\"Action-Sketcher\" LIBERO RoboTwin long horizon",
+    "CVPR 2026 VLA long-horizon progress-aware manipulation official code",
+    "CVPR 2026 VLA behavioral representation long-horizon official code",
+    "ICML 2026 VLA long-horizon behavioral representation official code",
+    "2026 VLA temporal coherence task progress manipulation executable",
+    "2026 VLA long horizon LIBERO CALVIN executable code",
+    "2026 VLA long horizon RoboTwin LIBERO executable code",
+    "2026 behavior representation VLA manipulation ICML CVPR",
+    "2026 progress-aware VLA manipulation CVPR",
+    "2026 visual planning VLA long-horizon robotic manipulation code",
+    "2026 action reasoning VLA long-horizon manipulation official implementation"
+  ],
+  "query_count": 16,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PALM-LONGHORIZON",
+      "name": "PALM: Progress-Aware Policy Learning via Affordance Reasoning for Long-Horizon Robotic Manipulation",
+      "aliases": [
+        "PALM",
+        "Progress-Aware Policy Learning via Affordance Reasoning for Long-Horizon Robotic Manipulation"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LONG_HORIZON_VLA_PROGRESS_AWARE_DISPLACEMENT_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Liu_PALM_Progress-Aware_Policy_Learning_via_Affordance_Reasoning_for_Long-Horizon_Robotic_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/PLAN-Lab/PALM"
+        }
+      ],
+      "role_match": true,
+      "material_reason": "PALM directly targets long-horizon robotic manipulation through task-relevant affordance reasoning and continuous within-subtask progress estimation, with overlapping CALVIN and LIBERO evaluation surfaces.",
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_PENDING_FINAL_VERSION_PARITY_AND_RESOURCE_BINDING",
+      "limits": [
+        "CALVIN_OR_LIBERO_ROLE_MATCH_REQUIRED",
+        "BACKBONE_DATA_AND_PRETRAINING_CONFIGURATION_MUST_BE BOUND",
+        "AFFORDANCE_SUPERVISION_AND_PROGRESS_SIGNAL_INFORMATION_OPPORTUNITY_MUST_BE AUDITED",
+        "REAL_WORLD_AND_SIMULATION_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_VERSION_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ACTION-SKETCHER",
+      "name": "Action-Sketcher: From Reasoning to Action via Visual Sketches for Robotic Manipulation",
+      "aliases": [
+        "Action-Sketcher",
+        "Action Sketcher",
+        "From Reasoning to Action via Visual Sketches for Robotic Manipulation",
+        "From Reasoning to Action via Visual Sketches for Long-Horizon Robotic Manipulation"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LONG_HORIZON_VLA_EXPLICIT_PLANNING_DISPLACEMENT_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Tan_Action-Sketcher_From_Reasoning_to_Action_via_Visual_Sketches_for_Robotic_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/FlagOpen/Action-Sketcher"
+        }
+      ],
+      "role_match": true,
+      "material_reason": "Action-Sketcher directly targets long-horizon manipulation through explicit task decomposition, spatial grounding, sketch revision, and action generation, with LIBERO and real-world manipulation evaluation.",
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_PENDING_AUTONOMOUS_INFORMATION_PARITY_AND_FINAL_VERSION_BINDING",
+      "limits": [
+        "AUTONOMOUS_NO_HUMAN_CORRECTION_CONFIGURATION_REQUIRED_FOR_COMPARISON_UNLESS_HUMAN_INPUT_IS_EXPLICITLY_MATCHED",
+        "BASE_VLA_AND_CHECKPOINT_MUST_BE BOUND",
+        "VISUAL_SKETCH_GENERATION_INFORMATION_OPPORTUNITY_MUST_BE AUDITED",
+        "LIBERO_OR_MATCHED_LONG_HORIZON_TASK_REQUIRED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PALM-LONGHORIZON",
+      "name": "PALM: Progress-Aware Policy Learning via Affordance Reasoning for Long-Horizon Robotic Manipulation",
+      "prior_candidate_matches": [],
+      "role_match": true,
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ACTION-SKETCHER",
+      "name": "Action-Sketcher: From Reasoning to Action via Visual Sketches for Robotic Manipulation",
+      "prior_candidate_matches": [
+        "DISCOVERY:T8-E1-ACT"
+      ],
+      "role_match": true,
+      "disposition": "PREEXISTING_OR_ALIAS_MATCH_NOT_RECOUNTED"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PALM-LONGHORIZON",
+      "name": "PALM: Progress-Aware Policy Learning via Affordance Reasoning for Long-Horizon Robotic Manipulation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LONG_HORIZON_VLA_PROGRESS_AWARE_DISPLACEMENT_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Liu_PALM_Progress-Aware_Policy_Learning_via_Affordance_Reasoning_for_Long-Horizon_Robotic_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/PLAN-Lab/PALM"
+        }
+      ],
+      "material_reason": "PALM directly targets long-horizon robotic manipulation through task-relevant affordance reasoning and continuous within-subtask progress estimation, with overlapping CALVIN and LIBERO evaluation surfaces.",
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_PENDING_FINAL_VERSION_PARITY_AND_RESOURCE_BINDING",
+      "limits": [
+        "CALVIN_OR_LIBERO_ROLE_MATCH_REQUIRED",
+        "BACKBONE_DATA_AND_PRETRAINING_CONFIGURATION_MUST_BE BOUND",
+        "AFFORDANCE_SUPERVISION_AND_PROGRESS_SIGNAL_INFORMATION_OPPORTUNITY_MUST_BE AUDITED",
+        "REAL_WORLD_AND_SIMULATION_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "ACoT-VLA",
+      "sources": [
+        "https://github.com/AgibotTech/ACoT-VLA"
+      ],
+      "disposition": "ROLE_RELEVANT_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The official repository describes a materially relevant action-reasoning architecture, but its published repository status still lists core training and inference components as pending release; this bounded pass therefore does not use it as a reproducible displacement candidate."
+    },
+    {
+      "name": "Fast-ThinkAct",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Huang_Fast-ThinkAct_Efficient_Vision-Language-Action_Reasoning_via_Verbalizable_Latent_Planning_CVPR_2026_paper.html"
+      ],
+      "disposition": "PEER_REVIEWED_ROLE_RELEVANT_REFERENCE_IMPLEMENTATION_NOT_BOUND_THIS_ROUND",
+      "reason": "The paper is materially relevant to long-horizon reasoning and failure recovery, but this bounded pass did not bind an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "GeoPredict",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2026/html/Qian_GeoPredict_Leveraging_Predictive_Kinematics_and_3D_Gaussian_Geometry_for_Precise_CVPR_2026_paper.html",
+        "https://github.com/jingjingqian75/GeoPredict"
+      ],
+      "disposition": "GEOMETRY_SPECIFIC_REFERENCE_NOT_BEHAVIORVLA_ROLE_DISPLACEMENT",
+      "reason": "Its primary mechanism and comparison contract concern predictive 3D kinematic and geometric supervision rather than the same long-horizon behavioral/progress representation role."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "behaviorvla_and_displacement_proposals_are_within_e1": true,
+    "forcing_vla_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V67"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "round_result": "NEW_MATERIAL_FOUND_COUNTER_RESET_TO_ZERO",
+    "reason": "At least one non-duplicate role-matched long-horizon VLA displacement candidate remained."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_identity_is_automatically_material": false,
+    "paper_reported_performance_is_task8_strength_ordering": false,
+    "behaviorvla_is_automatically_strongest": false,
+    "palm_or_action_sketcher_is_automatically_strongest": false,
+    "within_e1_vla_generalization_establishes_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B72_VERIFY_ADDENDUM_V70_AND_RUN_NEXT_DISPLACEMENT_REFINEMENT"
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 37,
+  "state": "ADDENDUM_V37_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T23:16:13Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v37": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v37.json",
+      "sha256": "513634e672d825e85a91af215e628af669a8d22b0f2092574f000cdd65dd4d01"
+    },
+    "systematic_saturation_v34": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v34.json",
+      "sha256": "075f0e8356b698a594ed9c159431a8f8bbe62f8113b022a581b20da3b62f5b29"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMINSIGHT",
+      "verification_state": "PEER_REVIEWED_EMNLP_2025_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DIRECT_MEMORY_AUGMENTATION_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "MemInsight is published in the main proceedings of EMNLP 2025.",
+        "It augments historical interactions with autonomously generated semantic attributes before retrieval.",
+        "Its published evaluation covers conversational recommendation, question answering, and event summarization.",
+        "Amazon Science publishes executable Python research code for the method."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1683/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/MemInsight"
+        }
+      ],
+      "limits": [
+        "TASK_AND_MEMORY_QUERY_SURFACE_MUST_BE MATCHED",
+        "MEMORY_AUGMENTATION_MODEL_AND_EMBEDDING_CONFIGURATION_MUST_BE BOUND",
+        "CONVERSATIONAL_MEMORY_RESULTS_DO_NOT_AUTOMATICALLY_ESTABLISH_TOOL_AGENT_DECISION_VALUE",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM0",
+      "verification_state": "PEER_REVIEWED_ECAI_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_SCALABLE_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Mem0 is published in the ECAI 2025 proceedings.",
+        "It dynamically extracts, consolidates, and retrieves salient information from multi-session conversations.",
+        "The work also studies a graph-memory variant for relational memory structure.",
+        "The official open-source implementation is maintained in the mem0ai repository."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://doi.org/10.3233/FAIA251160"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mem0ai/mem0"
+        }
+      ],
+      "limits": [
+        "BASE_MEM0_AND_GRAPH_MEMORY_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "LLM_EMBEDDING_AND_VECTOR_STORE_CONFIGURATION_MUST_BE BOUND",
+        "MULTI_SESSION_CONVERSATIONAL_MEMORY_RESULTS_DO_NOT_AUTOMATICALLY_ESTABLISH_TOOL_AGENT_DECISION_VALUE",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v37_candidates_have_role_level_external_review": true,
+    "all_addendum_v37_candidates_have_public_implementations": true,
+    "all_addendum_v37_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "direct_memory_benchmark_result_establishes_n_h1": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

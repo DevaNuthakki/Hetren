@@ -1,0 +1,157 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 34,
+  "state": "ADDENDUM_V34_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T22:58:15Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v34": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v34.json",
+      "sha256": "978fd440b33c4e49685e5192f177ebbb698feb0b1d79f49db96d13bd16ba5142"
+    },
+    "systematic_saturation_v31": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v31.json",
+      "sha256": "1a7933194f10dbb68ea03a19c3ff93b47dde790578f0e6daceafc1753f791324"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORY-R2",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_LEARNED_LONG_HORIZON_MEMORY_CREDIT_ASSIGNMENT_COMPARATOR",
+      "verified_facts": [
+        "Memory-R2 was publicly available on arXiv before the Task-8 evidence cutoff.",
+        "It trains long-horizon memory-augmented LLM agents whose memory state changes across sessions.",
+        "Its LoGo-GRPO method combines local rerollouts from matched intermediate memory states with a global trajectory objective.",
+        "It jointly optimizes memory formation and memory evolution and uses a progressive multi-session curriculum.",
+        "The public repository identifies itself as the official code release and includes training and evaluation pipelines."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.21768"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ahmedehabb/Memory-R2"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "LOGO_GRPO_TRAINING_RECIPE_AND_CURRICULUM_MUST_BE BOUND_IF_RETAINED",
+        "MEMORY_MANAGER_AND_FACT_EXTRACTOR_CONFIGURATION_MUST_BE BOUND",
+        "LONG_HORIZON_MULTI_SESSION_SETTING_MUST_BE MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMEX-RL",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_LEARNED_INDEXED_EXPERIENCE_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "Memex(RL) was publicly available on arXiv before the Task-8 evidence cutoff.",
+        "It maintains compact structured summaries and stable indices while preserving full interaction evidence in an external experience store.",
+        "Its RL objective learns memory write, indexing, and dereferencing behavior under a context budget.",
+        "The official repository provides an executable distributed RL training path and ALFWorld-related dependencies."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.04257"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Accenture/MemexRL"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "CONTEXT_BUDGET_AND_DEREFERENCE_BUDGET_MUST_BE BOUND",
+        "EXTERNAL_EXPERIENCE_STORE_AND_SUMMARY_FORMAT_MUST_BE BOUND",
+        "DISTRIBUTED_TRAINING_RESOURCE_REQUIREMENTS_REQUIRE_TASK_9_ACCOUNTING"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMRL-RUNTIME",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_RUNTIME_EPISODIC_MEMORY_RL_COMPARATOR",
+      "verified_facts": [
+        "MemRL was publicly available on arXiv before the Task-8 evidence cutoff.",
+        "It keeps the base LLM frozen and places plasticity in episodic memory rather than model-weight updates.",
+        "Its two-phase retrieval filters memories by semantic relevance and then selects among them using learned utility values.",
+        "Memory utility is updated from environmental feedback at runtime.",
+        "The official implementation exposes benchmark entrypoints for ALFWorld, Lifelong Agent Bench, BigCodeBench, and HLE."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.03192"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MemTensor/MemRL"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "FROZEN_BASE_MODEL_AND_MEMORY_BACKEND_MUST_BE BOUND",
+        "UTILITY_UPDATE_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "RUNTIME_MEMORY_LEARNING_MUST_NOT_BE MISLABELLED_MODEL_WEIGHT_ADAPTATION"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ATOMMEM-CRUD",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_LEARNED_DYNAMIC_MEMORY_OPERATION_COMPARATOR",
+      "verified_facts": [
+        "AtomMem was publicly available before the Task-8 evidence cutoff.",
+        "It formulates memory management as a learnable decision process over atomic Create, Read, Update, and Delete operations.",
+        "Its learned memory policy combines supervised fine-tuning and reinforcement learning.",
+        "The official repository provides executable code and data-preparation guidance for the evaluated long-context tasks."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.08323"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/RUCBM/AtomMem"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "CRUD_ACTION_SPACE_AND_POLICY_CHECKPOINT_MUST_BE BOUND",
+        "SFT_AND_RL_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "LONG_CONTEXT_MEMORY_TASK_MATCH_REQUIRED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v34_candidates_have_role_level_external_review": true,
+    "all_addendum_v34_candidates_are_peer_reviewed": false,
+    "all_addendum_v34_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

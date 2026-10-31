@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_PACKAGE_V8_MANIFEST",
+  "generation_attempt": 8,
+  "package_path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v8.json",
+  "package_sha256": "383753fc816ea1a6a2ffb264fb0d2325f0b45276fc74c75a902c7f090908b02a",
+  "generation_environment_decision_path": "tests/qualification/data/baseline_requirements_gen3/generation_environment_decision_attempt_8.json",
+  "generation_environment_decision_sha256": "4571104befe9d261bd4632442056cb843cce460d860a1fe10b7a86ee72f61f95",
+  "contains_holdout_cases": false,
+  "target_evaluator_executed": false,
+  "target_freshness_consumed": false
+}

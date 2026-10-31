@@ -1,0 +1,467 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 35,
+  "state": "SATURATION_V35_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T23:16:13Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "publication_or_public_method_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_commit_or_release": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v37_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v37.json",
+      "sha256": "fe20c452a08e7ed0c3aa392cec5af662cf519c26cacb1355e5ed0875b84b06ee"
+    },
+    "systematic_saturation_v34": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v34.json",
+      "sha256": "075f0e8356b698a594ed9c159431a8f8bbe62f8113b022a581b20da3b62f5b29"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_MEMORY_ARCHITECTURES",
+    "E1_PROCEDURAL_MEMORY",
+    "E1_MEMORY_CONSISTENCY_AND_EVOLUTION",
+    "N_H1_DIRECT_MEMORY_ROLE"
+  ],
+  "queries_executed": [
+    "\"AMA: Adaptive Memory via Multi-Agent Collaboration\" ACL 2026 github",
+    "\"SYNAPSE\" episodic semantic memory spreading activation ACL 2026 github",
+    "\"Hindsight\" structured agent memory retain recall reflect ACL 2026 github",
+    "\"Memory OS of AI Agent\" EMNLP 2025 github",
+    "\"Remember Me, Refine Me\" ACL 2026 ReMe github",
+    "\"A-MEM: Agentic Memory for LLM Agents\" NeurIPS 2025 github",
+    "site:aclanthology.org/2026 agent memory long-term memory retrieval update executable",
+    "site:aclanthology.org/2025 agent memory long-term memory EMNLP executable",
+    "site:proceedings.neurips.cc 2025 agent memory LLM official code",
+    "2026 long term memory LLM agents ACL episodic semantic official implementation",
+    "2026 adaptive agent memory multi granularity consistency github",
+    "2026 procedural memory agent evolution BFCL AppWorld official implementation",
+    "2026 structured agent memory temporal graph beliefs official github",
+    "2025 hierarchical memory operating system AI agent LoCoMo github",
+    "2025 dynamic linked agentic memory NeurIPS code",
+    "2026 direct memory LLM agents executable peer reviewed retrieval update"
+  ],
+  "query_count": 16,
+  "proposed_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "aliases": [
+        "Adaptive Memory via Multi-Agent Collaboration",
+        "AMA"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ADAPTIVE_MULTI_GRANULARITY_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.152/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/AMA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_CANDIDATE_IF_MEMORY_QUERY_AND_UPDATE_INFORMATION_OPPORTUNITY_MATCH",
+      "material_reason": "Separates construction, adaptive multi-granularity retrieval, evidence judging, and conflict-driven memory refresh into coordinated roles.",
+      "limits": [
+        "LOCOMO_OR_LONGMEMEVAL_STYLE_MEMORY_TASK_DOES_NOT_AUTOMATICALLY_EQUAL_TOOL_AGENT_DECISION_TASK",
+        "RETRIEVAL_ROUND_BUDGET_AND_LLM_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_REFRESH_INFORMATION_ACCESS_MUST_BE PARITY_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SYNAPSE-MEMORY",
+      "name": "Synapse: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation",
+      "aliases": [
+        "SYNAPSE",
+        "Synergistic Associative Processing Semantic Encoding"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EPISODIC_SEMANTIC_GRAPH_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_REIMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1108/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_REIMPLEMENTATION",
+          "url": "https://github.com/hq0709/synapse"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_CANDIDATE_WITH_IMPLEMENTATION_PROVENANCE_CAVEAT",
+      "material_reason": "Uses a unified episodic-semantic graph with spreading activation, lateral inhibition, temporal decay, and hybrid retrieval rather than ordinary vector-only recall.",
+      "limits": [
+        "PUBLIC_REPOSITORY_STATES_IT_IS_A_CLEAN_ROOM_REIMPLEMENTATION_FROM_THE_PAPER_SPECIFICATION",
+        "REIMPLEMENTATION_RESULTS_MAY_DIFFER_FROM_CAMERA_READY_RESULTS",
+        "GRAPH_CONSTRUCTION_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "aliases": [
+        "Hindsight",
+        "Hindsight Agent Memory"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRUCTURED_RETAIN_RECALL_REFLECT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_SYSTEM_DEMO_AND_OFFICIAL_OPEN_SOURCE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_SYSTEM_DEMONSTRATION",
+          "url": "https://aclanthology.org/2026.acl-demo.27/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vectorize-io/hindsight"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_SYSTEM_CANDIDATE_IF_SYSTEM_DEMO_EVIDENCE_AND_MATCHED_TASK_ARE_ACCEPTABLE",
+      "material_reason": "Separates world, experience, observation, and opinion memory networks and exposes explicit retain, recall, and reflect operations.",
+      "limits": [
+        "SYSTEM_DEMO_PUBLICATION_MUST_NOT_BE TREATED_AS_IDENTICAL_TO_FULL_RESEARCH_TRACK_EVIDENCE",
+        "MODEL_AND_STORAGE_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_PRODUCT_REPOSITORY_HEAD_MUST_NOT_BE USED_AS_CUTOFF_VERSION_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "name": "Memory OS of AI Agent",
+      "aliases": [
+        "MemoryOS",
+        "Memory OS"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HIERARCHICAL_MEMORY_OS_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_EMNLP_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1318/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BAI-LAB/MemoryOS"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_CANDIDATE_IF_HIERARCHICAL_PERSONAL_MEMORY_SETTING_MATCHED",
+      "material_reason": "Implements short-, mid-, and long-term hierarchical storage with explicit storage, update, retrieval, and generation operations.",
+      "limits": [
+        "PERSONALIZED_LONG_CONVERSATION_SETTING_MUST_BE MATCHED",
+        "MEMORY_PROMOTION_AND_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_PERFORMANCE_DOES_NOT_AUTOMATICALLY_ESTABLISH_TOOL_AGENT_N_H1"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REME-PROCEDURAL",
+      "name": "Remember Me, Refine Me: A Dynamic Procedural Memory Framework for Experience-Driven Agent Evolution",
+      "aliases": [
+        "ReMe",
+        "Remember Me Refine Me"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_PROCEDURAL_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_EXPERIENCE_REUSE_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_PROCEDURAL_MEMORY_CANDIDATE_IF_AGENT_TOOL_TASK_MATCHED",
+      "material_reason": "Uses success/failure distillation, scenario-adaptive reuse, and utility-based refinement of procedural memories on agent-oriented BFCL-V3 and AppWorld evaluations.",
+      "limits": [
+        "CURRENT_REPOSITORY_HAS_CONTINUED_EVOLVING_AFTER_PUBLICATION_AND_CUTOFF",
+        "FINAL_RETAINED_REVISION_MUST_BE CUTOFF_CONSISTENT",
+        "WITHIN_E1_PROCEDURAL_REUSE_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMEM",
+      "name": "A-MEM: Agentic Memory for LLM Agents",
+      "aliases": [
+        "A-MEM",
+        "A-Mem"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DYNAMIC_LINKED_AGENTIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2025_AND_OFFICIAL_REPRODUCTION_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/19909c36f51abc4856b4560aff3d36d6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_REPRODUCTION_IMPLEMENTATION",
+          "url": "https://github.com/WujiangXu/A-mem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_CANDIDATE_IF_DYNAMIC_MEMORY_ORGANIZATION_SETTING_MATCHED",
+      "material_reason": "Builds dynamically linked structured memories and allows new memories to update contextual representations of prior memories.",
+      "limits": [
+        "MEMORY_NOTE_GENERATION_LINKING_AND_EVOLUTION_CONFIGURATION_MUST_BE BOUND",
+        "RETRIEVAL_K_AND_MODEL_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_BENCHMARK_GAIN_DOES_NOT_AUTOMATICALLY_ESTABLISH_TOOL_AGENT_DECISION_VALUE"
+      ]
+    }
+  ],
+  "proposed_candidate_count": 6,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "aliases": [
+        "Adaptive Memory via Multi-Agent Collaboration",
+        "AMA"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+          "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+          "source_artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SYNAPSE-MEMORY",
+      "name": "Synapse: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation",
+      "aliases": [
+        "SYNAPSE",
+        "Synergistic Associative Processing Semantic Encoding"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-SYNAPSE-MEMORY",
+          "name": "SYNAPSE: Empowering LLM Agents with Episodic-Semantic Memory via Spreading Activation",
+          "source_artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v30.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "aliases": [
+        "Hindsight",
+        "Hindsight Agent Memory"
+      ],
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "name": "Memory OS of AI Agent",
+      "aliases": [
+        "MemoryOS",
+        "Memory OS"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+          "name": "Memory OS of AI Agent",
+          "source_artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REME-PROCEDURAL",
+      "name": "Remember Me, Refine Me: A Dynamic Procedural Memory Framework for Experience-Driven Agent Evolution",
+      "aliases": [
+        "ReMe",
+        "Remember Me Refine Me"
+      ],
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "prior_promoted_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMEM",
+      "name": "A-MEM: Agentic Memory for LLM Agents",
+      "aliases": [
+        "A-MEM",
+        "A-Mem"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-A-MEM",
+          "name": "A-Mem: Agentic Memory for LLM Agents",
+          "source_artifact": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+        }
+      ]
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HINDSIGHT-MEMORY",
+      "name": "Hindsight: Structured Agent Memory that Retains, Recalls, and Reflects",
+      "aliases": [
+        "Hindsight",
+        "Hindsight Agent Memory"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_STRUCTURED_RETAIN_RECALL_REFLECT_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_SYSTEM_DEMO_AND_OFFICIAL_OPEN_SOURCE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_SYSTEM_DEMONSTRATION",
+          "url": "https://aclanthology.org/2026.acl-demo.27/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vectorize-io/hindsight"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_MEMORY_SYSTEM_CANDIDATE_IF_SYSTEM_DEMO_EVIDENCE_AND_MATCHED_TASK_ARE_ACCEPTABLE",
+      "material_reason": "Separates world, experience, observation, and opinion memory networks and exposes explicit retain, recall, and reflect operations.",
+      "limits": [
+        "SYSTEM_DEMO_PUBLICATION_MUST_NOT_BE TREATED_AS_IDENTICAL_TO_FULL_RESEARCH_TRACK_EVIDENCE",
+        "MODEL_AND_STORAGE_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_PRODUCT_REPOSITORY_HEAD_MUST_NOT_BE USED_AS_CUTOFF_VERSION_IDENTITY"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REME-PROCEDURAL",
+      "name": "Remember Me, Refine Me: A Dynamic Procedural Memory Framework for Experience-Driven Agent Evolution",
+      "aliases": [
+        "ReMe",
+        "Remember Me Refine Me"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_PROCEDURAL_MEMORY_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_EXPERIENCE_REUSE_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.829/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/agentscope-ai/ReMe"
+        }
+      ],
+      "eligibility_status": "MATERIAL_DIRECT_PROCEDURAL_MEMORY_CANDIDATE_IF_AGENT_TOOL_TASK_MATCHED",
+      "material_reason": "Uses success/failure distillation, scenario-adaptive reuse, and utility-based refinement of procedural memories on agent-oriented BFCL-V3 and AppWorld evaluations.",
+      "limits": [
+        "CURRENT_REPOSITORY_HAS_CONTINUED_EVOLVING_AFTER_PUBLICATION_AND_CUTOFF",
+        "FINAL_RETAINED_REVISION_MUST_BE CUTOFF_CONSISTENT",
+        "WITHIN_E1_PROCEDURAL_REUSE_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE"
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_boundaries": [
+    {
+      "name": "Memory-R1",
+      "disposition": "RETAIN_EXECUTABLE_IMPLEMENTATION_GATE_FROM_PRIOR_RESEARCH",
+      "reason": "Do not silently promote prior reference status without a governed verification step proving implementation and role requirements."
+    },
+    {
+      "name": "Fine-Mem",
+      "disposition": "RETAIN_EXECUTABLE_IMPLEMENTATION_GATE_FROM_PRIOR_RESEARCH",
+      "reason": "Do not convert literature relevance into reproducible comparator status without executable evidence."
+    },
+    {
+      "name": "U-Mem",
+      "disposition": "RETAIN_INFORMATION_OPPORTUNITY_GATE_FROM_PRIOR_RESEARCH",
+      "reason": "Memory access and update information must remain comparable to the eventual Hetren experiment."
+    },
+    {
+      "name": "EvolveMem",
+      "disposition": "RETAIN_EVALUATION_INFORMATION_BOUNDARY_FROM_PRIOR_RESEARCH",
+      "reason": "Evaluation-time information must not exceed the matched comparison contract."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "reme_within_e1_experience_reuse_is_not_general_cross_family_transfer": true,
+    "direct_memory_refinement_is_e1_n_h1_scoped": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one proposed direct-memory mechanism was not represented by a previously promoted Task-8 candidate identity."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "direct_memory_candidate_is_automatically_claim_bearing": false,
+    "memory_qa_performance_establishes_agent_decision_value": false,
+    "within_e1_memory_reuse_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B40_VERIFY_ADDENDUM_V38_AND_RUN_NEXT_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

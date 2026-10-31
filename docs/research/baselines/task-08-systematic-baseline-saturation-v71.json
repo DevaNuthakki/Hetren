@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 71,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATE",
+  "recorded_at_utc": "2026-09-27T04:08:19Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "public_candidate_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "retained_candidate_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v73_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v73.json",
+      "sha256": "4ab85fc2003660213157928fd2457049a56c2a51e1f4a0ffc9b72bad8fd3617b"
+    },
+    "systematic_saturation_v70": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v70.json",
+      "sha256": "1367f395b27c7f16c8e33c62dbc4bff9858451e671362c2163ce671265cf8160"
+    }
+  },
+  "search_mode": "BOUNDED_DISPLACEMENT_ONLY",
+  "focus": [
+    "E1_CONTINUAL_VLA_ROLE_DISPLACEMENT",
+    "E2_DISPLACEMENT_SPOT_CHECK",
+    "E3_DISPLACEMENT_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"OrthoSkillVLA\" continual skill learning PRCV 2026 code",
+    "\"Simple Recipe Works\" continual VLA reinforcement learning RLC 2026",
+    "\"CLARE\" continual learning vision-language-action RA-L 2026 code",
+    "\"CLARE\" autonomous adapter routing expansion VLA github",
+    "\"Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting\" ICML 2026 code",
+    "\"Memory Anchors for Continual Robot Learning\" CoRL 2026",
+    "\"Multisensory Continual Learning\" CoRL 2026 force code",
+    "2026 continual VLA autonomous adapter routing exemplar free official code",
+    "2026 continual robot learning replay pretrained VLA official code",
+    "2026 continual VLA skill adaptation deployment routing official implementation",
+    "2026 continual VLA reinforcement learning catastrophic forgetting comparator",
+    "2026 VLA continual learning task-free routing adapters replay code"
+  ],
+  "query_count": 12,
+  "displacement_proposals": [
+    {
+      "candidate": "CLARE: Continual Learning for Vision-Language-Action Models via Autonomous Adapter Routing and Expansion",
+      "candidate_id": "DISCOVERY:T8-E1-CLARE",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "prior_matches": [],
+      "reason": "No prior promoted Task-8 candidate represents CLARE, and its exemplar-free adapter expansion plus task-label-free deployment routing is materially distinct from the currently reviewed continual-VLA candidates."
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CLARE",
+      "name": "CLARE: Continual Learning for Vision-Language-Action Models via Autonomous Adapter Routing and Expansion",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_CONTINUAL_VLA_COMPARATOR_CANDIDATE",
+        "A_H1_CONTINUAL_VLA_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_RETENTION_DIAGNOSTIC_ONLY"
+      ],
+      "evidence_status": "PEER_REVIEWED_RA_L_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PUBLICATION_RECORD",
+          "url": "https://doi.org/10.1109/LRA.2026.3693992"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.09512"
+        },
+        {
+          "class": "AUTHOR_LAB_PUBLICATION_RECORD",
+          "url": "https://www.dynsyslab.org/research/publications/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/learnsyslab/clare"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_CONTINUAL_VLA_TASK_SEQUENCE_AND_INFORMATION_REGIME_MATCH",
+      "material_reason": "Provides an exemplar-free continual VLA mechanism based on autonomous modular-adapter expansion and deployment-time routing without task labels, which is structurally distinct from both gradient-subspace continual skill learning and sequential LoRA reinforcement learning.",
+      "limits": [
+        "VLA_CONTINUAL_TASK_SEQUENCE_REQUIRED",
+        "BASE_VLA_CHECKPOINT_AND_EXPANDABLE_LAYER_SET_MUST_BE BOUND",
+        "FEATURE_SIMILARITY_EXPANSION_THRESHOLD_MUST_BE BOUND",
+        "AUTOENCODER_ROUTING_CONFIGURATION_MUST_BE BOUND",
+        "LIBERO_AND_REAL_WORLD_RESULTS_MUST_NOT_BE COLLAPSED",
+        "RETENTION_DOES_NOT_ESTABLISH_HETREN_A_H2_ROLLBACK",
+        "WITHIN_E1_CONTINUAL_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning",
+      "evidence_state": "PEER_REVIEWED_ICML_2026_WITH_PUBLIC_CODE",
+      "sources": [
+        "https://rpl.cs.utexas.edu/publications/2026/07/19/liu-icml26-continual/",
+        "https://continual-vlas.github.io/forget-me-not/",
+        "https://arxiv.org/abs/2603.03818"
+      ],
+      "disposition": "SUPPORTING_EVIDENCE_FOR_EXPERIENCE_REPLAY_NOT_SEPARATE_ALGORITHM_IDENTITY",
+      "reason": "The material result strengthens the case for Experience Replay on pretrained VLA policies, but the algorithmic mechanism is standard replay and is already represented inside the continual-VLA comparison ecosystem rather than requiring a new paper-named baseline identity."
+    },
+    {
+      "name": "Memory Anchors for Continual Robot Learning",
+      "evidence_state": "CORL_2026_RESEARCH_REFERENCE",
+      "sources": [
+        "https://arxiv.org/abs/2608.26545",
+        "https://robot-adaptation.github.io/MemoryAnchors"
+      ],
+      "disposition": "ROLE_RELEVANT_REPLAY_SELECTION_REFERENCE_IMPLEMENTATION_NOT_BOUND_THIS_PASS",
+      "reason": "The method is materially relevant to continual robot-learning replay selection, but this bounded pass did not independently bind a specific official executable implementation identity suitable for governed reproduction."
+    },
+    {
+      "name": "MuSe \u2014 Multisensory Continual Learning",
+      "evidence_state": "CORL_2026_WITH_PUBLIC_RESEARCH_CODE",
+      "sources": [
+        "https://arxiv.org/abs/2606.30988",
+        "https://jadenvc.github.io/multisensory-continual-learning/"
+      ],
+      "disposition": "NEW_SENSOR_MODALITY_SCENARIO_SPECIFIC_REFERENCE_NOT_GENERIC_DISPLACEMENT_CANDIDATE",
+      "reason": "MuSe adapts pretrained visuomotor policies to newly introduced force sensing. It becomes claim-bearing only for an experiment whose governed information opportunity includes that new modality."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "continual_vla_methods_are_within_e1": true,
+    "forcing_within_e1_continual_learning_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V71"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "CLARE was not previously represented and is a materially distinct role-matched continual-VLA displacement candidate."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "clare_is_automatically_strongest": false,
+    "continual_vla_retention_establishes_a_h2": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "memory_anchors_has_bound_executable_baseline_in_this_pass": false,
+    "supporting_er_paper_is_automatically_new_algorithm_identity": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B76_VERIFY_ADDENDUM_V74_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

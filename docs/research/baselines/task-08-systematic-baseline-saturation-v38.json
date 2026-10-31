@@ -1,0 +1,289 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 38,
+  "state": "SATURATION_V38_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T23:34:37Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "only_evidence_public_by_cutoff_is_eligible_for_discovery": true,
+    "current_repository_head_is_not_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v40_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v40.json",
+      "sha256": "70ae4ad33cdcdb85fdcd77b66c97da00aeaaedc0b42e48050cca3be293fae70e"
+    },
+    "systematic_saturation_v37": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v37.json",
+      "sha256": "e1bec51ffb040ca00b5ae537d26b55afba930f2fd186ff9ae50d69ac7c0ac9b3"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_AGENT_MEMORY",
+    "LEARNED_MEMORY_MANAGEMENT",
+    "ASSOCIATIVE_AND_GRAPH_MEMORY",
+    "TASK_AGNOSTIC_MEMORY",
+    "MEMORY_CONSTRUCTION_RL",
+    "MEMORY_SYSTEM_EVOLUTION",
+    "META_MEMORY",
+    "MEMORY_SKILL_EVOLUTION"
+  ],
+  "queries_executed": [
+    "\"Learning Hierarchical Procedural Memory for LLM Agents through Bayesian Selection and Contrastive Refinement\"",
+    "\"Memp: Exploring Agent Procedural Memory\"",
+    "\"Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents\"",
+    "\"MemEvolve: Meta-Evolution of Agent Memory Systems\"",
+    "\"MemOCR: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning\"",
+    "\"Mem-T: Densifying Rewards for Long-Horizon Memory Agents\"",
+    "\"HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents\"",
+    "\"PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents\"",
+    "\"MemBuilder: Reinforcing LLMs for Long-Term Memory Construction via Attributed Dense Rewards\"",
+    "\"MemPro: Agentic Memory Systems as Evolvable Programs\"",
+    "\"MetaMem: Evolving Meta-Memory for Knowledge Utilization through Self-Reflective Symbolic Optimization\"",
+    "\"MemSkill: Learning and Evolving Memory Skills for Self-Evolving Agents\"",
+    "\"Memory-R1: Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement Learning\"",
+    "\"O-Mem: Omni Memory System for Personalized, Long Horizon, Self-Evolving Agents\"",
+    "\"MemAdapter: Fast Alignment across Agent Memory Paradigms via Generative Subgraph Retrieval\"",
+    "\"MemForest: An Efficient Agent Memory System with Hierarchical Temporal Indexing\""
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 6,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+          "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+          "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v35.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBUILDER",
+      "name": "MemBuilder: Reinforcing LLMs for Long-Term Memory Construction via Attributed Dense Rewards",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMPRO",
+      "name": "MemPro: Agentic Memory Systems as Evolvable Programs",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-METAMEM",
+      "name": "MetaMem: Evolving Meta-Memory for Knowledge Utilization through Self-Reflective Symbolic Optimization",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMSKILL",
+      "name": "MemSkill: Learning and Evolving Memory Skills for Self-Evolving Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBUILDER",
+      "name": "MemBuilder: Reinforcing LLMs for Long-Term Memory Construction via Attributed Dense Rewards",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MEMORY_CONSTRUCTION_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_WITH_EXECUTABLE_CODE",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1284/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Zh1yuShen/MemBuilder"
+        }
+      ],
+      "material_reason": "Trains memory construction with attributed dense rewards and component-level contribution weighting, distinct from fixed retrieval and procedural-memory systems.",
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_PENDING_MEMORY_TASK_APPLICABILITY_AND_VERSION_BINDING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMPRO",
+      "name": "MemPro: Agentic Memory Systems as Evolvable Programs",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EVOLVABLE_MEMORY_SYSTEM_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_MEMORY_PIPELINE_EVOLUTION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PRE_CUTOFF_PREPRINT_WITH_EXECUTABLE_IMPLEMENTATION_AND_AUTHOR_REPORTED_EMNLP_2026_MAIN_ACCEPTANCE",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.00619"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/wanghai673/MemPro"
+        }
+      ],
+      "material_reason": "Treats the full memory construction-retrieval pipeline, including executable code and prompts, as an evolvable program under failure-mode-guided refinement.",
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_PUBLICATION_VENUE_RECORD_AND_FINAL_VERSION_STILL_TO_BE_BOUND"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-METAMEM",
+      "name": "MetaMem: Evolving Meta-Memory for Knowledge Utilization through Self-Reflective Symbolic Optimization",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_META_MEMORY_KNOWLEDGE_UTILIZATION_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_SELF_REFLECTIVE_MEMORY_UPDATE_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_CODE",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.270/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenBMB/MetaMem"
+        }
+      ],
+      "material_reason": "Optimizes an explicit meta-memory of transferable knowledge-utilization experience using self-reflective symbolic updates.",
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_PENDING_AGENT_DECISION_APPLICABILITY_AND_VERSION_BINDING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMSKILL",
+      "name": "MemSkill: Learning and Evolving Memory Skills for Self-Evolving Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MEMORY_SKILL_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_EVOLVING_MEMORY_SKILL_REFERENCE_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_CROSS_DATASET_MEMORY_SKILL_TRANSFER_REFERENCE"
+      ],
+      "evidence_status": "PRE_CUTOFF_PRIMARY_PREPRINT_WITH_EXECUTABLE_CODE",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.02474"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ViktorAxelsen/MemSkill"
+        }
+      ],
+      "material_reason": "Replaces fixed memory operations with learned, reusable and evolvable memory skills, including transfer evaluation across datasets and base models.",
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_ROLE_CONDITIONAL_PENDING_FINAL_PUBLICATION_AND_VERSION_BINDING"
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "disposition": "PEER_REVIEWED_REFERENCE_BLOCKED_BY_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "ACL 2026 verifies the RL memory-manager and answer-agent method, but the public repository states that code is still forthcoming."
+    },
+    {
+      "name": "O-Mem",
+      "sources": [
+        "https://arxiv.org/abs/2511.13593",
+        "https://github.com/OPPO-PersonalAI/O-Mem"
+      ],
+      "disposition": "PERSONALIZATION_SPECIFIC_REFERENCE_NOT_PROMOTED_IN_THIS_GENERAL_DIRECT_MEMORY_PASS",
+      "reason": "Its primary governed problem is personalized long-horizon interaction through active user profiling; applicability to a generic E1 decision comparator must be separately declared."
+    },
+    {
+      "name": "MemAdapter",
+      "sources": [
+        "https://arxiv.org/abs/2602.08369"
+      ],
+      "disposition": "CROSS_PARADIGM_MEMORY_REFERENCE_IMPLEMENTATION_IDENTITY_NOT_BOUND_IN_THIS_PASS",
+      "reason": "The preprint is materially relevant to cross-paradigm memory alignment and fusion, but this review did not bind an authoritative executable implementation identity."
+    },
+    {
+      "name": "MemForest",
+      "sources": [
+        "https://arxiv.org/abs/2605.23986",
+        "https://github.com/Concyclics/MemForest"
+      ],
+      "disposition": "WRITE_PATH_EFFICIENCY_REFERENCE_NOT_PROMOTED_IN_THIS_PASS",
+      "reason": "The method is relevant to memory substrate efficiency, but its current public artifact is tied to a later submission/revision process and is not needed as a new claim-bearing decision comparator at this stage."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_cross_task_or_cross_model_memory_transfer_references_exist": true,
+    "forcing_memory_transfer_within_e1_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V38"
+  },
+  "coverage_observations": {
+    "E1": "DIRECT_MEMORY_POOL_EXPANDED",
+    "E2": "NOT_REOPENED_BY_DIRECT_MEMORY_REFINEMENT",
+    "E3": "NOT_REOPENED_BY_VISUAL_MEMORY_ENCODING_ALONE",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially new direct-memory comparator remained after dynamic deduplication, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "memory_method_is_automatically_n_h1_applicable": false,
+    "within_e1_memory_transfer_establishes_n_h2": false,
+    "preprint_is_automatically_peer_reviewed": false,
+    "reference_only_method_is_claim_bearing": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B43_VERIFY_ADDENDUM_V41_AND_CONTINUE_BOUNDED_DIRECT_MEMORY_REFINEMENT"
+}

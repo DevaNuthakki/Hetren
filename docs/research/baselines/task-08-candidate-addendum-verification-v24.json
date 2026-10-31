@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 24,
+  "state": "ADDENDUM_V24_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:09:10Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v24": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v24.json",
+      "sha256": "2436fe966904e4526dd62b53b338127d336bc4c96ee20a28aa38e880ad563e64"
+    },
+    "systematic_saturation_v21": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v21.json",
+      "sha256": "3ed4304287173b915aa9bbceb09c9b3581fc1a7c1682597d99b83dc143608811"
+    },
+    "distpfn_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-distpfn-identity-resolution-v1.json",
+      "sha256": "f43ec9b774cde7f3668872126ebcf9e68f1693f578bffaa06a2ae7b717236b7f"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-DISTPFN",
+      "verification_state": "ICML_2026_CONFERENCE_PUBLICATION_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_TABULAR_LABEL_SHIFT_TEST_TIME_ADJUSTMENT_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "DistPFN is reported as an ICML 2026 conference publication.",
+        "It is a post-hoc inference-time adjustment method for TabPFN-family tabular foundation models under label shift.",
+        "It rescales predicted class probabilities using the training prior and predicted posterior without architectural modification or additional model training.",
+        "DistPFN-T adds temperature scaling to control adjustment strength.",
+        "The public implementation provides executable source code and evaluation support.",
+        "The published study evaluates more than 250 OpenML classification datasets."
+      ],
+      "sources": [
+        {
+          "class": "INSTITUTIONAL_PUBLICATION_RECORD",
+          "url": "https://www.lgresearch.ai/publication/view?seq=178"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2605.04363"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/seunghan96/DistPFN"
+        }
+      ],
+      "limits": [
+        "LABEL_SHIFT_SETTING_MUST_BE MATCHED",
+        "METHOD_DOES_NOT_CLAIM_TO_SOLVE_FEATURE_SHIFT",
+        "TABPFN_FAMILY_AND_BASE_MODEL_VERSION_MUST_BE BOUND",
+        "DISTPFN_AND_DISTPFN_T_MUST_BE TREATED_AS_DISTINCT_CONFIGURATIONS",
+        "TEMPERATURE_SELECTION_POLICY_MUST_BE BOUND_IF_DISTPFN_T_IS_USED",
+        "LABEL_SHIFT_INFORMATION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "DOES_NOT_ESTABLISH_GENERAL_E2_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v24_candidates_have_role_level_external_review": true,
+    "distpfn_identity_distinct_from_drift_resilient_tabpfn": true,
+    "distpfn_identity_distinct_from_other_tabpfn_candidates": true,
+    "all_addendum_v24_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "conference_publication_establishes_strongest_status": false,
+    "distpfn_solves_feature_shift": false,
+    "distpfn_is_general_e2_adaptation": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

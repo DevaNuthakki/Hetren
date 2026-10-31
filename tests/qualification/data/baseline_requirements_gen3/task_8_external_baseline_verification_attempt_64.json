@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 64,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:40:13Z",
+  "task": 8,
+  "bindings": {
+    "attempt_63": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_63.json",
+      "sha256": "3cbceb68f51363e74fc5397af22954780df3e4d65c80acefe6fcc1cda1b7a65c"
+    },
+    "addendum_v62_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v62.json",
+      "sha256": "a143ba50dacc12df3f2972d8b554c320feac5ff6b7a3ee1f5ae7c7049f2663de"
+    },
+    "systematic_saturation_v60": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v60.json",
+      "sha256": "d2c077eb52f105c188c81dd1afe46ab9012241f23921617fb09f8169ee4f5cd2"
+    },
+    "candidate_addendum_v63": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v63.json",
+      "sha256": "68e853ddb8ebccf6e4d450207accdee79065599f8f85dc6c43dbdcfb39c0f097"
+    }
+  },
+  "state_summary": {
+    "discovery_mode": "DISPLACEMENT_ONLY",
+    "broad_canonical_enumeration_reopened": false,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v63_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B65_VERIFY_ADDENDUM_V63_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT",
+  "claim_limits": {
+    "stopping_rule_satisfied_means_strongest_selected": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

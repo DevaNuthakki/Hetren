@@ -1,0 +1,92 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 2,
+  "state": "ADDENDUM_V2_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:32:40Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v2": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v2.json",
+      "sha256": "afb505296bfe1f5366386ec3e7d515166c92aa677217f953520c96f248adea6a"
+    },
+    "discovery_refinement_v3": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v3.json",
+      "sha256": "2271a5fe745712a12b10e96c15ee62be59308bd9dc58c453ea44604c5ed3ba2a"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E3-UHERDING",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_ACTIVE_LEARNING_COMPARATOR_IF_ACQUISITION_TASK_MATCHED",
+      "verified_facts": [
+        "Uncertainty Herding is an ICLR 2025 active-learning method.",
+        "The method explicitly targets low, medium, and high label-budget regimes.",
+        "The official implementation also contains the authors' MaxHerding implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/0302fb83c62991efbccf0a003e4f5a92-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BorealisAI/uherding"
+        }
+      ],
+      "eligibility_limits": [
+        "ACTIVE_LEARNING_DECISION_SURFACE_REQUIRED",
+        "LABEL_BUDGET_REGIME_MUST_BE_MATCHED",
+        "FEATURE_EXTRACTOR_AND_TRAINING_PROTOCOL_MUST_BE_BOUND",
+        "FULL_IMMUTABLE_COMMIT_REQUIRED_BEFORE_FINAL_RETENTION"
+      ],
+      "strongest_status": "NOT_ESTABLISHED"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-TTT-ICL-TABPFN",
+      "verification_state": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_UNRESOLVED",
+      "role_disposition": "E2_TEST_TIME_TRAINING_COMPARATOR_IF_INFORMATION_OPPORTUNITY_MATCHED",
+      "verified_facts": [
+        "The ICML 2025 work studies gradient-based test-time training for in-context learning.",
+        "Its empirical contribution applies the method to TabPFN for tabular classification.",
+        "The procedure trains on in-context demonstrations available at inference time."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/gozeten25a.html"
+        }
+      ],
+      "implementation_review": "NO_OFFICIAL_IMPLEMENTATION_LOCATED_DURING_THIS_VERIFICATION",
+      "eligibility_limits": [
+        "IN_CONTEXT_DEMONSTRATION_ACCESS_MUST_BE_MATCHED",
+        "LABEL_OR_TARGET_INFORMATION_OPPORTUNITY_MUST_BE_EXPLICIT",
+        "OFFICIAL_OR_REPRODUCIBLE_IMPLEMENTATION_REQUIRED_BEFORE_FINAL_RETENTION",
+        "TABPFN_MODEL_REVISION_MUST_BE_BOUND"
+      ],
+      "strongest_status": "BLOCKED_PENDING_REPRODUCIBILITY_AND_PARITY_REVIEW"
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v2_candidates_have_role_level_external_review": true,
+    "all_addendum_v2_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

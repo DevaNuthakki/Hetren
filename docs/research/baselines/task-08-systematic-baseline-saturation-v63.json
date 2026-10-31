@@ -1,0 +1,315 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 63,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:15:23Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "mode": "DISPLACEMENT_ONLY",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v65_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v65.json",
+      "sha256": "9dedc05f315f4355e1a238f243f8ffc1da02b0970178a0445a2a88a4fbc12035"
+    },
+    "systematic_saturation_v62": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v62.json",
+      "sha256": "9d75cbaddf1dce2e863620d76053be7b536a8b0249950c189259c9d6113dd9d2"
+    },
+    "candidate_addendum_v65": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v65.json",
+      "sha256": "790062c2253624fc960bb4debf6a5c93c4c6a8f3a68740083ad8ae19028de05a"
+    },
+    "attempt_66": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_66.json",
+      "sha256": "6d5aa84bbeda6e822957bb516bf710b4facc4be0942434d8d75231f66a417425"
+    }
+  },
+  "focus": [
+    "E1_LONG_HORIZON_VLA_DISPLACEMENT",
+    "E1_ADAPTIVE_REASONING_VLA_DISPLACEMENT",
+    "E1_HISTORY_AND_TEMPORAL_MEMORY_VLA_DISPLACEMENT",
+    "E1_RUNTIME_AND_TEMPORAL_ROBUSTNESS_DISPLACEMENT",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER_CHECK"
+  ],
+  "queries_executed": [
+    "\"\u03c40-VLA\" arxiv 2608.16885",
+    "\"OneTwoVLA\" OpenReview ICLR 2026",
+    "\"Xiaomi-Robotics-0\" arxiv",
+    "\"TRM-VLA\" CVPR 2026",
+    "\"MemoryVLA\" ICLR 2026",
+    "\"CronusVLA\" AAAI 2026",
+    "\"HAMLET\" ICLR 2026 VLA",
+    "\"Verifier-free Test-Time Sampling\" VLA MG-Select ICLR 2026",
+    "\"Align-Then-stEer\" ICLR 2026 VLA",
+    "\"OneTwoVLA\" ICLR 2026 openreview",
+    "\"MemoryVLA\" ICLR 2026 openreview",
+    "\"HAMLET\" ICLR 2026 vision language action history memory",
+    "\"CronusVLA\" github official",
+    "\"Align-Then-stEer\" ICLR 2026 github",
+    "\"Align-Then-stEer: Adapting the Vision-Language Action Models through Unified Latent Guidance\" OpenReview",
+    "\"MemoryVLA: Perceptual-Cognitive Memory in Vision-Language-Action Models for Robotic Manipulation\" OpenReview",
+    "\"OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning\" OpenReview",
+    "\"TRM-VLA: Temporal-Aware Chain-of-Thought Reasoning and Memorization for Vision-Language-Action Models\" openaccess CVPR 2026",
+    "\"CronusVLA\" site:ojs.aaai.org AAAI 2026 38903"
+  ],
+  "query_count": 19,
+  "proposal_count": 4,
+  "identity_disposition": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRM-VLA",
+      "name": "TRM-VLA: Temporal-Aware Chain-of-Thought Reasoning and Memorization for Vision-Language-Action Models",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYVLA",
+      "name": "MemoryVLA: Perceptual-Cognitive Memory in Vision-Language-Action Models for Robotic Manipulation",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CRONUSVLA",
+      "name": "CronusVLA: Towards Efficient and Robust Manipulation via Multi-Frame Vision-Language-Action Modeling",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HAMLET-VLA",
+      "name": "HAMLET: Switch Your Vision-Language-Action Model into a History-Aware Policy",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "preexisting_or_duplicate": [],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRM-VLA",
+      "name": "TRM-VLA: Temporal-Aware Chain-of-Thought Reasoning and Memorization for Vision-Language-Action Models",
+      "implementation_identity": "https://github.com/Serenos/TRM-VLA",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TEMPORAL_REASONING_MEMORY_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LONG_HORIZON_REASONING_VLA_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_EXECUTABLE_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://openaccess.thecvf.com/CVPR2026?day=2026-06-05"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Serenos/TRM-VLA"
+        }
+      ],
+      "material_reason": "Adds keyframe-triggered hierarchical reasoning, granularity-adaptable historical reasoning memory, and reasoning-conditioned action generation for long-horizon VLA control, making it a direct potential displacer for long-horizon and adaptive-reasoning E1 roles.",
+      "known_limitations": [
+        "COGACT_BASE_IDENTITY_AND_PRETRAINED_WEIGHTS_MUST_BE BOUND",
+        "KEYFRAME_TRIGGER_POLICY_MUST_BE BOUND",
+        "CONTEXT_MEMORY_GRANULARITY_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "LIBERO_SIMPLER_AND_REAL_ROBOT_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "REASONING_COMPUTE_AND_LATENCY_REQUIRE_RESOURCE_PARITY_REVIEW",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYVLA",
+      "name": "MemoryVLA: Perceptual-Cognitive Memory in Vision-Language-Action Models for Robotic Manipulation",
+      "implementation_identity": "https://github.com/shihao1895/MemoryVLA",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HISTORY_AWARE_MEMORY_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LONG_HORIZON_TEMPORAL_POLICY_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=54U3XHf7qq"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.19236"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/shihao1895/MemoryVLA"
+        }
+      ],
+      "material_reason": "Uses working memory plus a perceptual-cognitive memory bank to retrieve and update decision-relevant historical information for long-horizon VLA action generation, directly overlapping history-aware E1 comparison roles.",
+      "known_limitations": [
+        "MEMORYVLA_AND_MEMORYVLA_PLUS_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "BASE_VLA_AND_DIFFUSION_ACTION_EXPERT_IDENTITY_MUST_BE BOUND",
+        "MEMORY_BANK_CAPACITY_RETRIEVAL_AND_UPDATE_RULES_MUST_BE BOUND",
+        "TRAINING_DATA_AND_HISTORY_INFORMATION_OPPORTUNITY_MUST_BE PARITY_AUDITED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "TRAINED_HISTORY_AWARE_POLICY_IS_NOT_AUTOMATICALLY_A_H1_TEST_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CRONUSVLA",
+      "name": "CronusVLA: Towards Efficient and Robust Manipulation via Multi-Frame Vision-Language-Action Modeling",
+      "implementation_identity": "https://github.com/InternRobotics/CronusVLA",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_MULTI_FRAME_TEMPORAL_VLA_DISPLACER_CANDIDATE",
+        "N_H1_ROBUST_TEMPORAL_POLICY_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38903"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/InternRobotics/CronusVLA"
+        }
+      ],
+      "material_reason": "Extends single-frame VLA policies to multi-frame temporal modeling through feature chunking and post-training, with explicit robustness evaluation under temporal and spatial observation disturbances.",
+      "known_limitations": [
+        "MODEL_SCALE_7B_AND_0_5B_MUST_NOT_BE COLLAPSED",
+        "PRETRAIN_POSTTRAIN_AND_TASK_FINETUNE_STAGES_MUST_BE BOUND",
+        "PAST_ACTION_WINDOW_AND_ACTION_CHUNK_CONFIGURATION_MUST_BE BOUND",
+        "SIMPLERENV_LIBERO_AND_REAL_ROBOT_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "HARDWARE_AND_INFERENCE_RATE_REQUIRE_PARITY_REVIEW",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HAMLET-VLA",
+      "name": "HAMLET: Switch Your Vision-Language-Action Model into a History-Aware Policy",
+      "implementation_identity": "https://github.com/myungkyuKoo/HAMLET-Isaac-GR00T",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HISTORY_AWARE_FINE_TUNED_VLA_DISPLACER_CANDIDATE",
+        "N_H1_LIGHTWEIGHT_TEMPORAL_MEMORY_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=KcJ9U0x6kO"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2510.00695"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://myungkyukoo.github.io/hamlet/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/myungkyuKoo/HAMLET-Isaac-GR00T"
+        }
+      ],
+      "material_reason": "Adds moment tokens and a lightweight temporal memory module to pretrained VLA policies, directly addressing history-dependent and long-horizon action selection without requiring a full VLA retraining from scratch.",
+      "known_limitations": [
+        "BASE_GROOT_VERSION_MUST_BE BOUND",
+        "N1_5_AND_N1_6_IMPLEMENTATION_BRANCHES_MUST_NOT_BE COLLAPSED",
+        "MEMORY_WINDOW_AND_STRIDE_MUST_BE BOUND",
+        "ROBOMME_RMBENCH_ROBOCASA_AND_LIBERO_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "HISTORY_AWARE_FINETUNING_IS_NOT_AUTOMATICALLY_A_H1_DEPLOYMENT_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "DISCOVERY_ELIGIBLE_PENDING_FINAL_APPLICABILITY_PARITY_AND_PINNING"
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_not_promoted": [
+    {
+      "name": "MG-Select \u2014 Verifier-free Test-Time Sampling for Vision-Language-Action Models",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=UD4Rw8MOEK"
+        },
+        {
+          "class": "PUBLIC_PROJECT_PAGE_REPOSITORY",
+          "url": "https://github.com/suhyeok-jang/mg-select"
+        }
+      ],
+      "disposition": "TEST_TIME_SCALING_RESEARCH_REFERENCE_PENDING_EXECUTABLE_IMPLEMENTATION_VERIFICATION",
+      "reason": "The reviewed public repository identifies itself as the MG-Select project-page repository; this pass did not verify an executable model implementation sufficient for governed reproduction."
+    },
+    {
+      "name": "Align-Then-stEer",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=T3i7Ifeatk"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TeleHuman/Align-Then-Steer"
+        }
+      ],
+      "disposition": "ROLE_CONDITIONAL_ADAPTATION_REFERENCE_NOT_PROMOTED_IN_THIS_DISPLACEMENT_PASS",
+      "reason": "ATE uses target-domain adaptation action data and downstream fine-tuning guidance; that information opportunity must be matched explicitly before it can displace an A-H1 or N-H1 comparator."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_long_horizon_temporal_and_cross_embodiment_evidence_exists": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one targeted, previously unpromoted role-matched displacement candidate was found."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "final_selection_authorized": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "peer_review_alone_establishes_final_applicability": false,
+    "public_code_is_final_immutable_version_identity": false,
+    "history_aware_policy_is_automatically_test_time_adaptation": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "screened_reference_is_claim_bearing_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B68_VERIFY_ADDENDUM_V66_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

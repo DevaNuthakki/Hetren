@@ -1,0 +1,354 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 64,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:21:45Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_mode": "BOUNDED_DISPLACEMENT_ONLY",
+  "displacement_materiality_rule": "Count only a previously unrepresented candidate whose mechanism and evidence could alter the retained comparator set for a concrete applicable environment-role-task-information-opportunity tuple.",
+  "cutoff_policy": {
+    "public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true,
+    "membodied_preprint_timestamp_is_before_cutoff": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v66_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v66.json",
+      "sha256": "0e506de8a570eadfed962a99543255d00d5e30be5f6dac324aaab37a67b45375"
+    },
+    "systematic_saturation_v63": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v63.json",
+      "sha256": "ecceb4fc41a05554e9b34e24b582b9f0571485c537fd62fb912f7ebd7de67f62"
+    }
+  },
+  "focus": [
+    "E1_LONG_HORIZON_VLA_MEMORY_DISPLACEMENT",
+    "E1_PARTIAL_OBSERVABILITY",
+    "E1_EPISODIC_AND_SCRATCHPAD_MEMORY",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Notes-to-Self\" ICRA 2026 VLA code",
+    "\"Scratchpad Augmented VLAs\" github",
+    "\"muVLA\" recurrent memory VLA github",
+    "\"On Recurrent Memory for Partially Observable Manipulation\" github",
+    "\"MemBodied\" recurrent associative memory VLA github",
+    "\"MemBodied\" arxiv 2609.28256",
+    "\"FM-VLA\" CoRL 2026 github",
+    "\"ChainVLA\" github long-horizon manipulation",
+    "\"AtlasVLA\" github persistent world ego state",
+    "\"T3VF\" test-time training VLA github",
+    "2026 VLA recurrent memory partial observability executable",
+    "2026 VLA scratchpad memory manipulation executable",
+    "2026 VLA associative episodic memory manipulation executable",
+    "2026 VLA force memory long horizon implementation",
+    "2026 long horizon VLA execution state memory code",
+    "2026 partially observable VLA memory benchmark implementation"
+  ],
+  "query_count": 16,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NOTES-TO-SELF-VLA",
+      "name": "Notes-to-Self: Scratchpad Augmented VLAs for Memory Dependent Manipulation Tasks",
+      "aliases": [
+        "Notes-to-Self",
+        "Notes to Self",
+        "Scratchpad Augmented VLAs for Memory Dependent Manipulation Tasks"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LANGUAGE_SCRATCHPAD_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICRA_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://ras.papercept.net/conferences/conferences/ICRA26/program/ICRA26_ContentListWeb_5.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.21013"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Qualcomm-AI-research/scratchpad-vla"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_MEMORY_DEPENDENT_VLA_SETTING_MATCHED",
+      "material_reason": "Uses an explicit structured language scratchpad for grounding, plan state, and completed subgoals, providing a materially different memory channel from latent-token and multi-frame history mechanisms.",
+      "limits": [
+        "SCRATCHPAD_INFORMATION_CHANNEL_MUST_BE PERMITTED_BY_MATCHED_EXPERIMENT",
+        "OPENVLA_VARIANT_AND_FINETUNING_CONFIGURATION_MUST_BE BOUND",
+        "CLEVR_SKILLS_MEMORYBENCH_AND_REAL_WORLD_SETTINGS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MUVLA",
+      "name": "\u03bcVLA: On Recurrent Memory for Partially Observable Manipulation in VLA Models",
+      "aliases": [
+        "\u03bcVLA",
+        "muVLA",
+        "On Recurrent Memory for Partially Observable Manipulation in VLA Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_RECURRENT_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.12497"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CognitiveAISystems/muVLA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_PARTIAL_OBSERVABILITY_SETTING_MATCHED",
+      "material_reason": "Isolates recurrence as the primary intervention by adding persistent memory tokens to OpenVLA-OFT, with matched memoryless ablations, reproducible training recipes, and released checkpoints.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "MEMORY_WIDTH_TBPTT_LENGTH_AND_UPDATE_RULE_MUST_BE BOUND",
+        "MIKASA_ROBO_AND_LIBERO_SETTINGS_MUST_BE DISTINGUISHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBODIED",
+      "name": "MemBodied: Recurrent Associative Memory for Vision-Language-Action Models",
+      "aliases": [
+        "MemBodied",
+        "Recurrent Associative Memory for Vision-Language-Action Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ASSOCIATIVE_EPISODIC_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "public_evidence_date_utc": "2026-09-23T15:19:19Z",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2609.28256"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/declare-lab/MemBodied"
+        }
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_EPISODIC_MEMORY_VLA_SETTING_MATCHED",
+      "material_reason": "Introduces fixed-size recurrent associative state, an episode anchor, and transition-conditioned writes, providing a materially different bounded-memory mechanism from frame stacking and latent-token-only recurrence.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "PUBLIC_EVIDENCE_MUST_REMAIN_BOUND_TO_PRE_CUTOFF_STATE",
+        "PI0_AND_PI05_BACKENDS_MUST_NOT_BE COLLAPSED",
+        "RMBENCH_AND_LIBERO_CONFIGURATIONS_MUST_BE BOUND_SEPARATELY"
+      ]
+    }
+  ],
+  "displacement_proposal_count": 3,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NOTES-TO-SELF-VLA",
+      "name": "Notes-to-Self: Scratchpad Augmented VLAs for Memory Dependent Manipulation Tasks",
+      "id_match": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MUVLA",
+      "name": "\u03bcVLA: On Recurrent Memory for Partially Observable Manipulation in VLA Models",
+      "id_match": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBODIED",
+      "name": "MemBodied: Recurrent Associative Memory for Vision-Language-Action Models",
+      "id_match": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NOTES-TO-SELF-VLA",
+      "name": "Notes-to-Self: Scratchpad Augmented VLAs for Memory Dependent Manipulation Tasks",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LANGUAGE_SCRATCHPAD_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICRA_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://ras.papercept.net/conferences/conferences/ICRA26/program/ICRA26_ContentListWeb_5.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.21013"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Qualcomm-AI-research/scratchpad-vla"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_MEMORY_DEPENDENT_VLA_SETTING_MATCHED",
+      "material_reason": "Uses an explicit structured language scratchpad for grounding, plan state, and completed subgoals, providing a materially different memory channel from latent-token and multi-frame history mechanisms.",
+      "limits": [
+        "SCRATCHPAD_INFORMATION_CHANNEL_MUST_BE PERMITTED_BY_MATCHED_EXPERIMENT",
+        "OPENVLA_VARIANT_AND_FINETUNING_CONFIGURATION_MUST_BE BOUND",
+        "CLEVR_SKILLS_MEMORYBENCH_AND_REAL_WORLD_SETTINGS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MUVLA",
+      "name": "\u03bcVLA: On Recurrent Memory for Partially Observable Manipulation in VLA Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_RECURRENT_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.12497"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CognitiveAISystems/muVLA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_PARTIAL_OBSERVABILITY_SETTING_MATCHED",
+      "material_reason": "Isolates recurrence as the primary intervention by adding persistent memory tokens to OpenVLA-OFT, with matched memoryless ablations, reproducible training recipes, and released checkpoints.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "MEMORY_WIDTH_TBPTT_LENGTH_AND_UPDATE_RULE_MUST_BE BOUND",
+        "MIKASA_ROBO_AND_LIBERO_SETTINGS_MUST_BE DISTINGUISHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBODIED",
+      "name": "MemBodied: Recurrent Associative Memory for Vision-Language-Action Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ASSOCIATIVE_EPISODIC_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "public_evidence_date_utc": "2026-09-23T15:19:19Z",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2609.28256"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/declare-lab/MemBodied"
+        }
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_EPISODIC_MEMORY_VLA_SETTING_MATCHED",
+      "material_reason": "Introduces fixed-size recurrent associative state, an episode anchor, and transition-conditioned writes, providing a materially different bounded-memory mechanism from frame stacking and latent-token-only recurrence.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "PUBLIC_EVIDENCE_MUST_REMAIN_BOUND_TO_PRE_CUTOFF_STATE",
+        "PI0_AND_PI05_BACKENDS_MUST_NOT_BE COLLAPSED",
+        "RMBENCH_AND_LIBERO_CONFIGURATIONS_MUST_BE BOUND_SEPARATELY"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "FM-VLA: Force-based Memory for Vision-Language-Action Models in Contact-Rich Manipulation",
+      "sources": [
+        "https://arxiv.org/abs/2607.18231",
+        "https://github.com/qft-333/FM-VLA"
+      ],
+      "evidence_state": "CORL_2026_ACCEPTANCE_REPORTED_PUBLIC_PREPRINT_REPOSITORY_PRESENT",
+      "disposition": "REFERENCE_BEHIND_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "The verified repository view primarily exposes project material and does not yet establish the complete executable training/evaluation implementation needed for governed displacement."
+    },
+    {
+      "name": "ChainVLA",
+      "source": "https://arxiv.org/abs/2608.02326",
+      "evidence_state": "PUBLIC_PREPRINT",
+      "disposition": "REFERENCE_BEHIND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "The paper is materially relevant to long-horizon execution state, but this pass did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "AtlasVLA",
+      "source": "https://arxiv.org/abs/2608.06729",
+      "evidence_state": "PUBLIC_PREPRINT",
+      "disposition": "REFERENCE_BEHIND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_GATE",
+      "reason": "Persistent world-ego state is materially relevant, but this pass did not verify a reproducible official implementation."
+    },
+    {
+      "name": "T3VF",
+      "source": "https://github.com/sangwu99/T3VF",
+      "evidence_state": "ICML_2026_CATS_WORKSHOP_WITH_OFFICIAL_CODE",
+      "disposition": "WORKSHOP_REFERENCE_NOT_PROMOTED_TO_ARCHIVAL_CLAIM_BEARING_POOL",
+      "reason": "Provides executable VLA test-time training evidence but is currently workshop-level and does not displace the stronger archival or directly memory-matched pool in this round."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "vla_memory_candidates_are_within_e1": true,
+    "forcing_vla_memory_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V64"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one dynamically deduplicated, materially role-matched displacement candidate was found.",
+    "two_consecutive_no_new_rounds_required": true
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "new_candidate_is_automatically_strongest": false,
+    "vla_memory_result_establishes_general_n_h2": false,
+    "reference_only_method_is_claim_bearing": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B69_VERIFY_ADDENDUM_V67_AND_RUN_NEXT_BOUNDED_DISPLACEMENT_REFINEMENT"
+}

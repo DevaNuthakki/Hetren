@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_PACKAGE_V10_MANIFEST",
+  "state": "PACKAGE_V10_CONSTRUCTED_NOT_GENERATED",
+  "generation_attempt": 10,
+  "package": {
+    "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v10.json",
+    "sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+    "size_bytes": 92463,
+    "schema_version": "10.0.0",
+    "artifact_type": "TASK_8_GEN3_ISOLATED_FRESH_HOLDOUT_GENERATION_PACKAGE_V10",
+    "state": "READY_FOR_ISOLATED_GENERATION_ATTEMPT_10"
+  },
+  "lineage": {
+    "parent_package_v9_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+    "attempt_10_successor_design_sha256": "0dc572c1e0af16aee893dab05d39863086f6be9e64ce848cc65a7cd3c0f0adc3",
+    "attempt_10_environment_decision_sha256": "d16b7fcbc61fd562700d7bfae3d0d73f3343a16b207a286966e04585242246d6",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "authorized_transformation": {
+    "mechanical_attempt_9_to_10_identity_substitution": true,
+    "generator_side_ui_isolation_self_audit_removed": true,
+    "orchestration_side_attestation_remains_external_to_package": true,
+    "non_self_auditing_generator_input_use_contract_added": true,
+    "generator_isolation_success_metadata_removed": true,
+    "generator_isolation_failure_contract_removed": true,
+    "requirement_specific_environment_hardening_rules_removed": 1,
+    "removed_rule_sha256": "423b0a423c29edecb9126c0c51a4b248c185aa1a4bd4299dd23c357268bee6ec",
+    "generic_environment_self_consistency_hardening_preserved": true,
+    "structural_generator_output_preflight_preserved": true,
+    "handoff_integrity_contract_preserved": true
+  },
+  "frozen_contracts": {
+    "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+    "preregistration_contract_sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037",
+    "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+    "public_evaluator_contract_manifest_sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "generation_identity": {
+    "case_count": 54,
+    "must_accept_count": 27,
+    "must_reject_count": 27,
+    "first_case_id": "G3-H10-001",
+    "last_case_id": "G3-H10-054",
+    "success_output_filename": "fresh_holdout_cases_attempt_10.json"
+  },
+  "construction_state": {
+    "package_constructed": true,
+    "independent_package_checker_created": false,
+    "independent_package_validation_completed": false,
+    "local_disk_handoff_created": false,
+    "pre_generation_environment_attestation_created": false,
+    "generator_chat_started": false,
+    "first_generator_message_sent": false,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "claim_limits": {
+    "manifest_does_not_authorize_generation_by_itself": true,
+    "manifest_does_not_establish_package_independent_validation": true,
+    "manifest_does_not_establish_scientific_support": true,
+    "manifest_does_not_claim_provider_internal_statelessness": true,
+    "manifest_does_not_claim_complete_model_visible_context": true
+  },
+  "next_required_gate": "INDEPENDENT_PACKAGE_V10_VALIDATION_BEFORE_HANDOFF"
+}

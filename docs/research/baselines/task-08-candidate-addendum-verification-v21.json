@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 21,
+  "state": "ADDENDUM_V21_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:51:18Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v21": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v21.json",
+      "sha256": "ef37a818ab2210702219d8bfbf0487f11f3c0529365a494177fefc21344b52a7"
+    },
+    "systematic_saturation_v18": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v18.json",
+      "sha256": "bfc81b62319fbe4079ec32b918876f18108964632af52b6f520123cb34ad42c5"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-XSKILL",
+      "verification_state": "ICML_2026_ACCEPTANCE_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_MULTIMODAL_AGENT_EXPERIENCE_AND_SKILL_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "XSkill is publicly identified by its authors as accepted at ICML 2026.",
+        "Its public implementation supports both skill-and-experience accumulation and inference using the resulting memory bank.",
+        "The method extracts task-level skills and action-level experiences from multimodal-agent trajectories without requiring parameter updates.",
+        "At inference time it retrieves and adapts accumulated knowledge to the current visual and task context.",
+        "Its published evaluation covers multiple multimodal-agent and tool-use benchmarks rather than a standalone static vision classifier."
+      ],
+      "sources": [
+        {
+          "class": "AUTHOR_PROJECT_PAGE",
+          "url": "https://xskill-agent.github.io/xskill_page/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/XSkill-Agent/XSkill"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.12056"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_ICML_PROCEEDINGS_LOCATOR_NOT_BOUND_BY_THIS_REVIEW",
+        "MULTIMODAL_INPUT_DOES_NOT_BY_ITSELF_MAKE_THIS_AN_E3_BASELINE",
+        "E1_USE_REQUIRES_TOOL_OR_AGENT_DECISION_DEPENDENCY_IN_THE_MATCHED_EXPERIMENT",
+        "MEMORY_BANK_CONTENT_AND_ACCUMULATION_PROTOCOL_MUST_BE BOUND",
+        "BACKBONE_MODEL_TOOLSET_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_TASK_GENERALIZATION_WITHIN_AGENT_BENCHMARKS_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v21_candidates_have_role_level_external_review": true,
+    "all_addendum_v21_candidates_are_finally_eligible": false,
+    "archival_proceedings_locator_bound": false,
+    "full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "author_project_acceptance_statement_is_archival_proceedings_identity": false,
+    "multimodal_input_implies_e3": false,
+    "cross_task_agent_generalization_establishes_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

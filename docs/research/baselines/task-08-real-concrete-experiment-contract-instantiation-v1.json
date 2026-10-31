@@ -1,0 +1,313 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONCRETE_EXPERIMENT_CONTRACT_INSTANTIATION",
+  "state": "NO_REAL_CONTRACT_READY_MISSING_EXPLICIT_IDENTITY_BINDINGS",
+  "recorded_at_utc": "2026-09-27T21:41:58Z",
+  "task": 8,
+  "bindings": {
+    "applicability_frontier": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-resolution-frontier-v1.json",
+      "sha256": "f6982ad5ed1716fffea85478b6bc8bff4e8209a6a22c004786c160c1b19b1ac5"
+    },
+    "contract_instantiation_boundary": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "tuple_resolution": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-applicability-tuple-resolution-v1.json",
+      "sha256": "4b0bac8b75b414e4e6474e80e0bfe23feabaab11b0c46d09ae11ffda0c779f9b"
+    },
+    "binding_readiness": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-contract-binding-readiness-v1.json",
+      "sha256": "509ef389e306793ab046289b19f968cf231f620562f82b24d333414ce1230021"
+    },
+    "catalog": {
+      "path": "docs/research/baselines/task-08-non-governing-baseline-catalog-projection-v1.json",
+      "sha256": "6deb2af5d704cd467010f13fe4bc81907bf620391d75b30c24fee6903cf07ca3"
+    }
+  },
+  "frozen_boundary_schema_evidence": {
+    "candidate_contract_field_lists": [
+      {
+        "path": "concrete_experiment_contract_definition.universal_required_sections[9].required_fields",
+        "values": [
+          "resource_matching_rule",
+          "resource_accounting_reference",
+          "compute_budget_binding_if_applicable",
+          "execution_budget_binding_if_applicable",
+          "engineering_effort_binding_if_applicable",
+          "adaptation_cost_binding_if_applicable"
+        ]
+      },
+      {
+        "path": "concrete_experiment_contract_definition.universal_required_sections[10].required_fields",
+        "values": [
+          "execution_harness_identity",
+          "runtime_or_environment_identity",
+          "dependency_or_container_identity",
+          "seed_or_replication_policy_if_applicable",
+          "external_service_revision_capture_rule_if_applicable"
+        ]
+      },
+      {
+        "path": "concrete_experiment_contract_definition.hypothesis_specific_requirements.N-H1.required_fields",
+        "values": [
+          "exact_investigation_decision_behavior",
+          "strongest_matched_baseline_role",
+          "resource_matching_rule",
+          "independent_governed_evaluation_unit_requirement"
+        ]
+      }
+    ]
+  },
+  "resource_handoff_state": {
+    "resource_match_state_count": 222,
+    "resource_match_state_counts": {
+      "UNRESOLVED_TASK_9_HANDOFF_REQUIRED": 222
+    },
+    "task8_creates_task9_accounting_values": false
+  },
+  "real_source_inventory": {
+    "source_count": 5,
+    "sources": [
+      {
+        "source_path": "tests/qualification/data/initial_splits/historical_cases.json",
+        "source_sha256": "aa6d662ebc486535a59f1f84ea0ed4fc7cc90cb322eb5922dc34fdd3723fe5a7",
+        "dataset_identity_evidence": [
+          {
+            "path": "dataset_id",
+            "key": "dataset_id",
+            "value": "TASK7-INITIAL-SPLITS-HISTORICAL-CASES"
+          }
+        ],
+        "split_identity_evidence": [],
+        "evaluation_unit_evidence": [],
+        "independence_group_evidence": [],
+        "environment_evidence": [],
+        "system_or_runtime_identity_evidence": [],
+        "evaluator_identity_evidence": [],
+        "resource_identity_evidence": [],
+        "readiness_dimensions": {
+          "dataset_identity": true,
+          "split_identity": false,
+          "evaluation_unit_identity": false,
+          "independence_group_identity": false,
+          "environment_identity": false,
+          "system_or_runtime_identity": false,
+          "evaluator_identity": false,
+          "resource_identity": false
+        }
+      },
+      {
+        "source_path": "tests/qualification/data/initial_splits/positive_cases.json",
+        "source_sha256": "ea223d8a814efd4c6ded331f42b73aacca2192bea730e77c5afddf10135c994a",
+        "dataset_identity_evidence": [
+          {
+            "path": "dataset_id",
+            "key": "dataset_id",
+            "value": "TASK7-INITIAL-SPLITS-POSITIVE-CASES"
+          }
+        ],
+        "split_identity_evidence": [],
+        "evaluation_unit_evidence": [],
+        "independence_group_evidence": [],
+        "environment_evidence": [],
+        "system_or_runtime_identity_evidence": [],
+        "evaluator_identity_evidence": [],
+        "resource_identity_evidence": [],
+        "readiness_dimensions": {
+          "dataset_identity": true,
+          "split_identity": false,
+          "evaluation_unit_identity": false,
+          "independence_group_identity": false,
+          "environment_identity": false,
+          "system_or_runtime_identity": false,
+          "evaluator_identity": false,
+          "resource_identity": false
+        }
+      },
+      {
+        "source_path": "tests/qualification/data/initial_splits/qualification_cases.json",
+        "source_sha256": "1863184c2d608259c90de63d785d1d93831754d419b7e1f8216987d425e4cc58",
+        "dataset_identity_evidence": [
+          {
+            "path": "dataset_id",
+            "key": "dataset_id",
+            "value": "TASK7-INITIAL-SPLITS-QUALIFICATION-CASES"
+          }
+        ],
+        "split_identity_evidence": [],
+        "evaluation_unit_evidence": [],
+        "independence_group_evidence": [],
+        "environment_evidence": [],
+        "system_or_runtime_identity_evidence": [],
+        "evaluator_identity_evidence": [],
+        "resource_identity_evidence": [],
+        "readiness_dimensions": {
+          "dataset_identity": true,
+          "split_identity": false,
+          "evaluation_unit_identity": false,
+          "independence_group_identity": false,
+          "environment_identity": false,
+          "system_or_runtime_identity": false,
+          "evaluator_identity": false,
+          "resource_identity": false
+        }
+      },
+      {
+        "source_path": "tests/qualification/data/initial_splits/set_d_cases.json",
+        "source_sha256": "7285d45f7dd10979f8b1a975a4ca4e8144efd0108c72d4e2c4c290955f5f6bfe",
+        "dataset_identity_evidence": [
+          {
+            "path": "dataset_id",
+            "key": "dataset_id",
+            "value": "TASK7-INITIAL-SPLITS-SET-D"
+          }
+        ],
+        "split_identity_evidence": [],
+        "evaluation_unit_evidence": [],
+        "independence_group_evidence": [],
+        "environment_evidence": [],
+        "system_or_runtime_identity_evidence": [],
+        "evaluator_identity_evidence": [],
+        "resource_identity_evidence": [],
+        "readiness_dimensions": {
+          "dataset_identity": true,
+          "split_identity": false,
+          "evaluation_unit_identity": false,
+          "independence_group_identity": false,
+          "environment_identity": false,
+          "system_or_runtime_identity": false,
+          "evaluator_identity": false,
+          "resource_identity": false
+        }
+      },
+      {
+        "source_path": "tests/qualification/data/initial_splits/set_e_cases.json",
+        "source_sha256": "1e51bd3ba1eb3436a3812cc93973c3a9cd7c21df25c587ac916c83f9a967f3ae",
+        "dataset_identity_evidence": [
+          {
+            "path": "dataset_id",
+            "key": "dataset_id",
+            "value": "TASK7-INITIAL-SPLITS-SET-E"
+          }
+        ],
+        "split_identity_evidence": [],
+        "evaluation_unit_evidence": [],
+        "independence_group_evidence": [],
+        "environment_evidence": [],
+        "system_or_runtime_identity_evidence": [],
+        "evaluator_identity_evidence": [],
+        "resource_identity_evidence": [],
+        "readiness_dimensions": {
+          "dataset_identity": true,
+          "split_identity": false,
+          "evaluation_unit_identity": false,
+          "independence_group_identity": false,
+          "environment_identity": false,
+          "system_or_runtime_identity": false,
+          "evaluator_identity": false,
+          "resource_identity": false
+        }
+      }
+    ]
+  },
+  "instantiation_policy": {
+    "cross_artifact_identity_inference_allowed": false,
+    "mechanical_combination_of_unrelated_sources_allowed": false,
+    "invent_missing_system_identity": false,
+    "invent_missing_evaluator_identity": false,
+    "invent_missing_split_identity": false,
+    "invent_missing_resource_identity": false,
+    "protected_outcome_use_allowed": false
+  },
+  "contract_instance_count": 0,
+  "contract_instances": [],
+  "blocked_source_count": 5,
+  "blocked_sources": [
+    {
+      "source_path": "tests/qualification/data/initial_splits/historical_cases.json",
+      "missing_identity_dimensions": [
+        "split_identity",
+        "evaluation_unit_identity",
+        "independence_group_identity",
+        "environment_identity",
+        "system_or_runtime_identity",
+        "evaluator_identity",
+        "resource_identity"
+      ],
+      "disposition": "NOT_INSTANTIATED_NO_CROSS_ARTIFACT_IDENTITY_INFERENCE"
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/positive_cases.json",
+      "missing_identity_dimensions": [
+        "split_identity",
+        "evaluation_unit_identity",
+        "independence_group_identity",
+        "environment_identity",
+        "system_or_runtime_identity",
+        "evaluator_identity",
+        "resource_identity"
+      ],
+      "disposition": "NOT_INSTANTIATED_NO_CROSS_ARTIFACT_IDENTITY_INFERENCE"
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/qualification_cases.json",
+      "missing_identity_dimensions": [
+        "split_identity",
+        "evaluation_unit_identity",
+        "independence_group_identity",
+        "environment_identity",
+        "system_or_runtime_identity",
+        "evaluator_identity",
+        "resource_identity"
+      ],
+      "disposition": "NOT_INSTANTIATED_NO_CROSS_ARTIFACT_IDENTITY_INFERENCE"
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/set_d_cases.json",
+      "missing_identity_dimensions": [
+        "split_identity",
+        "evaluation_unit_identity",
+        "independence_group_identity",
+        "environment_identity",
+        "system_or_runtime_identity",
+        "evaluator_identity",
+        "resource_identity"
+      ],
+      "disposition": "NOT_INSTANTIATED_NO_CROSS_ARTIFACT_IDENTITY_INFERENCE"
+    },
+    {
+      "source_path": "tests/qualification/data/initial_splits/set_e_cases.json",
+      "missing_identity_dimensions": [
+        "split_identity",
+        "evaluation_unit_identity",
+        "independence_group_identity",
+        "environment_identity",
+        "system_or_runtime_identity",
+        "evaluator_identity",
+        "resource_identity"
+      ],
+      "disposition": "NOT_INSTANTIATED_NO_CROSS_ARTIFACT_IDENTITY_INFERENCE"
+    }
+  ],
+  "selection_state": {
+    "candidate_specific_applicability_binding_started": false,
+    "comparator_ranking_started": false,
+    "baseline_selected": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_inspected": false
+  },
+  "claim_limits": {
+    "dataset_file_alone_is_concrete_experiment_contract": false,
+    "research_paper_benchmark_name_is_local_experiment_identity": false,
+    "task7_split_identity_implies_system_identity": false,
+    "task7_split_identity_implies_evaluator_identity": false,
+    "generic_resource_semantics_are_task9_accounting_values": false,
+    "contract_instantiation_authorizes_baseline_selection": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I5A2R13C_RESOLVE_EXPLICIT_SYSTEM_EVALUATOR_AND_RESOURCE_BINDINGS_WITHOUT_BASELINE_SELECTION"
+}

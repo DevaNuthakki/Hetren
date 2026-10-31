@@ -1,0 +1,270 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_ACCOUNTING_CONTRACT_ADVERSARIAL_REVIEW",
+  "state": "RED_TEAM_COMPLETE_HARDENING_REQUIRED_NO_VALUES_RECORDED",
+  "recorded_at_utc": "2026-09-28T23:25:58Z",
+  "task": 9,
+  "methodology_classification": "HETREN_GOVERNANCE_SYNTHESIS_NOT_EXTERNAL_STANDARD_CLAIM",
+  "bindings": {
+    "ledger_contract_v1": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "sha256": "44662f31243d3817a68b2613637c32874482b58d434f976581f100c462d5b620"
+    },
+    "measurement_contract_v1": {
+      "path": "docs/research/accounting/task-09-resource-measurement-contract-v1.json",
+      "sha256": "82d750776c8b2938d882c29985be5680e940b26576851477c56c8e126cc6eede"
+    },
+    "t9a1_attempt": {
+      "path": "tests/qualification/data/task_9_accounting/task_9_accounting_contract_attempt_1.json",
+      "sha256": "871d5c1ae1ba7bdf8e3c39caa30723c8557833f4c434c13f05866a6bc2c9c532"
+    },
+    "task8_task9_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "task8_dependency_block": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-dependency-block-v1.json",
+      "sha256": "a615c4f16fb4cf752ac774a4a3e12ebeff67fe1094adb38795857b1403c52eab"
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "T9-RT-001",
+      "topic": "DOUBLE_COUNTING",
+      "severity": "CRITICAL",
+      "attack": "The same underlying resource event can be represented in multiple ledger categories and accidentally summed twice.",
+      "required_hardening": [
+        "EVERY_RESOURCE_EVENT_REQUIRES_UNIQUE_EVENT_ID",
+        "DERIVED_VALUES_MUST_REFERENCE_SOURCE_EVENT_IDS",
+        "DERIVED_VALUE_MUST_NOT_CREATE_SECOND_BILLABLE_EVENT",
+        "AGGREGATION_MUST_DEDUPLICATE_BY_RESOURCE_EVENT_ID"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-002",
+      "topic": "SHARED_RESOURCE_ATTRIBUTION",
+      "severity": "CRITICAL",
+      "attack": "A shared GPU, VM, API batch, engineer session, cache, or storage object can be fully charged to multiple candidates.",
+      "required_hardening": [
+        "ATTRIBUTION_MODE_REQUIRED",
+        "DIRECT_ALLOCATED_SHARED_UNALLOCATED_DISTINGUISHED",
+        "ALLOCATION_DRIVER_MUST_BE_PREDECLARED",
+        "UNALLOCATABLE_SHARED_COST_REPORTED_SEPARATELY",
+        "NO_FAVORABLE_POST_RESULT_ALLOCATION"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-003",
+      "topic": "FAILED_RUNS_AND_RETRIES",
+      "severity": "CRITICAL",
+      "attack": "Discarding failed or retried executions understates actual resource and engineering cost.",
+      "required_hardening": [
+        "RESOURCE_CONSUMING_FAILURES_REMAIN_ACCOUNTABLE",
+        "ATTEMPT_LINEAGE_REQUIRED",
+        "RETRY_REASON_REQUIRED",
+        "SCIENTIFIC_VALIDITY_SEPARATE_FROM_ACCOUNTING_INCLUSION"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-004",
+      "topic": "CACHE_AND_WARM_START",
+      "severity": "HIGH",
+      "attack": "Warm caches, reused embeddings, checkpoints, compiled kernels, downloaded assets, or provider prompt caches can make one side appear cheaper.",
+      "required_hardening": [
+        "CACHE_STATE_REQUIRED",
+        "WARM_START_STATE_REQUIRED",
+        "REUSED_ARTIFACTS_MUST_BE_IDENTIFIED",
+        "COLD_AND_WARM_MEASUREMENTS_MUST_NOT_BE_SILENTLY_MIXED"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-005",
+      "topic": "PROVIDER_PRICING_DRIFT",
+      "severity": "CRITICAL",
+      "attack": "Current public pricing may differ from the price effective when an experiment ran.",
+      "required_hardening": [
+        "RATE_SOURCE_REQUIRED",
+        "RATE_EFFECTIVE_TIMESTAMP_REQUIRED",
+        "SKU_MODEL_REGION_AND_UNIT_REQUIRED",
+        "ORIGINAL_BILLED_AMOUNT_PRESERVED_WHEN_AVAILABLE",
+        "LATER_PRICE_CHANGES_MUST_NOT_REWRITE_HISTORICAL_COST"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-006",
+      "topic": "CURRENCY_CONVERSION",
+      "severity": "HIGH",
+      "attack": "Converting historical costs using an unspecified or later exchange rate can alter comparisons.",
+      "required_hardening": [
+        "ORIGINAL_CURRENCY_PRESERVED",
+        "FX_SOURCE_REQUIRED_IF_CONVERTED",
+        "FX_RATE_TIMESTAMP_REQUIRED",
+        "FX_RATE_VALUE_REQUIRED",
+        "CONVERTED_AND_ORIGINAL_VALUES_BOTH_REPORTED"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-007",
+      "topic": "CONCURRENT_WORKLOADS",
+      "severity": "CRITICAL",
+      "attack": "Summing full machine cost or energy independently for overlapping jobs can multiply-count shared infrastructure.",
+      "required_hardening": [
+        "CONCURRENCY_CONTEXT_REQUIRED",
+        "DEDICATED_INSTANCE_INTERVAL_ACCOUNTED_ONCE",
+        "OVERLAPPING_JOB_ALLOCATION_REQUIRES_PREDECLARED_DRIVER",
+        "NO_PER_JOB_FULL_INSTANCE_CHARGE_WHEN_JOBS_SHARE_INTERVAL"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-008",
+      "topic": "ACTIVE_VS_ELAPSED_HUMAN_EFFORT",
+      "severity": "HIGH",
+      "attack": "Waiting for training or downloads can be mislabeled as active engineering effort.",
+      "required_hardening": [
+        "ACTIVE_HUMAN_TIME_SEPARATE_FROM_ELAPSED_TIME",
+        "PASSIVE_WAIT_TIME_SEPARATE",
+        "EFFORT_ACTIVITY_CATEGORY_REQUIRED",
+        "PERSON_OR_ROLE_IDENTITY_PSEUDONYM_ALLOWED_BUT_REQUIRED"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-009",
+      "topic": "RETROSPECTIVE_EFFORT_ESTIMATION",
+      "severity": "HIGH",
+      "attack": "Human effort reconstructed after seeing outcomes may be biased toward a preferred system.",
+      "required_hardening": [
+        "CONTEMPORANEOUS_AND_RETROSPECTIVE_ESTIMATES_DISTINGUISHED",
+        "RETROSPECTIVE_ESTIMATE_REQUIRES_EVIDENCE_BASIS",
+        "UNCERTAINTY_RANGE_REQUIRED_FOR_RETROSPECTIVE_ESTIMATE",
+        "RETROSPECTIVE_POINT_ESTIMATE_NOT_EQUIVALENT_TO_MEASURED_EFFORT"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-010",
+      "topic": "ADAPTATION_PHASE_BOUNDARY",
+      "severity": "CRITICAL",
+      "attack": "Setup, tuning, adaptation, evaluation, rollback, and debugging can be moved across accounting boundaries after outcomes are known.",
+      "required_hardening": [
+        "PHASE_TAXONOMY_REQUIRED",
+        "PHASE_START_AND_END_BOUNDARIES_REQUIRED",
+        "ADAPTATION_BOUNDARY_MUST_BE_BOUND_BEFORE_PROTECTED_OUTCOMES",
+        "ROLLBACK_AND_RESTORATION_COST_RECORDED_SEPARATELY"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-011",
+      "topic": "TASK8_RESOURCE_REGIME_HANDOFF",
+      "severity": "CRITICAL",
+      "attack": "Task 9 could accidentally choose a favorable resource-comparison regime instead of only measuring resources.",
+      "required_hardening": [
+        "TASK9_MUST_NOT_SELECT_TASK8_SEMANTIC_RESOURCE_REGIME",
+        "TASK8_REGIME_BINDING_REQUIRED_FOR_REAL_COMPARISON",
+        "TASK9_ONLY_MEASURES_AND_REPORTS_BOUND_DIMENSIONS",
+        "STRICT_MATCH_BUDGET_CAP_AND_JOINT_REPORTING_REMAIN_TASK8_SEMANTICS"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-012",
+      "topic": "POST_RESULT_ACCOUNTING_CHANGE",
+      "severity": "CRITICAL",
+      "attack": "Definitions, formulas, rates, or inclusion rules could be changed after protected outcomes are inspected.",
+      "required_hardening": [
+        "ACCOUNTING_CONTRACT_VERSION_REQUIRED",
+        "AMENDMENTS_APPEND_ONLY",
+        "PRIOR_OBSERVED_RECORDS_NEVER_SILENTLY_REWRITTEN",
+        "POST_RESULT_CHANGE_CANNOT_RETROACTIVELY_IMPROVE_COMPARISON"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-013",
+      "topic": "QUALITY_RESOURCE_AGGREGATION",
+      "severity": "CRITICAL",
+      "attack": "A weighted composite score can hide worse quality or Pareto domination by choosing favorable weights.",
+      "required_hardening": [
+        "NO_DEFAULT_SCALAR_UTILITY_SCORE",
+        "QUALITY_AND_RESOURCE_AXES_REPORTED_SEPARATELY",
+        "WEIGHTS_REQUIRE_PRECOMMITMENT_IF_EVER_USED",
+        "PARETO_INTERPRETATION_REQUIRES_COMPARABLE_AXES_AND_DECLARED_DIRECTIONS"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-014",
+      "topic": "MISSING_ZERO_NOT_APPLICABLE_SEMANTICS",
+      "severity": "CRITICAL",
+      "attack": "UNKNOWN, zero, not measured, and genuinely not applicable can collapse to the same representation.",
+      "required_hardening": [
+        "VALUE_STATE_REQUIRED",
+        "OBSERVED_ZERO_REQUIRES_MEASUREMENT_EVIDENCE",
+        "UNKNOWN_IS_NOT_ZERO",
+        "NOT_MEASURED_IS_NOT_ZERO",
+        "NOT_APPLICABLE_REQUIRES_JUSTIFICATION"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-015",
+      "topic": "SETUP_AND_AMORTIZATION",
+      "severity": "HIGH",
+      "attack": "One-time setup work can be charged entirely to one run or hidden through assumed future reuse.",
+      "required_hardening": [
+        "ONE_TIME_SETUP_COST_REPORTED_SEPARATELY",
+        "AMORTIZATION_NOT_DEFAULT",
+        "AMORTIZATION_REQUIRES_PREDECLARED_DENOMINATOR_AND_REUSE_BASIS",
+        "RAW_UNAMORTIZED_COST_REMAINS_REPORTABLE"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-016",
+      "topic": "DISCOUNTS_CREDITS_AND_FREE_TIERS",
+      "severity": "HIGH",
+      "attack": "Promotional credits or negotiated discounts can make operational cost incomparable to reproducible list-price cost.",
+      "required_hardening": [
+        "GROSS_RATE_AND_NET_PAID_AMOUNT_DISTINGUISHED",
+        "CREDITS_DISCOUNTS_AND_FREE_TIER_RECORDED_SEPARATELY",
+        "ZERO_NET_PAYMENT_DOES_NOT_IMPLY_ZERO_RESOURCE_CONSUMPTION"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-017",
+      "topic": "MEASUREMENT_TOOL_AND_SAMPLING_BIAS",
+      "severity": "HIGH",
+      "attack": "Different profilers, sampling intervals, provider dashboards, or telemetry gaps can create artificial differences.",
+      "required_hardening": [
+        "MEASUREMENT_TOOL_IDENTITY_REQUIRED",
+        "TOOL_VERSION_REQUIRED_WHERE_AVAILABLE",
+        "SAMPLING_INTERVAL_OR_PROVIDER_AGGREGATION_WINDOW_REQUIRED",
+        "TELEMETRY_COMPLETENESS_STATE_REQUIRED"
+      ]
+    },
+    {
+      "finding_id": "T9-RT-018",
+      "topic": "LOGICAL_USAGE_VS_BILLED_USAGE",
+      "severity": "HIGH",
+      "attack": "Logical tokens, API calls, wall time, accelerator time, and provider-billed units can differ.",
+      "required_hardening": [
+        "LOGICAL_USAGE_AND_BILLED_USAGE_SEPARATE",
+        "PROVIDER_CACHED_INPUT_UNITS_SEPARATE_WHERE_AVAILABLE",
+        "ROUNDING_MINIMUMS_AND_BILLING_GRANULARITY_PRESERVED",
+        "NO_INFERRED_BILLING_FROM_LOGICAL_USAGE_WHEN_PROVIDER_RECORD_EXISTS"
+      ]
+    }
+  ],
+  "finding_count": 18,
+  "critical_finding_count": 10,
+  "high_finding_count": 8,
+  "review_conclusion": {
+    "t9a1_contracts_rejected": false,
+    "t9a1_contracts_rewritten": false,
+    "hardening_overlay_required": true,
+    "observed_values_authorized": false,
+    "real_comparison_contract_authorized": false,
+    "protected_execution_authorized": false
+  },
+  "claim_limits": {
+    "records_observed_resource_values": false,
+    "records_observed_monetary_values": false,
+    "records_observed_human_effort": false,
+    "establishes_practical_value": false,
+    "establishes_task9_authority": false,
+    "establishes_scientific_support": false
+  }
+}

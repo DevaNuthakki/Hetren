@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 16,
+  "state": "ADDENDUM_V16_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:18:34Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v16": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v16.json",
+      "sha256": "345d49fb74571a8167cdf5adbf478594398df196a044d9c8fdabe6d655151f1c"
+    },
+    "systematic_saturation_v13": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v13.json",
+      "sha256": "2ec64b4cbd77056548cd1096aecebe15d3bb2c59aa85adc7bde276d91493ddf8"
+    },
+    "tabpfn_identity_resolution": {
+      "path": "docs/research/baselines/task-08-drift-resilient-tabpfn-identity-resolution-v1.json",
+      "sha256": "af12e92ffec55d1e636302426b17d1afdd5cf230fb0d8c87c9a5e30051944191"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-DRIFT-RESILIENT-TABPFN",
+      "verification_state": "PEER_REVIEWED_NEURIPS_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_TEMPORAL_DISTRIBUTION_SHIFT_TABULAR_COMPARATOR",
+      "verified_facts": [
+        "Drift-Resilient TabPFN is published at NeurIPS 2024.",
+        "It targets temporal distribution shift in tabular data using in-context learning with a Prior-Data Fitted Network.",
+        "Its synthetic pretraining prior models evolving structural causal mechanisms.",
+        "The official repository provides code, a pre-trained model, dependency specifications, and a reproducibility notebook."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://papers.nips.cc/paper_files/paper/2024/file/b2e2774c8e76afe191b5bf518f5cb727-Paper-Conference.pdf"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/Drift-Resilient_TabPFN"
+        }
+      ],
+      "limits": [
+        "TEMPORAL_TABULAR_SHIFT_SETTING_REQUIRED",
+        "PRETRAINED_MODEL_IDENTITY_MUST_BE BOUND",
+        "DATA_ORDER_AND_TEMPORAL_CONTEXT_CONFIGURATION_MUST_BE BOUND",
+        "PRIOR_LICENSING_AND_MODEL_ACCESS_MUST_BE VERIFIED",
+        "IN_CONTEXT_TEMPORAL_ADAPTATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v16_candidates_have_role_level_external_review": true,
+    "all_addendum_v16_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

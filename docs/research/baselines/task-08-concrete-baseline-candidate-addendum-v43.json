@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 43,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T23:46:25Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v42": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v42.json",
+      "sha256": "3ba869c28b8c592c2f70b8711c9c7a060620534dee92560268317b5e1bfe5234"
+    },
+    "systematic_saturation_v40": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v40.json",
+      "sha256": "268ce4ad2fbc579977711024a67f08d48b1dc4b744fe28d1c129e8d2911fbf98"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TMEM-TRIGGER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "T-Mem: Memory That Anticipates, Not Archives",
+      "implementation_identity": "https://github.com/Sherlockwz/T-Mem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_DIRECT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_ASSOCIATIVE_RECALL_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.15405"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/T-Mem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "ELIGIBLE_IF_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+        "Uses write-time descriptive and associative trigger families over item- and scene-level memory so memories can be reached even when the future query lacks surface similarity.",
+        "OFFICIAL_EMNLP_2026_PROCEEDINGS_ENTRY_NOT_USED_AS_ELIGIBILITY_EVIDENCE",
+        "LOCOMO_OR_LOCOMO_PLUS_STYLE_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH",
+        "BUILD_MODEL_QA_MODEL_EMBEDDER_RERANKER_AND_TRIGGER_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ],
+      "eligibility_status": "ELIGIBLE_IF_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V40"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

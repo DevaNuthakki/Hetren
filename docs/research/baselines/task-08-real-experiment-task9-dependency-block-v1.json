@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_EXPERIMENT_TASK9_DEPENDENCY_BLOCK",
+  "state": "FORMAL_DEPENDENCY_BLOCK_FROZEN_TASK8_WAITING_ON_REAL_EXPERIMENT_AND_TASK9_INPUTS",
+  "recorded_at_utc": "2026-09-27T21:57:01Z",
+  "task": 8,
+  "bindings": {
+    "r13e_real_experiment_task9_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "concrete_experiment_contract_boundary": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "canonical_baseline_catalog": {
+      "path": "docs/research/baselines/task-08-non-governing-baseline-catalog-projection-v1.json",
+      "sha256": "6deb2af5d704cd467010f13fe4bc81907bf620391d75b30c24fee6903cf07ca3"
+    }
+  },
+  "frozen_dependency_snapshot": {
+    "same_source_bundle_count": 5,
+    "dataset_identity_available_count": 5,
+    "runtime_or_environment_identity_available_count": 0,
+    "task9_concrete_accounting_value_count": 0,
+    "concrete_ready_contract_count": 0,
+    "canonical_candidate_count_waiting_for_later_binding": 222
+  },
+  "missing_external_inputs": {
+    "real_experiment_owned": [
+      "runtime_or_environment_identity_for_each_applicable_bundle",
+      "actual_execution_environment_or_runtime_revision_where_material",
+      "real_system_or_runtime_binding_needed_by_the_concrete_experiment_contract"
+    ],
+    "task9_owned": [
+      "concrete_cost_fields_and_measurement_definitions",
+      "execution_cost_fields_and_observed_values",
+      "compute_resource_fields_and_observed_values",
+      "engineering_effort_fields_and_observed_values_where_applicable",
+      "adaptation_cost_fields_and_observed_values_where_applicable",
+      "accounting_values",
+      "practical_value_measurement_configuration"
+    ],
+    "joint_or_pre_protected_binding": [
+      "applicable_resource_comparison_regime_or_rule",
+      "material_resource_dimensions_for_each_concrete_experiment"
+    ]
+  },
+  "ownership_rules": {
+    "task8_must_not_invent_runtime_identity": true,
+    "task8_must_not_invent_task9_accounting_values": true,
+    "task8_must_not_choose_fake_resource_values_to_unblock_selection": true,
+    "existing_dataset_identity_does_not_imply_runtime_identity": true,
+    "same_source_bundle_does_not_imply_concrete_ready_contract": true
+  },
+  "resume_conditions": [
+    "REAL_RUNTIME_OR_ENVIRONMENT_IDENTITIES_EXIST_AND_ARE_GOVERNED",
+    "TASK9_CONCRETE_MEASUREMENT_AND_ACCOUNTING_INPUTS_EXIST",
+    "APPLICABLE_RESOURCE_COMPARISON_REGIME_IS_EXPLICITLY_BOUND_BEFORE_PROTECTED_INSPECTION",
+    "CONCRETE_EXPERIMENT_CONTRACTS_CAN_BE_VALIDATED_AS_CONCRETE_READY",
+    "PROTECTED_OUTCOMES_REMAIN_UNINSPECTED"
+  ],
+  "prohibited_while_blocked": [
+    "CANDIDATE_SPECIFIC_APPLICABILITY_FILTERING",
+    "COMPARATOR_RANKING",
+    "STRONGEST_COMPARATOR_SELECTION",
+    "IMMUTABLE_FINAL_BASELINE_VERSION_PINNING",
+    "CONCRETE_BASELINE_FREEZE",
+    "PROTECTED_OUTCOME_INSPECTION",
+    "TASK8_AUTHORITY_CLAIM",
+    "SCIENTIFIC_SUPPORT_CLAIM"
+  ],
+  "task8_state": {
+    "candidate_specific_applicability_filtering_started": false,
+    "comparator_ranking_started": false,
+    "immutable_final_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcome_inspected": false,
+    "authority_established": false,
+    "scientific_support_established": false
+  },
+  "claim_limits": {
+    "dependency_block_is_experiment_contract": false,
+    "dependency_block_is_task9_accounting": false,
+    "dependency_block_authorizes_baseline_selection": false,
+    "dependency_block_authorizes_version_pinning": false,
+    "dependency_block_establishes_task8_authority": false,
+    "dependency_block_establishes_scientific_support": false
+  },
+  "next_gate": "I5A2R13G_RESUME_ONLY_AFTER_GOVERNED_REAL_EXPERIMENT_AND_TASK9_INPUTS_EXIST"
+}

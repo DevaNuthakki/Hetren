@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 40,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T23:27:51Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v39": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v39.json",
+      "sha256": "d4de0fd94207ead5bfca52bea13a1e764962db55e5d1365e78c8936d142b2b9b"
+    },
+    "systematic_saturation_v37": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v37.json",
+      "sha256": "e1bec51ffb040ca00b5ae537d26b55afba930f2fd186ff9ae50d69ac7c0ac9b3"
+    }
+  },
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MACLA-PROCEDURAL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Learning Hierarchical Procedural Memory for LLM Agents through Bayesian Selection and Contrastive Refinement",
+      "implementation_identity": "https://github.com/S-Forouzandeh/MACLA-LLM-Agents-AAMAS-Conference",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HIERARCHICAL_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_PEER_REVIEWED_PROCEEDINGS",
+          "url": "https://www.ifaamas.org/Proceedings/aamas2026/forms/contents.htm"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2512.18950"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/S-Forouzandeh/MACLA-LLM-Agents-AAMAS-Conference"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "PROCEDURAL_MEMORY_TASK_SETTING_MUST_BE MATCHED",
+        "MEMORY_CONSTRUCTION_TRAJECTORIES_MUST_BE BOUND",
+        "BAYESIAN_SELECTION_AND_REFINEMENT_CONFIGURATION_MUST_BE BOUND",
+        "DOMAIN_AGNOSTIC_CLAIM_DOES_NOT_ESTABLISH_HETREN_CROSS_FAMILY_N_H2"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMP-PROCEDURAL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Memp: Exploring Agent Procedural Memory",
+      "implementation_identity": "https://github.com/zjunlp/MemP",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_MEMORY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_PEER_REVIEWED_PROGRAM",
+          "url": "https://2026.aclweb.org/program/findings/"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.06433"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/MemP"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "TRAVELPLANNER_OR_ALFWORLD_STYLE_APPLICABILITY_MUST_BE MATCHED",
+        "BUILD_RETRIEVAL_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "STRONGER_TO_WEAKER_MODEL_MEMORY_MIGRATION_IS_WITHIN_E1_AND_NOT_GENERAL_N_H2"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+      "implementation_identity": "https://github.com/Ji-shuo/MRAgent",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ACTIVE_GRAPH_MEMORY_RECONSTRUCTION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.06036"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Ji-shuo/MRAgent"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "LONG_HORIZON_MEMORY_REASONING_ROLE_IS_CONDITIONAL",
+        "GRAPH_BUILD_AND_TOOL_CALLING_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_AND_LONGMEMEVAL_ARE_NOT_AUTOMATICALLY_FULL_AGENT_DECISION_TASKS"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMEVOLVE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemEvolve: Meta-Evolution of Agent Memory Systems",
+      "implementation_identity": "https://github.com/bingreeky/MemEvolve",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_MEMORY_ARCHITECTURE_EVOLUTION_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bingreeky/MemEvolve"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MEMORY_SYSTEM_EVOLUTION_ROLE_MUST_BE MATCHED",
+        "EVALUATION_TASKS_AND_INITIAL_MEMORY_PROVIDER_MUST_BE BOUND",
+        "META_EVOLUTION_IS_NOT_EVIDENCE_THAT_HETREN_ALREADY_SELF_IMPROVES"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMOCR",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemOCR: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning",
+      "implementation_identity": "https://github.com/meituan/MemOCR",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_VISUAL_MEMORY_REPRESENTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/meituan/MemOCR"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MULTIMODAL_MEMORY_INFORMATION_OPPORTUNITY_MUST_BE ALLOWED",
+        "VISUAL_MEMORY_ENCODING_DOES_NOT_BY_ITSELF_MAKE_THE_TASK_E3_VISION",
+        "MODEL_AND_GPU_RESOURCE_REQUIREMENTS_MUST_BE ACCOUNTED_BY_TASK_9"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEM-T",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Mem-T: Densifying Rewards for Long-Horizon Memory Agents",
+      "implementation_identity": "https://github.com/yanweiyue/Mem-T",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MEMORY_OPERATION_POLICY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.23014"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yanweiyue/Mem-T"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MEMORY_OPERATION_POLICY_AND_CHECKPOINT_MUST_BE BOUND",
+        "TRAINING_SCRIPT_AVAILABILITY_AND_EXACT_RELEASE_STATE_MUST_BE VERIFIED_AT_FINAL_PINNING",
+        "LONGMEMORY_QA_RESULTS_MUST_NOT_BE EQUATED_WITH_ALL_E1_AGENT_TASKS"
+      ],
+      "provenance": "CROSS_VENUE_DIRECT_MEMORY_SATURATION_V37"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

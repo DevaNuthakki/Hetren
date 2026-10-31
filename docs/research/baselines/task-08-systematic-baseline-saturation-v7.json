@@ -1,0 +1,205 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 7,
+  "state": "POST_BALANCED_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:10:55Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_interpretation": {
+    "publication_or_public_evidence_predates_cutoff_required": true,
+    "current_repository_view_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_be_resolved_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v9_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v9.json",
+      "sha256": "1cf1edffe161703d3f9fa349c471e12542185d01fc569b592aeb12440f1da5a5"
+    },
+    "systematic_saturation_v6": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v6.json",
+      "sha256": "d9ccfb390cd7fbfb6b74d703a63fe6331b31dee80e0cf68e8b34062afd0443f1"
+    }
+  },
+  "focus": [
+    "E1_AGENT_META_RL_AND_TEST_TIME_ADAPTATION",
+    "E2_STRUCTURED_ML_POST_PFT3A_SPOT_CHECK",
+    "E3_VLM_TTA_UNCERTAINTY_AND_BIAS",
+    "N_H2_GENERAL_CROSS_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "ICLR 2026 meta reinforcement learning language agents exploration test time official code LaMer",
+    "Meta-RL Induces Exploration in Language Agents ICLR 2026 official github",
+    "ICLR 2026 adaptive entropy VLM test-time adaptation official code ADTE",
+    "Adaptive Debiasing Tsallis Entropy ICLR 2026 github",
+    "2026 peer reviewed agent adaptation unseen environment meta RL official implementation",
+    "2026 peer reviewed tabular test-time adaptation active feature acquisition official implementation",
+    "2026 peer reviewed VLM test-time adaptation entropy bias official implementation",
+    "2026 learned cross environment transfer policy agent structured vision peer reviewed implementation",
+    "2026 general meta policy transfer across language agents tabular vision official research",
+    "2026 test-time self improvement agent reasoning peer reviewed code environment interaction",
+    "2026 federated continual test-time adaptation CVPR scenario specific",
+    "2026 efficient VLM test-time adaptation workshop embedding linear adapter"
+  ],
+  "query_count": 12,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LAMER-METARL",
+      "name": "LaMer \u2014 Meta-RL Induces Exploration in Language Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_EXPLORATION_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_IN_CONTEXT_AGENT_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_META_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=Jq6N3B9QY7"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mlbio-epfl/LaMer"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_EPISODE_EXPLORATION_AND_FEEDBACK_SETTING_MATCHED",
+      "material_reason": "Peer-reviewed Meta-RL method that explicitly trains language agents for exploration across environments and performs in-context policy adaptation from test-time feedback without gradient updates.",
+      "n_h2_limit": "GENERALIZATION_IS_ACROSS_LANGUAGE_AGENT_ENVIRONMENTS_AND_DOES_NOT_ESTABLISH_HETREN_E1_E2_E3_CROSS_FAMILY_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ADTE",
+      "name": "Adaptive Debiasing Tsallis Entropy",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VLM_ENTROPY_ADAPTATION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=dHj8hC081K"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jinx630/ADTE"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_CLIP_STYLE_VLM_VIEW_SELECTION_AND_BIAS_SETTING_MATCHED",
+      "material_reason": "Introduces adaptive class-specific Tsallis entropy and label adjustment for VLM TTA, making its uncertainty-selection mechanism materially different from existing Shannon-entropy and cache-based candidates."
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "peer_review_state": {
+    "all_new_material_candidates_peer_reviewed": true,
+    "all_new_material_candidates_have_official_implementations": true
+  },
+  "n_h2_reference_research": [
+    {
+      "name": "LaMer \u2014 Meta-RL Induces Exploration in Language Agents",
+      "sources": [
+        "https://openreview.net/pdf?id=Jq6N3B9QY7",
+        "https://github.com/mlbio-epfl/LaMer"
+      ],
+      "evidence_state": "ICLR_2026_PEER_REVIEWED_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Learns exploration behavior across related language-agent environments and adapts in context from feedback at test time.",
+      "disposition": "WITHIN_E1_META_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No verified experiment transfers the learned decision mechanism into Hetren's E2 structured-ML or E3 vision families."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "sources": [
+        "https://arxiv.org/abs/2605.30132",
+        "https://github.com/yixinw-lab/TaskExtrapolation"
+      ],
+      "evidence_state": "ICML_2026_REFERENCE_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Learns relations among tasks for extrapolation to unseen tasks.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Task-relation extrapolation is not evidence of one decision policy spanning E1, E2, and E3."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "sources": [
+        "https://github.com/reAIM-Lab/Learning-To-Measure"
+      ],
+      "evidence_state": "ICML_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Meta-learns feature-acquisition decisions over structured-data tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its verified transfer scope remains E2 active feature acquisition."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "peer_reviewed_within_e1_meta_transfer_reference_verified": true,
+    "within_environment_transfer_references_exist": true,
+    "forcing_within_environment_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_POST_BALANCED_SATURATION_V7"
+  },
+  "screened_not_promoted": [
+    {
+      "name": "TF-TTCL",
+      "source": "https://aclanthology.org/2026.findings-acl.1482/",
+      "disposition": "NOT_PROMOTED_TO_CURRENT_E1_AGENT_POOL",
+      "reason": "Peer-reviewed training-free online adaptation for LLM reasoning, but the verified evaluation concerns reasoning tasks rather than a matched interactive-agent environment contract."
+    },
+    {
+      "name": "CURE",
+      "source": "https://aclanthology.org/2026.acl-long.1321/",
+      "disposition": "NOT_PROMOTED_TO_CURRENT_E1_AGENT_POOL",
+      "reason": "Peer-reviewed test-time self-improvement for LLM reasoning, but the currently verified setup is not an interactive agent-environment baseline comparable to GTTA, LaMer, AgentGym, or related E1 candidates."
+    },
+    {
+      "name": "BPFedCTTA",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Wang_Towards_Stable_Federated_Continual_Test-Time_Adaptation_in_Wild_World_CVPR_2026_paper.html",
+      "disposition": "FEDERATED_SCENARIO_SPECIFIC_NOT_PROMOTED",
+      "reason": "Requires a federated continual client/global-model setting that has not been declared as an applicable Hetren E3 experiment."
+    },
+    {
+      "name": "IMA and TMA",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026W/Viscale/html/Vempati_IMA__TMA_Efficient_Test-Time_Adaptation_for_VLMs_via_Linear_CVPRW_2026_paper.html",
+      "disposition": "WORKSHOP_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Material lightweight VLM adaptation research, but workshop-level evidence does not currently displace the stronger peer-reviewed claim-bearing VLM pool; retain as a diagnostic/reference possibility."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_META_RL_LANGUAGE_AGENT_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NEW_PEER_REVIEWED_VLM_ENTROPY_ADAPTATION_COMPARATOR_FOUND",
+    "N_H2": "STRONGER_WITHIN_E1_TRANSFER_REFERENCE_FOUND_BUT_GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "This post-balanced saturation round discovered LaMer and ADTE, two peer-reviewed materially relevant candidates absent from prior Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "lamer_establishes_general_n_h2": false,
+    "peer_review_alone_establishes_final_eligibility": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B12_VERIFY_ADDENDUM_V10_AND_RUN_NEXT_REASONABLE_SATURATION_REFINEMENT"
+}

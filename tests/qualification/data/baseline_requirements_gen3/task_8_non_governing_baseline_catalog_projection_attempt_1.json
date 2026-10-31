@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_NON_GOVERNING_BASELINE_CATALOG_PROJECTION_ATTEMPT",
+  "attempt": 1,
+  "state": "NON_GOVERNING_CATALOG_PROJECTION_COMPLETE_FIELD_GROUNDING_QUANTIFIED",
+  "recorded_at_utc": "2026-09-27T20:42:46Z",
+  "task": 8,
+  "bindings": {
+    "i5a2r9_catalog_boundary": {
+      "path": "docs/research/baselines/task-08-baseline-catalog-later-binding-boundary-v1.json",
+      "sha256": "f1c69ca222d3f8ff5f01516165144c75eb4617d3215681c9f20b389e609d5637"
+    },
+    "i5a2r9_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_baseline_catalog_later_binding_boundary_attempt_1.json",
+      "sha256": "20c46fd0ef9ecf09e3fa34068494745e1e01e37eca58dec3b4ef4abee3227563"
+    },
+    "non_governing_catalog_projection_v1": {
+      "path": "docs/research/baselines/task-08-non-governing-baseline-catalog-projection-v1.json",
+      "sha256": "6deb2af5d704cd467010f13fe4bc81907bf620391d75b30c24fee6903cf07ca3"
+    }
+  },
+  "state_summary": {
+    "canonical_candidate_count": 222,
+    "historical_candidate_id_count": 223,
+    "field_grounding_quantified": true,
+    "concrete_baseline_variants_created": 0,
+    "experiment_specific_baseline_bindings_created": 0,
+    "split_versions_created": 0,
+    "partition_memberships_created": 0,
+    "comparator_ranking_started": false,
+    "immutable_baseline_version_pinning_started": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false
+  },
+  "next_gate": "I5A2R11_CATALOG_GROUNDING_GAP_STRATIFICATION_NO_SELECTION",
+  "claim_limits": {
+    "catalog_grounded_means_finally_pinned": false,
+    "catalog_grounded_means_finally_eligible": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

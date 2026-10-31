@@ -1,0 +1,199 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 6,
+  "state": "ADDENDUM_V6_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:56:07Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v6": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v6.json",
+      "sha256": "4cc6abda3aa7ee25b5b6786aba703af66cbcf3a109922b019eb17dede39af8c4"
+    },
+    "systematic_saturation_v3": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v3.json",
+      "sha256": "f12a4b93f2fb99501e5a1bb518eab4f87a6443663779b311ffb2532ab5c5fe42"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTOCCAM",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_FIXED_WEB_AGENT_COMPARATOR_IF_TASK_MATCHED",
+      "verified_facts": [
+        "AgentOccam is an ICLR 2025 baseline for LLM-based web agents.",
+        "Its core intervention aligns web observations and actions with the underlying LLM rather than introducing online learning.",
+        "The paper explicitly evaluates without in-context examples, new agent roles, online feedback, or search strategies."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/f2c6e459b95694a24ac69c469a4ee746-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/AgentOccam"
+        }
+      ],
+      "limits": [
+        "WEB_INTERACTION_TASK_MATCH_REQUIRED",
+        "UNDERLYING_LLM_IDENTITY_MUST_BE_BOUND",
+        "OBSERVATION_AND_ACTION_REPRESENTATION_CONFIGURATION_MUST_BE_BOUND",
+        "NOT_AN_N_H2_LEARNED_TRANSFER_COMPARATOR"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTTREK",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_AND_MODEL_ASSET_VERIFIED",
+      "role_disposition": "E1_LEARNED_BROWSER_AGENT_COMPARATOR_IF_TASK_MATCHED",
+      "verified_facts": [
+        "AgentTrek is an ICLR 2025 trajectory-synthesis framework for GUI and web agents.",
+        "It synthesizes trajectories by replaying tutorial-derived instructions in real digital environments.",
+        "The published work demonstrates that fine-tuning on those synthesized trajectories improves grounding and planning performance."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c681fb2bf1d785fbc766f3ea14758aab-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/xlang-ai/AgentTrek"
+        }
+      ],
+      "limits": [
+        "EXACT_TRAINED_MODEL_CHECKPOINT_MUST_BE_BOUND",
+        "TRAJECTORY_DATASET_IDENTITY_MUST_BE BOUND",
+        "WEB_OR_GUI_TASK_MATCH_REQUIRED",
+        "TRAINING_PIPELINE_AND_BASE_MODEL_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAGE",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_ARCHIVED_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_SELF_IMPROVING_SKILL_LIBRARY_AGENT_COMPARATOR",
+      "verified_facts": [
+        "SAGE is published at ACL 2026.",
+        "It uses Skill Augmented GRPO and Sequential Rollout to accumulate and reuse skills across related tasks.",
+        "The official repository is archived and read-only and contains the research implementation plus dependency patches."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "limits": [
+        "APPWORLD_OR_MATCHED_SKILL_TASK_SETTING_REQUIRED",
+        "BASE_MODEL_AND_SFT_CHECKPOINT_MUST_BE_BOUND",
+        "SKILL_LIBRARY_STATE_AND_TRAINING_RECIPE_MUST_BE_BOUND",
+        "ARCHIVED_REPOSITORY_STATE_MUST_BE PRESERVED",
+        "WITHIN_AGENT_TASK_SKILL_REUSE_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-L2M",
+      "verification_state": "ICML_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_META_ACTIVE_FEATURE_ACQUISITION_COMPARATOR",
+      "verified_facts": [
+        "Learning-To-Measure is an ICML 2026 in-context active feature acquisition method.",
+        "It formalizes a meta-AFA setting that learns acquisition behavior across tasks.",
+        "The official implementation includes predictor pretraining, acquisition-policy training, and evaluation workflows."
+      ],
+      "sources": [
+        {
+          "class": "ICML_2026_PUBLICATION_RECORD",
+          "url": "https://reaim-lab.github.io/publications.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/reAIM-Lab/Learning-To-Measure"
+        }
+      ],
+      "limits": [
+        "ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_REQUIRED",
+        "SYNTHETIC_PRETRAINING_AND_META_TASK_DISTRIBUTION_MUST_BE_BOUND",
+        "MISSINGNESS_AND_LABEL_AVAILABILITY_REGIME_MUST_BE MATCHED",
+        "WITHIN_E2_META_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-GITBO",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_HIGH_DIMENSIONAL_BAYESIAN_OPTIMIZATION_COMPARATOR",
+      "verified_facts": [
+        "GIT-BO is an ICLR 2026 high-dimensional Bayesian-optimization method.",
+        "It couples TabPFN v2 with gradient-informed active-subspace search.",
+        "Its official implementation contains a modified local TabPFN implementation required by GIT-BO rather than using an arbitrary current TabPFN package."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/b54bafb92da25f09ac367cff46678992-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rosenyu304/GITBO"
+        }
+      ],
+      "limits": [
+        "BAYESIAN_OPTIMIZATION_DECISION_SURFACE_REQUIRED",
+        "BUNDLED_MODIFIED_TABPFN_REVISION_MUST_BE PART_OF_BASELINE_IDENTITY",
+        "GPU_AND_RESOURCE_VALUES_REMAIN_TASK_9_OWNED",
+        "HIGH_DIMENSIONAL_APPLICABILITY_MUST_BE MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-ZSBO-TABPFN",
+      "verification_state": "AUTOML_2026_AND_OFFICIAL_REPRODUCIBILITY_REPOSITORY_VERIFIED",
+      "role_disposition": "E2_ZERO_SHOT_BAYESIAN_OPTIMIZATION_COMPARATOR",
+      "verified_facts": [
+        "Zero-Shot Bayesian Optimization with TabPFN is an AutoML 2026 Methods Track publication.",
+        "The method uses TabPFN as a zero-shot Bayesian-optimization surrogate without per-target-task surrogate training.",
+        "The official reproducibility repository contains packaged result evidence and scripts that fetch exact third-party revisions used by the paper."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_RESEARCH_PUBLICATION",
+          "url": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/tabpfn-automl2026"
+        }
+      ],
+      "limits": [
+        "BAYESIAN_OPTIMIZATION_DECISION_SURFACE_REQUIRED",
+        "TABPFN_AND_ALL_FETCHED_THIRD_PARTY_REVISIONS_MUST_BE BOUND",
+        "BENCHMARK_DATA_LICENSE_AND_PROVENANCE_MUST_BE PRESERVED",
+        "ZERO_SHOT_WITHIN_BO_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 6,
+  "interpretation": {
+    "all_addendum_v6_candidates_have_role_level_external_review": true,
+    "all_addendum_v6_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "n_h2_observation": "Agent and structured-ML candidates provide meaningful within-family generalization or transfer evidence, but none independently establishes one learned decision-transfer comparator spanning Hetren E1, E2, and E3.",
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

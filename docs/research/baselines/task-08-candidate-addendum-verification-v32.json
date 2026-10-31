@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 32,
+  "state": "ADDENDUM_V32_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T22:43:37Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v32": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json",
+      "sha256": "13cddc4504f6e13ac17f5deb8a4da71c311b9dfaade23387bb874c2920e4eaab"
+    },
+    "systematic_saturation_v29": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v29.json",
+      "sha256": "c5e27973b25a08262c358738a05dec153988ca10d067693d434d08dd79f13836"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "verification_state": "PEER_REVIEWED_ACL_2026_WITH_PUBLIC_EXECUTABLE_CODE_LICENSE_GATE_PENDING",
+      "role_disposition": "E1_ASSOCIATIVE_EPISODIC_SEMANTIC_MEMORY_COMPARATOR",
+      "verified_facts": [
+        "HeLa-Mem is published as an ACL 2026 main-conference paper.",
+        "It represents episodic memory as a dynamic graph whose associations evolve through co-activation.",
+        "It additionally distills densely connected episodic regions into reusable semantic memory.",
+        "The public repository provides executable LoCoMo and LongMemEval-S encoding and evaluation paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.625/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/ReinerBRO/HeLa-Mem"
+        }
+      ],
+      "limits": [
+        "EXPLICIT_REPOSITORY_LICENSE_REMAINS_TO_BE VERIFIED_BEFORE_FINAL_RETENTION",
+        "LOCOMO_OR_LONGMEMEVAL_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "LLM_EMBEDDING_RETRIEVAL_AND_CONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_IMMUTABLE_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_WITH_OFFICIAL_EXECUTABLE_IMPLEMENTATION",
+      "role_disposition": "E1_EFFICIENT_MULTI_STAGE_LONG_TERM_MEMORY_COMPARATOR",
+      "identity_disambiguation": {
+        "this_candidate": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+        "venue": "ICLR 2026",
+        "official_repository": "https://github.com/zjunlp/LightMem",
+        "not_the_same_identity_as": "Lightweight LLM Agent Memory with Small Language Models \u2014 ACL 2026"
+      },
+      "verified_facts": [
+        "This LightMem identity is published at ICLR 2026.",
+        "It organizes memory processing into sensory, short-term, and long-term stages.",
+        "Its long-term update path separates offline consolidation from online inference.",
+        "The official repository provides executable LoCoMo and LongMemEval workflows.",
+        "The repository also hosts other methods, including StructMem, which must remain separately identified."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/a05b72653ec5b473732129829ae04195-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        }
+      ],
+      "limits": [
+        "DO_NOT_CONFLATE_WITH_THE_DISTINCT_ACL_2026_LIGHTMEM_PAPER",
+        "EXACT_LIGHTMEM_MODE_AND_CONFIGURATION_MUST_BE BOUND",
+        "SHARED_REPOSITORY_DOES_NOT_MERGE_LIGHTMEM_AND_STRUCTMEM_IDENTITIES",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_IMMUTABLE_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RECMEM",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_OFFICIAL_MIT_IMPLEMENTATION",
+      "role_disposition": "E1_RECURRENCE_TRIGGERED_MEMORY_CONSOLIDATION_COMPARATOR",
+      "verified_facts": [
+        "RecMem is published in ACL 2026 Findings.",
+        "It delays expensive episodic and semantic consolidation until semantically similar interactions recur sufficiently.",
+        "Incoming interactions are first stored in a lightweight subconscious layer.",
+        "The official repository exposes the core RecMem implementation and benchmark evaluation entry point.",
+        "The repository carries an MIT license."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1619/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CaiusDai/RecMem"
+        },
+        {
+          "class": "OFFICIAL_LICENSE",
+          "url": "https://github.com/CaiusDai/RecMem/blob/main/LICENSE"
+        }
+      ],
+      "limits": [
+        "RECURRENCE_THRESHOLDS_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_AND_EMBEDDING_PROVIDER_MUST_BE BOUND",
+        "LOCOMO_OR_LONGMEMEVAL_MEMORY_ROLE_MUST_MATCH",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_IMMUTABLE_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BMAM",
+      "verification_state": "PUBLIC_PREPRINT_WITH_EXECUTABLE_MIT_IMPLEMENTATION_NOT_VERIFIED_PEER_REVIEWED",
+      "role_disposition": "E1_BRAIN_INSPIRED_MULTI_AGENT_MEMORY_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "BMAM is publicly documented as a brain-inspired multi-agent memory framework.",
+        "Its implementation separates memory responsibilities across specialized brain-region-inspired agents.",
+        "The repository exposes hybrid retrieval using lexical, vector, graph, and temporal information.",
+        "The repository provides executable setup instructions and states an MIT license."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.20465"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/innovation64/BMAM"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "MULTI_AGENT_ORCHESTRATION_COST_AND_INFORMATION_ACCESS_MUST_BE AUDITED",
+        "MEMORY_COMPONENTS_AND_COORDINATION_CONFIGURATION_MUST_BE BOUND",
+        "ONGOING_RESEARCH_STATUS_PREVENTS_AUTOMATIC_STRONGEST_COMPARATOR_STATUS",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v32_candidates_have_role_level_external_review": true,
+    "all_addendum_v32_candidates_are_peer_reviewed": false,
+    "all_addendum_v32_candidates_are_finally_eligible": false,
+    "lightmem_short_name_collision_resolved": true,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "bmam_is_peer_reviewed": false,
+    "public_code_establishes_final_eligibility": false,
+    "lightmem_name_implies_same_paper_identity": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

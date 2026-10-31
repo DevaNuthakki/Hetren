@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_POST_REMEDIATION_REGRESSION_AUTHORIZATION",
+  "state": "AUTHORIZED_NON_FRESH_REGRESSION_NOT_EXECUTED",
+  "generation_attempt": 10,
+  "authorized_at_utc": "2026-09-26T02:18:09.013737Z",
+  "evidence_class": "REGRESSION_ONLY",
+  "fresh": false,
+  "runner": {
+    "path": "scripts/run_baseline_requirements_gen3_attempt_10_post_remediation_regression.py",
+    "sha256": "297339ccbcc5595a87905edd63bd92ad4b50cdd499b49286d25336a98a03fc07",
+    "statically_inspected": true,
+    "compiled_without_execution": true,
+    "target_imported_during_validation": false,
+    "target_executed_during_validation": false
+  },
+  "frozen_inputs": {
+    "remediated_evaluator_sha256": "37b4075c00a9bea3e249bb0f9c895a6a6ccf7481a255ae7e1ece0d64c1c0907e",
+    "failed_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+    "remediation_boundary_sha256": "063b6882d42ec9db5242f0ede9760aab677f5f3c68ab1ace4efb508e9daab1ff",
+    "post_patch_boundary_sha256": "ea04d06b5e151b78b80314601ce964cc3875a2ca28239a90f30e3ab5d6381347",
+    "holdout_cases_sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+    "development_cases_sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d",
+    "mutations_sha256": "f86885033501c61136fdfbdf34c639665e26a6936522ad03cb100cd41675796e",
+    "authoritative_first_run_sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028",
+    "historical_regression_sha256": "da22d819a6cbfab8c5c076f80e2079512463b16d7b127b0b8d7e602a48d7d3ba"
+  },
+  "execution_contract": {
+    "holdout_calls": 54,
+    "development_calls": 54,
+    "mutation_calls": 34,
+    "expected_total_calls": 142,
+    "calls_per_item": 1,
+    "all_predictions_before_scoring": true,
+    "raw_predictions_preserved_before_scoring": true,
+    "oracle_fields_passed_to_evaluator": false
+  },
+  "scoring_contract": {
+    "attempt_10_consumed_holdout": {
+      "required_pass_count": 54,
+      "required_total": 54,
+      "must_accept_requires": "ACCEPT_AND_ZERO_VIOLATIONS",
+      "must_reject_requires": "REJECT_AND_EXPECTED_CODES_SUBSET_OF_ACTUAL"
+    },
+    "development": {
+      "required_pass_count": 54,
+      "required_total": 54,
+      "scoring_semantics": "HISTORICAL_DECISION_MATCH_ONLY"
+    },
+    "mutations": {
+      "required_pass_count": 34,
+      "required_total": 34,
+      "must_accept_requires": "ACCEPT_AND_ZERO_VIOLATIONS",
+      "must_reject_requires": "REJECT_AND_EXPECTED_CODES_SUBSET_OF_ACTUAL"
+    }
+  },
+  "targeted_required_outcomes": {
+    "G3-H10-009": "ACCEPT_WITH_ZERO_VIOLATIONS",
+    "G3-H10-010": "REJECT_WITH_PERSISTENT_STATE_NOT_MATCHED",
+    "G3-H10-037": "ACCEPT_WITH_ZERO_VIOLATIONS",
+    "G3-H10-038": "REJECT_WITH_TARGET_INFORMATION_CHANNEL_HIDDEN"
+  },
+  "historical_evidence_policy": {
+    "authoritative_attempt_10_first_run": "FAIL_52_OF_54",
+    "authoritative_first_run_remains_immutable": true,
+    "attempt_10_freshness_consumed": true,
+    "this_execution_is_fresh": false,
+    "freshness_restored": false,
+    "new_protected_holdout_claim_created": false
+  },
+  "output_contract": {
+    "raw_predictions": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_attempt_10_post_remediation_predictions.json",
+    "regression_result": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_attempt_10_post_remediation_regression_result.json"
+  },
+  "execution_state": {
+    "authorized": true,
+    "runner_executed": false,
+    "target_imported": false,
+    "predictions_exist": false,
+    "scoring_started": false,
+    "result_exists": false
+  },
+  "authorized_command": "python3 scripts/run_baseline_requirements_gen3_attempt_10_post_remediation_regression.py",
+  "next_required_action": "FINAL_BYTE_CHECK_THEN_EXECUTE_AUTHORIZED_NON_FRESH_REGRESSION_ONCE"
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_HOLDOUT_GENERATION_PACKAGE_V3_MANIFEST",
+  "state": "FROZEN_BEFORE_ISOLATED_GENERATION_ATTEMPT_3",
+  "generation_attempt": 3,
+  "generation_attempt_3_started": false,
+  "attempt_3_cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "target_freshness_consumed": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_v3_sha256": "0d55267ee6b40ac69fd07470dcf09e5714ba3002686f62d4cc6a5a9625ebe8ff",
+  "generation_package_v3_checker_sha256": "7a7ed51a888432d805612c5531e9b91748bf2e5485c953c4da58853b1887550f",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "governed_predecessor": {
+    "generation_attempt": 2,
+    "disposition": "REJECTED_PRE_EXECUTION_INPUT_BOUNDARY_MISMATCH",
+    "disposition_sha256": "c16fd6827db35fea4e48a4711e5ee14665bf664541441c59fe12b20cda17ee2b",
+    "target_freshness_consumed": false
+  },
+  "artifacts": [
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v3.json",
+      "sha256": "0d55267ee6b40ac69fd07470dcf09e5714ba3002686f62d4cc6a5a9625ebe8ff"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v3.py",
+      "sha256": "7a7ed51a888432d805612c5531e9b91748bf2e5485c953c4da58853b1887550f"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract.json",
+      "sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract_manifest.json",
+      "sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v2.json",
+      "sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v2_manifest.json",
+      "sha256": "349b62bac1e91fec985c3dd13b3d6a511036973efde1a7cb639a4f9386d62880"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_2.json",
+      "sha256": "91557fcea5f2202fdc634cc19fb79d55f33718b146172a838978ce5e7037ca0a"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_2_disposition.json",
+      "sha256": "c16fd6827db35fea4e48a4711e5ee14665bf664541441c59fe12b20cda17ee2b"
+    }
+  ],
+  "generator_handoff_boundary": {
+    "file_to_supply": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v3.json",
+    "supply_only_package_v3": true,
+    "do_not_supply_manifest": true,
+    "do_not_supply_checker": true,
+    "do_not_supply_repository": true,
+    "do_not_supply_target_evaluator": true,
+    "do_not_supply_attempt_1": true,
+    "do_not_supply_attempt_2": true,
+    "do_not_supply_attempt_2_disposition": true,
+    "do_not_supply_prior_cases_mutations_predictions_results": true,
+    "do_not_supply_remediation_history": true,
+    "do_not_supply_other_hetren_project_context": true,
+    "do_not_supply_hetren_memory_or_saved_context": true,
+    "do_not_supply_prior_hetren_chat_or_summary": true,
+    "do_not_supply_prior_generation_request_excerpt": true
+  },
+  "generation_session_boundary": {
+    "package_v3_must_be_only_hetren_specific_context": true,
+    "ambient_context_gate_runs_before_any_case_generation": true,
+    "fail_closed_on_nonpackage_hetren_context": true,
+    "abort_without_generating_cases_on_boundary_failure": true,
+    "successful_output_requires_machine_readable_isolation_state": true
+  },
+  "execution_boundary": {
+    "generate_all_cases_before_target_execution": true,
+    "freeze_generated_cases_before_target_execution": true,
+    "produce_all_predictions_before_scoring": true,
+    "one_target_call_per_case": true,
+    "target_call_uses_primary_requirement_only": true,
+    "secondary_requirements_are_context_only": true,
+    "first_target_execution_permanently_consumes_freshness": true
+  },
+  "interpretation": "This manifest freezes the exact Generation Package v3 and its independent checker before isolated Generation Attempt 3. Attempt 3 has not begun, no Attempt-3 cases exist, and the target evaluator has not been executed or simulated. Attempt 2 remains preserved and rejected pre-execution for its input-boundary mismatch without consuming target freshness."
+}

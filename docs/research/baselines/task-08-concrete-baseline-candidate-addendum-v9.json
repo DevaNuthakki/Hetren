@@ -1,0 +1,167 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 9,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T05:06:43Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v8": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v8.json",
+      "sha256": "aa6431f199aa868e5d4ec4a6a7eb93eaeb263b4186afe8607978b4c736d17042"
+    },
+    "systematic_saturation_v6": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v6.json",
+      "sha256": "d9ccfb390cd7fbfb6b74d703a63fe6331b31dee80e0cf68e8b34062afd0443f1"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-GTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Grounded Test-Time Adaptation / Test-Time Adaptation for LLM Agents via Environment Interaction",
+      "implementation_identity": "https://github.com/r2llab/GTTA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_role": [
+        "A_H1_AGENT_TEST_TIME_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H1_ENVIRONMENT_GROUNDING_AGENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=OH4PE0TDo0"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/r2llab/GTTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_UNSEEN_AGENT_ENVIRONMENT_INTERACTION_SETTING_MATCHED",
+        "Peer-reviewed deployment-time adaptation for LLM agents using environment interaction, with distinct syntactic-alignment and dynamics-grounding mechanisms and official WebArena/BFCLv3/Tau-Bench implementation paths."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_UNSEEN_AGENT_ENVIRONMENT_INTERACTION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "BALANCED_SATURATION_PASS_V6"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-PFT3A",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PFT3A",
+      "implementation_identity": "https://github.com/rundohe/PFT3A",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_PRIOR_FREE_TABULAR_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rundohe/PFT3A"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_PRIOR_FREE_TABULAR_DISTRIBUTION_SHIFT_SETTING_MATCHED",
+        "Directly targets tabular label and feature shift while prohibiting source-data and source-prior access, making it materially distinct from FTAT, AdapTable and feature-decrement-specific methods already preserved."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_PRIOR_FREE_TABULAR_DISTRIBUTION_SHIFT_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "BALANCED_SATURATION_PASS_V6"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-RAMEN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Ramen",
+      "implementation_identity": "https://github.com/baowenxuan/Ramen",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_MIXED_DOMAIN_VLM_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STREAM_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Bao_Ramen_Robust_Test-Time_Adaptation_of_Vision-Language_Models_with_Active_Sample_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/baowenxuan/Ramen"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MIXED_DOMAIN_VLM_STREAM_SETTING_MATCHED",
+        "Handles mixed-domain test streams through per-sample retrieval, domain-consistent active sample selection, prediction balancing and an embedding-gradient cache."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MIXED_DOMAIN_VLM_STREAM_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "BALANCED_SATURATION_PASS_V6"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

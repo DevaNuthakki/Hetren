@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 54,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T01:36:42Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v53": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v53.json",
+      "sha256": "d3cce6e53c696d37da541dbae2b105fe69cadad2b4d7863203d282b6ca005243"
+    },
+    "systematic_saturation_v51": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v51.json",
+      "sha256": "21017af0b594607a93f64376f1c409f6415411f6aea407a08bcf14fdcf7fb1a4"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ZERO-SHOT-PLANNER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Language Models as Zero-Shot Planners: Extracting Actionable Knowledge for Embodied Agents",
+      "implementation_identity": "https://github.com/huangwl18/language-planner",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ZERO_SHOT_EMBODIED_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/huang22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/language-planner"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_ELIGIBLE_IF_VIRTUALHOME_STYLE_ACTIONABLE_PLANNING_SETTING_MATCHED",
+        "AVAILABLE_ACTION_SET_MUST_BE BOUND",
+        "PROMPT_EXAMPLES_AND_LANGUAGE_MODEL_MUST_BE BOUND",
+        "ZERO_SHOT_PLANNING_IS_NOT_ONLINE_ADAPTATION",
+        "Canonical executable zero-shot embodied planning baseline that maps high-level language tasks into admissible environment actions."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_VIRTUALHOME_STYLE_ACTIONABLE_PLANNING_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_E1_SATURATION_V51"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SAYCAN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+      "implementation_identity": "https://github.com/google-research/google-research/tree/master/saycan",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_GROUNDED_AFFORDANCE_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v205/ichter23a.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://say-can.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/saycan"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_SKILL_AFFORDANCE_SETTING_MATCHED",
+        "OPEN_SOURCE_TABLETOP_IMPLEMENTATION_IS_NOT_THE_FULL_REAL_ROBOT_SYSTEM",
+        "LANGUAGE_MODEL_SKILL_LIBRARY_AND_VALUE_FUNCTION_CONFIGURATION_MUST_BE BOUND",
+        "AFFORDANCE_INFORMATION_OPPORTUNITY_MUST_BE PARITY MATCHED",
+        "Canonical grounded planning baseline combining language-model skill relevance with executable-skill affordance/value information."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_SKILL_AFFORDANCE_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_E1_SATURATION_V51"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-CODE-AS-POLICIES",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Code as Policies: Language Model Programs for Embodied Control",
+      "implementation_identity": "https://github.com/google-research/google-research/tree/master/code_as_policies",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LANGUAGE_MODEL_POLICY_CODE_SYNTHESIS_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://doi.org/10.1109/ICRA48891.2023.10160591"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://code-as-policies.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/code_as_policies"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_API_POLICY_SYNTHESIS_SETTING_MATCHED",
+        "ROBOT_API_AND_PERCEPTION_PRIMITIVES_MUST_BE BOUND",
+        "PROMPT_AND_LANGUAGE_MODEL_IDENTITY_MUST_BE BOUND",
+        "CODE_SYNTHESIS_SETTING_MUST_NOT_BE COMPARED_TO_UNMATCHED_TEXT_ONLY_AGENT TASKS",
+        "Canonical executable embodied-control comparator where an LLM synthesizes policy code over perception and robot-control APIs."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_API_POLICY_SYNTHESIS_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_E1_SATURATION_V51"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-PROGPROMPT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ProgPrompt: Generating Situated Robot Task Plans using Large Language Models",
+      "implementation_identity": "https://github.com/NVlabs/progprompt-vh",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_PROGRAMMATIC_SITUATED_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ieeexplore.ieee.org/document/10161317/"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://progprompt.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVlabs/progprompt-vh"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ROLE_CONDITIONAL_ELIGIBLE_IF_SITUATED_ROBOT_OR_VIRTUALHOME_PLANNING_SETTING_MATCHED",
+        "VIRTUALHOME_OR_MATCHED_SITUATED_ACTION_SPACE_REQUIRED",
+        "EXAMPLE_PROGRAMS_AND_AVAILABLE_ACTIONS_MUST_BE BOUND",
+        "STATIC_PROMPT_PLANNING_MUST_NOT_BE MISLABELED_ONLINE_ADAPTATION",
+        "Peer-reviewed executable programmatic-prompt planning baseline with explicit actions, objects, assertions, and recovery-oriented plan structure."
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_SITUATED_ROBOT_OR_VIRTUALHOME_PLANNING_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_E1_SATURATION_V51"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

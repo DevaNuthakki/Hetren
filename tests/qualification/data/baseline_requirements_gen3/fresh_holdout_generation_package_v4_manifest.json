@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_HOLDOUT_GENERATION_PACKAGE_V4_MANIFEST",
+  "state": "FROZEN_BEFORE_ISOLATED_GENERATION_ATTEMPT_4",
+  "generation_attempt": 4,
+  "generation_attempt_4_started": false,
+  "attempt_4_cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "target_freshness_consumed": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_v4_sha256": "5dbf26fffa27c1b02112d296a6f566023b080f733afae54d363e2df09cb866de",
+  "generation_package_v4_checker_sha256": "7aac664aa1230c5ed112721b7c8bfea19d57bd531ad35ccb59ea4794f56b4247",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "governed_predecessor": {
+    "generation_attempt": 3,
+    "state": "ABORTED_PRE_CASE_GENERATION_HANDOFF_SCOPE_MISMATCH",
+    "generation_failure_sha256": "626f272c0c4142c8677fcc73dd400794ef1842e054fef7a616fe2f9ec4ece241",
+    "disposition_sha256": "4b326483d210d1c230920c2aa12ea44dc67e867e3b956ff5efa30d6dabd1f59e",
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false,
+    "protected_evidence_leakage_proven": false,
+    "target_freshness_consumed": false,
+    "successor_generation_attempt": 4
+  },
+  "artifacts": [
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v4.json",
+      "sha256": "5dbf26fffa27c1b02112d296a6f566023b080f733afae54d363e2df09cb866de"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v4.py",
+      "sha256": "7aac664aa1230c5ed112721b7c8bfea19d57bd531ad35ccb59ea4794f56b4247"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract.json",
+      "sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract_manifest.json",
+      "sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v3.json",
+      "sha256": "0d55267ee6b40ac69fd07470dcf09e5714ba3002686f62d4cc6a5a9625ebe8ff"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v3_manifest.json",
+      "sha256": "b92572819c2ae9b63e69c1e9314132f9ad998d478825d158a316a72cf74bf269"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/generation_isolation_failure_attempt_3.json",
+      "sha256": "626f272c0c4142c8677fcc73dd400794ef1842e054fef7a616fe2f9ec4ece241"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_3_disposition.json",
+      "sha256": "4b326483d210d1c230920c2aa12ea44dc67e867e3b956ff5efa30d6dabd1f59e"
+    }
+  ],
+  "generator_handoff_boundary": {
+    "file_to_supply": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v4.json",
+    "supply_only_package_v4_as_hetren_specific_input": true,
+    "do_not_supply_manifest": true,
+    "do_not_supply_checker": true,
+    "do_not_supply_repository": true,
+    "do_not_supply_target_evaluator": true,
+    "do_not_supply_attempt_1": true,
+    "do_not_supply_attempt_2": true,
+    "do_not_supply_attempt_3_failure": true,
+    "do_not_supply_attempt_3_disposition": true,
+    "do_not_supply_prior_cases_mutations_predictions_results": true,
+    "do_not_supply_remediation_history": true,
+    "do_not_supply_other_hetren_project_context": true,
+    "do_not_supply_hetren_memory_or_saved_context": true,
+    "do_not_supply_prior_hetren_chat_or_summary": true,
+    "do_not_supply_prior_hetren_generation_request_excerpt": true,
+    "unrelated_non_hetren_context_is_permitted": true,
+    "unrelated_non_hetren_context_must_not_trigger_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true
+  },
+  "generation_session_boundary": {
+    "package_v4_must_be_only_hetren_specific_context": true,
+    "ambient_gate_runs_before_any_case_generation": true,
+    "nonpackage_hetren_context_requires_abort": true,
+    "ambiguous_potentially_hetren_specific_context_requires_abort": true,
+    "unrelated_non_hetren_context_does_not_require_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true,
+    "abort_occurs_before_case_generation": true,
+    "abort_does_not_consume_target_freshness": true,
+    "successful_output_requires_machine_readable_isolation_state": true
+  },
+  "execution_boundary": {
+    "generate_all_cases_before_target_execution": true,
+    "freeze_generated_cases_before_target_execution": true,
+    "produce_all_predictions_before_scoring": true,
+    "one_target_call_per_case": true,
+    "target_call_uses_primary_requirement_only": true,
+    "secondary_requirements_are_context_only": true,
+    "expectation_not_passed_to_target": true,
+    "expected_violation_codes_not_passed_to_target": true,
+    "first_target_execution_permanently_consumes_freshness": true
+  },
+  "interpretation": "This manifest freezes the exact Generation Package v4, its independent bounded-successor checker, and the target evaluator before isolated Generation Attempt 4. Attempt 4 has not begun and no Attempt-4 cases or predictions exist. Attempt 3 remains preserved as a pre-case-generation handoff-scope failure that did not consume target freshness. Package v4 narrows the isolation decision to Hetren-specific context: unrelated non-Hetren ambient context is permitted but must not inform case design."
+}

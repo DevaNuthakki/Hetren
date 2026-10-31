@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 47,
+  "state": "SATURATION_V47_FOUND_NEW_LEGACY_E1_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:34:42Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "all_sources_used_for_materiality_preexist_cutoff": true,
+    "current_repository_head_not_used_as_final_version_identity": true,
+    "final_retained_revision_requires_cutoff_consistent_pin": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v49_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v49.json",
+      "sha256": "4805e9e8f6b163a2415b01c7330b5945f233ee4c42a5a6e2e48736ccb97a5452"
+    },
+    "systematic_saturation_v46": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v46.json",
+      "sha256": "1249ed4de9df554f6f9fc12b58aaf5df6590320190dae242c4338ea4d808b30b"
+    }
+  },
+  "focus": [
+    "SECOND_CONSECUTIVE_DIRECT_MEMORY_CONFIRMATION",
+    "LEGACY_HIGH_RELEVANCE_E1_MEMORY_IDENTITY_SWEEP",
+    "INTERACTIVE_AGENT_MEMORY_ROLE_MATERIALITY",
+    "ROLE_ADJACENT_MEMORY_ARCHITECTURE_SCREEN",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "Agent Workflow Memory ICML 2025 WebArena Mind2Web official implementation",
+    "Agent Workflow Memory online workflow memory cross task website domain",
+    "AriGraph IJCAI 2025 episodic semantic memory interactive TextWorld",
+    "AriGraph official implementation interactive text game agent",
+    "MAGMA ACL 2026 multi graph agentic memory implementation",
+    "MAGMA LoCoMo LongMemEval agent memory retrieval",
+    "Beyond RAG for Agent Memory xMemory 2026 implementation",
+    "xMemory LoCoMo PerLTQA retrieval decoupling aggregation",
+    "MUSE ACL 2026 hierarchical memory self evolving agent implementation",
+    "Mem2Evolve ACL 2026 experience memory asset memory code release",
+    "Zep temporal knowledge graph architecture agent memory",
+    "AgenticMemory taxonomy workflow episodic semantic procedural memory",
+    "2025 peer reviewed workflow memory web agents",
+    "2025 peer reviewed episodic graph memory interactive LLM agents",
+    "2026 peer reviewed graph agent memory ACL long horizon",
+    "2026 executable memory retrieval architecture agent memory"
+  ],
+  "query_count": 16,
+  "candidate_dispositions": [
+    {
+      "name": "Agent Workflow Memory",
+      "candidate_id": "DISCOVERY:T8-E1-AWM-WORKFLOW-MEMORY",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": [],
+      "reason": "Peer-reviewed executable workflow-memory comparator with direct multi-step web-agent evaluation was not found in prior governed candidate addenda."
+    },
+    {
+      "name": "AriGraph",
+      "candidate_id": "DISCOVERY:T8-E1-ARIGRAPH",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": [],
+      "reason": "Peer-reviewed executable memory architecture with direct interactive-agent evaluation was not found in prior governed candidate addenda."
+    },
+    {
+      "name": "MAGMA: A Multi-Graph based Agentic Memory Architecture for AI Agents",
+      "disposition": "ROLE_ADJACENT_MEMORY_REASONING_REFERENCE_NOT_PROMOTED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1709/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/FredJiang0324/MAGMA"
+        }
+      ],
+      "reason": "The verified evaluation is centered on LoCoMo and LongMemEval memory reasoning rather than a materially matched multi-step tool/action environment; preserve as memory-architecture reference unless a matching E1 experiment is later declared."
+    },
+    {
+      "name": "Beyond RAG for Agent Memory / xMemory",
+      "disposition": "PREPRINT_ROLE_ADJACENT_MEMORY_RETRIEVAL_REFERENCE_NOT_PROMOTED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.02007"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/HU-xiaobai/xMemory"
+        }
+      ],
+      "reason": "Executable and relevant to memory retrieval, but verified experiments are LoCoMo and PerLTQA memory QA rather than a matched interactive E1 action contract."
+    },
+    {
+      "name": "MUSE \u2014 Towards Self-Evolving Agents via Interactive Experience Refinement",
+      "disposition": "WHOLE_AGENT_EVOLUTION_REFERENCE_NOT_DIRECT_MEMORY_COMPARATOR",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1522/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/KnowledgeXLab/MUSE"
+        }
+      ],
+      "reason": "MUSE uses hierarchical memory inside a broader whole-agent self-evolution loop; retain behind experiment-level applicability rather than treating it as a direct memory-component comparator."
+    },
+    {
+      "name": "Mem2Evolve",
+      "disposition": "WHOLE_AGENT_COEVOLUTION_REFERENCE_CODE_RELEASE_GATE_UNRESOLVED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.952/"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://buaa-irip-llm.github.io/Mem2Evolve/"
+        }
+      ],
+      "reason": "The paper is peer reviewed and memory is central to its co-evolution mechanism, but the official project page states the codebase is still undergoing release review; it is not a reproducible direct-memory baseline at this gate."
+    },
+    {
+      "name": "Zep: A Temporal Knowledge Graph Architecture for Agent Memory",
+      "disposition": "PREPRINT_MEMORY_SERVICE_REFERENCE_NOT_PROMOTED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2501.13956"
+        }
+      ],
+      "reason": "Zep is a temporal agent-memory service evaluated primarily on memory retrieval and long-memory reasoning; retain as architecture/reference evidence rather than force it into a directly matched E1 action-policy role."
+    }
+  ],
+  "candidate_disposition_count": 7,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AWM-WORKFLOW-MEMORY",
+      "name": "Agent Workflow Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_NON_LEARNED_WORKFLOW_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_TASK_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICML_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/wang25bx.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zorazrw/agent-workflow-memory"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_WEB_AGENT_WORKFLOW_MEMORY_SETTING_MATCHED",
+      "material_reason": "AWM induces reusable workflows from prior action trajectories and uses them to guide subsequent multi-step web-agent actions in WebArena and Mind2Web.",
+      "n_h2_limit": "CROSS_TASK_WEBSITE_AND_DOMAIN_GENERALIZATION_REMAINS_WITHIN_E1_WEB_AGENTS_AND_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ARIGRAPH",
+      "name": "AriGraph: Learning Knowledge Graph World Models with Episodic Memory for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_NON_LEARNED_EPISODIC_SEMANTIC_GRAPH_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_IJCAI_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ijcai.org/proceedings/2025/2"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIRI-Institute/AriGraph"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_INTERACTIVE_TEXTWORLD_AGENT_SETTING_MATCHED",
+      "material_reason": "AriGraph constructs and updates semantic-plus-episodic graph memory while an agent explores interactive text environments and uses that memory for planning and action selection.",
+      "n_h2_limit": "GENERALIZATION_TO_QA_DOES_NOT_ESTABLISH_HETREN_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_transfer_references_exist": true,
+    "forcing_within_e1_memory_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "prior_round_counter": 1,
+    "reason": "At least one materially relevant interactive E1 memory comparator was absent from prior promoted candidate addenda; discovery saturation is reset."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "discovery_stopping_establishes_final_baseline_selection": false,
+    "role_adjacent_memory_reference_is_claim_bearing": false,
+    "within_e1_generalization_establishes_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B52_VERIFY_ADDENDUM_V50_AND_CONTINUE_BOUNDED_REFINEMENT"
+}

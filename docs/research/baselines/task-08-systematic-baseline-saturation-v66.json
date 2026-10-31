@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 66,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:37:48Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "post_cutoff_repository_head_state_cannot_define_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v68_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v68.json",
+      "sha256": "499c199fe415fa1b1555e52021c1d05ca6d2624ad67d786961bb48a454685b14"
+    },
+    "systematic_saturation_v65": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v65.json",
+      "sha256": "3b2c26cb79b81f1aae7402dd18c67a9733e4a82ceae9659ae0f77facf8e3f72c"
+    }
+  },
+  "mode": "BOUNDED_DISPLACEMENT_ONLY",
+  "focus": [
+    "E1_LONG_HORIZON_MEMORY_AUGMENTED_VLA_DISPLACEMENT",
+    "E2_NO_FORCED_EXPANSION_WITHOUT_ROLE_MATCH",
+    "E3_NO_FORCED_EXPANSION_WITHOUT_ROLE_MATCH",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "BehaviorVLA github 2026",
+    "long-horizon VLA memory 2026 github robotic manipulation",
+    "partially observable VLA 2026 github manipulation",
+    "robot memory VLA 2026 github manipulation accepted",
+    "embodied memory VLA 2026 github manipulation",
+    "vision-language-action memory CVPR 2026 github",
+    "vision-language-action memory ICRA 2026 github",
+    "vision-language-action memory CoRL 2026 github",
+    "vision-language-action temporal CoRL 2026 github",
+    "robot manipulation memory CoRL 2026 VLA",
+    "BehaviorVLA ICML 2026 paper",
+    "From Abstraction to Instantiation ICML 2026 proceedings",
+    "BehaviorVLA github ICML26-BehaviorVLA",
+    "S2-VLA arxiv github",
+    "Chronos VLA arxiv github long-horizon manipulation",
+    "HiMe VLA arxiv github hierarchical embodied memory",
+    "NativeMEM VLA arxiv github",
+    "Harness VLA arxiv github"
+  ],
+  "query_count": 18,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+      "name": "BehaviorVLA: From Abstraction to Instantiation",
+      "aliases": [
+        "BehaviorVLA",
+        "From Abstraction to Instantiation: Learning Behavioral Representation for Vision-Language-Action Model"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LONG_HORIZON_VLA_COMPARATOR_CANDIDATE",
+        "N_H1_BEHAVIOR_REPRESENTATION_DISPLACEMENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICML_2026_PROGRAM_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.22671"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/ICML26-BehaviorVLA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_MATCHED_IF_LONG_HORIZON_VLA_BEHAVIOR_REPRESENTATION_SETTING_MATCHED",
+      "material_reason": "BehaviorVLA uses a causal Mamba-based encoder to aggregate trajectory-level behavior, stores stable behavior prototypes in memory, estimates online execution phase, and conditions action generation on both global behavior and local phase.",
+      "limits": [
+        "VLA_ROBOTIC_MANIPULATION_SETTING_REQUIRED",
+        "BEHAVIOR_ENCODER_CHECKPOINT_AND_MEMORY_BANK_MUST_BE BOUND",
+        "PI05_BASE_MODEL_AND_NORMALIZATION_ASSETS_MUST_BE BOUND",
+        "TRAINING_DATA_AND_THREE_STAGE_TRAINING_RECIPE_MUST_BE BOUND",
+        "LIBERO_ROBOTWIN_CALVIN_AND_REAL_WORLD_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "displacement_proposal_count": 1,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+      "name": "BehaviorVLA: From Abstraction to Instantiation",
+      "id_already_present": false,
+      "normalized_alias_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    }
+  ],
+  "preexisting_or_duplicate_count": 0,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BEHAVIORVLA",
+      "name": "BehaviorVLA: From Abstraction to Instantiation",
+      "aliases": [
+        "BehaviorVLA",
+        "From Abstraction to Instantiation: Learning Behavioral Representation for Vision-Language-Action Model"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LONG_HORIZON_VLA_COMPARATOR_CANDIDATE",
+        "N_H1_BEHAVIOR_REPRESENTATION_DISPLACEMENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICML_2026_PROGRAM_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.22671"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/iLearn-Lab/ICML26-BehaviorVLA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_MATCHED_IF_LONG_HORIZON_VLA_BEHAVIOR_REPRESENTATION_SETTING_MATCHED",
+      "material_reason": "BehaviorVLA uses a causal Mamba-based encoder to aggregate trajectory-level behavior, stores stable behavior prototypes in memory, estimates online execution phase, and conditions action generation on both global behavior and local phase.",
+      "limits": [
+        "VLA_ROBOTIC_MANIPULATION_SETTING_REQUIRED",
+        "BEHAVIOR_ENCODER_CHECKPOINT_AND_MEMORY_BANK_MUST_BE BOUND",
+        "PI05_BASE_MODEL_AND_NORMALIZATION_ASSETS_MUST_BE BOUND",
+        "TRAINING_DATA_AND_THREE_STAGE_TRAINING_RECIPE_MUST_BE BOUND",
+        "LIBERO_ROBOTWIN_CALVIN_AND_REAL_WORLD_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Chronos: A Physics-Informed Full-History Framework for Non-Markovian Long-Horizon Manipulation",
+      "sources": [
+        "https://arxiv.org/abs/2606.30318",
+        "https://github.com/yulinzhouZYL/Chronos"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_SUBMITTED_TO_T_RO",
+      "disposition": "ROLE_CONDITIONAL_LONG_HORIZON_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Chronos is highly relevant to memory-dependent long-horizon manipulation, but it is a broader full-history manipulation policy rather than the same memory-augmented VLA policy tuple. It should only enter the retained comparison set when the governed experiment explicitly permits that policy family and matches RMBench or an equivalent non-Markovian history-conditioned manipulation contract."
+    },
+    {
+      "name": "Harness VLA",
+      "sources": [
+        "https://arxiv.org/abs/2607.08448",
+        "https://github.com/RLinf/RPent"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_AND_EXECUTABLE_AGENTIC_FRAMEWORK",
+      "disposition": "HIERARCHICAL_AGENTIC_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Harness VLA composes a frozen VLA with a memory-guided planner and analytic primitives, changing architecture and information opportunity relative to end-to-end VLA candidates. A governed hierarchical-agent experiment is required before it can displace a direct VLA policy comparator."
+    },
+    {
+      "name": "NativeMEM",
+      "sources": [
+        "https://arxiv.org/abs/2607.06678",
+        "https://github.com/OpenDriveLab/NativeMEM"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_WITH_WORK_IN_PROGRESS_CODE_RELEASE",
+      "disposition": "PREVIOUSLY_SCREENED_IMPLEMENTATION_MATURITY_REFERENCE_NOT_RECOUNTED",
+      "reason": "NativeMEM was already preserved behind an implementation-maturity gate in prior governed discovery and therefore cannot be recounted as a new displacement candidate merely because current repository material is visible."
+    },
+    {
+      "name": "HiMe / Hierarchical Embodied Memory",
+      "evidence_state": "RELEVANT_LONG_HORIZON_MEMORY_RESEARCH",
+      "disposition": "NOT_PROMOTED_WITHOUT_UNAMBIGUOUS_PRIOR_IDENTITY_AND_OFFICIAL_REPRODUCIBLE_IMPLEMENTATION_CHECK",
+      "reason": "The current bounded pass did not establish a clean new identity distinct from all prior hierarchical-memory candidates together with a governed executable implementation binding."
+    },
+    {
+      "name": "S2-VLA / State-Space Guided VLA",
+      "evidence_state": "RELEVANT_STATE_SPACE_VLA_RESEARCH",
+      "disposition": "NOT_PROMOTED_WITHOUT_COMPLETE_REPRODUCIBILITY_AND_PRIOR_IDENTITY_CHECK",
+      "reason": "The bounded pass did not establish enough implementation and identity evidence to claim a new displacement candidate."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "behaviorvla_if_new_is_within_e1_only": true,
+    "chronos_is_not_general_cross_family_transfer_evidence": true,
+    "harness_vla_is_not_general_cross_family_transfer_evidence": true,
+    "forcing_vla_or_embodied_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V66"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "previous_consecutive_no_new_material_candidate_rounds": 0,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "required_consecutive_no_new_material_candidate_rounds": 2,
+    "reason": "At least one materially new role-matched displacement candidate survived dynamic identity filtering."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "behaviorvla_is_automatically_strongest": false,
+    "chronos_is_automatically_same_comparison_tuple": false,
+    "harness_vla_is_automatically_same_comparison_tuple": false,
+    "screened_reference_is_claim_bearing_baseline": false,
+    "general_n_h2_established": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "I4B71_VERIFY_ADDENDUM_V69_AND_RUN_NEXT_BOUNDED_DISPLACEMENT_ONLY_REFINEMENT"
+}

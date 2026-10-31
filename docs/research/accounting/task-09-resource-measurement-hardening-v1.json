@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_RESOURCE_MEASUREMENT_HARDENING",
+  "state": "HARDENED_DRAFT_OVERLAY_NO_OBSERVED_MEASUREMENTS",
+  "recorded_at_utc": "2026-09-28T23:25:58Z",
+  "task": 9,
+  "methodology_classification": "HETREN_GOVERNANCE_HARDENING_PROPOSAL",
+  "bindings": {
+    "base_measurement_contract": {
+      "path": "docs/research/accounting/task-09-resource-measurement-contract-v1.json",
+      "sha256": "82d750776c8b2938d882c29985be5680e940b26576851477c56c8e126cc6eede"
+    },
+    "red_team_review": {
+      "path": "docs/research/accounting/task-09-accounting-contract-red-team-v1.json",
+      "sha256": "472a22a04be317df4c9c5e5bbd65e9700f39b539be400efe919b2d1f1839105a"
+    },
+    "task8_task9_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    }
+  },
+  "measurement_context_required": [
+    "measurement_procedure_id",
+    "procedure_version",
+    "experiment_contract_id",
+    "attempt_id",
+    "phase",
+    "started_at_utc",
+    "ended_at_utc",
+    "runtime_environment_identity",
+    "measurement_tool_identity",
+    "measurement_tool_version_if_available",
+    "telemetry_completeness_state"
+  ],
+  "cache_and_warm_state": {
+    "required_fields": [
+      "cache_state",
+      "warm_start_state",
+      "reused_checkpoint_state",
+      "reused_embedding_or_index_state",
+      "compiled_or_preloaded_state"
+    ],
+    "allowed_cache_state_examples": [
+      "COLD",
+      "WARM",
+      "PARTIAL",
+      "PROVIDER_MANAGED_UNKNOWN",
+      "NOT_APPLICABLE"
+    ],
+    "cold_and_warm_results_must_not_be_silently_merged": true
+  },
+  "concurrency_rules": {
+    "concurrent_workload_state_required": true,
+    "shared_instance_identity_required_if_applicable": true,
+    "overlap_interval_required_if_applicable": true,
+    "dedicated_instance_interval_accounted_once": true,
+    "per_job_full_instance_double_charge_forbidden": true,
+    "allocation_driver_must_match_ledger_contract": true
+  },
+  "compute_measurement": {
+    "dimensions": [
+      "cpu_time",
+      "accelerator_time",
+      "wall_clock_time",
+      "peak_host_memory",
+      "peak_accelerator_memory"
+    ],
+    "logical_and_billed_compute_separate": true,
+    "sampling_interval_required_if_sampled": true,
+    "provider_metering_window_required_if_provider_metered": true
+  },
+  "api_and_token_measurement": {
+    "dimensions": [
+      "request_count",
+      "input_units",
+      "output_units",
+      "cached_input_units_if_reported",
+      "provider_billed_units"
+    ],
+    "logical_usage_separate_from_billed_usage": true,
+    "provider_record_preferred_over_inferred_billing_when_available": true,
+    "billing_rounding_or_minimum_preserved": true
+  },
+  "storage_and_network_measurement": {
+    "dimensions": [
+      "persistent_storage_byte_time",
+      "temporary_storage_peak_bytes",
+      "network_ingress_bytes_if_material",
+      "network_egress_bytes_if_material"
+    ],
+    "only_material_dimensions_need_be_required_by_real_contract": true,
+    "not_measured_must_be_explicit": true
+  },
+  "failed_run_measurement": {
+    "failed_runs_measured_if_resources_consumed": true,
+    "termination_reason_required": true,
+    "last_complete_telemetry_timestamp_required_if_partial": true,
+    "partial_measurement_must_not_be_presented_as_complete": true
+  },
+  "adaptation_measurement": {
+    "separate_adaptation_window_required": true,
+    "pre_adaptation_resource_use_separate": true,
+    "adaptation_resource_use_separate": true,
+    "post_adaptation_evaluation_separate": true,
+    "rollback_and_restoration_separate_if_applicable": true
+  },
+  "human_effort_measurement": {
+    "active_time_and_elapsed_time_separate": true,
+    "passive_wait_separate": true,
+    "contemporaneous_capture_preferred": true,
+    "retrospective_capture_requires_uncertainty": true,
+    "automated_runtime_not_human_effort": true
+  },
+  "monetary_measurement": {
+    "provider_invoice_or_metered_record_preferred_when_available": true,
+    "list_price_estimate_must_be_labeled_estimate": true,
+    "discount_credit_and_tax_components_separate": true,
+    "historical_pricing_snapshot_required_for_derived_cost": true
+  },
+  "task8_resource_regime_boundary": {
+    "task9_selects_semantic_resource_regime": false,
+    "task9_may_measure_dimensions_before_regime_selected": true,
+    "real_comparison_requires_task8_regime_binding": true,
+    "allowed_examples_from_upstream_governance": [
+      "STRICTLY_MATCHED",
+      "BUDGET_CAPPED",
+      "UNCONSTRAINED_BUT_JOINTLY_REPORTED"
+    ],
+    "examples_are_not_task9_defaults": true
+  },
+  "measurement_completeness_states": [
+    "COMPLETE",
+    "PARTIAL",
+    "UNAVAILABLE",
+    "NOT_APPLICABLE"
+  ],
+  "practical_value_reporting_rules": {
+    "quality_axis_separate": true,
+    "resource_axes_separate": true,
+    "human_effort_axis_separate": true,
+    "adaptation_cost_axis_separate_if_applicable": true,
+    "monetary_axis_separate_if_available": true,
+    "default_weighted_sum": null,
+    "pareto_claim_requires_complete_comparable_axes": true
+  },
+  "observed_measurement_count": 0,
+  "claim_limits": {
+    "records_observed_measurements": false,
+    "records_observed_monetary_cost": false,
+    "records_observed_human_effort": false,
+    "selects_task8_resource_regime": false,
+    "establishes_practical_value": false,
+    "authorizes_protected_execution": false,
+    "establishes_task9_authority": false
+  }
+}

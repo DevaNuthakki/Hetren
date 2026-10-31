@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_BASELINE_CANDIDATE_IDENTITY_RESOLUTION",
+  "resolution_generation": 1,
+  "state": "DISTPFN_NOT_PREVIOUSLY_PROMOTED_NEW_IDENTITY_REQUIRED",
+  "recorded_at_utc": "2026-09-26T21:02:53Z",
+  "task": 8,
+  "target": {
+    "canonical_name": "DistPFN",
+    "paper_title": "Mitigating Label Shift in Tabular In-Context Learning via Test-Time Posterior Adjustment",
+    "arxiv": "2605.04363",
+    "implementation": "https://github.com/seunghan96/DistPFN",
+    "environment": "E2_STRUCTURED_ML"
+  },
+  "search_scope": {
+    "candidate_addendum_files_scanned": 23,
+    "promoted_candidate_records_scanned": 73
+  },
+  "exact_prior_matches": [],
+  "exact_prior_match_count": 0,
+  "related_tabpfn_family_candidates": [
+    {
+      "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v16.json",
+      "candidate_id": "DISCOVERY:T8-E2-DRIFT-RESILIENT-TABPFN",
+      "name": "Drift-Resilient TabPFN",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/b2e2774c8e76afe191b5bf518f5cb727-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/Drift-Resilient_TabPFN"
+        }
+      ]
+    },
+    {
+      "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v2.json",
+      "candidate_id": "DISCOVERY:T8-E2-TTT-ICL-TABPFN",
+      "name": "Test-Time Training for In-Context Learning / TabPFN empirical instantiation",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/gozeten25a.html"
+        }
+      ]
+    },
+    {
+      "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v6.json",
+      "candidate_id": "DISCOVERY:T8-E2-ZSBO-TABPFN",
+      "name": "Zero-Shot Bayesian Optimization with TabPFN",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "source_references": [
+        {
+          "class": "OFFICIAL_RESEARCH_PUBLICATION",
+          "url": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/tabpfn-automl2026"
+        }
+      ]
+    }
+  ],
+  "related_tabpfn_family_candidate_count": 3,
+  "identity_analysis": {
+    "drift_resilient_tabpfn_is_automatically_same_identity": false,
+    "zero_shot_bo_tabpfn_is_automatically_same_identity": false,
+    "generic_tabpfn_family_membership_is_identity_equivalence": false,
+    "distpfn_requires_its_own_identity_if_not_exactly_preexisting": true
+  },
+  "new_candidate_required": true,
+  "claim_limits": {
+    "identity_resolution_selects_strongest_baseline": false,
+    "identity_resolution_freezes_version": false,
+    "identity_resolution_establishes_task_8_authority": false
+  }
+}

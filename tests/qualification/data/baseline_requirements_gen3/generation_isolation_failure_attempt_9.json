@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_GENERATION_ISOLATION_FAILURE_ATTEMPT_9",
+  "state": "ABORTED_BEFORE_CASE_GENERATION",
+  "generation_attempt": 9,
+  "generation_package_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+  "generation_session_isolation": {
+    "scope": "OBSERVABLE_CONVERSATION_INPUTS_ONLY",
+    "gate_checked_before_case_generation": true,
+    "package_v9_is_only_hetren_specific_attachment": false,
+    "minimal_governed_handoff_is_only_other_hetren_specific_text": false,
+    "observable_nonpackage_hetren_context_detected": true,
+    "additional_attachment_detected": true,
+    "earlier_conversation_message_detected": true,
+    "isolation_gate_passed_before_case_generation": false,
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false
+  },
+  "abort_reason": "Observable generation-session isolation boundary violation: earlier user/assistant messages and additional non-package Hetren-specific context/attachment are visible in this conversation. Per Package v9, generation aborted before any case generation."
+}

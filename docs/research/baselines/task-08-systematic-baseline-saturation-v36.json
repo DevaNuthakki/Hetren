@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 36,
+  "state": "DIRECT_MEMORY_SATURATION_V36_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-26T23:21:50Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "research_origin": "BOUNDED_EXTERNAL_RESEARCH_BEFORE_ARTIFACT_CREATION",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v38_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v38.json",
+      "sha256": "4d22f9f7d3166a7d769a683e1ef294c241d401b80e30626e0ece00ccfbfa73a6"
+    },
+    "systematic_saturation_v35": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v35.json",
+      "sha256": "dc9b89b7518f098348590092493d6eaa23d259906035ab29c76713a3e4d65f06"
+    },
+    "candidate_addendum_v38": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v38.json",
+      "sha256": "472817ff6311ca10bc28c097c5463605fa3ffa835c25bbf865b910d8de5fa968"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_LONG_TERM_MEMORY",
+    "E1_LEARNED_MEMORY_CONTROL",
+    "E1_ASSOCIATIVE_MEMORY",
+    "E1_MEMORY_DISTILLATION",
+    "E1_RESOURCE_EFFICIENT_MEMORY"
+  ],
+  "queries_used_for_external_review": [
+    "2026 peer reviewed LLM agent long term memory direct memory official implementation",
+    "2026 ICML agent memory task agnostic plugin memory PlugMem",
+    "2026 ACL learned unified long term short term agent memory AgeMem",
+    "2026 ACL Hebbian associative memory LLM agents HeLa-Mem",
+    "2026 ACL adaptive memory distillation agent Nemori",
+    "2026 ICLR lightweight efficient memory augmented generation LightMem",
+    "2026 direct agent memory retrieval consolidation procedural episodic official code",
+    "2026 learned memory management reinforcement learning LLM agent official code",
+    "2026 agent memory graph episodic semantic consolidation official code",
+    "2026 long horizon LLM memory system conference implementation",
+    "2026 agent memory retention retrieval reflection conference",
+    "2026 procedural episodic semantic memory LLM agents comparison"
+  ],
+  "query_count": 12,
+  "proposed_mechanism_count": 5,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+      "aliases_checked": [
+        "PlugMem",
+        "A Task-Agnostic Plugin Memory Module for LLM Agents"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-PLUGMEM",
+          "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v35.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM",
+      "name": "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+      "aliases_checked": [
+        "AgeMem",
+        "Agentic Memory",
+        "Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-AGEMEM-UNIFIED",
+          "name": "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v36.json"
+        },
+        {
+          "id": "DISCOVERY:T8-E1-AGEMEM",
+          "name": "AgeMem \u2014 Agentic Memory",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v28.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+      "aliases_checked": [
+        "HeLa-Mem",
+        "Hebbian Learning and Associative Memory for LLM Agents"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-HELA-MEM",
+          "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NEMORI",
+      "name": "What Deserves Memory: Adaptive Memory Distillation for LLM Agents",
+      "aliases_checked": [
+        "Nemori",
+        "What Deserves Memory",
+        "Adaptive Memory Distillation for LLM Agents"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-NEMORI",
+          "name": "Nemori \u2014 What Deserves Memory: Adaptive Memory Distillation for LLM Agents",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v33.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM-ICLR",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "aliases_checked": [
+        "LightMem",
+        "Lightweight and Efficient Memory-Augmented Generation"
+      ],
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "id": "DISCOVERY:T8-E1-LIGHTMEM",
+          "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_reference_only": [
+    {
+      "name": "ARTEM: Agentic Retrieval with Temporal-Episodic Memory",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_AAAI_2026",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/39773"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/cassthm/ARTEM"
+        }
+      ],
+      "disposition": "TEMPORAL_EPISODIC_MEMORY_REFERENCE_NOT_PROMOTED_IN_THIS_DIRECT_MEMORY_ROUND",
+      "reason": "The verified evaluation emphasizes episodic recall, chronology and uncertainty tasks; it should become claim-bearing only if a matched temporal-episodic memory experiment is declared."
+    },
+    {
+      "name": "LeanMem",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.03463"
+        }
+      ],
+      "disposition": "ONGOING_RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Recent long-term-memory research is relevant, but archival peer review and a governed reproducible implementation identity were not established in this bounded pass."
+    },
+    {
+      "name": "Agent Zero Memory",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2608.29606"
+        }
+      ],
+      "disposition": "ONGOING_RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Provenance-aware multi-store memory is relevant, but this bounded pass does not bind the research paper to a reproducible claim-bearing implementation identity."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_refinement_scope": "E1_ONLY",
+    "forcing_memory_reuse_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_DIRECT_MEMORY_SATURATION_V36"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "counter_entering_round": 0,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "reason": "No materially new eligible direct-memory comparator was found in this complete bounded refinement, so this is the first consecutive no-new-material round."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "memory_benchmark_is_general_agent_intelligence": false,
+    "direct_memory_method_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "screened_reference_is_claim_bearing": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B41_SECOND_CONSECUTIVE_NO_NEW_MATERIAL_CONFIRMATION_REFINEMENT"
+}

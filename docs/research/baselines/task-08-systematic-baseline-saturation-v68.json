@@ -1,0 +1,174 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 68,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:48:49Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v70_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v70.json",
+      "sha256": "591f8354f8240f85a3a2aa76132740b1d9cb634cc46591a0450c746cdb08e493"
+    },
+    "systematic_saturation_v67": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v67.json",
+      "sha256": "e66189f7b7b25ef12e90593b5befb0e423d7b964b63792631b7fa4bfe415c543"
+    },
+    "candidate_addendum_v70": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v70.json",
+      "sha256": "de23501e8b3459df4daa7285170985ecbbd57395d6a9c595956aed9191cac4ca"
+    }
+  },
+  "displacement_target": {
+    "candidate_id": "DISCOVERY:T8-E1-PALM-LONGHORIZON",
+    "role": "LONG_HORIZON_ROBOTIC_MANIPULATION_POLICY",
+    "materiality_rule": "Only a previously unpromoted candidate with directly comparable long-horizon manipulation decision behavior and reproducible public implementation may reset the stopping counter."
+  },
+  "queries_executed": [
+    "PALM long-horizon manipulation direct displacement CVPR 2026",
+    "2026 long-horizon VLA progress temporal consistency official code",
+    "OptimusVLA long-horizon progress dual memory CVPR 2026 official code",
+    "AtomicVLA long-horizon planning skill composition CVPR 2026 official code",
+    "2026 affordance grounded long-horizon robot manipulation CVPR",
+    "2026 long-horizon VLA task progress action history memory",
+    "2026 long-horizon robotic manipulation skill planning execution VLA",
+    "2026 PALM comparable long-horizon robot policy LIBERO LONG CALVIN",
+    "2026 robotic manipulation temporal consistency progress-aware VLA",
+    "2026 long-horizon affordance planning VLA executable implementation",
+    "2026 CVPR VLA atomic skill long horizon",
+    "2026 CVPR VLA dual memory long horizon"
+  ],
+  "query_count": 12,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPTIMUSVLA",
+      "name": "OptimusVLA",
+      "prior_promoted_matches": [
+        "DISCOVERY:T8-E1-OPTIMUSVLA"
+      ],
+      "role_match": true,
+      "reproducibility_gate": "PASS_PUBLIC_EXECUTABLE_IMPLEMENTATION_AND_CHECKPOINTS",
+      "disposition": "PREEXISTING_OR_ALIAS_MATCH_NOT_RECOUNTED"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+      "name": "AtomicVLA",
+      "prior_promoted_matches": [],
+      "role_match": true,
+      "reproducibility_gate": "PASS_PUBLIC_EXECUTABLE_TRAINING_EVALUATION_AND_CHECKPOINT_ASSETS",
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    }
+  ],
+  "displacement_proposal_count": 2,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+      "name": "AtomicVLA",
+      "full_title": "AtomicVLA: Unlocking the Potential of Atomic Skill Learning in Robots",
+      "aliases": [
+        "AtomicVLA",
+        "Unlocking the Potential of Atomic Skill Learning in Robots",
+        "Skill-Guided Mixture-of-Experts"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LONG_HORIZON_SKILL_COMPOSITION_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H1_PLANNING_AND_EXECUTION_VLA_ROLE_CONDITIONAL"
+      ],
+      "role_match": true,
+      "reproducibility_gate": "PASS_PUBLIC_EXECUTABLE_TRAINING_EVALUATION_AND_CHECKPOINT_ASSETS",
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_AtomicVLA_Unlocking_the_Potential_of_Atomic_Skill_Learning_in_Robots_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zhanglk9/AtomicVLA"
+        }
+      ],
+      "material_reason": "Directly targets long-horizon multi-step robot control through joint task-level planning, atomic skill abstractions, and skill-routed expert composition.",
+      "limits": [
+        "LONG_HORIZON_SKILL_COMPOSITION_SETTING_REQUIRED",
+        "ATOMIC_SKILL_LIBRARY_AND_ROUTING_CONFIGURATION_MUST_BE BOUND",
+        "BASE_MODEL_AND_EXPERT_CONFIGURATION_MUST_BE BOUND",
+        "CONTINUAL_LEARNING_RESULTS_REQUIRE_SEPARATE_ROLE_MATCH",
+        "LIBERO_CALVIN_AND_REAL_WORLD_EVIDENCE_MUST_NOT_BE COLLAPSED"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "AGiLe",
+      "full_title": "AGiLe: Learning Robust Long-Horizon Manipulation via Affordance-Grounded Bidirectional Latent Planning",
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_PROJECT_AND_PAPER_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Chen_AGiLe_Learning_Robust_Long-Horizon_Manipulation_via_Affordance-Grounded_Bidirectional_Latent_Planning_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://agile-long.github.io/"
+        }
+      ],
+      "disposition": "DIRECT_ROLE_RESEARCH_REFERENCE_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "reason": "AGiLe is a close PALM-role comparator because it combines long-horizon bidirectional planning with affordance grounding, but this bounded review did not verify an official executable implementation."
+    },
+    {
+      "name": "FLARE",
+      "full_title": "FLARE: A Failure-Aware Framework for Autonomous Correction and Recovery in Visual-Language Robotic Manipulation",
+      "evidence_state": "PEER_REVIEWED_CVPR_2026",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhao_FLARE_A_Failure-Aware_Framework_for_Autonomous_Correction_and_Recovery_in_CVPR_2026_paper.html"
+        }
+      ],
+      "disposition": "RECOVERY_SPECIFIC_REFERENCE_NOT_PALM_ROLE_DISPLACEMENT",
+      "reason": "FLARE targets retry/reset failure recovery rather than the same primary progress-aware long-horizon planning role as PALM."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "robotic_manipulation_policy_candidates_do_not_establish_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_DISPLACEMENT_SATURATION_V68"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "required_consecutive_no_new_material_candidate_rounds": 2,
+    "reason": "At least one materially new role-matched displacement candidate was found."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_identity_alone_is_material": false,
+    "published_method_without_reproducibility_is_claim_bearing": false,
+    "new_candidate_is_automatically_strongest": false,
+    "palms_public_results_directly_rank_against_candidates": false,
+    "robotic_manipulation_transfer_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B73_VERIFY_ADDENDUM_V71_AND_RUN_NEXT_BOUNDED_DISPLACEMENT_REFINEMENT"
+}

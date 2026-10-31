@@ -1,0 +1,220 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 56,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T01:48:36Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v55": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v55.json",
+      "sha256": "2fb32403720056dc13b741d8e05196026e572888862a634c42251cd5c5ae00c3"
+    },
+    "systematic_saturation_v53": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v53.json",
+      "sha256": "723082676a428231c3fb6c3d319b8f3dbd09cb687d75ba7e4d096bcd1c103bec"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-VOXPOSER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "VoxPoser: Composable 3D Value Maps for Robotic Manipulation with Language Models",
+      "implementation_identity": "https://github.com/huangwl18/VoxPoser",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ZERO_SHOT_LANGUAGE_GROUNDED_CONTROL_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_CANONICAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://voxposer.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/VoxPoser"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_OR_MATCHED_LANGUAGE_GROUNDED_MANIPULATION_SETTING",
+        "PUBLIC_RLBENCH_CODE_IS_DESCRIBED_BY_AUTHORS_AS_DEMO_IMPLEMENTATION_NOT_EVALUATION_BENCHMARK",
+        "PUBLIC_RLBENCH_IMPLEMENTATION_USES_SIMULATOR_OBJECT_MASKS_INSTEAD_OF_REAL_WORLD_PERCEPTION_PIPELINE",
+        "LLM_VLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "MOTION_PLANNER_AND_ENVIRONMENT_CONFIGURATION_MUST_BE BOUND",
+        "Zero-shot LLM/VLM-based manipulation method that composes 3D value maps and passes them to motion planners rather than learning a task-specific control policy."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_OR_MATCHED_LANGUAGE_GROUNDED_MANIPULATION_SETTING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_SATURATION_PASS_V53"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-PERACT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PerAct: Perceiver-Actor for Multi-Task Robotic Manipulation",
+      "implementation_identity": "https://github.com/peract/peract",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_LANGUAGE_CONDITIONED_3D_MANIPULATION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_CANONICAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://peract.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/peract/peract"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_MULTI_STEP_MANIPULATION_SETTING_MATCHED",
+        "RLBENCH_TASK_SET_AND_VARIATIONS_MUST_BE BOUND",
+        "PRETRAINED_CHECKPOINT_ID_AND_LATENT_CONFIGURATION_MUST_BE BOUND",
+        "CAMERA_SET_VOXEL_SIZE_AND_DATA_AUGMENTATION_MUST_BE BOUND",
+        "TRAINING_DEMONSTRATION_BUDGET_MUST_BE RESOURCE_MATCHED",
+        "End-to-end behavior-cloning agent using 3D voxel representations and a Perceiver-style policy over language-conditioned manipulation tasks, with released datasets, checkpoints, training, and evaluation code."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_MULTI_STEP_MANIPULATION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_SATURATION_PASS_V53"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-CLIPORT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CLIPort: What and Where Pathways for Robotic Manipulation",
+      "implementation_identity": "https://github.com/cliport/cliport",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_LANGUAGE_CONDITIONED_TABLETOP_POLICY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_CANONICAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PROJECT_PAGE",
+          "url": "https://cliport.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/cliport/cliport"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_LANGUAGE_CONDITIONED_TABLETOP_ACTION_SEQUENCE_SETTING_MATCHED",
+        "TASK_MUST_REQUIRE_MATERIALLY_SEQUENTIAL_ENVIRONMENT_INTERACTION_TO_QUALIFY_AS_E1",
+        "TRAINING_DEMONSTRATION_COUNT_MUST_BE BOUND",
+        "PRETRAINED_CHECKPOINT_AND_MODEL_VARIANT_MUST_BE BOUND",
+        "CLIP_AND_TRANSPORTER_CONFIGURATION_MUST_BE BOUND",
+        "Executable imitation-learning policy combining CLIP semantic grounding with Transporter-style spatial action prediction for language-conditioned tabletop tasks."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_LANGUAGE_CONDITIONED_TABLETOP_ACTION_SEQUENCE_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_SATURATION_PASS_V53"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-RVT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "RVT: Robotic View Transformer for 3D Object Manipulation",
+      "implementation_identity": "https://github.com/nvlabs/rvt",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MULTI_VIEW_3D_MANIPULATION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_CANONICAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_PROVIDER_RESEARCH_PAGE",
+          "url": "https://research.nvidia.com/publication/2023-11_rvt-robotic-view-transformer-3d-object-manipulation"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/nvlabs/rvt"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_3D_MANIPULATION_SETTING_MATCHED",
+        "RVT_AND_RVT2_IDENTITIES_MUST_NOT_BE COLLAPSED",
+        "RLBENCH_TASK_AND_DEMONSTRATION_REGIME_MUST_BE BOUND",
+        "MODEL_VARIANT_AND_CHECKPOINT_MUST_BE BOUND",
+        "MULTI_VIEW_RENDERING_AND_CAMERA_CONFIGURATION_MUST_BE BOUND",
+        "Multi-view transformer policy for 3D manipulation with official reproduction code and trained-model support, representing a distinct learned-control architecture from voxel-heavy PerAct."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_IF_RLBENCH_3D_MANIPULATION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_EMBODIED_SATURATION_PASS_V53"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

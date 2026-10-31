@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 13,
+  "state": "SATURATION_V9_FOUND_NEW_MATERIAL_E1_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:22:00Z",
+  "task": 8,
+  "bindings": {
+    "attempt_12": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_12.json",
+      "sha256": "ce7ffa8f1dde5aa7646f7a50c8819f6b5a17c58e632b9a90a2ee801a4063dcb8"
+    },
+    "addendum_v11_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v11.json",
+      "sha256": "c1ae94a56a3c43f17c28738c60d4da90118b4b8c95864f13c269b03fc5ed74ee"
+    },
+    "systematic_saturation_v9": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v9.json",
+      "sha256": "f283a8a1db959be025a0b9331b46fdc5fd334227a37b5ae7af75f1378cea5058"
+    },
+    "candidate_addendum_v12": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v12.json",
+      "sha256": "4b7582b6ce77ff746af2981afa3a8cbb28c5937f7b52357653652932b8a4d431"
+    }
+  },
+  "state_summary": {
+    "addendum_v11_role_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v12_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "The bounded saturation refinement discovered TMoW and STAD as materially distinct externally evidenced candidates absent from prior governed Task-8 candidate evidence.",
+  "next_gate": "I4B14_VERIFY_ADDENDUM_V12_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

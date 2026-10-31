@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 44,
+  "state": "ADDENDUM_V44_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T00:00:24Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v44": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v44.json",
+      "sha256": "25fde7b043a213a16e90f33941fa8aea80a6b19c7fa00cec0bc3fee5d85d735e"
+    },
+    "systematic_saturation_v41": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v41.json",
+      "sha256": "9cc941e27e17b55b406e78b316159759c47f36cb1115ebb34249bd544854497e"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOBRAIN-EXEC",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EXECUTIVE_AGENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "MemoBrain is published in Findings of ACL 2026.",
+        "It constructs dependency-aware executive memory over reasoning steps in tool-augmented agents.",
+        "It actively manages working context by pruning invalid steps, folding completed sub-trajectories, and preserving a compact reasoning backbone.",
+        "The public implementation exposes an executable MemoBrain package and token-budget-driven memory management.",
+        "The publication evaluates long-horizon reasoning on GAIA, WebWalker, and BrowseComp-Plus."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.127/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/qhjqhj00/MemoBrain"
+        }
+      ],
+      "limits": [
+        "TOOL_AUGMENTED_LONG_HORIZON_REASONING_ROLE_MUST_MATCH",
+        "EXECUTIVE_MEMORY_MODEL_IDENTITY_MUST_BE BOUND",
+        "TOKEN_BUDGET_AND_MEMORY_COMPRESSION_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HIMEM-HIERARCHICAL",
+      "verification_state": "PRIMARY_PREPRINT_AND_PUBLIC_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_HIERARCHICAL_LONG_TERM_MEMORY_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "HiMem was publicly released as arXiv:2601.06377 in January 2026.",
+        "It constructs Episode Memory and Note Memory in a hierarchical long-term memory architecture.",
+        "Its episode construction uses topic-aware event-surprise segmentation.",
+        "It supports hybrid and best-effort retrieval plus conflict-aware memory reconsolidation.",
+        "A public implementation is available from the authors."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.06377"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/jojopdq/HiMem"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "LONG_HORIZON_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH",
+        "SEGMENTATION_RETRIEVAL_AND_RECONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v44_candidates_have_role_level_external_review": true,
+    "memobrain_archival_peer_review_verified": true,
+    "himem_archival_peer_review_verified": false,
+    "all_addendum_v44_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "himem_is_peer_reviewed": false,
+    "publication_status_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 14,
+  "state": "SATURATION_V10_FOUND_NEW_MATERIAL_E1_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:27:36Z",
+  "task": 8,
+  "bindings": {
+    "attempt_13": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_13.json",
+      "sha256": "531b342674170161ddd3f02e5c138b13a379765a53724b7dea24be1bca83c7a6"
+    },
+    "addendum_v12_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v12.json",
+      "sha256": "7cde26c85c1bbfa873d1f0855cc52748610610935ad42e94d318a29cf4c04352"
+    },
+    "systematic_saturation_v10": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v10.json",
+      "sha256": "880c234abf22e12fe749e7d748c379b1ce1acee89139f121e92b818f5f459e56"
+    },
+    "candidate_addendum_v13": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v13.json",
+      "sha256": "7f266fea80b452ac65197491640a7d1de0503f0ed7e1d0b8003cd376ce7b2291"
+    }
+  },
+  "state_summary": {
+    "addendum_v12_role_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v13_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "Saturation v10 discovered Timely-RL and FOZO as materially distinct, reproducible, peer-reviewed candidates absent from prior governed Task-8 candidate identities.",
+  "next_gate": "I4B15_VERIFY_ADDENDUM_V13_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

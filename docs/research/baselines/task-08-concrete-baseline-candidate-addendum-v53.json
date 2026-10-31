@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 53,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T01:30:56Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v52": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v52.json",
+      "sha256": "53217cf6ef01a589794e2bb3810996b2c767f427ad420801f5f48cf75a721402"
+    },
+    "systematic_saturation_v50": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v50.json",
+      "sha256": "051223fc65e35cb6d2a5b8a4dc5e54e8766527d51b28fd84b0fe5089a5945234"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ADAPLANNER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AdaPlanner: Adaptive Planning from Feedback with Language Models",
+      "implementation_identity": "https://github.com/haotiansun14/AdaPlanner",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_FEEDBACK_DRIVEN_PLANNING_COMPARATOR_CANDIDATE",
+        "A_H1_CLOSED_LOOP_REPLANNING_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/b5c8c1c117618267944b2617add0a766-Abstract.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/haotiansun14/AdaPlanner"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "ALFWORLD_OR_MINIWOB_STYLE_INTERACTIVE_SETTING_REQUIRED",
+        "PLAN_REFINEMENT_AND_SKILL_DISCOVERY_CONFIGURATION_MUST_BE BOUND",
+        "SUCCESSFUL_PLAN_REUSE_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "FEEDBACK_DRIVEN_REPLANNING_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_ELIGIBILITY_AUDIT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_LEGACY_E1_SATURATION_PASS_V50"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SWIFTSAGE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SwiftSage: A Generative Agent with Fast and Slow Thinking for Complex Interactive Tasks",
+      "implementation_identity": "https://github.com/SwiftSage/SwiftSage",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HYBRID_LEARNED_AND_DELIBERATIVE_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/4b0eea69deea512c9e2c469187643dc2-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SwiftSage/SwiftSage"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "SCIENCEWORLD_INTERACTIVE_SETTING_REQUIRED",
+        "SWIFT_BEHAVIOR_CLONING_MODEL_AND_SAGE_LLM_MUST_BE BOUND",
+        "V1_SCIENCEWORLD_CODE_MUST_BE DISTINGUISHED_FROM_LATER_SWIFTSAGE_V2",
+        "HYBRID_ARCHITECTURE_RESOURCE_PARITY_MUST_BE AUDITED"
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_ELIGIBILITY_AUDIT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_LEGACY_E1_SATURATION_PASS_V50"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LATS",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models",
+      "implementation_identity": "https://github.com/andyz245/LanguageAgentTreeSearch",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TREE_SEARCH_REFLECTION_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v235/zhou24r.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/andyz245/LanguageAgentTreeSearch"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "WEBSHOP_DECISION_MAKING_ROLE_MUST_BE SEPARATED_FROM_HOTPOTQA_AND_PROGRAMMING",
+        "TREE_SEARCH_ITERATION_GENERATION_AND_EVALUATION_BUDGETS_MUST_BE BOUND",
+        "BASE_MODEL_AND_VALUE_FUNCTION_PROMPTS_MUST_BE BOUND",
+        "SEARCH_COMPUTE_REQUIRES_TASK_9_RESOURCE_ACCOUNTING"
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_FINAL_ELIGIBILITY_AUDIT",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "CANONICAL_LEGACY_E1_SATURATION_PASS_V50"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

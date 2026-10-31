@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_LEGACY_AGENT_MEMORY_IDENTITY_RESOLUTION",
+  "resolution_generation": 1,
+  "state": "LEGACY_IDENTITIES_RESOLVED_BEFORE_SATURATION_V48",
+  "recorded_at_utc": "2026-09-27T01:18:16Z",
+  "task": 8,
+  "scope": [
+    "REFLEXION",
+    "EXPEL",
+    "AGENT_PRO",
+    "VOYAGER"
+  ],
+  "resolutions": [
+    {
+      "identity": "Reflexion",
+      "status": "PREEXISTING_CANDIDATE_ONLY_NOT_NEW",
+      "matching_records": [
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": "Reflexion",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json"
+        },
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": null,
+          "source_file": "docs/research/baselines/task-08-candidate-external-verification-v2.json"
+        }
+      ],
+      "new_candidate_required": false,
+      "reason": "Reflexion already exists in the governed candidate registry and must not be rediscovered as a new identity."
+    },
+    {
+      "identity": "ExpeL",
+      "status": "NO_PRIOR_EXACT_CANDIDATE_IDENTITY_FOUND",
+      "matching_records": [],
+      "new_candidate_required": true
+    },
+    {
+      "identity": "Agent-Pro",
+      "status": "NO_PRIOR_EXACT_CANDIDATE_IDENTITY_FOUND",
+      "matching_records": [],
+      "new_candidate_required": true,
+      "audit_note": "Earlier broad AGENT_PRO matching produced false positives involving unrelated procedural memory candidate names. Exact identity matching does not find a prior Agent-Pro candidate."
+    },
+    {
+      "identity": "Voyager",
+      "status": "NO_PRIOR_EXACT_CANDIDATE_IDENTITY_FOUND",
+      "matching_records": [],
+      "new_candidate_required": true
+    }
+  ],
+  "new_candidate_identities_required": [
+    "ExpeL",
+    "Agent-Pro",
+    "Voyager"
+  ],
+  "new_candidate_count": 3,
+  "claim_limits": {
+    "identity_resolution_establishes_scientific_eligibility": false,
+    "identity_resolution_selects_strongest_comparator": false,
+    "identity_resolution_freezes_baseline": false
+  }
+}

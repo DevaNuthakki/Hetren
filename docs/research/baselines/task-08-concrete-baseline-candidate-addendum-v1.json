@@ -1,0 +1,248 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:17:54Z",
+  "task": 8,
+  "bindings": {
+    "original_registry": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+      "sha256": "83235e3348fa7afbc774fa0335d535f966f2a8a67cc8db46f47803ad37318d36"
+    },
+    "refinement_v2": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v2.json",
+      "sha256": "8f0b2e83b0ee69c9c468977036fdb21ec31122062250835a89d8374dda8a31e0"
+    }
+  },
+  "candidate_count": 9,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E2-ADAPTABLE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AdapTable",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://github.com/drumpt/AdapTable"
+      ],
+      "evidence_status": "OFFICIAL_REPOSITORY_VERIFIED_PRIMARY_PEER_REVIEW_LEVEL_IS_WORKSHOP",
+      "eligibility_status": "PENDING",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-FTTA-FD",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Fully Test-Time Adaptation for Feature Decrement in Tabular Data",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "comparison_role": [
+        "A_H1_SCENARIO_SPECIFIC_ADAPTATION_BASELINE"
+      ],
+      "source_references": [
+        "https://www.ijcai.org/proceedings/2025/550",
+        "https://github.com/LAMDA-NeSy/Fully-Test-Time-Adaptation-for-Feature-Decrement-in-Tabular-Data"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_FEATURE_DECREMENT_APPLICABILITY",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-TDA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Training-free Dynamic Adapter",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://openaccess.thecvf.com/content/CVPR2024/html/Karmanov_Efficient_Test-Time_Adaptation_of_Vision-Language_Models_CVPR_2024_paper.html",
+        "https://github.com/kdiAAA/TDA"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-TT-RAA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Test-Time Retrieval-Augmented Adaptation",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://openaccess.thecvf.com/content/ICCV2025/html/Fan_Test-Time_Retrieval-Augmented_Adaptation_for_Vision-Language_Models_ICCV_2025_paper.html",
+        "https://github.com/xinqi-fan/TT-RAA"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-FRET",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FRET",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_VISION_TTA_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://openaccess.thecvf.com/content/ICCV2025/html/You_FRET_Feature_Redundancy_Elimination_for_Test_Time_Adaptation_ICCV_2025_paper.html",
+        "https://github.com/youlj109/fret"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_MATCHED_STRENGTH_REVIEW",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-MGTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Learning to Generate Gradients for Test-Time Adaptation",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_LEARNED_OPTIMIZER_TTA_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/33783",
+        "https://github.com/keikeiqi/MGTTA"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_MATCHED_STRENGTH_AND_INFORMATION_PARITY_REVIEW",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-BCA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Bayesian Class Adaptation",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://openaccess.thecvf.com/content/CVPR2025/html/Zhou_Bayesian_Test-Time_Adaptation_for_Vision-Language_Models_CVPR_2025_paper.html",
+        "https://github.com/buerzlh/Bayesian-Test-Time-Adaptation-for-Vision-Language-Models"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "eligibility_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-RA-TTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Retrieval-Augmented Test-Time Adaptation",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "source_references": [
+        "https://github.com/kaist-dmlab/RA-TTA"
+      ],
+      "evidence_status": "OFFICIAL_IMPLEMENTATION_AND_CONFERENCE_ACCEPTANCE_VERIFIED",
+      "eligibility_status": "PRIMARY_PUBLICATION_BINDING_STILL_REQUIRED",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E3-MAXHERDING",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MaxHerding",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "comparison_role": [
+        "N_H1_LOW_BUDGET_ACTIVE_LEARNING_COMPARATOR_CANDIDATE"
+      ],
+      "source_references": [
+        "https://arxiv.org/abs/2407.12212"
+      ],
+      "evidence_status": "PRIMARY_PREPRINT_VERIFIED_IMPLEMENTATION_NOT_VERIFIED",
+      "eligibility_status": "IMPLEMENTATION_AND_REPRODUCIBILITY_REVIEW_REQUIRED",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "provenance": "SECOND_PREREGISTERED_EXTERNAL_QUERY_REFINEMENT"
+    }
+  ],
+  "original_registry_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

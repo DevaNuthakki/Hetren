@@ -1,0 +1,161 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 54,
+  "state": "ADDENDUM_V54_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:43:08Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v54": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v54.json",
+      "sha256": "b1f412c60eeef7c981c29e74ed2d2d8e25b795f0c7a1cec9ff25c9ad552de741"
+    },
+    "systematic_saturation_v51": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v51.json",
+      "sha256": "21017af0b594607a93f64376f1c409f6415411f6aea407a08bcf14fdcf7fb1a4"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ZERO-SHOT-PLANNER",
+      "verification_state": "PEER_REVIEWED_ICML_2022_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_CANONICAL_LANGUAGE_MODEL_EMBODIED_PLANNING_COMPARATOR",
+      "verified_facts": [
+        "The method is published at ICML 2022.",
+        "It grounds high-level natural-language household tasks into admissible mid-level actions.",
+        "The evaluation uses the interactive VirtualHome environment.",
+        "The official implementation provides executable planning code and VirtualHome action/example resources."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/huang22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/language-planner"
+        }
+      ],
+      "limits": [
+        "VIRTUALHOME_STYLE_ACTION_SPACE_OR_EQUIVALENT_MATCH_REQUIRED",
+        "LANGUAGE_MODEL_IDENTITY_AND_SAMPLING_CONFIGURATION_MUST_BE BOUND",
+        "AVAILABLE_ACTIONS_AND_PROMPT_EXAMPLES_ARE_INFORMATION_OPPORTUNITY",
+        "ZERO_SHOT_LABEL_DOES_NOT_MEAN_NO_PROMPT_EXAMPLES_OR_NO_PRETRAINING"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAYCAN",
+      "verification_state": "PEER_REVIEWED_CORL_2022_AND_OFFICIAL_SIMULATION_RELEASE_VERIFIED",
+      "role_disposition": "E1_CANONICAL_AFFORDANCE_GROUNDED_ROBOT_PLANNING_COMPARATOR",
+      "verified_facts": [
+        "SayCan is published in the CoRL 2022 proceedings.",
+        "It combines language-model usefulness scores with learned skill-affordance or value-function scores.",
+        "The resulting policy repeatedly selects grounded skills for temporally extended robot instructions.",
+        "The project released a simulated tabletop implementation through Google Research."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v205/ichter23a.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://say-can.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/saycan"
+        }
+      ],
+      "limits": [
+        "PREDEFINED_SKILL_LIBRARY_MUST_BE MATCHED",
+        "AFFORDANCE_OR_VALUE_FUNCTION_ACCESS_MUST_BE MATCHED",
+        "LANGUAGE_MODEL_VARIANT_MUST_BE BOUND",
+        "REAL_ROBOT_AND_SIMULATION_CONFIGURATIONS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CODE-AS-POLICIES",
+      "verification_state": "PEER_REVIEWED_ICRA_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_CANONICAL_LANGUAGE_MODEL_PROGRAM_POLICY_COMPARATOR",
+      "verified_facts": [
+        "Code as Policies is published at ICRA 2023.",
+        "It uses code-generating language models to produce robot policy programs from natural-language instructions.",
+        "Generated programs can compose perception APIs, control primitives, arithmetic, and feedback loops.",
+        "Google Research provides experiment code and interactive demonstration notebooks."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://doi.org/10.1109/ICRA48891.2023.10160591"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/code_as_policies"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://code-as-policies.github.io/"
+        }
+      ],
+      "limits": [
+        "PERCEPTION_AND_CONTROL_API_SURFACE_MUST_BE MATCHED",
+        "LANGUAGE_MODEL_CODE_GENERATION_IDENTITY_MUST_BE BOUND",
+        "PROMPT_PROGRAM_EXAMPLES_ARE INFORMATION_OPPORTUNITY",
+        "TABLETOP_NAVIGATION_AND_OTHER_DOMAINS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PROGPROMPT",
+      "verification_state": "PEER_REVIEWED_ICRA_2023_AND_OFFICIAL_VIRTUALHOME_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_CANONICAL_PROGRAMMATIC_PROMPT_PLANNING_COMPARATOR",
+      "verified_facts": [
+        "ProgPrompt is published at ICRA 2023.",
+        "It represents robot actions, objects, examples, comments, and assertions in a program-like prompt.",
+        "Assertions support execution-time precondition checking and recovery behavior.",
+        "The official NVIDIA repository releases the VirtualHome implementation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ieeexplore.ieee.org/document/10161317/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVlabs/progprompt-vh"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://progprompt.github.io/"
+        }
+      ],
+      "limits": [
+        "PROGRAMMATIC_PROMPT_AND_ACTION_LIBRARY_MUST_BE MATCHED",
+        "VIRTUALHOME_AND_PHYSICAL_ROBOT_RESULTS_MUST_NOT_BE COLLAPSED",
+        "LLM_IDENTITY_PROMPT_EXAMPLES_AND_ASSERTION_CONFIGURATION_MUST_BE BOUND"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v54_candidates_have_role_level_external_review": true,
+    "all_addendum_v54_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonical_status_establishes_strongest_status": false,
+    "peer_review_establishes_final_applicability": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

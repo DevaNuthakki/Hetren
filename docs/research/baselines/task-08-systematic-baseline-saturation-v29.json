@@ -1,0 +1,287 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 29,
+  "state": "SATURATION_V29_FOUND_NEW_MEMORY_MECHANISM_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T22:38:11Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "publication_or_public_research_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v31_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v31.json",
+      "sha256": "dd841dd4229e8949beea8861450b2740f6ce56b77870e247daa955a3b600b559"
+    },
+    "systematic_saturation_v28": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v28.json",
+      "sha256": "00537a95a1c8ed5ad521d371b1982bd360392582be5182d707738e9d39364fc3"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_MEMORY_MECHANISM_CLASS_CLOSURE",
+    "N_H1_MEMORY_COMPARATOR_COVERAGE",
+    "N_H2_CROSS_FAMILY_TRANSFER_GAP_CHECK"
+  ],
+  "queries_executed": [
+    "\"AMA\" \"Adaptive Memory via Multi-Agent Collaboration\" ACL 2026 github",
+    "\"HeLa-Mem\" ACL 2026 github",
+    "\"LightMem\" ICLR 2026 github",
+    "\"Memp\" \"Exploring Agent Procedural Memory\" ACL 2026 github",
+    "\"RecMem\" ACL 2026 memory github",
+    "\"BMAM\" ACL 2026 memory github",
+    "\"Memory-R1\" ACL 2026 github code",
+    "\"H-MEM\" EACL 2026 github",
+    "\"ReasoningBank\" ICLR 2026 official implementation",
+    "\"Remember Me, Refine Me\" ACL 2026 ReMe github",
+    "\"Thought-Retriever\" TMLR 2026 github",
+    "2026 peer reviewed agent memory multi granularity code",
+    "2026 peer reviewed associative agent memory code",
+    "2026 peer reviewed procedural agent memory code",
+    "2026 peer reviewed memory consolidation long running LLM agents code",
+    "2026 peer reviewed multi-agent memory framework code"
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 6,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-ADAPTIVE-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_RECOUNTED",
+      "prior_candidate_artifact_matches": [
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_candidate_artifact_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_candidate_artifact_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP",
+      "name": "MemP: Exploring Agent Procedural Memory",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_RECOUNTED",
+      "prior_candidate_artifact_matches": [
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v7.json"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RECMEM",
+      "name": "RecMem: Recurrence-based Memory Consolidation for Efficient and Effective Long-Running LLM Agents",
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_candidate_artifact_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BMAM",
+      "name": "BMAM: Brain-inspired Multi-Agent Memory Framework",
+      "disposition": "NEW_MATERIAL_CANDIDATE",
+      "prior_candidate_artifact_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-HELA-MEM",
+      "name": "HeLa-Mem: Hebbian Learning and Associative Memory for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ASSOCIATIVE_EPISODIC_SEMANTIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.625/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ReinerBRO/HeLa-Mem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ASSOCIATIVE_LONG_TERM_EPISODIC_SEMANTIC_MEMORY_ROLE_MATCH",
+      "material_reason": "Combines a Hebbian episodic graph with reflective semantic-memory distillation and associative retrieval, a distinct mechanism from flat vector memory or procedural-only memory.",
+      "limits": [
+        "LOCOMO_STYLE_LONG_TERM_MEMORY_ROLE_MUST MATCH",
+        "GRAPH_UPDATE_AND_DISTILLATION_CONFIGURATION_MUST_BE BOUND",
+        "ASSOCIATION_AND_CONSOLIDATION_COSTS_REQUIRE_RESOURCE_ACCOUNTING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TIERED_EFFICIENT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/a05b72653ec5b473732129829ae04195-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_TERM_MEMORY_EFFICIENCY_AND_OFFLINE_CONSOLIDATION_ROLE_MATCH",
+      "material_reason": "Uses sensory filtering, topic-aware short-term memory, and offline sleep-time long-term consolidation, explicitly separating online retrieval from heavier consolidation.",
+      "limits": [
+        "MEMORY_STAGE_CONFIGURATION_MUST_BE BOUND",
+        "OFFLINE_CONSOLIDATION_INFORMATION_ACCESS_MUST_BE MATCHED",
+        "TOKEN_API_AND_RUNTIME_RESOURCE_DIMENSIONS_REQUIRE_TASK_9_ACCOUNTING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RECMEM",
+      "name": "RecMem: Recurrence-based Memory Consolidation for Efficient and Effective Long-Running LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_RECURRENCE_BASED_MEMORY_CONSOLIDATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1619/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CaiusDai/RecMem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_RUNNING_INTERACTION_MEMORY_CONSOLIDATION_ROLE_MATCH",
+      "material_reason": "Targets long-running agent memory with recurrence-based consolidation designed to avoid the cost of eagerly processing every interaction into long-term memory.",
+      "limits": [
+        "CONSOLIDATION_TRIGGER_AND_RECURRENCE_CONFIGURATION_MUST_BE BOUND",
+        "LONG_RUNNING_DIALOGUE_OR_INTERACTION_ROLE_MUST MATCH",
+        "CONSOLIDATION_COSTS_REQUIRE_TASK_9_ACCOUNTING",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BMAM",
+      "name": "BMAM: Brain-inspired Multi-Agent Memory Framework",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_SPECIALIZED_MULTI_COMPONENT_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_MEMORY_EXPORT_RESTORE_DIAGNOSTIC_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1973/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/innovation64/BMAM"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTI_COMPONENT_LONG_TERM_MEMORY_AND_TEMPORAL_REASONING_ROLE_MATCH",
+      "material_reason": "Separates episodic, semantic, salience-aware, control, temporal, and procedural responsibilities and includes explicit memory export/restore evaluation.",
+      "limits": [
+        "MULTI_AGENT_MEMORY_COMPONENT_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_OR_LONGMEMEVAL_ROLE_MUST MATCH",
+        "MEMORY_EXPORT_RESTORE_IS_NOT_EQUIVALENT_TO_HETREN_A_H2_MODEL_ROLLBACK",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "screened_references": [
+    {
+      "name": "Memory-R1",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.583/"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_REPOSITORY",
+          "url": "https://github.com/yansikuan/memory-r1"
+        }
+      ],
+      "disposition": "PEER_REVIEWED_REFERENCE_NOT_PROMOTED_EXECUTABLE_CODE_NOT_RELEASED",
+      "reason": "The ACL 2026 method is highly relevant because it learns ADD, UPDATE, DELETE, NOOP, retrieval and answer-memory behavior using reinforcement learning, but the official repository states that code is coming soon."
+    },
+    {
+      "name": "H-MEM",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.eacl-long.15/"
+        }
+      ],
+      "disposition": "PEER_REVIEWED_HIERARCHICAL_MEMORY_REFERENCE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The method provides a materially relevant hierarchical long-term-memory mechanism, but this bounded review did not verify an official executable implementation suitable for governed reproduction."
+    }
+  ],
+  "materiality_rule": {
+    "candidate_must_be_role_applicable": true,
+    "candidate_must_be_materially_distinct": true,
+    "candidate_must_not_already_be_promoted": true,
+    "claim_bearing_candidate_requires_reproducible_implementation": true,
+    "new_name_alone_is_not_material": true
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_methods_are_e1_specific": true,
+    "within_e1_memory_transfer_or_self_evolution_is_not_general_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V29"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "required_consecutive_no_new_material_candidate_rounds": 2,
+    "reason": "The mechanism-closure refinement found at least one peer-reviewed executable direct-memory comparator that was not previously promoted in governed Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "all_memory_papers_are_comparable": false,
+    "screened_reference_is_claim_bearing": false,
+    "within_e1_memory_transfer_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "search_stopping_rule_satisfied": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B34_VERIFY_ADDENDUM_V32_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

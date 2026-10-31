@@ -1,0 +1,176 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 67,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T03:21:45Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v66": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v66.json",
+      "sha256": "772d26243ff3d1a8bd67853e576adfa6c5fca4927c4af91ff75f2cb04ee2bbf3"
+    },
+    "systematic_saturation_v64": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v64.json",
+      "sha256": "8bbb4f6cac712e8e2e5ad47f5d5585bfbd5890f4fa5ba294a4696c3a6eb58188"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-NOTES-TO-SELF-VLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Notes-to-Self: Scratchpad Augmented VLAs for Memory Dependent Manipulation Tasks",
+      "implementation_identity": "https://github.com/Qualcomm-AI-research/scratchpad-vla",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LANGUAGE_SCRATCHPAD_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://ras.papercept.net/conferences/conferences/ICRA26/program/ICRA26_ContentListWeb_5.html"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2602.21013"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Qualcomm-AI-research/scratchpad-vla"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_MEMORY_DEPENDENT_VLA_SETTING_MATCHED",
+        "SCRATCHPAD_INFORMATION_CHANNEL_MUST_BE PERMITTED_BY_MATCHED_EXPERIMENT",
+        "OPENVLA_VARIANT_AND_FINETUNING_CONFIGURATION_MUST_BE BOUND",
+        "CLEVR_SKILLS_MEMORYBENCH_AND_REAL_WORLD_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "Uses an explicit structured language scratchpad for grounding, plan state, and completed subgoals, providing a materially different memory channel from latent-token and multi-frame history mechanisms."
+      ],
+      "eligibility_status": "MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_MEMORY_DEPENDENT_VLA_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V64"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MUVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "\u03bcVLA: On Recurrent Memory for Partially Observable Manipulation in VLA Models",
+      "implementation_identity": "https://github.com/CognitiveAISystems/muVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_RECURRENT_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "EXECUTABLE_PREPRINT_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.12497"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CognitiveAISystems/muVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_PARTIAL_OBSERVABILITY_SETTING_MATCHED",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "MEMORY_WIDTH_TBPTT_LENGTH_AND_UPDATE_RULE_MUST_BE BOUND",
+        "MIKASA_ROBO_AND_LIBERO_SETTINGS_MUST_BE DISTINGUISHED",
+        "Isolates recurrence as the primary intervention by adding persistent memory tokens to OpenVLA-OFT, with matched memoryless ablations, reproducible training recipes, and released checkpoints."
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_PARTIAL_OBSERVABILITY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V64"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMBODIED",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemBodied: Recurrent Associative Memory for Vision-Language-Action Models",
+      "implementation_identity": "https://github.com/declare-lab/MemBodied",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ASSOCIATIVE_EPISODIC_MEMORY_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "EXECUTABLE_PREPRINT_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2609.28256"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/declare-lab/MemBodied"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_EPISODIC_MEMORY_VLA_SETTING_MATCHED",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "PUBLIC_EVIDENCE_MUST_REMAIN_BOUND_TO_PRE_CUTOFF_STATE",
+        "PI0_AND_PI05_BACKENDS_MUST_NOT_BE COLLAPSED",
+        "RMBENCH_AND_LIBERO_CONFIGURATIONS_MUST_BE BOUND_SEPARATELY",
+        "Introduces fixed-size recurrent associative state, an episode anchor, and transition-conditioned writes, providing a materially different bounded-memory mechanism from frame stacking and latent-token-only recurrence."
+      ],
+      "eligibility_status": "MATERIAL_EXECUTABLE_PREPRINT_DISPLACEMENT_CANDIDATE_IF_EPISODIC_MEMORY_VLA_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V64"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

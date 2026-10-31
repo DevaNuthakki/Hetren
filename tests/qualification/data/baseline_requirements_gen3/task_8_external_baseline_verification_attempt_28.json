@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 28,
+  "state": "SATURATION_V24_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:20:22Z",
+  "task": 8,
+  "bindings": {
+    "attempt_27": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_27.json",
+      "sha256": "831356391098b6fbad959f12c5063ecf425421532fbc71b4d87c2d5a6540497c"
+    },
+    "addendum_v26_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v26.json",
+      "sha256": "af9247c893663bdf52dd0a33d2bac79c678a3ef9b3f688e5a7118cdce85c005d"
+    },
+    "systematic_saturation_v24": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v24.json",
+      "sha256": "2b218d83870f24b931995a90520f676722b8ef1b94b9b9a7878cdb772c3b8a4b"
+    },
+    "candidate_addendum_v27": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v27.json",
+      "sha256": "ae31a9d3e6044b099fe73289f5d37f27fe3925e29029920e8061d5d3e2467b73"
+    }
+  },
+  "state_summary": {
+    "addendum_v26_role_review_complete": true,
+    "new_material_candidates_found": 1,
+    "candidate_addendum_v27_count": 1,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason": "AEC was absent from prior promoted candidate identities and is preserved as a materially distinct role-conditional E1 learned episodic-control comparator.",
+  "next_gate": "I4B29_VERIFY_ADDENDUM_V27_AND_RUN_NEXT_BOUNDED_ROLE_APPLICABILITY_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

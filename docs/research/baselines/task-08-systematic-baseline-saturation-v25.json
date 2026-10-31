@@ -1,0 +1,221 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 25,
+  "state": "SATURATION_V25_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T21:25:54Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "research_or_publication_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_state_is_not_final_version_identity": true,
+    "final_retained_repository_revision_must_be_proven_cutoff_consistent": true,
+    "post_cutoff_repository_changes_must_not_be_used_to_strengthen_pre_cutoff_selection": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v27_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v27.json",
+      "sha256": "8ce412f79f59ff1713933a2b48941055276fbce6ef3c4cdd3a4e9b61106e65b6"
+    },
+    "systematic_saturation_v24": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v24.json",
+      "sha256": "2b218d83870f24b931995a90520f676722b8ef1b94b9b9a7878cdb772c3b8a4b"
+    }
+  },
+  "focus": [
+    "E1_MEMORY_AND_LONG_HORIZON_AGENT_CONTROL",
+    "E2_STRUCTURED_ML_POST_DISTPFN_AND_TARS",
+    "E3_SMALL_VLM_TEST_TIME_SCALING_AND_ADAPTATION",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "ACL 2026 learned agent memory reinforcement learning executable implementation",
+    "Agentic Memory AgeMem ACL 2026 official code",
+    "Memory-R1 ACL 2026 implementation status",
+    "AMA Adaptive Memory ACL 2026 reproducibility code",
+    "ACL 2026 evolving agent workflow human preferences HFlow",
+    "2026 learned agent long term short term memory tool actions policy",
+    "2026 structured tabular test-time adaptation after Drift-Resilient TabPFN",
+    "2026 active feature acquisition structured tabular sequential decision official code",
+    "2026 industrial tabular online test-time adaptation cross-domain",
+    "ICLR 2026 small vision-language model test-time scaling official code",
+    "Efficient Test-Time Scaling for Small Vision-Language Models ICLR 2026",
+    "2026 vision-language test-time augmentation adaptation small model",
+    "2026 VLM calibration test-time prompt tuning A-TPT",
+    "2026 cross-family learned decision transfer agent structured vision",
+    "2026 common learned policy transfer agent tabular vision"
+  ],
+  "query_count": 15,
+  "proposals_checked": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM",
+      "name": "AgeMem \u2014 Agentic Memory"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-EFFICIENT-TTS-SMALL-VLM",
+      "name": "Efficient Test-Time Scaling for Small Vision-Language Models"
+    }
+  ],
+  "preexisting_or_duplicate": [],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM",
+      "name": "AgeMem \u2014 Agentic Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_LONG_HORIZON_MEMORY_MANAGEMENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_TOOL_ACTION_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_WITH_EXECUTABLE_PUBLIC_RESEARCH_IMPLEMENTATION_OBSERVED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.981/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/y1y5/AgeMem"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.01885"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_HORIZON_MEMORY_OPERATIONS_ARE_PART_OF_MATCHED_E1_DECISION_SURFACE",
+      "material_reason": "AgeMem learns unified short-term and long-term memory operations as agent-callable actions using progressive reinforcement learning, a materially different learned control mechanism from AEC episodic retrieval.",
+      "limits": [
+        "MEMORY_OPERATIONS_MUST_BE PART_OF_GOVERNED_AGENT_BEHAVIOR",
+        "HOT_POT_QA_STYLE_TRAINING_DOES_NOT_AUTOMATICALLY_MATCH_ARBITRARY_TOOL_AGENT_TASKS",
+        "BASE_MODEL_RL_CHECKPOINT_TOOL_SCHEMA_AND_MEMORY_STORE_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_CUTOFF_CONSISTENT_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-EFFICIENT-TTS-SMALL-VLM",
+      "name": "Efficient Test-Time Scaling for Small Vision-Language Models",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_SMALL_VLM_TEST_TIME_AUGMENTATION_REFERENCE_ROLE_CONDITIONAL",
+        "A_H1_SMALL_VLM_PARAMETER_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://iclr.cc/virtual/2026/papers.html"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2510.03574"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/monurcan/efficient_test_time_scaling"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_SMALL_VLM_MULTIMODAL_TEST_TIME_SCALING_SETTING_MATCHED",
+      "material_reason": "Defines two efficient inference-time mechanisms for small VLMs: augmentation with token-level aggregation and pseudo-label-driven parameter adaptation.",
+      "limits": [
+        "TTAUG_AND_TTADAPT_MUST_BE_BOUND_AS_SEPARATE_CONFIGURED_VARIANTS",
+        "SMALL_VLM_MODEL_IDENTITY_AND_SCALE_MUST_BE MATCHED",
+        "AUGMENTATION_COUNT_AND_FORWARD_COMPUTE_REQUIRE_TASK_9_ACCOUNTING",
+        "TTADAPT_UPDATE_STEPS_AND_PARAMETER_SURFACE_MUST_BE BOUND",
+        "TEST_TIME_SCALING_EFFICIENCY_DOES_NOT_ESTABLISH_A_H2_ROLLBACK"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "reference_or_screened": [
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_BUT_REPOSITORY_STATES_CODE_COMING_SOON",
+      "disposition": "STRONG_E1_RESEARCH_REFERENCE_NOT_EXECUTABLE_BASELINE_YET",
+      "reason": "The peer-reviewed method learns ADD, UPDATE, DELETE and NOOP memory-management behavior with RL, but the public repository currently states that executable code is still forthcoming."
+    },
+    {
+      "name": "AMA \u2014 Adaptive Memory via Multi-Agent Collaboration",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.152/",
+        "https://github.com/Sherlockwz/AMA"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_EXECUTABLE_RESEARCH_CODE",
+      "disposition": "ROLE_SPECIFIC_MEMORY_SYSTEM_REFERENCE_NOT_GENERIC_E1_POLICY_COMPARATOR",
+      "reason": "AMA evaluates coordinated memory construction, retrieval, judging and refresh over long-context memory benchmarks; it should become claim-bearing only for a matched memory-system comparison rather than by environment-family membership alone."
+    },
+    {
+      "name": "HFlow",
+      "source": "https://aclanthology.org/2026.findings-acl.1250/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS",
+      "disposition": "HUMAN_PREFERENCE_WORKFLOW_EVOLUTION_REFERENCE_BEHIND_INFORMATION_OPPORTUNITY_GATE",
+      "reason": "Its workflow search is explicitly guided by human preferences; it is not information-parity comparable unless the governed Hetren experiment grants the same preference channel."
+    },
+    {
+      "name": "Multimodal knowledge-enhanced online TTA for industrial tabular prediction",
+      "source": "https://doi.org/10.1016/j.engappai.2026.115061",
+      "evidence_state": "PEER_REVIEWED_2026_INDUSTRIAL_TABULAR_RESEARCH",
+      "disposition": "E2_INDUSTRIAL_MULTIMODAL_SCENARIO_REFERENCE_NOT_GENERIC_COMPARATOR",
+      "reason": "Its cross-domain industrial sensor setting is materially narrower than a generic structured-data comparison and requires a matched industrial multimodal experiment."
+    },
+    {
+      "name": "A-TPT",
+      "source": "https://github.com/MB-Shihab-Aaqil-Ahamed/A-TPT",
+      "evidence_state": "ICLR_2026_WITH_OFFICIAL_CODE",
+      "disposition": "E3_CALIBRATION_SPECIFIC_REFERENCE_NOT_GENERIC_A_H1_ADAPTATION_COMPARATOR",
+      "reason": "Its principal governed objective is calibration of test-time prompt tuning, so it should not be promoted solely because it belongs to vision-language TTA."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_memory_or_agent_generalization_references_exist": true,
+    "cross_model_or_cross_task_generalization_is_not_cross_environment_family_transfer": true,
+    "forcing_memory_or_vlm_methods_into_general_n_h2_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V25"
+  },
+  "coverage_observations": {
+    "E1": "NEW_ROLE_CONDITIONAL_AGE_MEM_CANDIDATE",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NEW_ROLE_CONDITIONAL_SMALL_VLM_TEST_TIME_SCALING_CANDIDATE",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "round_is_qualifying_no_new_material_round": false,
+    "reason": "At least one proposed role/applicability-specific comparator was not previously promoted, so the consecutive no-new-material counter remains zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "memory_subsystem_reference_is_automatically_generic_agent_baseline": false,
+    "agemem_establishes_general_n_h2": false,
+    "efficient_tts_establishes_a_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "first_no_new_round_if_any_satisfies_final_stopping_rule": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B30_VERIFY_ADDENDUM_V28_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

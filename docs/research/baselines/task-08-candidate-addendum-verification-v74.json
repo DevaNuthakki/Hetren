@@ -1,0 +1,84 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 74,
+  "state": "ADDENDUM_V74_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T04:54:45Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v74": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v74.json",
+      "sha256": "26f1e77914d3282f351fbb48222b6cd9a590cef568ab74f823c4504e0f5e58d8"
+    },
+    "systematic_saturation_v71": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v71.json",
+      "sha256": "483a1fd99683fe72554c8dde6763788ace0fe03648fb8f6e3b9092949ab2655f"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CLARE",
+      "verification_state": "PEER_REVIEWED_IEEE_RA_L_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_CONTINUAL_VLA_ADAPTER_ROUTING_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "CLARE is accepted to IEEE Robotics and Automation Letters in 2026 and is associated with DOI 10.1109/LRA.2026.3693992.",
+        "The primary research record was public before the frozen Task-8 external-evidence cutoff.",
+        "CLARE is an exemplar-free continual-learning framework for vision-language-action models.",
+        "It inserts lightweight modular adapters into selected VLA modules and expands them selectively using layer-wise feature similarity.",
+        "Deployment uses an autoencoder-based routing mechanism to activate adapters without task labels.",
+        "The official repository provides executable training and LIBERO evaluation code together with pretrained checkpoints and benchmark datasets."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PUBLICATION_RECORD",
+          "url": "https://doi.org/10.1109/LRA.2026.3693992"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.09512"
+        },
+        {
+          "class": "AUTHOR_LAB_PUBLICATION_RECORD",
+          "url": "https://www.dynsyslab.org/research/publications/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/learnsyslab/clare"
+        }
+      ],
+      "limits": [
+        "VLA_CONTINUAL_TASK_SEQUENCE_REQUIRED",
+        "BASE_VLA_CHECKPOINT_AND_EXPANDABLE_LAYER_SET_MUST_BE BOUND",
+        "FEATURE_SIMILARITY_EXPANSION_THRESHOLD_MUST_BE BOUND",
+        "AUTOENCODER_ROUTING_CONFIGURATION_MUST_BE BOUND",
+        "LIBERO_AND_REAL_WORLD_RESULTS_MUST_NOT_BE COLLAPSED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "RETENTION_DOES_NOT_ESTABLISH_HETREN_A_H2_ROLLBACK",
+        "WITHIN_E1_CONTINUAL_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v74_candidates_have_role_level_external_review": true,
+    "all_addendum_v74_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_or_code_availability_establishes_strongest_status": false,
+    "clare_retention_establishes_a_h2": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

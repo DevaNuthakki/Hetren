@@ -1,0 +1,180 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_HOLDOUT_GENERATION_PACKAGE_V7_MANIFEST",
+  "state": "FROZEN_BEFORE_ISOLATED_GENERATION_ATTEMPT_7",
+  "generation_attempt": 7,
+  "generation_attempt_7_started": false,
+  "attempt_7_cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "target_freshness_consumed": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_v7_sha256": "990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6",
+  "generation_package_v7_checker_sha256": "bfdb04547b3c7de043e6512abfa7384d3eed029d808d6d9c6c89066b46e01784",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "exact_external_handoff_filename": "generation_package_v7_990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6.json",
+  "handoff_hash_binding": {
+    "algorithm": "SHA-256",
+    "package_sha256": "990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6",
+    "filename_contains_full_64_character_lowercase_package_sha256": true,
+    "generator_success_output_must_copy_filename_sha256_to_generation_package_sha256": true,
+    "embedded_source_hash_substitution_prohibited": true,
+    "handoff_filename": "generation_package_v7_990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6.json"
+  },
+  "operational_hardening": {
+    "triggering_predecessor_attempt": 6,
+    "hardening_is_scientific_requirement_change": false,
+    "hardening_is_public_evaluator_interface_change": false,
+    "hardening_is_target_evaluator_change": false,
+    "hardening_is_generator_output_contract_change": true,
+    "exact_case_identity_preflight_required": true,
+    "unique_case_id_count_required": 54,
+    "exact_case_count_required": 54,
+    "must_accept_count_required": 27,
+    "must_reject_count_required": 27,
+    "per_primary_requirement_accept_reject_pairing_required": true,
+    "minimum_cross_requirement_interaction_cases": 12,
+    "exact_package_hash_binding_required": true,
+    "success_output_must_report_preflight": true,
+    "preflight_may_execute_target_evaluator": false,
+    "preflight_may_simulate_target_evaluator": false
+  },
+  "governed_predecessor": {
+    "generation_attempt": 6,
+    "state": "REJECTED_PRE_EXECUTION_GENERATED_ARTIFACT_CONTRACT_FAILURE",
+    "generated_artifact_sha256": "8b8c408517d6cb653b9a69b1a1ae184ca638b44e60b15524e2cf8d6dcea1ef54",
+    "disposition_sha256": "e5c2f9a097f632890cee4fbabdf57d63b90e1dfb7e87260113bfc4a11ed732ea",
+    "cases_generated": true,
+    "cases_accepted_for_protected_execution": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false,
+    "successor_generation_attempt": 7
+  },
+  "operational_predecessor": {
+    "generation_package_v6_sha256": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8",
+    "generation_package_v6_checker_sha256": "ba0a8f59ce4cbe2c411e09435f5252c7acf13cb7ec1bb443615dcb7aad4a50e1",
+    "generation_package_v6_manifest_sha256": "84d91709ba4b0d4980faeebe919e8e141dea7f4c51240dab5e5dc7e8ee18b090",
+    "v7_stripped_and_reversed_reconstructs_v6_exactly": true,
+    "scientific_semantics_changed": false,
+    "public_evaluator_interface_changed": false,
+    "target_evaluator_changed": false,
+    "generator_output_contract_hardened": true
+  },
+  "artifacts": [
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v7.json",
+      "sha256": "990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v7.py",
+      "sha256": "bfdb04547b3c7de043e6512abfa7384d3eed029d808d6d9c6c89066b46e01784"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract.json",
+      "sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract_manifest.json",
+      "sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v6.json",
+      "sha256": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v6.py",
+      "sha256": "ba0a8f59ce4cbe2c411e09435f5252c7acf13cb7ec1bb443615dcb7aad4a50e1"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v6_manifest.json",
+      "sha256": "84d91709ba4b0d4980faeebe919e8e141dea7f4c51240dab5e5dc7e8ee18b090"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_6.json",
+      "sha256": "8b8c408517d6cb653b9a69b1a1ae184ca638b44e60b15524e2cf8d6dcea1ef54"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_6_disposition.json",
+      "sha256": "e5c2f9a097f632890cee4fbabdf57d63b90e1dfb7e87260113bfc4a11ed732ea"
+    }
+  ],
+  "generator_handoff_boundary": {
+    "file_to_supply": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v7.json",
+    "external_handoff_filename": "generation_package_v7_990a611b7be68448bf899a111323ac4d108ba5b01378831c67a635788e9c21e6.json",
+    "supply_only_package_v7_as_hetren_specific_input": true,
+    "do_not_supply_manifest": true,
+    "do_not_supply_checker": true,
+    "do_not_supply_repository": true,
+    "do_not_supply_target_evaluator": true,
+    "do_not_supply_prior_generation_packages": true,
+    "do_not_supply_attempt_6_generated_cases": true,
+    "do_not_supply_attempt_6_disposition": true,
+    "do_not_supply_prior_attempt_failures": true,
+    "do_not_supply_prior_attempt_dispositions": true,
+    "do_not_supply_prior_cases_mutations_predictions_results": true,
+    "do_not_supply_remediation_history": true,
+    "do_not_supply_other_hetren_project_context": true,
+    "do_not_supply_hetren_memory_or_saved_context": true,
+    "do_not_supply_prior_hetren_chat_or_summary": true,
+    "generation_environment_must_not_expose_prior_hetren_breadcrumbs": true,
+    "unrelated_non_hetren_context_is_permitted": true,
+    "unrelated_non_hetren_context_must_not_trigger_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true
+  },
+  "generation_session_boundary": {
+    "package_v7_must_be_only_hetren_specific_context": true,
+    "fresh_generation_session_required": true,
+    "attempt_6_generation_session_must_not_be_reused": true,
+    "ambient_gate_runs_before_any_case_generation": true,
+    "nonpackage_hetren_context_requires_abort": true,
+    "ambiguous_potentially_hetren_specific_context_requires_abort": true,
+    "prior_hetren_breadcrumb_requires_abort": true,
+    "unrelated_non_hetren_context_does_not_require_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true,
+    "abort_occurs_before_case_generation": true,
+    "abort_does_not_consume_target_freshness": true
+  },
+  "generation_output_boundary": {
+    "generate_all_cases_before_preflight": true,
+    "run_structural_preflight_before_returning_success": true,
+    "preflight_must_not_execute_target_evaluator": true,
+    "preflight_must_not_simulate_target_evaluator": true,
+    "invalid_intermediate_success_output_must_not_be_returned": true,
+    "success_requires_exact_case_identity_set": true,
+    "success_requires_54_unique_case_ids": true,
+    "success_requires_27_must_accept": true,
+    "success_requires_27_must_reject": true,
+    "success_requires_requirement_pairing": true,
+    "success_requires_minimum_12_interactions": true,
+    "success_requires_exact_package_hash_binding": true,
+    "success_output_reports_preflight": true
+  },
+  "future_execution_boundary": {
+    "freeze_generated_cases_before_target_execution": true,
+    "produce_all_predictions_before_scoring": true,
+    "one_target_call_per_case": true,
+    "target_call_uses_primary_requirement_only": true,
+    "secondary_requirements_are_context_only": true,
+    "expectation_not_passed_to_target": true,
+    "expected_violation_codes_not_passed_to_target": true,
+    "first_target_execution_permanently_consumes_freshness": true
+  },
+  "interpretation": "This manifest freezes hardened Generation Package v7 and its independent checker before isolated Generation Attempt 7. The scientific G3, preregistration, public evaluator interface, scoring semantics, claim limits, and frozen target evaluator remain unchanged from Package v6. Package v7 introduces only generator-output contract hardening after Attempt 6 demonstrated a pre-execution generated-artifact contract failure. The exact external handoff filename contains the complete SHA-256 of Package-v7 bytes so the generator can bind generation_package_sha256 without using an embedded source hash or impossible self-reference. Attempt 7 has not begun and target freshness remains unconsumed."
+}

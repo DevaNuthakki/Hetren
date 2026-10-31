@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONTRACT_SAME_SOURCE_IDENTITY_GAP_CLOSURE_ATTEMPT",
+  "attempt": 1,
+  "state": "SAME_SOURCE_IDENTITY_SEARCH_EXHAUSTED_NO_CONTRACT_READY_EXTERNAL_INPUTS_REQUIRED",
+  "recorded_at_utc": "2026-09-27T21:50:07Z",
+  "task": 8,
+  "bindings": {
+    "r13c_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_real_contract_explicit_binding_resolution_attempt_1.json",
+      "sha256": "d8eb2e9b32e04a21d9aef8a21751be0e0c8a3b3f56823fe10656a74e45e988f3"
+    },
+    "r13d_gap_closure": {
+      "path": "docs/research/baselines/task-08-real-contract-same-source-identity-gap-closure-v1.json",
+      "sha256": "db202d17d468363aa978e1d793483e18a18e21ccf2810a63789df8a4268051b8"
+    }
+  },
+  "state_summary": {
+    "sources_examined": 5,
+    "sources_with_explicit_dataset_id": 5,
+    "sources_with_runtime_or_environment_identity": 0,
+    "concrete_ready_contract_count": 0,
+    "canonical_candidate_count": 222,
+    "task9_values_created": false,
+    "candidate_specific_applicability_binding_started": false,
+    "comparator_ranking_started": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcome_inspected": false
+  },
+  "next_gate": "I5A2R13E_FORMALIZE_EXTERNAL_CONTRACT_INPUT_HANDOFF_WITHOUT_FABRICATING_RUNTIME_OR_TASK9_VALUES",
+  "claim_limits": {
+    "creates_real_experiment_contract": false,
+    "creates_task9_values": false,
+    "merges_unrelated_sources": false,
+    "establishes_task8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

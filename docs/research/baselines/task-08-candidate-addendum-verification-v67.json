@@ -1,0 +1,131 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 67,
+  "state": "ADDENDUM_V67_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T03:27:21Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v67": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v67.json",
+      "sha256": "1374ffcb2a1812a288360ee3785620782caecb7e5ada5d514b4600eaaa9b3251"
+    },
+    "systematic_saturation_v64": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v64.json",
+      "sha256": "8bbb4f6cac712e8e2e5ad47f5d5585bfbd5890f4fa5ba294a4696c3a6eb58188"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-NOTES-TO-SELF-VLA",
+      "verification_state": "PEER_REVIEWED_ICRA_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_MEMORY_DEPENDENT_VLA_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "Notes-to-Self is presented as an ICRA 2026 paper.",
+        "It augments a VLA with a structured language scratchpad containing Grounding, Plan, and Act sections.",
+        "The scratchpad carries spatial and temporal information across a manipulation episode.",
+        "The official Qualcomm AI Research repository contains executable evaluation code."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT_PAGE",
+          "url": "https://qualcomm-ai-research.github.io/Notes-to-Self/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Qualcomm-AI-research/scratchpad-vla"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.21013"
+        }
+      ],
+      "limits": [
+        "MEMORY_DEPENDENT_MANIPULATION_SETTING_REQUIRED",
+        "SCRATCHPAD_SCHEMA_AND_UPDATE_TRIGGER_MUST_BE BOUND",
+        "BACKBONE_AND_FINETUNING_CONFIGURATION_MUST_BE BOUND",
+        "REAL_ROBOT_AND_SIMULATION_RESULTS_MUST_NOT_BE COLLAPSED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MUVLA",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_RECURRENT_MEMORY_VLA_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "\u03bcVLA studies minimal recurrent memory augmentation for partially observable manipulation.",
+        "It carries learnable memory tokens across timesteps inside an OpenVLA-OFT-derived backbone.",
+        "The official repository supports MIKASA-Robo and LIBERO training and evaluation.",
+        "The public project and author records identify the work as an arXiv or under-review work rather than a verified archival peer-reviewed publication."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.12497"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/CognitiveAISystems/muVLA"
+        },
+        {
+          "class": "PRIMARY_PROJECT_PAGE",
+          "url": "https://avanturist322.github.io/mu-vla/"
+        }
+      ],
+      "limits": [
+        "MUST_NOT_BE_MISLABELED_PEER_REVIEWED",
+        "PARTIAL_OBSERVABILITY_AND_MEMORY_STRUCTURE_MUST_BE MATCHED",
+        "MEMORY_WIDTH_TBPTT_LENGTH_AND_UPDATE_RULE_MUST_BE BOUND",
+        "MIKASA_ROBO_AND_LIBERO_SETTINGS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMBODIED",
+      "verification_state": "PUBLIC_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_ASSOCIATIVE_EPISODIC_MEMORY_VLA_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "MemBodied was publicly submitted on 2026-09-23, before the Task-8 external-evidence cutoff.",
+        "It adds fixed-size episodic memory through associative state, an episode anchor, and transition-conditioned writes.",
+        "The official implementation provides \u03c00 and \u03c00.5 RMBench backends plus a LIBERO configuration.",
+        "The verified publication record is an arXiv preprint; archival peer review was not verified."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2609.28256"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/declare-lab/MemBodied"
+        }
+      ],
+      "limits": [
+        "MUST_NOT_BE_MISLABELED_PEER_REVIEWED",
+        "RMBENCH_OR_LIBERO_TASK_CONTRACT_MUST_BE MATCHED",
+        "ASSOCIATIVE_MEMORY_RANK_AND_EPISODE_ANCHOR_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v67_candidates_have_role_level_external_review": true,
+    "all_addendum_v67_candidates_are_peer_reviewed": false,
+    "all_addendum_v67_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

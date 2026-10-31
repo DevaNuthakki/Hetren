@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 9,
+  "state": "SECOND_FOCUSED_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:00:35Z",
+  "task": 8,
+  "bindings": {
+    "attempt_8": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_8.json",
+      "sha256": "ce45ae1b50ba2c82873e1d99f3f7a32ea29c080fa32fda8bae00808bd4f3dec0"
+    },
+    "addendum_v7_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v7.json",
+      "sha256": "3a65f07a7caa014eba906f3dce808773cc86278e32bf58cc5c7124b7be271226"
+    },
+    "systematic_saturation_v5": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v5.json",
+      "sha256": "4f3b8c8cb2afeca058fef807359a38087d9cf2a5680f2fd816c124c7fe48b092"
+    },
+    "candidate_addendum_v8": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v8.json",
+      "sha256": "aa6431f199aa868e5d4ec4a6a7eb93eaeb263b4186afe8607978b4c736d17042"
+    }
+  },
+  "state_summary": {
+    "addendum_v7_role_review_complete": true,
+    "new_material_candidates_found": 3,
+    "candidate_addendum_v8_count": 3,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "The second focused post-expansion saturation pass discovered a peer-reviewed materially distinct E3 test-time RL comparator and additional ongoing E1 test-time-learning research.",
+  "next_gate": "I4B10_VERIFY_ADDENDUM_V8_AND_RUN_NEXT_FOCUSED_SATURATION",
+  "claim_limits": {
+    "preprints_are_peer_reviewed": false,
+    "ongoing_research_is_final_baseline_authority": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

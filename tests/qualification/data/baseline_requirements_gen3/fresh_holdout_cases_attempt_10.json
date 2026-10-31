@@ -1,0 +1,1534 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CASES_ATTEMPT_10",
+  "state": "GENERATED_NOT_EXECUTED",
+  "generation_attempt": 10,
+  "fresh_holdout": true,
+  "protected_evaluation": true,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+  "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+  "generator_provenance": {
+    "generation_package_filename": "generation_package_v10_f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009.json",
+    "semantic_authority": "embedded_generation_3_requirements",
+    "executable_interface": "embedded_public_evaluator_contract",
+    "generation_method": "semantic-first fresh holdout generation from Package v10 only; public contract used only to encode executable facts and primary-requirement violation vocabularies",
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false
+  },
+  "generator_attestations": {
+    "used_generation_package_v10_as_complete_task_8_semantic_and_executable_interface_authority": true,
+    "did_not_seek_or_use_nonpackage_task_8_history_or_target_evaluator_implementation": true,
+    "did_not_adjudicate_chat_history_attachment_project_memory_personalization_or_provider_internal_state": true,
+    "did_not_use_web_or_external_retrieval": true,
+    "generated_all_54_cases_before_target_execution": true,
+    "did_not_execute_or_simulate_target_evaluator": true,
+    "completed_generator_output_preflight_before_returning_success_artifact": true,
+    "generator_output_preflight_passed_all_required_assertions": true,
+    "generation_package_sha256_copied_from_verified_handoff_filename_sha256": true,
+    "completed_environment_self_consistency_preflight_before_returning_success_artifact": true,
+    "environment_self_consistency_preflight_passed_all_required_assertions": true
+  },
+  "external_sources": [],
+  "cases": [
+    {
+      "id": "G3-H10-001",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-009",
+        "G3-BR-010"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": false,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNKNOWN"
+      },
+      "rationale": "An external backend may lack an immutable known revision. G3 permits that state when exact pinning is not claimed and the reproducibility limitation and unknown revision are explicitly preserved; provenance handling is therefore material.",
+      "adversarial_dimension": "Legitimate unknown backend revision without false exact-pinning claim.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-001",
+          "G3-BR-009",
+          "G3-BR-010"
+        ],
+        "encoding_contract_requirement": "G3-BR-001",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-002",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": true,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNKNOWN"
+      },
+      "rationale": "The backend revision is explicitly unknown, so claiming an exact immutable version contradicts G3 even though the reproducibility limitation is recorded.",
+      "adversarial_dimension": "Contradictory exact-version claim under an explicitly unknown revision.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-001",
+          "G3-BR-009"
+        ],
+        "encoding_contract_requirement": "G3-BR-001",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-003",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": true,
+        "task7_lineage_applied": true
+      },
+      "rationale": "A post-protected baseline change is legitimate only as successor evidence with the earlier result preserved and Task 7 lineage applied; this tests the allowed update path rather than forbidding all later changes.",
+      "adversarial_dimension": "Unusual-valid post-protected change with complete successor lineage.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-002",
+          "G3-BR-023"
+        ],
+        "encoding_contract_requirement": "G3-BR-002",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-004",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SUCCESSOR_EVIDENCE_MISSING"
+      ],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": false,
+        "task7_lineage_applied": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. Changing the baseline after protected inspection cannot rewrite the original comparison; preserving the old result is insufficient when no successor evidence is created.",
+      "adversarial_dimension": "Cross-environment consistency; Partial lineage compliance that omits the successor evidence object.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-002",
+          "G3-BR-023"
+        ],
+        "encoding_contract_requirement": "G3-BR-002",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-005",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": false,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "The strongest-applicable claim is bounded to a predeclared search scope and cutoff, with materially considered comparators and exclusions preserved and no protected-outcome selection.",
+      "adversarial_dimension": "Fully governed bounded comparator discovery, including preserved exclusions.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-003",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-006",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": true,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "Even a well-documented comparator search is invalid for the original claim when protected outcomes are used to decide comparator selection.",
+      "adversarial_dimension": "Protected-outcome leakage hidden inside otherwise complete comparator provenance.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-003",
+          "G3-BR-023"
+        ],
+        "encoding_contract_requirement": "G3-BR-003",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-007",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": false
+      },
+      "rationale": "A diagnostic anchor may be beaten while the strongest comparator is not. G3 allows reporting the diagnostic result so long as it is not promoted into general superiority.",
+      "adversarial_dimension": "Favorable simple-anchor result coexisting with an unfavorable strongest comparator.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-004",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-004",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-008",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+      ],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The anchor is explicitly diagnostic and the candidate loses to the strongest comparator, so using the anchor win to report general superiority improperly substitutes the diagnostic role for the claim-bearing comparator.",
+      "adversarial_dimension": "Cross-environment consistency; Diagnostic anchor masquerading as claim-bearing evidence.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-004",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-004",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-009",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_prior_transcript_available": false,
+        "baseline_retrieval_cache": "cold-cache",
+        "candidate_prior_transcript_available": true,
+        "candidate_retrieval_cache": "warm-cache",
+        "persistent_state_matched": false,
+        "state_difference_is_treatment": true
+      },
+      "rationale": "Persistent information differs between candidate and baseline, but that difference is itself the predeclared treatment. G3 permits treatment differences rather than requiring literal state identity.",
+      "adversarial_dimension": "Legitimate persistent-state asymmetry that is the treatment under test.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-005",
+          "G3-BR-007"
+        ],
+        "encoding_contract_requirement": "G3-BR-005",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-010",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007",
+        "G3-BR-019"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ],
+      "facts": {
+        "baseline_prior_transcript_available": false,
+        "baseline_retrieval_cache": "cold-cache",
+        "candidate_prior_transcript_available": true,
+        "candidate_retrieval_cache": "warm-cache",
+        "persistent_state_matched": false,
+        "state_difference_is_treatment": false
+      },
+      "rationale": "The candidate alone receives a prior transcript and a warmed retrieval cache, the persistent state is not matched, and the difference is not the treatment. This creates a material information-opportunity advantage.",
+      "adversarial_dimension": "Indirect information advantage through persistent transcript and cache state.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-005",
+          "G3-BR-007",
+          "G3-BR-019"
+        ],
+        "encoding_contract_requirement": "G3-BR-005",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-011",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "controlled_replay": true,
+        "environment_mutable": true,
+        "paired_execution": false,
+        "same_snapshot": false,
+        "temporal_drift_qualified": false
+      },
+      "rationale": "A mutable environment need not use the identical snapshot when a controlled replay faithfully equalizes the relevant evaluation state; G3 lists controlled replay as an appropriate drift-control mechanism.",
+      "adversarial_dimension": "Alternative valid drift control using replay instead of same-snapshot or paired execution.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-006"
+        ],
+        "encoding_contract_requirement": "G3-BR-006",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-012",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+      ],
+      "facts": {
+        "controlled_replay": false,
+        "environment_mutable": true,
+        "paired_execution": false,
+        "same_snapshot": false,
+        "temporal_drift_qualified": false
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The environment can drift and the comparison uses neither snapshotting, paired execution, controlled replay, nor an explicit temporal-drift limitation, so evaluation parity is not preserved.",
+      "adversarial_dimension": "Cross-environment consistency; Mutable evaluation environment with every declared drift control absent.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-006",
+          "G3-BR-009"
+        ],
+        "encoding_contract_requirement": "G3-BR-006",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-013",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": true,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "A material asymmetry is legitimate when it was classified before protected inspection and is exactly the causal treatment the comparison claims to evaluate.",
+      "adversarial_dimension": "Material but scientifically legitimate predeclared treatment asymmetry.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-007",
+          "G3-BR-005"
+        ],
+        "encoding_contract_requirement": "G3-BR-007",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-014",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ASYMMETRY_NOT_CAUSALLY_RELEVANT"
+      ],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": false,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "Predeclaring an asymmetry does not make it valid when the asymmetry is unrelated to the causal distinction claimed by the comparison.",
+      "adversarial_dimension": "Predeclared yet causally irrelevant advantage.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-007",
+          "G3-BR-005"
+        ],
+        "encoding_contract_requirement": "G3-BR-007",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-015",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-022"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_scientifically_justified": true,
+        "baseline_manual_iterations": 2,
+        "candidate_manual_iterations": 5,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "The sides receive different manual-iteration counts, but the asymmetry is scientifically justified and governed by a predeclared tuning policy. G3 governs opportunity semantics rather than imposing automatic numerical equality.",
+      "adversarial_dimension": "Unequal tuning counts that are justified by the declared scientific design.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-008",
+          "G3-BR-022"
+        ],
+        "encoding_contract_requirement": "G3-BR-008",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-016",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-022"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TUNING_OPPORTUNITY_ASYMMETRY"
+      ],
+      "facts": {
+        "asymmetry_scientifically_justified": false,
+        "baseline_manual_iterations": 2,
+        "candidate_manual_iterations": 12,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. A predeclared policy does not cure systematically greater candidate tuning opportunity when the difference lacks scientific justification.",
+      "adversarial_dimension": "Cross-environment consistency; Large manual-iteration advantage hidden behind a formally predeclared policy.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-008",
+          "G3-BR-022"
+        ],
+        "encoding_contract_requirement": "G3-BR-008",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-017",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-010"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "evaluator_revision": "UNAVAILABLE",
+        "evaluator_revision_available": false,
+        "evaluator_revision_field_present": true
+      },
+      "rationale": "When the evaluator revision cannot be obtained, G3 requires an explicit UNKNOWN or UNAVAILABLE representation rather than invention or silent omission. This case records UNAVAILABLE explicitly.",
+      "adversarial_dimension": "Explicit unavailable provenance rather than fabricated precision.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-009",
+          "G3-BR-010"
+        ],
+        "encoding_contract_requirement": "G3-BR-009",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-018",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-010"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ],
+      "facts": {
+        "evaluator_revision_available": true,
+        "evaluator_revision_field_present": false
+      },
+      "rationale": "The evaluator revision is available but its material provenance field is omitted, so the comparison cannot preserve exact comparison provenance.",
+      "adversarial_dimension": "Known material provenance deliberately omitted despite availability.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-009",
+          "G3-BR-010"
+        ],
+        "encoding_contract_requirement": "G3-BR-009",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-019",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "IRREPRODUCIBLE_EXTERNAL_DEPENDENCY"
+      },
+      "rationale": "An unpinned external API can still be governed when the manifest truthfully classifies it as an irreproducible external dependency and records the resulting limitation.",
+      "adversarial_dimension": "Legitimate irreproducibility classification for an unpinnable external service.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-010",
+          "G3-BR-009"
+        ],
+        "encoding_contract_requirement": "G3-BR-010",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-020",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_RECONSTRUCTION"
+      ],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "EXACT_RECONSTRUCTION"
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. An unpinned external API prevents exact reconstruction; recording a limitation does not make an EXACT_RECONSTRUCTION classification truthful.",
+      "adversarial_dimension": "Cross-environment consistency; False exact-reconstruction label despite acknowledged external dependency.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-010",
+          "G3-BR-009"
+        ],
+        "encoding_contract_requirement": "G3-BR-010",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-021",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "outcome_driven_stopping": false,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": true
+      },
+      "rationale": "The stopping rule is predeclared, stopping is not outcome driven, and repeated stochastic runs are not promoted into independent Task 7 units.",
+      "adversarial_dimension": "Proper stochastic replication without pseudoreplication.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-011",
+          "G3-BR-012"
+        ],
+        "encoding_contract_requirement": "G3-BR-011",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-022",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "OPTIONAL_STOPPING"
+      ],
+      "facts": {
+        "outcome_driven_stopping": true,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": false
+      },
+      "rationale": "Stopping based on protected outcomes without a predeclared stopping rule is the optional-stopping behavior G3 prohibits for protected scientific conclusions.",
+      "adversarial_dimension": "Outcome-driven stopping while otherwise avoiding pseudoreplication.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-011",
+          "G3-BR-012"
+        ],
+        "encoding_contract_requirement": "G3-BR-011",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-023",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-011"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "analysis_uses_independence_groups": true,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": false
+      },
+      "rationale": "The analysis respects both Task 7 evaluation units and independence groups and does not treat repeated seeds as new independent units.",
+      "adversarial_dimension": "Paired dependency-aware uncertainty analysis.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-012",
+          "G3-BR-011"
+        ],
+        "encoding_contract_requirement": "G3-BR-012",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-024",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-011"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "REPEATED_SEEDS_TREATED_INDEPENDENT"
+      ],
+      "facts": {
+        "analysis_uses_independence_groups": true,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. Even when Task 7 units and independence groups are otherwise used, counting repeated seeds as independent manufactures independence that the design does not have.",
+      "adversarial_dimension": "Cross-environment consistency; Pseudoreplication introduced only at the seed level.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-012",
+          "G3-BR-011"
+        ],
+        "encoding_contract_requirement": "G3-BR-012",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-025",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [
+        "G3-BR-014"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "primary_claim_remains_failed": true,
+        "primary_metric_passed": false,
+        "secondary_promoted_after_outcome": false
+      },
+      "rationale": "The primary metric fails and that failure remains the disposition of the original primary claim. Secondary findings may still be reported because none is promoted post hoc into primary support.",
+      "adversarial_dimension": "Legitimate reporting of secondary findings after a failed primary metric.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-013",
+          "G3-BR-014"
+        ],
+        "encoding_contract_requirement": "G3-BR-013",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-026",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [
+        "G3-BR-014"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_HOC_SECONDARY_PROMOTION"
+      ],
+      "facts": {
+        "primary_claim_remains_failed": false,
+        "primary_metric_passed": false,
+        "secondary_promoted_after_outcome": true
+      },
+      "rationale": "After the predeclared primary metric fails, a secondary result is promoted into support for the original claim and the failed-primary disposition is not preserved.",
+      "adversarial_dimension": "Post-outcome metric substitution after primary failure.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-013",
+          "G3-BR-014"
+        ],
+        "encoding_contract_requirement": "G3-BR-013",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-027",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": true,
+        "hard_constraint_bound_before_protected": true
+      },
+      "rationale": "The claim-affecting hard constraint was frozen before protected inspection and is evaluated as a blocker rather than being averaged into aggregate performance.",
+      "adversarial_dimension": "Hard constraint remains a separate gate even with favorable aggregate performance.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-014",
+          "G3-BR-013"
+        ],
+        "encoding_contract_requirement": "G3-BR-014",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-028",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "HARD_CONSTRAINT_CAN_BE_AVERAGED_AWAY"
+      ],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": false,
+        "hard_constraint_bound_before_protected": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The constraint is claim-affecting and was prebound, but the procedure allows its violation to be overridden by aggregate performance, contradicting G3's hard-gate semantics.",
+      "adversarial_dimension": "Cross-environment consistency; Averaging away a predeclared claim-affecting constraint.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-014",
+          "G3-BR-013"
+        ],
+        "encoding_contract_requirement": "G3-BR-014",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-029",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-025"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": false
+      },
+      "rationale": "Sampling is predeclared, the intended difficulty distribution is preserved, and weights are not changed in response to outcomes, so benchmark coverage remains tied to the frozen claim scope.",
+      "adversarial_dimension": "Stable portfolio weighting under a predeclared sampling design.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-015",
+          "G3-BR-025"
+        ],
+        "encoding_contract_requirement": "G3-BR-015",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-030",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-025"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": true
+      },
+      "rationale": "Changing benchmark weights after seeing outcomes can alter the conclusion even when the original sampling rule and difficulty distribution were well specified.",
+      "adversarial_dimension": "Post-outcome reweighting of an otherwise governed benchmark.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-015",
+          "G3-BR-025"
+        ],
+        "encoding_contract_requirement": "G3-BR-015",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-031",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "benchmark_dynamic": true,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "UNKNOWN",
+        "dynamic_implies_clean": false
+      },
+      "rationale": "A dynamically generated benchmark is not assumed clean. With no cleanliness evidence, G3 permits the contamination relationship to remain explicitly UNKNOWN.",
+      "adversarial_dimension": "Dynamic benchmark with disciplined uncertainty rather than presumed cleanliness.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-016",
+          "G3-BR-015"
+        ],
+        "encoding_contract_requirement": "G3-BR-016",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-032",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "DYNAMISM_USED_AS_CLEANLINESS_PROOF"
+      ],
+      "facts": {
+        "benchmark_dynamic": true,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "CLEAN",
+        "dynamic_implies_clean": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The benchmark is called clean solely because it is dynamic even though no cleanliness evidence is available; G3 explicitly rejects dynamism as proof of cleanliness.",
+      "adversarial_dimension": "Cross-environment consistency; Dynamic-generation status used as a contamination-cleanliness shortcut.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-016",
+          "G3-BR-015"
+        ],
+        "encoding_contract_requirement": "G3-BR-016",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-033",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-026"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "alternative_crosscheck_present": true,
+        "bias_control_performed": true,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": true,
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true
+      },
+      "rationale": "The claim depends on a same-family judge, but the evaluator identity, version, scoring procedure, relationship, bias controls, and an alternative cross-check are all explicit. G3 allows such a relationship when it is qualified rather than hidden.",
+      "adversarial_dimension": "Same-family evaluator accepted only with explicit bias controls and cross-checking.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-017",
+          "G3-BR-026"
+        ],
+        "encoding_contract_requirement": "G3-BR-017",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-034",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-026"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SELF_PREFERENCE_NOT_CONTROLLED"
+      ],
+      "facts": {
+        "alternative_crosscheck_present": false,
+        "bias_control_performed": false,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": true,
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true
+      },
+      "rationale": "The claim depends on a same-family judge and the relationship is disclosed, but no bias control or alternative evaluation path addresses self-preference risk.",
+      "adversarial_dimension": "Disclosed same-family coupling without any substantive bias control.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-017",
+          "G3-BR-026"
+        ],
+        "encoding_contract_requirement": "G3-BR-017",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-035",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-021"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "claims_absence_of_side_effects": false,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "In E1, some state effects fall outside the observation boundary. G3 permits this when the boundary is declared, the unobservable state is explicitly UNKNOWN, and absence of side effects is not claimed.",
+      "adversarial_dimension": "Legitimate explicit UNKNOWN for unobservable agent side effects.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-018",
+          "G3-BR-021"
+        ],
+        "encoding_contract_requirement": "G3-BR-018",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-036",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-021"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "UNOBSERVED_TREATED_AS_ABSENT"
+      ],
+      "facts": {
+        "claims_absence_of_side_effects": true,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "The observation boundary openly excludes hidden side effects and records them as UNKNOWN, so claiming their absence converts lack of observation into evidence of absence.",
+      "adversarial_dimension": "Absence claim contradicting an explicit unobservable-state boundary.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-018",
+          "G3-BR-021"
+        ],
+        "encoding_contract_requirement": "G3-BR-018",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-037",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "channel_classified_separately": true,
+        "claimed_as_learned_transfer": true,
+        "manual_target_engineering": false,
+        "target_specific_demonstrations": false,
+        "target_specific_onboarding": false,
+        "target_specific_prompt_engineering": false,
+        "target_specific_retrieval": true
+      },
+      "rationale": "Target-specific retrieval exists, but it is explicitly classified as a separate information channel rather than being silently credited as learned cross-family transfer.",
+      "adversarial_dimension": "Legitimate transfer study containing a separately classified target-information channel.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-019",
+          "G3-BR-005"
+        ],
+        "encoding_contract_requirement": "G3-BR-019",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-038",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-007"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ],
+      "facts": {
+        "channel_classified_separately": false,
+        "claimed_as_learned_transfer": true,
+        "manual_target_engineering": false,
+        "target_specific_demonstrations": false,
+        "target_specific_onboarding": false,
+        "target_specific_prompt_engineering": true,
+        "target_specific_retrieval": false
+      },
+      "rationale": "A target-specific prompt is used while the result is claimed as learned transfer and the target-information channel is not classified separately, confounding the transfer interpretation.",
+      "adversarial_dimension": "Target-specific prompt engineering hidden inside a learned-transfer claim.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-019",
+          "G3-BR-005",
+          "G3-BR-007"
+        ],
+        "encoding_contract_requirement": "G3-BR-019",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-039",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-003",
+        "G3-BR-008"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_adaptation_input": "reference-stream",
+        "candidate_adaptation_input": "treatment-stream",
+        "difference_is_declared_treatment": true,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "The adaptation inputs differ, but that input difference is the declared causal treatment and the strongest applicable adaptation baseline is still used.",
+      "adversarial_dimension": "Valid adaptation-input asymmetry that defines the treatment under test.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-020",
+          "G3-BR-003",
+          "G3-BR-008"
+        ],
+        "encoding_contract_requirement": "G3-BR-020",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-040",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-003",
+        "G3-BR-008"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ADAPTATION_INPUT_ASYMMETRY"
+      ],
+      "facts": {
+        "baseline_adaptation_input": "reference-stream",
+        "candidate_adaptation_input": "privileged-stream",
+        "difference_is_declared_treatment": false,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The candidate receives different adaptation input that is not the declared treatment. Using the strongest baseline does not cure this adaptation-input opportunity asymmetry.",
+      "adversarial_dimension": "Cross-environment consistency; Privileged adaptation input despite an otherwise strong comparator.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-020",
+          "G3-BR-003",
+          "G3-BR-008"
+        ],
+        "encoding_contract_requirement": "G3-BR-020",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-041",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-018"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "behavioral_restoration_checked": true,
+        "declared_rollback_success": true,
+        "persistent_index_restored": true,
+        "persistent_memory_material": true,
+        "persistent_memory_restored": true,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "Rollback success is supported by command success, restoration of material persistent state, and a behavioral restoration check; G3 requires this combination rather than invocation evidence alone.",
+      "adversarial_dimension": "Verified rollback across both persistent state and behavior.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-021",
+          "G3-BR-018"
+        ],
+        "encoding_contract_requirement": "G3-BR-021",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-042",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-018"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ROLLBACK_MATERIAL_STATE_NOT_RESTORED"
+      ],
+      "facts": {
+        "behavioral_restoration_checked": true,
+        "declared_rollback_success": true,
+        "persistent_index_restored": true,
+        "persistent_memory_material": true,
+        "persistent_memory_restored": false,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "Rollback is declared successful and behavior is checked, but a material persistent memory surface is not restored. Successful invocation and partial restoration cannot establish rollback.",
+      "adversarial_dimension": "Partial rollback that leaves a material persistent memory state behind.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-021",
+          "G3-BR-018"
+        ],
+        "encoding_contract_requirement": "G3-BR-021",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-043",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-008"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "quality_and_resource_reported_separately": true,
+        "resource_regime_frozen_before_protected": true,
+        "single_weighted_score_only": false
+      },
+      "rationale": "The semantic resource regime is frozen before protected inspection and performance and resource evidence remain separately reportable, preserving any quality-resource tradeoff.",
+      "adversarial_dimension": "Joint reporting that preserves rather than collapses resource tradeoffs.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-022",
+          "G3-BR-008"
+        ],
+        "encoding_contract_requirement": "G3-BR-022",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-044",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-008"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+      ],
+      "facts": {
+        "quality_and_resource_reported_separately": false,
+        "resource_regime_frozen_before_protected": true,
+        "single_weighted_score_only": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. Although the resource regime was frozen, reporting only one weighted aggregate hides whether quality gains are bought by materially worse resources.",
+      "adversarial_dimension": "Cross-environment consistency; Frozen resource regime followed by tradeoff-hiding aggregation.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-022",
+          "G3-BR-008"
+        ],
+        "encoding_contract_requirement": "G3-BR-022",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-045",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": true,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "Credible evidence of a stronger comparator triggers reassessment while preserving the historical result and recording the review date, which is the governed supersession path.",
+      "adversarial_dimension": "Comparator supersession handled without erasing historical evidence.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-023",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-023",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-046",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "BASELINE_REASSESSMENT_NOT_TRIGGERED"
+      ],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": false,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "A credible materially stronger comparator is known, but no reassessment is triggered. Preserving the old result and recording a date do not satisfy the required evidence consequence.",
+      "adversarial_dimension": "Known stronger comparator ignored while historical evidence is left untouched.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-023",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-023",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-047",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "broader_claim_blocked": true,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "The required comparator cannot be implemented, so the broader claim is blocked; a narrower successor claim does not imply broader superiority and retains the original evidence gap.",
+      "adversarial_dimension": "Truthful narrowing when a required comparator is unavailable.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-024",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-024",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-048",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-003"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "BROADER_CLAIM_NOT_BLOCKED"
+      ],
+      "facts": {
+        "broader_claim_blocked": false,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The required comparator is unavailable, yet the broader claim is not blocked. Preserving the evidence gap in documentation does not make the unsupported broader claim valid.",
+      "adversarial_dimension": "Cross-environment consistency; Unavailable required comparator with the broad claim left open.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-024",
+          "G3-BR-003"
+        ],
+        "encoding_contract_requirement": "G3-BR-024",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-049",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": false,
+        "time_window_declared": true
+      },
+      "rationale": "The real-world evaluation declares deployment, population, sampling, and time-window scope and is not selected because its results were favorable, so evidence remains tied to the represented claim scope.",
+      "adversarial_dimension": "Scoped real-world evidence with explicit population and temporal boundaries.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-025",
+          "G3-BR-015"
+        ],
+        "encoding_contract_requirement": "G3-BR-025",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-050",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "REAL_WORLD_SELECTION_CHERRY_PICKED"
+      ],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": true,
+        "time_window_declared": true
+      },
+      "rationale": "All real-world scope fields are declared, but the evaluation slice is selected because its results are favorable, creating outcome-driven cherry-picking.",
+      "adversarial_dimension": "Complete scope metadata masking favorable-result selection.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-025",
+          "G3-BR-015"
+        ],
+        "encoding_contract_requirement": "G3-BR-025",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-051",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "material_independent_path_present": true,
+        "same_judge_model": false,
+        "same_model_family": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "The verification path shares a model family and preprocessing, but those common-mode dependencies are disclosed and a materially independent path is present to address correlated-bias risk.",
+      "adversarial_dimension": "Independence that is partial but transparently qualified and materially diversified.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-026",
+          "G3-BR-017"
+        ],
+        "encoding_contract_requirement": "G3-BR-026",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-052",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "MATERIAL_INDEPENDENT_PATH_MISSING"
+      ],
+      "facts": {
+        "material_independent_path_present": false,
+        "same_judge_model": true,
+        "same_model_family": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "This case is intentionally cross-environment: the same governed comparison is applied across E1 and E3, so the interaction is material rather than a single-environment relabeling. The verification path shares the judge model, model family, and preprocessing. Disclosure is necessary but not sufficient when no materially independent path addresses the resulting common-mode risk.",
+      "adversarial_dimension": "Cross-environment consistency; Nominal verification with disclosed but unmitigated common-mode dependencies.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-026",
+          "G3-BR-017"
+        ],
+        "encoding_contract_requirement": "G3-BR-026",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-053",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": true,
+        "environment_binding": "E2 structured-data evaluation",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": false
+      },
+      "rationale": "The control is explicitly NOT_APPLICABLE for the concrete E2 binding, a governed reason is present, genuine inapplicability is verified, and omitting it does not change the scientific meaning of the claim.",
+      "adversarial_dimension": "Legitimate NOT_APPLICABLE disposition rather than forced universal applicability.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-027",
+          "G3-BR-005"
+        ],
+        "encoding_contract_requirement": "G3-BR-027",
+        "external_challenge_pattern_sources": []
+      }
+    },
+    {
+      "id": "G3-H10-054",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-006"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "NOT_APPLICABLE_CHANGES_CLAIM_MEANING"
+      ],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": false,
+        "environment_binding": "E3 vision evaluation",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": true
+      },
+      "rationale": "The omitted control is not genuinely inapplicable and its absence changes the claim's scientific meaning. A recorded reason cannot turn convenience into a valid NOT_APPLICABLE disposition.",
+      "adversarial_dimension": "NOT_APPLICABLE used as an escape from a scientifically material control.",
+      "generation_provenance": {
+        "semantic_requirements": [
+          "G3-BR-027",
+          "G3-BR-005",
+          "G3-BR-006"
+        ],
+        "encoding_contract_requirement": "G3-BR-027",
+        "external_challenge_pattern_sources": []
+      }
+    }
+  ],
+  "generator_output_preflight": {
+    "performed_before_return": true,
+    "passed": true,
+    "generation_package_sha256_matches_handoff_filename": true,
+    "case_count": 54,
+    "unique_case_id_count": 54,
+    "exact_case_identity_set": true,
+    "must_accept_count": 27,
+    "must_reject_count": 27,
+    "primary_requirement_pairing_valid": true,
+    "environment_minimums_satisfied": true,
+    "interaction_case_count": 52,
+    "minimum_interaction_requirement_satisfied": true,
+    "all_case_schema_checks_passed": true,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "environment_self_consistency_checked": true,
+    "environment_self_consistency_passed": true,
+    "environment_binding_token_mismatch_count": 0,
+    "semantic_environment_consistency_review_passed": true
+  }
+}

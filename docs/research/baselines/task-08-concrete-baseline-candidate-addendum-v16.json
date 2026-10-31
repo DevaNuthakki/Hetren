@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 16,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T20:04:30Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v15": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v15.json",
+      "sha256": "0f23559b393c694041c178ab1481f02f4a0360851114d734e9e80c000256431b"
+    },
+    "tabpfn_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-drift-resilient-tabpfn-identity-resolution-v1.json",
+      "sha256": "af12e92ffec55d1e636302426b17d1afdd5cf230fb0d8c87c9a5e30051944191"
+    },
+    "systematic_saturation_v13": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v13.json",
+      "sha256": "2ec64b4cbd77056548cd1096aecebe15d3bb2c59aa85adc7bde276d91493ddf8"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E2-DRIFT-RESILIENT-TABPFN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Drift-Resilient TabPFN",
+      "implementation_identity": "https://github.com/automl/Drift-Resilient_TabPFN",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TEMPORAL_SHIFT_TABULAR_PREDICTION_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_IN_CONTEXT_TEMPORAL_SHIFT_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/b2e2774c8e76afe191b5bf518f5cb727-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/Drift-Resilient_TabPFN"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_SMALL_TO_MODERATE_TABULAR_TEMPORAL_SHIFT_AND_IN_CONTEXT_INFORMATION_REGIME_MATCH",
+        "DATASET_SIZE_AND_TABULAR_PREDICTION_SETTING_MUST_BE MATCHED",
+        "TEMPORAL_ORDER_AND_CONTEXT_INFORMATION_ACCESS_MUST_BE PARITY_MATCHED",
+        "PRETRAINED_DRIFT_RESILIENT_MODEL_ARTIFACT_MUST_BE BOUND",
+        "IN_CONTEXT_INFERENCE_MUST_NOT_BE CONFLATED_WITH_ONLINE_PARAMETER_UPDATE",
+        "A_H1_ROLE_IS_ONLY_APPLICABLE_IF_THE_GOVERNED_ADAPTATION_CONTRACT_ACCEPTS_IN_CONTEXT_TEST_TIME_ADAPTATION",
+        "DISTINCT_FROM_ZERO_SHOT_BAYESIAN_OPTIMIZATION_WITH_TABPFN",
+        "Provides a behaviorally distinct TabPFN variant pretrained specifically for temporal distribution shifts using evolving synthetic structural causal models, rather than using TabPFN as a Bayesian-optimization surrogate."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_SMALL_TO_MODERATE_TABULAR_TEMPORAL_SHIFT_AND_IN_CONTEXT_INFORMATION_REGIME_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V13"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

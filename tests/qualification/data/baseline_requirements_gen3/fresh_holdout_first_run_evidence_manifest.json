@@ -1,0 +1,90 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_FIRST_RUN_EVIDENCE_MANIFEST",
+  "state": "AUTHORITATIVE_FIRST_RUN_PRESERVED",
+  "generation_attempt": 10,
+  "preserved_at_utc": "2026-09-26T02:02:35.371255Z",
+  "evidence_class": "FRESH_PROTECTED_HOLDOUT_FIRST_EXECUTION",
+  "artifacts": {
+    "generation_package_v10": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v10.json",
+      "sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009",
+      "size_bytes": 92463
+    },
+    "fresh_holdout_cases_attempt_10": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_cases_attempt_10.json",
+      "sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+      "size_bytes": 61241
+    },
+    "fresh_holdout_freeze_manifest": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_freeze_manifest.json",
+      "sha256": "64c3e69417e74dda898109f324573fa7d15924f479e426804363fb15eb622d48",
+      "size_bytes": 8122
+    },
+    "execution_authorization": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_execution_authorization_attempt_10.json",
+      "sha256": "af1080540676cb13d57795197ef729d161cd3637a1a5c2f6238b1164da104466",
+      "size_bytes": 4549
+    },
+    "single_use_start_receipt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run_started.json",
+      "sha256": "e43a1706ebcfe9f671f39e54f1dc981d56fa7c2da64ebefd70421e40621190dd",
+      "size_bytes": 1079
+    },
+    "raw_first_predictions": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_predictions.json",
+      "sha256": "d0e8bbb549363239bb300912f646fdfeed48c8587218468a0e7ec9d31a079fae",
+      "size_bytes": 11598
+    },
+    "authoritative_first_run": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run.json",
+      "sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028",
+      "size_bytes": 34854
+    },
+    "protected_runner": {
+      "path": "scripts/run_baseline_requirements_gen3_fresh_holdout_attempt_10.py",
+      "sha256": "a91d7665b333979a8956e8a33a717b80485e836cb04b0d8f49d78aab036ad2d2",
+      "size_bytes": 25050
+    },
+    "failed_target_evaluator_snapshot": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/semantic_evaluator_first_fresh_holdout_run.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+      "size_bytes": 27003
+    }
+  },
+  "authoritative_result": {
+    "qualification_result": "FAIL",
+    "case_count": 54,
+    "passed_case_count": 52,
+    "failed_case_count": 2,
+    "must_accept_correct": 25,
+    "must_accept_total": 27,
+    "must_reject_correct": 27,
+    "must_reject_total": 27,
+    "false_accept_count": 0,
+    "false_reject_count": 2,
+    "false_reject_ids": [
+      "G3-H10-009",
+      "G3-H10-037"
+    ],
+    "violation_contract_failure_count": 0
+  },
+  "freshness": {
+    "consumed": true,
+    "fresh_rerun_permitted": false,
+    "future_use_class": "REGRESSION_EVIDENCE_ONLY"
+  },
+  "preservation_rules": {
+    "cases_immutable": true,
+    "raw_predictions_immutable": true,
+    "first_run_result_immutable": true,
+    "failed_evaluator_snapshot_immutable": true,
+    "runner_immutable": true,
+    "authorization_immutable": true,
+    "failure_is_valid_evidence": true
+  },
+  "classification_state": {
+    "classification_completed": false,
+    "remediation_started": false
+  }
+}

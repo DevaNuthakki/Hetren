@@ -1,0 +1,381 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_EXTERNAL_VERIFICATION",
+  "state": "VERIFICATION_IN_PROGRESS_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T03:03:58Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "pre_research_boundary": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_selection_research_boundary.json",
+      "sha256": "f42d61e99ba4ca64543fb7a0cd2050654b2dcd3d9f24c127954e988e6835c63d"
+    },
+    "i4a_discovery_log": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-log-v1.json",
+      "sha256": "d345c33bf0a3ba1f55753a5f3f4548e760342517855522fdbbc9e5e6ce423bad"
+    },
+    "i4a_candidate_registry": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+      "sha256": "83235e3348fa7afbc774fa0335d535f966f2a8a67cc8db46f47803ad37318d36"
+    },
+    "i4a_attempt_1": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_discovery_attempt_1.json",
+      "sha256": "6584367b3ff4e10f76a22cbe715fdedf377d7c96ecd18a8b547157bd7ddb90c3"
+    }
+  },
+  "methodology": {
+    "primary_or_official_sources_preferred": true,
+    "protected_hetren_outcomes_used": false,
+    "i4a_registry_mutated": false,
+    "candidate_winner_selected": false,
+    "ambiguous_or_unverified_claims_preserved_as_unresolved": true
+  },
+  "verified_release_facts": [
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-AGENT-LIGHTNING",
+      "fact": "Official GitHub releases expose v1.0.1 as the latest release observed in this verification tranche.",
+      "release": "v1.0.1",
+      "release_date": "2026-08-24",
+      "official_release_abbrev_commit": "8435586",
+      "source": "https://github.com/microsoft/agent-lightning/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-SWE-AGENT",
+      "fact": "Official GitHub releases expose v1.1.0 as the latest release observed in this verification tranche.",
+      "release": "v1.1.0",
+      "release_date": "2026-05-22",
+      "official_release_abbrev_commit": "0f3acaf",
+      "source": "https://github.com/SWE-agent/SWE-agent/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-OPTUNA",
+      "fact": "Official GitHub releases expose v5.0.0 as the latest release observed in this verification tranche.",
+      "release": "v5.0.0",
+      "release_date": "2026-09-07",
+      "official_release_abbrev_commit": "01ddd17",
+      "source": "https://github.com/optuna/optuna/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-FLAML",
+      "fact": "Official GitHub releases expose v2.6.0 as the latest release observed in this verification tranche.",
+      "release": "v2.6.0",
+      "release_date": "2026-04-28",
+      "official_release_abbrev_commit": "d31e082",
+      "source": "https://github.com/microsoft/FLAML/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-SMAC3",
+      "fact": "Official GitHub releases expose v2.4.0 as the latest release observed in this verification tranche.",
+      "release": "v2.4.0",
+      "release_date": "2026-04-10",
+      "official_release_abbrev_commit": "1c32e14",
+      "source": "https://github.com/automl/SMAC3/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-AUTOGLUON",
+      "fact": "Official GitHub releases expose v1.6.3 as the latest release observed in this verification tranche.",
+      "release": "v1.6.3",
+      "release_date": "2026-09-18",
+      "official_release_abbrev_commit": "2d7d603",
+      "source": "https://github.com/autogluon/autogluon/releases",
+      "full_commit_sha_required_before_final_freeze": true,
+      "i4a_correction": "I4A recorded v1.6.0 as a candidate release. That is not the latest official release available before the research cutoff."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABICLV2",
+      "fact": "Official TabICL releases expose v2.2.0 as the latest release observed in this verification tranche.",
+      "release": "v2.2.0",
+      "release_date": "2026-09-02",
+      "official_release_abbrev_commit": "0dbff3e",
+      "source": "https://github.com/soda-inria/tabicl/releases",
+      "full_commit_sha_required_before_final_freeze": true
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+      "fact": "Official TabPFN releases expose package v9.0.0 as the latest release observed in this verification tranche.",
+      "release": "v9.0.0",
+      "release_date": "2026-09-15",
+      "official_release_abbrev_commit": "c70b6ef",
+      "source": "https://github.com/PriorLabs/TabPFN/releases",
+      "full_commit_sha_required_before_final_freeze": true,
+      "important_distinction": "Package version is not sufficient baseline identity. Final binding must separately pin the selected TabPFN model/checkpoint/revision and behavior-relevant configuration."
+    }
+  ],
+  "implementation_status_findings": [
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABLOG",
+      "status": "BLOCKED_PENDING_EXECUTABLE_IMPLEMENTATION",
+      "verified_fact": "The current official-linked GitHub repository exposes a README stating that code was under review for copyright/legal purposes; executable implementation was not available from that repository during this verification tranche.",
+      "sources": [
+        "https://proceedings.mlr.press/v235/ren24b.html",
+        "https://github.com/WeijieyingRen/TabLog"
+      ],
+      "selection_consequence": "Do not freeze TabLog as a reproducible executable baseline unless implementation availability is independently resolved and pinned."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-METABO",
+      "status": "VERIFIED_RESEARCH_PROTOTYPE_UNMAINTAINED",
+      "verified_fact": "The official repository describes MetaBO as a research prototype developed for the publication and states that it will not be maintained or monitored.",
+      "sources": [
+        "https://github.com/boschresearch/MetaBO"
+      ],
+      "selection_consequence": "Retain as transfer-relevant historical research evidence; do not assume it is the strongest current comparator solely from publication status."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-TENT",
+      "status": "VERIFIED_OFFICIAL_ARCHIVED_IMPLEMENTATION",
+      "verified_fact": "The official Tent repository is archived and read-only.",
+      "sources": [
+        "https://github.com/DequanWang/tent"
+      ],
+      "selection_consequence": "Tent may remain a foundational TTA comparator but archived status and stronger later methods must be considered before claim-bearing selection."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-PFT3A",
+      "status": "VERIFIED_REPOSITORY_NO_RELEASE_PIN_YET",
+      "verified_fact": "The located PFT3A repository exposes the method implementation but no GitHub releases; the observed repository history contained one commit in the web view used for this tranche.",
+      "sources": [
+        "https://github.com/rundohe/PFT3A"
+      ],
+      "selection_consequence": "A full immutable commit SHA must be resolved before any final retained baseline binding."
+    }
+  ],
+  "role_fit_findings": [
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-REACT",
+      "role_disposition": "PLAUSIBLE_FIXED_OR_NON_LEARNED_AGENT_COMPARATOR",
+      "basis": "ReAct interleaves prompted reasoning traces and task actions. The method itself is not evidence of learned cross-family transfer.",
+      "sources": [
+        "https://arxiv.org/abs/2210.03629"
+      ],
+      "not_established": [
+        "N-H2 learned transfer",
+        "global strongest-applicable status"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-AGENT-LIGHTNING",
+      "role_disposition": "PLAUSIBLE_LEARNED_AGENT_TRAINING_COMPARATOR",
+      "basis": "Agent Lightning v1.0 is a harnessed agentic-RL framework and reports trained-agent improvements, but a framework package alone is not a concrete claim-bearing baseline.",
+      "sources": [
+        "https://www.microsoft.com/en-us/research/publication/agent-lightning-v1-0-towards-harnessed-agentic-rl/",
+        "https://github.com/microsoft/agent-lightning"
+      ],
+      "required_for_final_binding": [
+        "base model identity",
+        "trained policy/checkpoint identity",
+        "training data or governed training input identity",
+        "RL/training configuration",
+        "agent harness identity",
+        "tool and environment configuration",
+        "immutable code revision"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-SWE-AGENT",
+      "role_disposition": "TASK_CONDITIONAL_SOFTWARE_ENGINEERING_AGENT_COMPARATOR",
+      "basis": "SWE-agent is specifically designed around software-engineering and repository issue-solving tasks.",
+      "sources": [
+        "https://github.com/SWE-agent/SWE-agent"
+      ],
+      "not_established": [
+        "applicability to arbitrary E1 agent tasks"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-GEPA",
+      "role_disposition": "PLAUSIBLE_TEXTUAL_OR_PROMPT_ADAPTATION_COMPARATOR",
+      "basis": "GEPA optimizes textual system components through reflective evolution and is directly relevant when the candidate adaptation surface includes prompts, textual policies, instructions, or analogous text components.",
+      "sources": [
+        "https://arxiv.org/abs/2507.19457",
+        "https://github.com/gepa-ai/gepa"
+      ],
+      "not_established": [
+        "applicability to non-text adaptation mechanisms",
+        "global strongest-applicable status"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-OPTUNA",
+      "role_disposition": "TASK_CONDITIONAL_HPO_OR_SEARCH_DECISION_COMPARATOR",
+      "basis": "Optuna is a hyperparameter-optimization framework. It is relevant when the governed E2 decision problem is hyperparameter/search selection, not automatically as a raw predictive-model baseline.",
+      "sources": [
+        "https://github.com/optuna/optuna"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-SMAC3",
+      "role_disposition": "TASK_CONDITIONAL_BAYESIAN_OPTIMIZATION_OR_ALGORITHM_CONFIGURATION_COMPARATOR",
+      "basis": "SMAC3 is a Bayesian-optimization and algorithm-configuration package. Role eligibility depends on E2's governed decision surface.",
+      "sources": [
+        "https://github.com/automl/SMAC3"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-FLAML",
+      "role_disposition": "TASK_CONDITIONAL_AUTOML_COMPARATOR",
+      "basis": "FLAML is an AutoML system. It is a plausible strong system comparator only for matched AutoML/model-selection tasks and resource regimes.",
+      "sources": [
+        "https://github.com/microsoft/FLAML"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-AUTOGLUON",
+      "role_disposition": "PREDICTIVE_SYSTEM_OR_AUTOML_COMPARATOR_ROLE_CONDITIONAL",
+      "basis": "AutoGluon is a predictive AutoML system. It must not automatically be treated as an N-H1 investigation-decision baseline unless the experiment's decision construct is matched.",
+      "sources": [
+        "https://github.com/autogluon/autogluon"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABICLV2",
+      "role_disposition": "PREDICTIVE_MODEL_DIAGNOSTIC_OR_TASK_CONDITIONAL_COMPARATOR",
+      "basis": "TabICLv2 is a tabular foundation model for classification/regression. Strong predictive accuracy does not by itself establish eligibility for a learned investigation-decision claim.",
+      "sources": [
+        "https://github.com/soda-inria/tabicl"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+      "role_disposition": "PREDICTIVE_MODEL_DIAGNOSTIC_OR_TASK_CONDITIONAL_COMPARATOR",
+      "basis": "TabPFN is a tabular foundation-model system. Package strength is not automatically equivalent to the Task-8 decision construct.",
+      "sources": [
+        "https://github.com/PriorLabs/TabPFN"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-METABO",
+      "role_disposition": "TRANSFER_RELEVANT_BAYESIAN_OPTIMIZATION_RESEARCH_COMPARATOR",
+      "basis": "MetaBO explicitly learns acquisition functions for transfer learning in Bayesian optimization.",
+      "sources": [
+        "https://github.com/boschresearch/MetaBO"
+      ],
+      "not_established": [
+        "direct applicability to every E2 N-H2 experiment",
+        "current strongest-applicable status"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-IALE",
+      "role_disposition": "TRANSFER_RELEVANT_ACTIVE_LEARNING_COMPARATOR",
+      "basis": "IALE trains a transferable active-learning policy and evaluates application to different image datasets and classifier architectures.",
+      "sources": [
+        "https://www.jmlr.org/papers/v23/21-0387.html"
+      ],
+      "not_established": [
+        "universal cross-family transfer",
+        "applicability outside matched active-learning experiments"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-EATA",
+      "role_disposition": "A_H1_TTA_AND_A_H2_FORGETTING_RELEVANT_COMPARATOR",
+      "basis": "EATA performs test-time adaptation and explicitly introduces regularization to reduce forgetting on in-distribution data.",
+      "sources": [
+        "https://github.com/mr-eggplant/EATA"
+      ],
+      "not_established": [
+        "Hetren A-H2 rollback satisfaction"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-COTTA",
+      "role_disposition": "A_H1_CONTINUAL_TTA_AND_A_H2_RETENTION_RELEVANT_COMPARATOR",
+      "basis": "CoTTA targets continual test-time adaptation and uses stochastic restoration toward source weights to preserve source knowledge.",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2022/html/Wang_Continual_Test-Time_Domain_Adaptation_CVPR_2022_paper.html",
+        "https://github.com/qinenergy/cotta"
+      ],
+      "not_established": [
+        "full Hetren rollback-state restoration semantics"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-SAR",
+      "role_disposition": "A_H1_STRONG_TTA_CANDIDATE_REQUIRES_MATCHED_STRENGTH_REVIEW",
+      "basis": "SAR is an official ICLR 2023 test-time adaptation method designed for dynamic distribution shifts.",
+      "sources": [
+        "https://github.com/mr-eggplant/SAR"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-FOA",
+      "role_disposition": "A_H1_TTA_CANDIDATE_REQUIRES_MATCHED_STRENGTH_REVIEW",
+      "basis": "FOA is an ICML 2024 test-time adaptation method that performs adaptation using forward passes rather than standard backpropagation.",
+      "sources": [
+        "https://github.com/mr-eggplant/FOA"
+      ]
+    }
+  ],
+  "unreviewed_or_partially_reviewed_candidates": [
+    "T8-E1-REFLEXION",
+    "T8-E1-AGENT-Q",
+    "T8-E1-OPRO",
+    "T8-E1-TEXTGRAD",
+    "T8-E1-CODEGYM",
+    "T8-E2-AUTOSKLEARN2",
+    "T8-E2-FTAT",
+    "T8-E3-BADGE",
+    "T8-E3-TYPICLUST",
+    "T8-E3-PROBCOVER",
+    "T8-E3-MEMO",
+    "T8-E3-SHOT",
+    "T8-E3-PTA",
+    "T8-E3-VIT3",
+    "T8-E3-STATA"
+  ],
+  "material_i4a_corrections_identified": [
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-AUTOGLUON",
+      "correction": "I4A candidate version v1.6.0 is not the latest official release available before the cutoff; v1.6.3 was released 2026-09-18."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+      "correction": "Bind official PriorLabs/TabPFN implementation and distinguish package version from selected model/checkpoint identity."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABLOG",
+      "correction": "Do not treat the paper's code-availability statement as sufficient reproducibility evidence while the linked repository lacks executable code."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-AGENT-LIGHTNING",
+      "correction": "Framework version alone is insufficient concrete-baseline identity; trained policy/model/harness/training recipe must also be pinned."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-AUTOGLUON",
+      "correction": "Predictive system strength does not automatically establish N-H1 investigation-decision role eligibility."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABICLV2",
+      "correction": "Predictive model strength does not automatically establish N-H1 investigation-decision role eligibility."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+      "correction": "Predictive model strength does not automatically establish N-H1 investigation-decision role eligibility."
+    }
+  ],
+  "selection_state": {
+    "search_stopping_rule_satisfied": false,
+    "all_candidates_verified": false,
+    "all_versions_fully_pinned": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false
+  },
+  "claim_limits": {
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_strongest_global_baseline": false,
+    "establishes_any_hypothesis_pass": false,
+    "rewrites_i4a_history": false
+  },
+  "next_gate": "I4B2_VERIFY_REMAINING_CANDIDATES_AND_RESOLVE_FULL_IMMUTABLE_VERSION_BINDINGS"
+}

@@ -1,0 +1,215 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 48,
+  "state": "SATURATION_V48_FOUND_NEW_LEGACY_E1_EXPERIENCE_AND_SKILL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:18:16Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "all_new_candidate_publication_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "retained_implementation_revision_must_later_be_resolved_to_cutoff_consistent_commit": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v50_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v50.json",
+      "sha256": "b44d6583d00ca5365f5237ea81b971b419c4916e2c768d84b2d067b14231de15"
+    },
+    "legacy_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-legacy-agent-memory-identity-resolution-v1.json",
+      "sha256": "d630664f13c5c6bc8da4970ce68f90d273d82e2d5af289cbc3ac093d87583bf6"
+    },
+    "systematic_saturation_v47": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v47.json",
+      "sha256": "7bf621613be4a67eb6fcce7e4c0e6d55e0d0f50a3c65a33d1f9ce3efb237c817"
+    }
+  },
+  "focus": [
+    "LEGACY_E1_EXPERIENTIAL_MEMORY",
+    "LEGACY_E1_POLICY_REFLECTION",
+    "LEGACY_E1_EXECUTABLE_SKILL_MEMORY",
+    "DIRECT_AGENT_MEMORY_CONTINUITY",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"ExpeL: LLM Agents Are Experiential Learners\" AAAI official code",
+    "\"ExpeL\" experiential agent memory GitHub",
+    "\"Agent-Pro\" ACL 2024 policy-level reflection official code",
+    "\"Agent-Pro: Learning to Evolve via Policy-Level Reflection and Optimization\"",
+    "\"Voyager: An Open-Ended Embodied Agent with Large Language Models\" TMLR",
+    "\"MineDojo/Voyager\" skill library implementation",
+    "\"Reflexion\" NeurIPS 2023 episodic memory code",
+    "\"legacy agent memory\" ExpeL Voyager Reflexion Agent-Pro",
+    "\"experiential learning\" language agents memory decision making",
+    "\"lifelong learning agent\" skill library memory executable code"
+  ],
+  "query_count": 10,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EXPEL",
+      "name": "ExpeL: LLM Agents Are Experiential Learners",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_EXPERIENTIAL_LEARNING_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_EXPERIENCE_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AAAI_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/29936"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LeapLabTHU/ExpeL"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EXPERIENCE_COLLECTION_AND_INFERENCE_MEMORY_ACCESS_ARE_MATCHED",
+      "material_reason": "ExpeL autonomously gathers experiences, extracts reusable natural-language knowledge, and recalls both insights and prior experiences to improve later agent decisions without parametric model updates.",
+      "limits": [
+        "TRAINING_TASK_EXPERIENCE_ACCESS_MUST_BE PARITY_MATCHED",
+        "INSIGHT_EXTRACTION_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "BASE_LLM_AND_TASK_ENVIRONMENT_MUST_BE BOUND",
+        "WITHIN_E1_TRANSFER_EVIDENCE_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENT-PRO",
+      "name": "Agent-Pro: Learning to Evolve via Policy-Level Reflection and Optimization",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_POLICY_EVOLUTION_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_POLICY_REFLECTION_OPTIMIZATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2024.acl-long.292/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ZJU-OmniAI/Agent-Pro"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_INTERACTIVE_POLICY_EVOLUTION_SETTING_MATCHED",
+      "material_reason": "Agent-Pro iteratively reflects over trajectories and dynamically generated beliefs and uses search-based policy optimization to improve decision behavior through interactive experience.",
+      "limits": [
+        "BLACKJACK_OR_TEXAS_HOLDEM_RESULTS_ARE_NOT_GENERIC_AGENT EVIDENCE",
+        "BELIEF_AND_POLICY_REPRESENTATION_MUST_BE BOUND",
+        "DEPTH_FIRST_POLICY_SEARCH_BUDGET_MUST_BE ACCOUNTED",
+        "INTERACTION_HISTORY_ACCESS_MUST_BE PARITY MATCHED",
+        "POLICY_EVOLUTION_WITHIN_E1_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VOYAGER",
+      "name": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_EXECUTABLE_SKILL_LIBRARY_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_LIFELONG_SKILL_ACQUISITION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_SKILL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_TMLR_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=ehfRiF0R3a"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MineDojo/Voyager"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EMBODIED_LIFELONG_SKILL_ACQUISITION_SETTING_MATCHED",
+      "material_reason": "Voyager combines an automatic curriculum, an expanding executable-code skill library, and environment-feedback-driven iterative prompting to acquire and reuse skills in an embodied environment.",
+      "limits": [
+        "MINECRAFT_OR_COMPARABLY_MATCHED_EMBODIED_SETTING_REQUIRED",
+        "GPT4_OR_REPLACEMENT_BASE_MODEL_IDENTITY_MUST_BE BOUND",
+        "SKILL_LIBRARY_INITIAL_STATE_AND_CONTENT_MUST_BE BOUND",
+        "AUTOMATIC_CURRICULUM_AND_ITERATIVE_PROMPTING_CONFIGURATION_MUST_BE BOUND",
+        "SKILL_TRANSFER_BETWEEN_MINECRAFT_WORLDS_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "preexisting_or_reference": [
+    {
+      "identity": "Reflexion",
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+      "evidence_state": "PEER_REVIEWED_NEURIPS_2023_WITH_OFFICIAL_IMPLEMENTATION",
+      "sources": [
+        "https://papers.neurips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html",
+        "https://github.com/noahshinn/reflexion"
+      ],
+      "disposition": "PREEXISTING_GOVERNED_CANDIDATE_IDENTITY_NOT_NEW",
+      "reason": "Reflexion already existed in the Task-8 candidate registry before this refinement and must not reset the stopping counter as a newly discovered identity."
+    },
+    {
+      "identity": "Agent Workflow Memory",
+      "candidate_id": "DISCOVERY:T8-E1-AWM-WORKFLOW-MEMORY",
+      "disposition": "VERIFIED_THIS_GATE_NOT_NEW_THIS_REFINEMENT"
+    },
+    {
+      "identity": "AriGraph",
+      "candidate_id": "DISCOVERY:T8-E1-ARIGRAPH",
+      "disposition": "VERIFIED_THIS_GATE_NOT_NEW_THIS_REFINEMENT"
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_experience_or_skill_transfer_references_found": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V48"
+  },
+  "coverage_observations": {
+    "E1": "THREE_NEW_LEGACY_PEER_REVIEWED_EXECUTABLE_COMPARATORS_FOUND",
+    "E2": "NO_NEW_E2_COMPARATOR_THIS_REFINEMENT",
+    "E3": "NO_NEW_E3_COMPARATOR_THIS_REFINEMENT",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The bounded legacy-memory refinement discovered ExpeL, Agent-Pro, and Voyager as materially distinct peer-reviewed executable E1 comparators that were absent from the governed promoted candidate pool."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "legacy_age_implies_weakness": false,
+    "peer_review_implies_strongest_status": false,
+    "reflexion_is_new_candidate": false,
+    "within_e1_transfer_proves_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B53_VERIFY_ADDENDUM_V51_AND_CONTINUE_BOUNDED_LEGACY_MEMORY_REFINEMENT"
+}

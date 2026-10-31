@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 23,
+  "state": "SATURATION_V19_FOUND_NEW_MATERIAL_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T20:51:18Z",
+  "task": 8,
+  "bindings": {
+    "attempt_22": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_22.json",
+      "sha256": "49258a6d22f112377dd35263644bda9c8e9097c092fa6f252473ea94dd0fa633"
+    },
+    "addendum_v21_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v21.json",
+      "sha256": "09a59c6db8148a052e23cdc4d3c1f820582138905571a0182ffb579130a9a161"
+    },
+    "systematic_saturation_v19": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v19.json",
+      "sha256": "0819f75ccc191f8e2f80ce9a0dd0b86420371aa8889f3643304cf90f1a375464"
+    },
+    "candidate_addendum_v22": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v22.json",
+      "sha256": "2daa96b7c763a0c153edb3b89d615691a746bb79af33045e971bd3d583ca9eb3"
+    }
+  },
+  "state_summary": {
+    "addendum_v21_role_review_complete": true,
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v22_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "Saturation v19 discovered GATE and AgentFactory as materially distinct peer-reviewed reproducible E1 comparator identities absent from the prior governed candidate pool.",
+  "next_gate": "I4B24_VERIFY_ADDENDUM_V22_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

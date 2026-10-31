@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 13,
+  "state": "ADDENDUM_V13_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:31:59Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v13": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v13.json",
+      "sha256": "7f266fea80b452ac65197491640a7d1de0503f0ed7e1d0b8003cd376ce7b2291"
+    },
+    "systematic_saturation_v10": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v10.json",
+      "sha256": "880c234abf22e12fe749e7d748c379b1ce1acee89139f121e92b818f5f459e56"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TIMELY-RL",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_EVALUATION_AND_RL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TIME_BUDGET_AWARE_LEARNED_AGENT_COMPARATOR",
+      "verified_facts": [
+        "Timely Machine is published in the ACL 2026 main long-paper proceedings.",
+        "Timely-Eval covers high-frequency tool calls, low-frequency tool calls, and time-constrained reasoning under explicit wall-clock budgets.",
+        "Timely-RL uses cold-start supervised fine-tuning followed by reinforcement learning to improve temporal planning.",
+        "The official repository separates the Timely-Eval package from the Timely-RL training pipeline.",
+        "The repository contains evaluation support for general reasoning, Agentic ML, and interactive Jericho, plus RL environment-server and training paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.211/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Entarochuan/Timely-Machine"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.16486"
+        }
+      ],
+      "limits": [
+        "TIME_BUDGET_AND_TOOL_LATENCY_MUST_BE PART_OF_MATCHED_E1_CONTRACT",
+        "TIMELY_EVAL_AND_TIMELY_RL_MUST_NOT_BE TREATED_AS_THE_SAME_BASELINE",
+        "BASE_MODEL_SFT_DATA_RL_RECIPE_AND_MODEL_CHECKPOINT_MUST_BE BOUND",
+        "TOOL_LATENCY_AND_INTERACTION_BUDGET_REQUIRE_TASK_9_RESOURCE_ACCOUNTING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FOZO",
+      "verification_state": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_FORWARD_ONLY_ZEROTH_ORDER_TTA_COMPARATOR",
+      "verified_facts": [
+        "FOZO is published at CVPR 2026.",
+        "It performs test-time adaptation through forward-only zeroth-order optimization of learnable visual prompts.",
+        "Its optimization objective combines intermediate feature-statistics alignment and prediction-entropy minimization.",
+        "The published evaluation includes continual adaptation on ImageNet-C, ImageNet-R, and ImageNet-Sketch.",
+        "The official implementation supports both full-precision and quantized-model evaluation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Wang_FOZO_Forward-Only_Zeroth-Order_Prompt_Optimization_for_Test-Time_Adaptation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/eVI-group-SCU/FOZO"
+        }
+      ],
+      "limits": [
+        "VIT_AND_VISUAL_PROMPT_ADAPTATION_SURFACE_MUST_BE MATCHED",
+        "SOURCE_STATISTICS_ACCESS_MUST_BE AUDITED",
+        "FORWARD_PASS_COUNT_AND_RUNTIME_BUDGET_REQUIRE_TASK_9_ACCOUNTING",
+        "FULL_PRECISION_AND_QUANTIZED_CONFIGURATIONS_MUST_NOT_BE COLLAPSED",
+        "FORWARD_ONLY_OPERATION_DOES_NOT_ESTABLISH_A_H2_ROLLBACK"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v13_candidates_have_role_level_external_review": true,
+    "all_addendum_v13_candidates_are_peer_reviewed": true,
+    "all_addendum_v13_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_alone_establishes_strongest_status": false,
+    "resource_efficiency_establishes_a_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

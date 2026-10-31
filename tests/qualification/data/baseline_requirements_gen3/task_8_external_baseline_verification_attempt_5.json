@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 5,
+  "state": "SYSTEMATIC_SATURATION_PASS_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T04:40:12Z",
+  "task": 8,
+  "bindings": {
+    "attempt_4": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_4.json",
+      "sha256": "d49338a59f78464b309f851a43b92fc51643fe4f7817138ed79061f74afc7fa8"
+    },
+    "addendum_v3_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v3.json",
+      "sha256": "ebf8cf94ab061a90d51c7bdd56bf44cd77518873d815cc9e91be2695381ea091"
+    },
+    "systematic_saturation_v1": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v1.json",
+      "sha256": "3663b99d234da93a088c768c1a4d973026d99c0bc986373c730e8b13a8046271"
+    },
+    "candidate_addendum_v4": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v4.json",
+      "sha256": "5e19de3c813b651ab3dac242de931b3194395c099531165942c1fb16b5bd12a8"
+    }
+  },
+  "state_summary": {
+    "addendum_v3_role_review_complete": true,
+    "systematic_sources_consulted": 12,
+    "new_material_candidates_found": 6,
+    "candidate_addendum_v4_count": 6,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "The first systematic saturation pass produced multiple materially relevant candidates absent from earlier Task-8 research artifacts.",
+  "next_gate": "I4B6_VERIFY_ADDENDUM_V4_AND_SCREEN_SYSTEMATIC_DISCOVERY_QUEUE",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

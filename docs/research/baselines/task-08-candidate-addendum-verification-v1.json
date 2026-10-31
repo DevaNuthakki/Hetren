@@ -1,0 +1,263 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 1,
+  "state": "ADDENDUM_V1_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:26:33Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v1": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v1.json",
+      "sha256": "f0976fbb139bfdc2e2c1db888bc4e77cf2700bc8a7d786b92b318ba9b4a8f36b"
+    },
+    "discovery_refinement_v2": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v2.json",
+      "sha256": "8f0b2e83b0ee69c9c468977036fdb21ec31122062250835a89d8374dda8a31e0"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-ADAPTABLE",
+      "verification_state": "OFFICIAL_IMPLEMENTATION_AND_WORKSHOP_PUBLICATION_VERIFIED",
+      "role_disposition": "E2_TABULAR_TTA_CANDIDATE_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "AdapTable targets tabular test-time adaptation under distribution shift.",
+        "Its method combines a shift-aware uncertainty calibrator with a label-distribution handler.",
+        "The located publication is a NeurIPS 2024 workshop contribution rather than a NeurIPS main-conference paper."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/drumpt/AdapTable"
+        },
+        {
+          "class": "ARCHIVED_SOFTWARE_RECORD",
+          "url": "https://zenodo.org/records/15671200"
+        }
+      ],
+      "selection_limits": [
+        "WORKSHOP_LEVEL_EVIDENCE_MUST_NOT_BE_OVERSOLD",
+        "MATCHED_MODEL_AND_SHIFT_REGIME_REQUIRED",
+        "STRONGEST_APPLICABLE_STATUS_NOT_ESTABLISHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-FTTA-FD",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_WITH_REPRODUCIBILITY_LIMIT",
+      "role_disposition": "E2_FEATURE_DECREMENT_SPECIFIC_ADAPTATION_CANDIDATE",
+      "verified_facts": [
+        "The IJCAI 2025 work specifically studies tabular feature decrement in addition to distribution shift.",
+        "It proposes LLM-IMPUTE and an augmented-training method named ATLLM.",
+        "The public implementation README states that additional datasets and models used in the paper were still coming soon in the version observed during this review."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.ijcai.org/proceedings/2025/550"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LAMDA-NeSy/Fully-Test-Time-Adaptation-for-Feature-Decrement-in-Tabular-Data"
+        }
+      ],
+      "selection_limits": [
+        "SCENARIO_SPECIFIC_TO_FEATURE_DECREMENT",
+        "LLM_INFORMATION_ACCESS_MUST_BE_MATCHED_WHERE_APPLICABLE",
+        "ATLLM_TRAINING_PHASE_ACCESS_MUST_BE_MATCHED_WHERE_APPLICABLE",
+        "REPOSITORY_COMPLETENESS_LIMIT_MUST_BE_PRESERVED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TDA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_TRAINING_FREE_TTA_CANDIDATE",
+      "verified_facts": [
+        "TDA is a training-free dynamic adapter for vision-language-model test-time adaptation.",
+        "It maintains a lightweight key-value cache and does not require backpropagation.",
+        "It is evaluated on VLM adaptation benchmarks rather than being a universal E3 comparator."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2024/html/Karmanov_Efficient_Test-Time_Adaptation_of_Vision-Language_Models_CVPR_2024_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/kdiAAA/TDA"
+        }
+      ],
+      "selection_limits": [
+        "MATCHED_VLM_SETTING_REQUIRED",
+        "NOT_AUTOMATICALLY_APPLICABLE_TO_NON_VLM_E3_TASKS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TT-RAA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_RETRIEVAL_AUGMENTED_TTA_CANDIDATE",
+      "verified_facts": [
+        "TT-RAA performs retrieval-augmented VLM adaptation at test time.",
+        "It maintains a streaming mixture-of-Gaussians database to estimate the test distribution.",
+        "Its experiments cover cross-domain and out-of-distribution visual-recognition benchmarks."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/ICCV2025/html/Fan_Test-Time_Retrieval-Augmented_Adaptation_for_Vision-Language_Models_ICCV_2025_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/xinqi-fan/TT-RAA"
+        }
+      ],
+      "selection_limits": [
+        "MATCHED_VLM_SETTING_REQUIRED",
+        "RETRIEVAL_INFORMATION_OPPORTUNITY_MUST_BE_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FRET",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VISION_TTA_CANDIDATE",
+      "verified_facts": [
+        "FRET addresses feature redundancy during test-time adaptation.",
+        "The paper distinguishes S-FRET from graph-based G-FRET.",
+        "The paper explicitly identifies label-shift weakness in the simpler S-FRET formulation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/ICCV2025/html/You_FRET_Feature_Redundancy_Elimination_for_Test_Time_Adaptation_ICCV_2025_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/youlj109/fret"
+        }
+      ],
+      "selection_limits": [
+        "S_FRET_AND_G_FRET_MUST_NOT_BE_COLLAPSED_INTO_ONE_UNVERSIONED_BEHAVIOR",
+        "SHIFT_AND_ARCHITECTURE_MATCHING_REQUIRED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-MGTTA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_LEARNED_OPTIMIZER_TTA_CANDIDATE",
+      "verified_facts": [
+        "MGTTA replaces manually designed test-time optimizers with a learned Meta Gradient Generator.",
+        "The learned optimizer uses historical gradient information during online adaptation.",
+        "The paper reports evaluation on ImageNet-C, ImageNet-R, ImageNet-Sketch, and ImageNet-A."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/33783"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/keikeiqi/MGTTA"
+        }
+      ],
+      "selection_limits": [
+        "LEARNED_OPTIMIZER_PRETRAINING_PROVENANCE_MUST_BE_BOUND",
+        "TRAINING_INFORMATION_OPPORTUNITY_MUST_BE_MATCHED",
+        "MODEL_AND_SHIFT_SETTING_MUST_BE_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-BCA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_TTA_CANDIDATE",
+      "verified_facts": [
+        "BCA performs Bayesian class adaptation for VLM test-time adaptation.",
+        "It updates class embeddings and class priors using incoming test data.",
+        "Its claim-bearing evidence is specific to VLM adaptation settings."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Zhou_Bayesian_Test-Time_Adaptation_for_Vision-Language_Models_CVPR_2025_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/buerzlh/Bayesian-Test-Time-Adaptation-for-Vision-Language-Models"
+        }
+      ],
+      "selection_limits": [
+        "MATCHED_VLM_SETTING_REQUIRED",
+        "CLASS_PRIOR_UPDATE_CONFIGURATION_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-RA-TTA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_EXTERNAL_RETRIEVAL_VLM_TTA_CANDIDATE",
+      "verified_facts": [
+        "RA-TTA adapts VLM predictions using external knowledge retrieved from a web-scale image database.",
+        "The method explicitly relies on an external retrieval information channel.",
+        "Its official repository provides precomputed image-embedding database support for reproduction."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/fa1790d7c3036c691d0b2fb3b9a0ce64-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/kaist-dmlab/RA-TTA"
+        }
+      ],
+      "selection_limits": [
+        "EXTERNAL_RETRIEVAL_CHANNEL_MUST_BE_EXPLICIT",
+        "INFORMATION_OPPORTUNITY_PARITY_REQUIRED",
+        "MUST_NOT_BE_COMPARED_AS_IF_RETRIEVAL_FREE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-MAXHERDING",
+      "verification_state": "PEER_REVIEWED_AND_IMPLEMENTATION_PATH_VERIFIED",
+      "role_disposition": "E3_LOW_BUDGET_ACTIVE_LEARNING_COMPARATOR",
+      "verified_facts": [
+        "MaxHerding generalizes probability coverage for low-budget active learning.",
+        "Its evidence is specifically strongest in low-budget active-learning regimes rather than all budget regimes.",
+        "The authors' later Uncertainty-Herding repository includes code for MaxHerding."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/11051.pdf"
+        },
+        {
+          "class": "IMPLEMENTATION_IN_AUTHORS_LATER_OFFICIAL_REPOSITORY",
+          "url": "https://github.com/BorealisAI/uherding"
+        }
+      ],
+      "selection_limits": [
+        "LOW_BUDGET_REGIME_SPECIFIC",
+        "BUDGET_REGIME_MUST_BE_PREDECLARED",
+        "LATER_ALL_BUDGET_METHODS_MUST_BE_CONSIDERED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 9,
+  "interpretation": {
+    "all_addendum_v1_candidates_have_role_level_external_review": true,
+    "all_addendum_v1_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

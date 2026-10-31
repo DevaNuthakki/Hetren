@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 22,
+  "state": "SATURATION_V22_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:09:10Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v24_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v24.json",
+      "sha256": "56b0697cde3c190bed59765adbd58890b882dc05cf8967a478109528f777baf1"
+    },
+    "systematic_saturation_v21": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v21.json",
+      "sha256": "3ed4304287173b915aa9bbceb09c9b3581fc1a7c1682597d99b83dc143608811"
+    }
+  },
+  "focus": [
+    "E1_AGENTIC_RL_AFTER_TOOL_USE_AND_AGENT_TRAINING_EXPANSION",
+    "E2_TABULAR_SHIFT_AFTER_DISTPFN",
+    "E3_GENERIC_TTA_DUPLICATE_AND_ROLE_MATERIALITY_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"SOAR\" \"Supervision from Observation for Agentic Reinforcement Learning\" ACL 2026 code",
+    "\"SOAR\" agentic reinforcement learning official github",
+    "\"EnvScaler\" ACL 2026 official github agent environment synthesis",
+    "\"NOMADD\" data drift tabular 2026 implementation",
+    "\"Numerical Optimization of Models Adapting to Data Drift\" code",
+    "site:aclanthology.org/2026 agentic reinforcement learning tool environment observation",
+    "site:aclanthology.org/2026 tool-use reinforcement learning agent official code",
+    "site:proceedings.iclr.cc 2026 agent environment reinforcement learning tool use",
+    "site:proceedings.mlr.press 2026 tabular label shift test-time adaptation",
+    "site:proceedings.mlr.press 2026 tabular data drift adaptation",
+    "site:openaccess.thecvf.com/content/CVPR2026 vision-language test-time adaptation official code",
+    "site:proceedings.iclr.cc 2026 vision-language test-time adaptation official code",
+    "2026 learned decision transfer language agent tabular vision cross family",
+    "2026 unified policy transfer agent structured data vision"
+  ],
+  "query_count": 14,
+  "duplicate_checks": {
+    "soar_prior_promoted_matches": [],
+    "soar_already_promoted": false
+  },
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SOAR-OBSERVATION-RL",
+      "name": "SOAR \u2014 Supervision from Observation for Agentic Reinforcement Learning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_AGENT_RL_COMPARATOR_CANDIDATE",
+        "N_H1_ENVIRONMENT_OBSERVATION_SUPERVISION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.1624/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Mimasss2/SOAR"
+        }
+      ],
+      "cutoff_evidence": {
+        "peer_reviewed_publication_predates_cutoff": true,
+        "paper_explicitly_identifies_public_code": true,
+        "current_repository_head_used_as_final_version_identity": false,
+        "cutoff_consistent_immutable_commit_still_required_if_retained": true
+      },
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_AGENTIC_RL_TOOL_INTERACTION_AND_OBSERVATION_INFORMATION_REGIME_MATCHED",
+      "material_reason": "SOAR changes the training signal for agentic reinforcement learning by assigning positive advantage to environment-observation tokens according to preceding-action confidence, directly targeting learning of environment dynamics and tool-call consequences.",
+      "limits": [
+        "TRAINING_TIME_AGENTIC_RL_METHOD_NOT_TEST_TIME_ADAPTATION",
+        "BASE_MODEL_SFT_STAGE_GRPO_CONFIGURATION_AND_OBSERVATION_LOSS_MUST_BE BOUND",
+        "TOOL_SERVERS_RETRIEVAL_CORPUS_SEARCH_SERVICE_AND_SUMMARIZATION_MODEL_MUST_BE BOUND_WHERE_APPLICABLE",
+        "TRAINING_AND_ROLLOUT_COMPUTE_REQUIRE_TASK_9_RESOURCE_ACCOUNTING",
+        "LLM_AS_JUDGE_EVALUATION_MUST_NOT_BE CONFUSED_WITH_POLICY_TRAINING_SIGNAL",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "EnvScaler",
+      "sources": [
+        "https://aclanthology.org/2026.findings-acl.407/",
+        "https://github.com/RUC-NLPIR/EnvScaler"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Programmatically synthesizes executable, stateful, tool-interactive environments and scenarios for SFT and RL agent training.",
+      "disposition": "E1_TRAINING_ENVIRONMENT_INFRASTRUCTURE_REFERENCE_NOT_STANDALONE_POLICY_COMPARATOR_THIS_ROUND",
+      "reason": "Its distinguishing contribution is construction of training environments, scenarios, validation functions, and training infrastructure rather than a uniquely defined decision policy directly comparable under the current N-H1 policy role."
+    },
+    {
+      "name": "NOMADD",
+      "sources": [
+        "https://arxiv.org/abs/2608.02845"
+      ],
+      "evidence_state": "PUBLIC_2026_PREPRINT_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "relevance": "Post-hoc temporal data-drift mitigation applicable to multiple model families and evaluated on the Drift-Resilient TabPFN benchmark.",
+      "disposition": "E2_ONGOING_RESEARCH_REFERENCE_NOT_PROMOTED_TO_REPRODUCIBLE_CLAIM_BEARING_BASELINE",
+      "reason": "The work is a preprint and this bounded review did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "Prototype-Based Test-Time Adaptation of Vision-Language Models",
+      "sources": [
+        "https://arxiv.org/abs/2604.21360",
+        "https://github.com/hzhxmu/PTA"
+      ],
+      "evidence_state": "ICML_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "disposition": "PRIOR_POOL_OR_DUPLICATE_CHECK_ONLY_NOT_COUNTED_AS_NEW",
+      "reason": "This method was already encountered in the governed discovery history and must not be counted again merely because the current bounded query rediscovered its implementation."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "SOAR",
+      "evidence_state": "ACL_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Learns agent behavior from action-observation interaction using agentic reinforcement learning.",
+      "disposition": "WITHIN_E1_LEARNED_AGENT_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The learned decision mechanism is demonstrated inside agentic language-model environments and does not establish transfer into structured-ML and vision families."
+    },
+    {
+      "name": "DistPFN",
+      "evidence_state": "ICML_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Provides inference-time label-shift correction for TabPFN-family structured-data models.",
+      "disposition": "WITHIN_E2_ADAPTATION_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its mechanism is specific to tabular posterior adjustment and is not a common learned decision mechanism spanning E1, E2, and E3."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "soar_is_within_e1_only": true,
+    "distpfn_is_within_e2_only": true,
+    "forcing_within_environment_methods_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V22"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_EXECUTABLE_AGENTIC_RL_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_AFTER_DISTPFN",
+    "E3": "NO_NEW_GENERIC_E3_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "SOAR is a materially distinct, peer-reviewed, executable E1 agentic-RL comparator absent from prior promoted candidate identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "environment_synthesis_reference_is_automatically_policy_baseline": false,
+    "preprint_without_verified_implementation_is_automatically_claim_bearing": false,
+    "soar_establishes_general_n_h2": false,
+    "distpfn_establishes_general_e2_adaptation": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B27_VERIFY_ADDENDUM_V25_AND_RUN_NEXT_BOUNDED_ROLE_APPLICABILITY_REFINEMENT"
+}

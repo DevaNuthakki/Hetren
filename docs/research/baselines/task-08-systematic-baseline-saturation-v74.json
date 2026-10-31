@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 74,
+  "state": "SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T05:09:57Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_canonical_enumeration_reopened": false,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "atomicvla_publication_and_code_release_predate_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v76_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v76.json",
+      "sha256": "2b2f6513a3f3967e0abb6b267ea7808163353074394f17cd29ce2b58b5bb474b"
+    },
+    "systematic_saturation_v73": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v73.json",
+      "sha256": "36f69cc32837232ddbdb11f1926a441f2f7c45b80add9bdb7d3682129d00a49d"
+    }
+  },
+  "focus": [
+    "E1_CONTINUAL_VLA_ROLE_DISPLACEMENT",
+    "E2_DISPLACEMENT_SPOT_CHECK",
+    "E3_DISPLACEMENT_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"AtomicVLA\" CVPR 2026 continual learning official code",
+    "\"AtomicVLA\" atomic skill learning robots github",
+    "\"AtomicVLA\" continual learning real world manipulation",
+    "\"CRL-VLA\" continual vision-language-action code 2026",
+    "\"Continuous Vision-Language-Action Co-Learning\" AAAI 2026 code",
+    "\"VLAct\" continued pretraining vision-language-action 2026 code",
+    "\"Can Vision-Language-Action Models Learn from Real-World Data Continually without Forgetting\" code",
+    "\"SkillsCrafter\" continual manipulation AAAI 2026 code",
+    "\"CLARE\" continual VLA RA-L 2026 code",
+    "\"Simple Recipe Works\" continual VLA reinforcement learning code",
+    "2026 continual VLA atomic skill library routing code",
+    "2026 continual VLA dynamic expert composition skill learning"
+  ],
+  "query_count": 12,
+  "atomicvla_identity_resolution": {
+    "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+    "candidate_name": "AtomicVLA: Unlocking the Potential of Atomic Skill Learning in Robots",
+    "prior_promoted_matches": [
+      {
+        "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+        "name": "AtomicVLA",
+        "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v71.json"
+      }
+    ],
+    "preexisting": true,
+    "disposition": "PREEXISTING_PROMOTED_IDENTITY_NOT_DOUBLE_COUNTED"
+  },
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "AtomicVLA",
+      "disposition": "PREEXISTING_PROMOTED_IDENTITY_NOT_DOUBLE_COUNTED",
+      "prior_promoted_matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-ATOMICVLA",
+          "name": "AtomicVLA",
+          "file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v71.json"
+        }
+      ],
+      "reason": "Dynamic governed-candidate identity scan determines whether AtomicVLA is new or already represented."
+    },
+    {
+      "name": "CRL-VLA: Continual Vision-Language-Action Learning",
+      "sources": [
+        "https://arxiv.org/abs/2602.03445"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_ROLE_RELEVANT",
+      "disposition": "REFERENCE_ONLY_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The method is directly relevant to continual VLA reinforcement learning, but this bounded pass did not verify an official executable implementation identity suitable for governed reproduction."
+    },
+    {
+      "name": "Continuous Vision-Language-Action Co-Learning with Semantic-Physical Alignment for Behavioral Cloning",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/39677",
+        "https://arxiv.org/abs/2511.14396"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026",
+      "disposition": "ROLE_MISMATCH_NOT_CONTINUAL_LEARNING_COMPARATOR",
+      "reason": "Continuous refers to temporally coherent behavioral cloning/co-learning, not sequential continual skill acquisition with a retention/forgetting contract."
+    },
+    {
+      "name": "VLAct \u2014 Beyond Data Scaling",
+      "sources": [
+        "https://arxiv.org/abs/2608.27550",
+        "https://github.com/starVLA/VLAct"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_WITH_EXECUTABLE_IMPLEMENTATION",
+      "disposition": "CONTINUED_PRETRAINING_REFERENCE_NOT_CONTINUAL_LEARNING_DISPLACER",
+      "reason": "VLAct improves the pretrained VLA representation through continued pretraining; that is not the same sequential continual-learning role."
+    },
+    {
+      "name": "Can VLA Models Learn from Real-World Data Continually without Forgetting?",
+      "sources": [
+        "https://arxiv.org/abs/2605.26820"
+      ],
+      "evidence_state": "PUBLIC_REAL_WORLD_CONTINUAL_VLA_STUDY",
+      "disposition": "EXPERIENCE_REPLAY_SUPPORTING_EVIDENCE_NOT_NEW_ALGORITHM_IDENTITY",
+      "reason": "The principal actionable comparator is well-configured experience replay, which is already represented inside the governed continual-VLA comparison ecosystem."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_continual_skill_learning_evidence_exists": true,
+    "forcing_within_e1_continual_learning_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_DISPLACEMENT_SATURATION_V74"
+  },
+  "stopping_rule": {
+    "satisfied": true,
+    "consecutive_no_new_material_candidate_rounds": 2,
+    "reason": "AtomicVLA was already represented, so this is the second consecutive complete displacement-only no-new-material refinement."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "atomicvla_is_automatically_strongest": false,
+    "continual_retention_establishes_a_h2": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "discovery_stopping_authorizes_automatic_selection": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "POST_DISCOVERY_SELECTION_READINESS_AUDIT_BEFORE_IMMUTABLE_PINNING"
+}

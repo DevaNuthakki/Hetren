@@ -1,0 +1,1046 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ISOLATED_FRESH_HOLDOUT_GENERATION_PACKAGE",
+  "state": "READY_FOR_ISOLATED_GENERATION",
+  "contains_holdout_cases": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout_generation": true,
+  "protected_evaluation": true,
+  "source_bindings": {
+    "generation_3_path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+    "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+    "preregistration_contract_path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+    "preregistration_contract_sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+  },
+  "allowed_inputs": [
+    "embedded_generation_3_requirements",
+    "embedded_preregistration_contract",
+    "external_research_used_only_for_adversarial_challenge_patterns"
+  ],
+  "forbidden_inputs": [
+    "semantic evaluator source or implementation",
+    "known 54-case development corpus",
+    "known 34-mutation corpus",
+    "historical development-case predictions",
+    "historical mutation predictions",
+    "historical first mutation result",
+    "mutation mismatch classification",
+    "nine remediation targets",
+    "remediated regression result details beyond the frozen fact that the evaluator version is fixed"
+  ],
+  "generator_isolation_rule": "The generator must receive this package as its complete Hetren Task 8 semantic input. It must not inspect the repository, semantic evaluator implementation, known development cases, known mutations, their answers, their results, or remediation history.",
+  "operationalized_design": {
+    "case_count": 54,
+    "requirements": 27,
+    "cases_per_primary_requirement": 2,
+    "per_requirement_expectation_pattern": {
+      "must_accept": 1,
+      "must_reject": 1
+    },
+    "total_must_accept": 27,
+    "total_must_reject": 27,
+    "required_environment_values": [
+      "E1",
+      "E2",
+      "E3",
+      "CROSS_ENV"
+    ],
+    "minimum_cases_per_environment": 6,
+    "minimum_cross_requirement_interaction_cases": 12,
+    "case_ids": "G3-H-001 through G3-H-054",
+    "all_cases_generated_before_evaluator_execution": true,
+    "case_order_frozen_before_evaluator_execution": true,
+    "expectations_frozen_before_evaluator_execution": true,
+    "facts_frozen_before_evaluator_execution": true
+  },
+  "case_schema": {
+    "required_fields": [
+      "id",
+      "primary_requirement",
+      "secondary_requirements",
+      "environment",
+      "expectation",
+      "expected_violation_codes",
+      "facts",
+      "rationale",
+      "adversarial_dimension",
+      "generation_provenance"
+    ],
+    "id_format": "G3-H-NNN",
+    "primary_requirement_format": "G3-BR-NNN",
+    "secondary_requirements": "zero or more other G3 requirement IDs",
+    "environment_allowed": [
+      "E1",
+      "E2",
+      "E3",
+      "CROSS_ENV"
+    ],
+    "expectation_allowed": [
+      "MUST_ACCEPT",
+      "MUST_REJECT"
+    ],
+    "expected_violation_codes": "empty for MUST_ACCEPT; one or more semantic violation codes for MUST_REJECT",
+    "facts": "structured facts presented to the evaluator; no expectation or answer label may be encoded inside facts",
+    "rationale": "why the case should be accepted or rejected under G3, written without reference to evaluator behavior",
+    "adversarial_dimension": "the independent edge case, ambiguity pressure, interaction, or unusual-valid-state dimension being tested",
+    "generation_provenance": "which G3 text and, if applicable, external challenge source informed this case"
+  },
+  "generation_rules": [
+    "Generate exactly two cases for every G3-BR-001 through G3-BR-027.",
+    "For every requirement, generate one MUST_ACCEPT case and one MUST_REJECT case.",
+    "Cases must test meaning, not superficial field-name presence.",
+    "MUST_ACCEPT cases should include unusual but legitimate states where possible, to attack over-rejection.",
+    "MUST_REJECT cases should attack hidden assumptions, contradictory facts, alternate information channels, boundary conditions, or cross-requirement interactions.",
+    "At least 12 cases must exercise a material interaction with one or more secondary G3 requirements.",
+    "Use E1, E2, E3, and CROSS_ENV, with at least six cases in each.",
+    "Do not create cases by guessing what implementation branches probably exist.",
+    "Do not use exact examples, known answers, mutation IDs, or historical failures from prior Hetren qualification.",
+    "External research may suggest challenge patterns but may not override G3 semantics.",
+    "Any external source used must be recorded with a stable locator and its role must be limited to challenge-generation context.",
+    "Generate all 54 cases and their expectations before any evaluator execution.",
+    "Once frozen and first executed, these cases permanently cease to be fresh and become regression evidence only."
+  ],
+  "required_generator_attestations": {
+    "did_not_read_semantic_evaluator_source": true,
+    "did_not_read_known_development_cases": true,
+    "did_not_read_known_mutations": true,
+    "did_not_read_prior_predictions_or_results": true,
+    "did_not_read_remediation_history": true,
+    "generated_all_cases_before_evaluator_execution": true
+  },
+  "expected_output": {
+    "filename": "fresh_holdout_cases.json",
+    "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CASES",
+    "state": "GENERATED_NOT_EXECUTED",
+    "fresh_holdout": true,
+    "protected_evaluation": true,
+    "authoritative": false,
+    "scientific_support_established": false,
+    "required_top_level_fields": [
+      "schema_version",
+      "artifact_type",
+      "state",
+      "fresh_holdout",
+      "protected_evaluation",
+      "authoritative",
+      "scientific_support_established",
+      "generation_package_sha256",
+      "generator_provenance",
+      "generator_attestations",
+      "external_sources",
+      "cases"
+    ]
+  },
+  "claim_limits": {
+    "generation_does_not_establish_scientific_support": true,
+    "generation_does_not_establish_task_8_authority": true,
+    "a_future_pass_does_not_prove_universal_generalization": true
+  },
+  "embedded_generation_3_requirements": {
+    "schema_version": "1.0.0",
+    "artifact_type": "TASK_8_BASELINE_REQUIREMENTS_GENERATION_3",
+    "state": "RESEARCH_CANDIDATE",
+    "authoritative": false,
+    "scientific_support_established": false,
+    "generation": 3,
+    "derived_from": {
+      "generation_2": "docs/research/baselines/task-08-baseline-requirements-gen2.json",
+      "generation_2_red_team": "docs/research/baselines/task-08-gen2-red-team.json",
+      "generation_2_dispositions": "docs/research/baselines/task-08-gen2-red-team-dispositions.json"
+    },
+    "requirements": [
+      {
+        "id": "G3-BR-001",
+        "key": "baseline.identity-version",
+        "title": "Stable Baseline Identity And Version",
+        "lineage": [
+          "BR-001",
+          "AF-006",
+          "AF-010"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Every governed baseline has stable logical identity and an immutable behavior-relevant version. Material changes create a new version. External services that cannot guarantee immutable backend behavior preserve provider identity, advertised revision, timestamp, configuration, captured outputs, and the resulting reproducibility limitation rather than claiming exact pinning.",
+        "derived_from_g2": "G2-BR-001",
+        "hardening_attack_ids": [
+          "G2-AF-001"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-001"
+        ]
+      },
+      {
+        "id": "G3-BR-002",
+        "key": "baseline.pre-protected-binding",
+        "title": "Pre-Protected Baseline Binding Freeze",
+        "lineage": [
+          "BR-002",
+          "AF-007"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Before protected outcomes are inspected, bind baseline identity, version, role, selection rule, comparison configuration, and resource-comparison regime. Subsequent changes inherit Task 7 freshness, repeated-peeking, disclosure, lineage, and invalidation semantics and create successor evidence rather than rewriting the earlier comparison.",
+        "derived_from_g2": "G2-BR-002",
+        "hardening_attack_ids": [
+          "G2-AF-002"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-002"
+        ]
+      },
+      {
+        "id": "G3-BR-003",
+        "key": "baseline.strongest-applicable-selection",
+        "title": "Strongest Applicable Comparator Selection",
+        "lineage": [
+          "BR-003",
+          "AF-001",
+          "AF-002"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Where a strongest applicable comparator is required, predeclare the eligible comparator class, applicability criteria, matching constraints, comparator-discovery scope, search sources, search procedure, as-of cutoff, selection evidence, selection rule, and tie policy. Preserve materially considered comparators and exclusion reasons. Protected outcomes may not determine discovery scope, eligibility, exclusion, or selection. 'Strongest applicable' is bounded to the governed eligible matched set discovered under that declared search contract and is not a claim of global optimality.",
+        "derived_from_g2": "G2-BR-003",
+        "hardening_attack_ids": [
+          "G2-AF-003"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-003"
+        ]
+      },
+      {
+        "id": "G3-BR-004",
+        "key": "baseline.comparator-role-separation",
+        "title": "Diagnostic Anchors And Claim-Bearing Comparators",
+        "lineage": [
+          "BR-004",
+          "AF-023"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Distinguish diagnostic anchors, ordinary claim-bearing matched comparators, and strongest-applicable comparators. A favorable result against a simple anchor cannot satisfy or obscure failure against a stronger comparator required by the hypothesis. Any anchor used must still be credibly implemented for its declared diagnostic role.",
+        "derived_from_g2": "G2-BR-004",
+        "hardening_attack_ids": [
+          "G2-AF-004"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-004"
+        ]
+      },
+      {
+        "id": "G3-BR-005",
+        "key": "comparison.information-opportunity-parity",
+        "title": "Information And Opportunity Parity",
+        "lineage": [
+          "BR-005",
+          "AF-003"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Candidate and baseline receive materially comparable task information, data access, protected-outcome restrictions, tools, permissions, external-service opportunity, and interaction opportunity unless a difference is the predeclared treatment. Information parity includes material persistent and indirect state such as caches, retrieval stores, tool memory, prior transcripts, warmed state, demonstrations, indexes, and other information-bearing artifacts that could advantage either side.",
+        "derived_from_g2": "G2-BR-005",
+        "hardening_attack_ids": [
+          "G2-AF-005",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-005",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-006",
+        "key": "comparison.evaluation-parity",
+        "title": "Evaluation Parity",
+        "lineage": [
+          "BR-005",
+          "AF-003",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Candidate and baseline are evaluated against the same applicable evaluation units, split version, evaluator contract, outcome semantics, hard constraints, and materially equivalent environment state unless a scientifically justified difference is declared before protected inspection. Where temporal or external-system drift can affect results, the comparison uses an appropriate snapshot, paired execution, controlled replay, bounded execution window, or explicitly qualified temporal-drift limitation.",
+        "derived_from_g2": "G2-BR-006",
+        "hardening_attack_ids": [
+          "G2-AF-006",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-006",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-007",
+        "key": "comparison.declared-asymmetry",
+        "title": "Declared Treatment And Legitimate Asymmetry",
+        "lineage": [
+          "BR-005",
+          "AF-003"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Fairness does not require identical internal algorithms. Any material candidate-versus-baseline asymmetry must be classified before protected inspection as the treatment under test, a method-required operation, a governed resource-regime difference, or a comparison defect. A treatment asymmetry is valid only when it corresponds to the causal or scientific distinction the comparison claims to evaluate rather than merely giving one side an unrelated advantage. Undeclared or unjustified asymmetry blocks a claim whose interpretation depends on matching.",
+        "derived_from_g2": "G2-BR-007",
+        "hardening_attack_ids": [
+          "G2-AF-007",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-007",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-008",
+        "key": "comparison.tuning-selection-governance",
+        "title": "Tuning And Model-Selection Governance",
+        "lineage": [
+          "BR-006",
+          "AF-004"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Predeclare candidate and baseline tuning spaces, development and validation evidence, automated search procedures, manual iteration opportunities, expert intervention policy, debugging opportunity, prompt or configuration iteration, stopping rules, selection criteria, and protected-data prohibitions. One side must not receive systematically greater tuning opportunity merely to weaken the comparison. Task 8 governs opportunity semantics; Task 9 owns concrete search, human-effort, time, compute, and monetary measurements.",
+        "derived_from_g2": "G2-BR-008",
+        "hardening_attack_ids": [
+          "G2-AF-008"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-008"
+        ]
+      },
+      {
+        "id": "G3-BR-009",
+        "key": "comparison.provenance",
+        "title": "Exact Comparison Provenance",
+        "lineage": [
+          "BR-007",
+          "AF-006",
+          "AF-010",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Preserve material candidate, baseline, target, model/provider, prompt/policy, scaffold, inference, tool, permission, evaluator, environment, split, data, source revision, dependency, seed, timestamp, and external-service provenance needed to interpret the comparison. Every material provenance field that cannot be obtained must be represented explicitly as UNKNOWN or UNAVAILABLE with the reason when known rather than silently omitted or invented.",
+        "derived_from_g2": "G2-BR-009",
+        "hardening_attack_ids": [
+          "G2-AF-009"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-009"
+        ]
+      },
+      {
+        "id": "G3-BR-010",
+        "key": "comparison.reproducible-manifest",
+        "title": "Reproducible Comparison Manifest",
+        "lineage": [
+          "BR-008",
+          "AF-006",
+          "AF-010"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Each consequential comparison has a versioned experiment manifest capable of reconstructing or faithfully replaying the comparison to the extent permitted by the underlying systems. The manifest records an applicable reproducibility class such as EXACT_RECONSTRUCTION, CONTROLLED_RECONSTRUCTION, BEHAVIORAL_REPLAY, or IRREPRODUCIBLE_EXTERNAL_DEPENDENCY, with justification. Integrity-checked artifacts are used where practical, and external dependency limitations remain explicit.",
+        "derived_from_g2": "G2-BR-010",
+        "hardening_attack_ids": [
+          "G2-AF-001",
+          "G2-AF-010"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-001",
+          "G2-RM-010"
+        ]
+      },
+      {
+        "id": "G3-BR-011",
+        "key": "comparison.stochastic-replication",
+        "title": "Stochastic Replication And Stopping Governance",
+        "lineage": [
+          "BR-009",
+          "AF-011"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "When material stochasticity exists, predeclare replication unit, attempt count or stopping rule, controllable seed/sampling policy, aggregation, uncertainty method, and major variation sources. Outcome-driven optional stopping is prohibited for protected scientific conclusions unless governed in advance. Repeated runs do not manufacture independent Task 7 evaluation units.",
+        "derived_from_g2": "G2-BR-011",
+        "hardening_attack_ids": [
+          "G2-AF-011"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-011"
+        ]
+      },
+      {
+        "id": "G3-BR-012",
+        "key": "comparison.effect-uncertainty",
+        "title": "Effect Size And Statistical Uncertainty",
+        "lineage": [
+          "BR-010",
+          "AF-011",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Scientific superiority comparisons report the predeclared effect measure and applicable uncertainty under a statistical model consistent with Task 7 EvaluationUnit and IndependenceGroup semantics and the actual dependency design. Valid paired structure is preserved when applicable. Statistical significance cannot replace material effect size or weaken Task 6 thresholds.",
+        "derived_from_g2": "G2-BR-012",
+        "hardening_attack_ids": [
+          "G2-AF-012"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-012"
+        ]
+      },
+      {
+        "id": "G3-BR-013",
+        "key": "comparison.primary-measures-reporting",
+        "title": "Primary Measures And Selective-Reporting Control",
+        "lineage": [
+          "BR-010",
+          "BR-013",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Predeclare primary claim-bearing measures, secondary or diagnostic measures, aggregation rules, and any scientifically material multiplicity or selective-reporting policy before protected inspection. A secondary or diagnostic result may be reported but must not be promoted after outcome inspection into support for the original primary claim. Task 8 must not invent statistical corrections that override Task 6 hypothesis semantics.",
+        "derived_from_g2": "G2-BR-013",
+        "hardening_attack_ids": [
+          "G2-AF-013"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-013"
+        ]
+      },
+      {
+        "id": "G3-BR-014",
+        "key": "comparison.hard-constraints",
+        "title": "Hard Constraints Cannot Be Averaged Away",
+        "lineage": [
+          "BR-013",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Applicable claim-affecting hard constraints must be bound before protected outcome inspection and remain separately evaluated from aggregated performance. A favorable mean, composite, or secondary metric cannot convert a critical-invariant, authorization, protected-data, retention, locality, rollback, or other governed hard-constraint violation into PASS.",
+        "derived_from_g2": "G2-BR-014",
+        "hardening_attack_ids": [
+          "G2-AF-014"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-014"
+        ]
+      },
+      {
+        "id": "G3-BR-015",
+        "key": "benchmark.construct-coverage",
+        "title": "Benchmark Construct, Portfolio, Coverage, And Claim Scope",
+        "lineage": [
+          "BR-011",
+          "AF-008"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Document benchmark construct, environment family, claim scope, coverage, omissions, generator identity where applicable, task population, sampling procedure, task mixture, sampling weights, difficulty distribution, dependency structure, and expected relation to intended real-world behavior. When portfolio, subset, sampling, weighting, generator, or difficulty choices can change the conclusion, freeze those rules before protected outcomes.",
+        "derived_from_g2": "G2-BR-015",
+        "hardening_attack_ids": [
+          "G2-AF-015"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-015"
+        ]
+      },
+      {
+        "id": "G3-BR-016",
+        "key": "benchmark.contamination-exposure",
+        "title": "Contamination And Exposure Provenance",
+        "lineage": [
+          "BR-012",
+          "AF-009"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Represent known, suspected, unknown, and ruled-out contamination or exposure relationships that materially affect interpretation. Dynamic generation does not imply cleanliness; dynamic benchmarks must still satisfy construct, difficulty, provenance, leakage, evaluator, and reproducibility requirements. Task 7 remains the authority for protected-data contamination semantics.",
+        "derived_from_g2": "G2-BR-016",
+        "hardening_attack_ids": [
+          "G2-AF-016"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-016"
+        ]
+      },
+      {
+        "id": "G3-BR-017",
+        "key": "evaluation.evaluator-validity",
+        "title": "Evaluator Identity, Validity, Bias, And Artifact Control",
+        "lineage": [
+          "AF-005",
+          "AF-006",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A claim-bearing evaluator has explicit identity, version, configuration, construct, scoring procedure, known limitations, and material relationship to the candidate and baseline. Where relevant, qualification addresses same-model or same-family coupling, self-preference, order or position effects, formatting or verbosity bias, answer-parsing artifacts, calibration, and independent or alternative cross-checks. An evaluator defect or material uncontrolled evaluator bias can invalidate the affected comparison and must not be attributed to candidate or baseline capability.",
+        "derived_from_g2": "G2-BR-017",
+        "hardening_attack_ids": [
+          "G2-AF-017",
+          "G2-AF-027"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-017",
+          "G2-RM-027"
+        ]
+      },
+      {
+        "id": "G3-BR-018",
+        "key": "e1.observable-trajectory-evidence",
+        "title": "E1 Outcome And Observable Trajectory Evidence",
+        "lineage": [
+          "BR-014",
+          "AF-013"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2"
+        ],
+        "environments": [
+          "E1"
+        ],
+        "requirement": "When execution behavior affects interpretation, preserve outcome separately from observable trajectory evidence such as actions, tool calls, environment transitions, retries, refusals, termination, harness failures, and evaluator-visible policy events. The evidence declares its observation boundary, including material state or side effects that are not observable. Unobserved behavior is not evidence of absence. Claim-affecting trajectory categories and classification rules are predeclared; ambiguous cases remain UNKNOWN rather than being forced into a favorable explanation. Private model chain-of-thought is neither required nor requested.",
+        "derived_from_g2": "G2-BR-018",
+        "hardening_attack_ids": [
+          "G2-AF-018"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-018"
+        ]
+      },
+      {
+        "id": "G3-BR-019",
+        "key": "native.transfer-comparator-isolation",
+        "title": "N-H2 Transfer Comparator Isolation",
+        "lineage": [
+          "BR-015",
+          "AF-014"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "N-H2 comparisons distinguish learned cross-family transfer from target-starting references, fixed or non-learned methods, shared infrastructure, retrieval, target-specific prompts, onboarding, manual target engineering, and other information transfer. Source-side learned advantage remains separately demonstrable, and protected target outcomes cannot tune the transferred mechanism.",
+        "derived_from_g2": "G2-BR-019",
+        "hardening_attack_ids": [
+          "G2-AF-005",
+          "G2-AF-019"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-005",
+          "G2-RM-019"
+        ]
+      },
+      {
+        "id": "G3-BR-020",
+        "key": "adaptive.ah1-comparator-set",
+        "title": "A-H1 Adaptation Comparator Set",
+        "lineage": [
+          "BR-016",
+          "AF-015"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A-H1 binds the frozen pre-adaptation state, no-adaptation reference, strongest applicable matched adaptation baseline, and scientifically necessary conventional update comparator where valid. Adaptation comparator eligibility, tuning, adaptation-input access, information opportunity, and exclusion provenance follow the same strongest-applicable and comparison-parity safeguards as other claim-bearing baselines.",
+        "derived_from_g2": "G2-BR-020",
+        "hardening_attack_ids": [
+          "G2-AF-020"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-020"
+        ]
+      },
+      {
+        "id": "G3-BR-021",
+        "key": "adaptive.ah2-retention-locality-rollback",
+        "title": "A-H2 Retention, Locality, And Verified Rollback",
+        "lineage": [
+          "BR-017",
+          "AF-016"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A-H2 separately preserves pre/post adaptation prior capability, locality, critical invariants where applicable, rollback execution, and protected post-rollback behavior. Before evaluation, define the material state surfaces rollback is expected to restore, including applicable model state, memory, indexes, caches, policies, or other persistent state. Rollback evidence requires applicable state and behavioral restoration; material state that cannot be observed is recorded as UNKNOWN rather than assumed restored. Successful rollback invocation alone is insufficient.",
+        "derived_from_g2": "G2-BR-021",
+        "hardening_attack_ids": [
+          "G2-AF-021"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-021"
+        ]
+      },
+      {
+        "id": "G3-BR-022",
+        "key": "resources.comparison-regime",
+        "title": "Resource-Comparison Regime And Task 9 Boundary",
+        "lineage": [
+          "BR-018",
+          "AF-004",
+          "AF-017"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Before protected inspection, freeze the applicable semantic resource regime, such as strictly matched, budget-capped, or unconstrained-but-jointly-reported, and identify materially relevant resource dimensions. Performance and resource evidence remain separately reportable so a favorable aggregate cannot hide a quality-resource tradeoff or Pareto domination. Task 9 owns concrete definitions, measurement procedures, and observed token, API, compute, time, memory, storage, monetary, and human-effort values.",
+        "derived_from_g2": "G2-BR-022",
+        "hardening_attack_ids": [
+          "G2-AF-008",
+          "G2-AF-022",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-008",
+          "G2-RM-022",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-023",
+        "key": "baseline.supersession-recomparison",
+        "title": "Baseline Supersession And Recomparison",
+        "lineage": [
+          "BR-019",
+          "AF-007",
+          "AF-018"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Credible evidence of a materially relevant stronger comparator or baseline defect triggers governed reassessment under the applicable BASELINE evidence consequence. Comparator review preserves an explicit as-of date, search scope, material search sources, and trigger evidence without pretending continuous knowledge of every external method. Historical evidence remains preserved, and recomparison follows Task 7 freshness and lineage rules.",
+        "derived_from_g2": "G2-BR-023",
+        "hardening_attack_ids": [
+          "G2-AF-002",
+          "G2-AF-023"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-002",
+          "G2-RM-023"
+        ]
+      },
+      {
+        "id": "G3-BR-024",
+        "key": "baseline.missing-comparator-disposition",
+        "title": "Missing Comparator Blocks Or Narrows The Claim",
+        "lineage": [
+          "BR-020",
+          "AF-002",
+          "AF-019"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "When a required meaningful comparator cannot be implemented or reproduced, do not manufacture a weak substitute. The broader claim remains BLOCKED, INCONCLUSIVE, or otherwise truthfully dispositioned. Any narrower successor claim preserves the original evidence gap and cannot imply the blocked broader superiority claim.",
+        "derived_from_g2": "G2-BR-024",
+        "hardening_attack_ids": [
+          "G2-AF-024"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-024"
+        ]
+      },
+      {
+        "id": "G3-BR-025",
+        "key": "evaluation.real-world-validity",
+        "title": "Benchmark Evidence And Real-World Validity",
+        "lineage": [
+          "BR-021",
+          "AF-020"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Automated benchmark evidence supports only the represented claim scope. Additional simulation, red-team, user, field, shadow, replay, or other evaluation is triggered when the exact claim materially depends on open-ended operation, humans, long horizons, changing environments, workflow integration, production constraints, or safety-relevant behavior. Such real-world evaluation preserves the relevant population, organization or tenant scope, workflow scope, environment, sampling method, deployment assumptions, and time window. Benchmark success is not production-readiness evidence by default.",
+        "derived_from_g2": "G2-BR-025",
+        "hardening_attack_ids": [
+          "G2-AF-025"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-025"
+        ]
+      },
+      {
+        "id": "G3-BR-026",
+        "key": "evaluation.independent-verification",
+        "title": "Claim-Proportionate Independent Verification",
+        "lineage": [
+          "BR-022",
+          "AF-021"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Consequential comparisons are independently verifiable under Task 7. The verification plan declares relevant separation across code, evaluator, model or model family, data access, transformations, aggregation, execution path, assumptions, and authority, and explicitly discloses common-mode dependencies. When generation, judging, and verification share a model family or other material dependency, the verification plan must address the correlated-bias risk and introduce an appropriately different path when required by the claim consequence. Nominally separate scripts do not establish independence.",
+        "derived_from_g2": "G2-BR-026",
+        "hardening_attack_ids": [
+          "G2-AF-026",
+          "G2-AF-027"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-026",
+          "G2-RM-027"
+        ]
+      },
+      {
+        "id": "G3-BR-027",
+        "key": "comparison.environment-applicability-binding",
+        "title": "Environment-Specific Applicability Binding",
+        "lineage": [
+          "G2-AF-028"
+        ],
+        "derived_from_g2": null,
+        "hardening_attack_ids": [
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-028"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Task 8 defines shared comparison semantics while allowing typed environment-specific bindings for E1 agent systems, E2 structured-data ML systems, and E3 vision systems. A requirement that is not applicable to a concrete environment or experiment must use an explicit NOT_APPLICABLE disposition with a governed reason, affected requirement identity, environment scope, and verification that the omitted control is genuinely inapplicable rather than merely inconvenient. NOT_APPLICABLE must not remove a control whose absence would change the scientific meaning of the claim."
+      }
+    ]
+  },
+  "embedded_preregistration_contract": {
+    "schema_version": "1.0.0",
+    "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CONTRACT",
+    "state": "PREREGISTERED_NOT_GENERATED",
+    "authoritative": false,
+    "scientific_support_established": false,
+    "protected_evaluation": true,
+    "fresh_holdout": true,
+    "target_generation": 3,
+    "frozen_inputs": {
+      "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+      "semantic_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+      "successful_regression_sha256": "da22d819a6cbfab8c5c076f80e2079512463b16d7b127b0b8d7e602a48d7d3ba"
+    },
+    "generation_policy": {
+      "cases_must_not_exist_before_this_contract": true,
+      "generator_must_not_use_evaluator_source": true,
+      "generator_must_not_use_prior_case_answers": true,
+      "generator_must_use_generation_3_requirements": true,
+      "generator_may_use_external_research_challenges": true,
+      "cases_become_regression_evidence_after_first_execution": true,
+      "case_rewrite_after_first_execution_forbidden": true
+    },
+    "holdout_design": {
+      "minimum_case_count": 54,
+      "minimum_must_accept": 18,
+      "minimum_must_reject": 18,
+      "all_27_requirements_must_be_covered": true,
+      "minimum_cases_per_requirement": 2,
+      "require_positive_controls": true,
+      "require_negative_controls": true,
+      "require_cross_requirement_interactions": true,
+      "require_e1_coverage": true,
+      "require_e2_coverage": true,
+      "require_e3_coverage": true,
+      "require_cross_environment_coverage": true
+    },
+    "execution_policy": {
+      "first_execution_only_once": true,
+      "all_predictions_before_scoring": true,
+      "expectation_not_passed_to_evaluator": true,
+      "preserve_full_first_result": true,
+      "preserve_false_accepts": true,
+      "preserve_false_rejects": true,
+      "preserve_violation_codes": true,
+      "no_rerun_as_fresh": true
+    },
+    "success_rule": {
+      "must_accept_correct": "ALL",
+      "must_reject_correct": "ALL",
+      "expected_violation_contracts": "ALL_REQUIRED_CODES_PRESENT",
+      "false_accepts_allowed": 0,
+      "false_rejects_allowed": 0
+    },
+    "failure_policy": {
+      "failure_is_valid_evidence": true,
+      "classify_before_remediation": true,
+      "allowed_classifications": [
+        "EVALUATOR_DEFECT",
+        "G3_REQUIREMENT_AMBIGUITY",
+        "HOLDOUT_ORACLE_DEFECT"
+      ],
+      "historical_failure_must_remain_preserved": true,
+      "remediated_rerun_is_regression_only": true
+    },
+    "claim_limits": {
+      "passing_does_not_establish_scientific_support": true,
+      "passing_does_not_establish_task_8_authority": true,
+      "passing_does_not_establish_task_5_support": true,
+      "passing_does_not_prove_universal_generalization": true
+    },
+    "interpretation": "This contract is frozen before fresh adversarial holdout cases are generated. The future holdout is intended to test generalization beyond known development cases and mutations. After its first execution, those cases are no longer fresh and may only be used as regression evidence."
+  }
+}

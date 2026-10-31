@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GENERATION_2_RED_TEAM_DISPOSITIONS",
+  "state": "RESEARCH_ONLY",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_generation": 2,
+  "input_red_team": "docs/research/baselines/task-08-gen2-red-team.json",
+  "allowed_actions": [
+    "KEEP",
+    "REVISE",
+    "SPLIT",
+    "ADD",
+    "DEFER",
+    "REJECT"
+  ],
+  "generation_3_required": true,
+  "generation_3_reason": "Generation 2 remains directionally sound but 18 attacks require semantic hardening and one attack exposes a missing cross-environment applicability concept.",
+  "generation_3_output_not_yet_created": false,
+  "entries": [
+    {
+      "id": "G2-RM-001",
+      "attack_id": "G2-AF-001",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-001",
+        "G2-BR-010"
+      ],
+      "owner": "TASK_8",
+      "reason": "Generation 2 already distinguishes logical provider identity from exact reproducibility by preserving provider revision, timestamps, captured outputs, configuration, and explicit reproducibility limitations. Generation 3 should cross-reference the two requirements but does not need a new semantic concept."
+    },
+    {
+      "id": "G2-RM-002",
+      "attack_id": "G2-AF-002",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-002",
+        "G2-BR-023"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Both requirements already inherit Task 7 freshness, repeated peeking, lineage, disclosure, and invalidation semantics across successor comparisons. Task 8 must not create another holdout reuse policy."
+    },
+    {
+      "id": "G2-RM-003",
+      "attack_id": "G2-AF-003",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-003"
+      ],
+      "owner": "TASK_8",
+      "reason": "Comparator eligibility is governed, but the search scope and as-of cutoff used to discover credible comparators are not yet explicit enough to audit selective comparator discovery."
+    },
+    {
+      "id": "G2-RM-004",
+      "attack_id": "G2-AF-004",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-004"
+      ],
+      "owner": "TASK_8",
+      "reason": "Generation 2 already distinguishes diagnostic anchors from claim-bearing and strongest-applicable comparators and explicitly forbids anchor success from obscuring failure against the required stronger comparator."
+    },
+    {
+      "id": "G2-RM-005",
+      "attack_id": "G2-AF-005",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-005",
+        "G2-BR-019"
+      ],
+      "owner": "TASK_8",
+      "reason": "Information parity must explicitly include persistent and indirect state such as caches, retrieval stores, tool memory, prior transcripts, warmed state, and other target-specific information channels."
+    },
+    {
+      "id": "G2-RM-006",
+      "attack_id": "G2-AF-006",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-006"
+      ],
+      "owner": "TASK_8",
+      "reason": "Evaluation parity needs explicit temporal/environment-state semantics covering snapshots, paired execution, controlled replay, or acknowledged temporal drift."
+    },
+    {
+      "id": "G2-RM-007",
+      "attack_id": "G2-AF-007",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-007"
+      ],
+      "owner": "TASK_8",
+      "reason": "Declared asymmetry needs a testable rule for whether the difference is genuinely part of the treatment or instead changes the meaning of the claimed comparison."
+    },
+    {
+      "id": "G2-RM-008",
+      "attack_id": "G2-AF-008",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-008",
+        "G2-BR-022"
+      ],
+      "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+      "reason": "Task 8 should explicitly include human tuning opportunity, manual debugging, prompt iteration, and failed-search opportunity in the comparison semantics while Task 9 measures concrete effort."
+    },
+    {
+      "id": "G2-RM-009",
+      "attack_id": "G2-AF-009",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-009"
+      ],
+      "owner": "TASK_8",
+      "reason": "All materially relevant but unavailable provenance must be represented explicitly as UNKNOWN or UNAVAILABLE rather than being omitted from the record."
+    },
+    {
+      "id": "G2-RM-010",
+      "attack_id": "G2-AF-010",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-010"
+      ],
+      "owner": "TASK_8",
+      "reason": "The manifest needs a declared reproducibility class distinguishing exact reconstruction, controlled reconstruction, behavioral replay, and irreproducible external dependency."
+    },
+    {
+      "id": "G2-RM-011",
+      "attack_id": "G2-AF-011",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-011"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Generation 2 already requires material variation sources and explicitly forbids repeated runs from manufacturing independent Task 7 evaluation units. Correlated replication belongs inside those dependency semantics."
+    },
+    {
+      "id": "G2-RM-012",
+      "attack_id": "G2-AF-012",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-012"
+      ],
+      "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+      "reason": "Generation 2 already requires the statistical model to match the evaluation-unit and dependency design. Generation 3 should make the Task 7 EvaluationUnit and IndependenceGroup cross-reference explicit without changing the core requirement."
+    },
+    {
+      "id": "G2-RM-013",
+      "attack_id": "G2-AF-013",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-013"
+      ],
+      "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+      "reason": "Primary and secondary measures are distinguished, but Generation 3 should explicitly prohibit post-hoc promotion of a secondary or diagnostic measure as support for the original primary claim."
+    },
+    {
+      "id": "G2-RM-014",
+      "attack_id": "G2-AF-014",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-014"
+      ],
+      "owner": "TASK_8",
+      "reason": "Claim-affecting hard constraints need explicit pre-protected freeze semantics rather than merely separate reporting."
+    },
+    {
+      "id": "G2-RM-015",
+      "attack_id": "G2-AF-015",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-015"
+      ],
+      "owner": "TASK_8",
+      "reason": "Benchmark validity must include sampling distribution, generator identity where applicable, task mixture, weights, and difficulty distribution rather than only construct labels and benchmark names."
+    },
+    {
+      "id": "G2-RM-016",
+      "attack_id": "G2-AF-016",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-016"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Generation 2 already states that dynamic generation does not establish cleanliness and preserves known, suspected, unknown, and ruled-out exposure states. Task 7 remains contamination authority."
+    },
+    {
+      "id": "G2-RM-017",
+      "attack_id": "G2-AF-017",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-017"
+      ],
+      "owner": "TASK_8",
+      "reason": "Evaluator validity needs explicit evaluator-to-candidate and evaluator-to-baseline relationship provenance, including same-model, same-family, self-preference, and correlated-bias risk where material."
+    },
+    {
+      "id": "G2-RM-018",
+      "attack_id": "G2-AF-018",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-018"
+      ],
+      "owner": "TASK_8",
+      "reason": "Observable trajectory evidence needs an explicit observation boundary so unobserved side effects or hidden environment state cannot be interpreted as evidence of absence."
+    },
+    {
+      "id": "G2-RM-019",
+      "attack_id": "G2-AF-019",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-019"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Generation 2 already enumerates retrieval, target-specific prompts, onboarding, manual target engineering, infrastructure, and other target information channels separately from learned transfer."
+    },
+    {
+      "id": "G2-RM-020",
+      "attack_id": "G2-AF-020",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-020"
+      ],
+      "owner": "TASK_8",
+      "reason": "A-H1 comparator semantics should explicitly require adaptation input parity in addition to strongest-applicable selection and tuning safeguards."
+    },
+    {
+      "id": "G2-RM-021",
+      "attack_id": "G2-AF-021",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-021"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Rollback verification needs a declared relevant-state surface, behavioral restoration checks, and UNKNOWN treatment for material state that cannot be observed directly."
+    },
+    {
+      "id": "G2-RM-022",
+      "attack_id": "G2-AF-022",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-022"
+      ],
+      "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+      "reason": "Task 8 should require non-collapsing quality/resource interpretation so Task 9 measurements can expose tradeoffs or Pareto domination rather than being hidden by one favorable aggregate."
+    },
+    {
+      "id": "G2-RM-023",
+      "attack_id": "G2-AF-023",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-023"
+      ],
+      "owner": "TASK_8",
+      "reason": "Reassessment should preserve an explicit comparator-review as-of date, search scope, and governed trigger without pretending Hetren continuously knows every external method."
+    },
+    {
+      "id": "G2-RM-024",
+      "attack_id": "G2-AF-024",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-024"
+      ],
+      "owner": "TASK_8",
+      "reason": "Generation 2 already requires narrowed claims to preserve the original evidence gap and explicitly prohibits implying the blocked broader superiority claim."
+    },
+    {
+      "id": "G2-RM-025",
+      "attack_id": "G2-AF-025",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-025"
+      ],
+      "owner": "TASK_8",
+      "reason": "Real-world evaluation needs explicit population, workflow, environment, time-window, sampling, and deployment-scope provenance whenever those choices affect the claim."
+    },
+    {
+      "id": "G2-RM-026",
+      "attack_id": "G2-AF-026",
+      "action": "KEEP",
+      "targets": [
+        "G2-BR-026"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Generation 2 already requires shared-dependency disclosure and claim-proportionate separation across evaluator, code, data, transformations, aggregation, execution path, assumptions, and authority."
+    },
+    {
+      "id": "G2-RM-027",
+      "attack_id": "G2-AF-027",
+      "action": "REVISE",
+      "targets": [
+        "G2-BR-017",
+        "G2-BR-026"
+      ],
+      "owner": "TASK_8_INHERITS_TASK_7",
+      "reason": "Evaluator validity and independent verification should explicitly surface same-model or same-family coupling across generation, judging, and verification and require alternative separation where that coupling is material."
+    },
+    {
+      "id": "G2-RM-028",
+      "attack_id": "G2-AF-028",
+      "action": "ADD",
+      "targets": [
+        "G2-BR-005",
+        "G2-BR-006",
+        "G2-BR-007",
+        "G2-BR-022"
+      ],
+      "owner": "TASK_8",
+      "new_requirement_key": "comparison.environment-applicability-binding",
+      "reason": "Shared comparison semantics need typed E1/E2/E3 bindings and a governed NOT_APPLICABLE state with explicit justification. This should be one cross-cutting requirement rather than duplicated escape logic inside multiple comparison requirements."
+    }
+  ],
+  "generation_3_output_artifact": "docs/research/baselines/task-08-baseline-requirements-gen3.json"
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 46,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T00:08:37Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v45": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v45.json",
+      "sha256": "4e4a950aff0674fa11fd60f3d2e26bf4d2a472404f564fefbd50479376b43ba3"
+    },
+    "systematic_saturation_v43": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v43.json",
+      "sha256": "66a9af94b79bfa920fa667928fbcabcb2a5fbc8c6f7dfe9d57f2471ac850b3b1"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SAM-STATE-ADAPTIVE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SAM: State-Adaptive Memory for Long-Horizon Reasoning Agent",
+      "implementation_identity": "https://github.com/qhjqhj00/cabeza",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STATE_ADAPTIVE_LONG_HORIZON_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.24468"
+        },
+        {
+          "class": "PAPER_LINKED_IMPLEMENTATION_LINEAGE",
+          "url": "https://github.com/qhjqhj00/cabeza"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_HORIZON_AGENT_REASONING_AND_MEMORY_INFORMATION_OPPORTUNITY_MATCH",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "CURRENT_CABEZA_REPOSITORY_IS_A_REFACTOR_OF_THE_EXPERIMENTAL_SAM_TOOLKIT",
+        "CUTOFF_CONSISTENT_SAM_IMPLEMENTATION_COMMIT_MUST_BE_RESOLVED_IF_RETAINED",
+        "AGENT_BACKBONE_AND_SEARCH_TOOL_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_CUE_AND_PAGE_RECALL_CONFIGURATION_MUST_BE BOUND",
+        "PREPRINT_STATUS_MUST_NOT_BE_UPGRADED_WITHOUT_ARCHIVAL_EVIDENCE",
+        "SAM explicitly makes access to long interaction history depend on the agent's evolving state, using compact memory cues while preserving raw trajectory pages for intent-driven recall."
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_HORIZON_AGENT_REASONING_AND_MEMORY_INFORMATION_OPPORTUNITY_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V43"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-RAMEM-CONTEXTUAL-REINSTATEMENT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "RaMem: Contextual Reinstatement for Long-term Agentic Memory",
+      "implementation_identity": "https://github.com/weiyang930/RaMem-Release",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_CONTEXT_VALIDITY_AWARE_LONG_TERM_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.22844"
+        },
+        {
+          "class": "AUTHOR_PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/weiyang930/RaMem-Release"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_TERM_CONTEXT_VALIDITY_AND_RETRIEVAL_SETTING_MATCH",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "EPISODIC_METADATA_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "RETRIEVER_AND_EMBEDDING_MODEL_IDENTITIES_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "PREPRINT_STATUS_MUST_NOT_BE_UPGRADED_WITHOUT_ARCHIVAL_EVIDENCE",
+        "RaMem addresses context collapse by grounding memories in episodic conditions, inducing query-specific recall conditions, performing validity-aware retrieval, and preserving context through answer synthesis."
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_LONG_TERM_CONTEXT_VALIDITY_AND_RETRIEVAL_SETTING_MATCH",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V43"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

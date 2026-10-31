@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 59,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T02:12:28Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "bindings": {
+    "candidate_addendum_v58": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v58.json",
+      "sha256": "80eb4180e8dade90d24c51631d1c1408861c2acf8ce37252a2c015cc7318b339"
+    },
+    "systematic_saturation_v56": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v56.json",
+      "sha256": "5e8ea4afdbff4b177f8babfcbd3388f4e00eb525dfe7bd59cb650186ab0f4676"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-VLA-ADAPTER",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "VLA-Adapter: An Effective Paradigm for Tiny-Scale Vision-Language-Action Model",
+      "aliases": [
+        "VLA-Adapter",
+        "VLA Adapter",
+        "VLA-Adapter: An Effective Paradigm for Tiny-Scale Vision-Language-Action Model"
+      ],
+      "implementation_identity": "https://github.com/OpenHelix-Team/VLA-Adapter",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_MATCHED_EMBODIED_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38931"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHelix-Team/VLA-Adapter"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://vla-adapter.github.io/"
+        }
+      ],
+      "displacement_target": "OpenVLA-OFT",
+      "displacement_basis": [
+        "The peer-reviewed AAAI paper directly includes OpenVLA-OFT and VLA-Adapter in the same four-suite LIBERO comparison table.",
+        "The paper reports 97.1 percent average LIBERO success for OpenVLA-OFT and 97.3 percent for the paper-defined VLA-Adapter.",
+        "The paper-defined VLA-Adapter uses a 0.5B backbone while the tabulated OpenVLA-OFT uses a 7B backbone."
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "EXACT_VLA_ADAPTER_VERSION_AND_CHECKPOINT_MUST_BE BOUND",
+        "LIBERO_PROTOCOL_AND_REPETITION_COUNT_MUST_BE MATCHED",
+        "ROBOTIC_PRETRAINING_DIFFERENCES_MUST_BE PART_OF_INFORMATION_PARITY_REVIEW",
+        "TRAINING_VRAM_THROUGHPUT_AND_PARAMETER_COUNT_REQUIRE_TASK_9_ACCOUNTING",
+        "PUBLIC_TABLE_RESULT_DOES_NOT_AUTOMATICALLY_ESTABLISH_STRONGEST_STATUS"
+      ],
+      "eligibility_status": "DIRECT_DISPLACEMENT_CANDIDATE_PENDING_FULL_INFORMATION_RESOURCE_AND_CONFIGURATION_PARITY",
+      "version_gate": {
+        "paper_defined_original_candidate": "VLA-Adapter",
+        "implementation_extension": "VLA-Adapter-Pro",
+        "rule": "VLA-Adapter-Pro must not be silently substituted for the paper-defined original candidate. If retained, any Pro configuration requires its own explicit version/configuration binding."
+      },
+      "information_opportunity_gate": null,
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V56"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SIMPLEVLA-RL",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "SimpleVLA-RL: Scaling VLA Training via Reinforcement Learning",
+      "aliases": [
+        "SimpleVLA-RL",
+        "Simple VLA RL",
+        "SimpleVLA-RL: Scaling VLA Training via Reinforcement Learning"
+      ],
+      "implementation_identity": "https://github.com/PRIME-RL/SimpleVLA-RL",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_RL_ENHANCED_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/cbfbcb4da14235bd69b134070898ae9d-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/PRIME-RL/SimpleVLA-RL"
+        }
+      ],
+      "displacement_target": "OpenVLA-OFT",
+      "displacement_basis": [
+        "SimpleVLA-RL is applied directly to OpenVLA-OFT rather than being only an unrelated robotic policy.",
+        "The peer-reviewed paper reports improved VLA performance after reinforcement-learning training and evaluates on LIBERO.",
+        "The official implementation explicitly supports OpenVLA-OFT and LIBERO training and evaluation."
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "RL_ENVIRONMENT_INTERACTION_OPPORTUNITY_MUST_BE MATCHED",
+        "SFT_COLD_START_AND_RL_DATA_MUST_BE BOUND",
+        "REWARD_FUNCTION_AND_EXPLORATION_CONFIGURATION_MUST_BE BOUND",
+        "SIMULATION_TRAJECTORY_BUDGET_REQUIRES_TASK_9_ACCOUNTING",
+        "CANNOT_REPLACE_AN_SFT_ONLY_COMPARATOR_IF_EXTRA_INTERACTION_IS_DISALLOWED"
+      ],
+      "eligibility_status": "DIRECT_DISPLACEMENT_CANDIDATE_ONLY_IF_RL_INTERACTION_AND_TRAINING_OPPORTUNITY_CAN_BE_PARITY_MATCHED",
+      "version_gate": null,
+      "information_opportunity_gate": {
+        "extra_rl_training": true,
+        "environment_interaction_or_trajectory_sampling": true,
+        "automatic_displacement_without_parity": false
+      },
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V56"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MIXTURE-OF-HORIZONS",
+      "baseline_version": "UNPINNED_DISPLACEMENT_CANDIDATE",
+      "name": "Mixture of Horizons in Action Chunking",
+      "aliases": [
+        "Mixture of Horizons in Action Chunking",
+        "Mixture of Horizons"
+      ],
+      "implementation_identity": "https://github.com/Timsty1/MixtureOfHorizons",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_ACTION_CHUNKING_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf/59efed0dc840bf0fc3ad806f021c851a2d2d77ea.pdf"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Timsty1/MixtureOfHorizons"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://timsty1.github.io/moh/"
+        }
+      ],
+      "displacement_target": "GENERIC_MATCHED_VLA_ROLE_INCLUDING_OPENVLA_OFT_WHEN_PARITY_IS_DEFENSIBLE",
+      "displacement_basis": [
+        "The ICML paper reports LIBERO results in the same four-suite benchmark table that includes OpenVLA-OFT.",
+        "The table reports OpenVLA-OFT at 97.1 percent average and pi0.5 with Mixture of Horizons at 99.0 percent average.",
+        "The method changes the action-chunking mechanism by mixing multiple horizons and supports standard and dynamic LIBERO evaluation."
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "PI0_5_PLUS_MOH_AND_OPENVLA_OFT_ARE_DIFFERENT_BASE_SYSTEMS",
+        "TRAINING_ITERATION_BATCH_DATA_AND_PRETRAINING_OPPORTUNITY_MUST_BE AUDITED",
+        "ACTION_HORIZON_AND_DYNAMIC_INFERENCE_CONFIGURATION_MUST_BE BOUND",
+        "TABLE_RESULT_IS_NOT_A_MATCHED_CAUSAL_ABLATION_AGAINST_OPENVLA_OFT",
+        "MUST_NOT_BE_DECLARED_STRONGER_UNTIL_COMPARABILITY_GATES_PASS"
+      ],
+      "eligibility_status": "PLAUSIBLE_DISPLACEMENT_CANDIDATE_PENDING_BASE_MODEL_TRAINING_AND_RESOURCE_PARITY",
+      "version_gate": null,
+      "information_opportunity_gate": null,
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V56"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 57,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:18:29Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_scope_rule": {
+    "open_ended_canonical_enumeration": false,
+    "candidate_must_plausibly_displace_retained_comparator_or_fill_real_role_gap": true,
+    "prior_promoted_candidate_is_new": false,
+    "prior_structurally_screened_identity_is_new_without_new_eligibility_fact": false,
+    "cross_incomparable_numeric_ranking": false
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v59_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v59.json",
+      "sha256": "2c1b55da6a8e02c60dd80103bf9c434ce4374d6722108a73f0d41530d5cf6930"
+    },
+    "systematic_saturation_v56": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v56.json",
+      "sha256": "5e8ea4afdbff4b177f8babfcbd3388f4e00eb525dfe7bd59cb650186ab0f4676"
+    }
+  },
+  "queries_executed": [
+    "FLOWER efficient VLA CoRL 2025 LIBERO CALVIN code weights",
+    "FLOWER VLA displacement efficient generalist robot policy sub-billion",
+    "LLaVA-VLA ICRA 2026 0.5B CALVIN RoboTwin official implementation",
+    "Rethinking Practicality VLA lightweight baseline CEBench ICRA 2026",
+    "MoLe-VLA AAAI 2026 dynamic layer skipping RLBench official code",
+    "MoLe-VLA inference efficiency OpenVLA RLBench displacement comparator"
+  ],
+  "query_count": 6,
+  "proposed_displacement_identities": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-FLOWER-VLA",
+      "name": "FLOWER",
+      "aliases": [
+        "FLOWER",
+        "FLOWER VLA",
+        "Vision-Language-Flow Models",
+        "Democratizing Generalist Robot Policies with Efficient Vision-Language-Flow Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EFFICIENT_GENERALIST_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "LIBERO_OR_CALVIN_GENERALIST_MANIPULATION_WITH_EXPLICIT_MODEL_TRAINING_AND_INFERENCE_RESOURCE_ACCOUNTING",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v305/reuss25a.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://intuitive-robots.github.io/flower_vla/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/intuitive-robots/flower_vla_pret"
+        }
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2025_WITH_PUBLIC_CODE_WEIGHTS_AND_TRAINING_RECIPE",
+      "material_reason": "A sub-billion-parameter generalist VLA with public training and model artifacts can plausibly displace an efficiency-oriented VLA comparator when CALVIN or LIBERO task, training-data, and resource conditions are matched.",
+      "parity_gates": [
+        "MATCHED_LIBERO_OR_CALVIN_TASK_REQUIRED",
+        "PRETRAINING_DATA_AND_FINETUNING_DATA_MUST_BE AUDITED",
+        "MODEL_SIZE_TRAINING_COMPUTE_INFERENCE_MEMORY_AND_LATENCY_REQUIRE_TASK_9_ACCOUNTING",
+        "FLOW_BASED_ACTION_HEAD_MUST_NOT_BE COMPARED_AS_IF_IDENTICAL_TO_OTHER_ACTION_PARAMETERIZATIONS"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLAVA-VLA",
+      "name": "LLaVA-VLA",
+      "aliases": [
+        "LLaVA-VLA",
+        "Rethinking the Practicality of Vision-language-action Model",
+        "Rethinking the Practicality of Vision-Language-Action Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TINY_SCALE_PRACTICAL_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "TINY_SCALE_OR_CONSUMER_GPU_VLA_ON_CEBENCH_CALVIN_OR_ROBOTWIN_WHERE_THE_SAME_EVALUATION_CONTRACT_IS_AVAILABLE",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.22663"
+        },
+        {
+          "class": "INSTITUTIONAL_PUBLICATION_RECORD",
+          "url": "https://milab.westlake.edu.cn/publications.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHelix-Team/LLaVA-VLA"
+        }
+      ],
+      "evidence_status": "ICRA_2026_PUBLICATION_SUPPORTED_BY_INSTITUTIONAL_RECORD_WITH_OFFICIAL_IMPLEMENTATION",
+      "material_reason": "The released 0.5B practical VLA configuration can plausibly challenge VLA-Adapter or another tiny-scale retained comparator when model scale, training opportunity, benchmark, and action representation are matched.",
+      "parity_gates": [
+        "EXACT_05B_OR_OTHER_LLAVA_VLA_VARIANT_MUST_BE BOUND",
+        "CEBENCH_CALVIN_OR_ROBOTWIN_TASK_MUST_BE MATCHED",
+        "NO_PRETRAINING_AND_FINETUNING_OPPORTUNITY_MUST_BE AUDITED",
+        "ACTION_EXPERT_AND_VANILLA_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "CONSUMER_GPU_DEPLOYABILITY_IS_NOT_BY_ITSELF_A_STRENGTH_WIN"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MOLE-VLA",
+      "name": "MoLe-VLA",
+      "aliases": [
+        "MoLe-VLA",
+        "Mixture-of-Layers Vision Language Action",
+        "Dynamic Layer-skipping Vision Language Action Model"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DYNAMIC_LAYER_SKIPPING_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "RLBENCH_OR_MATCHED_REAL_WORLD_MANIPULATION_WITH_INFERENCE_LATENCY_OR_COMPUTE_AS_AN_EXPLICIT_RESOURCE_DIMENSION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38945"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/RoyZry98/MoLe-VLA-Pytorch"
+        }
+      ],
+      "evidence_status": "PEER_REVIEWED_AAAI_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "material_reason": "Dynamic layer activation directly changes the performance-versus-inference-cost frontier and can plausibly displace a dense VLA efficiency comparator in an RLBench or equivalent matched-resource experiment.",
+      "parity_gates": [
+        "RLBENCH_OR_EQUIVALENT_TASK_CONTRACT_REQUIRED",
+        "COGACT_BACKBONE_AND_CHECKPOINT_MUST_BE BOUND",
+        "LAYER_ROUTING_AND_COGKD_CONFIGURATION_MUST_BE BOUND",
+        "INFERENCE_FREQUENCY_COMPUTE_AND_MEMORY_REQUIRE_TASK_9_ACCOUNTING",
+        "DIFFERENT_BASE_MODELS_MUST_NOT_BE NUMERICALLY_RANKED_WITHOUT_DEFENSIBLE_COMPARABILITY"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    }
+  ],
+  "proposed_identity_count": 3,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-FLOWER-VLA",
+      "name": "FLOWER",
+      "aliases": [
+        "FLOWER",
+        "FLOWER VLA",
+        "Vision-Language-Flow Models",
+        "Democratizing Generalist Robot Policies with Efficient Vision-Language-Flow Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_EFFICIENT_GENERALIST_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "LIBERO_OR_CALVIN_GENERALIST_MANIPULATION_WITH_EXPLICIT_MODEL_TRAINING_AND_INFERENCE_RESOURCE_ACCOUNTING",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v305/reuss25a.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://intuitive-robots.github.io/flower_vla/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/intuitive-robots/flower_vla_pret"
+        }
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2025_WITH_PUBLIC_CODE_WEIGHTS_AND_TRAINING_RECIPE",
+      "material_reason": "A sub-billion-parameter generalist VLA with public training and model artifacts can plausibly displace an efficiency-oriented VLA comparator when CALVIN or LIBERO task, training-data, and resource conditions are matched.",
+      "parity_gates": [
+        "MATCHED_LIBERO_OR_CALVIN_TASK_REQUIRED",
+        "PRETRAINING_DATA_AND_FINETUNING_DATA_MUST_BE AUDITED",
+        "MODEL_SIZE_TRAINING_COMPUTE_INFERENCE_MEMORY_AND_LATENCY_REQUIRE_TASK_9_ACCOUNTING",
+        "FLOW_BASED_ACTION_HEAD_MUST_NOT_BE COMPARED_AS_IF_IDENTICAL_TO_OTHER_ACTION_PARAMETERIZATIONS"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLAVA-VLA",
+      "name": "LLaVA-VLA",
+      "aliases": [
+        "LLaVA-VLA",
+        "Rethinking the Practicality of Vision-language-action Model",
+        "Rethinking the Practicality of Vision-Language-Action Models"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TINY_SCALE_PRACTICAL_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "TINY_SCALE_OR_CONSUMER_GPU_VLA_ON_CEBENCH_CALVIN_OR_ROBOTWIN_WHERE_THE_SAME_EVALUATION_CONTRACT_IS_AVAILABLE",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.22663"
+        },
+        {
+          "class": "INSTITUTIONAL_PUBLICATION_RECORD",
+          "url": "https://milab.westlake.edu.cn/publications.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHelix-Team/LLaVA-VLA"
+        }
+      ],
+      "evidence_status": "ICRA_2026_PUBLICATION_SUPPORTED_BY_INSTITUTIONAL_RECORD_WITH_OFFICIAL_IMPLEMENTATION",
+      "material_reason": "The released 0.5B practical VLA configuration can plausibly challenge VLA-Adapter or another tiny-scale retained comparator when model scale, training opportunity, benchmark, and action representation are matched.",
+      "parity_gates": [
+        "EXACT_05B_OR_OTHER_LLAVA_VLA_VARIANT_MUST_BE BOUND",
+        "CEBENCH_CALVIN_OR_ROBOTWIN_TASK_MUST_BE MATCHED",
+        "NO_PRETRAINING_AND_FINETUNING_OPPORTUNITY_MUST_BE AUDITED",
+        "ACTION_EXPERT_AND_VANILLA_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "CONSUMER_GPU_DEPLOYABILITY_IS_NOT_BY_ITSELF_A_STRENGTH_WIN"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MOLE-VLA",
+      "name": "MoLe-VLA",
+      "aliases": [
+        "MoLe-VLA",
+        "Mixture-of-Layers Vision Language Action",
+        "Dynamic Layer-skipping Vision Language Action Model"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DYNAMIC_LAYER_SKIPPING_VLA_DISPLACEMENT_CANDIDATE"
+      ],
+      "matched_displacement_surface": "RLBENCH_OR_MATCHED_REAL_WORLD_MANIPULATION_WITH_INFERENCE_LATENCY_OR_COMPUTE_AS_AN_EXPLICIT_RESOURCE_DIMENSION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38945"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/RoyZry98/MoLe-VLA-Pytorch"
+        }
+      ],
+      "evidence_status": "PEER_REVIEWED_AAAI_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "material_reason": "Dynamic layer activation directly changes the performance-versus-inference-cost frontier and can plausibly displace a dense VLA efficiency comparator in an RLBench or equivalent matched-resource experiment.",
+      "parity_gates": [
+        "RLBENCH_OR_EQUIVALENT_TASK_CONTRACT_REQUIRED",
+        "COGACT_BACKBONE_AND_CHECKPOINT_MUST_BE BOUND",
+        "LAYER_ROUTING_AND_COGKD_CONFIGURATION_MUST_BE BOUND",
+        "INFERENCE_FREQUENCY_COMPUTE_AND_MEMORY_REQUIRE_TASK_9_ACCOUNTING",
+        "DIFFERENT_BASE_MODELS_MUST_NOT_BE NUMERICALLY_RANKED_WITHOUT_DEFENSIBLE_COMPARABILITY"
+      ],
+      "identity_disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "is_new_material_candidate": true,
+      "prior_candidate_matches": [],
+      "prior_screened_matches": []
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "status": "UNRESOLVED",
+    "forcing_vla_within_e1_transfer_into_general_cross_family_role_prohibited": true
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one genuinely new displacement candidate survived governed identity deduplication.",
+    "two_consecutive_no_new_rounds_required": true
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "efficient_model_is_automatically_stronger": false,
+    "different_robot_benchmarks_are_directly_rankable": false,
+    "vla_transfer_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B62_VERIFY_ADDENDUM_V60_AND_RUN_NEXT_DISPLACEMENT_ONLY_REFINEMENT"
+}

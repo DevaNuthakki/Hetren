@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 63,
+  "state": "DISPLACEMENT_ONLY_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T02:34:44Z",
+  "task": 8,
+  "bindings": {
+    "attempt_62": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_62.json",
+      "sha256": "aab47446f6c5630896a1dfd58e5eacfe94b7b4da422f764ec32f0ccd8832cb69"
+    },
+    "addendum_v61_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v61.json",
+      "sha256": "a2cd507dd85a3ade7decb31c99ae91ba33aed97cd96c36466f615d241910b958"
+    },
+    "systematic_saturation_v59": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v59.json",
+      "sha256": "8cd0dedb0b0412aaf071f94bb997df146aa1bbebe210de7bea26383989c2667d"
+    },
+    "candidate_addendum_v62": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v62.json",
+      "sha256": "5ab59bc5974bbf25724021e2c9c240221fa93cb558cc7da9e15749da4ff756ce"
+    }
+  },
+  "state_summary": {
+    "addendum_v61_role_review_complete": true,
+    "discovery_mode": "DISPLACEMENT_ONLY",
+    "new_material_candidates_found": 0,
+    "candidate_addendum_v62_count": 0,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 1,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_not_yet_closed": "I4B63 is only the first consecutive bounded DISPLACEMENT-ONLY no-new-material refinement. The preregistered stopping condition requires one further consecutive reasonable refinement with no materially new eligible displacer or role-gap-filling comparator.",
+  "next_gate": "I4B64_SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_CONFIRMATION",
+  "claim_limits": {
+    "global_literature_exhaustion_established": false,
+    "final_selection_authorized": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

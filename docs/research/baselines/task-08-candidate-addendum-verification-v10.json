@@ -1,0 +1,104 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 10,
+  "state": "ADDENDUM_V10_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:15:58Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v10": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v10.json",
+      "sha256": "247387b1fa49bad288e2687c4d9fa413edfa0c7ed02aa67951260f738076de6f"
+    },
+    "systematic_saturation_v7": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v7.json",
+      "sha256": "c0d7336a926fef0b66981265f4c3d5f49382eff883b8f899241fa8a23b17bc67"
+    },
+    "source_correction_v1": {
+      "path": "docs/research/baselines/task-08-research-source-correction-v1.json",
+      "sha256": "8aea15af934301779711e151bd4050296734e43d29782f7944d998e29e9b998a"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LAMER-METARL",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_META_RL_EXPLORATION_AND_IN_CONTEXT_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "LaMer is published as an ICLR 2026 conference paper.",
+        "It trains language agents across episodes to encourage active exploration and long-horizon reward optimization.",
+        "Its test-time policy adaptation uses reflection over environment feedback without gradient updates.",
+        "The published evaluation includes Sokoban, MineSweeper, and WebShop.",
+        "The official implementation provides LaMer training and RL-baseline workflows."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=4GiBscHW1k"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mlbio-epfl/LaMer"
+        }
+      ],
+      "source_correction_applied": true,
+      "limits": [
+        "EXACT_BASE_MODEL_AND_ENVIRONMENT_SET_MUST_BE BOUND",
+        "CROSS_EPISODE_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "TEST_TIME_FEEDBACK_AND_REFLECTION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "WITHIN_LANGUAGE_AGENT_GENERALIZATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ADTE",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_ENTROPY_AND_CLASS_BIAS_TTA_COMPARATOR",
+      "verified_facts": [
+        "ADTE is published at ICLR 2026.",
+        "It replaces standard Shannon-entropy uncertainty handling with adaptive class-specific Tsallis entropy.",
+        "Its class-specific entropy parameter is derived from estimated label bias in incoming test instances.",
+        "The method integrates adaptive entropy-based view selection with label adjustment.",
+        "The official implementation includes ImageNet variants and cross-domain dataset support."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/50729453d56ecf6a8b7be78998776472-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jinx630/ADTE"
+        }
+      ],
+      "limits": [
+        "MATCHED_CLIP_STYLE_VLM_SETTING_REQUIRED",
+        "CLASS_BIAS_ESTIMATION_CONFIGURATION_MUST_BE BOUND",
+        "VIEW_AUGMENTATION_AND_LABEL_ADJUSTMENT_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_ARCHITECTURE_AND_PROMPT_SETTING_MUST_BE MATCHED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v10_candidates_have_role_level_external_review": true,
+    "all_addendum_v10_candidates_are_peer_reviewed": true,
+    "all_addendum_v10_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "source_correction_rewrites_history": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

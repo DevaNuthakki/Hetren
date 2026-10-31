@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 20,
+  "state": "SATURATION_V16_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:32:10Z",
+  "task": 8,
+  "bindings": {
+    "attempt_19": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_19.json",
+      "sha256": "1269a47cb3d5d0a949b13cd568c8ed0444eedda909eecf0584306da8c1be6f91"
+    },
+    "addendum_v18_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v18.json",
+      "sha256": "b4b7dea333ed5ddc7da5394c8f51491c29aba020867271eca4dbf6ba664d8a7e"
+    },
+    "systematic_saturation_v16": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v16.json",
+      "sha256": "f94d149ecdb963b854b849f62221144fda2b8f38c6cf7f089a1f7b4b66139b35"
+    },
+    "candidate_addendum_v19": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v19.json",
+      "sha256": "78b19da4b667035a32d92374d57af59995c88355363e30ef534805dcdda46cee"
+    }
+  },
+  "state_summary": {
+    "addendum_v18_role_review_complete": true,
+    "new_material_candidates_found": 1,
+    "candidate_addendum_v19_count": 1,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "reason_search_remains_open": "Saturation v16 discovered EVOTOOL as a materially distinct peer-reviewed executable E1 modular tool-policy evolution comparator absent from the governed candidate set.",
+  "next_gate": "I4B21_VERIFY_ADDENDUM_V19_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

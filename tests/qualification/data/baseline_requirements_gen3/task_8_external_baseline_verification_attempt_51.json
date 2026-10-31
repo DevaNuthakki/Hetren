@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 51,
+  "state": "SATURATION_V47_FOUND_NEW_LEGACY_E1_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T00:34:42Z",
+  "task": 8,
+  "bindings": {
+    "attempt_50": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_50.json",
+      "sha256": "5c77fed50ef6a66777a93200ccbede06a9fbc88e76dbb82101c3c23d18fcd5ec"
+    },
+    "addendum_v49_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v49.json",
+      "sha256": "4805e9e8f6b163a2415b01c7330b5945f233ee4c42a5a6e2e48736ccb97a5452"
+    },
+    "systematic_saturation_v47": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v47.json",
+      "sha256": "7bf621613be4a67eb6fcce7e4c0e6d55e0d0f50a3c65a33d1f9ce3efb237c817"
+    },
+    "candidate_addendum_v50": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v50.json",
+      "sha256": "7dcee9f629f29eed395cb349e65aad9afd1994b1959cc91df81f5a25192781ed"
+    }
+  },
+  "state_summary": {
+    "new_material_candidates_found": 2,
+    "candidate_addendum_v50_count": 2,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "final_selection_authorized_interpretation": "Discovery remains open because a materially new comparator was found.",
+  "next_gate": "I4B52_VERIFY_ADDENDUM_V50_AND_CONTINUE_BOUNDED_REFINEMENT",
+  "claim_limits": {
+    "discovery_stopping_establishes_task_8_authority": false,
+    "discovery_stopping_establishes_scientific_support": false,
+    "discovery_stopping_freezes_baselines": false,
+    "any_hypothesis_pass_established": false
+  }
+}

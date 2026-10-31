@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 50,
+  "state": "ADDENDUM_V50_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:18:16Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v50": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v50.json",
+      "sha256": "7dcee9f629f29eed395cb349e65aad9afd1994b1959cc91df81f5a25192781ed"
+    },
+    "systematic_saturation_v47": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v47.json",
+      "sha256": "7bf621613be4a67eb6fcce7e4c0e6d55e0d0f50a3c65a33d1f9ce3efb237c817"
+    },
+    "legacy_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-legacy-agent-memory-identity-resolution-v1.json",
+      "sha256": "d630664f13c5c6bc8da4970ce68f90d273d82e2d5af289cbc3ac093d87583bf6"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AWM-WORKFLOW-MEMORY",
+      "verification_state": "PEER_REVIEWED_ICML_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_WORKFLOW_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Agent Workflow Memory is published at ICML 2025.",
+        "AWM induces reusable workflows from past task trajectories and supplies relevant workflows to guide future agent actions.",
+        "AWM supports both offline workflow induction from auxiliary examples and online workflow induction from prior test experiences.",
+        "Its public implementation contains executable Mind2Web and WebArena experiment paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/wang25bx.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zorazrw/agent-workflow-memory"
+        }
+      ],
+      "limits": [
+        "WEB_NAVIGATION_TASK_MATCH_REQUIRED",
+        "OFFLINE_AND_ONLINE_AWM_MUST_NOT_BE_COLLAPSED",
+        "WORKFLOW_INDUCTION_DATA_ACCESS_MUST_BE_PARITY_MATCHED",
+        "MODEL_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "WORKFLOW_GENERALIZATION_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ARIGRAPH",
+      "verification_state": "PEER_REVIEWED_IJCAI_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_GRAPH_EPISODIC_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "AriGraph is published in the IJCAI 2025 main track.",
+        "It constructs and updates an external graph combining semantic knowledge with episodic memory while the agent explores.",
+        "The Ariadne agent uses this graph representation for planning and decision-making in interactive text-game environments.",
+        "The official public repository contains executable AriGraph/Ariadne pipelines."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.ijcai.org/proceedings/2025/2"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIRI-Institute/AriGraph"
+        }
+      ],
+      "limits": [
+        "TEXT_GAME_OR_MATCHED_INTERACTIVE_AGENT_SETTING_REQUIRED",
+        "GRAPH_EXTRACTION_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "BASE_MODEL_AND_PLANNING_CONFIGURATION_MUST_BE BOUND",
+        "STATIC_QA_RESULTS_MUST_NOT_BE COLLAPSED_WITH_INTERACTIVE_AGENT_RESULTS",
+        "MEMORY_GRAPH_PERFORMANCE_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v50_candidates_have_role_level_external_review": true,
+    "all_addendum_v50_candidates_are_peer_reviewed": true,
+    "all_addendum_v50_candidates_have_public_implementations": true,
+    "all_addendum_v50_candidates_are_finally_eligible": false,
+    "full_immutable_cutoff_consistent_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "verification_selects_strongest_baseline": false,
+    "verification_freezes_concrete_baseline": false,
+    "verification_establishes_task_8_authority": false,
+    "verification_establishes_scientific_support": false
+  }
+}

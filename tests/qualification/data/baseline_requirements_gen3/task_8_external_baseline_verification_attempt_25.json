@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 25,
+  "state": "SATURATION_V21_FOUND_NEW_MATERIAL_E2_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:02:54Z",
+  "task": 8,
+  "bindings": {
+    "attempt_24": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_24.json",
+      "sha256": "e7b2308bf7c9393337257758febca1bb4484aca8bce4e8e03f4076e1d4276980"
+    },
+    "distpfn_identity_resolution": {
+      "path": "docs/research/baselines/task-08-distpfn-identity-resolution-v1.json",
+      "sha256": "f43ec9b774cde7f3668872126ebcf9e68f1693f578bffaa06a2ae7b717236b7f"
+    },
+    "addendum_v23_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v23.json",
+      "sha256": "9a53dea872e2f7904cbbd871af00d96a97a69d84cd9be0d8263c755ac2d7f171"
+    },
+    "systematic_saturation_v21": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v21.json",
+      "sha256": "3ed4304287173b915aa9bbceb09c9b3581fc1a7c1682597d99b83dc143608811"
+    },
+    "candidate_addendum_v24": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v24.json",
+      "sha256": "2436fe966904e4526dd62b53b338127d336bc4c96ee20a28aa38e880ad563e64"
+    }
+  },
+  "state_summary": {
+    "addendum_v23_empty_review_complete": true,
+    "distpfn_new_candidate_required": true,
+    "new_material_candidates_found": 1,
+    "candidate_addendum_v24_count": 1,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B26_VERIFY_ADDENDUM_V24_AND_RUN_NEXT_BOUNDED_REFINEMENT",
+  "claim_limits": {
+    "discovery_stopping_satisfies_task_8": false,
+    "final_selection_authorized_by_this_attempt": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

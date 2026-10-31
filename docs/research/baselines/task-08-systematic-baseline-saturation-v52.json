@@ -1,0 +1,233 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 52,
+  "state": "SATURATION_V52_FOUND_NEW_CANONICAL_EMBODIED_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:43:08Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v54_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v54.json",
+      "sha256": "2c91a92ccd73b557a79c6b2d5f80a6e58a60664f17a7f7ca3ad88efbf079047d"
+    },
+    "systematic_saturation_v51": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v51.json",
+      "sha256": "21017af0b594607a93f64376f1c409f6415411f6aea407a08bcf14fdcf7fb1a4"
+    }
+  },
+  "focus": [
+    "CANONICAL_EMBODIED_E1_GROUNDED_PLANNING",
+    "CANONICAL_EMBODIED_E1_LEARNED_CONTROL",
+    "CANONICAL_LANGUAGE_CONDITIONED_ROBOT_POLICIES",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "LLM-Planner ICCV 2023 embodied agent official code",
+    "few-shot grounded planning embodied agents ALFRED official implementation",
+    "VIMA ICML 2023 robot manipulation multimodal prompts official code",
+    "VIMA Bench pretrained checkpoints official implementation",
+    "RT-1 RSS 2023 robotics transformer official code checkpoints",
+    "language conditioned robot control transformer canonical embodied baseline",
+    "Inner Monologue embodied reasoning official executable implementation",
+    "SayPlan CoRL 2023 official executable implementation",
+    "LLM+P planning official code embodied interactive agent comparison"
+  ],
+  "query_count": 9,
+  "planned_candidate_count": 3,
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLM-PLANNER",
+      "name": "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_candidate_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VIMA",
+      "name": "VIMA: Robot Manipulation with Multimodal Prompts",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_candidate_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RT1",
+      "name": "RT-1: Robotics Transformer for Real-World Control at Scale",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_candidate_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LLM-PLANNER",
+      "name": "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_FEW_SHOT_GROUNDED_EMBODIED_PLANNING_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICCV_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Song_LLM-Planner_Few-Shot_Grounded_Planning_for_Embodied_Agents_with_Large_Language_ICCV_2023_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OSU-NLP-Group/LLM-Planner"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_FEW_SHOT_GROUNDED_ALFRED_STYLE_PLANNING_SETTING_MATCHED",
+      "material_reason": "Provides a peer-reviewed executable few-shot physically grounded embodied planner with both high-level and end-to-end implementations.",
+      "limits": [
+        "ALFRED_OR_EQUIVALENT_EMBODIED_TASK_CONTRACT_REQUIRED",
+        "FEW_SHOT_EXAMPLE_ACCESS_AND_RETRIEVAL_CONFIGURATION_MUST_BE MATCHED",
+        "LOW_LEVEL_CONTROLLER_ACCESS_MUST_BE DECLARED",
+        "LLM_IDENTITY_AND_PROMPT_CONFIGURATION_MUST_BE BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VIMA",
+      "name": "VIMA: Robot Manipulation with Multimodal Prompts",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MULTIMODAL_EMBODIED_CONTROL_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_NOVEL_TASK_GENERALIZATION_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICML_2023_AND_OFFICIAL_IMPLEMENTATION_CHECKPOINTS_AND_BENCHMARK_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v202/jiang23b.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vimalabs/VIMA"
+        },
+        {
+          "class": "OFFICIAL_BENCHMARK",
+          "url": "https://github.com/vimalabs/VimaBench"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTIMODAL_PROMPT_CONDITIONED_ROBOT_MANIPULATION_SETTING_MATCHED",
+      "material_reason": "Provides a learned sequential embodied-control policy with multimodal prompts, released checkpoints, executable evaluation, and explicit novel-task generalization partitions.",
+      "limits": [
+        "VIMA_BENCH_OR_EQUIVALENT_MANIPULATION_CONTRACT_REQUIRED",
+        "MULTIMODAL_PROMPT_INFORMATION_MUST_BE MATCHED",
+        "MODEL_CHECKPOINT_AND_CAPACITY_MUST_BE BOUND",
+        "OBJECT_DETECTOR_AND_OBSERVATION_PIPELINE_MUST_BE BOUND",
+        "WITHIN_E1_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RT1",
+      "name": "RT-1: Robotics Transformer for Real-World Control at Scale",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LANGUAGE_CONDITIONED_ROBOT_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_MULTI_TASK_GENERALIZATION_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2023_AND_OFFICIAL_IMPLEMENTATION_AND_CHECKPOINTS_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss19/p025.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/robotics_transformer"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LANGUAGE_CONDITIONED_REAL_WORLD_ROBOT_CONTROL_SETTING_MATCHED",
+      "material_reason": "Provides a peer-reviewed learned sequential robot-control transformer with official code, tests, and trained checkpoints for language-conditioned real-world control.",
+      "limits": [
+        "REAL_ROBOT_CONTROL_CONTRACT_REQUIRED",
+        "TRAINED_CHECKPOINT_AND_DATA_REGIME_MUST_BE BOUND",
+        "OBSERVATION_ACTION_TOKENIZATION_MUST_BE MATCHED",
+        "SIM_REAL_OR_JOINT_TRAINING_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "WITHIN_E1_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Inner Monologue: Embodied Reasoning through Planning with Language Models",
+      "sources": [
+        "https://innermonologue.github.io/",
+        "https://research.google/pubs/innermonologue-embodied-reasoning-through-planning-with-language-models/"
+      ],
+      "disposition": "MATERIAL_CANONICAL_E1_REFERENCE_EXECUTABLE_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED",
+      "reason": "Closed-loop language feedback and replanning are materially relevant, but an official independently reproducible implementation was not established by this bounded pass."
+    },
+    {
+      "name": "SayPlan: Grounding Large Language Models using 3D Scene Graphs for Scalable Robot Task Planning",
+      "sources": [
+        "https://sayplan.github.io/"
+      ],
+      "disposition": "MATERIAL_CANONICAL_E1_REFERENCE_OFFICIAL_EXECUTABLE_IMPLEMENTATION_NOT_VERIFIED",
+      "reason": "The CoRL work is materially relevant to grounded long-horizon planning, but the executable repository located during this review was a third-party reconstruction rather than an author release."
+    },
+    {
+      "name": "LLM+P: Empowering Large Language Models with Optimal Planning Proficiency",
+      "sources": [
+        "https://arxiv.org/abs/2304.11477",
+        "https://github.com/Cranial-XIX/llm-pddl"
+      ],
+      "disposition": "EXECUTABLE_SYMBOLIC_PLANNING_REFERENCE_NOT_PROMOTED_TO_CURRENT_EMBODIED_E1_ROLE",
+      "reason": "LLM+P translates natural-language planning problems into PDDL and invokes a classical planner; the verified contract is symbolic planning rather than a matched embodied interactive control loop."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_generalization_references_may_exist": true,
+    "forcing_embodied_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V52"
+  },
+  "coverage_observations": {
+    "E1": "NEW_CANONICAL_EMBODIED_E1_CANDIDATES_FOUND",
+    "E2": "OUT_OF_SCOPE_FOR_THIS_BOUNDED_CANONICAL_EMBODIED_REFINEMENT",
+    "E3": "OUT_OF_SCOPE_FOR_THIS_BOUNDED_CANONICAL_EMBODIED_REFINEMENT",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially new canonical embodied E1 comparator survived dynamic repository-wide candidate identity deduplication."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonical_candidate_is_automatically_strongest": false,
+    "cross_task_robot_generalization_establishes_general_n_h2": false,
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B57_VERIFY_ADDENDUM_V55_AND_RUN_NEXT_BOUNDED_CANONICAL_REFINEMENT"
+}

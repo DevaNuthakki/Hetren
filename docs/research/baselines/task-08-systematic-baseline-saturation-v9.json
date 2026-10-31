@@ -1,0 +1,239 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 9,
+  "state": "SATURATION_V9_FOUND_NEW_MATERIAL_E1_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:22:00Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_state_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v11_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v11.json",
+      "sha256": "c1ae94a56a3c43f17c28738c60d4da90118b4b8c95864f13c269b03fc5ed74ee"
+    },
+    "systematic_saturation_v8": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v8.json",
+      "sha256": "4230c93e848148f98b478894def58a52abd92057229caf6424dc48309670b914"
+    }
+  },
+  "focus": [
+    "E1_AGENT_TEST_TIME_ADAPTATION_AND_LEARNED_ROUTING",
+    "E2_STRUCTURED_ML_POST_PFT3A_AND_ACTIVE_ACQUISITION",
+    "E3_TEMPORAL_AND_VLM_TEST_TIME_ADAPTATION",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"WebFactory\" ICLR 2026 official github web agent",
+    "\"STAR\" \"Test-Time Adaptation Can Enhance Universal Prompt Learning\" CVPR 2026 github",
+    "2026 peer reviewed LLM agent test-time adaptation official github ICLR 2026",
+    "2026 peer reviewed tabular test-time adaptation active feature acquisition official github ICLR ICML 2026",
+    "2026 peer reviewed VLM test-time adaptation official github ICLR CVPR 2026 entropy prompt adaptation",
+    "2026 cross modality meta learning transfer policy agent tabular vision peer reviewed official github",
+    "2026 cross-domain learned decision policy transfer agent structured data vision official paper",
+    "\"site:proceedings.iclr.cc\" 2026 \"test-time\" agent language agents environment",
+    "\"site:aclanthology.org/2026\" \"test-time\" agent environment adaptation language agent",
+    "\"site:proceedings.mlr.press\" 2026 \"active feature acquisition\" tabular",
+    "\"site:proceedings.iclr.cc\" 2026 tabular adaptation test-time active feature",
+    "\"site:openaccess.thecvf.com/content/CVPR2026\" \"test-time adaptation\" vision-language model prompt code",
+    "\"site:proceedings.iclr.cc\" 2026 \"vision-language\" \"test-time adaptation\"",
+    "\"DeAR\" CVPR 2026 test-time adaptation VLM github",
+    "\"IMA TMA\" test-time adaptation github 2026 VLM",
+    "\"FGA\" ICLR 2026 test-time adaptation github",
+    "\"A2Memory\" ICML 2026 github test-time adaptation",
+    "\"active feature acquisition\" 2026 ICML ICLR official github",
+    "\"feature acquisition\" 2026 \"ICML\" \"decision transformer\"",
+    "\"tabular test-time adaptation\" 2026 github ICLR ICML",
+    "\"structured data\" \"test-time adaptation\" 2026 official code",
+    "\"Bayesian optimization\" 2026 \"TabPFN\" ICLR ICML official github",
+    "\"meta active learning\" 2026 tabular acquisition policy official github",
+    "\"Test-Time Adaptation without Source Data for Out-of-Domain Bioactivity Prediction\" ICLR 2026 code",
+    "\"Test-Time Mixture of World Models for Embodied Agents in Dynamic Environments\" ICLR 2026 code",
+    "\"Test-Time Alignment for Large Language Models via Textual Model Predictive Control\" ICLR 2026",
+    "\"Test-Time Efficient Pretrained Model Portfolios for Time Series Forecasting\" ICLR 2026",
+    "\"Temporal Test-Time Adaptation with State-Space Models\" ICLR 2026",
+    "\"STAD\" \"Temporal Test-Time Adaptation\" 2026 github",
+    "\"Temporal Test-Time Adaptation\" \"State-Space Models\" github"
+  ],
+  "query_count": 30,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TMOW",
+      "name": "Test-Time Mixture of World Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_EMBODIED_AGENT_TEST_TIME_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H1_WORLD_MODEL_ROUTING_AGENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_DOMAIN_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://iclr.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.22647"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/doldam0/tmow"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EMBODIED_AGENT_WORLD_MODEL_SETTING_MATCHED",
+      "material_reason": "Adapts routing over multiple learned world models at test time and supports zero-shot adaptation plus few-shot world-model expansion in embodied-agent environments.",
+      "n_h2_limit": "TRANSFER_AND_ADAPTATION_ARE_WITHIN_EMBODIED_AGENT_DOMAINS_AND_DO_NOT_ESTABLISH_GENERAL_E1_E2_E3_TRANSFER"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-STAD",
+      "name": "STAD \u2014 Temporal Test-Time Adaptation with State-Space Models",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_TEMPORAL_DISTRIBUTION_SHIFT_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_TEMPORAL_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_TMLR_2025_AND_AUTHOR_LINKED_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=HFETOmUtrV"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_RECORD",
+          "url": "https://monasch.github.io/"
+        },
+        {
+          "class": "AUTHOR_LINKED_EXECUTABLE_IMPLEMENTATION",
+          "url": "https://github.com/monasch/tta-monitor"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TEMPORAL_VISION_SHIFT_AND_FINAL_LAYER_ADAPTATION_SETTING_MATCHED",
+      "material_reason": "Provides a probabilistic state-space approach to gradual temporal test-time adaptation, with public executable support for STAD and FMoW-Time.",
+      "a_h2_limit": "TEMPORAL_STABILITY_EVIDENCE_DOES_NOT_BY_ITSELF_SATISFY_HETREN_ROLLBACK_AND_RESTORATION_REQUIREMENTS"
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "reference_or_screened": [
+    {
+      "name": "Test-Time Adaptation without Source Data for Out-of-Domain Bioactivity Prediction",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/0886e50806c3faf55e557bd63ba3e70c-Abstract-Conference.html",
+      "disposition": "E2_SCENARIO_SPECIFIC_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "The method is peer-reviewed and potentially relevant to structured-data ML, but its verified contract is protein-ligand bioactivity under scaffold, protein, and assay shift; no official executable implementation was located during this bounded review."
+    },
+    {
+      "name": "TTVS",
+      "source": "https://aclanthology.org/2026.findings-acl.1634/",
+      "disposition": "REASONING_MODEL_REFERENCE_NOT_E1_AGENT_BASELINE",
+      "reason": "Its published evaluation concerns self-evolving reasoning models over test queries rather than a materially tool-using multi-step agent environment."
+    },
+    {
+      "name": "Textual Model Predictive Control",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/00ffe234ea4ea394a8a4d8e29804641e-Abstract-Conference.html",
+      "disposition": "LLM_ALIGNMENT_REFERENCE_NOT_E1_AGENT_BASELINE",
+      "reason": "Its verified tasks are text-generation alignment tasks such as translation, long-form generation, and program synthesis rather than a matched tool-using agent system."
+    },
+    {
+      "name": "DeAR",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Ma_DeAR_Fine-Grained_VLM_Adaptation_by_Decomposing_Attention_Head_Roles_CVPR_2026_paper.html",
+      "disposition": "OFFLINE_VLM_ADAPTATION_REFERENCE_NOT_A_MATCHED_TEST_STREAM_TTA_BASELINE",
+      "reason": "DeAR is a task-adaptation and generalization method using learned tokens and role-based attention control; the reviewed evidence does not establish the same unlabeled deployment-time adaptation contract as the A-H1 TTA candidates."
+    },
+    {
+      "name": "IMA and TMA",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026W/Viscale/html/Vempati_IMA__TMA_Efficient_Test-Time_Adaptation_for_VLMs_via_Linear_CVPRW_2026_paper.html",
+      "disposition": "WORKSHOP_DIAGNOSTIC_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Useful lightweight VLM-TTA evidence, but workshop-level evidence does not currently add a necessary claim-bearing role beyond the substantially populated peer-reviewed E3 comparator pool."
+    },
+    {
+      "name": "Test-Time Efficient Pretrained Model Portfolios for Time Series Forecasting",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1c1b099a19621e4bd2753ac572e1dbd5-Abstract-Conference.html",
+      "disposition": "E2_TIME_SERIES_SCENARIO_REFERENCE_NOT_PROMOTED",
+      "reason": "Model-portfolio selection and ensembling are relevant structured-ML mechanisms, but the verified contract is time-series forecasting rather than a generally matched E2 investigation or adaptation experiment."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "TMoW",
+      "evidence_state": "ICLR_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Adapts mixtures of learned world models across unseen embodied-agent domains.",
+      "disposition": "WITHIN_E1_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The method does not demonstrate one learned decision mechanism transferred into structured-ML and vision systems."
+    },
+    {
+      "name": "WebFactory",
+      "evidence_state": "ICLR_2026_CONFERENCE_LISTED_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Transfers learned web-agent behavior from generated offline environments toward online web settings.",
+      "disposition": "WITHIN_E1_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The transfer boundary remains within GUI/web-agent systems."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "evidence_state": "ICML_2026_REFERENCE_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Learns relations between tasks for extrapolation.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No evidence verifies one common decision policy spanning E1, E2, and E3."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "evidence_state": "ICML_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Meta-learns structured-data feature-acquisition decisions.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its demonstrated transfer remains within structured-data active feature acquisition."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "additional_within_e1_transfer_reference_found": true,
+    "within_environment_transfer_references_exist": true,
+    "forcing_within_environment_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V9"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_EMBODIED_AGENT_TEST_TIME_ADAPTATION_CANDIDATE_FOUND",
+    "E2": "NO_NEW_GENERAL_OR_DIRECTLY_MATCHED_E2_CANDIDATE_PROMOTED_THIS_ROUND",
+    "E3": "NEW_PEER_REVIEWED_TEMPORAL_SHIFT_TTA_CANDIDATE_FOUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The bounded refinement discovered TMoW and STAD, both materially distinct externally evidenced candidates absent from prior governed Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "scenario_specific_reference_is_automatically_claim_bearing": false,
+    "tmow_establishes_general_n_h2": false,
+    "stad_establishes_a_h2_rollback": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B14_VERIFY_ADDENDUM_V12_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

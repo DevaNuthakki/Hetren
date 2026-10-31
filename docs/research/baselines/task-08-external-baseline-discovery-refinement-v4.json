@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_DISCOVERY_REFINEMENT",
+  "refinement_generation": 4,
+  "state": "MULTIPLE_MATERIAL_NEW_CANDIDATES_FOUND_STOPPING_RULE_NOT_SATISFIED",
+  "recorded_at_utc": "2026-09-26T04:32:40Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v2_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v2.json",
+      "sha256": "f47198e1a629bd2d37c09d3eaf128553022caefe9cbe4d2c4bd44818c8f87859"
+    },
+    "refinement_v3": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v3.json",
+      "sha256": "2271a5fe745712a12b10e96c15ee62be59308bd9dc58c453ea44604c5ed3ba2a"
+    }
+  },
+  "query_refinement_round": 4,
+  "queries_executed": [
+    "\"lifelong test-time adaptation\" vision NeurIPS 2025 LCoTTA paper",
+    "\"LCoTTA\" NeurIPS 2025 paper",
+    "\"Protected Test-Time Adaptation via Online Entropy Matching\" code paper",
+    "\"POEM\" test-time adaptation NeurIPS 2024 github",
+    "\"long-term\" continual test-time adaptation 2025 official github NeurIPS LCoTTA other",
+    "\"SAR2\" test-time adaptation ICLR 2025 official github",
+    "\"Test-time correlation alignment\" ICML 2025 github LinearTCA+",
+    "\"Test-time ensemble via linear mode connectivity\" ICLR 2025 github",
+    "\"Adaptive energy alignment\" test-time adaptation ICLR 2025 github",
+    "\"Selective label enhancement learning\" test-time adaptation ICLR 2025 github",
+    "\"NCTTA\" CVPR 2026 paper official",
+    "\"Neural Collapse in Test Time Adaptation\" CVPR 2026 paper",
+    "\"COME: Test-time Adaption by Conservatively Minimizing Entropy\" ICLR 2025 paper",
+    "\"Entropy is not Enough for Test-Time Adaptation\" ICLR 2024 official paper"
+  ],
+  "query_count": 14,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LCOTTA",
+      "name": "LCoTTA",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_LONG_TERM_RETENTION_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/1b6f528fe522a956dce80d5b98be8cd5-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ThunderDavid/LCoTTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_LONG_TERM_TTA_REVIEW",
+      "material_reason": "Directly addresses lifelong continual test-time adaptation and long-run degeneration."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-COME",
+      "name": "COME",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/2ea18fdc667e0ef2ad82b2b4d65147ad-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BlueWhaleLab/COME"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "material_reason": "Targets adaptation stability under standard, lifelong, and open-world TTA settings."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-POEM",
+      "name": "Protected Online Entropy Matching",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_ONLINE_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_NO_SHIFT_PRESERVATION_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/9b35a0a20d617dc68ae98a7a57df2f51-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yarinbar/poem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STABILITY_REVIEW",
+      "material_reason": "Explicitly targets shift-triggered online adaptation while preserving accuracy and calibration in no-shift conditions."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LINEARTCA",
+      "name": "LinearTCA / LinearTCA+",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_LOW_COMPUTE_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_WITH_LINKED_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/you25c.html"
+        },
+        {
+          "class": "IMPLEMENTATION_LINKED_BY_PRIMARY_PAPER",
+          "url": "https://github.com/youlj109/TCA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_VARIANT_AND_MATCHED_RESOURCE_REVIEW",
+      "material_reason": "Provides correlation-alignment TTA with an explicitly low-compute variant and a plug-in variant."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-PASLE",
+      "name": "PASLE",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_PSEUDO_LABEL_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/ac662d74829e4407ce1d126477f4a03a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/palm-ml/PASLE"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "material_reason": "Addresses uncertain pseudo-label handling during TTA and was absent from earlier candidate evidence."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-AEA",
+      "name": "Adaptive Energy Alignment",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_FAST_ONLINE_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_BINDING_UNRESOLVED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/36636f1009939960aa2f9e28d28c8a7d-Abstract-Conference.html"
+        }
+      ],
+      "eligibility_status": "MATERIAL_CANDIDATE_BLOCKED_PENDING_OFFICIAL_IMPLEMENTATION_BINDING",
+      "material_reason": "Targets fast online TTA through source-target energy alignment."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TTE",
+      "name": "Test-Time Ensemble",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_TTA_ENHANCEMENT_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H2_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_BINDING_UNRESOLVED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c242f2b7f60d8c685b6481939330e241-Abstract-Conference.html"
+        }
+      ],
+      "eligibility_status": "MATERIAL_CANDIDATE_BLOCKED_PENDING_IMPLEMENTATION_AND_BASE_METHOD_BINDING",
+      "material_reason": "Wraps existing TTA methods through parameter averaging and distillation, so exact baseline identity depends on the underlying method."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-NCTTA",
+      "name": "NCTTA",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VISION_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Cevaaa/NCTTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "material_reason": "Current CVPR 2026 TTA method evaluated across common corruption and domain-shift benchmarks."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DEYO",
+      "name": "DeYO",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/cd0665986c1e9c15f6569ac944bcf88a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jhyun17/DeYO"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_STRENGTH_REVIEW",
+      "material_reason": "Established TTA comparator designed to avoid entropy-based sample-selection failure under biased settings."
+    }
+  ],
+  "new_material_candidate_count": 9,
+  "considered_not_added": [
+    {
+      "name": "Private and Stable Test-Time Adaptation with Differential Privacy",
+      "source": "https://github.com/van-hammerheads/private-stable-tta",
+      "disposition": "NOT_ADDED_TO_GENERAL_POOL",
+      "reason": "Privacy is an additional comparison constraint not presently required by the generic A-H1 role; retain for a privacy-constrained experiment if such an experiment is declared."
+    },
+    {
+      "name": "ALINE",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/4df9a5e6bad9e64ebcea453e031142bb-Abstract-Conference.html",
+      "disposition": "NOT_ADDED_TO_CURRENT_MATCHED_E2_POOL",
+      "reason": "ALINE is a learned active data-acquisition and Bayesian-inference system, but no current Task-8 experiment has yet established a matched structured-ML decision construct for it."
+    },
+    {
+      "name": "MetaAgent",
+      "source": "https://github.com/qhjqhj00/MetaAgent",
+      "disposition": "RESEARCH_REFERENCE_NOT_CURRENT_CLAIM_BEARING_BASELINE",
+      "reason": "The surfaced work is relevant to self-evolving tool-use agents, but this review did not establish a peer-reviewed matched evaluation contract suitable for current baseline retention."
+    }
+  ],
+  "discovery_observation": "The E3 test-time-adaptation literature remained insufficiently saturated under earlier keyword searches; this round surfaced multiple peer-reviewed materially relevant comparators.",
+  "stopping_rule": {
+    "satisfied": false,
+    "reason": "Multiple materially relevant comparator methods absent from the existing pool were identified in this refinement.",
+    "two_consecutive_no_new_candidate_rounds_completed": 0
+  },
+  "selection_state": {
+    "strongest_baseline_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidates_are_automatically_eligible": false,
+    "new_candidates_are_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_research_method": "SYSTEMATIC_SATURATION_PASS_USING_COMPREHENSIVE_TTA_AND_ROLE_SPECIFIC_INDEXES_BEFORE_ANOTHER_STOPPING_RULE_ATTEMPT"
+}

@@ -1,0 +1,225 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 40,
+  "state": "ADDENDUM_V40_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T23:34:37Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v40": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v40.json",
+      "sha256": "5ec89024450e05bd57cb3492ab01eadbbfee09d6b6d4bdd22785d951cadd19bf"
+    },
+    "systematic_saturation_v37": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v37.json",
+      "sha256": "e1bec51ffb040ca00b5ae537d26b55afba930f2fd186ff9ae50d69ac7c0ac9b3"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MACLA-PROCEDURAL",
+      "verification_state": "PEER_REVIEWED_AAMAS_2026_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_HIERARCHICAL_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "The work appears in the AAMAS 2026 proceedings.",
+        "MACLA keeps the base LLM frozen while extracting and refining reusable procedural memory from trajectories.",
+        "Its selection mechanism tracks procedure reliability using Bayesian posterior information.",
+        "The public author repository exposes executable MACLA implementation material."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=nACbOKntgL"
+        },
+        {
+          "class": "OFFICIAL_CONFERENCE_PROCEEDINGS",
+          "url": "https://ifaamas.org/Proceedings/aamas2026/forms/contents.htm"
+        },
+        {
+          "class": "AUTHOR_PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/S-Forouzandeh/MACLA-LLM-Agents-AAMAS-Conference"
+        }
+      ],
+      "limits": [
+        "PROCEDURAL_MEMORY_BUILD_AND_SELECTION_CONFIGURATION_MUST_BE_BOUND",
+        "TRAJECTORY_SOURCE_AND_FAILURE_SUCCESS_INFORMATION_MUST_BE PARITY_MATCHED",
+        "BASE_MODEL_MUST_BE BOUND",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP-PROCEDURAL",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNABLE_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "MemP is published in ACL 2026 Findings.",
+        "It distills trajectories into fine-grained instructions and higher-level reusable procedural abstractions.",
+        "The system supports both offline procedural-memory construction and online self-learning.",
+        "The official repository contains executable offline and online experiment entry points."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.866/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/MemP"
+        }
+      ],
+      "limits": [
+        "OFFLINE_AND_ONLINE_MEMORY_MODES_MUST_NOT_BE COLLAPSED",
+        "TRAJECTORY_SOURCE_AND_UPDATE_POLICY_MUST_BE BOUND",
+        "BASE_AND_MEMORY_BUILDER_MODELS_MUST_BE BOUND",
+        "CROSS_MODEL_MEMORY_MIGRATION_IS_NOT_GENERAL_N_H2_EVIDENCE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "verification_state": "ICML_2026_CONFERENCE_LISTING_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_GRAPH_RECONSTRUCTION_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Memory is Reconstructed, Not Retrieved is listed in the ICML 2026 program.",
+        "MRAgent represents memory using a Cue-Tag-Content graph.",
+        "Its active reconstruction process iteratively explores and prunes memory paths using accumulated reasoning evidence.",
+        "A public repository provides executable graph-building and tool-calling retrieval code."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.06036"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Ji-shuo/MRAgent"
+        }
+      ],
+      "limits": [
+        "LONG_HORIZON_MEMORY_REASONING_SETTING_REQUIRED",
+        "GRAPH_CONSTRUCTION_AND_TOOL_ACCESS_MUST_BE BOUND",
+        "LOCOMO_AND_LONGMEMEVAL_RESULTS_MUST_NOT_BE GENERALIZED_TO_ALL_E1_TASKS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMEVOLVE",
+      "verification_state": "ICML_2026_CONFERENCE_LISTING_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_MEMORY_ARCHITECTURE_META_EVOLUTION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "MemEvolve is listed in the ICML 2026 program.",
+        "It jointly evolves memory content and the memory-system architecture.",
+        "The method treats encode, store, retrieve, and manage components as a modular design space.",
+        "The public repository identifies itself as the official implementation and includes the EvolveLab substrate."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2512.18746"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bingreeky/MemEvolve"
+        }
+      ],
+      "limits": [
+        "EVOLUTION_SEARCH_SPACE_MUST_BE BOUND",
+        "BASE_MEMORY_FRAMEWORK_AND_BACKBONE_MUST_BE BOUND",
+        "TASK_FEEDBACK_INFORMATION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "MEMORY_ARCHITECTURE_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOCR",
+      "verification_state": "ICML_2026_CONFERENCE_LISTING_WITH_PUBLIC_CODE_AND_CHECKPOINTS_VERIFIED",
+      "role_disposition": "E1_VISUAL_MEMORY_REPRESENTATION_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "MemOCR is listed in the ICML 2026 program.",
+        "It represents long-horizon memory in a visual layout with adaptive information density.",
+        "Its training objective exposes the memory agent to varying compression budgets.",
+        "The public repository provides training and evaluation paths plus released checkpoints."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.21468"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/meituan/MemOCR"
+        }
+      ],
+      "limits": [
+        "VISUAL_MEMORY_ENCODING_DOES_NOT_RECLASSIFY_THE_AGENT_AS_E3_BY_ITSELF",
+        "MEMORY_BUDGET_AND_RENDERING_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_AND_CHECKPOINT_IDENTITY_MUST_BE BOUND",
+        "GPU_REQUIREMENTS_REQUIRE_TASK_9_ACCOUNTING"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM-T",
+      "verification_state": "ICML_2026_CONFERENCE_LISTING_AND_PUBLIC_INFERENCE_EVALUATION_IMPLEMENTATION_VERIFIED_TRAINING_RELEASE_INCOMPLETE",
+      "role_disposition": "E1_LEARNED_MEMORY_MANAGEMENT_RL_COMPARATOR_PENDING_FULL_REPRODUCIBILITY",
+      "verified_facts": [
+        "Mem-T is listed in the ICML 2026 program.",
+        "It trains memory construction and retrieval behavior using dense rewards derived from a memory-operation tree.",
+        "Its memory substrate separates working, factual, experiential, and raw memory.",
+        "The public repository includes inference and evaluation infrastructure plus a released model checkpoint.",
+        "The repository states that the training script is still forthcoming."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_LISTING",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.23014"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/yanweiyue/Mem-T"
+        }
+      ],
+      "limits": [
+        "FULL_TRAINING_REPRODUCIBILITY_NOT_VERIFIED",
+        "RELEASED_CHECKPOINT_AND_MEMORY_DATABASE_CONFIGURATION_MUST_BE BOUND",
+        "DENSE_REWARD_CONSTRUCTION_AND_TRAINING_INFORMATION_MUST_BE PARITY_AUDITED",
+        "CANNOT_BE_FINALLY_ELIGIBLE_AS_TRAINED_COMPARATOR_UNTIL_REQUIRED_REPRODUCIBILITY_IS_RESOLVED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 6,
+  "interpretation": {
+    "all_addendum_v40_candidates_have_role_level_external_review": true,
+    "all_addendum_v40_candidates_are_finally_eligible": false,
+    "mem_t_full_training_reproducibility_verified": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "visual_memory_encoding_implies_e3": false,
+    "publication_status_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

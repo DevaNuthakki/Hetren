@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_POST_DISCOVERY_CONCRETE_EXPERIMENT_APPLICABILITY_TUPLE_RESOLUTION_ATTEMPT",
+  "attempt": 1,
+  "state": "SCHEMA_BOUND_CANONICAL_MAPPING_APPLIED_CONCRETE_EXPERIMENT_BINDINGS_PENDING",
+  "recorded_at_utc": "2026-09-27T20:09:34Z",
+  "task": 8,
+  "bindings": {
+    "concrete_experiment_applicability_tuple_resolution_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-applicability-tuple-resolution-v1.json",
+      "sha256": "4b0bac8b75b414e4e6474e80e0bfe23feabaab11b0c46d09ae11ffda0c779f9b"
+    }
+  },
+  "state_summary": {
+    "explicit_schema_bound_canonical_mapping_used": true,
+    "heuristic_mapping_discovery_used": false,
+    "historical_candidate_id_count": 223,
+    "canonical_candidate_count": 222,
+    "resolved_concrete_experiment_tuple_count": 0,
+    "candidates_pending_concrete_experiment_binding": 222,
+    "concrete_applicability_tuple_resolution_complete": false,
+    "strongest_comparator_selected": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "interpretation": "The I5A2R5 implementation defect is repaired: canonical identity resolution now reads the authoritative candidate_to_canonical_id field directly. The frozen metadata supports a canonical experiment-applicability frontier but does not yet support final concrete experiment-specific applicability tuples. No mechanical cross-product or protected-outcome inference was used.",
+  "next_gate": "I5A2R6_BIND_CONCRETE_GOVERNED_EXPERIMENT_CONTRACTS_TO_CANONICAL_CANDIDATE_FRONTIER",
+  "claim_limits": {
+    "mapping_bug_repair_equals_tuple_resolution_complete": false,
+    "declared_role_metadata_equals_final_applicability": false,
+    "strongest_baseline_selected": false,
+    "concrete_baseline_frozen": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  }
+}

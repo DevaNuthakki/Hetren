@@ -1,0 +1,301 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 54,
+  "state": "SATURATION_V54_FOUND_NEW_CANONICAL_EMBODIED_MECHANISM_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:55:42Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v56_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v56.json",
+      "sha256": "9d189ee86f5442b1909b6955b51b7a71ea62d5e81a09ce80ef0df1bbbc6cdba3"
+    },
+    "systematic_saturation_v53": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v53.json",
+      "sha256": "723082676a428231c3fb6c3d319b8f3dbd09cb687d75ba7e4d096bcd1c103bec"
+    }
+  },
+  "focus": [
+    "E1_CANONICAL_EMBODIED_POLICY_MECHANISM_CLOSURE",
+    "SPATIAL_TRANSPORT_POLICY",
+    "ZERO_SHOT_MULTI_TASK_IMITATION",
+    "ACTION_CHUNKING",
+    "ACTION_DIFFUSION",
+    "GENERALIST_ROBOT_POLICY",
+    "OPEN_VISION_LANGUAGE_ACTION_POLICY"
+  ],
+  "queries_executed": [
+    "Transporter Networks CoRL 2020 official code Ravens",
+    "BC-Z CoRL 2021 Google Research Tensor2Robot",
+    "ACT Action Chunking Transformers RSS 2023 official code",
+    "Diffusion Policy RSS 2023 official code",
+    "Octo RSS 2024 official code checkpoints",
+    "OpenVLA CoRL 2024 official code models",
+    "canonical robot manipulation policy action chunking diffusion generalist VLA",
+    "robot manipulation baseline Transporter BC-Z ACT Diffusion Policy Octo OpenVLA"
+  ],
+  "query_count": 8,
+  "proposed_candidate_count": 6,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRANSPORTER-NETS",
+      "name": "Transporter Networks: Rearranging the Visual World for Robotic Manipulation",
+      "mechanism_class": "SPATIAL_TRANSPORT_ACTION_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BCZ",
+      "name": "BC-Z: Zero-Shot Task Generalization with Robotic Imitation Learning",
+      "mechanism_class": "ZERO_SHOT_MULTI_TASK_IMITATION_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ACT",
+      "name": "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+      "mechanism_class": "ACTION_CHUNKING_TRANSFORMER_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-DIFFUSION-POLICY",
+      "name": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+      "mechanism_class": "ACTION_DIFFUSION_VISUOMOTOR_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OCTO",
+      "name": "Octo: An Open-Source Generalist Robot Policy",
+      "mechanism_class": "GENERALIST_TRANSFORMER_DIFFUSION_ROBOT_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA",
+      "name": "OpenVLA: An Open-Source Vision-Language-Action Model",
+      "mechanism_class": "OPEN_VISION_LANGUAGE_ACTION_FOUNDATION_POLICY",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_MECHANISM_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRANSPORTER-NETS",
+      "name": "Transporter Networks: Rearranging the Visual World for Robotic Manipulation",
+      "aliases": [
+        "Transporter Networks",
+        "Transporter Nets"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "SPATIAL_TRANSPORT_ACTION_POLICY",
+      "comparison_roles": [
+        "N_H1_LEARNED_EMBODIED_CONTROL_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2020_AND_OFFICIAL_EXECUTABLE_REFERENCE_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://transporternets.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/ravens"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_MATCHED_EMBODIED_MANIPULATION_EXPERIMENT",
+      "material_reason": "Canonical spatial-displacement manipulation policy with executable training, evaluation, datasets, and pretrained models."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BCZ",
+      "name": "BC-Z: Zero-Shot Task Generalization with Robotic Imitation Learning",
+      "aliases": [
+        "BC-Z",
+        "BCZ"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "ZERO_SHOT_MULTI_TASK_IMITATION_POLICY",
+      "comparison_roles": [
+        "N_H1_LEARNED_MULTI_TASK_MANIPULATION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_ZERO_SHOT_TASK_TRANSFER_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2021_WITH_GOOGLE_RESEARCH_CODEBASE_ASSOCIATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v164/jang22a.html"
+        },
+        {
+          "class": "OFFICIAL_PROVIDER_RESEARCH_RECORD",
+          "url": "https://research.google/pubs/bc-z-zero-shot-task-generalization-with-robotic-imitation-learning/"
+        },
+        {
+          "class": "PUBLIC_GOOGLE_RESEARCH_CODEBASE",
+          "url": "https://github.com/google-research/tensor2robot"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_EXACT_BCZ_REPRODUCTION_PATH_AND_VERSION_STILL_REQUIRE_FINAL_AUDIT",
+      "material_reason": "Canonical language/video-conditioned imitation policy explicitly designed for zero-shot generalization to unseen manipulation tasks."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ACT",
+      "name": "Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware",
+      "aliases": [
+        "ACT",
+        "Action Chunking with Transformers"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "ACTION_CHUNKING_TRANSFORMER_POLICY",
+      "comparison_roles": [
+        "N_H1_LEARNED_BIMANUAL_CONTROL_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2023_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss19/p016.html"
+        },
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://tonyzhaozh.github.io/aloha/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tonyzhaozh/act"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_MATCHED_BIMANUAL_OR_ACTION_CHUNKING_EXPERIMENT",
+      "material_reason": "Canonical action-chunking Transformer policy with executable simulation and real-robot training/evaluation code."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-DIFFUSION-POLICY",
+      "name": "Diffusion Policy: Visuomotor Policy Learning via Action Diffusion",
+      "aliases": [
+        "Diffusion Policy"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "ACTION_DIFFUSION_VISUOMOTOR_POLICY",
+      "comparison_roles": [
+        "N_H1_LEARNED_VISUOMOTOR_CONTROL_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2023_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION",
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://diffusion-policy.cs.columbia.edu/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/real-stanford/diffusion_policy"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_MATCHED_VISUOMOTOR_CONTROL_EXPERIMENT",
+      "material_reason": "Canonical conditional diffusion policy for receding-horizon visuomotor control with released simulation and real-robot reproduction code."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OCTO",
+      "name": "Octo: An Open-Source Generalist Robot Policy",
+      "aliases": [
+        "Octo"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "GENERALIST_TRANSFORMER_DIFFUSION_ROBOT_POLICY",
+      "comparison_roles": [
+        "N_H1_GENERALIST_ROBOT_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_CROSS_EMBODIMENT_TRANSFER_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2024_WITH_OFFICIAL_CODE_AND_CHECKPOINTS",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.roboticsproceedings.org/rss20/p090.html"
+        },
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://octo-models.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/octo-models/octo"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_MATCHED_GENERALIST_ROBOT_POLICY_EXPERIMENT",
+      "material_reason": "Open generalist robot policy with pretrained checkpoints and documented adaptation to new observations, action spaces, and robot morphologies."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA",
+      "name": "OpenVLA: An Open-Source Vision-Language-Action Model",
+      "aliases": [
+        "OpenVLA"
+      ],
+      "environment": "E1_AGENT",
+      "mechanism_class": "OPEN_VISION_LANGUAGE_ACTION_FOUNDATION_POLICY",
+      "comparison_roles": [
+        "N_H1_VLA_GENERALIST_CONTROL_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_CROSS_TASK_AND_EMBODIMENT_TRANSFER_REFERENCE"
+      ],
+      "evidence_status": "PEER_REVIEWED_CORL_2024_WITH_OFFICIAL_CODE_MODELS_AND_FINETUNING_PIPELINE",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v270/kim25c.html"
+        },
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://openvla.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/openvla/openvla"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_PENDING_MATCHED_VLA_CONTROL_EXPERIMENT_AND_MODEL_LICENSE_AUDIT",
+      "material_reason": "Open vision-language-action foundation policy with released model checkpoints, training code, evaluation paths, and parameter-efficient fine-tuning support."
+    }
+  ],
+  "new_material_candidate_count": 6,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 6,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_transfer_references_exist": true,
+    "forcing_embodied_cross_task_or_cross_embodiment_transfer_into_general_n_h2_prohibited": true,
+    "status": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "scope_clarification": {
+    "type": "MATERIALITY_INTERPRETATION_NOT_PREREGISTRATION_REWRITE",
+    "this_pass_closes_declared_broad_embodied_mechanism_sweep": true,
+    "does_not_claim_exhaustive_robotics_literature": true,
+    "future_candidate_rule": "After this pass, canonicality or publication existence alone is insufficient. A future candidate must fill a concrete role/applicability gap or plausibly alter the retained comparator set for a matched governed experiment.",
+    "environment_family_taxonomy_is_not_universal_capability_support": true,
+    "preregistration_rewritten": false
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "One or more genuinely new candidate identities were found, so the counter remains zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonical_method_is_automatically_applicable": false,
+    "embodied_policy_is_general_n_h2_transfer_evidence": false,
+    "new_candidate_is_automatically_strongest": false,
+    "catalog_completeness_claimed": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B59_VERIFY_ADDENDUM_V57_AND_RUN_DISPLACEMENT_ONLY_REFINEMENT"
+}

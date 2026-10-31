@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 43,
+  "state": "ADDENDUM_V43_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T23:52:33Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v43": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v43.json",
+      "sha256": "9e2d0ae1aebf219aad4d214f82391b81d067fcca72dc2163cb23c0e42310ba54"
+    },
+    "systematic_saturation_v40": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v40.json",
+      "sha256": "268ce4ad2fbc579977711024a67f08d48b1dc4b744fe28d1c129e8d2911fbf98"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TMEM-TRIGGER",
+      "verification_state": "PRIMARY_PREPRINT_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED_AUTHOR_REPORTED_EMNLP_2026_ACCEPTANCE",
+      "role_disposition": "E1_DIRECT_CONVERSATIONAL_MEMORY_ASSOCIATIVE_RECALL_CANDIDATE",
+      "verified_facts": [
+        "T-Mem was publicly available as primary research before the Task-8 evidence cutoff.",
+        "T-Mem targets both descriptive recall and associative recall in long-term conversational memory.",
+        "Its memory representation separates scenes, atomic items, topic labels, trigger families, and persona information.",
+        "Its implementation builds write-time descriptive and associative trigger structures and performs hierarchical retrieval.",
+        "The public implementation provides executable LoCoMo and LoCoMo-Plus build and evaluation workflows."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.15405"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/T-Mem"
+        }
+      ],
+      "publication_status": {
+        "author_reported_emnlp_2026_main_acceptance": true,
+        "official_archival_emnlp_proceedings_independently_verified": false,
+        "acceptance_status_used_as_eligibility_basis": false
+      },
+      "limits": [
+        "CONVERSATIONAL_LONG_TERM_MEMORY_SETTING_MUST_BE MATCHED",
+        "LOCOMO_AND_LOCOMO_PLUS_RESULTS_MUST_NOT_BE TREATED_AS_GENERIC_AGENT_DECISION_RESULTS",
+        "LLM_EMBEDDING_RERANKER_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "ASSOCIATIVE_TRIGGER_GENERATION_INFORMATION_OPPORTUNITY_MUST_BE PARITY_AUDITED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_A_FINAL_IMMUTABLE_VERSION_BINDING",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v43_candidates_have_role_level_external_review": true,
+    "t_mem_archival_peer_review_independently_verified": false,
+    "t_mem_official_executable_implementation_verified": true,
+    "all_addendum_v43_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "author_reported_acceptance_equals_archival_verification": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

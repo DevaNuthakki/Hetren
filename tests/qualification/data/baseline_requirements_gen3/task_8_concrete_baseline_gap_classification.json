@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_GAP_CLASSIFICATION",
+  "state": "CONCRETE_BASELINE_DEFINITION_ABSENT",
+  "created_at_utc": "2026-09-26T02:47:24Z",
+  "task": 8,
+  "classification": "CONCRETE_BASELINE_AUTHORITY_AND_IMPLEMENTATION_GAP",
+  "observed_repository_facts": {
+    "generation_3_state": "RESEARCH_CANDIDATE",
+    "generation_3_authoritative": false,
+    "final_task_8_baseline_contract_exists": false,
+    "task_8_governing_mvp_specification_exists": false,
+    "task_8_lifecycle_decision_exists": false,
+    "canonical_concrete_baseline_registry_exists": false,
+    "canonical_baseline_id_fields_found": 0,
+    "environment_specific_concrete_baseline_registry_exists": false
+  },
+  "upstream_task_8_ownership": [
+    "concrete baseline implementations",
+    "baseline identities",
+    "baseline versions",
+    "baseline comparison configuration",
+    "comparison role binding"
+  ],
+  "required_role_families": [
+    "strongest matched baseline",
+    "non-learned baseline",
+    "learned baseline",
+    "transfer comparator",
+    "adaptation baseline",
+    "equally resourced comparison semantics"
+  ],
+  "interpretation": {
+    "semantic_methodology_qualification_complete": true,
+    "semantic_methodology_qualification_is_not_equivalent_to_concrete_baselines_specified": true,
+    "task_8_ready_for_acceptance": false,
+    "external_baseline_discovery_and_concrete_selection_required": true,
+    "scientific_support_established": false,
+    "task_8_governing_authority_established": false
+  },
+  "frozen_inputs": {
+    "generation_3": {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    "task_6": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7": {
+      "path": "docs/mvp/07-initial-splits.md",
+      "sha256": "d392120c20a6a829b6807e8217331ddd9b8a8f479722b204ae39edd17084ea46"
+    },
+    "readiness": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_baseline_qualification_readiness.json",
+      "sha256": "802f5be40910421e5b3f0a5904e909853d85b4685598b39200f7c4196398162a"
+    }
+  },
+  "next_required_gate": "FREEZE_CONCRETE_BASELINE_DISCOVERY_AND_SELECTION_PROTOCOL",
+  "prohibited_shortcuts": [
+    "Do not mark Task 8 complete from semantic evaluator qualification alone.",
+    "Do not manufacture concrete baseline identities from holdout case examples.",
+    "Do not choose comparators using protected Hetren outcomes.",
+    "Do not create Task-8 lifecycle acceptance before concrete baseline definitions exist."
+  ]
+}

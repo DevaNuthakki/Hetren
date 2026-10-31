@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANONICAL_ALIAS_RESOLUTION",
+  "alias_resolution_generation": 1,
+  "state": "PFT3A_HISTORICAL_IDS_RESOLVED_TO_ONE_CANONICAL_IDENTITY",
+  "recorded_at_utc": "2026-09-27T19:40:31Z",
+  "task": 8,
+  "subject": "PFT3A",
+  "historical_candidate_ids": [
+    "CANDIDATE-ONLY:T8-E2-PFT3A",
+    "DISCOVERY:T8-E2-PFT3A"
+  ],
+  "canonical_candidate_id": "DISCOVERY:T8-E2-PFT3A",
+  "alias_candidate_ids": [
+    "CANDIDATE-ONLY:T8-E2-PFT3A"
+  ],
+  "identity_evidence": {
+    "same_normalized_name": true,
+    "normalized_name": "pft3a",
+    "same_normalized_implementation_identity": true,
+    "normalized_implementation_identity": "github://github.com/rundohe/pft3a",
+    "independent_identity_signal_count": 2,
+    "identity_signals": [
+      "NORMALIZED_NAME",
+      "IMPLEMENTATION_REPOSITORY"
+    ],
+    "legacy_identity_external_evidence": "EARLY_EXTERNAL_VERIFICATION_POINTS_TO_SAME_PFT3A_IMPLEMENTATION",
+    "canonical_identity_external_evidence": "LATER_DISCOVERY_ID_HAS_PEER_REVIEWED_ROLE_LEVEL_VERIFICATION_AND_OFFICIAL_IMPLEMENTATION"
+  },
+  "canonical_choice": {
+    "selected_id": "DISCOVERY:T8-E2-PFT3A",
+    "reason": "The DISCOVERY identity is the later, richer role-reviewed identity for the same PFT3A method and implementation. Canonicalization is identity reconciliation only, not comparator selection.",
+    "based_on_protected_hetren_outcomes": false,
+    "based_on_comparator_performance": false,
+    "implies_strongest_status": false
+  },
+  "bindings": {
+    "candidate_inventory_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-candidate-inventory-v1.json",
+      "sha256": "5800ca28550e45dfcfdd02ff550632609b57c1dc23e6f76b53f39644539346e7"
+    },
+    "canonical_identity_reconciliation_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-canonical-identity-reconciliation-v1.json",
+      "sha256": "e0481ea340042feaa48d63f4dd257a4184b4322a17bbc4a104cd56216ff07528"
+    },
+    "legacy_external_verification": {
+      "path": "docs/research/baselines/task-08-candidate-external-verification-v1.json",
+      "sha256": "8cba21662988be395464034a435bafad3ad0d6253a659c63200a6bbdee135f09"
+    },
+    "canonical_role_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v9.json",
+      "sha256": "1cf1edffe161703d3f9fa349c471e12542185d01fc569b592aeb12440f1da5a5"
+    }
+  },
+  "count_effect": {
+    "raw_candidate_occurrence_count_before": 223,
+    "raw_candidate_occurrence_count_after": 223,
+    "unique_historical_candidate_id_count_before": 223,
+    "unique_historical_candidate_id_count_after": 223,
+    "canonical_candidate_count_before": 223,
+    "canonical_candidate_count_after": 222,
+    "historical_candidate_deleted": false
+  },
+  "history_policy": {
+    "rewrite_candidate_inventory_v1": false,
+    "rewrite_reconciliation_v1": false,
+    "rewrite_external_verification_history": false,
+    "preserve_both_historical_ids": true,
+    "future_canonical_consumers_use": "DISCOVERY:T8-E2-PFT3A"
+  },
+  "governance": {
+    "identity_resolution_only": true,
+    "applicability_decision_performed": false,
+    "strength_ranking_performed": false,
+    "version_pinning_performed": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false,
+    "lifecycle_transition_authorized": false
+  },
+  "claim_limits": {
+    "canonical_alias_implies_same_historical_record": false,
+    "canonical_alias_implies_applicability": false,
+    "canonical_alias_implies_final_eligibility": false,
+    "canonical_alias_implies_strongest_comparator": false,
+    "canonical_alias_establishes_scientific_support": false,
+    "canonical_alias_establishes_task_8_authority": false
+  }
+}

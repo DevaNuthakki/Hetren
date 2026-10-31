@@ -1,0 +1,230 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_9_GENERATION_ENVIRONMENT_DECISION",
+  "state": "DECIDED_BEFORE_PACKAGE_V9",
+  "generation_attempt": 9,
+  "decision": "CHATGPT_TEMPORARY_UNPERSONALIZED_OBSERVABLE_ISOLATION",
+  "decision_scope": "Internal protected-holdout generation environment. This decision governs observable application-level context isolation and does not claim provider-internal statelessness.",
+  "governed_predecessor": {
+    "attempt": 8,
+    "disposition_sha256": "bc20d26f111c27eef3e45bf99f93167535e14ca0f221dd76c15099fb2814a1eb",
+    "state": "REJECTED_PRE_EXECUTION_HOLDOUT_ORACLE_DEFECT",
+    "classification": "HOLDOUT_ORACLE_DEFECT",
+    "cases_generated": true,
+    "generated_cases_accepted_for_protected_execution": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "successor_design_binding": {
+    "path": "tests/qualification/data/baseline_requirements_gen3/generation_successor_design_attempt_9.json",
+    "sha256": "823c14d063e2a326e67fdd1a78261ca3581948341d77f1af2eaf6d93a5afd246",
+    "state": "DESIGNED_BEFORE_PACKAGE_V9",
+    "generation_attempt": 9
+  },
+  "selected_environment": {
+    "provider": "OpenAI",
+    "product": "ChatGPT",
+    "account": "SAME_USER_ACCOUNT_PERMITTED",
+    "conversation_type": "TEMPORARY_CHAT",
+    "personalization_mode": "UNPERSONALIZED",
+    "must_start_from_general_new_chat": true,
+    "must_not_start_inside_hetren_project": true,
+    "must_not_be_added_to_project": true,
+    "must_use_new_conversation_not_attempt_8_session": true,
+    "custom_gpt_prohibited": true,
+    "plugins_prohibited": true,
+    "connectors_prohibited": true,
+    "automatic_library_search_required_off": true,
+    "package_attachment_source": "LOCAL_DISK_ONLY",
+    "add_from_library_prohibited": true,
+    "web_search_prohibited": true,
+    "external_retrieval_prohibited": true,
+    "external_tools_prohibited": true,
+    "prior_messages_required": 0,
+    "first_user_message_must_be_generation_handoff": true,
+    "only_hetren_specific_attachment": "FROZEN_PACKAGE_V9",
+    "only_hetren_specific_text": "MINIMAL_GOVERNED_HANDOFF_INSTRUCTION",
+    "followup_after_first_generator_response_prohibited": true,
+    "temporary_chat_must_not_be_saved": true,
+    "temporary_chat_must_not_be_converted_to_regular_chat": true
+  },
+  "observable_isolation_controls": {
+    "unpersonalized_mode_excludes_memory": true,
+    "unpersonalized_mode_excludes_custom_instructions": true,
+    "unpersonalized_mode_excludes_plugins": true,
+    "temporary_chat_does_not_create_or_update_memory": true,
+    "temporary_chat_upload_not_saved_to_library_while_temporary": true,
+    "automatic_library_search_separately_disabled": true,
+    "project_context_excluded_by_starting_outside_project": true,
+    "attempt_8_generator_thread_excluded": true,
+    "prior_hetren_conversation_not_opened_in_generator_session": true,
+    "prior_hetren_files_not_attached": true,
+    "target_evaluator_not_attached": true,
+    "repository_not_attached": true,
+    "prior_cases_not_attached": true,
+    "prior_mutations_not_attached": true,
+    "prior_predictions_not_attached": true,
+    "prior_results_not_attached": true,
+    "remediation_history_not_attached": true,
+    "web_and_external_retrieval_disallowed": true
+  },
+  "pre_generation_attestation_required": {
+    "required": true,
+    "artifact": "generation_environment_attestation_attempt_9.json",
+    "must_be_created_before_package_v9_is_sent": true,
+    "must_record_user_observable_state": true,
+    "required_observations": [
+      "temporary_chat_selected",
+      "unpersonalized_selected_before_first_message",
+      "general_chat_outside_project",
+      "new_conversation_not_attempt_8_session",
+      "zero_prior_messages",
+      "custom_gpt_not_used",
+      "automatic_library_search_off",
+      "package_selected_from_local_disk",
+      "no_other_attachment_present",
+      "no_plugin_or_connector_selected",
+      "web_search_not_selected",
+      "no_other_external_tool_or_special_mode_selected",
+      "first_message_not_yet_sent_at_attestation_time"
+    ]
+  },
+  "generator_visible_isolation_rule": {
+    "scope": "OBSERVABLE_CONVERSATION_INPUTS_ONLY",
+    "generator_must_check": [
+      "whether the conversation contains Hetren-specific text outside Package v9 and the governed handoff",
+      "whether attachments other than Package v9 are visible in the generation conversation",
+      "whether the conversation already contains any earlier user or assistant message"
+    ],
+    "generator_must_not_be_asked_to_determine": [
+      "undocumented provider-internal state",
+      "provider retention systems",
+      "provider safety infrastructure",
+      "hidden server-side implementation details",
+      "whether model pretraining ever contained related public material"
+    ],
+    "fail_closed_on_observable_boundary_violation": true
+  },
+  "one_shot_generation_rule": {
+    "single_first_response_is_attempt_artifact": true,
+    "generator_correction_turn_prohibited": true,
+    "generator_regeneration_turn_prohibited": true,
+    "generator_feedback_after_output_prohibited": true,
+    "first_response_must_be_preserved_before_static_validation": true,
+    "static_validation_occurs_outside_generation_session": true,
+    "target_execution_prohibited_until_static_validation_passes": true
+  },
+  "freshness_claim_scope": {
+    "claim": "Fresh relative to the hidden target implementation and non-package Hetren development and qualification evidence under the governed observable application-level isolation boundary.",
+    "does_not_claim_absolute_provider_internal_statelessness": true,
+    "does_not_claim_model_pretraining_nonexposure": true,
+    "does_not_claim_independent_third_party_evaluation": true,
+    "does_not_claim_external_scientific_replication": true,
+    "does_not_claim_that_provider_safety_systems_have_zero_prior_context": true
+  },
+  "known_residual_limitations": [
+    {
+      "id": "A9-RL-001",
+      "limitation": "Temporary Chat is an observable application-level boundary, not proof of provider-internal statelessness.",
+      "mitigation": "Scope freshness to governed observable evaluation inputs and make no hidden-provider-state claim."
+    },
+    {
+      "id": "A9-RL-002",
+      "limitation": "OpenAI may retain Temporary Chat content for a limited period for safety purposes.",
+      "mitigation": "Retention is outside the freshness claim; do not equate temporary UI state with zero provider retention."
+    },
+    {
+      "id": "A9-RL-003",
+      "limitation": "The underlying model may possess generic evaluation knowledge from training.",
+      "mitigation": "Freshness is relative to private Hetren target implementation and prior Hetren qualification evidence, not generic pretrained knowledge."
+    }
+  ],
+  "source_review": [
+    {
+      "source_id": "A9-S001",
+      "publisher": "OpenAI",
+      "title": "Temporary chat in ChatGPT",
+      "locator": "OpenAI Help Center article 8914046",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Temporary Chat supports a pre-message choice between Personalized and Unpersonalized",
+        "Unpersonalized excludes memory",
+        "Unpersonalized excludes custom instructions",
+        "Unpersonalized excludes plugins",
+        "Temporary Chat does not create or update memories"
+      ]
+    },
+    {
+      "source_id": "A9-S002",
+      "publisher": "OpenAI",
+      "title": "Using Library to manage files in ChatGPT",
+      "locator": "OpenAI Help Center article 20001052",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Automatic Library search can be disabled under Settings > Personalization > Advanced",
+        "Disabling automatic Library search does not prevent explicit file attachment",
+        "Files uploaded in Temporary Chat are not saved to Library while the chat remains temporary"
+      ]
+    },
+    {
+      "source_id": "A9-S003",
+      "publisher": "OpenAI",
+      "title": "Projects in ChatGPT",
+      "locator": "OpenAI Help Center article 10169521",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Project chats can carry project-specific conversation context",
+        "Starting outside projects avoids introducing project-scoped generation context"
+      ]
+    }
+  ],
+  "rejected_environment_options": [
+    {
+      "option": "REUSE_ATTEMPT_8_GENERATION_SESSION",
+      "reason": "Attempt 9 requires a genuinely new generation session and predecessor generated evidence must not be available to the successor generator."
+    },
+    {
+      "option": "REUSE_THIS_HETREN_ORCHESTRATOR_CONVERSATION_AS_GENERATOR",
+      "reason": "This orchestration conversation contains protected qualification history and predecessor governance."
+    },
+    {
+      "option": "NEW_REGULAR_CHAT_WITH_PERSONALIZATION",
+      "reason": "Personalized context does not establish the required observable separation from prior Hetren work."
+    },
+    {
+      "option": "PROJECT_CHAT",
+      "reason": "Project context is designed for continuity and is therefore inappropriate for blind holdout generation."
+    },
+    {
+      "option": "CUSTOM_GPT",
+      "reason": "Custom GPT instructions, knowledge, or configuration would add unnecessary generation-environment variables."
+    }
+  ],
+  "attempt_9_package_requirements": {
+    "preserve_generation_3_requirements": true,
+    "preserve_preregistration_contract": true,
+    "preserve_public_evaluator_interface": true,
+    "preserve_scoring_contract": true,
+    "preserve_frozen_target_evaluator": true,
+    "preserve_v8_environment_isolation_hardening": true,
+    "preserve_v8_handoff_integrity_hardening": true,
+    "preserve_v8_generator_output_preflight": true,
+    "add_only_generic_environment_self_consistency_hardening": true,
+    "preserve_fail_closed_semantics_for_observable_boundary_violations": true,
+    "package_v9_must_not_embed_attempt_8_generated_cases": true,
+    "package_v9_must_not_embed_attempt_8_generated_artifact": true,
+    "package_v9_must_not_embed_attempt_8_disposition_contents": true,
+    "package_v9_must_not_embed_attempt_8_defect_instance": true,
+    "package_v9_must_not_embed_prior_predictions_or_results": true,
+    "generator_must_not_receive_attempt_8_case_content": true
+  },
+  "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "target_freshness_consumed": false,
+  "attempt_9_generation_started": false,
+  "package_v9_created": false,
+  "scientific_support_established": false,
+  "authoritative_holdout_result_established": false,
+  "interpretation": "Attempt 9 will preserve the Attempt-8 observable isolation environment class while requiring a completely new Unpersonalized Temporary ChatGPT session. The successor generator will receive only frozen Package v9 from local disk plus the minimal governed handoff. Automatic Library search, projects, custom GPTs, plugins, connectors, web retrieval, external retrieval, and other tools remain excluded. The decision binds predecessor disposition and successor design on the orchestration side but does not expose predecessor generated case content to the successor generator."
+}

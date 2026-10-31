@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_9_PRE_GENERATION_ENVIRONMENT_ATTESTATION",
+  "state": "ATTESTED_BEFORE_FIRST_GENERATOR_MESSAGE",
+  "generation_attempt": 9,
+  "attestation_scope": "USER_OBSERVABLE_APPLICATION_STATE_ONLY",
+  "observation_method": "MANUAL_USER_CONFIRMATION_OF_VISIBLE_CHATGPT_UI_STATE",
+  "observed_at_utc": "2026-09-26T00:23:50.543692Z",
+  "environment": {
+    "provider": "OpenAI",
+    "product": "ChatGPT",
+    "conversation_type": "TEMPORARY_CHAT",
+    "personalization_mode": "UNPERSONALIZED",
+    "generation_session": "NEW_SESSION_NOT_ATTEMPT_8"
+  },
+  "package_binding": {
+    "package_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+    "manifest_sha256": "9d6cbb0ec10de760d10efb4b11471bf674a0dd382f907bd948472ed32fd4a6bd",
+    "handoff_filename": "generation_package_v9_d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876.json",
+    "handoff_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+    "attachment_source": "LOCAL_DISK_ONLY"
+  },
+  "governance_binding": {
+    "generation_environment_decision_sha256": "6095bbb82b994cda04cc859ec9efa62129c323451a8e58015a1c910a3a01ffe5",
+    "successor_design_sha256": "823c14d063e2a326e67fdd1a78261ca3581948341d77f1af2eaf6d93a5afd246",
+    "package_checker_sha256": "8971c2ed55bce03ac3db301ef48b3c30f8651a25cbb1ff6ec655e51881b50a96",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "observations": {
+    "temporary_chat_selected": true,
+    "unpersonalized_selected_before_first_message": true,
+    "general_chat_outside_project": true,
+    "new_conversation_not_attempt_8_session": true,
+    "zero_prior_messages": true,
+    "custom_gpt_not_used": true,
+    "automatic_library_search_off": true,
+    "package_selected_from_local_disk": true,
+    "no_other_attachment_present": true,
+    "no_plugin_or_connector_selected": true,
+    "web_search_not_selected": true,
+    "no_other_external_tool_or_special_mode_selected": true,
+    "first_message_not_yet_sent_at_attestation_time": true
+  },
+  "observable_isolation_result": {
+    "passed": true,
+    "observable_boundary_violation_detected": false,
+    "package_v9_is_only_attachment": true,
+    "prior_messages_detected": false,
+    "attempt_8_session_reuse_detected": false,
+    "observable_nonpackage_hetren_context_detected": false
+  },
+  "claim_limits": {
+    "does_not_claim_provider_internal_statelessness": true,
+    "does_not_claim_model_pretraining_nonexposure": true,
+    "does_not_claim_independent_third_party_evaluation": true,
+    "does_not_claim_zero_provider_retention": true
+  },
+  "generation_state_at_attestation": {
+    "first_generator_message_sent": false,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  }
+}

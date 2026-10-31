@@ -1,0 +1,305 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 6,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T04:51:40Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v5": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v5.json",
+      "sha256": "707358ee9925f4c679ddb7b56da8f0e105401fa16147cd3af0a5667fce8cd8f3"
+    },
+    "systematic_saturation_v3": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v3.json",
+      "sha256": "f12a4b93f2fb99501e5a1bb518eab4f87a6443663779b311ffb2532ab5c5fe42"
+    }
+  },
+  "candidate_count": 6,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGENTOCCAM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AgentOccam",
+      "implementation_identity": "https://github.com/amazon-science/AgentOccam",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_FIXED_OR_NON_LEARNED_WEB_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_STRONGEST_MATCHED_WEB_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/f2c6e459b95694a24ac69c469a4ee746-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/AgentOccam"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_WEB_INTERACTION_TASK_MATCHED",
+        "Peer-reviewed explicitly strong simple baseline for LLM web agents that does not depend on online feedback, search strategies, or in-context examples."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_WEB_INTERACTION_TASK_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGENTTREK",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AgentTrek",
+      "implementation_identity": "https://github.com/xlang-ai/AgentTrek",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_BROWSER_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c681fb2bf1d785fbc766f3ea14758aab-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/xlang-ai/AgentTrek"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_BROWSER_GUI_AGENT_TASK_MATCHED",
+        "Provides trained browser-agent behavior derived from synthesized web trajectories and therefore represents a learned comparator distinct from fixed prompting scaffolds."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BROWSER_GUI_AGENT_TASK_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-SAGE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SAGE",
+      "implementation_identity": "https://github.com/amazon-science/SAGE",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_SELF_IMPROVING_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_SKILL_LIBRARY_AGENT_UPDATE_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_PENDING_APPWORLD_OR_MATCHED_SKILL_LEARNING_SETTING",
+        "Peer-reviewed RL-based self-improving agent method with explicit skill accumulation and reuse across task sequences."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_APPWORLD_OR_MATCHED_SKILL_LEARNING_SETTING",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-L2M",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Learning-To-Measure",
+      "implementation_identity": "https://github.com/reAIM-Lab/Learning-To-Measure",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_ACTIVE_FEATURE_ACQUISITION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E2_META_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=ZumBSRsRbE"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/reAIM-Lab/Learning-To-Measure"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_MATCHED",
+        "Learns feature-acquisition behavior across tasks and operates in-context on unseen tabular tasks, making it directly relevant to investigation or measurement-decision baselines."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-GITBO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "GIT-BO",
+      "implementation_identity": "https://github.com/rosenyu304/GITBO",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_HIGH_DIMENSIONAL_BAYESIAN_OPTIMIZATION_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/b54bafb92da25f09ac367cff46678992-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rosenyu304/GITBO"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_HIGH_DIMENSIONAL_BO_DECISION_SURFACE_MATCHED",
+        "Current peer-reviewed Bayesian-optimization comparator using a pretrained tabular foundation model and gradient-informed active-subspace search."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_HIGH_DIMENSIONAL_BO_DECISION_SURFACE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E2-ZSBO-TABPFN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Zero-Shot Bayesian Optimization with TabPFN",
+      "implementation_identity": "https://github.com/amazon-science/tabpfn-automl2026",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_ZERO_SHOT_BAYESIAN_OPTIMIZATION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E2_PRETRAINED_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_RESEARCH_PUBLICATION",
+          "url": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/tabpfn-automl2026"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_BAYESIAN_OPTIMIZATION_DECISION_SURFACE_MATCHED",
+        "Uses pretrained TabPFN as a zero-shot BO surrogate without fitting a new surrogate for each target optimization task."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BAYESIAN_OPTIMIZATION_DECISION_SURFACE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "THIRD_SYSTEMATIC_SATURATION_PASS_E1_E2_FOCUS"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

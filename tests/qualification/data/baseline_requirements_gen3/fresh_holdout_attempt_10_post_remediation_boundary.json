@@ -1,0 +1,123 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_POST_REMEDIATION_REGRESSION_BOUNDARY",
+  "state": "REMEDIATED_EVALUATOR_FROZEN_REGRESSION_NOT_YET_AUTHORIZED",
+  "generation_attempt": 10,
+  "created_at_utc": "2026-09-26T02:11:56.823706Z",
+  "remediation": {
+    "authorized_change_ids": [
+      "A10-RM-001",
+      "A10-RM-002"
+    ],
+    "authorized_change_count": 2,
+    "applied_change_count": 2,
+    "only_live_evaluator_changed": true,
+    "source_delta_verified_against_failed_snapshot": true,
+    "source_delta_exactly_matches_authorized_replacements": true,
+    "evaluator_compiled_without_execution": true
+  },
+  "evaluator_lineage": {
+    "historical_failed_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+    "remediated_evaluator_sha256": "37b4075c00a9bea3e249bb0f9c895a6a6ccf7481a255ae7e1ece0d64c1c0907e"
+  },
+  "frozen_inputs": {
+    "remediation_boundary": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_attempt_10_remediation_boundary.json",
+      "sha256": "063b6882d42ec9db5242f0ede9760aab677f5f3c68ab1ace4efb508e9daab1ff"
+    },
+    "failed_evaluator_snapshot": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/semantic_evaluator_first_fresh_holdout_run.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    "remediated_live_evaluator": {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "37b4075c00a9bea3e249bb0f9c895a6a6ccf7481a255ae7e1ece0d64c1c0907e"
+    },
+    "attempt_10_cases": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_cases_attempt_10.json",
+      "sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089"
+    },
+    "authoritative_first_run": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run.json",
+      "sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028"
+    },
+    "classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run_classification.json",
+      "sha256": "10163304c90625e24e1b4931867bd1257379aeb078b9be31ed753566c599ccfa"
+    },
+    "disposition": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_10_disposition.json",
+      "sha256": "cca0fcadfb3214efb88e37dd6438a586b3d8698f754fa155615be2c08109a9e4"
+    },
+    "development_cases": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/cases.json",
+      "sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d"
+    },
+    "mutations": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/mutations.json",
+      "sha256": "f86885033501c61136fdfbdf34c639665e26a6936522ad03cb100cd41675796e"
+    },
+    "historical_remediation_regression": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/remediation_regression_result.json",
+      "sha256": "da22d819a6cbfab8c5c076f80e2079512463b16d7b127b0b8d7e602a48d7d3ba"
+    }
+  },
+  "required_regression_sets": {
+    "consumed_attempt_10_holdout": {
+      "count": 54,
+      "required_pass_count": 54,
+      "evidence_class": "REGRESSION_ONLY",
+      "fresh": false
+    },
+    "development_cases": {
+      "count": 54,
+      "required_pass_count": 54,
+      "evidence_class": "DEVELOPMENT_REGRESSION"
+    },
+    "mutations": {
+      "count": 34,
+      "required_pass_count": 34,
+      "evidence_class": "MUTATION_REGRESSION"
+    }
+  },
+  "targeted_required_outcomes": {
+    "G3-H10-009": {
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    "G3-H10-010": {
+      "decision": "REJECT",
+      "required_violation_subset": [
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ]
+    },
+    "G3-H10-037": {
+      "decision": "ACCEPT",
+      "violations": []
+    },
+    "G3-H10-038": {
+      "decision": "REJECT",
+      "required_violation_subset": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ]
+    }
+  },
+  "historical_evidence_policy": {
+    "authoritative_attempt_10_first_run_sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028",
+    "authoritative_attempt_10_result": "FAIL",
+    "authoritative_attempt_10_pass_count": 52,
+    "authoritative_attempt_10_case_count": 54,
+    "freshness_consumed": true,
+    "post_patch_execution_is_fresh": false,
+    "post_patch_execution_class": "REGRESSION_ONLY",
+    "historical_result_must_not_be_rewritten": true,
+    "failed_evaluator_snapshot_must_not_be_rewritten": true
+  },
+  "runner_state": {
+    "new_regression_runner_created": false,
+    "new_regression_runner_frozen": false,
+    "regression_authorized": false,
+    "regression_executed": false
+  },
+  "next_required_action": "CREATE_AND_FREEZE_POST_REMEDIATION_REGRESSION_RUNNER_AND_AUTHORIZATION"
+}

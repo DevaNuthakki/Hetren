@@ -1,0 +1,110 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONTRACT_ADJUDICATION_STRUCTURAL_REPAIR",
+  "state": "STRUCTURAL_ASSUMPTION_REPAIRED_ZERO_FULLY_GROUNDED_RECORDS_EXTERNAL_INPUT_DEPENDENCY_PRESERVED",
+  "recorded_at_utc": "2026-09-28T23:13:00Z",
+  "task": 8,
+  "purpose": "Repair the failed I5A2R13D schema assumption without rewriting historical evidence, inventing missing identities, instantiating a real experiment contract, or selecting a baseline.",
+  "failed_structural_assumption": {
+    "assumed_container": "real_source_inventory.sources",
+    "actual_adjudication_container": "source_record_adjudications",
+    "actual_declared_source_record_count": 5,
+    "normalized_source_record_count": 5,
+    "repair_effect": "READ_CORRECT_EXISTING_SCHEMA_ONLY; NO SCIENTIFIC STATE PROMOTION"
+  },
+  "adjudication_result": {
+    "fully_grounded_source_record_count": 0,
+    "fully_grounded_source_record_paths": [],
+    "contract_ready_record_exists": false
+  },
+  "existing_blocker_chain": {
+    "real_instantiation_state": "NO_REAL_CONTRACT_READY_MISSING_EXPLICIT_IDENTITY_BINDINGS",
+    "explicit_resolution_state": "EXPLICIT_BINDING_RESOLUTION_COMPLETE_NO_CONTRACT_READY_TASK9_AND_OR_IDENTITY_GAPS_REMAIN",
+    "same_source_gap_closure_state": "SAME_SOURCE_IDENTITY_SEARCH_EXHAUSTED_NO_CONTRACT_READY_EXTERNAL_INPUTS_REQUIRED",
+    "handoff_state": "EXTERNAL_REAL_EXPERIMENT_AND_TASK9_INPUTS_REQUIRED_TASK8_BINDING_BLOCKED",
+    "dependency_block_state": "FORMAL_EXTERNAL_DEPENDENCY_BLOCK_FROZEN_TASK8_PAUSED"
+  },
+  "unresolved_external_input_classes": {
+    "runtime_or_environment_identity": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "REAL_EXPERIMENT_OR_RUNTIME_IDENTITY_INPUT_REQUIRED",
+      "task8_may_invent_value": false,
+      "owner_inferred_by_r13d": false
+    },
+    "resource_matching_rule": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "GOVERNED_RESOURCE_RULE_AND_TASK9_CONCRETE_ACCOUNTING_INPUT_REQUIRED",
+      "task8_may_invent_value": false
+    },
+    "engineering_effort_binding_if_applicable": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "TASK9_HANDOFF_REQUIRED",
+      "task8_may_invent_value": false
+    },
+    "adaptation_cost_binding_if_applicable": {
+      "state": "ABSENT_FROM_ALL_FIVE_SAME_SOURCE_BUNDLES",
+      "resolution": "TASK9_HANDOFF_REQUIRED",
+      "task8_may_invent_value": false
+    }
+  },
+  "real_execution_intent_check": {
+    "occurrence_count": 0,
+    "true_occurrence_count": 0,
+    "explicit_true_binding_found": false
+  },
+  "bindings": {
+    "contract_boundary": {
+      "path": "docs/research/baselines/task-08-concrete-experiment-contract-instantiation-boundary-v1.json",
+      "sha256": "5d26d054d3898b31580e3baf2aa610b71655d6c97568f5f39595442046139935"
+    },
+    "eligibility_adjudication": {
+      "path": "docs/research/baselines/task-08-real-contract-instantiation-eligibility-adjudication-v1.json",
+      "sha256": "872573dd4929ea79ac236f7b3765d1671318c92c9f9a17800ff9ffa639707bc7"
+    },
+    "eligibility_adjudication_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_real_contract_instantiation_eligibility_adjudication_attempt_1.json",
+      "sha256": "92d9287d84f5ff1aba584bb017fd49a89c6c48278fd967322c8691aea52e306d"
+    },
+    "real_contract_instantiation": {
+      "path": "docs/research/baselines/task-08-real-concrete-experiment-contract-instantiation-v1.json",
+      "sha256": "e2206cb08fb90b25950c6bdd8dcce0b9f1af04ee4bf6b95cc30d17ce46b20466"
+    },
+    "explicit_binding_resolution": {
+      "path": "docs/research/baselines/task-08-real-contract-explicit-binding-resolution-v1.json",
+      "sha256": "1bd6bafe8a77448d7d0321a38371768fed911a9ee2a55e1b59532154fff88491"
+    },
+    "same_source_identity_gap_closure": {
+      "path": "docs/research/baselines/task-08-real-contract-same-source-identity-gap-closure-v1.json",
+      "sha256": "db202d17d468363aa978e1d793483e18a18e21ccf2810a63789df8a4268051b8"
+    },
+    "external_input_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "dependency_block_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_real_experiment_task9_dependency_block_attempt_1.json",
+      "sha256": "9a05fac364f992bdfd06820a86f5b77e93014696caae2aeaac9070d2d1ae29b9"
+    }
+  },
+  "governance_conclusion": {
+    "rerun_failed_i5a2r13d_unchanged": false,
+    "repeat_same_source_search": false,
+    "cross_source_identity_synthesis_authorized": false,
+    "task8_may_invent_missing_runtime_identity": false,
+    "task8_may_invent_task9_resource_values": false,
+    "real_contract_instantiation_authorized": false,
+    "baseline_selection_authorized": false,
+    "immutable_baseline_version_pinning_authorized": false,
+    "protected_execution_authorized": false,
+    "task8_lifecycle_transition_authorized": false
+  },
+  "authoritative_next_gate": "I5A2R13G_RESUME_ONLY_AFTER_GOVERNED_REAL_EXPERIMENT_AND_TASK9_INPUTS_EXIST",
+  "claim_limits": {
+    "repairs_scientific_evidence": false,
+    "creates_real_experiment_contract": false,
+    "selects_baseline": false,
+    "pins_baseline_version": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

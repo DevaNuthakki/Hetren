@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_HOLDOUT_GENERATION_PACKAGE_V6_MANIFEST",
+  "state": "FROZEN_BEFORE_ISOLATED_GENERATION_ATTEMPT_6",
+  "generation_attempt": 6,
+  "generation_attempt_6_started": false,
+  "attempt_6_cases_generated": false,
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "target_freshness_consumed": false,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_v6_sha256": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8",
+  "generation_package_v6_checker_sha256": "ba0a8f59ce4cbe2c411e09435f5252c7acf13cb7ec1bb443615dcb7aad4a50e1",
+  "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "governed_predecessor": {
+    "generation_attempt": 5,
+    "state": "ABORTED_PRE_CASE_GENERATION_AMBIGUOUS_SAVED_CONTEXT_BREADCRUMBS",
+    "generation_failure_sha256": "0a4b4d08dab5bac8d28698359cb635d2246352bc1ee2942090863e6c850c8964",
+    "disposition_sha256": "9ea8b7e6383721cfc4187862853fff2eba18a4d56cbbd649b38d7bc272926684",
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "protected_evidence_leakage_proven": false,
+    "target_freshness_consumed": false,
+    "successor_generation_attempt": 6
+  },
+  "operational_predecessor": {
+    "generation_package_v5_sha256": "ff785b10d526ef59269e1311e4ca4364185cd0041123602f7c6f0c634d468f83",
+    "generation_package_v5_checker_sha256": "015811af4307564e8554c715bdceb4e7a0d4d9f649a0c2f2e0ba6806719f9ab9",
+    "generation_package_v5_manifest_sha256": "d1513bdb0b0d958b45436734334256d2f22613d4268bdf44acc693bbfa9d8bf2",
+    "v6_is_bounded_operational_successor_of_v5": true,
+    "scientific_semantics_changed": false,
+    "public_evaluator_interface_changed": false,
+    "target_evaluator_changed": false
+  },
+  "artifacts": [
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v6.json",
+      "sha256": "f05eaa07ce5bcbbbef15117b49a3bc82a8e4c4212a0a086f16cddc56d49d65d8"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v6.py",
+      "sha256": "ba0a8f59ce4cbe2c411e09435f5252c7acf13cb7ec1bb443615dcb7aad4a50e1"
+    },
+    {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract.json",
+      "sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/public_evaluator_contract_manifest.json",
+      "sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v5.json",
+      "sha256": "ff785b10d526ef59269e1311e4ca4364185cd0041123602f7c6f0c634d468f83"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package_v5.py",
+      "sha256": "015811af4307564e8554c715bdceb4e7a0d4d9f649a0c2f2e0ba6806719f9ab9"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v5_manifest.json",
+      "sha256": "d1513bdb0b0d958b45436734334256d2f22613d4268bdf44acc693bbfa9d8bf2"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/generation_isolation_failure_attempt_5.json",
+      "sha256": "0a4b4d08dab5bac8d28698359cb635d2246352bc1ee2942090863e6c850c8964"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_5_disposition.json",
+      "sha256": "9ea8b7e6383721cfc4187862853fff2eba18a4d56cbbd649b38d7bc272926684"
+    }
+  ],
+  "generator_handoff_boundary": {
+    "file_to_supply": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v6.json",
+    "supply_only_package_v6_as_hetren_specific_input": true,
+    "do_not_supply_manifest": true,
+    "do_not_supply_checker": true,
+    "do_not_supply_repository": true,
+    "do_not_supply_target_evaluator": true,
+    "do_not_supply_prior_generation_packages": true,
+    "do_not_supply_prior_attempt_failures": true,
+    "do_not_supply_prior_attempt_dispositions": true,
+    "do_not_supply_prior_cases_mutations_predictions_results": true,
+    "do_not_supply_remediation_history": true,
+    "do_not_supply_other_hetren_project_context": true,
+    "do_not_supply_hetren_memory_or_saved_context": true,
+    "do_not_supply_prior_hetren_chat_or_summary": true,
+    "do_not_supply_prior_hetren_generation_request_excerpt": true,
+    "generation_environment_must_not_expose_prior_hetren_breadcrumbs": true,
+    "unrelated_non_hetren_context_is_permitted": true,
+    "unrelated_non_hetren_context_must_not_trigger_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true
+  },
+  "generation_session_boundary": {
+    "package_v6_must_be_only_hetren_specific_context": true,
+    "ambient_gate_runs_before_any_case_generation": true,
+    "nonpackage_hetren_context_requires_abort": true,
+    "ambiguous_potentially_hetren_specific_context_requires_abort": true,
+    "prior_hetren_breadcrumb_requires_abort": true,
+    "unrelated_non_hetren_context_does_not_require_abort": true,
+    "unrelated_non_hetren_context_must_not_inform_case_design": true,
+    "abort_occurs_before_case_generation": true,
+    "abort_does_not_consume_target_freshness": true,
+    "successful_output_requires_machine_readable_isolation_state": true
+  },
+  "execution_boundary": {
+    "generate_all_cases_before_target_execution": true,
+    "freeze_generated_cases_before_target_execution": true,
+    "produce_all_predictions_before_scoring": true,
+    "one_target_call_per_case": true,
+    "target_call_uses_primary_requirement_only": true,
+    "secondary_requirements_are_context_only": true,
+    "expectation_not_passed_to_target": true,
+    "expected_violation_codes_not_passed_to_target": true,
+    "first_target_execution_permanently_consumes_freshness": true
+  },
+  "interpretation": "This manifest freezes the exact Generation Package v6, its independent bounded-successor checker, the unchanged Generation-3/D1/public evaluator authority, and the frozen target evaluator before isolated Generation Attempt 6. Attempt 5 remains preserved as a pre-case-generation environment-isolation abort and did not consume freshness. Package v6 changes operational attempt identity only; scientific semantics and evaluator interface remain unchanged. Attempt 6 requires a generation environment with no visible prior Hetren breadcrumbs or other non-package Hetren context."
+}

@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 4,
+  "state": "FOCUSED_POST_EXPANSION_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T04:56:07Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v6_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v6.json",
+      "sha256": "3be100548a9d8ea65942b98f592d97c905aab87a819aa7e7e15b1093ce7268b0"
+    },
+    "systematic_saturation_v3": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v3.json",
+      "sha256": "f12a4b93f2fb99501e5a1bb518eab4f87a6443663779b311ffb2532ab5c5fe42"
+    }
+  },
+  "focus": [
+    "E1_AGENT_POST_EXPANSION",
+    "E2_STRUCTURED_ML_POST_EXPANSION",
+    "N_H2_GENERAL_CROSS_FAMILY_TRANSFER",
+    "BOUNDED_E3_SPOT_CHECK"
+  ],
+  "queries_executed": [
+    "2026 learned web agent ICLR ACL NeurIPS self improving agent official github benchmark 2026",
+    "2026 tool use agent reinforcement learning generalization official github peer reviewed",
+    "2025 2026 active feature acquisition meta learning tabular official github ICML ICLR",
+    "2025 2026 Bayesian optimization transfer meta learning zero shot TabPFN official github peer reviewed",
+    "2025 2026 cross domain transfer learned acquisition policy active learning official github peer reviewed",
+    "2026 task extrapolation meta learning cross domain policy transfer official github ICML",
+    "2026 generalist policy transfer across modalities tasks agent tabular vision meta learning official paper",
+    "2026 E3 test time adaptation CVPR 2026 official github new method continual TTA VLM",
+    "Stochastic Encodings for Active Feature Acquisition ICML 2025 PMLR official paper",
+    "Active feature acquisition explainability driven ranking ICML 2025 PMLR official paper github",
+    "2026 active feature acquisition ICML 2026 tabular official paper github learned policy",
+    "Learning to Extrapolate to New Tasks relational task extrapolator ICML 2026 official github code",
+    "RTE relational task extrapolator code github ICML 2026",
+    "2026 meta reinforcement learning transfer across task families official github ICLR ICML generalization",
+    "2026 agent memory adaptation language agents ICML AdaMEM official github",
+    "Dynamic Logits Adjustment and Exploration github official DLAE CVPR 2026"
+  ],
+  "query_count": 16,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ADAMEM",
+      "name": "AdaMEM",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_TEST_TIME_AGENT_MEMORY_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H1_MEMORY_AUGMENTED_AGENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "ICML_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "ICML_2026_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yunx-z/AdaMEM"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TEST_TIME_MEMORY_ADAPTATION_SURFACE_MATCHED",
+      "material_reason": "Provides a concrete language-agent test-time adaptation mechanism based on persistent trajectory memory and dynamically synthesized short-term strategy memory."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-SEFA",
+      "name": "Stochastic Encodings for Active Feature Acquisition",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ACTIVE_FEATURE_ACQUISITION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/norcliffe25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/a-norcliffe/SEFA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_SEQUENTIAL_FEATURE_MEASUREMENT_DECISION_SURFACE_MATCHED",
+      "material_reason": "Directly models sequential decisions about which feature to measure next, making it closely aligned with investigation or measurement-value comparison roles."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-XAI-AFA",
+      "name": "Explainability-Driven Active Feature Acquisition",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_SEQUENTIAL_FEATURE_ACQUISITION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/guney25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vkola-lab/icml2025"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_MATCHED",
+      "material_reason": "Uses instance-specific explanations and a decision-transformer policy to sequentially choose which feature to acquire next."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DLAE",
+      "name": "Dynamic Logits Adjustment and Exploration",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Wu_Dynamic_Logits_Adjustment_and_Exploration_for_Test-Time_Adaptation_in_Vision_Language_Models_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/whynotcooper/Dynamic-Logits-Adjustment-and-Exploration-for-Test-Time-Adaptation-in-Vision-Language-Models"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_SEQUENTIAL_VLM_CLASSIFICATION_TTA_SETTING_MATCHED",
+      "material_reason": "Adds class-wise logit adjustment and exploratory cache selection to VLM adaptation, a materially distinct 2026 mechanism found in the bounded E3 spot-check."
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 2,
+    "E3_VISION": 1
+  },
+  "n_h2_reference_research": [
+    {
+      "name": "Relational Task Extrapolator / Learning to Extrapolate to New Tasks",
+      "publication_state": "ICML_2026",
+      "sources": [
+        "https://arxiv.org/abs/2605.30132",
+        "https://github.com/yixinw-lab/TaskExtrapolation"
+      ],
+      "verified_relevance": "Learns relational transformations between tasks and composes them when extrapolating to unseen tasks.",
+      "disposition": "REFERENCE_ONLY_NOT_GENERAL_N_H2_BASELINE",
+      "reason": "The demonstrated task-extrapolation setting does not establish one learned decision mechanism transferring across Hetren's agent, structured-ML, and vision environment families."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "publication_state": "ICML_2026",
+      "sources": [
+        "https://reaim-lab.github.io/publications.html",
+        "https://github.com/reAIM-Lab/Learning-To-Measure"
+      ],
+      "verified_relevance": "Meta-learns active feature acquisition across structured-data tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_BASELINE",
+      "reason": "The transfer scope remains active feature acquisition in structured/tabular task families."
+    },
+    {
+      "name": "SAGE",
+      "publication_state": "ACL_2026",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.69/",
+        "https://github.com/amazon-science/SAGE"
+      ],
+      "verified_relevance": "Accumulates and reuses learned skills across chains of related agent tasks.",
+      "disposition": "WITHIN_E1_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_BASELINE",
+      "reason": "Published evidence does not demonstrate the same decision policy transferred across E1, E2, and E3."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "rte_public_research_implementation_verified": true,
+    "within_environment_transfer_references_found": true,
+    "forcing_within_environment_or_task_relational_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_FOCUSED_POST_EXPANSION_SATURATION"
+  },
+  "screened_not_promoted": [
+    {
+      "name": "SISL",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/b03289925195cbdb80970003cd1c168a-Abstract-Conference.html",
+      "disposition": "REFERENCE_ONLY",
+      "reason": "Meta-RL skill adaptation is relevant inspiration, but the evaluated long-horizon control setting is not currently a matched E1/E2/E3 Task-8 comparator."
+    },
+    {
+      "name": "Active Feature Acquisition for Personalised Treatment Assignment",
+      "source": "https://proceedings.mlr.press/v258/piskorz25a.html",
+      "disposition": "SCENARIO_SPECIFIC_NOT_PROMOTED",
+      "reason": "Targets treatment-effect decision structure with causal and confounding-specific requirements rather than the generic E2 measurement-decision role."
+    },
+    {
+      "name": "High-dimensional BO linear-kernel benchmark result",
+      "source": "https://proceedings.mlr.press/v300/doumont26a.html",
+      "disposition": "STRENGTH_REVIEW_EVIDENCE_NOT_NEW_BASELINE_YET",
+      "reason": "Important evidence that simple transformed linear-kernel BO can outperform complex methods, but exact implementation and matched Task-8 baseline identity require separate binding before promotion."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "ADDITIONAL_TEST_TIME_MEMORY_ADAPTATION_CANDIDATE_FOUND",
+    "E2": "TWO_ADDITIONAL_DIRECT_ACTIVE_FEATURE_ACQUISITION_CANDIDATES_FOUND",
+    "E3": "ONE_MATERIAL_VLM_TTA_CANDIDATE_FOUND_IN_BOUNDED_SPOT_CHECK",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED_DESPITE_STRONGER_REFERENCE_EVIDENCE"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The focused post-expansion saturation pass produced materially relevant E1, E2, and bounded E3 candidates absent from prior Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "rte_is_a_general_n_h2_comparator": false,
+    "within_environment_transfer_evidence_proves_n_h2": false,
+    "new_candidates_are_automatically_strongest": false,
+    "new_candidates_are_automatically_finally_eligible": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B9_VERIFY_ADDENDUM_V7_AND_RUN_ANOTHER_FOCUSED_POST_EXPANSION_SATURATION"
+}

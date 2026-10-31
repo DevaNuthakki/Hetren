@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_EVALUATOR_REMEDIATION_BOUNDARY",
+  "state": "PREDECLARED_BEFORE_REMEDIATION_IMPLEMENTATION",
+  "generation_attempt": 10,
+  "created_at_utc": "2026-09-26T02:09:07.505238Z",
+  "classification_basis": {
+    "aggregate_classification": "EVALUATOR_DEFECT",
+    "classified_false_rejects": [
+      "G3-H10-009",
+      "G3-H10-037"
+    ],
+    "holdout_oracle_defect_count": 0,
+    "requirement_ambiguity_count": 0
+  },
+  "pre_remediation_bindings": {
+    "failed_evaluator": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/semantic_evaluator_first_fresh_holdout_run.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    "live_evaluator": {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    "package_v10": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package_v10.json",
+      "sha256": "f36f37aec79ce30c0585b5b07e8dee6e25cc8de570b23ca9a786faef1d7f8009"
+    },
+    "attempt_10_cases": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_cases_attempt_10.json",
+      "sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089"
+    },
+    "authoritative_first_run": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run.json",
+      "sha256": "e23948d2416aee500759ed9ca3249cf5afb32fe747dd54a38ec2f7ded32ec028"
+    },
+    "classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run_classification.json",
+      "sha256": "10163304c90625e24e1b4931867bd1257379aeb078b9be31ed753566c599ccfa"
+    },
+    "disposition": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_10_disposition.json",
+      "sha256": "cca0fcadfb3214efb88e37dd6438a586b3d8698f754fa155615be2c08109a9e4"
+    },
+    "first_run_evidence_manifest": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_first_run_evidence_manifest.json",
+      "sha256": "20518aa04480f1aec4628bd6b452afd7387b92ff481721faa8844a1789edc3f4"
+    },
+    "development_cases": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/cases.json",
+      "sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d"
+    },
+    "mutations": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/mutations.json",
+      "sha256": "f86885033501c61136fdfbdf34c639665e26a6936522ad03cb100cd41675796e"
+    }
+  },
+  "authorized_change_count": 2,
+  "authorized_changes": [
+    {
+      "change_id": "A10-RM-001",
+      "requirement": "G3-BR-005",
+      "violation_code": "PERSISTENT_STATE_NOT_MATCHED",
+      "classification_source": "G3-H10-009",
+      "problem": "The strict persistent_state_matched check rejects a declared-treatment difference even though G3-BR-005 permits that treatment exception.",
+      "pre_patch_trigger": "NOT persistent_state_matched",
+      "post_patch_trigger": "NOT persistent_state_matched AND NOT state_difference_is_treatment",
+      "required_source_logic": [
+        "not _flag(facts, 'persistent_state_matched')",
+        "and not _flag(facts, 'state_difference_is_treatment')"
+      ],
+      "must_not_change": [
+        "PERSISTENT_INFORMATION_ASYMMETRY logic",
+        "cache comparison semantics",
+        "prior-transcript comparison semantics",
+        "public fact vocabulary",
+        "violation-code vocabulary"
+      ]
+    },
+    {
+      "change_id": "A10-RM-002",
+      "requirement": "G3-BR-019",
+      "violation_code": "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER",
+      "classification_source": "G3-H10-037",
+      "problem": "The masquerade condition fires whenever any target-information channel exists and learned transfer is claimed, even if the channel is separately classified and no manual target engineering occurred.",
+      "pre_patch_trigger": "target_information_channel AND claimed_as_learned_transfer",
+      "post_patch_trigger": "manual_target_engineering AND claimed_as_learned_transfer AND NOT channel_classified_separately",
+      "required_source_logic": [
+        "_flag(facts, 'manual_target_engineering')",
+        "and _flag(facts, 'claimed_as_learned_transfer')",
+        "and not _flag(facts, 'channel_classified_separately')"
+      ],
+      "must_not_change": [
+        "target_information_channel construction",
+        "TARGET_INFORMATION_CHANNEL_HIDDEN logic",
+        "public fact vocabulary",
+        "violation-code vocabulary"
+      ]
+    }
+  ],
+  "forbidden_remediation": [
+    "changing Generation-3 requirement text",
+    "changing Package-v10",
+    "changing Attempt-10 cases",
+    "changing Attempt-10 expectations",
+    "changing Attempt-10 expected violation codes",
+    "changing raw first predictions",
+    "changing authoritative first-run result",
+    "changing frozen failed evaluator snapshot",
+    "changing development cases",
+    "changing mutation oracles",
+    "regenerating a fresh holdout",
+    "rerunning Attempt 10 as fresh",
+    "adding unrelated evaluator logic"
+  ],
+  "targeted_regression_contract": {
+    "G3-H10-009": {
+      "required_decision": "ACCEPT",
+      "required_violations": []
+    },
+    "G3-H10-010": {
+      "required_decision": "REJECT",
+      "required_expected_code_subset": [
+        "PERSISTENT_STATE_NOT_MATCHED"
+      ]
+    },
+    "G3-H10-037": {
+      "required_decision": "ACCEPT",
+      "required_violations": []
+    },
+    "G3-H10-038": {
+      "required_decision": "REJECT",
+      "required_expected_code_subset": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ]
+    }
+  },
+  "full_regression_contract": {
+    "attempt_10_consumed_holdout": {
+      "case_count": 54,
+      "required_pass_count": 54,
+      "evidence_class": "REGRESSION_ONLY",
+      "must_not_be_called_fresh": true,
+      "historical_first_run_remains": "52_OF_54_FAIL"
+    },
+    "known_development_cases": {
+      "case_count": 54,
+      "required_pass_count": 54
+    },
+    "mutation_corpus": {
+      "mutation_count": 34,
+      "required_pass_count": 34
+    },
+    "positive_mutation_controls_must_remain_accepting": true,
+    "negative_mutation_controls_must_retain_required_violation_subset": true
+  },
+  "historical_evidence_policy": {
+    "authoritative_attempt_10_result_remains_fail": true,
+    "authoritative_attempt_10_pass_count": 52,
+    "authoritative_attempt_10_case_count": 54,
+    "attempt_10_freshness_consumed": true,
+    "freshness_can_never_be_restored": true,
+    "post_remediation_attempt_10_execution_is_regression_only": true,
+    "failed_evaluator_snapshot_remains_immutable": true,
+    "classification_remains_immutable": true,
+    "disposition_remains_immutable": true
+  },
+  "implementation_policy": {
+    "only_live_evaluator_may_change": true,
+    "exactly_two_semantic_edits_authorized": true,
+    "compile_after_patch_required": true,
+    "static_source_diff_validation_required": true,
+    "no_semantic_execution_until_post_patch_boundary_is_frozen": true,
+    "new_regression_runner_required": true,
+    "regression_runner_must_not_overwrite_historical_results": true
+  },
+  "execution_state": {
+    "remediation_implementation_authorized": true,
+    "remediation_applied": false,
+    "remediated_evaluator_hash_known": false,
+    "post_patch_regression_authorized": false,
+    "post_patch_regression_executed": false
+  },
+  "next_required_action": "APPLY_EXACTLY_TWO_AUTHORIZED_EVALUATOR_CHANGES_THEN_FREEZE_POST_PATCH_REGRESSION_BOUNDARY"
+}

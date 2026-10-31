@@ -1,0 +1,78 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_ATTEMPT_DISPOSITION",
+  "attempt": 1,
+  "state": "REJECTED_PRE_EXECUTION_INTERFACE_CONTRACT_MISMATCH",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_evaluator_executed": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "attempt_artifact": {
+    "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_attempt_1.json",
+    "sha256": "c80f5ace7bfeb7ee264084672b9dc693945d46ba2644e917d3c6f2ec7de53684",
+    "canonical_cases_sha256": "d4f6a7baadc615954c0d716d24161c3695c94ea0b82410f1b648d9facbbe961a"
+  },
+  "generation_package": {
+    "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package.json",
+    "sha256": "800ed8e09da7c550995416b5145af7e106756c1e82c2f88bd858cf01e88fe746"
+  },
+  "frozen_target_evaluator": {
+    "path": "scripts/baseline_requirements_gen3_semantics.py",
+    "sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "pre_execution_findings": [
+    {
+      "id": "D4A-F001",
+      "classification": "GENERATION_PACKAGE_INTERFACE_CONTRACT_DEFECT",
+      "finding": "The isolated generation package required structured facts but did not provide the target evaluator's executable public fact vocabulary or a frozen semantic adapter contract.",
+      "consequence": "The generated domain-record facts cannot be assumed to be valid executable inputs to the frozen target evaluator."
+    },
+    {
+      "id": "D4A-F002",
+      "classification": "GENERATION_PACKAGE_VIOLATION_CONTRACT_DEFECT",
+      "finding": "The package did not provide the frozen target evaluator's public violation-code vocabulary, so the generator created its own G3 requirement-level semantic codes.",
+      "consequence": "The preregistered ALL_REQUIRED_CODES_PRESENT rule cannot be applied directly without an unregistered translation layer."
+    },
+    {
+      "id": "D4A-F003",
+      "classification": "MULTI_REQUIREMENT_SCORING_CONTRACT_UNDEFINED",
+      "finding": "19 of 27 MUST_REJECT cases require more than one semantic violation code, while the generation package does not define how primary and secondary requirement violations are to be executed and combined.",
+      "affected_case_ids": [
+        "G3-H-001",
+        "G3-H-002",
+        "G3-H-007",
+        "G3-H-009",
+        "G3-H-011",
+        "G3-H-017",
+        "G3-H-020",
+        "G3-H-021",
+        "G3-H-024",
+        "G3-H-025",
+        "G3-H-026",
+        "G3-H-030",
+        "G3-H-035",
+        "G3-H-037",
+        "G3-H-040",
+        "G3-H-041",
+        "G3-H-045",
+        "G3-H-047",
+        "G3-H-051"
+      ],
+      "consequence": "Creating that scoring interpretation after target execution would permit post-outcome rule construction."
+    }
+  ],
+  "disposition_rules": {
+    "attempt_cases_must_not_be_modified": true,
+    "attempt_must_not_be_executed_as_fresh": true,
+    "attempt_must_not_be_used_to_modify_target_evaluator": true,
+    "attempt_is_not_regression_evidence": true,
+    "attempt_is_not_scientific_evidence": true,
+    "attempt_is_not_task_8_authority": true,
+    "successor_package_must_define_public_input_contract_before_generation": true,
+    "successor_package_must_define_violation_scoring_contract_before_generation": true,
+    "successor_generation_must_not_receive_attempt_1_cases": true,
+    "target_evaluator_must_remain_frozen": true
+  },
+  "interpretation": "Generation Attempt 1 is preserved exactly but rejected before any target-evaluator execution because the isolated generation package did not define a complete executable interface and violation-scoring contract. This disposition is based on test-interface admissibility, not on any target prediction or holdout outcome. No case, evaluator, prediction, or scientific result is rewritten."
+}

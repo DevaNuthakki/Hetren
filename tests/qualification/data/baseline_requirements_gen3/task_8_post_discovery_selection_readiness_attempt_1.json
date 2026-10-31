@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_POST_DISCOVERY_SELECTION_READINESS_ATTEMPT",
+  "attempt": 1,
+  "state": "DISCOVERY_SATURATED_SELECTION_READINESS_AUDIT_COMPLETE_SELECTION_NOT_READY",
+  "recorded_at_utc": "2026-09-27T05:16:27Z",
+  "task": 8,
+  "bindings": {
+    "authoritative_discovery_head_attempt_78": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_78.json",
+      "sha256": "13c407f8d2dad54e4dfd04a8403fe7c6a65f6bbb31009456850b626e4dd1bde4"
+    },
+    "candidate_inventory_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-candidate-inventory-v1.json",
+      "sha256": "5800ca28550e45dfcfdd02ff550632609b57c1dc23e6f76b53f39644539346e7"
+    },
+    "applicability_framework_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-applicability-framework-v1.json",
+      "sha256": "d18f36cb450a1503c9e000effdc7a90b77a8cfc3829f931ffe25652504936952"
+    },
+    "selection_readiness_audit_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-selection-readiness-audit-v1.json",
+      "sha256": "0147dcd47ebd666bbddad76b0282e182c0ece2d0c54edbfe66c141e7d2e6ffa5"
+    }
+  },
+  "state_summary": {
+    "discovery_stopping_rule_satisfied": true,
+    "broad_discovery_reopening_required": false,
+    "selection_readiness_audit_complete": true,
+    "selection_freeze_ready": false,
+    "final_selection_authorized": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I5A2_CANONICAL_IDENTITY_RECONCILIATION_AND_APPLICABILITY_TUPLE_RESOLUTION",
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "creates_governing_task_8_specification": false,
+    "authorizes_decision_0009": false,
+    "authorizes_protected_execution": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

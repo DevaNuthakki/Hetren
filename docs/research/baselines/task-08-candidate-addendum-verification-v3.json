@@ -1,0 +1,249 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 3,
+  "state": "ADDENDUM_V3_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T04:40:12Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v3": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v3.json",
+      "sha256": "843c6eadfade3bfb95e9b2dc21509d749072dc72f1126fa8c051c7f894e0a489"
+    },
+    "discovery_refinement_v4": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-refinement-v4.json",
+      "sha256": "e363bb3b4bc595ff71581240b2fb6ed5b90f5bfc75d0714512290ff5bbe97a48"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LCOTTA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_LIFELONG_CONTINUAL_TTA_CANDIDATE",
+      "verified_facts": [
+        "LCoTTA is a NeurIPS 2025 lifelong continual test-time adaptation method.",
+        "It constrains adaptation using a tracked low-dimensional gradient subspace.",
+        "The official implementation supports long-term ImageNet-C evaluation with ResNet-50 and ViT-B/16."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/1b6f528fe522a956dce80d5b98be8cd5-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ThunderDavid/LCoTTA"
+        }
+      ],
+      "limits": [
+        "LONG_TERM_CONTINUAL_SETTING_MUST_BE_MATCHED",
+        "SOURCE_ACCESS_AND_RESET_SEMANTICS_MUST_BE_MATCHED",
+        "FULL_IMMUTABLE_REVISION_REQUIRED_BEFORE_RETENTION"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-COME",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_ENTROPY_BASED_TTA_REFINEMENT_CANDIDATE",
+      "verified_facts": [
+        "COME is an ICLR 2025 method that conservatively minimizes entropy.",
+        "The official implementation applies COME as a refinement to methods including Tent, EATA, and SAR.",
+        "Its reported settings include standard, lifelong, and open-world TTA."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/2ea18fdc667e0ef2ad82b2b4d65147ad-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BlueWhaleLab/COME"
+        }
+      ],
+      "limits": [
+        "BASE_TTA_METHOD_CONFIGURATION_MUST_BE_BOUND",
+        "COME_MUST_NOT_BE_TREATED_AS_ONE_UNIVERSAL_BEHAVIOR_INDEPENDENT_OF_HOST_METHOD"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-POEM",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_SHIFT_TRIGGERED_ONLINE_TTA_CANDIDATE",
+      "verified_facts": [
+        "POEM is a NeurIPS 2024 online test-time adaptation method.",
+        "It detects shifts using source-versus-target entropy behavior and adapts only when shift evidence warrants adaptation.",
+        "Its design explicitly includes preservation behavior for no-shift conditions."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/9b35a0a20d617dc68ae98a7a57df2f51-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yarinbar/poem"
+        }
+      ],
+      "limits": [
+        "SOURCE_ENTROPY_REFERENCE_ACCESS_MUST_BE_MATCHED",
+        "SHIFT_DETECTION_CONFIGURATION_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LINEARTCA",
+      "verification_state": "PEER_REVIEWED_WITH_PRIMARY_PAPER_LINKED_IMPLEMENTATION",
+      "role_disposition": "E3_LOW_COMPUTE_CORRELATION_ALIGNMENT_TTA_CANDIDATE",
+      "verified_facts": [
+        "Test-Time Correlation Alignment is an ICML 2025 method.",
+        "LinearTCA performs instance and correlation alignment without model parameter updates.",
+        "LinearTCA+ is a plug-in enhancement for existing TTA methods."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/you25c.html"
+        },
+        {
+          "class": "IMPLEMENTATION_LINKED_BY_PRIMARY_PAPER",
+          "url": "https://github.com/youlj109/TCA"
+        }
+      ],
+      "limits": [
+        "LINEARTCA_AND_LINEARTCA_PLUS_MUST_BE_SEPARATELY_VERSIONED",
+        "HOST_METHOD_MUST_BE_BOUND_FOR_LINEARTCA_PLUS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-PASLE",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_PSEUDO_LABEL_REFINEMENT_TTA_CANDIDATE",
+      "verified_facts": [
+        "PASLE is an ICLR 2025 test-time adaptation method.",
+        "It uses candidate pseudo-label sets for uncertain samples and progressively refines them.",
+        "The official implementation includes domain-generalization and image-corruption evaluation scripts."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/ac662d74829e4407ce1d126477f4a03a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/palm-ml/PASLE"
+        }
+      ],
+      "limits": [
+        "PSEUDO_LABEL_AND_THRESHOLD_CONFIGURATION_MUST_BE_BOUND",
+        "VALIDATION_INFORMATION_USED_FOR_HYPERPARAMETERS_MUST_BE_PARITY_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-AEA",
+      "verification_state": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_IDENTITY_NOT_YET_BOUND",
+      "role_disposition": "E3_FAST_ONLINE_TTA_CANDIDATE",
+      "verified_facts": [
+        "AEA is an ICLR 2025 online test-time adaptation method.",
+        "It aligns target-sample energy with a source-domain energy zone and uses class-wise correlation alignment.",
+        "The authors' publication page indicates code exists, but this Task-8 review has not yet frozen the concrete repository identity."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/36636f1009939960aa2f9e28d28c8a7d-Abstract-Conference.html"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_PAGE",
+          "url": "https://wonjeongchoi.github.io/"
+        }
+      ],
+      "limits": [
+        "IMPLEMENTATION_IDENTITY_UNRESOLVED",
+        "SOURCE_DOMAIN_REFERENCE_INFORMATION_MUST_BE_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TTE",
+      "verification_state": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_UNRESOLVED",
+      "role_disposition": "E3_TTA_WRAPPER_OR_ENHANCEMENT_CANDIDATE",
+      "verified_facts": [
+        "TTE is an ICLR 2025 method based on linear mode connectivity.",
+        "It ensembles parameter states during adaptation and includes a distillation mechanism.",
+        "TTE is designed to enhance existing TTA methods rather than define one standalone host-independent adaptation algorithm."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c242f2b7f60d8c685b6481939330e241-Abstract-Conference.html"
+        }
+      ],
+      "limits": [
+        "OFFICIAL_IMPLEMENTATION_NOT_BOUND_IN_THIS_REVIEW",
+        "UNDERLYING_HOST_TTA_METHOD_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-NCTTA",
+      "verification_state": "OFFICIAL_CVPR_2026_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VISION_TTA_CANDIDATE",
+      "verified_facts": [
+        "The official NCTTA repository identifies the method as Neural Collapse in Test Time Adaptation, CVPR 2026.",
+        "The implementation provides corruption and domain-shift evaluation support including ImageNet-C and PACS."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Cevaaa/NCTTA"
+        }
+      ],
+      "limits": [
+        "PRIMARY_PUBLICATION_BINDING_MUST_BE_ADDED_BEFORE_FINAL_RETENTION",
+        "EXACT_CHECKPOINT_AND_CONFIGURATION_MUST_BE_BOUND"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DEYO",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_BIASED_OR_WILD_TTA_CANDIDATE",
+      "verified_facts": [
+        "DeYO is an ICLR 2024 test-time adaptation method.",
+        "It introduces PLPD to account for disentangled-factor effects in sample selection and weighting.",
+        "Its evaluation specifically includes biased and wild adaptation scenarios."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/cd0665986c1e9c15f6569ac944bcf88a-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jhyun17/DeYO"
+        }
+      ],
+      "limits": [
+        "OBJECT_DESTRUCTIVE_TRANSFORMATION_CONFIGURATION_MUST_BE_BOUND",
+        "BIASED_OR_WILD_SETTING_APPLICABILITY_MUST_BE_MATCHED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 9,
+  "interpretation": {
+    "all_addendum_v3_candidates_have_role_level_external_review": true,
+    "all_addendum_v3_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

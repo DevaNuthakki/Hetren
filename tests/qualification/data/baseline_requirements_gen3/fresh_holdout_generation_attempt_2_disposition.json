@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_ATTEMPT_2_DISPOSITION",
+  "state": "REJECTED_PRE_EXECUTION_INPUT_BOUNDARY_MISMATCH",
+  "generation_attempt": 2,
+  "attempt_artifact_sha256": "91557fcea5f2202fdc634cc19fb79d55f33718b146172a838978ce5e7037ca0a",
+  "canonical_cases_sha256": "9e4b88a946a889dcb37b8e80567140c454fcf903da1281cf510243de4dbcf6cd",
+  "generation_package_v2_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+  "generation_package_v2_manifest_sha256": "349b62bac1e91fec985c3dd13b3d6a511036973efde1a7cb639a4f9386d62880",
+  "target_evaluator_executed": false,
+  "target_evaluator_simulated": false,
+  "target_predictions_produced": false,
+  "fresh_holdout_result_established": false,
+  "scientific_support_established": false,
+  "task_8_authority_established": false,
+  "task_5_support_established": false,
+  "protected_evidence_leakage_proven": false,
+  "case_semantic_defect_established": false,
+  "evaluator_defect_established": false,
+  "rejection_stage": "PRE_EXECUTION_GENERATION_BOUNDARY_REVIEW",
+  "primary_finding": {
+    "code": "GENERATOR_INPUT_BOUNDARY_ATTESTATION_MISMATCH",
+    "severity": "BLOCKING_FOR_PROTECTED_FRESH_HOLDOUT",
+    "frozen_requirement": "received_only_generation_package_v2_as_hetren_input",
+    "required_value": true,
+    "attempt_attested_value": true,
+    "contradictory_disclosure": "Attempt 2 states that automatically supplied context contained general Hetren background, filenames, and an earlier generation-request excerpt.",
+    "interpretation": "The generator may have excluded that ambient context from case design, but the literal frozen input-boundary attestation requires Package v2 to be the only Hetren input received. The disclosed additional Hetren context makes Attempt 2 ineligible for the protected fresh-holdout role."
+  },
+  "non_findings": {
+    "prior_case_contents_exposure_proven": false,
+    "attempt_1_exposure_proven": false,
+    "target_evaluator_source_exposure_proven": false,
+    "prior_predictions_or_results_exposure_proven": false,
+    "remediation_history_exposure_proven": false,
+    "protected_evidence_leakage_proven": false
+  },
+  "preservation_rules": {
+    "attempt_2_bytes_are_immutable_historical_evidence": true,
+    "attempt_2_cases_must_not_be_rewritten": true,
+    "attempt_2_must_not_be_executed_as_fresh": true,
+    "attempt_2_must_not_be_supplied_to_attempt_3_generator": true,
+    "attempt_2_is_not_regression_evidence": true,
+    "attempt_2_is_generation_boundary_evidence_only": true
+  },
+  "freshness_consequence": {
+    "target_freshness_consumed": false,
+    "reason": "The target evaluator was not accessed, executed, simulated, or used to produce predictions for Attempt 2.",
+    "successor_generation_attempt_permitted": true
+  },
+  "successor_requirement": {
+    "next_attempt": 3,
+    "must_prevent_ambient_hetren_project_context": true,
+    "must_not_receive_attempt_2": true,
+    "must_not_receive_attempt_1": true,
+    "must_not_receive_repository_material": true,
+    "must_not_receive_target_evaluator": true,
+    "must_not_receive_prior_cases_mutations_predictions_results": true,
+    "must_not_receive_remediation_history": true,
+    "must_receive_only_successor_generation_package_as_hetren_input": true
+  },
+  "interpretation": "Generation Attempt 2 is preserved but rejected before target execution because its own provenance discloses additional Hetren context inconsistent with the literal frozen generator input attestation. This does not establish exposure to prior protected evidence and does not consume target freshness."
+}

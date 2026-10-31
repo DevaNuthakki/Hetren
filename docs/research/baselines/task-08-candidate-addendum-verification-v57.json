@@ -1,0 +1,190 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 57,
+  "state": "ADDENDUM_V57_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:03:33Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v57": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v57.json",
+      "sha256": "14c21d8325de41530eb02eba1991ba154749a85c3d8fe5d9dc8a4184c7c94228"
+    },
+    "systematic_saturation_v54": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v54.json",
+      "sha256": "2f6baa55ba7bffdaf60095a30a4f017117fdb9da18f0b82fce970c959fbcc567"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TRANSPORTER-NETS",
+      "verification_state": "PEER_REVIEWED_CORL_2020_AND_REFERENCE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_VISION_BASED_PICK_PLACE_MANIPULATION_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Transporter Networks was published at CoRL 2020.",
+        "It parameterizes manipulation through spatial feature transport and action-location prediction.",
+        "The Ravens repository supplies simulation environments, training and evaluation code, pretrained models, and datasets."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH_AND_PROJECT",
+          "url": "https://transporternets.github.io/"
+        },
+        {
+          "class": "REFERENCE_IMPLEMENTATION",
+          "url": "https://github.com/google-research/ravens"
+        }
+      ],
+      "limits": [
+        "PICK_PLACE_OR_SPATIALLY_MATCHED_MANIPULATION_TASK_REQUIRED",
+        "RAVENS_TASK_AND_OBSERVATION_CONFIGURATION_MUST_BE BOUND",
+        "NOT_A_UNIVERSAL_GENERALIST_AGENT_COMPARATOR"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-BCZ",
+      "verification_state": "PEER_REVIEWED_CORL_2021_AND_GOOGLE_RESEARCH_CODE_FAMILY_VERIFIED",
+      "role_disposition": "E1_MULTITASK_ZERO_SHOT_IMITATION_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "BC-Z was published at CoRL 2021.",
+        "It studies language- or video-conditioned robotic imitation across many tasks and scenes.",
+        "Google's Tensor2Robot research codebase explicitly lists BC-Z among projects using the framework."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://research.google/pubs/bc-z-zero-shot-task-generalization-with-robotic-imitation-learning/"
+        },
+        {
+          "class": "OFFICIAL_RESEARCH_CODE_FAMILY",
+          "url": "https://github.com/google-research/tensor2robot"
+        }
+      ],
+      "limits": [
+        "EXACT_BCZ_RUNNABLE_CONFIGURATION_STILL_REQUIRES_FINAL_PINNING",
+        "LANGUAGE_OR_VIDEO_TASK_CONDITIONING_MUST_BE MATCHED",
+        "ARCHIVED_FRAMEWORK_STATE_MUST_BE GOVERNED_IF_RETAINED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ACT",
+      "verification_state": "PEER_REVIEWED_RSS_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_BIMANUAL_IMITATION_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "ACT was published with the ALOHA work at RSS 2023.",
+        "ACT predicts chunks of future actions using a transformer-based conditional generative policy.",
+        "The official repository contains training and evaluation code for simulated and real ALOHA settings."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_PROJECT",
+          "url": "https://tonyzhaozh.github.io/aloha/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tonyzhaozh/act"
+        }
+      ],
+      "limits": [
+        "BIMANUAL_OR_MATCHED_MANIPULATION_SETTING_REQUIRED",
+        "DEMONSTRATION_COUNT_AND_ACTION_CHUNK_CONFIGURATION_MUST_BE BOUND",
+        "ALOHA_AND_NON_ALOHA_RESULTS_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-DIFFUSION-POLICY",
+      "verification_state": "PEER_REVIEWED_RSS_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_VISUOMOTOR_DIFFUSION_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Diffusion Policy was published at RSS 2023.",
+        "It represents visuomotor action generation as conditional denoising diffusion.",
+        "The official repository includes training and evaluation implementations for simulation and real-robot settings."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss19/p026.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/real-stanford/diffusion_policy"
+        }
+      ],
+      "limits": [
+        "MATCHED_OBSERVATION_ACTION_AND_ROBOT_TASK_REQUIRED",
+        "DIFFUSION_HORIZON_AND_INFERENCE_STEPS_MUST_BE BOUND",
+        "COMPUTE_AND_LATENCY_REQUIRE_TASK_9_ACCOUNTING"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OCTO",
+      "verification_state": "PEER_REVIEWED_RSS_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_GENERALIST_ROBOT_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Octo was published at RSS 2024.",
+        "It is a transformer-based generalist robot policy pretrained on a large mixture of robot trajectories.",
+        "Its official implementation provides pretrained models, inference, zero-shot evaluation, and fine-tuning support."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://octo-models.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/octo-models/octo"
+        }
+      ],
+      "limits": [
+        "ROBOT_EMBODIMENT_AND_INPUT_MODALITY_MUST_BE MATCHED",
+        "OCTO_MODEL_VERSION_AND_CHECKPOINT_MUST_BE BOUND",
+        "ZERO_SHOT_AND_FINETUNED_MODES_MUST_NOT_BE COLLAPSED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA",
+      "verification_state": "PEER_REVIEWED_CORL_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_OPEN_VISION_LANGUAGE_ACTION_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "OpenVLA was published at CoRL 2024.",
+        "It is an open 7B vision-language-action model pretrained on a large collection of robot demonstrations.",
+        "The official implementation supports model inference, full fine-tuning, parameter-efficient fine-tuning, and LIBERO evaluation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v270/kim25c.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/openvla/openvla"
+        }
+      ],
+      "limits": [
+        "EXACT_OPENVLA_CHECKPOINT_AND_FINETUNING_MODE_MUST_BE BOUND",
+        "LIBERO_AND_REAL_ROBOT_CONTRACTS_MUST_NOT_BE COLLAPSED",
+        "BASE_OPENVLA_MUST_BE DISTINGUISHED_FROM_OFT_AND_OTHER_DERIVATIVES"
+      ]
+    }
+  ],
+  "candidate_findings_count": 6,
+  "interpretation": {
+    "all_addendum_v57_candidates_have_role_level_external_review": true,
+    "all_addendum_v57_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "role_review_selects_strongest_baseline": false,
+    "role_review_freezes_concrete_baseline": false,
+    "role_review_establishes_task_8_authority": false,
+    "role_review_establishes_scientific_support": false
+  }
+}

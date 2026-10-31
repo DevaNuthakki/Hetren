@@ -1,0 +1,351 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 58,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T02:28:49Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "broad_mechanism_enumeration_performed": false,
+  "canonical_paper_enumeration_performed": false,
+  "materiality_rule": "A candidate counts as new only if it fills a concrete comparison-role gap or can plausibly displace an existing comparator in a matched experiment.",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "all_proposed_candidate_research_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v60_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v60.json",
+      "sha256": "628b63e26f3c0125fb78e434e2ce8a0f991cecbbcc0679c162bdafe8a79fa556"
+    },
+    "systematic_saturation_v57": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v57.json",
+      "sha256": "b5dcb77cab45edb2b52ee622fe3bd0f479f27b2e04df4f4d3ebf66b74e6813fa"
+    }
+  },
+  "bounded_queries_executed": [
+    "OpenVLA-OFT RSS 2025 official implementation displacement OpenVLA LIBERO ALOHA",
+    "SpatialVLA RSS 2025 official implementation cross-robot adaptation",
+    "RDT-1B ICLR 2025 official implementation bimanual few-shot manipulation",
+    "pi0.5 CoRL 2025 official openpi open-world generalization",
+    "CogACT official implementation action expert OpenVLA displacement"
+  ],
+  "query_count": 5,
+  "planned_candidate_count": 5,
+  "candidate_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-OPENVLA-OFT",
+      "name": "OpenVLA-OFT \u2014 Fine-Tuning Vision-Language-Action Models: Optimizing Speed and Success",
+      "disposition": "PRIOR_PROMOTED_IDENTITY",
+      "reason": "The candidate already exists in a prior governed Task-8 candidate addendum and therefore cannot be double-counted as new material.",
+      "promoted_match_files": [
+        "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v58.json"
+      ],
+      "screened_match_files": [],
+      "displacement_surface": {
+        "target_role": "MATCHED_VLA_FINETUNING_AND_HIGH_FREQUENCY_ACTION_GENERATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "ACT",
+          "Diffusion Policy",
+          "RDT-1B",
+          "other matched VLA fine-tuning policies"
+        ],
+        "why_material": "Peer-reviewed recipe directly changes matched OpenVLA fine-tuning and action-generation behavior, with executable LIBERO and ALOHA evaluation paths."
+      }
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SPATIALVLA",
+      "name": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Models",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "reason": "No prior promoted or structurally screened identity was found, and the candidate has an explicit matched comparison surface on which it could plausibly displace an existing comparator.",
+      "promoted_match_files": [],
+      "screened_match_files": [],
+      "displacement_surface": {
+        "target_role": "MATCHED_SPATIAL_CROSS_ROBOT_GENERALIZATION_OR_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA spatial-transfer policies"
+        ],
+        "why_material": "Its spatial position encoding and adaptive action grids directly target cross-robot spatial generalization and fine-tuning to new robot setups."
+      }
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RDT-1B",
+      "name": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "reason": "No prior promoted or structurally screened identity was found, and the candidate has an explicit matched comparison surface on which it could plausibly displace an existing comparator.",
+      "promoted_match_files": [],
+      "screened_match_files": [],
+      "displacement_surface": {
+        "target_role": "MATCHED_BIMANUAL_OR_FEW_SHOT_ROBOT_MANIPULATION",
+        "plausibly_displaces": [
+          "ACT",
+          "Diffusion Policy",
+          "OpenVLA",
+          "other matched bimanual imitation policies"
+        ],
+        "why_material": "Peer-reviewed diffusion foundation policy with official checkpoints, training scripts and bimanual deployment paths directly overlaps existing bimanual and few-shot policy roles."
+      }
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PI05",
+      "name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "reason": "No prior promoted or structurally screened identity was found, and the candidate has an explicit matched comparison surface on which it could plausibly displace an existing comparator.",
+      "promoted_match_files": [],
+      "screened_match_files": [],
+      "displacement_surface": {
+        "target_role": "MATCHED_OPEN_WORLD_OR_LANGUAGE_CONDITIONED_GENERALIST_ROBOT_POLICY",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA policies"
+        ],
+        "why_material": "Open-world generalization plus an official released implementation and checkpoints make \u03c00.5 a direct challenger when the governed experiment includes analogous generalization and robot-policy access."
+      }
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-COGACT",
+      "name": "CogACT: A Foundational Vision-Language-Action Model for Synergizing Cognition and Action in Robotic Manipulation",
+      "disposition": "NEW_MATERIAL_DISPLACEMENT_CANDIDATE",
+      "reason": "No prior promoted or structurally screened identity was found, and the candidate has an explicit matched comparison surface on which it could plausibly displace an existing comparator.",
+      "promoted_match_files": [],
+      "screened_match_files": [],
+      "displacement_surface": {
+        "target_role": "MATCHED_VLA_ACTION_GENERATION_GENERALIZATION_AND_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "RT-2-style VLA policies",
+          "other matched VLA action-generation policies"
+        ],
+        "why_material": "Its specialized diffusion action module changes both action-sequence generation and cross-robot adaptation while retaining an executable official implementation."
+      }
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SPATIALVLA",
+      "name": "SpatialVLA: Exploring Spatial Representations for Visual-Language-Action Models",
+      "aliases": [
+        "SpatialVLA"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_SPATIAL_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_RSS_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.roboticsproceedings.org/rss21/p011.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SpatialVLA/SpatialVLA"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_SPATIAL_CROSS_ROBOT_GENERALIZATION_OR_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA spatial-transfer policies"
+        ],
+        "why_material": "Its spatial position encoding and adaptive action grids directly target cross-robot spatial generalization and fine-tuning to new robot setups."
+      },
+      "eligibility_status": "MATERIAL_IF_SPATIAL_OR_CROSS_ROBOT_GENERALIZATION_SURFACE_MATCHED",
+      "limits": [
+        "PRETRAINED_MODEL_AND_ACTION_GRID_CONFIGURATION_MUST_BE BOUND",
+        "ZERO_SHOT_AND_FINETUNED_NEW_SETUP_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RDT-1B",
+      "name": "RDT-1B: a Diffusion Foundation Model for Bimanual Manipulation",
+      "aliases": [
+        "RDT-1B",
+        "Robotics Diffusion Transformer"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_BIMANUAL_DIFFUSION_POLICY_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_FEW_SHOT_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/49f80e4d2471ad4f2edf4f5f1ab62339-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/thu-ml/RoboticsDiffusionTransformer"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_BIMANUAL_OR_FEW_SHOT_ROBOT_MANIPULATION",
+        "plausibly_displaces": [
+          "ACT",
+          "Diffusion Policy",
+          "OpenVLA",
+          "other matched bimanual imitation policies"
+        ],
+        "why_material": "Peer-reviewed diffusion foundation policy with official checkpoints, training scripts and bimanual deployment paths directly overlaps existing bimanual and few-shot policy roles."
+      },
+      "eligibility_status": "MATERIAL_IF_BIMANUAL_OR_FEW_SHOT_MANIPULATION_SURFACE_MATCHED",
+      "limits": [
+        "MODEL_SCALE_AND_PRETRAINING_DATA_ACCESS_MUST_BE PARITY_AUDITED",
+        "PRETRAINED_CHECKPOINT_AND_FINETUNING_RECIPE_MUST_BE BOUND",
+        "ZERO_SHOT_AND_FEW_SHOT_SETTINGS_MUST_BE SEPARATED",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PI05",
+      "name": "\u03c00.5: a Vision-Language-Action Model with Open-World Generalization",
+      "aliases": [
+        "pi0.5",
+        "pi05",
+        "\u03c00.5",
+        "pi 0.5"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_OPEN_WORLD_GENERALIST_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_OPEN_WORLD_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "CORL_2025_ORAL_RESEARCH_RECORD_AND_OFFICIAL_OPENPI_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_RESEARCH_RECORD",
+          "url": "https://openreview.net/forum?id=vlhoswksBO"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2504.16054"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Physical-Intelligence/openpi"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_OPEN_WORLD_OR_LANGUAGE_CONDITIONED_GENERALIST_ROBOT_POLICY",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "Octo",
+          "other matched generalist VLA policies"
+        ],
+        "why_material": "Open-world generalization plus an official released implementation and checkpoints make \u03c00.5 a direct challenger when the governed experiment includes analogous generalization and robot-policy access."
+      },
+      "eligibility_status": "MATERIAL_IF_OPEN_WORLD_GENERALIST_VLA_INFORMATION_AND_RESOURCE_REGIME_MATCHED",
+      "limits": [
+        "OFFICIAL_OPENPI_IMPLEMENTATION_DOES_NOT_EXPOSE_EVERY_INTERNAL_TRAINING_COMPONENT_FROM_THE_RESEARCH_PAPER",
+        "BASE_CHECKPOINT_FINE_TUNED_CHECKPOINT_AND_HEAD_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_DATA_INFORMATION_OPPORTUNITY_AND_COMPUTE_MUST_BE PARITY_AUDITED",
+        "WITHIN_ROBOTICS_GENERALIZATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-COGACT",
+      "name": "CogACT: A Foundational Vision-Language-Action Model for Synergizing Cognition and Action in Robotic Manipulation",
+      "aliases": [
+        "CogACT"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_DIFFUSION_ACTION_EXPERT_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H2_WITHIN_E1_NEW_ROBOT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PUBLIC_PREPRINT_WITH_OFFICIAL_MICROSOFT_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2411.19650"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/microsoft/CogACT"
+        }
+      ],
+      "displacement_surface": {
+        "target_role": "MATCHED_VLA_ACTION_GENERATION_GENERALIZATION_AND_NEW_ROBOT_ADAPTATION",
+        "plausibly_displaces": [
+          "OpenVLA",
+          "RT-2-style VLA policies",
+          "other matched VLA action-generation policies"
+        ],
+        "why_material": "Its specialized diffusion action module changes both action-sequence generation and cross-robot adaptation while retaining an executable official implementation."
+      },
+      "eligibility_status": "MATERIAL_RESEARCH_CANDIDATE_IF_MATCHED_VLA_ACTION_SURFACE_AND_PREPRINT_EVIDENCE_CLASS_ALLOWED",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELED_PEER_REVIEWED",
+        "MODEL_CHECKPOINT_ACTION_MODULE_AND_DIFFUSION_CONFIGURATION_MUST_BE BOUND",
+        "PAPER_REPORTED_ADVANTAGES_ARE_NOT_HETREN_RESULTS",
+        "WITHIN_ROBOTICS_TRANSFER_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_generalization_or_transfer_candidates_may_exist": true,
+    "forcing_robotics_within_family_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "required_consecutive_no_new_material_rounds": 2,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one genuinely new role-matched displacement candidate survived structured identity deduplication, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "claim_limits": {
+    "displacement_candidate_is_automatically_strongest": false,
+    "paper_reported_benchmark_result_is_hetren_result": false,
+    "within_e1_transfer_establishes_general_n_h2": false,
+    "preprint_is_peer_reviewed": false,
+    "global_literature_exhaustion_claimed": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B63_VERIFY_ADDENDUM_V61_AND_CONTINUE_DISPLACEMENT_ONLY_REFINEMENT"
+}

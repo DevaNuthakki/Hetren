@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 29,
+  "state": "ADDENDUM_V29_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T21:39:21Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v29": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v29.json",
+      "sha256": "0f94a4b5ee090e8c11cc2b14f0431a8594651af5f95c81236a39b6a1137f5cb2"
+    },
+    "systematic_saturation_v26": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v26.json",
+      "sha256": "7860cd07d24bddcd489e265cd2157c2fb5ec1941e49440ea208dc56d3ea36163"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-A-MEM",
+      "verification_state": "PEER_REVIEWED_NEURIPS_2025_AND_REPRODUCTION_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DIRECT_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "A-Mem is published in the NeurIPS 2025 main conference track.",
+        "It organizes agent memories as dynamically linked structured notes inspired by the Zettelkasten method.",
+        "Adding new memories can create links and update contextual representations of existing memories.",
+        "The public reproduction repository includes executable LoCoMo evaluation paths.",
+        "The public repository declares the MIT license."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/19909c36f51abc4856b4560aff3d36d6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_REPRODUCTION_IMPLEMENTATION",
+          "url": "https://github.com/WujiangXu/A-mem"
+        }
+      ],
+      "limits": [
+        "MEMORY_RETRIEVAL_K_AND_MODEL_CONFIGURATION_MUST_BE BOUND",
+        "REPRODUCTION_REPOSITORY_AND_DEPLOYMENT_LIBRARY_MUST_NOT_BE CONFLATED",
+        "LONG_TERM_MEMORY_QA_ROLE_MUST_MATCH_GOVERNED_EXPERIMENT",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_ADAPTIVE_MULTI_GRANULARITY_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "AMA is published in Findings of ACL 2026.",
+        "It coordinates Constructor, Retriever, Judge, and Refresher agents for long-term memory management.",
+        "It represents memory at raw-text, atomic-fact, and episode granularities.",
+        "The official implementation was publicly released on 2026-08-22.",
+        "The official repository declares the Apache License 2.0."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.152/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/AMA"
+        }
+      ],
+      "limits": [
+        "MEMORY_GRANULARITY_AND_RETRY_POLICY_MUST_BE BOUND",
+        "REFRESH_AND_CONFLICT_RESOLUTION_POLICY_MUST_BE BOUND",
+        "MODEL_AND_EMBEDDING_SERVICE_CONFIGURATION_MUST_BE BOUND",
+        "MULTI_AGENT_MEMORY_COORDINATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "verification_state": "PEER_REVIEWED_EMNLP_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_HIERARCHICAL_LONG_TERM_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "MemoryOS is published in the EMNLP 2025 main conference proceedings.",
+        "It defines Storage, Updating, Retrieval, and Generation as coordinated memory-management modules.",
+        "Its hierarchy separates short-term, mid-term, and long-term personal memory.",
+        "The public implementation provides executable MemoryOS evaluation and deployment components.",
+        "The public repository is licensed under Apache-2.0."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1318/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BAI-LAB/MemoryOS"
+        }
+      ],
+      "limits": [
+        "SHORT_MID_LONG_TERM_MEMORY_CONFIGURATION_MUST_BE BOUND",
+        "EMBEDDING_AND_INFERENCE_MODEL_CONFIGURATION_MUST_BE BOUND",
+        "PERSONALIZATION_MEMORY_ROLE_MUST_MATCH_GOVERNED_EXPERIMENT",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v29_candidates_have_role_level_external_review": true,
+    "all_addendum_v29_candidates_are_peer_reviewed": true,
+    "all_addendum_v29_candidates_have_executable_public_implementations": true,
+    "all_addendum_v29_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_establishes_strongest_status": false,
+    "implementation_availability_establishes_final_version": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

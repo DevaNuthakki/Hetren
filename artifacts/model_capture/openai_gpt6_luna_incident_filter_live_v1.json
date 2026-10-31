@@ -1,0 +1,115 @@
+{
+  "capture": {
+    "capture_sha256": "89497ab06eba436dec663153c5174733a60490155fcf0a63ebb87683fb79506c",
+    "limitations": [
+      "capture does not prove provider identity",
+      "capture does not prove model-response correctness",
+      "capture contains no authorization decision",
+      "replay is not a fresh model inference"
+    ],
+    "model": "gpt-6-luna",
+    "normalized_response": {
+      "selected_filter_tool": "inclusive_severity_filter",
+      "threshold": 3
+    },
+    "normalized_response_sha256": "bda4819aaf6e410fc10d3911e8032f3f550e6a701bde966d15bc456d23fc7d08",
+    "normalizer_id": "openai-responses-structured-output",
+    "normalizer_version": "1",
+    "provider": "openai",
+    "raw_response_sha256": "c82db475dfaa46aa242bc1f62da5789a6ee9d477a78b660fda50e2eeca79a5b5",
+    "raw_response_text": "{\"selected_filter_tool\":\"inclusive_severity_filter\",\"threshold\":3}",
+    "record_type": "ModelCapture",
+    "request_sha256": "fe6e7c474014697013dc5dcc722f595a55dc674ffe4888f6b3e4175bce7ffb2d",
+    "schema_version": 1
+  },
+  "captured_at_utc": "2026-10-07T21:11:33.327016+00:00",
+  "claim_limits": [
+    "this artifact records one live provider interaction and is not a model-quality benchmark",
+    "provider response metadata is provider-reported and does not independently authenticate provider identity",
+    "the reported model field does not independently prove the internal model implementation used",
+    "a correct decision on one case does not establish general reasoning, diagnosis, or repair capability",
+    "a captured response can be replayed deterministically but replay is not fresh model inference",
+    "captured_at_utc records the local process clock and is not a provider timestamp attestation",
+    "this artifact contains no authorization or deployment decision"
+  ],
+  "evidence_sha256": "ae5dd8dd6b1e426ffc71a733c4c695ebe2e495e4f2d8efcf1e29e0a974f4f70f",
+  "execution_mode": "live-openai-responses-api",
+  "implementation_fingerprints": {
+    "packages/model_capture.py": "a63082c128aab10e6661f8acf30632c8eb3bda0205738f90cc94a123d3b8dd95",
+    "packages/openai_responses.py": "90782b4d83f33dbf2dab70093e1a4baa239efa2e878a21e3ce670cba1af44a79"
+  },
+  "local_reference_check": {
+    "actual_decision": {
+      "selected_filter_tool": "inclusive_severity_filter",
+      "threshold": 3
+    },
+    "expected_decision": {
+      "selected_filter_tool": "inclusive_severity_filter",
+      "threshold": 3
+    },
+    "matches_expected": true
+  },
+  "provider": "openai",
+  "provider_result": {
+    "capture_sha256": "89497ab06eba436dec663153c5174733a60490155fcf0a63ebb87683fb79506c",
+    "evidence_sha256": "fc7eaf66fd168d2d03272d02a1cb833335ebb7bd816eb2a131cd0162f47a6504",
+    "input_tokens": 147,
+    "limitations": [
+      "response metadata is provider-reported",
+      "response ID does not independently authenticate the provider",
+      "response model field does not independently prove model identity",
+      "successful structured output does not establish correctness",
+      "live provider execution is not deterministic replay",
+      "result contains no authorization or deployment decision"
+    ],
+    "output_tokens": 24,
+    "record_type": "OpenAIResponsesResult",
+    "request_payload_sha256": "e7c869ef86c6e7f73ea3346ba9b70293299a58fdfe793b10a1c8bff2d39f0149",
+    "response_body_sha256": "356441916c4bbfb0150ec348333b086cd1994b3a253d495354c0c29fc215bcf6",
+    "response_id": "resp_0fd876c8004ae967016ac6b58335e887d18f3b4aa35b9f7c4a",
+    "response_model": "gpt-6-luna",
+    "schema_version": 1,
+    "status": "completed",
+    "total_tokens": 171
+  },
+  "record_type": "HetrenLiveOpenAIIncidentFilterEvidence",
+  "request": {
+    "generation_parameters": {
+      "max_output_tokens": 120,
+      "reasoning": {
+        "effort": "none"
+      }
+    },
+    "model": "gpt-6-luna",
+    "provider": "openai",
+    "record_type": "ModelRequest",
+    "response_schema": {
+      "additionalProperties": false,
+      "properties": {
+        "selected_filter_tool": {
+          "enum": [
+            "inclusive_severity_filter",
+            "strict_severity_filter"
+          ],
+          "type": "string"
+        },
+        "threshold": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "selected_filter_tool",
+        "threshold"
+      ],
+      "type": "object"
+    },
+    "response_schema_name": "incident_filter_decision",
+    "schema_version": 1,
+    "system_prompt": "You configure a deterministic incident-triage workflow. Return only the required structured decision. Do not invent tools. Choose the filter semantics and numeric threshold that exactly implement the stated requirement.",
+    "user_prompt": "Requirement: select incidents where service is 'payments' and severity is greater than or equal to 3.\n\nAvailable severity filter tools:\n- inclusive_severity_filter: keeps severity >= threshold\n- strict_severity_filter: keeps severity > threshold\n\nChoose selected_filter_tool and threshold."
+  },
+  "request_sha256": "fe6e7c474014697013dc5dcc722f595a55dc674ffe4888f6b3e4175bce7ffb2d",
+  "requested_model": "gpt-6-luna",
+  "schema_version": 1,
+  "source_checkpoint": "8e087baf324924b9353c8fd4d9933f740365f1bc"
+}

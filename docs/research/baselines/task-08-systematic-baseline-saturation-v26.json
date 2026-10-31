@@ -1,0 +1,223 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 26,
+  "state": "SATURATION_V26_FOUND_NEW_DIRECT_MEMORY_COMPARATORS",
+  "recorded_at_utc": "2026-09-26T21:33:02Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v28_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v28.json",
+      "sha256": "821167f4d23f6d391de6bb8a76204e45acf52f4c70a82bee5dcb718386a38e6b"
+    },
+    "systematic_saturation_v25": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v25.json",
+      "sha256": "ec3a7e3836ac3633a9669ec05276cdbf50118eb32a645ee0d19127a0e1c9ec31"
+    }
+  },
+  "bounded_scope": {
+    "purpose": "REFINE_DIRECT_COMPARATORS_AROUND_NEWLY_ADDED_AGEMEM_AND_SMALL_VLM_TEST_TIME_SCALING_ROLES",
+    "does_not_reopen_every_E1_E2_E3_SUBDOMAIN": true,
+    "materiality_rule": "A method resets the stopping counter only when it is non-duplicate, passes current access and evidence gates, and could materially alter the comparator set for an already represented role/applicability tuple."
+  },
+  "queries_executed": [
+    "AgeMem direct agent-memory baseline A-Mem NeurIPS implementation",
+    "AgeMem direct agent-memory baseline AMA ACL 2026 implementation",
+    "AgeMem direct agent-memory baseline MemoryOS EMNLP implementation",
+    "AgeMem learned memory comparator Memory-R1 ACL 2026 executable code",
+    "AgeMem long-term memory comparator HeLa-Mem ACL 2026 code license",
+    "Efficient Test-Time Scaling Small VLM direct comparator ICLR 2026",
+    "small VLM test-time scaling test-time augmentation adaptation official implementation",
+    "test-time scaling over perception multimodal official implementation",
+    "E2 structured ML additional direct comparator after DistPFN TARS TabPFN",
+    "cross environment learned decision transfer agent structured vision 2026"
+  ],
+  "query_count": 10,
+  "duplicate_screening": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-A-MEM",
+      "name": "A-Mem: Agentic Memory for LLM Agents",
+      "prior_promoted_matches": [],
+      "is_preexisting_or_duplicate": false
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "prior_promoted_matches": [],
+      "is_preexisting_or_duplicate": false
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "name": "Memory OS of AI Agent",
+      "prior_promoted_matches": [],
+      "is_preexisting_or_duplicate": false
+    }
+  ],
+  "proposed_direct_comparators_count": 3,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-A-MEM",
+      "name": "A-Mem: Agentic Memory for LLM Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_NON_LEARNED_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_DYNAMIC_MEMORY_ORGANIZATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2025_AND_REPRODUCTION_CODE_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/19909c36f51abc4856b4560aff3d36d6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_REPRODUCTION_IMPLEMENTATION",
+          "url": "https://github.com/WujiangXu/A-mem"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_HORIZON_AGENT_MEMORY_SYSTEM_IS_PART_OF_MATCHED_E1_CONTRACT",
+      "material_reason": "Provides a peer-reviewed executable non-RL memory-management comparator using dynamic indexing, linking, and memory evolution rather than AgeMem's learned memory-operation policy.",
+      "limits": [
+        "RETRIEVAL_K_AND_MEMORY_EVOLUTION_CONFIGURATION_MUST_BE BOUND",
+        "LLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE MATCHED",
+        "NON_LEARNED_MEMORY_SYSTEM_MUST_NOT_BE MISLABELED_AS_LEARNED_POLICY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AMA-MEMORY",
+      "name": "AMA: Adaptive Memory via Multi-Agent Collaboration",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_NON_LEARNED_MULTI_AGENT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_ADAPTIVE_RETRIEVAL_AND_MEMORY_REFRESH_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_APACHE2_RESEARCH_CODE_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.152/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/AMA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_LONG_TERM_AGENT_MEMORY_RETRIEVAL_AND_CONSISTENCY_SETTING_MATCHED",
+      "material_reason": "Provides a reproducible multi-agent memory comparator with multi-granularity construction, adaptive query routing, evidence sufficiency checks, and explicit refresh or deletion of conflicting memories.",
+      "limits": [
+        "RELEASED_RESEARCH_CODE_DATE_IS_2026_08_22_AND_PRECEDES_TASK8_CUTOFF",
+        "LLM_AND_EMBEDDING_PROVIDER_IDENTITIES_MUST_BE BOUND",
+        "RETRIEVAL_ROUND_AND_MEMORY_GRANULARITY_SETTINGS_MUST_BE BOUND",
+        "MULTI_AGENT_MEMORY_ORCHESTRATION_IS_NOT_ITSELF_A_LEARNED_POLICY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMORYOS",
+      "name": "Memory OS of AI Agent",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_NON_LEARNED_HIERARCHICAL_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_EMNLP_2025_AND_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2025.emnlp-main.1318/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/BAI-LAB/MemoryOS"
+        }
+      ],
+      "eligibility_status": "MATERIAL_IF_HIERARCHICAL_LONG_TERM_PERSONAL_MEMORY_SETTING_MATCHED",
+      "material_reason": "Provides an executable hierarchical short-, mid-, and long-term memory system with explicit storage, update, retrieval, and generation mechanisms.",
+      "limits": [
+        "PERSONALIZATION_AND_LONG_CONVERSATION_SETTING_MUST_BE MATCHED",
+        "MEMORY_PROMOTION_UPDATE_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_PROVIDER_AND_EMBEDDING_CONFIGURATION_MUST_BE PARITY_MATCHED"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_pending": [
+    {
+      "name": "Memory-R1",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.583/",
+        "https://github.com/yansikuan/memory-r1"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_BUT_OFFICIAL_REPOSITORY_STILL_STATES_CODE_COMING_SOON",
+      "disposition": "REPRODUCIBILITY_BLOCKED_NOT_PROMOTED",
+      "reason": "The publication is strong and directly relevant to learned memory management, but the official repository does not currently provide executable research code."
+    },
+    {
+      "name": "HeLa-Mem",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.625/",
+        "https://github.com/ReinerBRO/HeLa-Mem"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_WITH_EXECUTABLE_PUBLIC_CODE",
+      "disposition": "LICENSE_OR_REUSE_STATUS_UNRESOLVED_NOT_PROMOTED_THIS_ROUND",
+      "reason": "Executable research code is public, but this review did not verify a repository license. Task-8 eligibility explicitly preserves licensing and access constraints rather than silently assuming reuse permission."
+    },
+    {
+      "name": "TTSP \u2014 Test-time Scaling over Perception",
+      "sources": [
+        "https://arxiv.org/abs/2604.11025",
+        "https://github.com/jiangz20/TTSP"
+      ],
+      "evidence_state": "PUBLIC_PREPRINT_AND_APACHE2_EXECUTABLE_IMPLEMENTATION",
+      "disposition": "E3_ROLE_CONDITIONAL_REFERENCE_NOT_PROMOTED",
+      "reason": "TTSP operates on fine-grained multimodal visual reasoning with iterative crop or zoom tool use. It is not automatically comparable to the small-VLM benchmark and test-time-scaling contract represented by addendum-v28, and its final cutoff-consistent implementation revision remains unbound."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "memory_system_comparators_do_not_establish_cross_family_transfer": true,
+    "small_vlm_or_visual_perception_scaling_does_not_establish_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V26"
+  },
+  "coverage_observations": {
+    "E1": "DIRECT_MEMORY_COMPARATOR_SET_EXPANDED",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_DIRECTLY_MATCHED_SMALL_VLM_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one non-duplicate direct E1 memory-system comparator survived the preregistered evidence and applicability gates."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "direct_memory_comparator_is_automatically_strongest": false,
+    "memory_system_quality_establishes_n_h2": false,
+    "pending_or_blocked_reference_is_claim_bearing": false,
+    "ttsp_is_automatically_applicable_to_current_e3_role": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B31_VERIFY_ADDENDUM_V29_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

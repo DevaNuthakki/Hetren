@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_RESEARCH_SOURCE_CORRECTION",
+  "correction_generation": 1,
+  "state": "SOURCE_LOCATOR_CORRECTION_PRESERVED_WITHOUT_REWRITING_HISTORY",
+  "recorded_at_utc": "2026-09-26T05:15:58Z",
+  "task": 8,
+  "candidate_id": "DISCOVERY:T8-E1-LAMER-METARL",
+  "affected_frozen_artifacts": [
+    {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v7.json",
+      "sha256": "c0d7336a926fef0b66981265f4c3d5f49382eff883b8f899241fa8a23b17bc67"
+    },
+    {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v10.json",
+      "sha256": "247387b1fa49bad288e2687c4d9fa413edfa0c7ed02aa67951260f738076de6f"
+    }
+  ],
+  "correction": {
+    "field": "LaMer primary peer-reviewed paper locator",
+    "incorrect_recorded_value": "https://openreview.net/pdf?id=Jq6N3B9QY7",
+    "correct_value": "https://openreview.net/pdf?id=4GiBscHW1k",
+    "verified_publication": "Meta-RL Induces Exploration in Language Agents",
+    "verified_venue": "ICLR 2026",
+    "verification_sources": [
+      {
+        "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+        "url": "https://openreview.net/pdf?id=4GiBscHW1k"
+      },
+      {
+        "class": "OFFICIAL_IMPLEMENTATION",
+        "url": "https://github.com/mlbio-epfl/LaMer"
+      }
+    ]
+  },
+  "scientific_impact": {
+    "candidate_identity_changed": false,
+    "peer_review_status_changed": false,
+    "role_interpretation_changed": false,
+    "stopping_counter_changed": false,
+    "source_locator_corrected": true
+  },
+  "history_policy": {
+    "rewrite_prior_artifacts": false,
+    "preserve_original_error_as_history": true,
+    "all_future_references_use_correct_locator": true
+  },
+  "claim_limits": {
+    "correction_establishes_final_eligibility": false,
+    "correction_establishes_strongest_status": false,
+    "correction_establishes_task_8_authority": false
+  }
+}

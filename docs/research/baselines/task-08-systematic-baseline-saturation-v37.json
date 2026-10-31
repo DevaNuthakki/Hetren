@@ -1,0 +1,408 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 37,
+  "state": "SATURATION_V37_FOUND_NEW_CROSS_VENUE_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T23:27:51Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_research_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v39_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v39.json",
+      "sha256": "a224a0f0c132e19dbb3c3061cab6ae2feda2b70c835c7dedf1e813791424f8c5"
+    },
+    "systematic_saturation_v36": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v36.json",
+      "sha256": "9fafea3d9dc0f5e06e63af6d0377aa6ca2cb44a18dc00ae93037067dd299157d"
+    }
+  },
+  "focus": [
+    "E1_DIRECT_MEMORY_CROSS_VENUE_CONFIRMATION",
+    "PROCEDURAL_MEMORY",
+    "REASONING_MEMORY",
+    "MEMORY_CONSOLIDATION",
+    "ACTIVE_GRAPH_MEMORY",
+    "MEMORY_ARCHITECTURE_EVOLUTION",
+    "VISUAL_MEMORY_REPRESENTATION",
+    "LEARNED_MEMORY_OPERATION_POLICY"
+  ],
+  "systematic_source_families": [
+    "AAMAS_2026",
+    "ACL_2026",
+    "ICLR_2026",
+    "ICML_2026"
+  ],
+  "queries_executed": [
+    "\"procedural memory\" LLM agents AAMAS 2026",
+    "\"agent procedural memory\" ACL 2026",
+    "\"Memp: Exploring Agent Procedural Memory\"",
+    "\"ReasoningBank\" ICLR 2026",
+    "\"RecMem\" ACL 2026 agent memory",
+    "\"Memory is Reconstructed, Not Retrieved\" ICML 2026",
+    "\"MemEvolve\" ICML 2026 agent memory",
+    "\"MemOCR\" ICML 2026 memory agent",
+    "\"Mem-T\" ICML 2026 memory agent",
+    "\"long-horizon agent memory\" ACL 2026",
+    "\"continual learning\" procedural memory LLM agent",
+    "\"memory consolidation\" LLM agents ACL 2026",
+    "\"reasoning memory\" agent ICLR 2026",
+    "\"graph memory\" LLM agent ICML 2026",
+    "\"visual memory\" long-horizon agent ICML 2026",
+    "\"memory agent\" dense reward ICML 2026"
+  ],
+  "query_count": 16,
+  "proposed_candidate_count": 8,
+  "candidate_identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MACLA-PROCEDURAL",
+      "name": "Learning Hierarchical Procedural Memory for LLM Agents through Bayesian Selection and Contrastive Refinement",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP-PROCEDURAL",
+      "name": "Memp: Exploring Agent Procedural Memory",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+      "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "exact_candidate_id_already_present": true,
+      "prior_promoted_alias_matches": [
+        {
+          "normalized": "reasoningbankscalingagentselfevolvingwithreasoningmemory",
+          "candidate_id": "DISCOVERY:T8-E1-REASONINGBANK",
+          "name": "ReasoningBank: Scaling Agent Self-Evolving with Reasoning Memory",
+          "source": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v31.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RECMEM",
+      "name": "RecMem: Recurrence-based Memory Consolidation for Efficient and Effective Long-Running LLM Agents",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "exact_candidate_id_already_present": true,
+      "prior_promoted_alias_matches": [
+        {
+          "normalized": "recmemrecurrencebasedmemoryconsolidationforefficientandeffectivelongrunningllmagents",
+          "candidate_id": "DISCOVERY:T8-E1-RECMEM",
+          "name": "RecMem: Recurrence-based Memory Consolidation for Efficient and Effective Long-Running LLM Agents",
+          "source": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMEVOLVE",
+      "name": "MemEvolve: Meta-Evolution of Agent Memory Systems",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOCR",
+      "name": "MemOCR: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM-T",
+      "name": "Mem-T: Densifying Rewards for Long-Horizon Memory Agents",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "exact_candidate_id_already_present": false,
+      "prior_promoted_alias_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MACLA-PROCEDURAL",
+      "name": "Learning Hierarchical Procedural Memory for LLM Agents through Bayesian Selection and Contrastive Refinement",
+      "aliases": [
+        "MACLA",
+        "Memory-Augmented Continual Learning Agent"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HIERARCHICAL_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AAMAS_2026_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_PEER_REVIEWED_PROCEEDINGS",
+          "url": "https://www.ifaamas.org/Proceedings/aamas2026/forms/contents.htm"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2512.18950"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/S-Forouzandeh/MACLA-LLM-Agents-AAMAS-Conference"
+        }
+      ],
+      "material_reason": "Learns an external hierarchical procedural memory using Bayesian procedure selection, contrastive refinement, and meta-procedure composition while keeping the underlying LLM frozen.",
+      "limits": [
+        "PROCEDURAL_MEMORY_TASK_SETTING_MUST_BE MATCHED",
+        "MEMORY_CONSTRUCTION_TRAJECTORIES_MUST_BE BOUND",
+        "BAYESIAN_SELECTION_AND_REFINEMENT_CONFIGURATION_MUST_BE BOUND",
+        "DOMAIN_AGNOSTIC_CLAIM_DOES_NOT_ESTABLISH_HETREN_CROSS_FAMILY_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMP-PROCEDURAL",
+      "name": "Memp: Exploring Agent Procedural Memory",
+      "aliases": [
+        "MemP: Exploring Agent Procedural Memory",
+        "MemP"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_PROCEDURAL_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_MEMORY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_PEER_REVIEWED_PROGRAM",
+          "url": "https://2026.aclweb.org/program/findings/"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2508.06433"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/MemP"
+        }
+      ],
+      "material_reason": "Distills trajectories into fine-grained instructions and higher-level scripts and supports offline plus self-learning online procedural-memory construction.",
+      "limits": [
+        "TRAVELPLANNER_OR_ALFWORLD_STYLE_APPLICABILITY_MUST_BE MATCHED",
+        "BUILD_RETRIEVAL_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "STRONGER_TO_WEAKER_MODEL_MEMORY_MIGRATION_IS_WITHIN_E1_AND_NOT_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+      "aliases": [
+        "MRAgent",
+        "Graph Memory for LLM Agents"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ACTIVE_GRAPH_MEMORY_RECONSTRUCTION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_PROGRAM_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.06036"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Ji-shuo/MRAgent"
+        }
+      ],
+      "material_reason": "Uses a Cue-Tag-Content graph with iterative reasoning-driven exploration and pruning rather than one-shot static memory retrieval.",
+      "limits": [
+        "LONG_HORIZON_MEMORY_REASONING_ROLE_IS_CONDITIONAL",
+        "GRAPH_BUILD_AND_TOOL_CALLING_CONFIGURATION_MUST_BE BOUND",
+        "LOCOMO_AND_LONGMEMEVAL_ARE_NOT_AUTOMATICALLY_FULL_AGENT_DECISION_TASKS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMEVOLVE",
+      "name": "MemEvolve: Meta-Evolution of Agent Memory Systems",
+      "aliases": [
+        "MemEvolve"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_MEMORY_ARCHITECTURE_EVOLUTION_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_PROGRAM_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bingreeky/MemEvolve"
+        }
+      ],
+      "material_reason": "Evolves both memory contents and the memory-system architecture through a dual-loop meta-evolution process.",
+      "limits": [
+        "MEMORY_SYSTEM_EVOLUTION_ROLE_MUST_BE MATCHED",
+        "EVALUATION_TASKS_AND_INITIAL_MEMORY_PROVIDER_MUST_BE BOUND",
+        "META_EVOLUTION_IS_NOT_EVIDENCE_THAT_HETREN_ALREADY_SELF_IMPROVES"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEMOCR",
+      "name": "MemOCR: Layout-Aware Visual Memory for Efficient Long-Horizon Reasoning",
+      "aliases": [
+        "MemOCR"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_VISUAL_MEMORY_REPRESENTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "ICML_2026_PROGRAM_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/meituan/MemOCR"
+        }
+      ],
+      "material_reason": "Represents long-horizon memory visually with adaptive information density and layout rather than purely textual serialized memory.",
+      "limits": [
+        "MULTIMODAL_MEMORY_INFORMATION_OPPORTUNITY_MUST_BE ALLOWED",
+        "VISUAL_MEMORY_ENCODING_DOES_NOT_BY_ITSELF_MAKE_THE_TASK_E3_VISION",
+        "MODEL_AND_GPU_RESOURCE_REQUIREMENTS_MUST_BE ACCOUNTED_BY_TASK_9"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MEM-T",
+      "name": "Mem-T: Densifying Rewards for Long-Horizon Memory Agents",
+      "aliases": [
+        "Mem-T"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_MEMORY_OPERATION_POLICY_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_PROGRAM_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.23014"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yanweiyue/Mem-T"
+        }
+      ],
+      "material_reason": "Learns long-horizon memory construction and retrieval operations using dense step-wise rewards and hindsight credit assignment.",
+      "limits": [
+        "MEMORY_OPERATION_POLICY_AND_CHECKPOINT_MUST_BE BOUND",
+        "TRAINING_SCRIPT_AVAILABILITY_AND_EXACT_RELEASE_STATE_MUST_BE VERIFIED_AT_FINAL_PINNING",
+        "LONGMEMORY_QA_RESULTS_MUST_NOT_BE EQUATED_WITH_ALL_E1_AGENT_TASKS"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 6,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 6,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "OCR-Memory: Optical Context Retrieval for Long-Horizon Agent Memory",
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.474/",
+        "https://arxiv.org/abs/2604.26622"
+      ],
+      "disposition": "DIRECT_MEMORY_RESEARCH_REFERENCE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The optical locate-and-transcribe memory mechanism is materially interesting, but this pass did not independently bind an official executable implementation."
+    },
+    {
+      "name": "LEGOMem: Modular Procedural Memory for Multi-agent LLM Systems for Workflow Automation",
+      "evidence_state": "AAMAS_2026_EXTENDED_ABSTRACT",
+      "sources": [
+        "https://www.ifaamas.org/Proceedings/aamas2026/forms/contents.htm"
+      ],
+      "disposition": "EXTENDED_ABSTRACT_REFERENCE_NOT_PROMOTED",
+      "reason": "Useful procedural-memory reference, but the verified publication form is an extended abstract and this pass did not bind a reproducible implementation."
+    },
+    {
+      "name": "Selective Memory Retention for Long-Horizon LLM Agents",
+      "evidence_state": "PUBLIC_2026_RESEARCH_REFERENCE",
+      "sources": [
+        "https://arxiv.org/abs/2606.29178"
+      ],
+      "disposition": "RETENTION_POLICY_REFERENCE_PENDING_FULL_IMPLEMENTATION_AND_ROLE_BINDING",
+      "reason": "The retention-policy study is directly relevant to bounded memory, but this pass does not promote it without a governed implementation and exact experiment-role binding."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_memory_transfer_or_reuse_evidence_exists": true,
+    "forcing_memory_transfer_within_agents_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "previous_consecutive_no_new_material_candidate_rounds": 1,
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unpromoted materially relevant cross-venue direct-memory candidate was identified, so the consecutive no-new-material counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "candidate_publication_implies_final_eligibility": false,
+    "memory_benchmark_result_implies_generic_agent_superiority": false,
+    "within_e1_memory_transfer_proves_general_n_h2": false,
+    "visual_memory_representation_implies_e3_environment": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

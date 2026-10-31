@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 14,
+  "state": "ADDENDUM_V14_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T19:57:25Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v14": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v14.json",
+      "sha256": "cd3cbc259eb77d04037b75443d321fc31b4236dca1a3224793d9906d4da80612"
+    },
+    "systematic_saturation_v11": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v11.json",
+      "sha256": "cf466531eb1891f224926c9fafd056f41d88eb2e2671ac73e476ac21b0e8d10e"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-FTRL-TOOLUSE",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LEARNED_TOOL_USE_RL_COMPARATOR",
+      "verified_facts": [
+        "FTRL is published in Findings of ACL 2026.",
+        "Its method constructs stable local tool-use training environments through automated scenario decomposition, document generation, function integration, complexity scaling, and localized deployment.",
+        "Its verifiable reward mechanism evaluates both tool-use precision and task-completion completeness.",
+        "The primary paper directly identifies the public bytedance/FTRL repository as its code and data release."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.109/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/bytedance/FTRL"
+        }
+      ],
+      "limits": [
+        "TOOL_SCHEMA_AND_GENERATED_ENVIRONMENT_CONFIGURATION_MUST_BE BOUND",
+        "VERIFIABLE_REWARD_DEFINITION_MUST_BE BOUND",
+        "BASE_MODEL_RL_ALGORITHM_AND_TRAINING_CORPUS_MUST_BE BOUND",
+        "TRAINING_ENVIRONMENT_SYNTHESIS_MUST_NOT_BE MISLABELED_AS_DEPLOYMENT_TIME_ADAPTATION",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v14_candidates_have_role_level_external_review": true,
+    "all_addendum_v14_candidates_are_peer_reviewed": true,
+    "all_addendum_v14_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

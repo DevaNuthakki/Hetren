@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 45,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T00:00:24Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v44": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v44.json",
+      "sha256": "25fde7b043a213a16e90f33941fa8aea80a6b19c7fa00cec0bc3fee5d85d735e"
+    },
+    "systematic_saturation_v42": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v42.json",
+      "sha256": "3f75599f34e585539cb28f78f8b0dc09acd9fd50894d5ef7418be3c4bb044bb8"
+    }
+  },
+  "candidate_count": 4,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-TIMEM-TEMPORAL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TiMem: Temporal-Hierarchical Memory Consolidation for Long-Horizon Conversational Agents",
+      "implementation_identity": "https://github.com/TiMEM-AI/timem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TEMPORAL_HIERARCHICAL_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_NON_PARAMETER_UPDATING_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1091/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TiMEM-AI/timem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LONG_HORIZON_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+        "CONVERSATIONAL_LONG_HORIZON_ROLE_MUST_MATCH",
+        "TMT_HIERARCHY_AND_CONSOLIDATION_CONFIGURATION_MUST_BE BOUND",
+        "RECALL_CONFIGURATION_AND_LLM_PROVIDER_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Introduces a temporal memory tree with semantic-guided cross-level consolidation and complexity-aware recall, a materially distinct memory organization and recall mechanism."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LONG_HORIZON_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V42"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-PROACTIVE-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Remember When It Matters: Proactive Memory Agent for Long-Horizon Agents",
+      "implementation_identity": "https://github.com/yifannnwu/proactive-memory-agent",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_PROACTIVE_MEMORY_INTERVENTION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_MEMORY_SIDECAR_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ONGOING_RESEARCH_ROLE_CONDITIONAL_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2607.08716"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yifannnwu/proactive-memory-agent"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_PROACTIVE_MEMORY_INTERVENTION_ROLE_MATCHED",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "MEMORY_AGENT_AND_ACTION_AGENT_MODEL_IDENTITIES_MUST_BE BOUND",
+        "INTERVENTION_INTERVAL_AND_MEMORY_BANK_SCHEMA_MUST_BE BOUND",
+        "TERMINAL_OR_TOOL_AGENT_INFORMATION_OPPORTUNITY_MUST_MATCH",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Separates memory from the action policy and explicitly learns or applies a decision over when memory should intervene, rather than exposing retrieved memory on every step."
+      ],
+      "eligibility_status": "MATERIAL_ONGOING_RESEARCH_CANDIDATE_IF_PROACTIVE_MEMORY_INTERVENTION_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V42"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMPO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemPO: Self-Memory Policy Optimization for Long-Horizon Agents",
+      "implementation_identity": "https://github.com/TheNewBeeKing/MemPO",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MEMORY_POLICY_COMPARATOR_CANDIDATE",
+        "N_H1_REINFORCEMENT_LEARNED_MEMORY_MANAGEMENT_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1166/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TheNewBeeKing/MemPO"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LEARNED_LONG_HORIZON_MEMORY_POLICY_ROLE_MATCHED",
+        "POLICY_MODEL_AND_BASE_MODEL_MUST_BE BOUND",
+        "RL_TRAINING_RECIPE_AND_TRAINING_DATA_MUST_BE BOUND",
+        "RETRIEVER_AND_RAG_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_ACTION_SPACE_AND_RETENTION_POLICY_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "Optimizes a learned memory policy that autonomously summarizes, manages, and selectively retains memory during long-horizon interaction, with released RL training and evaluation code."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LEARNED_LONG_HORIZON_MEMORY_POLICY_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V42"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MCMA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Learning How to Remember: A Meta-Cognitive Management Method for Structured and Transferable Agent Memory",
+      "implementation_identity": "https://github.com/LiangThree/MCMA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MEMORY_COPILOT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_MEMORY_MANAGEMENT_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1535/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LiangThree/MCMA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LEARNED_MEMORY_ABSTRACTION_AND_AGENT_TRANSFER_ROLE_MATCHED",
+        "TASK_MODEL_AND_MEMORY_COPILOT_IDENTITIES_MUST_BE BOUND",
+        "DPO_TRAINING_CONFIGURATION_AND_PREFERENCE_DATA_MUST_BE BOUND",
+        "ABSTRACTION_LEVEL_SELECTION_POLICY_MUST_BE BOUND",
+        "TRANSFER_RESULTS_ARE_WITHIN_AGENT_TASK_FAMILIES",
+        "DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER",
+        "Learns a separate memory copilot that structures and abstracts experience and explicitly studies transfer of the learned memory-management capability across agent tasks."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LEARNED_MEMORY_ABSTRACTION_AND_AGENT_TRANSFER_ROLE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "POST_T_MEM_DIRECT_MEMORY_SATURATION_V42"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

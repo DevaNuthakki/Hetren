@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_ACCOUNTING_CONTRACT_ATTEMPT",
+  "attempt": 1,
+  "state": "TASK9_DRAFT_ACCOUNTING_CONTRACT_DEFINED_NO_VALUES_RECORDED",
+  "recorded_at_utc": "2026-09-28T23:21:34Z",
+  "task": 9,
+  "bindings": {
+    "ledger_contract": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "sha256": "44662f31243d3817a68b2613637c32874482b58d434f976581f100c462d5b620"
+    },
+    "measurement_contract": {
+      "path": "docs/research/accounting/task-09-resource-measurement-contract-v1.json",
+      "sha256": "82d750776c8b2938d882c29985be5680e940b26576851477c56c8e126cc6eede"
+    },
+    "task8_input_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "task8_dependency_block": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-dependency-block-v1.json",
+      "sha256": "a615c4f16fb4cf752ac774a4a3e12ebeff67fe1094adb38795857b1403c52eab"
+    }
+  },
+  "state_summary": {
+    "ledger_schema_defined": true,
+    "measurement_procedures_defined": true,
+    "missingness_semantics_defined": true,
+    "engineering_effort_semantics_defined": true,
+    "adaptation_cost_semantics_defined": true,
+    "monetary_rate_provenance_defined": true,
+    "practical_value_multi_axis_semantics_defined": true,
+    "observed_values_recorded": false,
+    "task8_baseline_selected": false,
+    "concrete_experiment_instantiated": false,
+    "protected_execution_authorized": false,
+    "task9_authority_established": false,
+    "scientific_support_established": false
+  },
+  "next_gate": "T9A_2_ADVERSARIAL_REVIEW_AND_MEASUREMENT_CONTRACT_HARDENING",
+  "claim_limits": {
+    "draft_contract_is_governing_specification": false,
+    "draft_contract_is_accepted_decision": false,
+    "measurement_schema_is_measurement_result": false,
+    "practical_value_configuration_is_practical_value_result": false
+  }
+}

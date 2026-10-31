@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_SELECTION_RESEARCH_BOUNDARY",
+  "state": "FROZEN_BEFORE_EXTERNAL_DISCOVERY",
+  "created_at_utc": "2026-09-26T02:47:25Z",
+  "task": 8,
+  "bindings": {
+    "gap_classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_gap_classification.json",
+      "sha256": "6ad2c2e93326513c7a26be2490a1b63892b996db372eb83047949148fac2d1ff"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "generation_3": {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    "task_6": {
+      "path": "docs/mvp/06-research-hypotheses.md",
+      "sha256": "fc389347e643b2acc23cc64648da48da46996cf964a6969732331a9eba0bc8f0"
+    },
+    "task_7": {
+      "path": "docs/mvp/07-initial-splits.md",
+      "sha256": "d392120c20a6a829b6807e8217331ddd9b8a8f479722b204ae39edd17084ea46"
+    },
+    "support_matrix": {
+      "path": "docs/mvp/05-support-matrix.md",
+      "sha256": "b77582423ea9574da51a5469a2ea7eec19a09a981b264f52b8b0f2929de6d868"
+    },
+    "decision_register": {
+      "path": "docs/decisions/register.md",
+      "sha256": "25f2e15b0364a80972c88d48af3013acfc56251a7c717c74a76bc62ad57e2f4d"
+    },
+    "qualification_readiness": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_baseline_qualification_readiness.json",
+      "sha256": "802f5be40910421e5b3f0a5904e909853d85b4685598b39200f7c4196398162a"
+    },
+    "regression_classification": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_attempt_10_post_remediation_regression_classification.json",
+      "sha256": "9131a4f6ddf1793d0bb67e49f55096a5225b2695ef8c37f2819bb7a5c54e0025"
+    },
+    "regression_result": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_attempt_10_post_remediation_regression_result.json",
+      "sha256": "220e7d60277828a751b32158c98b0a75f559e85b72f9b0c60c99f7e6ded173d4"
+    },
+    "remediated_semantic_evaluator": {
+      "path": "scripts/baseline_requirements_gen3_semantics.py",
+      "sha256": "37b4075c00a9bea3e249bb0f9c895a6a6ccf7481a255ae7e1ece0d64c1c0907e"
+    }
+  },
+  "governance_state": {
+    "task_8_ledger_state": "IN_PROGRESS",
+    "task_8_governing_specification_exists": false,
+    "task_8_lifecycle_decision_exists": false,
+    "concrete_baseline_registry_exists": false,
+    "external_discovery_authorized": true,
+    "concrete_selection_authorized": true,
+    "protected_hetren_outcome_based_selection_authorized": false,
+    "task_8_acceptance_authorized": false
+  },
+  "research_state": {
+    "external_research_started": false,
+    "candidate_registry_created": false,
+    "selection_review_created": false,
+    "concrete_baselines_frozen": false
+  },
+  "historical_evidence_rules": {
+    "attempt_10_protected_first_run_rewritten": false,
+    "attempt_10_freshness_restored": false,
+    "semantic_regression_evidence_reclassified_as_fresh": false
+  },
+  "next_gate": "EXECUTE_PREREGISTERED_EXTERNAL_BASELINE_DISCOVERY_AND_BUILD_CANDIDATE_REGISTRY"
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 47,
+  "state": "ADDENDUM_V47_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T00:22:17Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v47": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v47.json",
+      "sha256": "33f7662bf37b1c2355e250d9d53b4828b462dabf15336b92502d044deaebf387"
+    },
+    "systematic_saturation_v44": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v44.json",
+      "sha256": "a0caa017e153f4d6ee392d218aaeb458e6bda56404159818e49e62d7d9cb36e1"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-STITCH-CONTEXTUAL-INTENT",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_INTENT_CONDITIONED_LONG_HORIZON_MEMORY_RETRIEVAL_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "Grounding Agent Memory in Contextual Intent is published in Findings of ACL 2026.",
+        "The method is STITCH, Structured Intent Tracking in Contextual History.",
+        "STITCH indexes trajectory steps with contextual-intent cues and retrieves prior history by intent compatibility.",
+        "The contextual-intent cue represents latent thematic goal, action type, and salient entity types.",
+        "The publication evaluates STITCH on CAME-Bench and LongMemEval.",
+        "The public research repository identifies STITCH and CAME-Bench and provides install and benchmark-entrypoint material."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.584/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Seattleyrz/contextual-intent"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.10702"
+        }
+      ],
+      "limits": [
+        "CAME_BENCH_AND_LONGMEMEVAL_ARE_MEMORY_RETRIEVAL_OR_REASONING_EVALUATIONS_NOT_AUTOMATICALLY_FULL_INTERACTIVE_AGENT_CONTRACTS",
+        "E1_USE_REQUIRES_A_MATCHED_LONG_HORIZON_AGENT_MEMORY_ROLE",
+        "INTENT_EXTRACTION_INFORMATION_ACCESS_MUST_BE PARITY_MATCHED",
+        "EMBEDDING_LLM_RETRIEVAL_AND_INTENT_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "FINAL_RETAINED_REVISION_MUST_BE_CUTOFF_CONSISTENT",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v47_candidates_have_role_level_external_review": true,
+    "stitch_archival_peer_review_verified": true,
+    "stitch_public_research_implementation_verified": true,
+    "stitch_final_immutable_revision_pinned": false,
+    "all_addendum_v47_candidates_are_finally_eligible": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_alone_establishes_strongest_status": false,
+    "retrieval_benchmark_result_establishes_generic_agent_superiority": false,
+    "current_repository_head_is_final_version_identity": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_general_n_h2": false
+  }
+}

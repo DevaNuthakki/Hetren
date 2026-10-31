@@ -1,0 +1,27 @@
+{
+  "schema_version": "4.0.0",
+  "artifact_type": "TASK_8_GEN3_GENERATION_ISOLATION_FAILURE_ATTEMPT_4",
+  "state": "ABORTED_BEFORE_CASE_GENERATION",
+  "generation_attempt": 4,
+  "generation_package_sha256": "5dbf26fffa27c1b02112d296a6f566023b080f733afae54d363e2df09cb866de",
+  "generation_session_isolation": {
+    "nonpackage_hetren_context_detected": false,
+    "nonpackage_hetren_project_context_detected": false,
+    "nonpackage_hetren_memory_or_saved_context_detected": false,
+    "nonpackage_prior_hetren_chat_or_summary_detected": false,
+    "nonpackage_prior_hetren_generation_request_excerpt_detected": false,
+    "nonpackage_prior_hetren_generation_attempt_detected": false,
+    "nonpackage_hetren_repository_material_detected": false,
+    "nonpackage_target_evaluator_information_detected": false,
+    "nonpackage_prior_hetren_cases_mutations_predictions_results_detected": false,
+    "nonpackage_hetren_remediation_history_detected": false,
+    "ambiguous_potentially_hetren_specific_context_detected": true,
+    "isolation_gate_passed_before_case_generation": false,
+    "unrelated_non_hetren_context_present": true,
+    "unrelated_non_hetren_context_used_for_case_design": false
+  },
+  "abort_reason": "The context available before case generation includes a saved recent-activity breadcrumb for generation_package_v3_0d55267e.json, outside the supplied package. The breadcrumb does not establish whether that file is Hetren-specific, but it may convey prior generation-package workflow state. Its relationship cannot be determined safely from the available context without inferring or inspecting non-package material. The package generator_isolation_rule and generation_session_isolation_contract require failing closed for ambiguous potentially Hetren-specific context. Unrelated non-Hetren context is not the reason for this abort. No prior file was opened and no cases were generated.",
+  "target_evaluator_executed": false,
+  "target_predictions_produced": false,
+  "target_freshness_consumed": false
+}

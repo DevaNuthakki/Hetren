@@ -1,0 +1,278 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 19,
+  "state": "SATURATION_V19_FOUND_NEW_MATERIAL_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T20:51:18Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "materiality_scope": {
+    "unit": "ENVIRONMENT_PLUS_HYPOTHESIS_ROLE_PLUS_EXPERIMENT_MECHANISM_PLUS_INFORMATION_OPPORTUNITY_PLUS_EVALUATOR_COMPARABILITY",
+    "new_candidate_requires_potential_to_change_retained_comparator_set": true,
+    "merely_related_or_newer_paper_does_not_reset_counter": true,
+    "scenario_specific_method_requires_matching_experiment": true
+  },
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "promoted_publication_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v21_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v21.json",
+      "sha256": "09a59c6db8148a052e23cdc4d3c1f820582138905571a0182ffb579130a9a161"
+    },
+    "systematic_saturation_v18": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v18.json",
+      "sha256": "bfc81b62319fbe4079ec32b918876f18108964632af52b6f520123cb34ad42c5"
+    }
+  },
+  "focus": [
+    "E1_REUSABLE_SKILLS_TOOLS_AND_EXECUTABLE_SUBAGENTS",
+    "E2_POST_EXPANDED_STRUCTURED_ML_SPOT_CHECK",
+    "E3_POST_EXPANDED_TTA_SPOT_CHECK",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"XSkill\" ICML 2026 multimodal agent continual learning github",
+    "\"GATE\" \"Graph-based Adaptive Tool Evolution\" ACL 2026 github",
+    "\"AgentFactory\" ACL 2026 executable subagent github",
+    "\"SKILL0\" EMNLP 2026 github agent skill internalization",
+    "\"Graph of Skills\" EMNLP 2026 github agent",
+    "\"Skill1\" agent reinforcement learning 2026 github",
+    "\"D2Skill\" agentic reinforcement learning 2026 github",
+    "\"Skill Self-Play\" 2026 github",
+    "\"AutoSkill\" experience driven lifelong learning 2026 github",
+    "\"Trace2Skill\" transferable agent skills github",
+    "2026 peer reviewed executable self evolving agent reusable tools ACL",
+    "2026 peer reviewed executable subagent accumulation agent ACL",
+    "2026 structured tabular adaptation active feature acquisition new comparator",
+    "2026 vision language test time adaptation new archival executable comparator",
+    "2026 common learned decision transfer agent structured vision peer reviewed"
+  ],
+  "query_count": 15,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GATE-TOOL-EVOLUTION",
+      "name": "GATE \u2014 Graph-based Adaptive Tool Evolution Across Diverse Tasks",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_ADAPTIVE_TOOL_EVOLUTION_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_SCENARIO_TOOL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_LONG_PAPER_AND_OFFICIAL_CODE_DATA_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.87/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ayanami2003/GATE"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_MAKING_AND_REUSABLE_TOOL_EVOLUTION_SETTING_MATCHED",
+      "material_reason": "GATE dynamically constructs and evolves a hierarchical graph of reusable tools across multiple scenarios, giving Task 8 a materially distinct tool-evolution comparator rather than another memory or skill-retrieval variant.",
+      "limits": [
+        "TOOL_MAKING_MUST_BE PART_OF_THE_GOVERNED_E1_EXPERIMENT",
+        "TOOL_GRAPH_INITIALIZATION_UPDATE_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "LLM_BACKBONE_AND_EXECUTION_ENVIRONMENTS_MUST_BE BOUND",
+        "CODE_GENERATION_RESULTS_MUST_NOT_BE_CONFLATED_WITH_AGENT_ENVIRONMENT_RESULTS",
+        "CROSS_SCENARIO_TOOL_REUSE_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTFACTORY",
+      "name": "AgentFactory \u2014 A Self-Evolving Framework Through Executable Subagent Accumulation and Reuse",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_EXECUTABLE_SUBAGENT_REUSE_COMPARATOR_CANDIDATE",
+        "A_H1_EXECUTION_FEEDBACK_SUBAGENT_REFINEMENT_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_EXECUTABLE_CAPABILITY_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_SYSTEM_DEMONSTRATION_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-demo.81/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zzatpku/AgentFactory"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EXECUTABLE_SUBAGENT_ACCUMULATION_AND_REUSE_SETTING_MATCHED",
+      "material_reason": "AgentFactory stores successful solutions as executable Python subagents, retrieves and reuses them on later tasks, and refines them from execution feedback, a materially different persistent-capability mechanism from textual memories or skill documents.",
+      "limits": [
+        "SYSTEM_DEMONSTRATION_EVIDENCE_MUST_NOT_BE_TREATED_AS_A_LARGE_SCALE_UNIVERSAL_BENCHMARK",
+        "PYTHON_CAPABLE_EXECUTION_ENVIRONMENT_REQUIRED",
+        "SUBAGENT_CREATION_RETRIEVAL_MODIFICATION_AND_TOOL_ALLOCATION_CONFIGURATION_MUST_BE BOUND",
+        "A_H1_ROLE_ONLY_APPLIES_WHEN_EXECUTION_FEEDBACK_REFINEMENT_IS_INSIDE_THE_GOVERNED_ADAPTATION_WINDOW",
+        "PORTABILITY_OF_EXECUTABLE_SUBAGENTS_DOES_NOT_ESTABLISH_GENERAL_N_H2_CROSS_FAMILY_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "SKILL0",
+      "sources": [
+        "https://arxiv.org/abs/2604.02268",
+        "https://github.com/ZJU-REAL/SkillZero"
+      ],
+      "evidence_state": "PUBLIC_PRIMARY_PREPRINT_AND_OFFICIAL_EXECUTABLE_CODE_WITH_AUTHOR_REPOSITORY_EMNLP_2026_ACCEPTANCE_STATEMENT",
+      "relevance": "Internalizes retrieved agent skills into model parameters through a curriculum that progressively withdraws skill context.",
+      "disposition": "STRONG_ONGOING_OR_ACCEPTED_RESEARCH_REFERENCE_NOT_PROMOTED_AS_ARCHIVAL_PEER_REVIEW_IN_THIS_PASS",
+      "reason": "The official repository states EMNLP 2026 acceptance, but this bounded review did not verify an archival EMNLP proceedings record. The method remains materially relevant research and must not be mislabeled."
+    },
+    {
+      "name": "Graph-of-Skills",
+      "sources": [
+        "https://arxiv.org/abs/2604.05333",
+        "https://github.com/davidliuk/graph-of-skills"
+      ],
+      "evidence_state": "PUBLIC_RESEARCH_AND_EXECUTABLE_CODE_WITH_AUTHOR_REPOSITORY_EMNLP_2026_ACCEPTANCE_STATEMENT",
+      "relevance": "Builds a dependency graph over skill documents and retrieves bounded structurally relevant skill bundles.",
+      "disposition": "SKILL_RETRIEVAL_INFRASTRUCTURE_REFERENCE_NOT_STANDALONE_LEARNED_DECISION_POLICY_COMPARATOR",
+      "reason": "Its principal intervention is retrieval and organization of an existing skill library rather than a standalone learned agent policy."
+    },
+    {
+      "name": "Skill1",
+      "sources": [
+        "https://arxiv.org/abs/2605.06130",
+        "https://github.com/AlphaLab-USTC/Skill1"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_WITH_EXECUTABLE_IMPLEMENTATION",
+      "relevance": "Trains one policy to jointly select, utilize, and distill skills through a shared task-outcome reward.",
+      "disposition": "ONGOING_RESEARCH_REFERENCE_NOT_PROMOTED_THIS_ROUND",
+      "reason": "No archival peer-reviewed publication was verified in this bounded pass; preserve without fabricating publication status."
+    },
+    {
+      "name": "D2Skill",
+      "sources": [
+        "https://arxiv.org/abs/2603.28716",
+        "https://github.com/TU2021/D2Skill-AgenticRL"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_WITH_EXECUTABLE_IMPLEMENTATION",
+      "disposition": "ALREADY_PRESERVED_RESEARCH_REFERENCE_NOT_NEW",
+      "reason": "D2Skill was already preserved by prior Task-8 research and must not be double-counted."
+    },
+    {
+      "name": "COS-PLAY",
+      "sources": [
+        "https://arxiv.org/abs/2604.20987",
+        "https://github.com/wuxiyang1996/cos-play"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_WITH_PUBLIC_IMPLEMENTATION",
+      "disposition": "ALREADY_PRESERVED_RESEARCH_REFERENCE_NOT_NEW",
+      "reason": "COS-PLAY was already preserved by prior Task-8 research and must not be double-counted."
+    },
+    {
+      "name": "Skill Self-Play",
+      "sources": [
+        "https://arxiv.org/abs/2607.22529",
+        "https://github.com/Qwen-Applications/skill-self-play"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Co-evolves task proposal, solving, and a dynamic skill controller under verifiable self-play.",
+      "disposition": "TRAINING_EVOLUTION_REFERENCE_NOT_PROMOTED_TO_ARCHIVAL_CLAIM_BEARING_BASELINE_THIS_ROUND",
+      "reason": "This review verified a preprint and official code but not archival peer review."
+    },
+    {
+      "name": "AutoSkill",
+      "sources": [
+        "https://arxiv.org/abs/2603.01145",
+        "https://github.com/ECNU-ICALK/AutoSkill"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_AND_EXECUTABLE_SOFTWARE",
+      "relevance": "Extracts reusable skills from interaction experience and supports replay, mutation, evaluation and promotion.",
+      "disposition": "PRACTICAL_SELF_EVOLUTION_REFERENCE_NOT_PROMOTED_TO_ARCHIVAL_CLAIM_BEARING_BASELINE",
+      "reason": "Useful implementation evidence, but archival peer review was not verified in this pass."
+    },
+    {
+      "name": "Trace2Skill",
+      "sources": [
+        "https://arxiv.org/abs/2603.25158",
+        "https://github.com/Qwen-Applications/Trace2Skill"
+      ],
+      "evidence_state": "PRIMARY_PREPRINT_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Converts pools of execution traces into consolidated reusable skill patches.",
+      "disposition": "SKILL_DISTILLATION_REFERENCE_NOT_PROMOTED_TO_ARCHIVAL_CLAIM_BEARING_BASELINE",
+      "reason": "No archival peer-reviewed venue was verified in this bounded pass."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "GATE",
+      "evidence_state": "ACL_2026_LONG_WITH_CODE",
+      "relevance": "Evolves and reuses tools across multiple task scenarios.",
+      "disposition": "WITHIN_E1_OR_TOOL_SYSTEM_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The evidence does not establish one learned decision mechanism transferring into E2 structured ML and E3 vision."
+    },
+    {
+      "name": "AgentFactory",
+      "evidence_state": "ACL_2026_SYSTEM_DEMO_WITH_CODE",
+      "relevance": "Accumulates and reuses executable subagent capabilities across related tasks.",
+      "disposition": "WITHIN_E1_EXECUTABLE_CAPABILITY_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Executable portability is not evidence that the same learned decision policy transfers across Hetren environment families."
+    },
+    {
+      "name": "XSkill",
+      "evidence_state": "ICML_2026_ACCEPTANCE_WITH_PUBLIC_CODE",
+      "relevance": "Transfers accumulated skills and experiences across multimodal-agent tasks.",
+      "disposition": "WITHIN_E1_AGENT_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Cross-task multimodal-agent generalization remains inside the agent decision family."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "additional_within_e1_reusable_capability_references_found": true,
+    "forcing_within_e1_reuse_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V19"
+  },
+  "coverage_observations": {
+    "E1": "TWO_NEW_PEER_REVIEWED_REUSABLE_CAPABILITY_COMPARATORS_FOUND",
+    "E2": "NO_NEW_DIRECTLY_MATCHED_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_DIRECTLY_MATCHED_COMPARATOR_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "GATE and AgentFactory are materially distinct, peer-reviewed, reproducible E1 candidates absent from the prior governed candidate identities and can alter the applicable retained comparator set."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "accepted_or_preprint_skill_method_is_automatically_claim_bearing": false,
+    "retrieval_infrastructure_is_automatically_standalone_policy_baseline": false,
+    "gate_establishes_general_n_h2": false,
+    "agentfactory_establishes_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B24_VERIFY_ADDENDUM_V22_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

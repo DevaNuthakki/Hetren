@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 75,
+  "state": "ADDENDUM_V75_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T05:03:59Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v75": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v75.json",
+      "sha256": "1fbe6ecf3cf417e6b97e0dbe6ad320ac8bcac6f0fa4987a47cced9f16a42ec18"
+    },
+    "systematic_saturation_v72": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v72.json",
+      "sha256": "829a9f3ba3b5b7dee6dac2feaba6ea043b23cdb16d31fa0f3801842c8cfa889c"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SKILLSCRAFTER",
+      "verification_state": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LIFELONG_LANGUAGE_CONDITIONED_MANIPULATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "SkillsCrafter is published in the AAAI 2026 proceedings under the title Lifelong Language-Conditioned Robotic Manipulation Learning.",
+        "The method targets sequential acquisition of language-conditioned robotic manipulation skills while reducing catastrophic forgetting.",
+        "Manipulation Skills Adaptation preserves learned skill knowledge while sharing reusable knowledge with newly learned skills.",
+        "The method uses singular-value decomposition over skill instructions to construct common skill semantic subspaces.",
+        "Skills Specialization Aggregation combines previously learned skill knowledge according to semantic-subspace similarity.",
+        "The project reports twelve simulator skills and six real-environment skills, with the final two used for open-world generalization testing.",
+        "The official public implementation contains installation, RLBench demonstration preparation, semantic-subspace construction, task training, and evaluation workflows."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38930"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_PAGE",
+          "url": "https://skillscrafter-lifelong.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/skillscrafter-lifelong/code"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.05160"
+        }
+      ],
+      "limits": [
+        "LIFELONG_LANGUAGE_CONDITIONED_ROBOTIC_MANIPULATION_SETTING_REQUIRED",
+        "PRETRAINED_LLARVA_VICUNA_AND_OXE_CONFIGURATION_MUST_BE_BOUND",
+        "SEQUENTIAL_SKILL_ORDER_AND_TRAIN_TEST_PARTITION_MUST_BE BOUND",
+        "SVD_SEMANTIC_SUBSPACE_AND_SKILL_AGGREGATION_CONFIGURATION_MUST_BE BOUND",
+        "SIMULATOR_AND_REAL_ROBOT_RESULTS_MUST_NOT_BE COLLAPSED",
+        "OPEN_WORLD_GENERALIZATION_WITHIN_ROBOTIC_MANIPULATION_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "FORGETTING_REDUCTION_DOES_NOT_BY_ITSELF_ESTABLISH_HETREN_A_H2_ROLLBACK_AND_RESTORATION"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v75_candidates_have_role_level_external_review": true,
+    "all_addendum_v75_candidates_are_peer_reviewed": true,
+    "all_addendum_v75_candidates_have_executable_implementation": true,
+    "all_addendum_v75_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_and_code_establish_strongest_status": false,
+    "skills_crafter_establishes_general_n_h2": false,
+    "retention_establishes_a_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

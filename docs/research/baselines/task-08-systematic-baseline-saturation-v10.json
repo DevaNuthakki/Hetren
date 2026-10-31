@@ -1,0 +1,231 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 10,
+  "state": "SATURATION_V10_FOUND_NEW_MATERIAL_E1_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:27:35Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "publication_and_repository_release_evidence_predates_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v12_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v12.json",
+      "sha256": "7cde26c85c1bbfa873d1f0855cc52748610610935ad42e94d318a29cf4c04352"
+    },
+    "systematic_saturation_v9": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v9.json",
+      "sha256": "f283a8a1db959be025a0b9331b46fdc5fd334227a37b5ae7af75f1378cea5058"
+    }
+  },
+  "focus": [
+    "E1_AGENT_RESOURCE_AWARE_AND_TEST_TIME_ADAPTATION",
+    "E2_STRUCTURED_ML_POST_PFT3A_AND_ACTIVE_FEATURE_ACQUISITION",
+    "E3_FORWARD_ONLY_AND_CONTINUAL_TTA",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Test-Time Mixture of World Models\" ICLR 2026 official github",
+    "\"Temporal Test-Time Adaptation with State-Space Models\" TMLR github STAD",
+    "site:proceedings.iclr.cc 2026 language agent test-time adaptation official github tool using agent",
+    "site:aclanthology.org/2026 agent test-time adaptation environment official github",
+    "site:proceedings.mlr.press 2026 active feature acquisition tabular sequential measurement",
+    "site:proceedings.iclr.cc 2026 tabular test-time adaptation official github",
+    "site:openaccess.thecvf.com/content/CVPR2026 \"test-time adaptation\" vision-language official github",
+    "site:proceedings.iclr.cc 2026 \"vision-language\" \"test-time adaptation\" official code",
+    "2026 learned transfer policy across agent tabular vision meta learning official implementation",
+    "2026 cross-domain decision transfer agent structured data vision peer reviewed",
+    "site:proceedings.iclr.cc/paper_files/paper/2026 tabular \"test-time adaptation\" structured data machine learning",
+    "site:proceedings.mlr.press 2026 \"feature acquisition\" active tabular",
+    "site:proceedings.iclr.cc/paper_files/paper/2026 \"Bayesian optimization\" TabPFN meta learning",
+    "site:openaccess.thecvf.com/content/CVPR2026/html \"Forward-Only Zeroth-Order Prompt Optimization\" github",
+    "\"FOZO\" github test-time adaptation CVPR 2026",
+    "site:proceedings.iclr.cc/paper_files/paper/2026 agent \"test-time\" embodied language agent",
+    "site:aclanthology.org/2026 \"language agent\" \"test-time\" environment",
+    "\"Timely Machine\" ACL 2026 tool calls time budgets code",
+    "\"Timely-RL\" github",
+    "\"Model-Based Imaginative Planning for Embodied Agents\" github IMPLEMENT"
+  ],
+  "query_count": 20,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TIMELY-RL",
+      "name": "Timely Machine / Timely-RL",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_TIME_BUDGET_AWARE_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_RESOURCE_CONSTRAINED_AGENT_POLICY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_EVALUATION_AND_RL_CODE_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.211/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Entarochuan/Timely-Machine"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2601.16486"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TOOL_LATENCY_OR_WALL_CLOCK_BUDGET_IS_PART_OF_MATCHED_E1_CONTRACT",
+      "material_reason": "Learns temporal planning through supervised cold start plus reinforcement learning and evaluates behavior under explicit wall-clock budgets in tool-heavy, agentic-ML, and interactive settings.",
+      "limits": [
+        "TIME_BUDGET_AND_TOOL_LATENCY_CONTRACT_MUST_BE DECLARED",
+        "TRAINED_MODEL_CHECKPOINT_AND_BASE_MODEL_MUST_BE BOUND",
+        "SFT_AND_RL_TRAINING_DATA_AND_RECIPE_MUST_BE BOUND",
+        "EVALUATION_ONLY_CONFIGURATION_MUST_NOT_BE CONFUSED_WITH_TIMELY_RL_POLICY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FOZO",
+      "name": "FOZO \u2014 Forward-Only Zeroth-Order Prompt Optimization",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_FORWARD_ONLY_VISION_TTA_COMPARATOR_CANDIDATE",
+        "A_H1_RESOURCE_CONSTRAINED_PROMPT_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Wang_FOZO_Forward-Only_Zeroth-Order_Prompt_Optimization_for_Test-Time_Adaptation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/eVI-group-SCU/FOZO"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2603.04733"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_VIT_PROMPT_TTA_AND_FORWARD_ONLY_INFORMATION_REGIME_MATCHED",
+      "material_reason": "Uses forward-only zeroth-order optimization of visual prompts for continual TTA and explicitly studies low-memory and quantized deployment regimes.",
+      "limits": [
+        "VISION_TRANSFORMER_AND_PROMPT_ADAPTATION_SURFACE_MUST_BE MATCHED",
+        "SOURCE_STATISTICS_ACCESS_MUST_BE AUDITED",
+        "ZEROTH_ORDER_FORWARD_PASS_BUDGET_MUST_BE ACCOUNTED_BY_TASK_9",
+        "QUANTIZED_AND_FULL_PRECISION_SETTINGS_MUST_NOT_BE COLLAPSED",
+        "RESOURCE_EFFICIENCY_DOES_NOT_BY_ITSELF_ESTABLISH_A_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 1
+  },
+  "reference_or_screened": [
+    {
+      "name": "IMPLEMENT \u2014 Model-Based Imaginative Planning for Embodied Agents",
+      "source": "https://aclanthology.org/2026.acl-long.827/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "relevance": "Uses a learned world model, Monte Carlo imagined futures, and meta in-context learning over interaction history for ALFWorld embodied planning.",
+      "disposition": "MATERIAL_E1_RESEARCH_REFERENCE_IMPLEMENTATION_NOT_VERIFIED_IN_THIS_PASS",
+      "reason": "The paper is directly relevant to E1 planning and adaptation, but this bounded search did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "FTAT \u2014 Fully Test-time Adaptation for Tabular Data",
+      "source": "https://ojs.aaai.org/index.php/AAAI/article/view/34466",
+      "evidence_state": "PEER_REVIEWED_AAAI_2025_WITH_OFFICIAL_CODE",
+      "disposition": "ALREADY_REPRESENTED_IN_PRIOR_TASK8_CANDIDATE_POOL_NOT_NEW",
+      "reason": "This method is already represented by the governed FTAT candidate and therefore cannot be counted as a new E2 discovery."
+    },
+    {
+      "name": "PFT3A",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html",
+      "evidence_state": "PEER_REVIEWED_ICLR_2026_WITH_OFFICIAL_CODE",
+      "disposition": "ALREADY_REPRESENTED_IN_PRIOR_TASK8_CANDIDATE_POOL_NOT_NEW",
+      "reason": "PFT3A was preserved in I4B10 and cannot be recounted as a new E2 comparator."
+    },
+    {
+      "name": "TALON",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Wu_TALON_Test-time_Adaptive_Learning_for_On-the-Fly_Category_Discovery_CVPR_2026_paper.html",
+      "evidence_state": "PEER_REVIEWED_CVPR_2026_WITH_PUBLIC_CODE",
+      "disposition": "OPEN_WORLD_CATEGORY_DISCOVERY_SPECIFIC_NOT_PROMOTED",
+      "reason": "Its governed problem is on-the-fly category discovery rather than the currently matched E3 adaptation role."
+    }
+  ],
+  "n_h2_reference_research": [
+    {
+      "name": "TMoW",
+      "evidence_state": "ICLR_2026_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Recombines and adapts learned world models across unseen embodied-agent domains.",
+      "disposition": "WITHIN_E1_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its transfer boundary remains embodied-agent environments."
+    },
+    {
+      "name": "Timely-RL",
+      "evidence_state": "ACL_2026_WITH_OFFICIAL_RL_CODE",
+      "relevance": "Learns time-budget-aware planning behavior across agentic task regimes.",
+      "disposition": "E1_LEARNED_POLICY_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "It does not establish transfer of one learned decision mechanism into E2 structured ML and E3 vision."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "evidence_state": "ICML_2026_REFERENCE_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Learns relations between tasks for extrapolation.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No verified evidence demonstrates the same decision mechanism across E1, E2, and E3."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "evidence_state": "ICML_2026_WITH_PUBLIC_IMPLEMENTATION",
+      "relevance": "Meta-learns feature-acquisition decisions across structured-data tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Its demonstrated transfer remains within E2 structured-data acquisition."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "additional_within_e1_learned_policy_reference_found": true,
+    "within_environment_transfer_references_exist": true,
+    "forcing_within_environment_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V10"
+  },
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_TIME_BUDGET_AWARE_LEARNED_AGENT_COMPARATOR_FOUND",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_THIS_ROUND",
+    "E3": "NEW_PEER_REVIEWED_FORWARD_ONLY_VISION_TTA_COMPARATOR_FOUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The bounded refinement discovered Timely-RL and FOZO as materially distinct, reproducible, peer-reviewed candidates absent from prior governed Task-8 candidate identities."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "timely_rl_establishes_general_n_h2": false,
+    "fozo_establishes_a_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B15_VERIFY_ADDENDUM_V13_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

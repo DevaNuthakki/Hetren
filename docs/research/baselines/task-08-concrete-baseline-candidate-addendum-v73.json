@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 73,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T03:59:44Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v72": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v72.json",
+      "sha256": "d2b58d8c7c369c0504226c04e040db8d5cf5645b5794c81e4606e89886911da0"
+    },
+    "systematic_saturation_v70": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v70.json",
+      "sha256": "1367f395b27c7f16c8e33c62dbc4bff9858451e671362c2163ce671265cf8160"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ORTHOSKILLVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "OrthoSkillVLA: Continual Skill Learning via Gradient-Informed Skill Subspace Adaptation",
+      "implementation_identity": "https://github.com/Jiaqi-Wangx/OrthoSkillVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONTINUAL_SKILL_ADAPTATION_COMPARATOR_CANDIDATE",
+        "A_H2_RETENTION_LOCALITY_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2608.19589"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jiaqi-Wangx/OrthoSkillVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "PRCV_ARCHIVAL_PROCEEDINGS_IDENTITY_NOT_INDEPENDENTLY_BOUND_IN_THIS_PASS",
+        "X_VLA_BASE_MODEL_AND_CHECKPOINT_MUST_BE BOUND",
+        "LIBERO_SKILL_ORDER_AND_SPLITS_MUST_BE BOUND",
+        "NO_DEMONSTRATION_REPLAY_INFORMATION_REGIME_MUST_BE MATCHED",
+        "RETENTION_RESULTS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION"
+      ],
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_NOT_ALREADY_REPRESENTED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V70"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-VLA-SEQFT-RL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Simple Recipe Works \u2014 Sequential LoRA Fine-Tuning with Reinforcement Learning",
+      "implementation_identity": "https://github.com/UT-Austin-RobIn/continual-vla-rl",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_CONVENTIONAL_SEQUENTIAL_UPDATE_COMPARATOR_CANDIDATE",
+        "A_H1_CONTINUAL_RL_VLA_COMPARATOR_CANDIDATE",
+        "A_H2_RETENTION_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_RECORD",
+          "url": "https://rl-conference.cc/2026/paper_schedule.html"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.11653"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/UT-Austin-RobIn/continual-vla-rl"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "EXACT_VLA_MODEL_AND_LORA_CONFIGURATION_MUST_BE BOUND",
+        "PPO_OR_GRPO_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "TASK_ORDER_AND_CONTINUAL_RL_BENCHMARK_MUST_BE MATCHED",
+        "SEQUENTIAL_FINE_TUNING_MUST_NOT_BE CONFLATED_WITH_DEDICATED_CONTINUAL_LEARNING_METHODS",
+        "RETENTION_RESULTS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION"
+      ],
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_OR_REQUIRED_CONVENTIONAL_UPDATE_COMPARATOR_IF_NOT_ALREADY_REPRESENTED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V70"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

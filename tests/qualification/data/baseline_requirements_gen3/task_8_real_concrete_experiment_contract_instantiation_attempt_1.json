@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_CONCRETE_EXPERIMENT_CONTRACT_INSTANTIATION_ATTEMPT",
+  "attempt": 1,
+  "state": "NO_REAL_CONTRACT_READY_MISSING_EXPLICIT_IDENTITY_BINDINGS",
+  "recorded_at_utc": "2026-09-27T21:41:58Z",
+  "task": 8,
+  "bindings": {
+    "real_contract_instantiation": {
+      "path": "docs/research/baselines/task-08-real-concrete-experiment-contract-instantiation-v1.json",
+      "sha256": "e2206cb08fb90b25950c6bdd8dcce0b9f1af04ee4bf6b95cc30d17ce46b20466"
+    }
+  },
+  "state_summary": {
+    "real_source_count": 5,
+    "contract_instance_count": 0,
+    "blocked_source_count": 5,
+    "candidate_specific_applicability_binding_started": false,
+    "comparator_ranking_started": false,
+    "baseline_selected": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_inspected": false
+  },
+  "next_gate": "I5A2R13C_RESOLVE_EXPLICIT_SYSTEM_EVALUATOR_AND_RESOURCE_BINDINGS_WITHOUT_BASELINE_SELECTION",
+  "claim_limits": {
+    "dataset_file_alone_is_concrete_experiment_contract": false,
+    "research_paper_benchmark_name_is_local_experiment_identity": false,
+    "task7_split_identity_implies_system_identity": false,
+    "task7_split_identity_implies_evaluator_identity": false,
+    "generic_resource_semantics_are_task9_accounting_values": false,
+    "contract_instantiation_authorizes_baseline_selection": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  }
+}

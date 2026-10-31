@@ -1,0 +1,209 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_DISCOVERY_REFINEMENT",
+  "refinement_generation": 2,
+  "state": "MATERIAL_NEW_CANDIDATES_FOUND_STOPPING_RULE_NOT_SATISFIED",
+  "recorded_at_utc": "2026-09-26T04:17:54Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "discovery_v1": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-log-v1.json",
+      "sha256": "d345c33bf0a3ba1f55753a5f3f4548e760342517855522fdbbc9e5e6ce423bad"
+    },
+    "remaining_candidate_verification_v2": {
+      "path": "docs/research/baselines/task-08-candidate-external-verification-v2.json",
+      "sha256": "017b140b2110a4ea4e275cbdf5a17a1158355ba335857b0143c3267af50025bd"
+    }
+  },
+  "query_refinement_round": 2,
+  "queries_executed": [
+    "2025 2026 agent reinforcement learning generalization tool use official paper github benchmark learned agent comparator",
+    "2025 2026 language agent prompt optimization adaptation official paper github GEPA MIPROv2 TextGrad OPRO comparator",
+    "2025 2026 cross-task learned agent transfer policy tool use official paper github",
+    "2025 2026 tabular fully test-time adaptation distribution shift official paper github FTAT PFT3A FTTA-FD",
+    "2025 2026 tabular AutoML benchmark strongest official paper github FLAML AutoGluon auto-sklearn TabPFN TabICL TALENT",
+    "2025 2026 meta learning hyperparameter optimization transfer acquisition official paper github MetaBO successor",
+    "2025 2026 vision test-time adaptation ImageNet-C official paper github FreeTTA FRET GGTTA STAD",
+    "2025 2026 vision-language model test-time adaptation official paper github StatA PTA TDA Tip-Adapter TPT",
+    "2025 2026 deep active learning image classification benchmark official paper github TypiClust BADGE ProbCover new",
+    "2025 2026 transferable active learning policy cross-domain official paper github IALE successor",
+    "Free on the Fly Enhancing Flexibility in Test-Time Adaptation with Online EM official github",
+    "FRET Feature Redundancy Elimination for Test Time Adaptation official github ICCV 2025",
+    "Learning to Generate Gradients for Test-Time Adaptation via Test-Time Training Layers official github",
+    "Fully Test-Time Adaptation for Feature Decrement in Tabular Data github",
+    "AdapTable Test-Time Adaptation for Tabular Data official",
+    "Test-Time Retrieval-Augmented Adaptation for Vision-Language Models paper ICCV 2025",
+    "Efficient Test-Time Adaptation of Vision-Language Models CVPR 2024 paper",
+    "ProbCover active learning paper official arxiv example difficulty coverage",
+    "Bayesian Test-Time Adaptation for Vision-Language Models official github BCA"
+  ],
+  "query_count": 19,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E2-ADAPTABLE",
+      "name": "AdapTable",
+      "environment": "E2_STRUCTURED_ML",
+      "roles": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "OFFICIAL_REPOSITORY_VERIFIED_PRIMARY_PEER_REVIEW_LEVEL_IS_WORKSHOP",
+      "sources": [
+        "https://github.com/drumpt/AdapTable"
+      ],
+      "selection_status": "PENDING"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-FTTA-FD",
+      "name": "Fully Test-Time Adaptation for Feature Decrement in Tabular Data",
+      "environment": "E2_STRUCTURED_ML",
+      "roles": [
+        "A_H1_SCENARIO_SPECIFIC_ADAPTATION_BASELINE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://www.ijcai.org/proceedings/2025/550",
+        "https://github.com/LAMDA-NeSy/Fully-Test-Time-Adaptation-for-Feature-Decrement-in-Tabular-Data"
+      ],
+      "selection_status": "PENDING_FEATURE_DECREMENT_APPLICABILITY"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TDA",
+      "name": "Training-free Dynamic Adapter",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2024/html/Karmanov_Efficient_Test-Time_Adaptation_of_Vision-Language_Models_CVPR_2024_paper.html",
+        "https://github.com/kdiAAA/TDA"
+      ],
+      "selection_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-TT-RAA",
+      "name": "Test-Time Retrieval-Augmented Adaptation",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://openaccess.thecvf.com/content/ICCV2025/html/Fan_Test-Time_Retrieval-Augmented_Adaptation_for_Vision-Language_Models_ICCV_2025_paper.html",
+        "https://github.com/xinqi-fan/TT-RAA"
+      ],
+      "selection_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FRET",
+      "name": "FRET",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_VISION_TTA_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://openaccess.thecvf.com/content/ICCV2025/html/You_FRET_Feature_Redundancy_Elimination_for_Test_Time_Adaptation_ICCV_2025_paper.html",
+        "https://github.com/youlj109/fret"
+      ],
+      "selection_status": "PENDING_MATCHED_STRENGTH_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-MGTTA",
+      "name": "Learning to Generate Gradients for Test-Time Adaptation",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_LEARNED_OPTIMIZER_TTA_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/33783",
+        "https://github.com/keikeiqi/MGTTA"
+      ],
+      "selection_status": "PENDING_MATCHED_STRENGTH_AND_INFORMATION_PARITY_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-BCA",
+      "name": "Bayesian Class Adaptation",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        "https://openaccess.thecvf.com/content/CVPR2025/html/Zhou_Bayesian_Test-Time_Adaptation_for_Vision-Language_Models_CVPR_2025_paper.html",
+        "https://github.com/buerzlh/Bayesian-Test-Time-Adaptation-for-Vision-Language-Models"
+      ],
+      "selection_status": "PENDING_MATCHED_VLM_STRENGTH_REVIEW"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-RA-TTA",
+      "name": "Retrieval-Augmented Test-Time Adaptation",
+      "environment": "E3_VISION",
+      "roles": [
+        "A_H1_VLM_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "evidence_status": "OFFICIAL_IMPLEMENTATION_AND_CONFERENCE_ACCEPTANCE_VERIFIED",
+      "sources": [
+        "https://github.com/kaist-dmlab/RA-TTA"
+      ],
+      "selection_status": "PRIMARY_PUBLICATION_BINDING_STILL_REQUIRED"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-MAXHERDING",
+      "name": "MaxHerding",
+      "environment": "E3_VISION",
+      "roles": [
+        "N_H1_LOW_BUDGET_ACTIVE_LEARNING_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PRIMARY_PREPRINT_VERIFIED_IMPLEMENTATION_NOT_VERIFIED",
+      "sources": [
+        "https://arxiv.org/abs/2407.12212"
+      ],
+      "selection_status": "IMPLEMENTATION_AND_REPRODUCIBILITY_REVIEW_REQUIRED"
+    }
+  ],
+  "new_material_candidate_count": 9,
+  "benchmark_or_strength_sources": [
+    {
+      "name": "TabArena",
+      "purpose": "Current tabular predictive-system strength evidence and matched benchmarking; not automatically an N-H1 decision comparator.",
+      "source": "https://github.com/autogluon/tabarena"
+    },
+    {
+      "name": "Toolathlon",
+      "purpose": "Diverse realistic long-horizon agent benchmark evidence; benchmark rather than baseline implementation.",
+      "source": "https://github.com/hkust-nlp/Toolathlon"
+    },
+    {
+      "name": "OpenAgent",
+      "purpose": "Tool-use generalization-under-shift benchmark evidence; benchmark rather than baseline implementation.",
+      "source": "https://github.com/LAMDA-NeSy/OpenAgent"
+    }
+  ],
+  "additional_names_discovered_but_not_sufficiently_verified_for_registry_addendum": [
+    "FreeTTA",
+    "other 2025-2026 TTA methods surfaced through discovery indexes only"
+  ],
+  "stopping_rule": {
+    "satisfied": false,
+    "reason": "The second reasonable query-refinement round produced multiple materially relevant candidates absent from the original registry.",
+    "two_consecutive_no_new_candidate_rounds_completed": 0
+  },
+  "selection_state": {
+    "strongest_baseline_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidates_are_automatically_eligible": false,
+    "new_candidates_are_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

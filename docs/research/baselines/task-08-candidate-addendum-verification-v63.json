@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 63,
+  "state": "ADDENDUM_V63_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:45:29Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v63": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v63.json",
+      "sha256": "68e853ddb8ebccf6e4d450207accdee79065599f8f85dc6c43dbdcfb39c0f097"
+    },
+    "systematic_saturation_v60": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v60.json",
+      "sha256": "d2c077eb52f105c188c81dd1afe46ab9012241f23921617fb09f8169ee4f5cd2"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-VLA-BEING-H05",
+      "candidate_name": "Being-H0.5: Scaling Human-Centric Robot Learning for Cross-Embodiment Generalization",
+      "verification_state": "PUBLIC_PRIMARY_RESEARCH_AND_OFFICIAL_OPEN_IMPLEMENTATION_FAMILY_VERIFIED",
+      "role_disposition": "E1_CROSS_EMBODIMENT_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "Being-H0.5 is a 2026 public Vision-Language-Action research release focused on cross-embodiment generalization.",
+        "Its method uses a unified action representation across heterogeneous robot embodiments and human interaction data.",
+        "The official Being-H project exposes the Being-H0.5 research lineage, models, training/inference documentation, and public project assets."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2601.12993"
+        },
+        {
+          "class": "OFFICIAL_PROJECT_REPOSITORY",
+          "url": "https://github.com/BeingBeyond/Being-H0"
+        }
+      ],
+      "limits": [
+        "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+        "EXACT_MODEL_WEIGHTS_AND_POST_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "CROSS_EMBODIMENT_RESULTS_MUST_BE MATCHED_TO_THE_GOVERNED_EXPERIMENT",
+        "BEING_H07_IS_A_DIFFERENT_WORLD_ACTION_MODEL_IDENTITY_AND_MUST_NOT_BE_SILENTLY_SUBSTITUTED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-VLA-GR00T-N1.7",
+      "candidate_name": "NVIDIA Isaac GR00T N1.7",
+      "verification_state": "OFFICIAL_NVIDIA_GA_MODEL_AND_REFERENCE_CODE_VERIFIED",
+      "role_disposition": "E1_GENERALIST_HUMANOID_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "GR00T N1.7 is an open NVIDIA vision-language-action model for generalized humanoid robot skills.",
+        "NVIDIA released N1.7 model weights and reference code before the Task-8 evidence cutoff.",
+        "The official project supports fine-tuning, inference, custom robot data, and cross-embodiment use.",
+        "The repository history contains a July 2026 general-release transition for N1.7."
+      ],
+      "sources": [
+        {
+          "class": "OFFICIAL_PROVIDER",
+          "url": "https://developer.nvidia.com/isaac/gr00t"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVIDIA/Isaac-GR00T"
+        },
+        {
+          "class": "OFFICIAL_PROVIDER_TECHNICAL_ARTICLE",
+          "url": "https://developer.nvidia.com/blog/develop-humanoid-robot-policies-end-to-end-with-nvidia-isaac-gr00t/"
+        }
+      ],
+      "limits": [
+        "FINAL_RETAINED_VERSION_MUST_BIND_AN_IMMUTABLE_PRE_CUTOFF_RELEASE_OR_COMMIT",
+        "EXACT_CHECKPOINT_DATA_CONFIGURATION_AND_EMBODIMENT_MUST_BE BOUND",
+        "NVIDIA_GR00T_N2_WAS_ONLY_PREVIEWED_AND_MUST_NOT_BE_SUBSTITUTED_FOR_N17",
+        "PROVIDER_CLAIMS_DO_NOT_BY_THEMSELVES_ESTABLISH_STRONGEST_STATUS",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v63_candidates_have_role_level_external_review": true,
+    "all_addendum_v63_candidates_are_finally_eligible": false,
+    "full_immutable_revision_pinning_complete": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "provider_or_author_results_establish_global_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

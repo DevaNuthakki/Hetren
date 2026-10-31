@@ -1,0 +1,134 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 59,
+  "state": "ADDENDUM_V59_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T02:18:29Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v59": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v59.json",
+      "sha256": "4e6428191912786b17a209b187b43143d5005aabac58cd04b6b5dee8ee161f57"
+    },
+    "systematic_saturation_v56": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v56.json",
+      "sha256": "5e8ea4afdbff4b177f8babfcbd3388f4e00eb525dfe7bd59cb650186ab0f4676"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VLA-ADAPTER",
+      "candidate_name": "VLA-Adapter: An Effective Paradigm for Tiny-Scale Vision-Language-Action Model",
+      "verification_state": "PEER_REVIEWED_AAAI_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TINY_SCALE_EFFICIENT_VLA_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "VLA-Adapter is published in the AAAI 2026 proceedings.",
+        "The published method uses a 0.5B-parameter backbone and explicitly targets strong VLA performance without robot-data pretraining.",
+        "Its official implementation and model resources are publicly available.",
+        "The repository reports code release before the Task-8 external-evidence cutoff."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/38931"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenHelix-Team/VLA-Adapter"
+        }
+      ],
+      "displacement_gate": [
+        "TINY_SCALE_OR_RESOURCE_CONSTRAINED_VLA_EXPERIMENT_REQUIRED",
+        "MATCHED_ROBOT_BENCHMARK_AND_DATA_REGIME_REQUIRED",
+        "BASE_MODEL_AND_ACTION_HEAD_CONFIGURATION_MUST_BE BOUND",
+        "VLA_ADAPTER_PRO_MUST_NOT_BE SILENTLY_SUBSTITUTED_FOR_THE_PAPER_CONFIGURATION",
+        "RESOURCE_VALUES_REMAIN_TASK_9_OWNED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SIMPLEVLA-RL",
+      "candidate_name": "SimpleVLA-RL: Scaling VLA Training via Reinforcement Learning",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_VLA_RL_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "SimpleVLA-RL is published as an ICLR 2026 conference paper.",
+        "It applies online reinforcement learning to VLA policies using outcome-level environment rewards.",
+        "The official implementation supports OpenVLA and OpenVLA-OFT-based training and evaluation.",
+        "Its published experiments include LIBERO and RoboTwin-family evaluation."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/cbfbcb4da14235bd69b134070898ae9d-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/PRIME-RL/SimpleVLA-RL"
+        }
+      ],
+      "displacement_gate": [
+        "ONLINE_RL_AND_ENVIRONMENT_INTERACTION_MUST_BE ALLOWED_BY_THE_MATCHED_EXPERIMENT",
+        "OPENVLA_OFT_STARTING_POLICY_AND_CHECKPOINT_MUST_BE BOUND",
+        "REWARD_AND_INTERACTION_BUDGET_MUST_BE PARITY_MATCHED",
+        "SFT_ONLY_AND_RL_UPDATED_POLICIES_MUST_NOT_BE COLLAPSED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MIXTURE-OF-HORIZONS",
+      "candidate_name": "Mixture of Horizons in Action Chunking",
+      "verification_state": "ICML_2026_ACCEPTANCE_REPORTED_BY_PROJECT_WITH_OFFICIAL_CODE_AND_MODELS_VERIFIED",
+      "role_disposition": "E1_ACTION_HORIZON_DISPLACEMENT_CANDIDATE",
+      "verified_facts": [
+        "The Mixture of Horizons project reports acceptance at ICML 2026.",
+        "The work addresses the trade-off between long-horizon foresight and short-horizon action precision.",
+        "It combines multiple action horizons inside one policy and supports dynamic inference.",
+        "The official project repository provides evaluation code and released checkpoints."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2511.19433"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://timsty1.github.io/moh/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Timsty1/MixtureOfHorizons"
+        }
+      ],
+      "displacement_gate": [
+        "ACTION_CHUNKING_POLICY_REQUIRED",
+        "BASE_POLICY_MUST_SUPPORT_COMPARABLE_ACTION_HORIZONS",
+        "PI0_PI05_OR_REGRESSION_POLICY_IDENTITY_MUST_BE BOUND",
+        "TRAINING_ITERATIONS_AND_INFERENCE_THROUGHPUT_BUDGET_MUST_BE PARITY_AUDITED",
+        "PROJECT_REPORTED_ICML_ACCEPTANCE_MUST_NOT_BE USED_AS_FINAL_VERSION_PIN"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v59_candidates_have_role_level_external_review": true,
+    "all_addendum_v59_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "publication_or_project_status_establishes_strongest_status": false,
+    "current_repository_head_is_final_version_identity": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

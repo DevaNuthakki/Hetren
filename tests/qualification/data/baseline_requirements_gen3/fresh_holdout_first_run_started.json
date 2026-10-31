@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_FIRST_TARGET_RUN_START_RECEIPT",
+  "state": "SINGLE_USE_EXECUTION_STARTED_BEFORE_TARGET_IMPORT",
+  "generation_attempt": 10,
+  "started_at_utc": "2026-09-26T01:58:42.714063Z",
+  "runner_sha256": "a91d7665b333979a8956e8a33a717b80485e836cb04b0d8f49d78aab036ad2d2",
+  "authorization_sha256": "af1080540676cb13d57795197ef729d161cd3637a1a5c2f6238b1164da104466",
+  "fresh_holdout_cases_sha256": "44013a265a0b3cddece2579168ece02dcd464b22d761d05f713a45b3fc94f089",
+  "freeze_manifest_sha256": "64c3e69417e74dda898109f324573fa7d15924f479e426804363fb15eb622d48",
+  "target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+  "target_imported_at_receipt_creation": false,
+  "target_calls_attempted_at_receipt_creation": 0,
+  "target_predictions_available_at_receipt_creation": false,
+  "purpose": "Irreversibly mark the single protected Attempt-10 first-run execution as started before target import so an interrupted run cannot later be rerun and misrepresented as fresh."
+}

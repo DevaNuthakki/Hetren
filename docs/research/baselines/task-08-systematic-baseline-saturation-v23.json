@@ -1,0 +1,170 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 23,
+  "state": "SATURATION_V23_FOUND_NEW_MATERIAL_E1_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T21:14:23Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_is_not_final_immutable_version_identity": true,
+    "final_retained_revision_must_be_resolved_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v25_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v25.json",
+      "sha256": "be36572bfa7536c46f793515314da313bc90937aa76d44e7bbbc939fe3dadc35"
+    },
+    "systematic_saturation_v22": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v22.json",
+      "sha256": "3aad5c14782827eae00973dd2f95c4eee89404c2cc02e8541632880d4da81ee1"
+    }
+  },
+  "materiality_gate": {
+    "definition": "A result is materially new only if it is not already represented by a promoted candidate identity and could alter the retained comparator set for an already plausible environment-role-applicability tuple.",
+    "new_mechanism_alone_is_not_sufficient": true,
+    "scenario_specific_method_requires_matching_experiment_contract": true,
+    "non_reproducible_method_is_reference_only_until_reproduction_surface_exists": true
+  },
+  "focus": [
+    "E1_AGENT_LEARNED_POLICY_AND_WEB_AGENT_RL",
+    "E2_STRUCTURED_ML_POST_DISTPFN_AND_TABPFN",
+    "E3_POST_EXPANDED_GENERIC_TTA_POOL",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"SOAR\" agent 2026 reinforcement learning tool use agent official code paper",
+    "site:aclanthology.org/2026 agent reinforcement learning tool use environment official github 2026",
+    "site:proceedings.iclr.cc 2026 agent adaptation tool use reinforcement learning official github",
+    "site:proceedings.mlr.press 2026 tabular test-time adaptation active feature acquisition structured data official github",
+    "site:proceedings.iclr.cc 2026 tabular test-time adaptation TabPFN distribution shift official github",
+    "site:openaccess.thecvf.com/content/CVPR2026 \"test-time adaptation\" vision-language github 2026",
+    "site:proceedings.iclr.cc 2026 vision-language test-time adaptation official github",
+    "\"WorkForceAgent-R1\" github official",
+    "\"Fission-GRPO\" github official",
+    "\"Beyond the Context Window\" SUPO github agentic RL",
+    "\"The Confidence Dichotomy\" tool-use agents github ACL 2026",
+    "site:aclanthology.org/2026 \"agentic reinforcement learning\" tool use observation environment code ACL 2026",
+    "site:aclanthology.org/2026 \"web agent\" reinforcement learning code ACL 2026",
+    "site:proceedings.mlr.press 2026 \"active feature acquisition\" official code",
+    "site:openaccess.thecvf.com/content/CVPR2026F/html \"test-time adaptation\" \"vision-language\" github"
+  ],
+  "query_count": 15,
+  "workforceagent_duplicate_resolution": {
+    "prior_promoted_matches": [],
+    "new_candidate_required": true
+  },
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-WORKFORCEAGENT-R1",
+      "name": "WorkForceAgent-R1",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_WEB_AGENT_RL_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_FINDINGS_EACL_2026_AND_OFFICIAL_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-eacl.3/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/night-chen/WorkForceAgent-R1"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2505.22942"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_WORKARENA_STYLE_WEB_NAVIGATION_AND_RULE_BASED_AGENT_RL_SETTING_MATCHED",
+      "material_reason": "Provides a peer-reviewed executable learned web-agent policy trained with an R1-style reinforcement-learning framework and structured rewards for action correctness and output-format adherence.",
+      "limits": [
+        "WORKARENA_OR_COMPARABLE_BUSINESS_WEB_NAVIGATION_SETTING_REQUIRED",
+        "QWEN_MODEL_SIZE_AND_INITIAL_CHECKPOINT_MUST_BE BOUND",
+        "RULE_BASED_REWARD_FUNCTION_MUST_BE BOUND",
+        "DATA_PREPROCESSING_AND_VERL_CONFIGURATION_MUST_BE BOUND",
+        "WEB_AGENT_SPECIALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "Fission-GRPO",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.1880/",
+        "https://github.com/zxzadm/Fission-GRPO"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026_BUT_FULL_EXECUTABLE_RELEASE_PENDING",
+      "relevance": "Learns multi-turn tool-error recovery by converting failed trajectories into on-policy corrective supervision.",
+      "disposition": "STRONG_E1_RESEARCH_REFERENCE_NOT_REPRODUCIBLE_CLAIM_BEARING_BASELINE_YET",
+      "reason": "The official repository states that training code, data, checkpoints and evaluation scripts are still awaiting public release."
+    },
+    {
+      "name": "SUPO \u2014 Summarization augmented Policy Optimization",
+      "source": "https://aclanthology.org/2026.acl-long.966/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "relevance": "Jointly optimizes tool-use behavior and learned context summarization for long-horizon agentic RL.",
+      "disposition": "LONG_CONTEXT_ROLE_SPECIFIC_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "The mechanism is specifically applicable when fixed-context exhaustion is part of the governed E1 experiment, and an official executable implementation was not independently verified during this pass."
+    },
+    {
+      "name": "The Confidence Dichotomy",
+      "source": "https://aclanthology.org/2026.acl-long.520/",
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "relevance": "Studies and trains verbalized calibration for tool-use agents under evidence and verification tools.",
+      "disposition": "CALIBRATION_REFERENCE_NOT_CURRENT_GENERIC_E1_POLICY_COMPARATOR",
+      "reason": "Its principal comparison objective is confidence calibration; it becomes claim-bearing only if a matched calibration experiment is explicitly declared."
+    },
+    {
+      "name": "FPP / SoC and later E3 calibration methods",
+      "disposition": "NO_NEW_GENERIC_E3_CANDIDATE_PROMOTED",
+      "reason": "The bounded role/applicability search did not establish a materially new generic E3 comparator capable of altering the current retained TTA comparator set."
+    },
+    {
+      "name": "Post-DistPFN and post-Drift-Resilient TabPFN E2 search",
+      "disposition": "NO_NEW_DIRECTLY_MATCHED_E2_CANDIDATE_PROMOTED",
+      "reason": "The bounded search did not identify an additional reproducible structured/tabular comparator materially distinct from the already expanded Task-8 E2 pool."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_transfer_or_generalization_references_exist": true,
+    "forcing_within_environment_generalization_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V23"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "WorkForceAgent-R1 is not represented in the prior promoted candidate catalog and is a peer-reviewed, executable, role-matched web-agent RL comparator."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "workforceagent_is_automatically_strongest": false,
+    "fission_grpo_is_reproducible_baseline": false,
+    "calibration_specific_method_is_generic_policy_baseline": false,
+    "supo_is_generic_agent_comparator_without_context_limit_contract": false,
+    "establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B28_VERIFY_ADDENDUM_V26_AND_RUN_NEXT_BOUNDED_REFINEMENT"
+}

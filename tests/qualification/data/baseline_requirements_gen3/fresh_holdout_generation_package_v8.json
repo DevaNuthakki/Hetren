@@ -1,0 +1,2360 @@
+{
+  "schema_version": "8.0.0",
+  "artifact_type": "TASK_8_GEN3_ISOLATED_FRESH_HOLDOUT_GENERATION_PACKAGE_V8",
+  "state": "READY_FOR_ISOLATED_GENERATION_ATTEMPT_8",
+  "generation_attempt": 8,
+  "contains_holdout_cases": false,
+  "target_evaluator_executed": false,
+  "fresh_holdout_generation": true,
+  "protected_evaluation": true,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "source_bindings": {
+    "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+    "preregistration_contract_sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037",
+    "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+    "public_evaluator_contract_manifest_sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "authority_order": [
+    {
+      "rank": 1,
+      "source": "embedded_generation_3_requirements",
+      "role": "semantic authority"
+    },
+    {
+      "rank": 2,
+      "source": "embedded_preregistration_contract",
+      "role": "holdout lifecycle, independence, design, and claim limits"
+    },
+    {
+      "rank": 3,
+      "source": "embedded_public_evaluator_contract",
+      "role": "executable encoding interface only; does not redefine G3"
+    }
+  ],
+  "allowed_generator_inputs": [
+    "this Generation Package v8 as the complete Hetren Task 8 semantic and executable-interface input",
+    "the minimal governed handoff instruction accompanying the package attachment"
+  ],
+  "forbidden_generator_inputs": [
+    "any non-package Hetren project instructions or Hetren project context",
+    "any non-package Hetren memory, saved context, personalization, or profile information",
+    "any non-package prior Hetren chat message, summary, or excerpt",
+    "any non-package earlier Hetren generation-request excerpt",
+    "any prior Hetren generation attempt or generated holdout cases",
+    "target Hetren semantic evaluator source or implementation",
+    "target Hetren evaluator branch conditions",
+    "known Hetren Task 8 development cases",
+    "known Hetren Task 8 mutation cases",
+    "historical Hetren Task 8 predictions or results",
+    "Hetren Task 8 failure classifications",
+    "Hetren Task 8 remediation history",
+    "prior Hetren fresh-holdout predictions or results",
+    "Hetren repository material not embedded in this package",
+    "other Hetren files or filenames conveying prior Task 8 workflow state",
+    "web search results or externally retrieved material during the generation session"
+  ],
+  "generator_isolation_rule": "Before generating any case, inspect only the observable inputs in the current generation conversation. Package v8 must be the only Hetren-specific attachment and the minimal governed handoff must be the only Hetren-specific text outside the package. There must be no earlier user or assistant message in the conversation. If any observable non-package Hetren-specific context, any additional attachment, or any earlier conversation message is present, abort before case generation. Do not attempt to determine undocumented provider-internal state, provider retention systems, hidden server-side implementation details, pretraining exposure, or provider safety infrastructure.",
+  "freshness_scope": "Attempt 8 is intended to be fresh relative to the hidden target implementation and non-package Hetren development and qualification evidence under the governed observable application-level isolation boundary. This does not claim absolute provider-internal statelessness, model-pretraining nonexposure, independent third-party evaluation, or external scientific replication.",
+  "operationalized_design": {
+    "case_count": 54,
+    "primary_requirement_count": 27,
+    "cases_per_primary_requirement": 2,
+    "per_requirement_expectation_pattern": {
+      "MUST_ACCEPT": 1,
+      "MUST_REJECT": 1
+    },
+    "total_must_accept": 27,
+    "total_must_reject": 27,
+    "case_id_pattern": "G3-H8-NNN",
+    "case_ids": [
+      "G3-H8-001",
+      "G3-H8-002",
+      "G3-H8-003",
+      "G3-H8-004",
+      "G3-H8-005",
+      "G3-H8-006",
+      "G3-H8-007",
+      "G3-H8-008",
+      "G3-H8-009",
+      "G3-H8-010",
+      "G3-H8-011",
+      "G3-H8-012",
+      "G3-H8-013",
+      "G3-H8-014",
+      "G3-H8-015",
+      "G3-H8-016",
+      "G3-H8-017",
+      "G3-H8-018",
+      "G3-H8-019",
+      "G3-H8-020",
+      "G3-H8-021",
+      "G3-H8-022",
+      "G3-H8-023",
+      "G3-H8-024",
+      "G3-H8-025",
+      "G3-H8-026",
+      "G3-H8-027",
+      "G3-H8-028",
+      "G3-H8-029",
+      "G3-H8-030",
+      "G3-H8-031",
+      "G3-H8-032",
+      "G3-H8-033",
+      "G3-H8-034",
+      "G3-H8-035",
+      "G3-H8-036",
+      "G3-H8-037",
+      "G3-H8-038",
+      "G3-H8-039",
+      "G3-H8-040",
+      "G3-H8-041",
+      "G3-H8-042",
+      "G3-H8-043",
+      "G3-H8-044",
+      "G3-H8-045",
+      "G3-H8-046",
+      "G3-H8-047",
+      "G3-H8-048",
+      "G3-H8-049",
+      "G3-H8-050",
+      "G3-H8-051",
+      "G3-H8-052",
+      "G3-H8-053",
+      "G3-H8-054"
+    ],
+    "environment_values": [
+      "E1",
+      "E2",
+      "E3",
+      "CROSS_ENV"
+    ],
+    "minimum_cases_per_environment": 6,
+    "minimum_cross_requirement_interaction_cases": 12,
+    "all_cases_generated_before_target_execution": true,
+    "case_order_frozen_before_target_execution": true,
+    "expectations_frozen_before_target_execution": true,
+    "facts_frozen_before_target_execution": true,
+    "expected_violation_codes_frozen_before_target_execution": true
+  },
+  "executable_case_contract": {
+    "evaluator_call_count_per_case": 1,
+    "call_protocol": "evaluate(primary_requirement, facts, environment)",
+    "primary_requirement": "exactly one of G3-BR-001 through G3-BR-027",
+    "secondary_requirements": "semantic interaction context only; they do not trigger additional evaluator calls",
+    "facts_key_rule": "Every key in facts must belong to the public fact_keys for the case primary_requirement.",
+    "boolean_rule": "Boolean fact keys use JSON true/false. If omitted, the target _flag semantics are equivalent to the effective boolean default declared by the public contract.",
+    "non_boolean_rule": "Non-boolean fields follow closed enums where declared. Observed literal value hints are non-exhaustive unless the public contract explicitly identifies the field as a closed enum.",
+    "must_accept_rule": {
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "semantic_requirement": "The state must be legitimate under G3 even if unusual."
+    },
+    "must_reject_rule": {
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": "one or more codes from the public violation_codes of the primary requirement only",
+      "future_scoring_relation": "EXPECTED_CODES_SUBSET_OF_ACTUAL_CODES",
+      "additional_actual_codes_allowed": true
+    },
+    "expectation_is_not_evaluator_input": true,
+    "expected_violation_codes_are_not_evaluator_input": true,
+    "all_predictions_before_scoring": true
+  },
+  "case_schema": {
+    "required_fields": [
+      "id",
+      "primary_requirement",
+      "secondary_requirements",
+      "environment",
+      "expectation",
+      "expected_violation_codes",
+      "facts",
+      "rationale",
+      "adversarial_dimension",
+      "generation_provenance"
+    ],
+    "id_format": "G3-H8-NNN",
+    "primary_requirement_format": "G3-BR-NNN",
+    "secondary_requirements": "zero or more distinct G3 requirement IDs; context only",
+    "environment": "one of E1, E2, E3, CROSS_ENV",
+    "expectation": "MUST_ACCEPT or MUST_REJECT",
+    "facts": "structured executable facts conforming only to the public interface for primary_requirement",
+    "rationale": "semantic explanation derived from G3, never from guessed implementation behavior",
+    "adversarial_dimension": "the unusual-valid state, hidden assumption, contradiction, alternate information channel, boundary, or interaction tested",
+    "generation_provenance": "G3 requirement sections and optional external challenge-pattern sources informing the case"
+  },
+  "generation_rules": [
+    "Before generating any case, apply the observable conversation-input isolation gate. The conversation must contain zero prior user or assistant messages before the handoff, Package v8 must be the only attachment, and the minimal governed handoff must be the only other Hetren-specific text. If any earlier conversation message, any additional attachment, or any observable non-package Hetren-specific context is present, abort before case generation. Do not inspect or infer hidden provider state.",
+    "Generate exactly 54 cases before any target evaluation.",
+    "Generate exactly one MUST_ACCEPT and one MUST_REJECT for every G3-BR-001 through G3-BR-027.",
+    "Use every case ID G3-H8-001 through G3-H8-054 exactly once.",
+    "Generate exactly 27 MUST_ACCEPT and 27 MUST_REJECT cases.",
+    "Use only environment values E1, E2, E3, and CROSS_ENV.",
+    "Provide at least six cases for each environment value.",
+    "Provide at least twelve cases with a material secondary-requirement interaction.",
+    "For each case, use only fact keys permitted for its primary requirement by the embedded public evaluator contract.",
+    "For MUST_ACCEPT cases, expected_violation_codes must be empty.",
+    "For MUST_REJECT cases, expected_violation_codes must be nonempty and every expected code must belong to the primary requirement's public violation-code vocabulary.",
+    "Do not require secondary-requirement violation codes.",
+    "Do not perform additional evaluator calls for secondary requirements.",
+    "Design semantic situations first from G3, then encode them using the public contract.",
+    "Do not reverse-engineer or guess hidden evaluator branch conditions.",
+    "MUST_ACCEPT cases should include legitimate unusual states capable of exposing over-rejection.",
+    "MUST_REJECT cases should challenge hidden assumptions, contradictory states, alternate information channels, boundaries, and interactions.",
+    "Do not encode expectation, expected decision, or answer labels inside facts.",
+    "Attempt 8 generation must not use web search, external retrieval, plugins, connectors, or external tools.",
+    "The Attempt 8 success artifact external_sources field must be an empty list because external retrieval is prohibited in the governed generation session.",
+    "Once these cases are first executed, they permanently cease to be fresh and may thereafter be used only as regression evidence.",
+    "Before returning the single final success artifact, execute generator_output_preflight_contract. Do not return a success artifact unless every listed assertion passes.",
+    "Populate generation_package_sha256 only from the exact 64-character SHA-256 suffix of the verified attached Package-v8 handoff filename. Do not substitute generation_3_sha256, preregistration_contract_sha256, public evaluator hashes, target evaluator hashes, or any other embedded source hash.",
+    "Before returning success, verify that case IDs are exactly G3-H8-001 through G3-H8-054 with no duplicates and no omissions.",
+    "Before returning success, verify exactly 54 cases, exactly 27 MUST_ACCEPT and 27 MUST_REJECT, and exactly one of each expectation for every G3-BR-001 through G3-BR-027.",
+    "Before returning success, verify at least twelve cases have one or more material secondary_requirements interactions."
+  ],
+  "required_generator_attestations": {
+    "received_generation_package_v8_as_only_hetren_specific_attachment": true,
+    "received_only_minimal_governed_handoff_as_other_hetren_specific_text": true,
+    "observable_input_gate_checked_before_case_generation": true,
+    "no_observable_nonpackage_hetren_context_received": true,
+    "no_additional_attachment_visible": true,
+    "no_earlier_conversation_message_visible": true,
+    "did_not_read_any_prior_hetren_generation_attempt": true,
+    "did_not_read_target_hetren_evaluator_source": true,
+    "did_not_read_target_hetren_evaluator_branch_conditions": true,
+    "did_not_read_known_hetren_development_cases": true,
+    "did_not_read_known_hetren_mutations": true,
+    "did_not_read_prior_hetren_predictions_or_results": true,
+    "did_not_read_hetren_remediation_history": true,
+    "did_not_use_web_or_external_retrieval": true,
+    "did_not_attempt_hidden_provider_state_introspection": true,
+    "generated_all_54_cases_before_target_execution": true,
+    "did_not_execute_or_simulate_target_evaluator": true,
+    "completed_generator_output_preflight_before_returning_success_artifact": true,
+    "generator_output_preflight_passed_all_required_assertions": true,
+    "generation_package_sha256_copied_from_verified_handoff_filename_sha256": true
+  },
+  "expected_output": {
+    "filename": "fresh_holdout_cases_attempt_8.json",
+    "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CASES_ATTEMPT_8",
+    "state": "GENERATED_NOT_EXECUTED",
+    "generation_attempt": 8,
+    "fresh_holdout": true,
+    "protected_evaluation": true,
+    "authoritative": false,
+    "scientific_support_established": false,
+    "required_top_level_fields": [
+      "schema_version",
+      "artifact_type",
+      "state",
+      "generation_attempt",
+      "fresh_holdout",
+      "protected_evaluation",
+      "authoritative",
+      "scientific_support_established",
+      "generation_package_sha256",
+      "public_evaluator_contract_sha256",
+      "generator_provenance",
+      "generator_attestations",
+      "external_sources",
+      "cases",
+      "generation_session_isolation",
+      "generator_output_preflight"
+    ]
+  },
+  "claim_limits": {
+    "generation_does_not_establish_scientific_support": true,
+    "generation_does_not_establish_task_8_authority": true,
+    "future_pass_does_not_establish_task_5_support": true,
+    "future_pass_does_not_prove_universal_generalization": true,
+    "freshness_is_relative_to_hidden_implementation_and_prior_evidence": true
+  },
+  "embedded_generation_3_requirements": {
+    "schema_version": "1.0.0",
+    "artifact_type": "TASK_8_BASELINE_REQUIREMENTS_GENERATION_3",
+    "state": "RESEARCH_CANDIDATE",
+    "authoritative": false,
+    "scientific_support_established": false,
+    "generation": 3,
+    "derived_from": {
+      "generation_2": "docs/research/baselines/task-08-baseline-requirements-gen2.json",
+      "generation_2_red_team": "docs/research/baselines/task-08-gen2-red-team.json",
+      "generation_2_dispositions": "docs/research/baselines/task-08-gen2-red-team-dispositions.json"
+    },
+    "requirements": [
+      {
+        "id": "G3-BR-001",
+        "key": "baseline.identity-version",
+        "title": "Stable Baseline Identity And Version",
+        "lineage": [
+          "BR-001",
+          "AF-006",
+          "AF-010"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Every governed baseline has stable logical identity and an immutable behavior-relevant version. Material changes create a new version. External services that cannot guarantee immutable backend behavior preserve provider identity, advertised revision, timestamp, configuration, captured outputs, and the resulting reproducibility limitation rather than claiming exact pinning.",
+        "derived_from_g2": "G2-BR-001",
+        "hardening_attack_ids": [
+          "G2-AF-001"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-001"
+        ]
+      },
+      {
+        "id": "G3-BR-002",
+        "key": "baseline.pre-protected-binding",
+        "title": "Pre-Protected Baseline Binding Freeze",
+        "lineage": [
+          "BR-002",
+          "AF-007"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Before protected outcomes are inspected, bind baseline identity, version, role, selection rule, comparison configuration, and resource-comparison regime. Subsequent changes inherit Task 7 freshness, repeated-peeking, disclosure, lineage, and invalidation semantics and create successor evidence rather than rewriting the earlier comparison.",
+        "derived_from_g2": "G2-BR-002",
+        "hardening_attack_ids": [
+          "G2-AF-002"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-002"
+        ]
+      },
+      {
+        "id": "G3-BR-003",
+        "key": "baseline.strongest-applicable-selection",
+        "title": "Strongest Applicable Comparator Selection",
+        "lineage": [
+          "BR-003",
+          "AF-001",
+          "AF-002"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Where a strongest applicable comparator is required, predeclare the eligible comparator class, applicability criteria, matching constraints, comparator-discovery scope, search sources, search procedure, as-of cutoff, selection evidence, selection rule, and tie policy. Preserve materially considered comparators and exclusion reasons. Protected outcomes may not determine discovery scope, eligibility, exclusion, or selection. 'Strongest applicable' is bounded to the governed eligible matched set discovered under that declared search contract and is not a claim of global optimality.",
+        "derived_from_g2": "G2-BR-003",
+        "hardening_attack_ids": [
+          "G2-AF-003"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-003"
+        ]
+      },
+      {
+        "id": "G3-BR-004",
+        "key": "baseline.comparator-role-separation",
+        "title": "Diagnostic Anchors And Claim-Bearing Comparators",
+        "lineage": [
+          "BR-004",
+          "AF-023"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Distinguish diagnostic anchors, ordinary claim-bearing matched comparators, and strongest-applicable comparators. A favorable result against a simple anchor cannot satisfy or obscure failure against a stronger comparator required by the hypothesis. Any anchor used must still be credibly implemented for its declared diagnostic role.",
+        "derived_from_g2": "G2-BR-004",
+        "hardening_attack_ids": [
+          "G2-AF-004"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-004"
+        ]
+      },
+      {
+        "id": "G3-BR-005",
+        "key": "comparison.information-opportunity-parity",
+        "title": "Information And Opportunity Parity",
+        "lineage": [
+          "BR-005",
+          "AF-003"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Candidate and baseline receive materially comparable task information, data access, protected-outcome restrictions, tools, permissions, external-service opportunity, and interaction opportunity unless a difference is the predeclared treatment. Information parity includes material persistent and indirect state such as caches, retrieval stores, tool memory, prior transcripts, warmed state, demonstrations, indexes, and other information-bearing artifacts that could advantage either side.",
+        "derived_from_g2": "G2-BR-005",
+        "hardening_attack_ids": [
+          "G2-AF-005",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-005",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-006",
+        "key": "comparison.evaluation-parity",
+        "title": "Evaluation Parity",
+        "lineage": [
+          "BR-005",
+          "AF-003",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Candidate and baseline are evaluated against the same applicable evaluation units, split version, evaluator contract, outcome semantics, hard constraints, and materially equivalent environment state unless a scientifically justified difference is declared before protected inspection. Where temporal or external-system drift can affect results, the comparison uses an appropriate snapshot, paired execution, controlled replay, bounded execution window, or explicitly qualified temporal-drift limitation.",
+        "derived_from_g2": "G2-BR-006",
+        "hardening_attack_ids": [
+          "G2-AF-006",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-006",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-007",
+        "key": "comparison.declared-asymmetry",
+        "title": "Declared Treatment And Legitimate Asymmetry",
+        "lineage": [
+          "BR-005",
+          "AF-003"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Fairness does not require identical internal algorithms. Any material candidate-versus-baseline asymmetry must be classified before protected inspection as the treatment under test, a method-required operation, a governed resource-regime difference, or a comparison defect. A treatment asymmetry is valid only when it corresponds to the causal or scientific distinction the comparison claims to evaluate rather than merely giving one side an unrelated advantage. Undeclared or unjustified asymmetry blocks a claim whose interpretation depends on matching.",
+        "derived_from_g2": "G2-BR-007",
+        "hardening_attack_ids": [
+          "G2-AF-007",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-007",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-008",
+        "key": "comparison.tuning-selection-governance",
+        "title": "Tuning And Model-Selection Governance",
+        "lineage": [
+          "BR-006",
+          "AF-004"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Predeclare candidate and baseline tuning spaces, development and validation evidence, automated search procedures, manual iteration opportunities, expert intervention policy, debugging opportunity, prompt or configuration iteration, stopping rules, selection criteria, and protected-data prohibitions. One side must not receive systematically greater tuning opportunity merely to weaken the comparison. Task 8 governs opportunity semantics; Task 9 owns concrete search, human-effort, time, compute, and monetary measurements.",
+        "derived_from_g2": "G2-BR-008",
+        "hardening_attack_ids": [
+          "G2-AF-008"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-008"
+        ]
+      },
+      {
+        "id": "G3-BR-009",
+        "key": "comparison.provenance",
+        "title": "Exact Comparison Provenance",
+        "lineage": [
+          "BR-007",
+          "AF-006",
+          "AF-010",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Preserve material candidate, baseline, target, model/provider, prompt/policy, scaffold, inference, tool, permission, evaluator, environment, split, data, source revision, dependency, seed, timestamp, and external-service provenance needed to interpret the comparison. Every material provenance field that cannot be obtained must be represented explicitly as UNKNOWN or UNAVAILABLE with the reason when known rather than silently omitted or invented.",
+        "derived_from_g2": "G2-BR-009",
+        "hardening_attack_ids": [
+          "G2-AF-009"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-009"
+        ]
+      },
+      {
+        "id": "G3-BR-010",
+        "key": "comparison.reproducible-manifest",
+        "title": "Reproducible Comparison Manifest",
+        "lineage": [
+          "BR-008",
+          "AF-006",
+          "AF-010"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Each consequential comparison has a versioned experiment manifest capable of reconstructing or faithfully replaying the comparison to the extent permitted by the underlying systems. The manifest records an applicable reproducibility class such as EXACT_RECONSTRUCTION, CONTROLLED_RECONSTRUCTION, BEHAVIORAL_REPLAY, or IRREPRODUCIBLE_EXTERNAL_DEPENDENCY, with justification. Integrity-checked artifacts are used where practical, and external dependency limitations remain explicit.",
+        "derived_from_g2": "G2-BR-010",
+        "hardening_attack_ids": [
+          "G2-AF-001",
+          "G2-AF-010"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-001",
+          "G2-RM-010"
+        ]
+      },
+      {
+        "id": "G3-BR-011",
+        "key": "comparison.stochastic-replication",
+        "title": "Stochastic Replication And Stopping Governance",
+        "lineage": [
+          "BR-009",
+          "AF-011"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "When material stochasticity exists, predeclare replication unit, attempt count or stopping rule, controllable seed/sampling policy, aggregation, uncertainty method, and major variation sources. Outcome-driven optional stopping is prohibited for protected scientific conclusions unless governed in advance. Repeated runs do not manufacture independent Task 7 evaluation units.",
+        "derived_from_g2": "G2-BR-011",
+        "hardening_attack_ids": [
+          "G2-AF-011"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-011"
+        ]
+      },
+      {
+        "id": "G3-BR-012",
+        "key": "comparison.effect-uncertainty",
+        "title": "Effect Size And Statistical Uncertainty",
+        "lineage": [
+          "BR-010",
+          "AF-011",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Scientific superiority comparisons report the predeclared effect measure and applicable uncertainty under a statistical model consistent with Task 7 EvaluationUnit and IndependenceGroup semantics and the actual dependency design. Valid paired structure is preserved when applicable. Statistical significance cannot replace material effect size or weaken Task 6 thresholds.",
+        "derived_from_g2": "G2-BR-012",
+        "hardening_attack_ids": [
+          "G2-AF-012"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-012"
+        ]
+      },
+      {
+        "id": "G3-BR-013",
+        "key": "comparison.primary-measures-reporting",
+        "title": "Primary Measures And Selective-Reporting Control",
+        "lineage": [
+          "BR-010",
+          "BR-013",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_6_CONSTRAINTS",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Predeclare primary claim-bearing measures, secondary or diagnostic measures, aggregation rules, and any scientifically material multiplicity or selective-reporting policy before protected inspection. A secondary or diagnostic result may be reported but must not be promoted after outcome inspection into support for the original primary claim. Task 8 must not invent statistical corrections that override Task 6 hypothesis semantics.",
+        "derived_from_g2": "G2-BR-013",
+        "hardening_attack_ids": [
+          "G2-AF-013"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-013"
+        ]
+      },
+      {
+        "id": "G3-BR-014",
+        "key": "comparison.hard-constraints",
+        "title": "Hard Constraints Cannot Be Averaged Away",
+        "lineage": [
+          "BR-013",
+          "AF-012"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Applicable claim-affecting hard constraints must be bound before protected outcome inspection and remain separately evaluated from aggregated performance. A favorable mean, composite, or secondary metric cannot convert a critical-invariant, authorization, protected-data, retention, locality, rollback, or other governed hard-constraint violation into PASS.",
+        "derived_from_g2": "G2-BR-014",
+        "hardening_attack_ids": [
+          "G2-AF-014"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-014"
+        ]
+      },
+      {
+        "id": "G3-BR-015",
+        "key": "benchmark.construct-coverage",
+        "title": "Benchmark Construct, Portfolio, Coverage, And Claim Scope",
+        "lineage": [
+          "BR-011",
+          "AF-008"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Document benchmark construct, environment family, claim scope, coverage, omissions, generator identity where applicable, task population, sampling procedure, task mixture, sampling weights, difficulty distribution, dependency structure, and expected relation to intended real-world behavior. When portfolio, subset, sampling, weighting, generator, or difficulty choices can change the conclusion, freeze those rules before protected outcomes.",
+        "derived_from_g2": "G2-BR-015",
+        "hardening_attack_ids": [
+          "G2-AF-015"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-015"
+        ]
+      },
+      {
+        "id": "G3-BR-016",
+        "key": "benchmark.contamination-exposure",
+        "title": "Contamination And Exposure Provenance",
+        "lineage": [
+          "BR-012",
+          "AF-009"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Represent known, suspected, unknown, and ruled-out contamination or exposure relationships that materially affect interpretation. Dynamic generation does not imply cleanliness; dynamic benchmarks must still satisfy construct, difficulty, provenance, leakage, evaluator, and reproducibility requirements. Task 7 remains the authority for protected-data contamination semantics.",
+        "derived_from_g2": "G2-BR-016",
+        "hardening_attack_ids": [
+          "G2-AF-016"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-016"
+        ]
+      },
+      {
+        "id": "G3-BR-017",
+        "key": "evaluation.evaluator-validity",
+        "title": "Evaluator Identity, Validity, Bias, And Artifact Control",
+        "lineage": [
+          "AF-005",
+          "AF-006",
+          "AF-022"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A claim-bearing evaluator has explicit identity, version, configuration, construct, scoring procedure, known limitations, and material relationship to the candidate and baseline. Where relevant, qualification addresses same-model or same-family coupling, self-preference, order or position effects, formatting or verbosity bias, answer-parsing artifacts, calibration, and independent or alternative cross-checks. An evaluator defect or material uncontrolled evaluator bias can invalidate the affected comparison and must not be attributed to candidate or baseline capability.",
+        "derived_from_g2": "G2-BR-017",
+        "hardening_attack_ids": [
+          "G2-AF-017",
+          "G2-AF-027"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-017",
+          "G2-RM-027"
+        ]
+      },
+      {
+        "id": "G3-BR-018",
+        "key": "e1.observable-trajectory-evidence",
+        "title": "E1 Outcome And Observable Trajectory Evidence",
+        "lineage": [
+          "BR-014",
+          "AF-013"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2"
+        ],
+        "environments": [
+          "E1"
+        ],
+        "requirement": "When execution behavior affects interpretation, preserve outcome separately from observable trajectory evidence such as actions, tool calls, environment transitions, retries, refusals, termination, harness failures, and evaluator-visible policy events. The evidence declares its observation boundary, including material state or side effects that are not observable. Unobserved behavior is not evidence of absence. Claim-affecting trajectory categories and classification rules are predeclared; ambiguous cases remain UNKNOWN rather than being forced into a favorable explanation. Private model chain-of-thought is neither required nor requested.",
+        "derived_from_g2": "G2-BR-018",
+        "hardening_attack_ids": [
+          "G2-AF-018"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-018"
+        ]
+      },
+      {
+        "id": "G3-BR-019",
+        "key": "native.transfer-comparator-isolation",
+        "title": "N-H2 Transfer Comparator Isolation",
+        "lineage": [
+          "BR-015",
+          "AF-014"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "N-H2 comparisons distinguish learned cross-family transfer from target-starting references, fixed or non-learned methods, shared infrastructure, retrieval, target-specific prompts, onboarding, manual target engineering, and other information transfer. Source-side learned advantage remains separately demonstrable, and protected target outcomes cannot tune the transferred mechanism.",
+        "derived_from_g2": "G2-BR-019",
+        "hardening_attack_ids": [
+          "G2-AF-005",
+          "G2-AF-019"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-005",
+          "G2-RM-019"
+        ]
+      },
+      {
+        "id": "G3-BR-020",
+        "key": "adaptive.ah1-comparator-set",
+        "title": "A-H1 Adaptation Comparator Set",
+        "lineage": [
+          "BR-016",
+          "AF-015"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A-H1 binds the frozen pre-adaptation state, no-adaptation reference, strongest applicable matched adaptation baseline, and scientifically necessary conventional update comparator where valid. Adaptation comparator eligibility, tuning, adaptation-input access, information opportunity, and exclusion provenance follow the same strongest-applicable and comparison-parity safeguards as other claim-bearing baselines.",
+        "derived_from_g2": "G2-BR-020",
+        "hardening_attack_ids": [
+          "G2-AF-020"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-020"
+        ]
+      },
+      {
+        "id": "G3-BR-021",
+        "key": "adaptive.ah2-retention-locality-rollback",
+        "title": "A-H2 Retention, Locality, And Verified Rollback",
+        "lineage": [
+          "BR-017",
+          "AF-016"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "A-H2 separately preserves pre/post adaptation prior capability, locality, critical invariants where applicable, rollback execution, and protected post-rollback behavior. Before evaluation, define the material state surfaces rollback is expected to restore, including applicable model state, memory, indexes, caches, policies, or other persistent state. Rollback evidence requires applicable state and behavioral restoration; material state that cannot be observed is recorded as UNKNOWN rather than assumed restored. Successful rollback invocation alone is insufficient.",
+        "derived_from_g2": "G2-BR-021",
+        "hardening_attack_ids": [
+          "G2-AF-021"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-021"
+        ]
+      },
+      {
+        "id": "G3-BR-022",
+        "key": "resources.comparison-regime",
+        "title": "Resource-Comparison Regime And Task 9 Boundary",
+        "lineage": [
+          "BR-018",
+          "AF-004",
+          "AF-017"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_WITH_TASK_9_HANDOFF",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Before protected inspection, freeze the applicable semantic resource regime, such as strictly matched, budget-capped, or unconstrained-but-jointly-reported, and identify materially relevant resource dimensions. Performance and resource evidence remain separately reportable so a favorable aggregate cannot hide a quality-resource tradeoff or Pareto domination. Task 9 owns concrete definitions, measurement procedures, and observed token, API, compute, time, memory, storage, monetary, and human-effort values.",
+        "derived_from_g2": "G2-BR-022",
+        "hardening_attack_ids": [
+          "G2-AF-008",
+          "G2-AF-022",
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-008",
+          "G2-RM-022",
+          "G2-RM-028"
+        ]
+      },
+      {
+        "id": "G3-BR-023",
+        "key": "baseline.supersession-recomparison",
+        "title": "Baseline Supersession And Recomparison",
+        "lineage": [
+          "BR-019",
+          "AF-007",
+          "AF-018"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Credible evidence of a materially relevant stronger comparator or baseline defect triggers governed reassessment under the applicable BASELINE evidence consequence. Comparator review preserves an explicit as-of date, search scope, material search sources, and trigger evidence without pretending continuous knowledge of every external method. Historical evidence remains preserved, and recomparison follows Task 7 freshness and lineage rules.",
+        "derived_from_g2": "G2-BR-023",
+        "hardening_attack_ids": [
+          "G2-AF-002",
+          "G2-AF-023"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-002",
+          "G2-RM-023"
+        ]
+      },
+      {
+        "id": "G3-BR-024",
+        "key": "baseline.missing-comparator-disposition",
+        "title": "Missing Comparator Blocks Or Narrows The Claim",
+        "lineage": [
+          "BR-020",
+          "AF-002",
+          "AF-019"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "When a required meaningful comparator cannot be implemented or reproduced, do not manufacture a weak substitute. The broader claim remains BLOCKED, INCONCLUSIVE, or otherwise truthfully dispositioned. Any narrower successor claim preserves the original evidence gap and cannot imply the blocked broader superiority claim.",
+        "derived_from_g2": "G2-BR-024",
+        "hardening_attack_ids": [
+          "G2-AF-024"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-024"
+        ]
+      },
+      {
+        "id": "G3-BR-025",
+        "key": "evaluation.real-world-validity",
+        "title": "Benchmark Evidence And Real-World Validity",
+        "lineage": [
+          "BR-021",
+          "AF-020"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Automated benchmark evidence supports only the represented claim scope. Additional simulation, red-team, user, field, shadow, replay, or other evaluation is triggered when the exact claim materially depends on open-ended operation, humans, long horizons, changing environments, workflow integration, production constraints, or safety-relevant behavior. Such real-world evaluation preserves the relevant population, organization or tenant scope, workflow scope, environment, sampling method, deployment assumptions, and time window. Benchmark success is not production-readiness evidence by default.",
+        "derived_from_g2": "G2-BR-025",
+        "hardening_attack_ids": [
+          "G2-AF-025"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-025"
+        ]
+      },
+      {
+        "id": "G3-BR-026",
+        "key": "evaluation.independent-verification",
+        "title": "Claim-Proportionate Independent Verification",
+        "lineage": [
+          "BR-022",
+          "AF-021"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8_INHERITS_TASK_7",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Consequential comparisons are independently verifiable under Task 7. The verification plan declares relevant separation across code, evaluator, model or model family, data access, transformations, aggregation, execution path, assumptions, and authority, and explicitly discloses common-mode dependencies. When generation, judging, and verification share a model family or other material dependency, the verification plan must address the correlated-bias risk and introduce an appropriately different path when required by the claim consequence. Nominally separate scripts do not establish independence.",
+        "derived_from_g2": "G2-BR-026",
+        "hardening_attack_ids": [
+          "G2-AF-026",
+          "G2-AF-027"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-026",
+          "G2-RM-027"
+        ]
+      },
+      {
+        "id": "G3-BR-027",
+        "key": "comparison.environment-applicability-binding",
+        "title": "Environment-Specific Applicability Binding",
+        "lineage": [
+          "G2-AF-028"
+        ],
+        "derived_from_g2": null,
+        "hardening_attack_ids": [
+          "G2-AF-028"
+        ],
+        "generation_2_disposition_ids": [
+          "G2-RM-028"
+        ],
+        "disposition": "RESEARCH_CANDIDATE",
+        "owner": "TASK_8",
+        "hypotheses": [
+          "N-H1",
+          "N-H2",
+          "A-H1",
+          "A-H2"
+        ],
+        "environments": [
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "requirement": "Task 8 defines shared comparison semantics while allowing typed environment-specific bindings for E1 agent systems, E2 structured-data ML systems, and E3 vision systems. A requirement that is not applicable to a concrete environment or experiment must use an explicit NOT_APPLICABLE disposition with a governed reason, affected requirement identity, environment scope, and verification that the omitted control is genuinely inapplicable rather than merely inconvenient. NOT_APPLICABLE must not remove a control whose absence would change the scientific meaning of the claim."
+      }
+    ]
+  },
+  "embedded_preregistration_contract": {
+    "schema_version": "1.0.0",
+    "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CONTRACT",
+    "state": "PREREGISTERED_NOT_GENERATED",
+    "authoritative": false,
+    "scientific_support_established": false,
+    "protected_evaluation": true,
+    "fresh_holdout": true,
+    "target_generation": 3,
+    "frozen_inputs": {
+      "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+      "semantic_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+      "successful_regression_sha256": "da22d819a6cbfab8c5c076f80e2079512463b16d7b127b0b8d7e602a48d7d3ba"
+    },
+    "generation_policy": {
+      "cases_must_not_exist_before_this_contract": true,
+      "generator_must_not_use_evaluator_source": true,
+      "generator_must_not_use_prior_case_answers": true,
+      "generator_must_use_generation_3_requirements": true,
+      "generator_may_use_external_research_challenges": true,
+      "cases_become_regression_evidence_after_first_execution": true,
+      "case_rewrite_after_first_execution_forbidden": true
+    },
+    "holdout_design": {
+      "minimum_case_count": 54,
+      "minimum_must_accept": 18,
+      "minimum_must_reject": 18,
+      "all_27_requirements_must_be_covered": true,
+      "minimum_cases_per_requirement": 2,
+      "require_positive_controls": true,
+      "require_negative_controls": true,
+      "require_cross_requirement_interactions": true,
+      "require_e1_coverage": true,
+      "require_e2_coverage": true,
+      "require_e3_coverage": true,
+      "require_cross_environment_coverage": true
+    },
+    "execution_policy": {
+      "first_execution_only_once": true,
+      "all_predictions_before_scoring": true,
+      "expectation_not_passed_to_evaluator": true,
+      "preserve_full_first_result": true,
+      "preserve_false_accepts": true,
+      "preserve_false_rejects": true,
+      "preserve_violation_codes": true,
+      "no_rerun_as_fresh": true
+    },
+    "success_rule": {
+      "must_accept_correct": "ALL",
+      "must_reject_correct": "ALL",
+      "expected_violation_contracts": "ALL_REQUIRED_CODES_PRESENT",
+      "false_accepts_allowed": 0,
+      "false_rejects_allowed": 0
+    },
+    "failure_policy": {
+      "failure_is_valid_evidence": true,
+      "classify_before_remediation": true,
+      "allowed_classifications": [
+        "EVALUATOR_DEFECT",
+        "G3_REQUIREMENT_AMBIGUITY",
+        "HOLDOUT_ORACLE_DEFECT"
+      ],
+      "historical_failure_must_remain_preserved": true,
+      "remediated_rerun_is_regression_only": true
+    },
+    "claim_limits": {
+      "passing_does_not_establish_scientific_support": true,
+      "passing_does_not_establish_task_8_authority": true,
+      "passing_does_not_establish_task_5_support": true,
+      "passing_does_not_prove_universal_generalization": true
+    },
+    "interpretation": "This contract is frozen before fresh adversarial holdout cases are generated. The future holdout is intended to test generalization beyond known development cases and mutations. After its first execution, those cases are no longer fresh and may only be used as regression evidence."
+  },
+  "embedded_public_evaluator_contract": {
+    "schema_version": "1.0.0",
+    "artifact_type": "TASK_8_GEN3_PUBLIC_EVALUATOR_CONTRACT",
+    "state": "FROZEN_BEFORE_ATTEMPT_2",
+    "authoritative": false,
+    "scientific_support_established": false,
+    "evaluator_executed": false,
+    "source_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46",
+    "evaluate_protocol": {
+      "positional_arguments": [
+        "primary_requirement",
+        "facts",
+        "environment"
+      ],
+      "environment_values": [
+        "CROSS_ENV",
+        "E1",
+        "E2",
+        "E3"
+      ],
+      "primary_requirement_values": [
+        "G3-BR-001",
+        "G3-BR-002",
+        "G3-BR-003",
+        "G3-BR-004",
+        "G3-BR-005",
+        "G3-BR-006",
+        "G3-BR-007",
+        "G3-BR-008",
+        "G3-BR-009",
+        "G3-BR-010",
+        "G3-BR-011",
+        "G3-BR-012",
+        "G3-BR-013",
+        "G3-BR-014",
+        "G3-BR-015",
+        "G3-BR-016",
+        "G3-BR-017",
+        "G3-BR-018",
+        "G3-BR-019",
+        "G3-BR-020",
+        "G3-BR-021",
+        "G3-BR-022",
+        "G3-BR-023",
+        "G3-BR-024",
+        "G3-BR-025",
+        "G3-BR-026",
+        "G3-BR-027"
+      ],
+      "decision_values": [
+        "ACCEPT",
+        "REJECT"
+      ],
+      "global_input_error_codes": [
+        "MISSING_FACTS",
+        "UNKNOWN_ENVIRONMENT",
+        "UNKNOWN_REQUIREMENT"
+      ]
+    },
+    "fact_semantics": {
+      "_flag": "bool(facts.get(key, default)); implicit default is false",
+      "closed_enums": {
+        "environment": [
+          "CROSS_ENV",
+          "E1",
+          "E2",
+          "E3"
+        ],
+        "reproducibility_class": [
+          "BEHAVIORAL_REPLAY",
+          "CONTROLLED_RECONSTRUCTION",
+          "EXACT_RECONSTRUCTION",
+          "IRREPRODUCIBLE_EXTERNAL_DEPENDENCY"
+        ],
+        "applicability_state": [
+          "APPLICABLE",
+          "NOT_APPLICABLE"
+        ]
+      },
+      "nonclosed_observed_sentinels": {
+        "revision_state": [
+          "UNAVAILABLE",
+          "UNKNOWN"
+        ],
+        "evaluator_revision": [
+          "UNAVAILABLE",
+          "UNKNOWN"
+        ],
+        "unobservable_state_disposition": [
+          "UNAVAILABLE",
+          "UNKNOWN"
+        ],
+        "contamination_state": [
+          "CLEAN"
+        ],
+        "anchor_role": [
+          "DIAGNOSTIC"
+        ]
+      }
+    },
+    "scoring_contract": {
+      "calls_per_case": 1,
+      "call_protocol": "evaluate(primary_requirement, facts, environment)",
+      "secondary_requirements": "SEMANTIC_CONTEXT_ONLY_NO_ADDITIONAL_EVALUATOR_CALLS",
+      "must_accept_rule": {
+        "required_decision": "ACCEPT",
+        "required_violations": []
+      },
+      "must_reject_rule": {
+        "required_decision": "REJECT",
+        "required_violation_relation": "EXPECTED_CODES_SUBSET_OF_ACTUAL_CODES",
+        "additional_actual_codes_allowed": true
+      },
+      "expectation_passed_to_evaluator": false,
+      "expected_violation_codes_passed_to_evaluator": false,
+      "all_predictions_before_scoring": true
+    },
+    "requirements": {
+      "G3-BR-001": {
+        "fact_keys": [
+          "backend_revision_known",
+          "claims_exact_version_pin",
+          "reproducibility_limitation_recorded",
+          "revision_state"
+        ],
+        "boolean_fact_keys": [
+          "backend_revision_known",
+          "claims_exact_version_pin",
+          "reproducibility_limitation_recorded"
+        ],
+        "non_boolean_fact_keys": [
+          "revision_state"
+        ],
+        "effective_boolean_defaults": {
+          "backend_revision_known": false,
+          "claims_exact_version_pin": false,
+          "reproducibility_limitation_recorded": false
+        },
+        "observed_literal_value_hints": {
+          "revision_state": [
+            "UNAVAILABLE",
+            "UNKNOWN"
+          ]
+        },
+        "violation_codes": [
+          "FALSE_EXACT_VERSION_CLAIM",
+          "REPRODUCIBILITY_LIMITATION_MISSING",
+          "UNKNOWN_REVISION_NOT_RECORDED"
+        ]
+      },
+      "G3-BR-002": {
+        "fact_keys": [
+          "baseline_changed_after_protected",
+          "prior_result_preserved",
+          "successor_evidence_created",
+          "task7_lineage_applied"
+        ],
+        "boolean_fact_keys": [
+          "baseline_changed_after_protected",
+          "prior_result_preserved",
+          "successor_evidence_created",
+          "task7_lineage_applied"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "baseline_changed_after_protected": false,
+          "prior_result_preserved": false,
+          "successor_evidence_created": false,
+          "task7_lineage_applied": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "PRIOR_RESULT_NOT_PRESERVED",
+          "SUCCESSOR_EVIDENCE_MISSING",
+          "TASK7_LINEAGE_NOT_APPLIED"
+        ]
+      },
+      "G3-BR-003": {
+        "fact_keys": [
+          "exclusion_reasons_preserved",
+          "material_comparators_preserved",
+          "protected_outcomes_used_for_selection",
+          "search_cutoff_predeclared",
+          "search_scope_predeclared"
+        ],
+        "boolean_fact_keys": [
+          "exclusion_reasons_preserved",
+          "material_comparators_preserved",
+          "protected_outcomes_used_for_selection",
+          "search_cutoff_predeclared",
+          "search_scope_predeclared"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "exclusion_reasons_preserved": false,
+          "material_comparators_preserved": false,
+          "protected_outcomes_used_for_selection": false,
+          "search_cutoff_predeclared": false,
+          "search_scope_predeclared": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "COMPARATOR_PROVENANCE_MISSING",
+          "EXCLUSION_REASONS_MISSING",
+          "PROTECTED_SELECTION_LEAKAGE",
+          "SEARCH_CUTOFF_NOT_PREDECLARED",
+          "SEARCH_SCOPE_NOT_PREDECLARED"
+        ]
+      },
+      "G3-BR-004": {
+        "fact_keys": [
+          "anchor_role",
+          "candidate_beats_anchor",
+          "candidate_beats_strongest_comparator",
+          "reported_as_general_superiority"
+        ],
+        "boolean_fact_keys": [
+          "candidate_beats_anchor",
+          "candidate_beats_strongest_comparator",
+          "reported_as_general_superiority"
+        ],
+        "non_boolean_fact_keys": [
+          "anchor_role"
+        ],
+        "effective_boolean_defaults": {
+          "candidate_beats_anchor": false,
+          "candidate_beats_strongest_comparator": false,
+          "reported_as_general_superiority": false
+        },
+        "observed_literal_value_hints": {
+          "anchor_role": [
+            "DIAGNOSTIC"
+          ]
+        },
+        "violation_codes": [
+          "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+        ]
+      },
+      "G3-BR-005": {
+        "fact_keys": [
+          "baseline_prior_transcript_available",
+          "baseline_retrieval_cache",
+          "candidate_prior_transcript_available",
+          "candidate_retrieval_cache",
+          "persistent_state_matched",
+          "state_difference_is_treatment"
+        ],
+        "boolean_fact_keys": [
+          "baseline_prior_transcript_available",
+          "candidate_prior_transcript_available",
+          "persistent_state_matched",
+          "state_difference_is_treatment"
+        ],
+        "non_boolean_fact_keys": [
+          "baseline_retrieval_cache",
+          "candidate_retrieval_cache"
+        ],
+        "effective_boolean_defaults": {
+          "baseline_prior_transcript_available": false,
+          "candidate_prior_transcript_available": false,
+          "persistent_state_matched": false,
+          "state_difference_is_treatment": false
+        },
+        "observed_literal_value_hints": {
+          "baseline_retrieval_cache": [
+            null
+          ],
+          "candidate_retrieval_cache": [
+            null
+          ]
+        },
+        "violation_codes": [
+          "PERSISTENT_INFORMATION_ASYMMETRY",
+          "PERSISTENT_STATE_NOT_MATCHED"
+        ]
+      },
+      "G3-BR-006": {
+        "fact_keys": [
+          "controlled_replay",
+          "environment_mutable",
+          "paired_execution",
+          "same_snapshot",
+          "temporal_drift_qualified"
+        ],
+        "boolean_fact_keys": [
+          "controlled_replay",
+          "environment_mutable",
+          "paired_execution",
+          "same_snapshot",
+          "temporal_drift_qualified"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "controlled_replay": false,
+          "environment_mutable": false,
+          "paired_execution": false,
+          "same_snapshot": false,
+          "temporal_drift_qualified": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+        ]
+      },
+      "G3-BR-007": {
+        "fact_keys": [
+          "asymmetry_matches_claimed_treatment",
+          "asymmetry_predeclared",
+          "material_asymmetry"
+        ],
+        "boolean_fact_keys": [
+          "asymmetry_matches_claimed_treatment",
+          "asymmetry_predeclared",
+          "material_asymmetry"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "asymmetry_matches_claimed_treatment": false,
+          "asymmetry_predeclared": false,
+          "material_asymmetry": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "ASYMMETRY_NOT_CAUSALLY_RELEVANT",
+          "ASYMMETRY_NOT_PREDECLARED"
+        ]
+      },
+      "G3-BR-008": {
+        "fact_keys": [
+          "asymmetry_scientifically_justified",
+          "baseline_manual_iterations",
+          "candidate_manual_iterations",
+          "tuning_policy_predeclared"
+        ],
+        "boolean_fact_keys": [
+          "asymmetry_scientifically_justified",
+          "tuning_policy_predeclared"
+        ],
+        "non_boolean_fact_keys": [
+          "baseline_manual_iterations",
+          "candidate_manual_iterations"
+        ],
+        "effective_boolean_defaults": {
+          "asymmetry_scientifically_justified": false,
+          "tuning_policy_predeclared": false
+        },
+        "observed_literal_value_hints": {
+          "baseline_manual_iterations": [
+            null
+          ],
+          "candidate_manual_iterations": [
+            null
+          ]
+        },
+        "violation_codes": [
+          "TUNING_OPPORTUNITY_ASYMMETRY",
+          "TUNING_POLICY_NOT_PREDECLARED"
+        ]
+      },
+      "G3-BR-009": {
+        "fact_keys": [
+          "evaluator_revision",
+          "evaluator_revision_available",
+          "evaluator_revision_field_present"
+        ],
+        "boolean_fact_keys": [
+          "evaluator_revision_available",
+          "evaluator_revision_field_present"
+        ],
+        "non_boolean_fact_keys": [
+          "evaluator_revision"
+        ],
+        "effective_boolean_defaults": {
+          "evaluator_revision_available": false,
+          "evaluator_revision_field_present": false
+        },
+        "observed_literal_value_hints": {
+          "evaluator_revision": [
+            "UNAVAILABLE",
+            "UNKNOWN"
+          ]
+        },
+        "violation_codes": [
+          "AVAILABLE_PROVENANCE_NOT_RECORDED",
+          "MATERIAL_PROVENANCE_FIELD_OMITTED",
+          "UNAVAILABLE_PROVENANCE_NOT_EXPLICIT"
+        ]
+      },
+      "G3-BR-010": {
+        "fact_keys": [
+          "external_api_unpinned",
+          "limitation_recorded",
+          "reproducibility_class"
+        ],
+        "boolean_fact_keys": [
+          "external_api_unpinned",
+          "limitation_recorded"
+        ],
+        "non_boolean_fact_keys": [
+          "reproducibility_class"
+        ],
+        "effective_boolean_defaults": {
+          "external_api_unpinned": false,
+          "limitation_recorded": false
+        },
+        "observed_literal_value_hints": {
+          "reproducibility_class": [
+            "EXACT_RECONSTRUCTION"
+          ]
+        },
+        "violation_codes": [
+          "EXTERNAL_DEPENDENCY_LIMITATION_MISSING",
+          "FALSE_EXACT_RECONSTRUCTION",
+          "INVALID_REPRODUCIBILITY_CLASS"
+        ]
+      },
+      "G3-BR-011": {
+        "fact_keys": [
+          "outcome_driven_stopping",
+          "repeated_runs_claimed_independent",
+          "stopping_rule_predeclared"
+        ],
+        "boolean_fact_keys": [
+          "outcome_driven_stopping",
+          "repeated_runs_claimed_independent",
+          "stopping_rule_predeclared"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "outcome_driven_stopping": false,
+          "repeated_runs_claimed_independent": false,
+          "stopping_rule_predeclared": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "OPTIONAL_STOPPING",
+          "PSEUDOREPLICATION"
+        ]
+      },
+      "G3-BR-012": {
+        "fact_keys": [
+          "analysis_uses_independence_groups",
+          "analysis_uses_task7_evaluation_units",
+          "repeated_seeds_treated_independent"
+        ],
+        "boolean_fact_keys": [
+          "analysis_uses_independence_groups",
+          "analysis_uses_task7_evaluation_units",
+          "repeated_seeds_treated_independent"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "analysis_uses_independence_groups": false,
+          "analysis_uses_task7_evaluation_units": false,
+          "repeated_seeds_treated_independent": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "INDEPENDENCE_GROUP_IGNORED",
+          "REPEATED_SEEDS_TREATED_INDEPENDENT",
+          "TASK7_EVALUATION_UNIT_IGNORED"
+        ]
+      },
+      "G3-BR-013": {
+        "fact_keys": [
+          "primary_claim_remains_failed",
+          "primary_metric_passed",
+          "secondary_promoted_after_outcome"
+        ],
+        "boolean_fact_keys": [
+          "primary_claim_remains_failed",
+          "primary_metric_passed",
+          "secondary_promoted_after_outcome"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "primary_claim_remains_failed": false,
+          "primary_metric_passed": false,
+          "secondary_promoted_after_outcome": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "FAILED_PRIMARY_CLAIM_NOT_PRESERVED",
+          "POST_HOC_SECONDARY_PROMOTION"
+        ]
+      },
+      "G3-BR-014": {
+        "fact_keys": [
+          "constraint_affects_claim",
+          "constraint_violation_blocks_pass",
+          "hard_constraint_bound_before_protected"
+        ],
+        "boolean_fact_keys": [
+          "constraint_affects_claim",
+          "constraint_violation_blocks_pass",
+          "hard_constraint_bound_before_protected"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "constraint_affects_claim": true,
+          "constraint_violation_blocks_pass": false,
+          "hard_constraint_bound_before_protected": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "HARD_CONSTRAINT_CAN_BE_AVERAGED_AWAY",
+          "HARD_CONSTRAINT_NOT_FROZEN"
+        ]
+      },
+      "G3-BR-015": {
+        "fact_keys": [
+          "difficulty_distribution_preserved",
+          "sampling_rule_predeclared",
+          "weights_changed_after_outcomes"
+        ],
+        "boolean_fact_keys": [
+          "difficulty_distribution_preserved",
+          "sampling_rule_predeclared",
+          "weights_changed_after_outcomes"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "difficulty_distribution_preserved": false,
+          "sampling_rule_predeclared": false,
+          "weights_changed_after_outcomes": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "BENCHMARK_SAMPLING_NOT_PREDECLARED",
+          "DIFFICULTY_DISTRIBUTION_NOT_PRESERVED",
+          "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+        ]
+      },
+      "G3-BR-016": {
+        "fact_keys": [
+          "benchmark_dynamic",
+          "cleanliness_evidence_available",
+          "contamination_state",
+          "dynamic_implies_clean"
+        ],
+        "boolean_fact_keys": [
+          "benchmark_dynamic",
+          "cleanliness_evidence_available",
+          "dynamic_implies_clean"
+        ],
+        "non_boolean_fact_keys": [
+          "contamination_state"
+        ],
+        "effective_boolean_defaults": {
+          "benchmark_dynamic": false,
+          "cleanliness_evidence_available": false,
+          "dynamic_implies_clean": false
+        },
+        "observed_literal_value_hints": {
+          "contamination_state": [
+            "CLEAN"
+          ]
+        },
+        "violation_codes": [
+          "DYNAMIC_BENCHMARK_FALSE_CLEANLINESS",
+          "DYNAMISM_USED_AS_CLEANLINESS_PROOF",
+          "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM"
+        ]
+      },
+      "G3-BR-017": {
+        "fact_keys": [
+          "alternative_crosscheck_present",
+          "bias_control_performed",
+          "claim_depends_on_judge",
+          "evaluator_identity_present",
+          "evaluator_scoring_procedure_present",
+          "evaluator_version_present",
+          "judge_same_family_as_candidate",
+          "relationship_recorded"
+        ],
+        "boolean_fact_keys": [
+          "alternative_crosscheck_present",
+          "bias_control_performed",
+          "claim_depends_on_judge",
+          "evaluator_identity_present",
+          "evaluator_scoring_procedure_present",
+          "evaluator_version_present",
+          "judge_same_family_as_candidate",
+          "relationship_recorded"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "alternative_crosscheck_present": false,
+          "bias_control_performed": false,
+          "claim_depends_on_judge": true,
+          "evaluator_identity_present": false,
+          "evaluator_scoring_procedure_present": false,
+          "evaluator_version_present": false,
+          "judge_same_family_as_candidate": false,
+          "relationship_recorded": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "ALTERNATIVE_EVALUATION_PATH_MISSING",
+          "EVALUATOR_IDENTITY_MISSING",
+          "EVALUATOR_RELATIONSHIP_UNDISCLOSED",
+          "EVALUATOR_SCORING_PROCEDURE_MISSING",
+          "EVALUATOR_VERSION_MISSING",
+          "SELF_PREFERENCE_NOT_CONTROLLED"
+        ]
+      },
+      "G3-BR-018": {
+        "fact_keys": [
+          "claims_absence_of_side_effects",
+          "hidden_side_effects_observable",
+          "observation_boundary_declared",
+          "unobservable_state_disposition"
+        ],
+        "boolean_fact_keys": [
+          "claims_absence_of_side_effects",
+          "hidden_side_effects_observable",
+          "observation_boundary_declared"
+        ],
+        "non_boolean_fact_keys": [
+          "unobservable_state_disposition"
+        ],
+        "effective_boolean_defaults": {
+          "claims_absence_of_side_effects": false,
+          "hidden_side_effects_observable": true,
+          "observation_boundary_declared": false
+        },
+        "observed_literal_value_hints": {
+          "unobservable_state_disposition": [
+            "UNAVAILABLE",
+            "UNKNOWN"
+          ]
+        },
+        "violation_codes": [
+          "OBSERVATION_BOUNDARY_UNDECLARED",
+          "UNOBSERVABLE_STATE_NOT_EXPLICIT",
+          "UNOBSERVED_TREATED_AS_ABSENT"
+        ]
+      },
+      "G3-BR-019": {
+        "fact_keys": [
+          "channel_classified_separately",
+          "claimed_as_learned_transfer",
+          "manual_target_engineering",
+          "target_specific_demonstrations",
+          "target_specific_onboarding",
+          "target_specific_prompt_engineering",
+          "target_specific_retrieval"
+        ],
+        "boolean_fact_keys": [
+          "channel_classified_separately",
+          "claimed_as_learned_transfer",
+          "manual_target_engineering",
+          "target_specific_demonstrations",
+          "target_specific_onboarding",
+          "target_specific_prompt_engineering",
+          "target_specific_retrieval"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "channel_classified_separately": false,
+          "claimed_as_learned_transfer": false,
+          "manual_target_engineering": false,
+          "target_specific_demonstrations": false,
+          "target_specific_onboarding": false,
+          "target_specific_prompt_engineering": false,
+          "target_specific_retrieval": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "MANUAL_ENGINEERING_MASQUERADES_AS_TRANSFER",
+          "TARGET_INFORMATION_CHANNEL_HIDDEN"
+        ]
+      },
+      "G3-BR-020": {
+        "fact_keys": [
+          "baseline_adaptation_input",
+          "candidate_adaptation_input",
+          "difference_is_declared_treatment",
+          "strongest_applicable_baseline_used"
+        ],
+        "boolean_fact_keys": [
+          "difference_is_declared_treatment",
+          "strongest_applicable_baseline_used"
+        ],
+        "non_boolean_fact_keys": [
+          "baseline_adaptation_input",
+          "candidate_adaptation_input"
+        ],
+        "effective_boolean_defaults": {
+          "difference_is_declared_treatment": false,
+          "strongest_applicable_baseline_used": false
+        },
+        "observed_literal_value_hints": {
+          "baseline_adaptation_input": [
+            null
+          ],
+          "candidate_adaptation_input": [
+            null
+          ]
+        },
+        "violation_codes": [
+          "ADAPTATION_INPUT_ASYMMETRY",
+          "STRONG_ADAPTATION_BASELINE_MISSING"
+        ]
+      },
+      "G3-BR-021": {
+        "fact_keys": [
+          "behavioral_restoration_checked",
+          "declared_rollback_success",
+          "persistent_index_restored",
+          "persistent_memory_material",
+          "persistent_memory_restored",
+          "rollback_command_succeeded"
+        ],
+        "boolean_fact_keys": [
+          "behavioral_restoration_checked",
+          "declared_rollback_success",
+          "persistent_index_restored",
+          "persistent_memory_material",
+          "persistent_memory_restored",
+          "rollback_command_succeeded"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "behavioral_restoration_checked": false,
+          "declared_rollback_success": true,
+          "persistent_index_restored": false,
+          "persistent_memory_material": false,
+          "persistent_memory_restored": false,
+          "rollback_command_succeeded": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "ROLLBACK_BEHAVIOR_NOT_VERIFIED",
+          "ROLLBACK_MATERIAL_STATE_NOT_RESTORED",
+          "ROLLBACK_OPERATION_FAILED",
+          "ROLLBACK_STATE_NOT_RESTORED"
+        ]
+      },
+      "G3-BR-022": {
+        "fact_keys": [
+          "quality_and_resource_reported_separately",
+          "resource_regime_frozen_before_protected",
+          "single_weighted_score_only"
+        ],
+        "boolean_fact_keys": [
+          "quality_and_resource_reported_separately",
+          "resource_regime_frozen_before_protected",
+          "single_weighted_score_only"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "quality_and_resource_reported_separately": false,
+          "resource_regime_frozen_before_protected": false,
+          "single_weighted_score_only": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "QUALITY_RESOURCE_TRADEOFF_COLLAPSED",
+          "RESOURCE_REGIME_NOT_FROZEN",
+          "SINGLE_AGGREGATE_HIDES_TRADEOFF"
+        ]
+      },
+      "G3-BR-023": {
+        "fact_keys": [
+          "credible_stronger_comparator_evidence",
+          "historical_result_preserved",
+          "reassessment_triggered",
+          "review_as_of_date_recorded"
+        ],
+        "boolean_fact_keys": [
+          "credible_stronger_comparator_evidence",
+          "historical_result_preserved",
+          "reassessment_triggered",
+          "review_as_of_date_recorded"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "credible_stronger_comparator_evidence": false,
+          "historical_result_preserved": false,
+          "reassessment_triggered": false,
+          "review_as_of_date_recorded": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "BASELINE_REASSESSMENT_NOT_TRIGGERED",
+          "BASELINE_REVIEW_DATE_MISSING",
+          "HISTORICAL_BASELINE_RESULT_REWRITTEN"
+        ]
+      },
+      "G3-BR-024": {
+        "fact_keys": [
+          "broader_claim_blocked",
+          "narrow_claim_implies_broader_superiority",
+          "original_evidence_gap_preserved",
+          "required_comparator_available"
+        ],
+        "boolean_fact_keys": [
+          "broader_claim_blocked",
+          "narrow_claim_implies_broader_superiority",
+          "original_evidence_gap_preserved",
+          "required_comparator_available"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "broader_claim_blocked": false,
+          "narrow_claim_implies_broader_superiority": false,
+          "original_evidence_gap_preserved": false,
+          "required_comparator_available": true
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "BROADER_CLAIM_NOT_BLOCKED",
+          "NARROW_CLAIM_IMPLIES_BLOCKED_SUPERIORITY",
+          "ORIGINAL_EVIDENCE_GAP_LOST"
+        ]
+      },
+      "G3-BR-025": {
+        "fact_keys": [
+          "deployment_scope_declared",
+          "population_scope_declared",
+          "sampling_method_declared",
+          "selection_based_on_favorable_results",
+          "time_window_declared"
+        ],
+        "boolean_fact_keys": [
+          "deployment_scope_declared",
+          "population_scope_declared",
+          "sampling_method_declared",
+          "selection_based_on_favorable_results",
+          "time_window_declared"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "deployment_scope_declared": false,
+          "population_scope_declared": false,
+          "sampling_method_declared": false,
+          "selection_based_on_favorable_results": false,
+          "time_window_declared": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared",
+          "REAL_WORLD_SCOPE_MISSING:population_scope_declared",
+          "REAL_WORLD_SCOPE_MISSING:sampling_method_declared",
+          "REAL_WORLD_SCOPE_MISSING:time_window_declared",
+          "REAL_WORLD_SELECTION_CHERRY_PICKED"
+        ]
+      },
+      "G3-BR-026": {
+        "fact_keys": [
+          "material_independent_path_present",
+          "same_judge_model",
+          "same_model_family",
+          "same_preprocessing",
+          "shared_dependencies_disclosed"
+        ],
+        "boolean_fact_keys": [
+          "material_independent_path_present",
+          "same_judge_model",
+          "same_model_family",
+          "same_preprocessing",
+          "shared_dependencies_disclosed"
+        ],
+        "non_boolean_fact_keys": [],
+        "effective_boolean_defaults": {
+          "material_independent_path_present": false,
+          "same_judge_model": false,
+          "same_model_family": false,
+          "same_preprocessing": false,
+          "shared_dependencies_disclosed": false
+        },
+        "observed_literal_value_hints": {},
+        "violation_codes": [
+          "COMMON_MODE_DEPENDENCY_UNDISCLOSED",
+          "COMMON_MODE_MODEL_FAMILY_UNDISCLOSED",
+          "MATERIAL_INDEPENDENT_PATH_MISSING"
+        ]
+      },
+      "G3-BR-027": {
+        "fact_keys": [
+          "applicability_state",
+          "control_genuinely_inapplicable",
+          "environment_binding",
+          "governed_reason_present",
+          "omission_changes_claim_meaning"
+        ],
+        "boolean_fact_keys": [
+          "control_genuinely_inapplicable",
+          "governed_reason_present",
+          "omission_changes_claim_meaning"
+        ],
+        "non_boolean_fact_keys": [
+          "applicability_state",
+          "environment_binding"
+        ],
+        "effective_boolean_defaults": {
+          "control_genuinely_inapplicable": false,
+          "governed_reason_present": false,
+          "omission_changes_claim_meaning": false
+        },
+        "observed_literal_value_hints": {
+          "applicability_state": [
+            "APPLICABLE",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "violation_codes": [
+          "ENVIRONMENT_BINDING_MISSING",
+          "INVALID_APPLICABILITY_STATE",
+          "NOT_APPLICABLE_CHANGES_CLAIM_MEANING",
+          "NOT_APPLICABLE_REASON_MISSING",
+          "NOT_APPLICABLE_USED_AS_ESCAPE"
+        ]
+      }
+    },
+    "interface_totals": {
+      "direct_fact_keys": 108,
+      "complete_fact_keys": 115,
+      "direct_violation_codes": 72,
+      "complete_violation_codes": 79,
+      "dynamic_only_fact_keys": [
+        "deployment_scope_declared",
+        "evaluator_identity_present",
+        "evaluator_scoring_procedure_present",
+        "evaluator_version_present",
+        "population_scope_declared",
+        "sampling_method_declared",
+        "time_window_declared"
+      ],
+      "dynamic_only_violation_codes": [
+        "EVALUATOR_IDENTITY_MISSING",
+        "EVALUATOR_SCORING_PROCEDURE_MISSING",
+        "EVALUATOR_VERSION_MISSING",
+        "REAL_WORLD_SCOPE_MISSING:deployment_scope_declared",
+        "REAL_WORLD_SCOPE_MISSING:population_scope_declared",
+        "REAL_WORLD_SCOPE_MISSING:sampling_method_declared",
+        "REAL_WORLD_SCOPE_MISSING:time_window_declared"
+      ]
+    },
+    "claim_limits": {
+      "interface_contract_is_not_task_8_authority": true,
+      "interface_contract_does_not_establish_scientific_support": true,
+      "interface_contract_does_not_establish_generalization": true
+    },
+    "source_preview_sha256": "f20e0bc3c1353d74f0bca6f853e28849875275e8dd3d1683f6dd8bfcf7d22fe2",
+    "generation_attempt_2_started": false,
+    "fresh_holdout_executed": false,
+    "contract_scope": {
+      "purpose": "Provide the minimum executable public semantic interface required to author fresh holdout cases without exposing the evaluator implementation.",
+      "implementation_logic_exposed": false,
+      "source_code_exposed": false,
+      "branch_conditions_exposed": false,
+      "allowed_for_case_generation": true,
+      "does_not_replace_generation_3_semantics": true
+    },
+    "non_boolean_value_policy": {
+      "closed_enums_are_exhaustive": true,
+      "observed_literal_value_hints_are_exhaustive": false,
+      "missing_non_boolean_fact_observes_none_when_accessed_via_facts_get": true,
+      "generator_must_choose_values_consistent_with_generation_3_semantics": true
+    },
+    "attempt_2_generation_rules": {
+      "facts_must_use_only_public_contract_fact_keys": true,
+      "expected_violation_codes_must_use_only_primary_requirement_public_codes": true,
+      "one_case_one_primary_evaluator_call": true,
+      "secondary_requirements_are_context_only": true,
+      "must_accept_expected_violation_codes_empty": true,
+      "must_reject_expected_violation_codes_nonempty": true,
+      "generator_must_not_receive_evaluator_source": true,
+      "generator_must_not_receive_attempt_1": true,
+      "generator_must_not_receive_prior_cases_mutations_results_or_remediation_history": true
+    }
+  },
+  "generation_session_isolation_contract": {
+    "gate_timing": "BEFORE_ANY_CASE_GENERATION",
+    "fail_closed": true,
+    "scope": "OBSERVABLE_CONVERSATION_INPUTS_ONLY",
+    "package_v8_must_be_only_hetren_specific_attachment": true,
+    "minimal_governed_handoff_must_be_only_other_hetren_specific_text": true,
+    "conversation_must_have_zero_prior_messages_before_handoff": true,
+    "additional_attachment_detected_required_value": false,
+    "earlier_conversation_message_detected_required_value": false,
+    "observable_nonpackage_hetren_context_detected_required_value": false,
+    "generator_must_not_introspect_hidden_provider_state": true,
+    "if_observable_boundary_violation": "ABORT_WITHOUT_GENERATING_CASES",
+    "abort_output_filename": "generation_isolation_failure_attempt_8.json",
+    "abort_output_must_contain_cases": false,
+    "abort_does_not_consume_target_freshness": true,
+    "generator_must_not_continue_after_abort": true
+  },
+  "required_success_output_isolation_state": {
+    "observable_nonpackage_hetren_context_detected": false,
+    "additional_attachment_detected": false,
+    "earlier_conversation_message_detected": false,
+    "isolation_gate_passed_before_case_generation": true
+  },
+  "expected_isolation_failure_output": {
+    "filename": "generation_isolation_failure_attempt_8.json",
+    "artifact_type": "TASK_8_GEN3_GENERATION_ISOLATION_FAILURE_ATTEMPT_8",
+    "state": "ABORTED_BEFORE_CASE_GENERATION",
+    "generation_attempt": 8,
+    "cases_must_be_absent": true,
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false,
+    "required_fields": [
+      "schema_version",
+      "artifact_type",
+      "state",
+      "generation_attempt",
+      "generation_package_sha256",
+      "generation_session_isolation",
+      "abort_reason"
+    ]
+  },
+  "attempt_8_cases_generated": false,
+  "permitted_success_output_isolation_metadata": {},
+  "handoff_integrity_contract": {
+    "external_handoff_filename_pattern": "generation_package_v8_<EXACT_64_LOWERCASE_HEX_SHA256_OF_PACKAGE_BYTES>.json",
+    "handoff_creator_must_verify_filename_sha256_suffix_matches_exact_package_bytes": true,
+    "success_output_generation_package_sha256_source": "COPY_THE_EXACT_64_LOWERCASE_HEX_SHA256_SUFFIX_FROM_THE_ATTACHED_HANDOFF_FILENAME",
+    "success_output_generation_package_sha256_must_bind_exact_package_bytes": true,
+    "embedded_source_hashes_must_not_be_used_as_generation_package_sha256": true,
+    "explicitly_forbidden_hash_substitutions": [
+      "source_bindings.generation_3_sha256",
+      "source_bindings.preregistration_contract_sha256",
+      "source_bindings.public_evaluator_contract_sha256",
+      "source_bindings.public_evaluator_contract_manifest_sha256",
+      "source_bindings.frozen_target_evaluator_sha256"
+    ],
+    "reason": "The package contains several embedded source hashes. generation_package_sha256 refers only to the exact supplied Package-v8 file bytes and must not be populated from any embedded source binding."
+  },
+  "generator_output_preflight_contract": {
+    "timing": "AFTER_ALL_CASES_ARE_GENERATED_AND_BEFORE_RETURNING_SUCCESS_OUTPUT",
+    "scope": "STRUCTURAL_AND_CONTRACT_VALIDATION_ONLY",
+    "target_evaluator_must_not_be_executed": true,
+    "target_evaluator_must_not_be_simulated": true,
+    "protected_outcomes_must_not_be_available": true,
+    "intermediate_invalid_success_artifact_must_not_be_returned": true,
+    "if_any_assertion_fails": "REVISE_OR_REGENERATE_WITHIN_THE_GENERATION_PROCESS_BEFORE_RETURNING_THE_SINGLE_FINAL_SUCCESS_ARTIFACT",
+    "assertions": {
+      "generation_package_sha256_matches_verified_handoff_filename_sha256": true,
+      "case_count": 54,
+      "case_ids_exactly": [
+        "G3-H8-001",
+        "G3-H8-002",
+        "G3-H8-003",
+        "G3-H8-004",
+        "G3-H8-005",
+        "G3-H8-006",
+        "G3-H8-007",
+        "G3-H8-008",
+        "G3-H8-009",
+        "G3-H8-010",
+        "G3-H8-011",
+        "G3-H8-012",
+        "G3-H8-013",
+        "G3-H8-014",
+        "G3-H8-015",
+        "G3-H8-016",
+        "G3-H8-017",
+        "G3-H8-018",
+        "G3-H8-019",
+        "G3-H8-020",
+        "G3-H8-021",
+        "G3-H8-022",
+        "G3-H8-023",
+        "G3-H8-024",
+        "G3-H8-025",
+        "G3-H8-026",
+        "G3-H8-027",
+        "G3-H8-028",
+        "G3-H8-029",
+        "G3-H8-030",
+        "G3-H8-031",
+        "G3-H8-032",
+        "G3-H8-033",
+        "G3-H8-034",
+        "G3-H8-035",
+        "G3-H8-036",
+        "G3-H8-037",
+        "G3-H8-038",
+        "G3-H8-039",
+        "G3-H8-040",
+        "G3-H8-041",
+        "G3-H8-042",
+        "G3-H8-043",
+        "G3-H8-044",
+        "G3-H8-045",
+        "G3-H8-046",
+        "G3-H8-047",
+        "G3-H8-048",
+        "G3-H8-049",
+        "G3-H8-050",
+        "G3-H8-051",
+        "G3-H8-052",
+        "G3-H8-053",
+        "G3-H8-054"
+      ],
+      "case_ids_unique": true,
+      "unique_case_id_count": 54,
+      "must_accept_count": 27,
+      "must_reject_count": 27,
+      "primary_requirement_ids_exactly": [
+        "G3-BR-001",
+        "G3-BR-002",
+        "G3-BR-003",
+        "G3-BR-004",
+        "G3-BR-005",
+        "G3-BR-006",
+        "G3-BR-007",
+        "G3-BR-008",
+        "G3-BR-009",
+        "G3-BR-010",
+        "G3-BR-011",
+        "G3-BR-012",
+        "G3-BR-013",
+        "G3-BR-014",
+        "G3-BR-015",
+        "G3-BR-016",
+        "G3-BR-017",
+        "G3-BR-018",
+        "G3-BR-019",
+        "G3-BR-020",
+        "G3-BR-021",
+        "G3-BR-022",
+        "G3-BR-023",
+        "G3-BR-024",
+        "G3-BR-025",
+        "G3-BR-026",
+        "G3-BR-027"
+      ],
+      "each_primary_requirement_exactly_one_must_accept_and_one_must_reject": true,
+      "minimum_cases_per_environment": 6,
+      "minimum_cross_requirement_interaction_cases": 12,
+      "all_required_case_fields_present": true,
+      "must_accept_expected_violation_codes_empty": true,
+      "must_reject_expected_violation_codes_nonempty": true,
+      "expected_violation_codes_from_primary_requirement_public_vocabulary_only": true,
+      "facts_use_primary_requirement_public_interface_only": true,
+      "target_evaluator_executed": false,
+      "target_evaluator_simulated": false
+    }
+  },
+  "success_output_preflight_schema": {
+    "field_name": "generator_output_preflight",
+    "required": true,
+    "required_fields": [
+      "performed_before_return",
+      "passed",
+      "generation_package_sha256_matches_handoff_filename",
+      "case_count",
+      "unique_case_id_count",
+      "exact_case_identity_set",
+      "must_accept_count",
+      "must_reject_count",
+      "primary_requirement_pairing_valid",
+      "environment_minimums_satisfied",
+      "interaction_case_count",
+      "minimum_interaction_requirement_satisfied",
+      "all_case_schema_checks_passed",
+      "target_evaluator_executed",
+      "target_evaluator_simulated"
+    ],
+    "required_values": {
+      "performed_before_return": true,
+      "passed": true,
+      "generation_package_sha256_matches_handoff_filename": true,
+      "case_count": 54,
+      "unique_case_id_count": 54,
+      "exact_case_identity_set": true,
+      "must_accept_count": 27,
+      "must_reject_count": 27,
+      "primary_requirement_pairing_valid": true,
+      "environment_minimums_satisfied": true,
+      "minimum_interaction_requirement_satisfied": true,
+      "all_case_schema_checks_passed": true,
+      "target_evaluator_executed": false,
+      "target_evaluator_simulated": false
+    },
+    "interaction_case_count_constraint": "INTEGER_GREATER_THAN_OR_EQUAL_TO_12"
+  }
+}

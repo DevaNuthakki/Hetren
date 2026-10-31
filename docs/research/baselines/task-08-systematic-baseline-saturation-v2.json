@@ -1,0 +1,294 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 2,
+  "state": "SECOND_SYSTEMATIC_SATURATION_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T04:45:58Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v4_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v4.json",
+      "sha256": "a57a60bdb4ecd1ea1ccd49fd6b71bb6e9d15bfacbd36db8698c18ec6c9783ca1"
+    },
+    "systematic_saturation_v1": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v1.json",
+      "sha256": "3663b99d234da93a088c768c1a4d973026d99c0bc986373c730e8b13a8046271"
+    }
+  },
+  "systematic_sources": [
+    {
+      "scope": "E3_GENERAL_AND_CONTINUAL_TTA",
+      "name": "Awesome Test-Time Adaptation Resources",
+      "source": "https://github.com/Test-Time-Learning/adaptation",
+      "verified_observation": "Current curated index contains hundreds of TTA papers and explicit 2026 classification, segmentation, VLM and related entries.",
+      "source_role": "DISCOVERY_INDEX_NOT_STRENGTH_AUTHORITY_BY_ITSELF"
+    },
+    {
+      "scope": "E3_CONTINUAL_TTA",
+      "name": "Continual Test-Time Adaptation in Computer Vision survey",
+      "source": "https://arxiv.org/abs/2607.08164",
+      "verified_observation": "2026 survey organizes continual-TTA mechanisms into optimization-based, parameter-efficient and architecture-based families and reviews standard continual-shift evaluation practice.",
+      "source_role": "SURVEY_AND_TAXONOMY_SOURCE"
+    },
+    {
+      "scope": "E3_VLM_TTA",
+      "name": "Awesome CLIP TTA",
+      "source": "https://github.com/xyjie37/Awesome-CLIP-TTA",
+      "verified_observation": "Current VLM-TTA index lists accepted 2026 methods including LTTA, FGA, BITTA, PTA, A2Memory, D2O and FPP.",
+      "source_role": "DISCOVERY_INDEX_NOT_STRENGTH_AUTHORITY_BY_ITSELF"
+    },
+    {
+      "scope": "E1_AGENT",
+      "name": "AgentGym",
+      "source": "https://aclanthology.org/2025.acl-long.1355/",
+      "verified_observation": "Peer-reviewed multi-environment agent framework and learned-agent research source.",
+      "source_role": "CANDIDATE_AND_BENCHMARK_SOURCE"
+    },
+    {
+      "scope": "E1_AGENT",
+      "name": "SWE-RL",
+      "source": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/7107d4d2e837bde2171c6b71b5bde954-Abstract-Conference.html",
+      "verified_observation": "Peer-reviewed learned software-engineering reasoning method and task-conditional E1 evidence.",
+      "source_role": "CANDIDATE_SOURCE"
+    },
+    {
+      "scope": "E2_STRUCTURED_ML_AUTOML",
+      "name": "OpenML AutoML Benchmark",
+      "source": "https://openml.github.io/automlbenchmark/",
+      "verified_observation": "Extensible framework for matched AutoML system comparison on tabular tasks.",
+      "source_role": "BENCHMARK_SOURCE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DAS",
+      "name": "Dance Across Shifts / Dynamic Style Bridging",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONTINUAL_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_LONG_TERM_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhu_Dance_Across_Shifts_Forward-Facilitation_Continual_Test-Time_Adaptation_through_Dynamic_Style_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/z1358/DAS"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_MATCHED_CONTINUAL_TTA_REVIEW",
+      "material_reason": "Uses generated class exemplars and dynamic style bridging as a distinct continual-TTA supervisory mechanism absent from the prior governed candidate set."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FPP",
+      "name": "Flatness-aware Prompt Pretraining",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VLM_PROMPT_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Jang_Improving_Calibration_in_Test-Time_Prompt_Tuning_for_Vision-Language_Models_via_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/fpp"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ROLE_CONDITIONAL_PENDING_PROMPT_TUNING_MATCH",
+      "material_reason": "Changes the pre-adaptation prompt initialization for TPT and is relevant only when the governed adaptation surface includes prompt tuning."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ASR",
+      "name": "Adaptive and Selective Reset",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_LONG_TERM_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_RESET_AND_RETENTION_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/79bdd6fe3f012befcc459ad13de65d13-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/YonseiML/asr"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_LONG_TERM_TTA_MATCH",
+      "material_reason": "Introduces adaptive and selective reset semantics directly relevant to long-term adaptation stability and retention."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-LTTA",
+      "name": "Long-tailed Test-Time Adaptation for Vision-Language Models",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_LONG_TAILED_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_PUBLIC_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "ICLR_2026_PROGRAM",
+          "url": "https://iclr.cc/virtual/2026/papers.html"
+        },
+        {
+          "class": "PUBLIC_IMPLEMENTATION",
+          "url": "https://github.com/xuc865/LTTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_ONLY_FOR_LONG_TAILED_VLM_STREAMS",
+      "material_reason": "Addresses the distinct long-tailed online VLM adaptation regime rather than balanced test streams."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-FGA",
+      "name": "Flatness Guided Test-Time Adaptation for Vision-Language Models",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_VLM_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_IMPLEMENTATION_NOT_LOCATED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf/fc239ac466f1026181d3aecf458d30bc1e635f6c.pdf"
+        }
+      ],
+      "eligibility_status": "BLOCKED_PENDING_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+      "material_reason": "Peer-reviewed 2026 VLM-TTA method with distinct flatness-guided adaptation semantics; reproducible implementation identity was not located in this review."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-A2MEMORY",
+      "name": "A2Memory",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_ONLINE_VLM_MEMORY_ADAPTATION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_VENUE_VERIFIED_IMPLEMENTATION_NOT_LOCATED",
+      "sources": [
+        {
+          "class": "ICML_2026_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_RECORD",
+          "url": "https://zhouchenlin.github.io/"
+        }
+      ],
+      "eligibility_status": "BLOCKED_PENDING_PRIMARY_PAPER_AND_REPRODUCIBLE_IMPLEMENTATION_BINDING",
+      "material_reason": "Introduces attributive and associative memory for online VLM TTA and is materially relevant to memory-based adaptation comparisons."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-ACTTA",
+      "name": "AcTTA",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_PARAMETER_EFFICIENT_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_PRIMARY_RESEARCH_VERIFIED_PUBLIC_REPOSITORY_NOT_SUFFICIENTLY_REPRODUCIBLE",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Kim_AcTTA_Rethinking_Test-Time_Adaptation_via_Dynamic_Activation_CVPR_2026_paper.html"
+        },
+        {
+          "class": "AUTHOR_PUBLIC_REPOSITORY",
+          "url": "https://github.com/hyeongyu-kim/actta"
+        }
+      ],
+      "eligibility_status": "BLOCKED_PENDING_EXECUTABLE_RESEARCH_IMPLEMENTATION_BINDING",
+      "material_reason": "Introduces activation-function adaptation rather than normalization or conventional weight adaptation, making it a materially distinct parameter-efficient mechanism."
+    }
+  ],
+  "new_material_candidate_count": 7,
+  "screened_not_promoted": [
+    {
+      "name": "VITA",
+      "source": "https://openreview.net/pdf?id=V35oo1SVGH",
+      "disposition": "NOT_PROMOTED_TO_GENERIC_E3_POOL",
+      "reason": "The method targets zero-shot goal-conditioned value-function estimation and temporal reasoning rather than a generic matched E3 vision adaptation experiment."
+    },
+    {
+      "name": "Cross-Architecture Adaptation",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Xu_Cross-Architecture_Adaptation_Cloud-Edge_Continual_Test-Time_Adaptation_with_Dynamic_Sampling_and_CVPR_2026_paper.html",
+      "disposition": "NOT_PROMOTED_TO_GENERIC_E3_POOL",
+      "reason": "Requires a heterogeneous cloud-edge teacher/student architecture and communication regime not yet established as an applicable Task-8 experiment."
+    },
+    {
+      "name": "SPEGC",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Du_SPEGC_Continual_Test-Time_Adaptation_via_Semantic-Prompt-Enhanced_Graph_Clustering_for_Medical_CVPR_2026_paper.html",
+      "disposition": "NOT_PROMOTED_TO_GENERIC_E3_POOL",
+      "reason": "Medical image segmentation specific; retain only if a matched medical-segmentation E3 experiment is declared."
+    },
+    {
+      "name": "DOCO",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Yang_Back_to_Source_Open-Set_Continual_Test-Time_Adaptation_via_Domain_Compensation_CVPR_2026_paper.html",
+      "disposition": "NOT_PROMOTED_TO_GENERIC_E3_POOL",
+      "reason": "Open-set continual-TTA comparator; only applicable if the governed experiment includes unknown semantic classes and OOD detection."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "NO_NEW_GENERAL_E1_COMPARATOR_PROMOTED_IN_THIS_PASS_AFTER_AGENTGYM_AND_SWE_RL_REVIEW",
+    "E2": "NO_NEW_MATERIAL_E2_COMPARATOR_PROMOTED_IN_THIS_PASS_AFTER_AUTOML_AND_TABULAR_BENCHMARK_REVIEW",
+    "E3": "MULTIPLE_NEW_MATERIAL_TTA_AND_VLM_TTA_CANDIDATES_FOUND",
+    "N_H2": "GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER_COMPARATOR_STILL_NOT_VERIFIED"
+  },
+  "operational_interpretation": {
+    "one_global_winner_per_environment_required": false,
+    "catalog_plus_experiment_specific_applicability_binding_required": true,
+    "scenario_specific_methods_must_not_be_promoted_outside_matching_scenario": true,
+    "blocked_reproducibility_candidates_may_be_preserved_without_becoming_claim_bearing": true
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The second systematic saturation pass still produced multiple materially relevant candidate methods absent from prior Task-8 research artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "every_discovered_method_is_eligible": false,
+    "new_candidates_are_automatically_strongest": false,
+    "blocked_candidate_is_reproducible": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B7_VERIFY_ADDENDUM_V5_AND_RUN_THIRD_SYSTEMATIC_SATURATION_PASS"
+}

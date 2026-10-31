@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 17,
+  "state": "TABPFN_IDENTITY_RESOLVED_NEW_MATERIAL_E2_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:04:30Z",
+  "task": 8,
+  "bindings": {
+    "attempt_16": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_16.json",
+      "sha256": "f1ec0e88947a8595fc0cdd109ef91fafd850760097e18b4b36c1e37ab29aa35d"
+    },
+    "tabpfn_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-drift-resilient-tabpfn-identity-resolution-v1.json",
+      "sha256": "af12e92ffec55d1e636302426b17d1afdd5cf230fb0d8c87c9a5e30051944191"
+    },
+    "addendum_v15_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v15.json",
+      "sha256": "85e515c4de5869c01301aa96420690afbecab87a8e5b60b7067121edae9a849c"
+    },
+    "systematic_saturation_v13": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v13.json",
+      "sha256": "2ec64b4cbd77056548cd1096aecebe15d3bb2c59aa85adc7bde276d91493ddf8"
+    },
+    "candidate_addendum_v16": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v16.json",
+      "sha256": "345d49fb74571a8167cdf5adbf478594398df196a044d9c8fdabe6d655151f1c"
+    }
+  },
+  "state_summary": {
+    "addendum_v15_role_review_complete": true,
+    "tabpfn_distinct_method_resolution_complete": true,
+    "drift_resilient_new_candidate_required": true,
+    "new_material_candidates_found": 1,
+    "candidate_addendum_v16_count": 1,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "search_stopping_rule_satisfied": false,
+    "consecutive_no_new_candidate_refinements": 0,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "I4B18_VERIFY_ADDENDUM_V16_AND_RUN_NEXT_BOUNDED_REFINEMENT",
+  "claim_limits": {
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

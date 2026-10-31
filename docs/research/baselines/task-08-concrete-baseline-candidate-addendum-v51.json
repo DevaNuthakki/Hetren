@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 51,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T01:18:16Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v50": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v50.json",
+      "sha256": "7dcee9f629f29eed395cb349e65aad9afd1994b1959cc91df81f5a25192781ed"
+    },
+    "systematic_saturation_v48": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v48.json",
+      "sha256": "1327cca5f3fb293d64b4b14343c1e7b14d11c960bc341b20cf6b05036e4468e9"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-EXPEL",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ExpeL: LLM Agents Are Experiential Learners",
+      "implementation_identity": "https://github.com/LeapLabTHU/ExpeL",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_EXPERIENTIAL_LEARNING_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_EXPERIENCE_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/29936"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LeapLabTHU/ExpeL"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_EXPERIENCE_COLLECTION_AND_INFERENCE_MEMORY_ACCESS_ARE_MATCHED",
+        "TRAINING_TASK_EXPERIENCE_ACCESS_MUST_BE PARITY_MATCHED",
+        "INSIGHT_EXTRACTION_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "BASE_LLM_AND_TASK_ENVIRONMENT_MUST_BE BOUND",
+        "WITHIN_E1_TRANSFER_EVIDENCE_DOES_NOT_ESTABLISH GENERAL_N_H2",
+        "ExpeL autonomously gathers experiences, extracts reusable natural-language knowledge, and recalls both insights and prior experiences to improve later agent decisions without parametric model updates."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EXPERIENCE_COLLECTION_AND_INFERENCE_MEMORY_ACCESS_ARE_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "LEGACY_MEMORY_SATURATION_PASS_V48"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AGENT-PRO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Agent-Pro: Learning to Evolve via Policy-Level Reflection and Optimization",
+      "implementation_identity": "https://github.com/ZJU-OmniAI/Agent-Pro",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_POLICY_EVOLUTION_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_POLICY_REFLECTION_OPTIMIZATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2024.acl-long.292/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ZJU-OmniAI/Agent-Pro"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_INTERACTIVE_POLICY_EVOLUTION_SETTING_MATCHED",
+        "BLACKJACK_OR_TEXAS_HOLDEM_RESULTS_ARE_NOT_GENERIC_AGENT EVIDENCE",
+        "BELIEF_AND_POLICY_REPRESENTATION_MUST_BE BOUND",
+        "DEPTH_FIRST_POLICY_SEARCH_BUDGET_MUST_BE ACCOUNTED",
+        "INTERACTION_HISTORY_ACCESS_MUST_BE PARITY MATCHED",
+        "POLICY_EVOLUTION_WITHIN_E1_DOES_NOT_ESTABLISH GENERAL_N_H2",
+        "Agent-Pro iteratively reflects over trajectories and dynamically generated beliefs and uses search-based policy optimization to improve decision behavior through interactive experience."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_INTERACTIVE_POLICY_EVOLUTION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "LEGACY_MEMORY_SATURATION_PASS_V48"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-VOYAGER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+      "implementation_identity": "https://github.com/MineDojo/Voyager",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_EXECUTABLE_SKILL_LIBRARY_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_LIFELONG_SKILL_ACQUISITION_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_SKILL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=ehfRiF0R3a"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MineDojo/Voyager"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_EMBODIED_LIFELONG_SKILL_ACQUISITION_SETTING_MATCHED",
+        "MINECRAFT_OR_COMPARABLY_MATCHED_EMBODIED_SETTING_REQUIRED",
+        "GPT4_OR_REPLACEMENT_BASE_MODEL_IDENTITY_MUST_BE BOUND",
+        "SKILL_LIBRARY_INITIAL_STATE_AND_CONTENT_MUST_BE BOUND",
+        "AUTOMATIC_CURRICULUM_AND_ITERATIVE_PROMPTING_CONFIGURATION_MUST_BE BOUND",
+        "SKILL_TRANSFER_BETWEEN_MINECRAFT_WORLDS_DOES_NOT_ESTABLISH GENERAL_N_H2",
+        "Voyager combines an automatic curriculum, an expanding executable-code skill library, and environment-feedback-driven iterative prompting to acquire and reuse skills in an embodied environment."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EMBODIED_LIFELONG_SKILL_ACQUISITION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "LEGACY_MEMORY_SATURATION_PASS_V48"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

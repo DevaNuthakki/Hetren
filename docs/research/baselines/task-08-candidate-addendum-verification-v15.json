@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 15,
+  "state": "ADDENDUM_V15_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:04:29Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v15": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v15.json",
+      "sha256": "0f23559b393c694041c178ab1481f02f4a0360851114d734e9e80c000256431b"
+    },
+    "systematic_saturation_v12": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v12.json",
+      "sha256": "48c75ebe8ad6531d68b36c3cf7eedc6edd6e434a58f26de9ba87a83cb45f71c9"
+    },
+    "tabpfn_identity_resolution_v1": {
+      "path": "docs/research/baselines/task-08-drift-resilient-tabpfn-identity-resolution-v1.json",
+      "sha256": "af12e92ffec55d1e636302426b17d1afdd5cf230fb0d8c87c9a5e30051944191"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CODEGYM",
+      "candidate_name": "CodeGym \u2014 Generalizable End-to-End Tool-Use RL with Synthetic CodeGym",
+      "verification_state": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_ENVIRONMENT_IMPLEMENTATION_VERIFIED_POLICY_REPRODUCTION_REMAINS_TO_BE_BOUND",
+      "role_disposition": "E1_TOOL_USE_RL_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "CodeGym is published as an ICLR 2026 conference paper.",
+        "It converts static code problems into interactive, verifiable multi-turn tool-use environments for reinforcement-learning agents.",
+        "The official repository exposes the environment-synthesis pipeline and an online environment server.",
+        "The paper reports out-of-distribution tool-use generalization for models trained using CodeGym."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1e4322fddd833f83c855660ac65e428d-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/StigLidu/CodeGym"
+        }
+      ],
+      "limits": [
+        "CODEGYM_ENVIRONMENT_IMPLEMENTATION_IS_NOT_BY_ITSELF_A_FROZEN_TRAINED_POLICY_IDENTITY",
+        "EXACT_AGENT_CHECKPOINT_AND_RL_RECIPE_MUST_BE_BOUND_IF_RETAINED_AS_A_POLICY_BASELINE",
+        "MATCHED_MULTI_TURN_TOOL_USE_TASK_REQUIRED",
+        "OOD_TOOL_USE_GENERALIZATION_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTICQWEN",
+      "candidate_name": "AgenticQwen",
+      "verification_state": "PEER_REVIEWED_ACL_2026_INDUSTRY_TRACK_WITH_PUBLIC_TRAINING_CODE_AND_MODEL_ASSETS",
+      "role_disposition": "E1_SMALL_AGENTIC_MODEL_TOOL_USE_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "AgenticQwen is published in the ACL 2026 Industry Track.",
+        "The model family is trained through multi-round reasoning RL and agentic RL.",
+        "Its dual data flywheels generate increasingly difficult reasoning and multi-branch agentic tasks.",
+        "The paper links public model assets plus data-synthesis and RL-training code."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-industry.37/"
+        },
+        {
+          "class": "PUBLIC_TRAINING_IMPLEMENTATION",
+          "url": "https://github.com/haruhi-sudo/data_synth_and_rl"
+        },
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2604.21590"
+        }
+      ],
+      "limits": [
+        "EXACT_AGENTICQWEN_MODEL_CHECKPOINT_MUST_BE BOUND",
+        "REASONING_RL_AND_AGENTIC_RL_CONFIGURATIONS_MUST_BE BOUND",
+        "SYNTHETIC_DATA_RELEASE_AND_OPEN_SOURCE_DATA_MIX_MUST_BE BOUND",
+        "INDUSTRIAL_PRIVATE_EVALUATION_CANNOT_BE TREATED_AS_REPRODUCIBLE_PUBLIC_EVIDENCE",
+        "WITHIN_E1_AGENTIC_GENERALIZATION_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-TARS",
+      "candidate_name": "TARS \u2014 Multi-Timescale Representation with Adaptive Routing for Deep Tabular Learning under Temporal Shift",
+      "verification_state": "PEER_REVIEWED_NEURAL_NETWORKS_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_TEMPORAL_SHIFT_TABULAR_COMPARATOR_ROLE_CONDITIONAL",
+      "verified_facts": [
+        "TARS is published in Neural Networks volume 199 in 2026.",
+        "It augments deep tabular backbones with multi-timescale temporal representations and adaptive routing under temporal shift.",
+        "The official implementation follows the TabReD temporal-shift protocol and exposes multiple deep and classical backbones.",
+        "The implementation explicitly compares against AdapTable, FTTA, Koodos, TabPFN, and Drift-Resilient TabPFN."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41638097/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/gunnerwang/TARS-Timescale-Tabular"
+        }
+      ],
+      "limits": [
+        "TEMPORAL_SHIFT_AND_TIMESTAMP_INFORMATION_MUST_BE PART_OF_THE_MATCHED_E2_CONTRACT",
+        "BACKBONE_TIMESTAMP_ENCODING_AND_ROUTING_CONFIGURATION_MUST_BE BOUND",
+        "TRAINING_TIME_TEMPORAL_ROBUSTNESS_MUST_NOT_BE MISLABELED_TEST_TIME_ADAPTATION",
+        "ANY_OPTIONAL_TEST_TIME_ADAPTATION_MODE_MUST_BE SEPARATELY_BOUND_BEFORE_A_H1_USE"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v15_candidates_have_role_level_external_review": true,
+    "all_addendum_v15_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "environment_framework_equals_frozen_policy_baseline": false,
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

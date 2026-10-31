@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 46,
+  "state": "ADDENDUM_V46_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T00:13:08Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v46": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v46.json",
+      "sha256": "b253804988c87cd962c6a075da26774c6348dd06d4ffb15eb57c7ef5aee266ee"
+    },
+    "systematic_saturation_v43": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v43.json",
+      "sha256": "66a9af94b79bfa920fa667928fbcabcb2a5fbc8c6f7dfe9d57f2471ac850b3b1"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAM-STATE-ADAPTIVE",
+      "verification_state": "PUBLIC_PREPRINT_VERIFIED_EXECUTABLE_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED",
+      "role_disposition": "E1_STATE_ADAPTIVE_DIRECT_MEMORY_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "SAM was publicly released as arXiv:2605.24468 in May 2026.",
+        "SAM treats long-horizon reasoning as state-adaptive memory access rather than fixed truncation or fixed retrieval.",
+        "It maintains compact memory cues while retaining raw trajectory pages for intent-driven recall.",
+        "The memory module is optimized using expert-guided supervision and reinforcement learning."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.24468"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "EXECUTABLE_OFFICIAL_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED_IN_THIS_PASS",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "FINAL_REPRODUCIBLE_BASELINE_ELIGIBILITY_REMAINS_OPEN",
+        "DIRECT_MEMORY_RESULT_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RAMEM-CONTEXTUAL-REINSTATEMENT",
+      "verification_state": "PUBLIC_PREPRINT_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "role_disposition": "E1_CONTEXT_REINSTATEMENT_DIRECT_MEMORY_RESEARCH_CANDIDATE",
+      "verified_facts": [
+        "RaMem was publicly released as arXiv:2606.22844 in June 2026.",
+        "RaMem addresses context collapse by restoring episodic conditions around retrieved memory.",
+        "Its pipeline includes evidence anchoring, recall-condition induction, validity-aware retrieval, and context-preserved synthesis.",
+        "A public research implementation provides LoCoMo and LongMemEval-S execution paths."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.22844"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/weiyang930/RaMem-Release"
+        }
+      ],
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE_LABELLED_PEER_REVIEWED",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_CUTOFF_CONSISTENT_VERSION_IDENTITY",
+        "MODEL_EMBEDDING_DATASET_AND_RUNTIME_SWITCHES_MUST_BE BOUND_IF_RETAINED",
+        "DIRECT_MEMORY_RESULT_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 2,
+  "interpretation": {
+    "all_addendum_v46_candidates_have_role_level_external_review": true,
+    "all_addendum_v46_candidates_are_peer_reviewed": false,
+    "all_addendum_v46_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "implementation_presence_establishes_final_eligibility": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 20,
+  "state": "ADDENDUM_V20_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T20:44:37Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v20": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v20.json",
+      "sha256": "469cf4ac529640dd247fe6c9c918f561b1123b7da4c54fcdd0cc030e023765c4"
+    },
+    "systematic_saturation_v17": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v17.json",
+      "sha256": "972b5e5a697863bdda3fb6c9bfe27418e77f308754580dd65e527f7948fa8e29"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAGE-SKILL-GRPO",
+      "verification_state": "PEER_REVIEWED_ACL_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_SKILL_LIBRARY_RL_SELF_IMPROVEMENT_COMPARATOR",
+      "verified_facts": [
+        "SAGE is published as an ACL 2026 long paper.",
+        "It integrates an explicit skill library into reinforcement learning through Skill Augmented GRPO for self-Evolution.",
+        "Sequential Rollout accumulates skills across chains of related tasks.",
+        "Its Skill-integrated Reward augments ordinary outcome-based rewards.",
+        "The official Amazon Science repository provides executable SAGE code and modified AppWorld and LLaMA-Factory dependencies."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "limits": [
+        "APPWORLD_OR_MATCHED_TOOL_AGENT_SETTING_REQUIRED",
+        "SFT_AND_RL_MODEL_STATE_MUST_BE BOUND",
+        "SKILL_LIBRARY_INITIALIZATION_AND_UPDATE_POLICY_MUST_BE BOUND",
+        "ARCHIVED_REPOSITORY_STATE_MUST_LATER_BE PINNED_IMMUTABLY",
+        "WITHIN_E1_SKILL_TRANSFER_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SKILL-PRO",
+      "verification_state": "ICML_2026_SPOTLIGHT_ACCEPTANCE_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_NON_PARAMETRIC_SKILL_EVOLUTION_COMPARATOR",
+      "verified_facts": [
+        "Skill-Pro defines a Skill-augmented MDP for LLM agents.",
+        "Its skills use explicit initiation, policy, and termination components.",
+        "Its Non-Parametric PPO mechanism generates, verifies, refines, and prunes skills without base-model parameter updates.",
+        "The official repository identifies the work as an ICML 2026 Spotlight and provides executable code.",
+        "Independent author publication records also identify Skill-Pro as ICML 2026."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2602.01869"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Miracle1207/Skill-Pro"
+        },
+        {
+          "class": "AUTHOR_PUBLICATION_RECORD",
+          "url": "https://qiruimi.github.io/publications/"
+        }
+      ],
+      "limits": [
+        "FINAL_ARCHIVAL_PROCEEDINGS_LOCATOR_NOT_BOUND_IN_THIS_REVIEW",
+        "SKILL_MDP_AND_PPO_GATE_CONFIGURATION_MUST_BE BOUND",
+        "MEMORY_AND_SKILL_CAPACITY_MUST_BE PARITY_AUDITED",
+        "BASE_AGENT_AND_TASK_SUITE_MUST_BE MATCHED",
+        "CROSS_TASK_OR_CROSS_AGENT_REUSE_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-EVOTEST",
+      "verification_state": "ICLR_2026_PUBLICATION_RECORD_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_EVOLUTIONARY_TEST_TIME_LEARNING_COMPARATOR",
+      "verified_facts": [
+        "EvoTest is recorded by Microsoft Research as an ICLR 2026 publication.",
+        "It introduces the Jericho Test-Time Learning setting for repeated episodes of the same environment.",
+        "Its Evolver changes prompts, memory, hyperparameters, state-extraction logic, and tool-use routines between attempts.",
+        "The method does not require gradient updates or fine-tuning at test time.",
+        "The public repository provides the EvoTest and J-TTL implementation."
+      ],
+      "sources": [
+        {
+          "class": "INSTITUTIONAL_PUBLICATION_RECORD",
+          "url": "https://microsoft.com/en-us/research/publication/evotest-evolutionary-test-time-learning-for-self-improving-agentic-systems/"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2510.13220"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yf-he/EvoTest"
+        }
+      ],
+      "limits": [
+        "JERICHO_MULTI_EPISODE_SETTING_MUST_BE MATCHED",
+        "EVOLVER_MODEL_AND_ACTOR_MODEL_MUST_BE BOUND",
+        "PROMPT_MEMORY_HYPERPARAMETER_AND_TOOL_ROUTINE_MUTATION_SURFACE_MUST_BE BOUND",
+        "TEST_TIME_EPISODE_BUDGET_REQUIRES_TASK_9_ACCOUNTING",
+        "WITHIN_E1_TEST_TIME_LEARNING_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v20_candidates_have_role_level_external_review": true,
+    "all_addendum_v20_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_or_acceptance_alone_establishes_strongest_status": false,
+    "within_agent_skill_transfer_establishes_general_n_h2": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

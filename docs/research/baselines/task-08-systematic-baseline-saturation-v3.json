@@ -1,0 +1,316 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 3,
+  "state": "THIRD_SYSTEMATIC_SATURATION_FOUND_NEW_MATERIAL_E1_E2_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T04:51:40Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v5_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v5.json",
+      "sha256": "e4bbba0683acc350f721eaecdaa089385e03f747d42b8bf71267894e49cd50dd"
+    },
+    "systematic_saturation_v2": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v2.json",
+      "sha256": "8171b257090d028a43f884060f4e86b42e89ec38b3ce6ea4ee0d82eab68c0488"
+    }
+  },
+  "systematic_sources": [
+    {
+      "scope": "E1_WEB_AGENT",
+      "name": "AgentOccam",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/f2c6e459b95694a24ac69c469a4ee746-Abstract-Conference.html",
+      "source_role": "PEER_REVIEWED_STRONG_FIXED_WEB_AGENT_BASELINE_SOURCE"
+    },
+    {
+      "scope": "E1_BROWSER_AGENT",
+      "name": "AgentTrek",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c681fb2bf1d785fbc766f3ea14758aab-Abstract-Conference.html",
+      "source_role": "PEER_REVIEWED_LEARNED_BROWSER_AGENT_SOURCE"
+    },
+    {
+      "scope": "E1_SELF_IMPROVING_AGENT",
+      "name": "SAGE",
+      "source": "https://aclanthology.org/2026.acl-long.69/",
+      "source_role": "PEER_REVIEWED_SELF_IMPROVING_AGENT_SOURCE"
+    },
+    {
+      "scope": "E2_ACTIVE_FEATURE_ACQUISITION",
+      "name": "Learning-To-Measure",
+      "source": "https://reaim-lab.github.io/publications.html",
+      "source_role": "PEER_REVIEWED_META_ACTIVE_FEATURE_ACQUISITION_SOURCE"
+    },
+    {
+      "scope": "E2_BAYESIAN_OPTIMIZATION",
+      "name": "GIT-BO",
+      "source": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/b54bafb92da25f09ac367cff46678992-Abstract-Conference.html",
+      "source_role": "PEER_REVIEWED_HIGH_DIMENSIONAL_BO_SOURCE"
+    },
+    {
+      "scope": "E2_BAYESIAN_OPTIMIZATION",
+      "name": "Zero-Shot Bayesian Optimization with TabPFN",
+      "source": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training",
+      "source_role": "AUTOML_2026_ZERO_SHOT_BO_SOURCE"
+    },
+    {
+      "scope": "N_H2_TRANSFER_REFERENCE",
+      "name": "Learning to Extrapolate to New Tasks",
+      "source": "https://arxiv.org/abs/2605.30132",
+      "source_role": "ICML_2026_TASK_RELATION_AND_EXTRAPOLATION_REFERENCE_NOT_DIRECT_CROSS_FAMILY_BASELINE"
+    },
+    {
+      "scope": "N_H2_E2_TRANSFER_REFERENCE",
+      "name": "TabRepo",
+      "source": "https://proceedings.mlr.press/v256/salinas24a.html",
+      "source_role": "TABULAR_TRANSFER_AND_AUTOML_REFERENCE_NOT_GENERAL_CROSS_FAMILY_BASELINE"
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTOCCAM",
+      "name": "AgentOccam",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_FIXED_OR_NON_LEARNED_WEB_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_STRONGEST_MATCHED_WEB_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/f2c6e459b95694a24ac69c469a4ee746-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/AgentOccam"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_WEB_INTERACTION_TASK_MATCHED",
+      "material_reason": "Peer-reviewed explicitly strong simple baseline for LLM web agents that does not depend on online feedback, search strategies, or in-context examples."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-AGENTTREK",
+      "name": "AgentTrek",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_BROWSER_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_AND_MODEL_ASSET_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2025/hash/c681fb2bf1d785fbc766f3ea14758aab-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/xlang-ai/AgentTrek"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BROWSER_GUI_AGENT_TASK_MATCHED",
+      "material_reason": "Provides trained browser-agent behavior derived from synthesized web trajectories and therefore represents a learned comparator distinct from fixed prompting scaffolds."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAGE",
+      "name": "SAGE",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_SELF_IMPROVING_AGENT_COMPARATOR_CANDIDATE",
+        "A_H1_SKILL_LIBRARY_AGENT_UPDATE_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.69/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/SAGE"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_PENDING_APPWORLD_OR_MATCHED_SKILL_LEARNING_SETTING",
+      "material_reason": "Peer-reviewed RL-based self-improving agent method with explicit skill accumulation and reuse across task sequences."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-L2M",
+      "name": "Learning-To-Measure",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_ACTIVE_FEATURE_ACQUISITION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E2_META_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/forum?id=ZumBSRsRbE"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/reAIM-Lab/Learning-To-Measure"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_MATCHED",
+      "material_reason": "Learns feature-acquisition behavior across tasks and operates in-context on unseen tabular tasks, making it directly relevant to investigation or measurement-decision baselines."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-GITBO",
+      "name": "GIT-BO",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HIGH_DIMENSIONAL_BAYESIAN_OPTIMIZATION_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/b54bafb92da25f09ac367cff46678992-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rosenyu304/GITBO"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_HIGH_DIMENSIONAL_BO_DECISION_SURFACE_MATCHED",
+      "material_reason": "Current peer-reviewed Bayesian-optimization comparator using a pretrained tabular foundation model and gradient-informed active-subspace search."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-ZSBO-TABPFN",
+      "name": "Zero-Shot Bayesian Optimization with TabPFN",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_ZERO_SHOT_BAYESIAN_OPTIMIZATION_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E2_PRETRAINED_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "AUTOML_2026_AND_OFFICIAL_REPRODUCIBILITY_REPOSITORY_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_RESEARCH_PUBLICATION",
+          "url": "https://www.amazon.science/publications/zero-shot-bayesian-optimization-with-tabpfn-competitive-with-state-of-the-art-without-per-task-training"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/amazon-science/tabpfn-automl2026"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_BAYESIAN_OPTIMIZATION_DECISION_SURFACE_MATCHED",
+      "material_reason": "Uses pretrained TabPFN as a zero-shot BO surrogate without fitting a new surrogate for each target optimization task."
+    }
+  ],
+  "new_material_candidate_count": 6,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 3,
+    "E3_VISION": 0
+  },
+  "n_h2_reference_research": [
+    {
+      "name": "Relational Task Extrapolator",
+      "source": "https://arxiv.org/abs/2605.30132",
+      "publication_state": "ICML_2026",
+      "relevance": "Learns relational transformations between tasks and applies them to unseen target tasks.",
+      "disposition": "REFERENCE_ONLY_NOT_CURRENT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The evidence covers task extrapolation under specific relational structure and does not establish one learned decision mechanism transferring across Hetren E1, E2, and E3 environment families."
+    },
+    {
+      "name": "TabRepo transfer-learning applications",
+      "source": "https://proceedings.mlr.press/v256/salinas24a.html",
+      "publication_state": "AUTOML_2024_PEER_REVIEWED",
+      "relevance": "Demonstrates transfer of model-evaluation knowledge across tabular datasets.",
+      "disposition": "E2_TRANSFER_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "Transfer remains within tabular-system selection and does not span Hetren's E1/E2/E3 family boundary."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "source": "https://openreview.net/forum?id=ZumBSRsRbE",
+      "publication_state": "ICML_2026",
+      "relevance": "Meta-learns active feature acquisition behavior across tasks.",
+      "disposition": "WITHIN_E2_TRANSFER_RELEVANT_NOT_GENERAL_CROSS_FAMILY_COMPARATOR",
+      "reason": "Its transfer evidence is relevant to structured/tabular feature-acquisition tasks rather than one common decision policy across E1, E2, and E3."
+    },
+    {
+      "name": "SAGE",
+      "source": "https://aclanthology.org/2026.acl-long.69/",
+      "publication_state": "ACL_2026",
+      "relevance": "Accumulates and reuses learned skills across chains of agent tasks.",
+      "disposition": "WITHIN_E1_TRANSFER_RELEVANT_NOT_GENERAL_CROSS_FAMILY_COMPARATOR",
+      "reason": "The published evidence is centered on AppWorld-style agent tasks rather than E1-to-E2-to-E3 learned-decision transfer."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_environment_transfer_references_found": true,
+    "forcing_within_environment_transfer_method_into_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_THIRD_SYSTEMATIC_SATURATION"
+  },
+  "screened_not_promoted": [
+    {
+      "name": "SkillRL",
+      "source": "https://arxiv.org/abs/2602.08234",
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_IN_THIS_PASS",
+      "reason": "Material self-improving agent research with public code, but SAGE provides peer-reviewed 2026 evidence for a closely related current role; SkillRL may be reconsidered if the matched E1 contract distinguishes its recursive skill-bank mechanism materially."
+    },
+    {
+      "name": "Weasel",
+      "source": "https://arxiv.org/abs/2605.20291",
+      "disposition": "RESEARCH_REFERENCE_NOT_PROMOTED_IN_THIS_PASS",
+      "reason": "Relevant to out-of-domain web-agent training and data selection, but archival preprint evidence alone did not justify adding another claim-bearing comparator before matched E1 task definition."
+    },
+    {
+      "name": "Quick-Tune",
+      "source": "https://github.com/machinelearningnuremberg/QuickTune",
+      "disposition": "NOT_PROMOTED_TO_E2_STRUCTURED_POOL",
+      "reason": "Meta-learning model-selection and HPO method, but its primary demonstrated implementation is image-model fine-tuning rather than the currently governed structured-data environment."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "MATERIAL_FIXED_AND_LEARNED_AGENT_CANDIDATES_ADDED",
+    "E2": "MATERIAL_ACTIVE_ACQUISITION_AND_BAYESIAN_OPTIMIZATION_CANDIDATES_ADDED",
+    "E3": "NO_NEW_E3_CANDIDATE_PROMOTED_IN_THIS_PASS_BY_DESIGN_AFTER_PRIOR_SYSTEMATIC_EXPANSION",
+    "N_H2": "MULTIPLE_TRANSFER_REFERENCES_FOUND_BUT_NO_VERIFIED_GENERAL_E1_E2_E3_CROSS_FAMILY_COMPARATOR"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "The third systematic saturation pass produced materially relevant E1 and E2 candidates absent from prior Task-8 candidate artifacts."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "within_environment_transfer_evidence_proves_n_h2": false,
+    "new_candidates_are_automatically_strongest": false,
+    "reference_research_is_automatically_a_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B8_VERIFY_ADDENDUM_V6_AND_PERFORM_FOCUSED_SATURATION_AFTER_E1_E2_POOL_EXPANSION"
+}

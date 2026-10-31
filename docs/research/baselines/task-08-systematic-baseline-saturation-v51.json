@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 51,
+  "state": "SATURATION_V51_FOUND_NEW_CANONICAL_EMBODIED_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:36:42Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v53_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v53.json",
+      "sha256": "ae07743c867e72f1b663bf8d65768591b4b2263b98029bf1803b9aa815aacc50"
+    },
+    "systematic_saturation_v50": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v50.json",
+      "sha256": "051223fc65e35cb6d2a5b8a4dc5e54e8766527d51b28fd84b0fe5089a5945234"
+    }
+  },
+  "focus": [
+    "CANONICAL_LEGACY_EMBODIED_E1_PLANNING",
+    "GROUNDED_ACTION_SELECTION",
+    "PROGRAMMATIC_AND_CODE_POLICY_SYNTHESIS",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"Language Models as Zero-Shot Planners\" ICML 2022 official code",
+    "\"SayCan\" CoRL 2022 official code robotic affordances",
+    "\"Do As I Can, Not As I Say\" CoRL official implementation",
+    "\"Inner Monologue\" CoRL embodied planning official implementation",
+    "\"Code as Policies\" ICRA 2023 official code",
+    "\"ProgPrompt\" ICRA 2023 official code",
+    "canonical embodied language agent planning 2022 2023 executable baseline",
+    "legacy LLM embodied planning feedback agent official implementation"
+  ],
+  "query_count": 8,
+  "canonical_candidates_checked": 4,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ZERO-SHOT-PLANNER",
+      "name": "Language Models as Zero-Shot Planners: Extracting Actionable Knowledge for Embodied Agents",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAYCAN",
+      "name": "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CODE-AS-POLICIES",
+      "name": "Code as Policies: Language Model Programs for Embodied Control",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PROGPROMPT",
+      "name": "ProgPrompt: Generating Situated Robot Task Plans using Large Language Models",
+      "disposition": "NEW_MATERIAL_CANONICAL_EMBODIED_E1_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ZERO-SHOT-PLANNER",
+      "name": "Language Models as Zero-Shot Planners: Extracting Actionable Knowledge for Embodied Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_ZERO_SHOT_EMBODIED_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/huang22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/language-planner"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_VIRTUALHOME_STYLE_ACTIONABLE_PLANNING_SETTING_MATCHED",
+      "material_reason": "Canonical executable zero-shot embodied planning baseline that maps high-level language tasks into admissible environment actions.",
+      "limits": [
+        "AVAILABLE_ACTION_SET_MUST_BE BOUND",
+        "PROMPT_EXAMPLES_AND_LANGUAGE_MODEL_MUST_BE BOUND",
+        "ZERO_SHOT_PLANNING_IS_NOT_ONLINE_ADAPTATION"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SAYCAN",
+      "name": "Do As I Can, Not As I Say: Grounding Language in Robotic Affordances",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_GROUNDED_AFFORDANCE_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v205/ichter23a.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://say-can.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/saycan"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_SKILL_AFFORDANCE_SETTING_MATCHED",
+      "material_reason": "Canonical grounded planning baseline combining language-model skill relevance with executable-skill affordance/value information.",
+      "limits": [
+        "OPEN_SOURCE_TABLETOP_IMPLEMENTATION_IS_NOT_THE_FULL_REAL_ROBOT_SYSTEM",
+        "LANGUAGE_MODEL_SKILL_LIBRARY_AND_VALUE_FUNCTION_CONFIGURATION_MUST_BE BOUND",
+        "AFFORDANCE_INFORMATION_OPPORTUNITY_MUST_BE PARITY MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CODE-AS-POLICIES",
+      "name": "Code as Policies: Language Model Programs for Embodied Control",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LANGUAGE_MODEL_POLICY_CODE_SYNTHESIS_COMPARATOR_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://doi.org/10.1109/ICRA48891.2023.10160591"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://code-as-policies.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/google-research/tree/master/code_as_policies"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_EMBODIED_API_POLICY_SYNTHESIS_SETTING_MATCHED",
+      "material_reason": "Canonical executable embodied-control comparator where an LLM synthesizes policy code over perception and robot-control APIs.",
+      "limits": [
+        "ROBOT_API_AND_PERCEPTION_PRIMITIVES_MUST_BE BOUND",
+        "PROMPT_AND_LANGUAGE_MODEL_IDENTITY_MUST_BE BOUND",
+        "CODE_SYNTHESIS_SETTING_MUST_NOT_BE COMPARED_TO_UNMATCHED_TEXT_ONLY_AGENT TASKS"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PROGPROMPT",
+      "name": "ProgPrompt: Generating Situated Robot Task Plans using Large Language Models",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_PROGRAMMATIC_SITUATED_PLANNING_COMPARATOR_CANDIDATE"
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ieeexplore.ieee.org/document/10161317/"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://progprompt.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVlabs/progprompt-vh"
+        }
+      ],
+      "eligibility_status": "ROLE_CONDITIONAL_ELIGIBLE_IF_SITUATED_ROBOT_OR_VIRTUALHOME_PLANNING_SETTING_MATCHED",
+      "material_reason": "Peer-reviewed executable programmatic-prompt planning baseline with explicit actions, objects, assertions, and recovery-oriented plan structure.",
+      "limits": [
+        "VIRTUALHOME_OR_MATCHED_SITUATED_ACTION_SPACE_REQUIRED",
+        "EXAMPLE_PROGRAMS_AND_AVAILABLE_ACTIONS_MUST_BE BOUND",
+        "STATIC_PROMPT_PLANNING_MUST_NOT_BE MISLABELED_ONLINE_ADAPTATION"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 4,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 4,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "Inner Monologue: Embodied Reasoning through Planning with Language Models",
+      "environment": "E1_AGENT",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v205/huang23c.html"
+        },
+        {
+          "class": "OFFICIAL_PROJECT",
+          "url": "https://innermonologue.github.io/"
+        }
+      ],
+      "disposition": "MATERIAL_CANONICAL_E1_REFERENCE_EXECUTABLE_IMPLEMENTATION_NOT_INDEPENDENTLY_VERIFIED",
+      "reason": "The method is a canonical closed-loop embodied-planning reference using language feedback for replanning, but this bounded review did not independently verify a matching official executable research implementation suitable for governed reproduction."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "canonical_embodied_planning_methods_do_not_establish_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V51"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "previous_counter": 0,
+    "reason": "At least one materially new canonical embodied E1 candidate was discovered, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonical_status_establishes_strongest_status": false,
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "embodied_planning_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B56_VERIFY_ADDENDUM_V54_AND_CONTINUE_BOUNDED_CANONICAL_REFINEMENT"
+}

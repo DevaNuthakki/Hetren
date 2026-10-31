@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 47,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T00:13:09Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v46": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v46.json",
+      "sha256": "b253804988c87cd962c6a075da26774c6348dd06d4ffb15eb57c7ef5aee266ee"
+    },
+    "systematic_saturation_v44": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v44.json",
+      "sha256": "a0caa017e153f4d6ee392d218aaeb458e6bda56404159818e49e62d7d9cb36e1"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-STITCH-CONTEXTUAL-INTENT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Grounding Agent Memory in Contextual Intent / STITCH",
+      "implementation_identity": "https://github.com/Seattleyrz/contextual-intent",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_CONTEXT_AWARE_DIRECT_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_STRUCTURED_INTENT_RETRIEVAL_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.584/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Seattleyrz/contextual-intent"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_CONTEXT_AWARE_LONG_HORIZON_RETRIEVAL_ROLE_IS_MATCHED",
+        "CAME_BENCH_OR_MATCHED_GOAL_ORIENTED_MEMORY_SETTING_REQUIRED",
+        "INTENT_SCHEMA_AND_RETRIEVAL_CONFIGURATION_MUST_BE BOUND",
+        "MODEL_DATASET_AND_JUDGE_CONFIGURATION_MUST_BE BOUND",
+        "RETRIEVAL_QUALITY_DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER",
+        "STITCH indexes trajectory steps using structured contextual intent and retrieves memory by intent compatibility before semantic similarity, directly targeting interference from context-mismatched long-horizon memories."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_CONTEXT_AWARE_LONG_HORIZON_RETRIEVAL_ROLE_IS_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V44"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

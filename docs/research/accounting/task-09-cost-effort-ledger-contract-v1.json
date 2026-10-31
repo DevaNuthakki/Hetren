@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_COST_EFFORT_LEDGER_CONTRACT",
+  "contract_generation": 1,
+  "state": "DRAFT_RESEARCH_CONTRACT_NO_OBSERVED_VALUES",
+  "recorded_at_utc": "2026-09-28T23:21:34Z",
+  "task": 9,
+  "purpose": "Define Task-9-owned cost, resource, engineering-effort, adaptation-cost, and practical-value ledger semantics before any concrete observed values are recorded.",
+  "upstream_bindings": {
+    "task_8_task9_input_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "task_8_task9_dependency_block": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-dependency-block-v1.json",
+      "sha256": "a615c4f16fb4cf752ac774a4a3e12ebeff67fe1094adb38795857b1403c52eab"
+    }
+  },
+  "task_9_ownership": [
+    "compute_cost_fields",
+    "execution_cost_fields",
+    "engineering_effort_fields",
+    "adaptation_cost_fields",
+    "resource_measurement_definitions",
+    "resource_measurement_procedures",
+    "accounting_values",
+    "practical_value_measurement_configuration"
+  ],
+  "explicit_non_ownership": [
+    "baseline_identity",
+    "baseline_version",
+    "baseline_selection",
+    "baseline_comparison_role",
+    "task_8_resource_regime_selection",
+    "protected_split_identity",
+    "hypothesis_success_threshold",
+    "system_capability_support"
+  ],
+  "anti_hindsight_rules": {
+    "measurement_fields_frozen_before_applicable_protected_outcomes": true,
+    "measurement_procedures_frozen_before_applicable_protected_outcomes": true,
+    "resource_dimensions_must_not_be_suppressed_after_results": true,
+    "unfavorable_resource_measurements_must_be_preserved": true,
+    "failed_runs_with_real_resource_consumption_must_be_preserved": true,
+    "missing_value_must_not_be_interpreted_as_zero": true,
+    "missing_engineering_effort_must_not_be_interpreted_as_negligible": true,
+    "missing_adaptation_cost_must_not_be_interpreted_as_free": true,
+    "current_price_must_not_silently_replace_historical_price": true,
+    "resource_evidence_must_not_be_collapsed_into_quality_score": true
+  },
+  "task_8_resource_regime_binding": {
+    "owner": "TASK_8",
+    "accepted_semantic_regimes": [
+      "STRICTLY_MATCHED",
+      "BUDGET_CAPPED",
+      "UNCONSTRAINED_BUT_JOINTLY_REPORTED",
+      "NOT_APPLICABLE_WITH_GOVERNED_REASON"
+    ],
+    "task_9_behavior": "Task 9 measures and records resources under the Task-8-declared semantic regime. Task 9 does not choose a more favorable regime after seeing outcomes."
+  },
+  "ledger_record_identity": {
+    "required_fields": [
+      "ledger_record_id",
+      "experiment_manifest_id",
+      "experiment_run_id",
+      "system_version_id",
+      "candidate_or_baseline_id",
+      "candidate_or_baseline_version",
+      "comparison_role",
+      "environment_family",
+      "execution_phase",
+      "resource_regime",
+      "measurement_contract_version",
+      "measurement_window_start_utc",
+      "measurement_window_end_utc",
+      "source_evidence_refs"
+    ],
+    "execution_phase_values": [
+      "SETUP",
+      "TRAINING",
+      "DEVELOPMENT_TUNING",
+      "VALIDATION",
+      "ADAPTATION",
+      "EVALUATION",
+      "VERIFICATION",
+      "ROLLBACK",
+      "OTHER_WITH_REASON"
+    ]
+  },
+  "compute_resource_fields": [
+    {
+      "field": "accelerator_device_identity",
+      "unit": "IDENTITY",
+      "required_if_applicable": true
+    },
+    {
+      "field": "accelerator_active_seconds",
+      "unit": "SECONDS",
+      "required_if_measurable": true
+    },
+    {
+      "field": "cpu_active_seconds",
+      "unit": "SECONDS",
+      "required_if_measurable": true
+    },
+    {
+      "field": "peak_accelerator_memory_bytes",
+      "unit": "BYTES",
+      "required_if_measurable": true
+    },
+    {
+      "field": "peak_host_memory_bytes",
+      "unit": "BYTES",
+      "required_if_measurable": true
+    },
+    {
+      "field": "storage_bytes_written",
+      "unit": "BYTES",
+      "required_if_measurable": true
+    }
+  ],
+  "execution_resource_fields": [
+    {
+      "field": "wall_clock_seconds",
+      "unit": "SECONDS",
+      "required": true
+    },
+    {
+      "field": "model_invocation_count",
+      "unit": "COUNT",
+      "required_if_applicable": true
+    },
+    {
+      "field": "input_token_count",
+      "unit": "TOKENS",
+      "required_if_applicable": true
+    },
+    {
+      "field": "output_token_count",
+      "unit": "TOKENS",
+      "required_if_applicable": true
+    },
+    {
+      "field": "cached_input_token_count",
+      "unit": "TOKENS",
+      "required_if_provider_reports": true
+    },
+    {
+      "field": "api_call_count",
+      "unit": "COUNT",
+      "required_if_applicable": true
+    },
+    {
+      "field": "tool_call_count",
+      "unit": "COUNT",
+      "required_if_applicable": true
+    },
+    {
+      "field": "environment_step_count",
+      "unit": "COUNT",
+      "required_if_applicable": true
+    },
+    {
+      "field": "retry_count",
+      "unit": "COUNT",
+      "required_if_applicable": true
+    }
+  ],
+  "engineering_effort_fields": [
+    {
+      "field": "active_human_seconds",
+      "unit": "SECONDS",
+      "definition": "Contemporaneously recorded time spent actively performing engineering work for the governed run or comparison."
+    },
+    {
+      "field": "elapsed_human_session_seconds",
+      "unit": "SECONDS",
+      "definition": "Elapsed engineering-session time, preserved separately from active effort."
+    },
+    {
+      "field": "manual_intervention_count",
+      "unit": "COUNT"
+    },
+    {
+      "field": "prompt_iteration_count",
+      "unit": "COUNT"
+    },
+    {
+      "field": "configuration_iteration_count",
+      "unit": "COUNT"
+    },
+    {
+      "field": "debugging_iteration_count",
+      "unit": "COUNT"
+    },
+    {
+      "field": "failed_search_or_tuning_attempt_count",
+      "unit": "COUNT"
+    }
+  ],
+  "adaptation_cost_fields": [
+    {
+      "field": "adaptation_wall_clock_seconds",
+      "unit": "SECONDS"
+    },
+    {
+      "field": "adaptation_accelerator_seconds",
+      "unit": "SECONDS"
+    },
+    {
+      "field": "adaptation_cpu_seconds",
+      "unit": "SECONDS"
+    },
+    {
+      "field": "adaptation_input_tokens",
+      "unit": "TOKENS"
+    },
+    {
+      "field": "adaptation_output_tokens",
+      "unit": "TOKENS"
+    },
+    {
+      "field": "adaptation_model_invocations",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_tool_calls",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_examples_observed",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_labeled_target_examples",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_unlabeled_target_examples",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_optimizer_steps",
+      "unit": "COUNT"
+    },
+    {
+      "field": "adaptation_checkpoint_bytes_written",
+      "unit": "BYTES"
+    },
+    {
+      "field": "rollback_wall_clock_seconds",
+      "unit": "SECONDS"
+    }
+  ],
+  "monetary_cost_fields": [
+    {
+      "field": "currency_code",
+      "unit": "ISO_4217_CURRENCY_CODE"
+    },
+    {
+      "field": "provider_usage_charge",
+      "unit": "CURRENCY"
+    },
+    {
+      "field": "compute_charge",
+      "unit": "CURRENCY"
+    },
+    {
+      "field": "storage_charge",
+      "unit": "CURRENCY"
+    },
+    {
+      "field": "other_execution_charge",
+      "unit": "CURRENCY"
+    },
+    {
+      "field": "rate_schedule_identity",
+      "unit": "IDENTITY"
+    },
+    {
+      "field": "rate_schedule_effective_at_utc",
+      "unit": "UTC_TIMESTAMP"
+    }
+  ],
+  "human_effort_monetization": {
+    "default": "DO_NOT_MONETIZE",
+    "rule": "Human engineering effort remains a separately reported resource unless a labor-rate conversion rule was predeclared before applicable protected outcomes."
+  },
+  "missingness_states": [
+    "MEASURED",
+    "NOT_APPLICABLE_WITH_REASON",
+    "NOT_MEASURABLE_WITH_CURRENT_INSTRUMENTATION",
+    "SOURCE_DID_NOT_REPORT",
+    "MEASUREMENT_FAILED",
+    "UNKNOWN"
+  ],
+  "missingness_rules": {
+    "null_requires_missingness_state": true,
+    "zero_requires_observed_zero": true,
+    "not_applicable_requires_reason": true,
+    "estimated_value_requires_method_and_provenance": true,
+    "retrospective_human_effort_estimate_must_be_labeled": true
+  },
+  "raw_evidence_policy": {
+    "preserve_per_run_records": true,
+    "preserve_failed_run_resource_records": true,
+    "preserve_measurement_source_references": true,
+    "summary_values_must_not_replace_raw_records": true
+  },
+  "practical_value_configuration": {
+    "quality_and_resource_axes_reported_separately": true,
+    "default_composite_score": null,
+    "silent_quality_resource_aggregation_prohibited": true,
+    "pareto_analysis_allowed": true,
+    "pareto_analysis_requires_comparable_resource_dimensions": true,
+    "weighted_utility_allowed_only_if_predeclared": true,
+    "weighted_utility_must_be_frozen_before_protected_outcomes": true,
+    "missing_resource_dimension_cannot_be_treated_as_zero": true,
+    "practical_value_verdict_created_by_this_contract": false
+  },
+  "observed_values": [],
+  "claim_limits": {
+    "contains_observed_resource_values": false,
+    "contains_observed_cost_values": false,
+    "contains_observed_engineering_effort": false,
+    "contains_practical_value_result": false,
+    "selects_task_8_baseline": false,
+    "authorizes_protected_execution": false,
+    "establishes_task_9_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "T9A_2_ADVERSARIAL_REVIEW_AND_MEASUREMENT_CONTRACT_HARDENING"
+}

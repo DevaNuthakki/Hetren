@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_REAL_EXPERIMENT_TASK9_DEPENDENCY_BLOCK_ATTEMPT",
+  "attempt": 1,
+  "state": "FORMAL_EXTERNAL_DEPENDENCY_BLOCK_FROZEN_TASK8_PAUSED",
+  "recorded_at_utc": "2026-09-27T21:57:01Z",
+  "task": 8,
+  "bindings": {
+    "r13e_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    },
+    "r13f_dependency_block": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-dependency-block-v1.json",
+      "sha256": "a615c4f16fb4cf752ac774a4a3e12ebeff67fe1094adb38795857b1403c52eab"
+    }
+  },
+  "state_summary": {
+    "same_source_bundle_count": 5,
+    "runtime_environment_identity_count": 0,
+    "task9_concrete_accounting_value_count": 0,
+    "concrete_ready_contract_count": 0,
+    "candidate_specific_applicability_filtering_started": false,
+    "comparator_ranking_started": false,
+    "immutable_final_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcome_inspected": false,
+    "task8_authority_established": false,
+    "scientific_support_established": false
+  },
+  "resume_authorization": {
+    "authorized_now": false,
+    "requires_real_experiment_runtime_inputs": true,
+    "requires_task9_owned_measurement_and_accounting_inputs": true,
+    "requires_pre_protected_resource_regime_binding": true
+  },
+  "next_gate": "I5A2R13G_RESUME_ONLY_AFTER_GOVERNED_REAL_EXPERIMENT_AND_TASK9_INPUTS_EXIST"
+}

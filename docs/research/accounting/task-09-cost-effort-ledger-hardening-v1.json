@@ -1,0 +1,187 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_9_COST_EFFORT_LEDGER_HARDENING",
+  "state": "HARDENED_DRAFT_OVERLAY_NO_OBSERVED_VALUES",
+  "recorded_at_utc": "2026-09-28T23:25:58Z",
+  "task": 9,
+  "methodology_classification": "HETREN_GOVERNANCE_HARDENING_PROPOSAL",
+  "bindings": {
+    "base_ledger_contract": {
+      "path": "docs/research/accounting/task-09-cost-effort-ledger-contract-v1.json",
+      "sha256": "44662f31243d3817a68b2613637c32874482b58d434f976581f100c462d5b620"
+    },
+    "red_team_review": {
+      "path": "docs/research/accounting/task-09-accounting-contract-red-team-v1.json",
+      "sha256": "472a22a04be317df4c9c5e5bbd65e9700f39b539be400efe919b2d1f1839105a"
+    },
+    "task8_task9_handoff": {
+      "path": "docs/research/baselines/task-08-real-experiment-task9-contract-input-handoff-v1.json",
+      "sha256": "5ffb9d3e026d6582bf7ca8f58cf125c85517561c85c5be7c7b145d4972b48150"
+    }
+  },
+  "record_identity_rules": {
+    "required_identifiers": [
+      "ledger_record_id",
+      "experiment_contract_id",
+      "candidate_or_system_id",
+      "attempt_id",
+      "resource_event_id",
+      "measurement_procedure_id",
+      "accounting_contract_version"
+    ],
+    "resource_event_id_uniqueness_required": true,
+    "attempt_lineage_required": true,
+    "source_event_references_required_for_derived_values": true
+  },
+  "value_state_enum": [
+    "OBSERVED",
+    "OBSERVED_ZERO",
+    "DERIVED",
+    "ESTIMATED_RETROSPECTIVELY",
+    "NOT_MEASURED",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "value_state_rules": {
+    "unknown_is_zero": false,
+    "not_measured_is_zero": false,
+    "not_applicable_is_zero": false,
+    "observed_zero_requires_evidence": true,
+    "not_applicable_requires_justification": true,
+    "retrospective_estimate_requires_uncertainty": true
+  },
+  "attribution_modes": [
+    "DIRECT",
+    "ALLOCATED_SHARED",
+    "SHARED_UNALLOCATED",
+    "DERIVED_NON_BILLABLE"
+  ],
+  "shared_resource_rules": {
+    "allocation_driver_must_be_predeclared": true,
+    "allowed_driver_examples_not_defaults": [
+      "accelerator_seconds",
+      "cpu_seconds",
+      "provider_metered_units",
+      "exclusive_wall_clock_fraction",
+      "storage_byte_time"
+    ],
+    "arbitrary_equal_split_forbidden": true,
+    "post_result_favorable_allocation_forbidden": true,
+    "unallocatable_shared_cost_reported_separately": true
+  },
+  "retry_and_failure_rules": {
+    "resource_consuming_failed_attempts_accounted": true,
+    "retry_attempts_accounted": true,
+    "failed_attempt_scientific_validity_separate": true,
+    "retry_reason_required": true,
+    "attempt_parent_id_required_when_applicable": true
+  },
+  "human_effort_fields": {
+    "required": [
+      "effort_record_id",
+      "activity_category",
+      "active_human_seconds",
+      "elapsed_interval_seconds",
+      "passive_wait_seconds",
+      "evidence_basis",
+      "value_state"
+    ],
+    "activity_categories": [
+      "IMPLEMENTATION",
+      "CONFIGURATION",
+      "PROMPT_OR_POLICY_ITERATION",
+      "DEBUGGING",
+      "DATA_PREPARATION",
+      "ENVIRONMENT_SETUP",
+      "RUN_SUPERVISION",
+      "FAILURE_RECOVERY",
+      "ANALYSIS",
+      "VERIFICATION",
+      "OTHER_DECLARED"
+    ],
+    "retrospective_fields_if_applicable": [
+      "estimate_lower_bound_seconds",
+      "estimate_upper_bound_seconds",
+      "estimate_method",
+      "supporting_evidence"
+    ],
+    "passive_wait_counts_as_active_effort": false,
+    "human_effort_monetized_by_default": false
+  },
+  "phase_taxonomy": [
+    "SETUP",
+    "IMPLEMENTATION",
+    "TUNING_OR_SEARCH",
+    "TRAINING",
+    "PRE_ADAPTATION_EVALUATION",
+    "ADAPTATION",
+    "POST_ADAPTATION_EVALUATION",
+    "ROLLBACK",
+    "RESTORATION_VERIFICATION",
+    "TEARDOWN"
+  ],
+  "phase_boundary_rules": {
+    "phase_identity_required": true,
+    "adaptation_start_end_required_if_applicable": true,
+    "rollback_cost_separate_if_applicable": true,
+    "restoration_verification_cost_separate_if_applicable": true,
+    "post_result_phase_reclassification_forbidden": true
+  },
+  "monetary_fields": {
+    "required_when_monetary_value_exists": [
+      "original_amount",
+      "original_currency",
+      "rate_source",
+      "rate_effective_at",
+      "pricing_unit",
+      "sku_or_model",
+      "region_if_pricing_depends_on_region"
+    ],
+    "gross_and_net_fields_separate": true,
+    "credits_discounts_free_tier_separate": true,
+    "fx_conversion_if_used_requires": [
+      "converted_amount",
+      "converted_currency",
+      "fx_rate",
+      "fx_source",
+      "fx_rate_timestamp"
+    ],
+    "historical_cost_repricing_forbidden": true
+  },
+  "setup_and_amortization_rules": {
+    "one_time_setup_cost_separate": true,
+    "amortization_default": "NONE",
+    "if_amortized_requires": [
+      "predeclared_denominator",
+      "reuse_basis",
+      "allocation_formula"
+    ],
+    "raw_unamortized_value_retained": true
+  },
+  "aggregation_rules": {
+    "deduplicate_by_resource_event_id": true,
+    "quality_resource_scalar_default": null,
+    "quality_and_resources_separate": true,
+    "composite_weighting_requires_precommitment": true,
+    "pareto_interpretation_allowed_only_when": [
+      "axes_are_comparable",
+      "direction_of_preference_is_declared",
+      "measurement_completeness_is_sufficient"
+    ]
+  },
+  "post_result_change_control": {
+    "append_only_amendment_required": true,
+    "silent_rewrite_forbidden": true,
+    "historical_records_retain_original_contract_binding": true,
+    "new_definition_effective_only_under_declared_version": true
+  },
+  "observed_value_count": 0,
+  "claim_limits": {
+    "creates_observed_cost": false,
+    "creates_observed_effort": false,
+    "creates_observed_adaptation_cost": false,
+    "selects_task8_resource_regime": false,
+    "establishes_practical_value": false,
+    "establishes_task9_authority": false
+  }
+}

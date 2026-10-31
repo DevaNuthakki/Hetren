@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_DEVELOPMENT_CASE_FREEZE_MANIFEST",
+  "state": "DEVELOPMENT_QUALIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_generation": 3,
+  "case_source_class": "KNOWN_DEVELOPMENT_CASE",
+  "fresh_holdout": false,
+  "created_before_semantic_evaluator": true,
+  "historical_case_set": true,
+  "may_not_be_rewritten_to_satisfy_validator": true,
+  "case_count": 54,
+  "expectation_counts": {
+    "MUST_ACCEPT": 27,
+    "MUST_REJECT": 27
+  },
+  "artifacts": [
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/contract.json",
+      "sha256": "5e0663cc2117c4163c6b42d767290db594443127c9615d02c34990a467457907"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/schema.json",
+      "sha256": "e968f5a4dc793eb7639bb8823bbd72b876be37d3f437ee1965e4449177af5840"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/cases.json",
+      "sha256": "b2187b08cbde20086d74901316b1a0778d55e6f165a4cc774c32df67d361194d"
+    }
+  ],
+  "interpretation": "These hashes freeze the initial known-development Generation 3 qualification corpus before the semantic evaluator is implemented. If semantic defects are discovered later, historical bytes remain preserved and remediation must use explicit successor evidence rather than silently rewriting this frozen case set."
+}

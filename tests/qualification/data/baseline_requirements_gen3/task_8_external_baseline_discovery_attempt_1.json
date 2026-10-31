@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_DISCOVERY_ATTEMPT",
+  "attempt": 1,
+  "state": "DISCOVERY_IN_PROGRESS_MORE_RESEARCH_REQUIRED",
+  "recorded_at_utc": "2026-09-26T02:58:26Z",
+  "task": 8,
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "pre_research_boundary": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_concrete_baseline_selection_research_boundary.json",
+      "sha256": "f42d61e99ba4ca64543fb7a0cd2050654b2dcd3d9f24c127954e988e6835c63d"
+    },
+    "discovery_log": {
+      "path": "docs/research/baselines/task-08-external-baseline-discovery-log-v1.json",
+      "sha256": "d345c33bf0a3ba1f55753a5f3f4548e760342517855522fdbbc9e5e6ce423bad"
+    },
+    "candidate_registry": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+      "sha256": "83235e3348fa7afbc774fa0335d535f966f2a8a67cc8db46f47803ad37318d36"
+    }
+  },
+  "counts": {
+    "queries": 61,
+    "material_sources": 50,
+    "candidates": 34
+  },
+  "stopping_rule_satisfied": false,
+  "reason": "First broad discovery produced materially new candidates during refinement. Role-specific deep review and immutable version pinning remain required before selection.",
+  "selection_state": {
+    "winner_selected": false,
+    "baseline_frozen": false,
+    "protected_outcome_used": false
+  },
+  "next_gate": "I4B_ROLE_BINDING_VERSION_PINNING_AND_STRENGTH_EVIDENCE_REVIEW"
+}

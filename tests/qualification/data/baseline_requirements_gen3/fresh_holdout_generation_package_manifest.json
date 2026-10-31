@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_HOLDOUT_GENERATION_PACKAGE_MANIFEST",
+  "state": "FROZEN_BEFORE_HOLDOUT_GENERATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "fresh_holdout_cases_generated": false,
+  "package_created_before_holdout_cases": true,
+  "artifacts": [
+    {
+      "path": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+      "sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_contract.json",
+      "sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037"
+    },
+    {
+      "path": "tests/qualification/data/baseline_requirements_gen3/fresh_holdout_generation_package.json",
+      "sha256": "800ed8e09da7c550995416b5145af7e106756c1e82c2f88bd858cf01e88fe746"
+    },
+    {
+      "path": "scripts/check_baseline_requirements_gen3_holdout_generation_package.py",
+      "sha256": "3790d74b1882ec32721c9a73e600e188d3aca9f7b8e4ffab6606d98d8b614264"
+    }
+  ],
+  "interpretation": "This manifest freezes the isolated generation package before any fresh holdout cases are generated. The package exposes Generation 3 requirements and the preregistered holdout contract, but not the semantic evaluator implementation or known qualification answers."
+}

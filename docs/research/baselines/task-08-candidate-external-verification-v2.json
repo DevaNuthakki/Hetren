@@ -1,0 +1,344 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_EXTERNAL_VERIFICATION",
+  "verification_generation": 2,
+  "state": "ORIGINAL_34_CANDIDATES_ROLE_REVIEW_COMPLETE_SELECTION_NOT_AUTHORIZED",
+  "recorded_at_utc": "2026-09-26T04:17:54Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_registry_v1": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json",
+      "sha256": "83235e3348fa7afbc774fa0335d535f966f2a8a67cc8db46f47803ad37318d36"
+    },
+    "verification_v1": {
+      "path": "docs/research/baselines/task-08-candidate-external-verification-v1.json",
+      "sha256": "8cba21662988be395464034a435bafad3ad0d6253a659c63200a6bbdee135f09"
+    }
+  },
+  "review_scope": "Fifteen candidates explicitly left unreviewed or partially reviewed by I4B1.",
+  "candidate_findings": [
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "MEMORY_AND_LINGUISTIC_FEEDBACK_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "Reflexion reinforces language agents through linguistic feedback rather than weight updates.",
+        "The method stores reflective text in episodic memory and uses it to affect later decisions.",
+        "The official research implementation covers reasoning, programming, WebShop, and ALFWorld-style experiments."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/noahshinn/reflexion"
+        }
+      ],
+      "n_h2_status": "NOT_ESTABLISHED_AS_CROSS_FAMILY_LEARNED_TRANSFER"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-AGENT-Q",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "LEARNED_WEB_AGENT_COMPARATOR_IF_TASK_MATCHED",
+      "verified_facts": [
+        "Agent Q combines guided Monte Carlo Tree Search, self-critique, and iterative fine-tuning using an off-policy DPO variant.",
+        "Its reported evaluations are centered on interactive/web-agent settings including WebShop and booking scenarios."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2408.07199"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/sentient-engineering/agent-q"
+        }
+      ],
+      "n_h2_status": "CROSS_FAMILY_TRANSFER_NOT_ESTABLISHED_BY_THIS_REVIEW"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-OPRO",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "PROMPT_OR_NATURAL_LANGUAGE_OPTIMIZATION_COMPARATOR_IF_SURFACE_MATCHED",
+      "verified_facts": [
+        "OPRO uses an LLM as an optimizer and iteratively proposes solutions from previously observed solutions and objective values.",
+        "Its demonstrated applications include prompt optimization as well as non-prompt optimization examples."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3339f19c5fcee3ad74502947a32be9e6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-deepmind/opro"
+        }
+      ],
+      "a_h1_status": "ROLE_CONDITIONAL_ON_TEXTUAL_OR_PROMPT_ADAPTATION_SURFACE"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-TEXTGRAD",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "TEXTUAL_FEEDBACK_OPTIMIZATION_COMPARATOR_IF_SURFACE_MATCHED",
+      "verified_facts": [
+        "TextGrad optimizes compound generative-AI systems using LLM-generated textual feedback.",
+        "Published experiments include prompt, code, solution, molecule, treatment-plan, and agentic-system optimization."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://www.nature.com/articles/s41586-025-08661-4"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zou-group/textgrad"
+        }
+      ],
+      "a_h1_status": "ROLE_CONDITIONAL_ON_COMPARABLE_OPTIMIZATION_SURFACE"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E1-CODEGYM",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "TRAINING_ENVIRONMENT_NOT_STANDALONE_CONCRETE_BASELINE",
+      "verified_facts": [
+        "CodeGym synthesizes interactive tool-use environments for agent reinforcement learning.",
+        "The method reports out-of-distribution tool-use generalization after training models within CodeGym."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1e4322fddd833f83c855660ac65e428d-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/StigLidu/CodeGym"
+        }
+      ],
+      "required_for_baseline_binding": [
+        "trained model/checkpoint",
+        "training recipe",
+        "environment-generation configuration",
+        "agent harness",
+        "tool configuration",
+        "immutable implementation revision"
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-AUTOSKLEARN2",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "META_LEARNING_AUTOML_COMPARATOR_IF_AUTOML_DECISION_SURFACE",
+      "verified_facts": [
+        "Auto-sklearn 2.0 uses meta-learning and portfolio/budget mechanisms to configure AutoML.",
+        "The official implementation repository exposes version 0.15.0 as its latest release."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://jmlr.org/papers/v23/21-0992.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/auto-sklearn"
+        }
+      ],
+      "n_h2_status": "TRANSFER_RELEVANT_BUT_HETREN_CROSS_FAMILY_CRITERIA_NOT_YET_ESTABLISHED"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E2-FTAT",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_TABULAR_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "FTAT addresses fully test-time adaptation for tabular data under label and covariate shifts.",
+        "An official research implementation is publicly available."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34466"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/WNJXYK/FTTA"
+        }
+      ],
+      "a_h1_status": "MATERIAL_ELIGIBLE_CANDIDATE_REQUIRES_MATCHED_STRENGTH_REVIEW"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-BADGE",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "FIXED_DEEP_ACTIVE_LEARNING_ACQUISITION_COMPARATOR",
+      "verified_facts": [
+        "BADGE selects batches using gradient embeddings that combine uncertainty and diversity.",
+        "It does not require hand-tuned tradeoff hyperparameters between uncertainty and diversity."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/1906.03671"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/JordanAsh/badge"
+        }
+      ],
+      "n_h2_status": "NOT_A_LEARNED_CROSS_TASK_TRANSFER_POLICY"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-TYPICLUST",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "LOW_BUDGET_ACTIVE_LEARNING_COMPARATOR",
+      "verified_facts": [
+        "TypiClust is designed specifically for low-budget active learning.",
+        "Its empirical claim of strength is regime-specific rather than universal across all labeling budgets."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/hacohen22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/avihu111/TypiClust"
+        }
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-PROBCOVER",
+      "verification_state": "PRIMARY_AND_SHARED_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "LOW_BUDGET_ACTIVE_LEARNING_COMPARATOR",
+      "verified_facts": [
+        "ProbCover formulates low-budget active learning through probability coverage.",
+        "Its implementation is distributed through the TypiClust research repository."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2205.11320"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/avihu111/TypiClust"
+        }
+      ],
+      "known_followup": "Later research reports sensitivity of the original ProbCover radius heuristic and proposes generalized coverage methods; this must be considered during strength review."
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-MEMO",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "SINGLE_EXAMPLE_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "MEMO adapts model parameters at test time by minimizing entropy of the marginal prediction across augmentations of a test example.",
+        "Its design explicitly targets settings where only a single test point may be available."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://papers.neurips.cc/paper_files/paper/2022/hash/fc28053a08f59fccb48b11f2e31e81c7-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zhangmarvin/memo"
+        }
+      ]
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-SHOT",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "SOURCE_FREE_DOMAIN_ADAPTATION_COMPARATOR_IF_SETTING_MATCHED",
+      "verified_facts": [
+        "SHOT adapts a source model to an unlabeled target domain without source-data access.",
+        "SHOT freezes the source classifier and learns target-specific feature extraction using information maximization and self-supervised pseudo-labeling."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v119/liang20a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tim-learn/SHOT"
+        }
+      ],
+      "eligibility_limit": "SOURCE_FREE_DOMAIN_ADAPTATION_IS_NOT_AUTOMATICALLY_IDENTICAL_TO_HETREN_A_H1_TEST_TIME_ADAPTATION"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-PTA",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "VISION_LANGUAGE_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "PTA accumulates test-sample knowledge into class-specific prototypes for VLM test-time adaptation.",
+        "The paper evaluates image-recognition and point-cloud robustness/generalization settings."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.21360"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/hzhxmu/PTA"
+        }
+      ],
+      "a_h1_status": "ELIGIBLE_ONLY_FOR_MATCHED_VLM_OR_SUPPORTED_POINT_CLOUD_SETTINGS"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-VIT3",
+      "verification_state": "PRIMARY_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "TEST_TIME_TRAINING_ARCHITECTURE_NOT_AUTOMATIC_A_H1_BASELINE",
+      "verified_facts": [
+        "ViT3 is a visual architecture based on test-time training modules and online learning formulations inside the model.",
+        "It is evaluated across classification, generation, detection, and segmentation."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2512.01643"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LeapLabTHU/ViTTT"
+        }
+      ],
+      "eligibility_limit": "TEST_TIME_TRAINING_ARCHITECTURE_MUST_NOT_BE_EQUATED_WITH_POST_DEPLOYMENT_DISTRIBUTION_SHIFT_ADAPTATION_WITHOUT_MATCHING_THE_EXPERIMENT_CONSTRUCT"
+    },
+    {
+      "candidate_id": "CANDIDATE-ONLY:T8-E3-STATA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "REALISTIC_VLM_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "StatA is evaluated under variable effective class counts and non-IID online test streams.",
+        "Its statistical anchor is designed to preserve initial text-encoder knowledge."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Zanella_Realistic_Test-Time_Adaptation_of_Vision-Language_Models_CVPR_2025_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MaxZanella/StatA"
+        }
+      ],
+      "a_h2_status": "RETENTION_RELEVANT_BUT_DOES_NOT_BY_ITSELF_ESTABLISH_HETREN_ROLLBACK_REQUIREMENTS"
+    }
+  ],
+  "candidate_findings_count": 15,
+  "interpretation": {
+    "all_original_34_candidates_have_at_least_role_level_external_review": true,
+    "all_original_34_candidates_have_full_immutable_revision_pins": false,
+    "all_original_34_candidates_are_eligible": false,
+    "strength_ordering_complete": false,
+    "new_candidate_discovery_closed": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

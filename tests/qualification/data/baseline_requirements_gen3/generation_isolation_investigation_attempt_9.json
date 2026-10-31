@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_9_GENERATION_ISOLATION_INVESTIGATION",
+  "state": "INVESTIGATED_BEFORE_ATTEMPT_10_DESIGN",
+  "generation_attempt_investigated": 9,
+  "evidence_bindings": {
+    "failure_artifact_sha256": "957610200d7e1975052673e4ce5202edde12dea86b59d32fad7e55e70fc07b8e",
+    "disposition_sha256": "293a6be70c8afa1d1913f9a668d191f1cbdccb7bc222ae10487bad535eaf7c56",
+    "pre_generation_attestation_sha256": "36b4bcdbabefaa146bb0a1b6bbc6bd498308f2eeda502892d8114e7d35808886",
+    "package_v9_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+    "environment_decision_attempt_9_sha256": "6095bbb82b994cda04cc859ec9efa62129c323451a8e58015a1c910a3a01ffe5",
+    "successor_design_attempt_9_sha256": "823c14d063e2a326e67fdd1a78261ca3581948341d77f1af2eaf6d93a5afd246",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "established_observations": {
+    "user_visible_ui_attestation_recorded_zero_prior_messages": true,
+    "user_visible_ui_attestation_recorded_only_package_attachment": true,
+    "user_visible_ui_attestation_recorded_unpersonalized_temporary_chat": true,
+    "generator_reported_earlier_conversation_message_detected": true,
+    "generator_reported_additional_attachment_detected": true,
+    "generator_reported_observable_nonpackage_hetren_context_detected": true,
+    "generator_aborted_before_case_generation": true,
+    "cases_generated": false,
+    "target_evaluator_executed": false,
+    "target_predictions_produced": false,
+    "target_freshness_consumed": false
+  },
+  "root_cause_classification": {
+    "category": "OBSERVABILITY_SCOPE_MISMATCH",
+    "established": true,
+    "description": "The protocol treated user-visible ChatGPT UI state and generator-perceived model input state as equivalent observability domains. Attempt 9 demonstrates that this equivalence cannot be relied upon in the selected ChatGPT generation environment.",
+    "generator_self_audit_of_ui_equivalence_is_reliable": false,
+    "user_ui_attestation_proven_false": false,
+    "generator_failure_artifact_proven_false": false,
+    "actual_hidden_context_mechanism_identified": false
+  },
+  "not_established": {
+    "memory_contamination_occurred": false,
+    "project_context_contamination_occurred": false,
+    "library_search_contamination_occurred": false,
+    "custom_instruction_contamination_occurred": false,
+    "plugin_contamination_occurred": false,
+    "provider_system_message_caused_abort": false,
+    "provider_developer_message_caused_abort": false,
+    "provider_safety_context_caused_abort": false,
+    "file_representation_caused_extra_attachment_detection": false,
+    "user_misattested_ui_state": false,
+    "package_v9_semantic_contract_defect": false,
+    "target_evaluator_defect": false
+  },
+  "protocol_defect_established": {
+    "generator_was_asked_to_adjudicate_application_ui_state_from_model_visible_context": true,
+    "generator_report_was_treated_as_equivalent_to_user_visible_ui_attestation": true,
+    "that_equivalence_is_not_auditable_under_attempt_9_environment": true,
+    "same_generator_side_isolation_gate_must_not_be_reused_unchanged": true
+  },
+  "current_product_documentation_review": [
+    {
+      "source_id": "A9I-S001",
+      "publisher": "OpenAI",
+      "title": "Temporary chat in ChatGPT",
+      "locator": "OpenAI Help Center article 8914046",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Temporary Chat can be selected before the first message",
+        "Unpersonalized Temporary Chat does not use memory",
+        "Unpersonalized Temporary Chat does not use custom instructions",
+        "Unpersonalized Temporary Chat does not use plugins",
+        "Temporary Chat does not create or update memories"
+      ]
+    },
+    {
+      "source_id": "A9I-S002",
+      "publisher": "OpenAI",
+      "title": "Using Library to manage files in ChatGPT",
+      "locator": "OpenAI Help Center article 20001052",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Automatic Library search can be disabled",
+        "Disabling automatic Library search does not prevent explicit attachment",
+        "Temporary Chat uploads are not saved to Library while temporary"
+      ]
+    },
+    {
+      "source_id": "A9I-S003",
+      "publisher": "OpenAI",
+      "title": "Projects in ChatGPT",
+      "locator": "OpenAI Help Center article 10169521",
+      "accessed_date": "2026-09-25",
+      "supports": [
+        "Projects can supply project-scoped conversational context",
+        "Temporary Chat personalization behavior is separately controlled"
+      ]
+    }
+  ],
+  "documentation_limits": {
+    "docs_establish_model_visible_input_equals_visible_ui": false,
+    "docs_establish_no_provider_system_or_safety_context": false,
+    "docs_expose_exact_internal_attachment_representation": false,
+    "therefore_exact_internal_mechanism_cannot_be_claimed": true
+  },
+  "successor_environment_requirements": {
+    "attempt_10_must_use_new_generation_session": true,
+    "attempt_9_chat_must_not_be_reused": true,
+    "attempt_9_failure_artifact_must_not_be_given_to_successor_generator": true,
+    "attempt_9_attestation_must_not_be_given_to_successor_generator": true,
+    "prior_case_or_result_material_must_not_be_given_to_successor_generator": true,
+    "target_evaluator_must_remain_frozen": true,
+    "scientific_contract_must_remain_frozen": true,
+    "public_evaluator_interface_must_remain_frozen": true,
+    "scoring_contract_must_remain_frozen": true,
+    "v9_environment_self_consistency_hardening_must_be_preserved": true,
+    "same_chatgpt_ui_generator_self_isolation_gate_must_not_be_reused_unchanged": true,
+    "successor_input_boundary_must_be_externally_auditable_before_generation": true,
+    "successor_generator_must_not_be_asked_to_infer_hidden_or_ui_only_state": true,
+    "successor_environment_choice_requires_separate_design_before_package_v10": true
+  },
+  "candidate_environment_directions_for_later_design": [
+    {
+      "candidate": "EXPLICIT_SINGLE_REQUEST_API_INPUT_ENVELOPE",
+      "status": "CANDIDATE_NOT_YET_SELECTED",
+      "potential_advantage": "The orchestrator can construct and record the exact application-supplied request messages, file input, tool configuration, and conversation-state fields before generation.",
+      "required_future_review": [
+        "API account/access availability",
+        "exact model choice",
+        "file-input method",
+        "store setting",
+        "conversation and previous_response_id omission",
+        "tools omitted",
+        "request/response preservation",
+        "provider-retention claim limits"
+      ]
+    },
+    {
+      "candidate": "CHATGPT_UI_WITH_REDESIGNED_NON_SELF_AUDITING_GATE",
+      "status": "CANDIDATE_NOT_YET_SELECTED",
+      "potential_advantage": "Preserves the prior product environment while moving UI-only isolation claims entirely to orchestration-side attestation.",
+      "required_future_review": [
+        "whether model-visible non-package Hetren context can still be excluded",
+        "whether removing generator self-audit weakens actual independence",
+        "whether the boundary remains sufficiently auditable"
+      ]
+    }
+  ],
+  "decision": {
+    "attempt_10_environment_selected": false,
+    "package_v10_authorized": false,
+    "attempt_10_generation_authorized": false,
+    "next_step": "DESIGN_AND_COMPARE_SUCCESSOR_ENVIRONMENT_OPTIONS_BEFORE_ANY_PACKAGE_V10_CONSTRUCTION"
+  }
+}

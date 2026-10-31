@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_POST_DISCOVERY_CONCRETE_EXPERIMENT_CONTRACT_BINDING_READINESS_ATTEMPT",
+  "attempt": 1,
+  "state": "BLOCKED_PENDING_CONCRETE_GOVERNED_EXPERIMENT_CONTRACT_INSTANTIATION",
+  "recorded_at_utc": "2026-09-27T20:14:19Z",
+  "task": 8,
+  "bindings": {
+    "prior_tuple_resolution_attempt": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_post_discovery_concrete_experiment_applicability_tuple_resolution_attempt_1.json",
+      "sha256": "0e66744362bf9d7dac7a91891cc735847d527bb2f5517854b9b263825fb17850"
+    },
+    "binding_readiness_v1": {
+      "path": "docs/research/baselines/task-08-post-discovery-concrete-experiment-contract-binding-readiness-v1.json",
+      "sha256": "509ef389e306793ab046289b19f968cf231f620562f82b24d333414ce1230021"
+    }
+  },
+  "state_summary": {
+    "canonical_candidate_identities": 222,
+    "candidate_specific_concrete_bindings_created": 0,
+    "canonical_candidates_pending_concrete_binding": 222,
+    "structurally_complete_contract_candidate_count": 0,
+    "comparator_ranking_started": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "protected_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "next_gate": "I5A2R7_INSTANTIATE_OR_IMPORT_GOVERNED_EXPERIMENT_CONTRACTS_BEFORE_TASK8_BINDING",
+  "claim_limits": {
+    "concrete_applicability_complete": false,
+    "comparable_candidate_sets_partitioned": false,
+    "strongest_applicable_ordering_started": false,
+    "immutable_version_pinning_started": false,
+    "concrete_baseline_frozen": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false
+  }
+}

@@ -1,0 +1,236 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 49,
+  "state": "SATURATION_V49_FOUND_NEW_LEGACY_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:25:50Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v51_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v51.json",
+      "sha256": "6744caa6a3a47b081610deaf18616092a2edc071794059d84bb41da36efea913"
+    },
+    "systematic_saturation_v48": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v48.json",
+      "sha256": "1327cca5f3fb293d64b4b14343c1e7b14d11c960bc341b20cf6b05036e4468e9"
+    }
+  },
+  "focus": [
+    "LEGACY_E1_EXPERIENTIAL_LEARNING",
+    "LEGACY_E1_RETROSPECTION",
+    "LEGACY_E1_EMBODIED_SKILL_AND_MEMORY",
+    "LEGACY_E1_KNOWLEDGE_AND_MEMORY",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "Retroformer retrospective large language agents ICLR 2024 official implementation",
+    "legacy language agent environmental reward reflection policy gradient Retroformer",
+    "MindForge lifelong cultural learning embodied agents NeurIPS 2025 official implementation",
+    "MindForge Voyager memory Minecraft lifelong learning",
+    "Ghost in the Minecraft GITM memory open world agent official implementation",
+    "legacy Minecraft LLM agent memory skill library GITM Voyager",
+    "Generative Agents memory reflection planning UIST 2023 official implementation",
+    "MemGPT long term memory agent 2023 official code",
+    "DEPS interactive planning Minecraft LLM agent official implementation",
+    "legacy experiential learning LLM agents memory reflection planning 2023 2024",
+    "legacy embodied agent persistent memory experience skill library",
+    "legacy language agent memory environmental feedback executable baseline"
+  ],
+  "query_count": 12,
+  "identity_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RETROFORMER",
+      "name": "Retroformer: Retrospective Large Language Agents with Policy Gradient Optimization",
+      "disposition": "NEW_MATERIAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MINDFORGE",
+      "name": "MindForge: Empowering Embodied Agents with Theory of Mind for Lifelong Cultural Learning",
+      "disposition": "NEW_MATERIAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GITM",
+      "name": "Ghost in the Minecraft: Generally Capable Agents for Open-World Environments via Large Language Models with Text-based Knowledge and Memory",
+      "disposition": "NEW_MATERIAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RETROFORMER",
+      "name": "Retroformer: Retrospective Large Language Agents with Policy Gradient Optimization",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_LEARNED_RETROSPECTIVE_AGENT_COMPARATOR_CANDIDATE",
+        "N_H1_ENVIRONMENT_FEEDBACK_POLICY_IMPROVEMENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/29f421fbdcc82aeb349d784d3aaccdb3-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/weirayao/Retroformer"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_RETROSPECTIVE_MODEL_TRAINING_AND_AGENT_ENVIRONMENT_MATCHED",
+      "material_reason": "Learns a retrospective language model from environmental reward using policy-gradient optimization, then uses its reflections to improve the frozen actor agent on subsequent attempts.",
+      "limits": [
+        "ACTOR_AND_RETROSPECTIVE_MODEL_IDENTITIES_MUST_BE BOUND",
+        "TRAINING_ENVIRONMENTS_AND_REWARD_DEFINITION_MUST_BE BOUND",
+        "PROMPT_UPDATE_AND_REFLECTION_CONTEXT_MUST_BE BOUND",
+        "LEARNED_RETROSPECTION_WITHIN_E1_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MINDFORGE",
+      "name": "MindForge: Empowering Embodied Agents with Theory of Mind for Lifelong Cultural Learning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_MULTI_COMPONENT_MEMORY_EMBODIED_AGENT_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CULTURAL_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2025_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2025/hash/f82cb74b5d40004cb96d1426fc12fccf-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tapri-lab/mindforge"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_EMBODIED_MULTI_AGENT_OR_INSTRUCTIVE_CULTURAL_LEARNING_SETTING_MATCHED",
+      "material_reason": "Extends Voyager-style embodied lifelong learning with structured theory-of-mind representations, communication, semantic memory, episodic memory, and transfer from accumulated cultural experience.",
+      "limits": [
+        "MINECRAFT_AND_COLLABORATION_SETTING_MUST_BE MATCHED",
+        "SINGLE_AGENT_AND_MULTI_AGENT_CONFIGURATIONS_MUST_NOT_BE COLLAPSED",
+        "MEMORY_AND_COMMUNICATION_INFORMATION_OPPORTUNITY_MUST_BE PARITY_MATCHED",
+        "CULTURAL_TRANSFER_WITHIN_E1_DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GITM",
+      "name": "Ghost in the Minecraft: Generally Capable Agents for Open-World Environments via Large Language Models with Text-based Knowledge and Memory",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_OPEN_WORLD_KNOWLEDGE_AND_MEMORY_AGENT_REFERENCE_CANDIDATE",
+        "N_H1_HIERARCHICAL_MINECRAFT_AGENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PRIMARY_PREPRINT_AND_OFFICIAL_IMPLEMENTATION_VERIFIED_ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2305.17144"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OpenGVLab/GITM"
+        }
+      ],
+      "eligibility_status": "ONGOING_OR_NON_ARCHIVAL_RESEARCH_CANDIDATE_IF_MATCHED_MINECRAFT_ROLE_REQUIRES_IT",
+      "material_reason": "Provides an executable hierarchical open-world agent using text-based knowledge, memory, goal decomposition and planning in the same broad Minecraft environment family as Voyager.",
+      "limits": [
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "MINECRAFT_VERSION_STRUCTURED_ACTIONS_AND_LLM_CONFIGURATION_MUST_BE BOUND",
+        "TEXT_KNOWLEDGE_AND_MEMORY_ACCESS_MUST_BE PARITY_AUDITED",
+        "DOES_NOT_ESTABLISH GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_only": [
+    {
+      "name": "Generative Agents: Interactive Simulacra of Human Behavior",
+      "evidence_state": "PEER_REVIEWED_UIST_2023_WITH_OFFICIAL_IMPLEMENTATION",
+      "sources": [
+        "https://doi.org/10.1145/3586183.3606763",
+        "https://github.com/joonspk-research/generative_agents"
+      ],
+      "disposition": "MEMORY_REFLECTION_PLANNING_ARCHITECTURE_REFERENCE_NOT_CURRENT_CLAIM_BEARING_E1_BASELINE",
+      "reason": "The verified objective is believable social-behavior simulation in a sandbox rather than a matched task-performance or investigation-decision comparator."
+    },
+    {
+      "name": "MemGPT: Towards LLMs as Operating Systems",
+      "evidence_state": "PUBLIC_PREPRINT_WITH_RELEASED_RESEARCH_SYSTEM",
+      "sources": [
+        "https://arxiv.org/abs/2310.08560",
+        "https://research.memgpt.ai/"
+      ],
+      "disposition": "MEMORY_MANAGEMENT_SUBSTRATE_REFERENCE_NOT_CURRENT_INTERACTIVE_E1_COMPARATOR",
+      "reason": "The verified evaluations emphasize document analysis and multi-session conversation rather than the matched multi-step environment-action contract owned by E1."
+    },
+    {
+      "name": "DEPS \u2014 Describe, Explain, Plan and Select",
+      "evidence_state": "PUBLIC_PREPRINT_WITH_EXECUTABLE_MINECRAFT_IMPLEMENTATION",
+      "sources": [
+        "https://arxiv.org/abs/2302.01560",
+        "https://github.com/CraftJarvis/MC-Planner"
+      ],
+      "disposition": "LEGACY_OPEN_WORLD_PLANNING_REFERENCE_NOT_DIRECT_MEMORY_OR_EXPERIENCE_LEARNING_COMPARATOR",
+      "reason": "DEPS is materially useful as an interactive planning reference, but the reviewed mechanism does not provide the persistent experience-memory learning role targeted by this legacy-memory refinement."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "within_e1_transfer_and_lifelong_learning_references_exist": true,
+    "forcing_within_e1_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_LEGACY_SATURATION_V49"
+  },
+  "coverage_observations": {
+    "E1": "LEGACY_E1_POOL_EXPANDED",
+    "E2": "NO_NEW_E2_CANDIDATE_PROMOTED",
+    "E3": "NO_NEW_E3_CANDIDATE_PROMOTED",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one materially distinct legacy E1 comparator was absent from prior governed candidate addenda, so the no-new-material counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "preprint_is_peer_reviewed": false,
+    "reference_only_method_is_claim_bearing_baseline": false,
+    "within_e1_transfer_proves_general_n_h2": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B54_VERIFY_ADDENDUM_V52_AND_RUN_NEXT_BOUNDED_LEGACY_REFINEMENT"
+}

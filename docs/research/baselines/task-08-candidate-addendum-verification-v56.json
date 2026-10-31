@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 56,
+  "state": "ADDENDUM_V56_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:55:42Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v56": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v56.json",
+      "sha256": "788133659275cd152d2e37393d55c88b259facf7cf4b849e1b8e5a3e5bfdccda"
+    },
+    "systematic_saturation_v53": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v53.json",
+      "sha256": "723082676a428231c3fb6c3d319b8f3dbd09cb687d75ba7e4d096bcd1c103bec"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VOXPOSER",
+      "verification_state": "CORL_2023_ORAL_WITH_OFFICIAL_DEMO_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LANGUAGE_GROUNDED_ZERO_SHOT_MANIPULATION_REFERENCE_CANDIDATE",
+      "verified_facts": [
+        "VoxPoser is a CoRL 2023 oral paper.",
+        "It composes 3D value maps from language-model and vision-language-model outputs for zero-shot robotic manipulation.",
+        "The authors provide public RLBench demo code.",
+        "The released demo code explicitly does not contain the real-world perception pipeline and instead uses RLBench object masks."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://voxposer.github.io/"
+        },
+        {
+          "class": "OFFICIAL_DEMO_IMPLEMENTATION",
+          "url": "https://github.com/huangwl18/VoxPoser"
+        }
+      ],
+      "limits": [
+        "DEMO_CODE_NOT_A_COMPLETE_REAL_WORLD_REPRODUCTION",
+        "RLBench_OBJECT_MASK_ACCESS_MUST_NOT_BE HIDDEN",
+        "LLM_VLM_PROVIDER_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "MATCHED_MANIPULATION_SETTING_REQUIRED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-PERACT",
+      "verification_state": "PEER_REVIEWED_CORL_2022_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LANGUAGE_CONDITIONED_MULTI_TASK_MANIPULATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "PerAct is published at CoRL 2022.",
+        "It is an end-to-end behavior-cloning agent for language-conditioned robotic manipulation.",
+        "The official implementation supports RLBench training and evaluation.",
+        "The implementation documents checkpoints, generated datasets, and multi-task evaluation."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://peract.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/peract/peract"
+        }
+      ],
+      "limits": [
+        "RLBENCH_TASK_AND_VARIATION_SET_MUST_BE BOUND",
+        "TRAINING_DEMONSTRATION_COUNT_MUST_BE MATCHED",
+        "CLIP_AND_VOXELIZATION_CONFIGURATION_MUST_BE BOUND",
+        "LARGE_TRAINING_RESOURCE_REQUIREMENT_MUST_BE ACCOUNTED_BY_TASK_9"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-CLIPORT",
+      "verification_state": "PEER_REVIEWED_CORL_2021_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_LANGUAGE_CONDITIONED_TABLETOP_MANIPULATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "CLIPort is published at CoRL 2021.",
+        "It combines CLIP semantic features with Transporter-style spatial action prediction.",
+        "The official implementation contains data generation, training, validation, testing, and pretrained checkpoints.",
+        "Its published and released task surface is primarily tabletop manipulation."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://cliport.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/cliport/cliport"
+        }
+      ],
+      "limits": [
+        "TABLETOP_TASK_FAMILY_MUST_BE MATCHED",
+        "TRAINING_DEMONSTRATION_COUNT_MUST_BE MATCHED",
+        "CLIP_BACKBONE_AND_TRANSPORTER_CONFIGURATION_MUST_BE BOUND",
+        "PRETRAINED_CHECKPOINT_SELECTION_MUST_BE PREDECLARED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-RVT",
+      "verification_state": "PEER_REVIEWED_CORL_2023_ORAL_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_3D_MANIPULATION_TRANSFORMER_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "RVT is published at CoRL 2023 as an oral paper.",
+        "It uses virtual views and transformer-based prediction for 3D robotic manipulation.",
+        "The official NVIDIA repository reproduces RVT and RVT-2 experiments.",
+        "The repository exposes explicit licensing restrictions for code and pretrained models."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_PROJECT",
+          "url": "https://robotic-view-transformer.github.io/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/NVlabs/RVT"
+        }
+      ],
+      "limits": [
+        "RVT_AND_RVT2_MUST_NOT_BE COLLAPSED",
+        "RLBENCH_TASK_SET_MUST_BE MATCHED",
+        "PRETRAINED_MODEL_LICENSE_RESTRICTIONS_MUST_BE PRESERVED",
+        "CAMERA_AND_VIRTUAL_VIEW_CONFIGURATION_MUST_BE BOUND"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v56_candidates_have_role_level_external_review": true,
+    "all_addendum_v56_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonicality_establishes_applicability": false,
+    "peer_review_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

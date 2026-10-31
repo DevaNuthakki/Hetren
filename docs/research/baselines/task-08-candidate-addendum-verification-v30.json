@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 30,
+  "state": "ADDENDUM_V30_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T22:33:34Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v30": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v30.json",
+      "sha256": "673bb905027413e9bb1adce7737ad878f880d1d40bee0d4991296b6ff27c8a99"
+    },
+    "systematic_saturation_v27": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v27.json",
+      "sha256": "011917fbe1bdbd372013ce16c0806d6cfa1f367760031885ba0911c2162d0335"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SYNAPSE-MEMORY",
+      "verification_state": "PEER_REVIEWED_ACL_2026_FINDINGS_WITH_PUBLIC_MIT_CLEAN_ROOM_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_DIRECT_EPISODIC_SEMANTIC_MEMORY_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "SYNAPSE is published in Findings of ACL 2026.",
+        "The paper models long-term agent memory as a unified episodic-semantic graph.",
+        "Its retrieval mechanism combines spreading activation with temporal decay and lateral inhibition.",
+        "Its retrieval stack combines dense/geometric retrieval with graph activation-based retrieval.",
+        "The public repository is explicitly described as a clean-room reimplementation of the published method.",
+        "The public repository states that reproduced benchmark values may differ from the camera-ready paper values.",
+        "The repository contains executable LoCoMo benchmark, retrieval-ablation, and smoke-test paths.",
+        "The public repository is MIT licensed."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.findings-acl.1108/"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION_CLEAN_ROOM_RELEASE",
+          "url": "https://github.com/hq0709/synapse"
+        }
+      ],
+      "limits": [
+        "PUBLIC_IMPLEMENTATION_IS_A_CLEAN_ROOM_REIMPLEMENTATION",
+        "REPOSITORY_REPORTS_THAT_RELEASED_RESULTS_MAY_DIFFER_FROM_CAMERA_READY_RESULTS",
+        "FINAL_RETENTION_MUST_BIND_AN_EXACT_CUTOFF_CONSISTENT_REPOSITORY_REVISION",
+        "LOCOMO_STYLE_LONG_TERM_MEMORY_ROLE_MUST_MATCH_THE_GOVERNED_EXPERIMENT",
+        "EMBEDDING_MODEL_LLM_PROMPT_AND_RETRIEVAL_CONFIGURATION_MUST_BE_BOUND",
+        "PAPER_RESULTS_AND_RELEASE_RESULTS_MUST_NOT_BE SILENTLY INTERCHANGED",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "candidate_findings_count": 1,
+  "interpretation": {
+    "all_addendum_v30_candidates_have_role_level_external_review": true,
+    "synapse_clean_room_release_distinguished_from_camera_ready_implementation": true,
+    "synapse_release_results_not_assumed_identical_to_paper": true,
+    "all_addendum_v30_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "clean_room_release_is_identical_to_original_research_code": false,
+    "paper_result_is_release_result": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

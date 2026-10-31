@@ -1,0 +1,189 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 70,
+  "state": "DISPLACEMENT_ONLY_FOUND_NEW_MATERIAL_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T03:59:44Z",
+  "task": 8,
+  "discovery_mode": "DISPLACEMENT_ONLY",
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v72_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v72.json",
+      "sha256": "67eeb6310d2cbfb06412df1018567e68237e678bc182cba1417d3b49762599cd"
+    },
+    "systematic_saturation_v69": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v69.json",
+      "sha256": "ba1b2029b3884c54c09fdd17cf4cf93efdf77918060e046ebb91304f4f7dcf70"
+    }
+  },
+  "focus": [
+    "E1_VLA_CONTINUAL_SKILL_DISPLACEMENT",
+    "E1_VLA_CONTINUAL_RL_CONVENTIONAL_UPDATE_DISPLACEMENT",
+    "NO_BROAD_CANONICAL_ENUMERATION_REOPEN",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_GAP_PRESERVATION"
+  ],
+  "queries_executed": [
+    "\"OrthoSkillVLA\" continual skill learning VLA code",
+    "\"Continual Skill Learning via Gradient-Informed Skill Subspace Adaptation\"",
+    "\"Simple Recipe Works\" VLA continual reinforcement learning",
+    "\"continual-vla-rl\" VLA",
+    "2026 continual skill learning VLA catastrophic forgetting executable code",
+    "2026 continual reinforcement learning VLA LoRA sequential fine tuning",
+    "2026 VLA continual skill acquisition replay free",
+    "2026 VLA continual learning retention plasticity official code",
+    "2026 lifelong VLA reinforcement learning official implementation",
+    "2026 continual VLA skill adaptation MoE subspace",
+    "\"LaMem-VLA\" code release",
+    "\"T3VF\" test-time training VLA continual adaptation"
+  ],
+  "query_count": 12,
+  "displacement_proposals": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ORTHOSKILLVLA",
+      "name": "OrthoSkillVLA: Continual Skill Learning via Gradient-Informed Skill Subspace Adaptation",
+      "prior_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VLA-SEQFT-RL",
+      "name": "Simple Recipe Works \u2014 Sequential LoRA Fine-Tuning with Reinforcement Learning",
+      "prior_matches": [],
+      "disposition": "NEW_MATERIAL_ROLE_MATCHED_DISPLACEMENT_CANDIDATE"
+    }
+  ],
+  "displacement_proposal_count": 2,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ORTHOSKILLVLA",
+      "name": "OrthoSkillVLA: Continual Skill Learning via Gradient-Informed Skill Subspace Adaptation",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONTINUAL_SKILL_ADAPTATION_COMPARATOR_CANDIDATE",
+        "A_H2_RETENTION_LOCALITY_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PRCV_2026_ACCEPTANCE_REPORTED_BY_PRIMARY_RESEARCH_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2608.19589"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/Jiaqi-Wangx/OrthoSkillVLA"
+        }
+      ],
+      "material_reason": "Directly targets sequential continual skill acquisition in pretrained VLA models using heterogeneous gradient-informed subspace constraints and a feature-aware MoE decoder, without demonstration replay.",
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_IF_NOT_ALREADY_REPRESENTED",
+      "limits": [
+        "PRCV_ARCHIVAL_PROCEEDINGS_IDENTITY_NOT_INDEPENDENTLY_BOUND_IN_THIS_PASS",
+        "X_VLA_BASE_MODEL_AND_CHECKPOINT_MUST_BE BOUND",
+        "LIBERO_SKILL_ORDER_AND_SPLITS_MUST_BE BOUND",
+        "NO_DEMONSTRATION_REPLAY_INFORMATION_REGIME_MUST_BE MATCHED",
+        "RETENTION_RESULTS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-VLA-SEQFT-RL",
+      "name": "Simple Recipe Works \u2014 Sequential LoRA Fine-Tuning with Reinforcement Learning",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_CONVENTIONAL_SEQUENTIAL_UPDATE_COMPARATOR_CANDIDATE",
+        "A_H1_CONTINUAL_RL_VLA_COMPARATOR_CANDIDATE",
+        "A_H2_RETENTION_DIAGNOSTIC_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "RLC_2026_OFFICIAL_CONFERENCE_RECORD_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_RECORD",
+          "url": "https://rl-conference.cc/2026/paper_schedule.html"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.11653"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/UT-Austin-RobIn/continual-vla-rl"
+        }
+      ],
+      "material_reason": "Provides a strong conventional continual-RL comparison based on sequential LoRA fine-tuning with on-policy RL, with explicit forgetting, plasticity, and zero-shot-retention evaluation across VLA lifelong-learning settings.",
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_OR_REQUIRED_CONVENTIONAL_UPDATE_COMPARATOR_IF_NOT_ALREADY_REPRESENTED",
+      "limits": [
+        "EXACT_VLA_MODEL_AND_LORA_CONFIGURATION_MUST_BE BOUND",
+        "PPO_OR_GRPO_TRAINING_CONFIGURATION_MUST_BE BOUND",
+        "TASK_ORDER_AND_CONTINUAL_RL_BENCHMARK_MUST_BE MATCHED",
+        "SEQUENTIAL_FINE_TUNING_MUST_NOT_BE CONFLATED_WITH_DEDICATED_CONTINUAL_LEARNING_METHODS",
+        "RETENTION_RESULTS_DO_NOT_BY_THEMSELVES_SATISFY_HETREN_A_H2_ROLLBACK_AND_RESTORATION"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 2,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 2,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "MemBodied",
+      "disposition": "PREEXISTING_GOVERNED_TASK8_CANDIDATE_NOT_RECOUNTED",
+      "reason": "MemBodied was already promoted in the governed Task-8 displacement history."
+    },
+    {
+      "name": "LaMem-VLA",
+      "source": "https://github.com/quhongyu/LaMem-VLA",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS_UNRESOLVED",
+      "reason": "The public project repository still states that code will be released soon and does not expose an executable baseline implementation."
+    },
+    {
+      "name": "T3VF",
+      "source": "https://github.com/sangwu99/T3VF",
+      "disposition": "WORKSHOP_TEST_TIME_ADAPTATION_REFERENCE_NOT_PROMOTED_IN_CONTINUAL_SKILL_DISPLACEMENT_ROLE",
+      "reason": "T3VF has executable code but is a workshop-level test-time-training method for visual-foresight VLA OOD adaptation, not a direct continual-skill-learning displacer for this bounded round."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "continual_vla_methods_do_not_establish_general_cross_family_transfer": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "previous_round_counter": 1,
+    "reason": "At least one materially new role-matched displacement candidate was not represented in the prior governed candidate pool; the counter resets to zero."
+  },
+  "selection_state": {
+    "strength_ordering_complete": false,
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_candidate_is_automatically_strongest": false,
+    "retention_result_establishes_a_h2": false,
+    "continual_vla_result_establishes_n_h2": false,
+    "stopping_condition_authorizes_protected_execution": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B75_VERIFY_ADDENDUM_V73_AND_CONTINUE_BOUNDED_DISPLACEMENT_REFINEMENT"
+}

@@ -1,0 +1,2905 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_FRESH_ADVERSARIAL_HOLDOUT_CASES_ATTEMPT_2",
+  "state": "GENERATED_NOT_EXECUTED",
+  "generation_attempt": 2,
+  "fresh_holdout": true,
+  "protected_evaluation": true,
+  "authoritative": false,
+  "scientific_support_established": false,
+  "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+  "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+  "generator_provenance": {
+    "generator": "ChatGPT assistant performing package-bounded semantic case generation",
+    "source_attachment_filename": "hetren_task8_generation_package_v2_ac273519(1).json",
+    "hetren_semantic_and_executable_inputs_consulted": [
+      {
+        "artifact": "hetren_task8_generation_package_v2_ac273519(1).json",
+        "sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c"
+      }
+    ],
+    "authority_order": [
+      {
+        "rank": 1,
+        "source": "embedded_generation_3_requirements",
+        "role": "semantic authority"
+      },
+      {
+        "rank": 2,
+        "source": "embedded_preregistration_contract",
+        "role": "holdout lifecycle, independence, design, and claim limits"
+      },
+      {
+        "rank": 3,
+        "source": "embedded_public_evaluator_contract",
+        "role": "executable encoding interface only; does not redefine G3"
+      }
+    ],
+    "source_bindings_as_declared_by_package": {
+      "generation_3_sha256": "d01e39439d601fd28ed1b15cdb618214a0e5d84b2f88c142dd020dbf80930217",
+      "preregistration_contract_sha256": "4b62eb6feb6b2085cb8a90b2153e45449749ca520da277782a9a6bdcac35f037",
+      "public_evaluator_contract_sha256": "70a61f7ee6a3f3f95614ad1ebacf34798377062b3f1cd8a30a0c1246ffc4250c",
+      "public_evaluator_contract_manifest_sha256": "08ee63f8e2f277f52d7a6d44106b2ff58d806d3ea317aab9cf7d8b78052c684e",
+      "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+    },
+    "hash_binding_basis": {
+      "generation_package_sha256": "Computed SHA-256 over the exact attached file bytes, including their original serialization.",
+      "public_evaluator_contract_sha256": "Copied from the package source binding for the frozen public contract. No claim that reserialization of the embedded object reproduces the original source bytes.",
+      "other_source_bindings": "Preserved package declarations only; their external source artifacts were not retrieved or independently hashed."
+    },
+    "input_boundary_disclosure": "The attachment was the only Hetren Task 8 semantic and executable-interface material consulted for this artifact. Automatically supplied context contained general Hetren background, filenames, and an earlier generation-request excerpt; these were excluded from case design. No earlier case contents, attempt disposition, evaluator implementation, predictions, results, or Task 8 remediation history were read or retrieved. The input attestation refers to the Task 8 semantic and executable materials actually used.",
+    "generation_method": "Author hypothetical scientific situations from G3 first; establish their normative expectations from those requirements; encode only the corresponding public fact fields. Expected violation codes identify semantic defects using the public vocabulary. Neither decisions nor hidden implementation branches were computed, inferred, or simulated.",
+    "scenario_encoding_boundary": "The rationale states the complete hypothetical scenario and its G3 basis. The restricted facts object encodes only the public interface for the primary requirement. Narrative details and secondary interactions are provenance and semantic context, not additional evaluator inputs or requests for extra evaluation calls.",
+    "external_research_used": false,
+    "prior_cases_or_examples_copied": false,
+    "repository_material_retrieved": false,
+    "target_evaluator_accessed": false,
+    "target_evaluator_executed": false,
+    "target_evaluator_simulated": false,
+    "target_predictions_produced": false,
+    "freshness_scope": "Fresh generation relative to the hidden implementation and unconsulted prior cases/results; no claim of empirically verified nonoverlap with hidden corpora. The public executable interface was intentionally available.",
+    "environment_interpretation": {
+      "E1": "Agent systems",
+      "E2": "Structured-data ML systems",
+      "E3": "Vision systems",
+      "CROSS_ENV": "A scenario spanning at least two of E1, E2, and E3, as stated in its rationale; one primary evaluator call only."
+    },
+    "output_filename_resolution": "The explicit user request names fresh_holdout_cases.json. Attempt 2 identity and case IDs remain those required by the package, whose suggested filename includes an attempt_2 suffix.",
+    "freeze": {
+      "all_54_cases_generated_before_target_execution": true,
+      "case_order_frozen_before_target_execution": true,
+      "expectations_frozen_before_target_execution": true,
+      "facts_frozen_before_target_execution": true,
+      "expected_violation_codes_frozen_before_target_execution": true,
+      "case_content_sha256": "9e4b88a946a889dcb37b8e80567140c454fcf903da1281cf510243de4dbcf6cd",
+      "case_content_hash_encoding": "UTF-8 of the cases array serialized with sorted object keys, ensure_ascii=false, separators comma and colon without whitespace; array order preserved; no trailing newline."
+    },
+    "permitted_validation_scope": "JSON structure, source bindings, required fields, counts, IDs, environment coverage and applicability, public fact keys, JSON boolean types, closed enums, primary code vocabulary, label separation, provenance links, and semantic authoring review against G3 only. No target decision, prediction, scoring, or evaluator simulation.",
+    "artifact_validation": {
+      "validation_kind": "ARTIFACT_CONFORMANCE_ONLY_NOT_TARGET_EVALUATION",
+      "total_cases": 54,
+      "unique_case_ids": 54,
+      "primary_requirement_count": 27,
+      "exactly_one_of_each_expectation_per_primary": true,
+      "expectation_counts": {
+        "MUST_ACCEPT": 27,
+        "MUST_REJECT": 27
+      },
+      "environment_counts": {
+        "E1": 14,
+        "E2": 14,
+        "CROSS_ENV": 12,
+        "E3": 14
+      },
+      "environment_expectation_counts": {
+        "E1": {
+          "MUST_ACCEPT": 7,
+          "MUST_REJECT": 7
+        },
+        "E2": {
+          "MUST_ACCEPT": 7,
+          "MUST_REJECT": 7
+        },
+        "E3": {
+          "MUST_ACCEPT": 7,
+          "MUST_REJECT": 7
+        },
+        "CROSS_ENV": {
+          "MUST_ACCEPT": 6,
+          "MUST_REJECT": 6
+        }
+      },
+      "secondary_interaction_case_count": 53,
+      "secondary_interaction_case_ids": [
+        "G3-H2-001",
+        "G3-H2-002",
+        "G3-H2-003",
+        "G3-H2-004",
+        "G3-H2-005",
+        "G3-H2-006",
+        "G3-H2-007",
+        "G3-H2-008",
+        "G3-H2-009",
+        "G3-H2-010",
+        "G3-H2-011",
+        "G3-H2-012",
+        "G3-H2-013",
+        "G3-H2-014",
+        "G3-H2-015",
+        "G3-H2-016",
+        "G3-H2-017",
+        "G3-H2-018",
+        "G3-H2-019",
+        "G3-H2-020",
+        "G3-H2-021",
+        "G3-H2-022",
+        "G3-H2-023",
+        "G3-H2-024",
+        "G3-H2-025",
+        "G3-H2-027",
+        "G3-H2-028",
+        "G3-H2-029",
+        "G3-H2-030",
+        "G3-H2-031",
+        "G3-H2-032",
+        "G3-H2-033",
+        "G3-H2-034",
+        "G3-H2-035",
+        "G3-H2-036",
+        "G3-H2-037",
+        "G3-H2-038",
+        "G3-H2-039",
+        "G3-H2-040",
+        "G3-H2-041",
+        "G3-H2-042",
+        "G3-H2-043",
+        "G3-H2-044",
+        "G3-H2-045",
+        "G3-H2-046",
+        "G3-H2-047",
+        "G3-H2-048",
+        "G3-H2-049",
+        "G3-H2-050",
+        "G3-H2-051",
+        "G3-H2-052",
+        "G3-H2-053",
+        "G3-H2-054"
+      ],
+      "required_fields_present_in_every_case": true,
+      "only_primary_public_fact_keys_used": true,
+      "all_primary_public_fact_keys_explicit_in_each_case": true,
+      "boolean_types_and_closed_enums_checked": true,
+      "non_boolean_fact_values_checked": 28,
+      "expected_codes_use_only_primary_public_vocabulary": true,
+      "expectations_and_answer_labels_absent_from_facts": true,
+      "case_provenance_pointers_resolve_to_embedded_requirements": true,
+      "environment_specific_primary_scope_checked": true,
+      "semantic_authoring_review": "Reviewed every scenario and normative expectation against its G3 primary requirement, including unusual-valid states, material secondary interactions, CROSS_ENV scenario scope, and consistency of fact encodings. This was authoring review, not evaluation against any implementation.",
+      "attestation_review": "Required attestations reviewed against actions performed and the disclosed input boundary. No forbidden source or prior artifact was retrieved; no target evaluator was run or simulated.",
+      "target_evaluation_calls": 0,
+      "target_predictions_produced": 0
+    }
+  },
+  "generator_attestations": {
+    "received_only_generation_package_v2_as_hetren_input": true,
+    "did_not_read_target_evaluator_source": true,
+    "did_not_read_target_evaluator_branch_conditions": true,
+    "did_not_read_generation_attempt_1": true,
+    "did_not_read_known_development_cases": true,
+    "did_not_read_known_mutations": true,
+    "did_not_read_prior_predictions_or_results": true,
+    "did_not_read_remediation_history": true,
+    "generated_all_54_cases_before_target_execution": true,
+    "did_not_execute_or_simulate_target_evaluator": true
+  },
+  "external_sources": [],
+  "claim_limits": {
+    "generation_does_not_establish_scientific_support": true,
+    "generation_does_not_establish_task_8_authority": true,
+    "future_pass_does_not_establish_task_5_support": true,
+    "future_pass_does_not_prove_universal_generalization": true,
+    "freshness_is_relative_to_hidden_implementation_and_prior_evidence": true,
+    "passing_does_not_establish_scientific_support": true,
+    "passing_does_not_establish_task_8_authority": true,
+    "passing_does_not_establish_task_5_support": true,
+    "passing_does_not_prove_universal_generalization": true
+  },
+  "lifecycle_contract": {
+    "preregistration_package_pointer": "/embedded_preregistration_contract",
+    "evaluator_call_count_per_case_if_later_executed": 1,
+    "call_protocol": "evaluate(primary_requirement, facts, environment)",
+    "secondary_requirements_are_semantic_context_only": true,
+    "expectation_passed_to_evaluator": false,
+    "expected_violation_codes_passed_to_evaluator": false,
+    "all_predictions_before_scoring": true,
+    "must_reject_scoring_relation": "EXPECTED_CODES_SUBSET_OF_ACTUAL_CODES",
+    "additional_actual_codes_allowed": true,
+    "execution_policy": {
+      "first_execution_only_once": true,
+      "all_predictions_before_scoring": true,
+      "expectation_not_passed_to_evaluator": true,
+      "preserve_full_first_result": true,
+      "preserve_false_accepts": true,
+      "preserve_false_rejects": true,
+      "preserve_violation_codes": true,
+      "no_rerun_as_fresh": true
+    },
+    "success_rule": {
+      "must_accept_correct": "ALL",
+      "must_reject_correct": "ALL",
+      "expected_violation_contracts": "ALL_REQUIRED_CODES_PRESENT",
+      "false_accepts_allowed": 0,
+      "false_rejects_allowed": 0
+    },
+    "failure_policy": {
+      "failure_is_valid_evidence": true,
+      "classify_before_remediation": true,
+      "allowed_classifications": [
+        "EVALUATOR_DEFECT",
+        "G3_REQUIREMENT_AMBIGUITY",
+        "HOLDOUT_ORACLE_DEFECT"
+      ],
+      "historical_failure_must_remain_preserved": true,
+      "remediated_rerun_is_regression_only": true
+    },
+    "freshness_ends_permanently_after_first_execution": true,
+    "case_rewrite_after_first_execution_forbidden": true,
+    "subsequent_use_is_regression_only": true
+  },
+  "cases": [
+    {
+      "id": "G3-H2-001",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-009",
+        "G3-BR-010"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": false,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNAVAILABLE"
+      },
+      "rationale": "Scenario: An agent comparator calls a hosted planner whose provider publishes an advertised release but will not disclose its backend revision. Its stable logical identity, provider, advertised release, request timestamp, configuration, and captured outputs are preserved. The backend revision is explicitly UNAVAILABLE and the comparison disclaims exact behavior pinning. G3 basis: G3-BR-001 expressly permits this external-service limitation when it is recorded honestly; inability to pin an external backend is not itself a false version claim.",
+      "adversarial_dimension": "Unavailable backend identity with complete accessible provenance and an explicitly limited reproducibility claim.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-001",
+          "requirement_key": "baseline.identity-version",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/0/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-010",
+            "requirement_key": "comparison.reproducible-manifest",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/9/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "The unavailable backend revision remains a material provenance field with an explicit disposition; it is not silently omitted."
+          },
+          {
+            "requirement_id": "G3-BR-010",
+            "material_interaction": "Captured outputs support only the manifest reproducibility class justified by those artifacts, not immutable backend reconstruction."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-001",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-002",
+      "primary_requirement": "G3-BR-001",
+      "secondary_requirements": [
+        "G3-BR-010"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_VERSION_CLAIM"
+      ],
+      "facts": {
+        "backend_revision_known": false,
+        "claims_exact_version_pin": true,
+        "reproducibility_limitation_recorded": true,
+        "revision_state": "UNKNOWN"
+      },
+      "rationale": "Scenario: A hosted tool-planning baseline preserves request and response archives and openly records that the provider may silently change its backend. Nevertheless, the version record asserts exact behavior pinning because the client container and advertised API alias are fixed; the actual backend revision remains UNKNOWN. G3 basis: A fixed client and captured outputs cannot supply the immutable backend identity required for exact pinning. Recording the limitation elsewhere does not make the incompatible exact-version assertion true.",
+      "adversarial_dimension": "Contradiction between a disclosed external dependency limitation and an exact-version assertion.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-001",
+          "requirement_key": "baseline.identity-version",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/0/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-010",
+            "requirement_key": "comparison.reproducible-manifest",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/9/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-010",
+            "material_interaction": "Client reconstruction and response replay are different from reconstruction of the external service behavior."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-001",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-003",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": true,
+        "task7_lineage_applied": true
+      },
+      "rationale": "Scenario: After protected tabular-model results are inspected, a material baseline preprocessing defect is corrected. The originally frozen comparison and its defect disposition are retained; the corrected baseline receives a new version and successor comparison. Task 7 freshness, disclosure, lineage, repeated-inspection, and invalidation obligations are applied rather than rewriting the original record. G3 basis: The pre-protected freeze does not prohibit all later correction. G3-BR-002 permits governed successor evidence while preserving the historical comparison.",
+      "adversarial_dimension": "Legitimate post-inspection baseline correction with complete successor lineage.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-002",
+          "requirement_key": "baseline.pre-protected-binding",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-023",
+            "requirement_key": "baseline.supersession-recomparison",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/22/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-023",
+            "material_interaction": "A baseline defect triggers reassessment, while preservation of the prior result prevents that reassessment from laundering the earlier evidence."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-002",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-004",
+      "primary_requirement": "G3-BR-002",
+      "secondary_requirements": [
+        "G3-BR-023"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TASK7_LINEAGE_NOT_APPLIED"
+      ],
+      "facts": {
+        "baseline_changed_after_protected": true,
+        "prior_result_preserved": true,
+        "successor_evidence_created": true,
+        "task7_lineage_applied": false
+      },
+      "rationale": "Scenario: A baseline threshold is adjusted after analysts inspect protected outcomes. They retain the original comparison and create a separate successor record, but reuse the inspected evidence as if fresh and omit the inherited repeated-peeking, disclosure, and invalidation treatment. G3 basis: Creating a new record and preserving the old one are insufficient without Task 7 freshness and lineage semantics for the changed comparison.",
+      "adversarial_dimension": "A formally separate successor hides continued dependence on already inspected outcomes.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-002",
+          "requirement_key": "baseline.pre-protected-binding",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-023",
+            "requirement_key": "baseline.supersession-recomparison",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/22/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-023",
+            "material_interaction": "Recomparison inherits freshness obligations even when its historical predecessor remains intact."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-002",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-005",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [
+        "G3-BR-007",
+        "G3-BR-027"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": false,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "Scenario: A joint E2/E3 study freezes a comparator search over systems runnable under its declared data-locality and permission constraints. A widely stronger but incompatible hosted comparator is materially considered and excluded for that predeclared constraint. Search sources, procedure, cutoff, selection evidence, tie rule, the considered set, and exclusion reasons are retained; protected outcomes never influence selection. The strongest-applicable claim is limited to this eligible matched set. G3 basis: G3-BR-003 defines strength relative to the governed eligible search set, not every externally available method. A scientifically relevant matching constraint may exclude an otherwise strong comparator.",
+      "adversarial_dimension": "A bounded strongest-applicable set legitimately excludes a more capable but inapplicable comparator.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-003",
+          "requirement_key": "baseline.strongest-applicable-selection",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/2/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-027",
+            "requirement_key": "comparison.environment-applicability-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/26/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The matching constraint defines the claim interpretation before results, rather than supplying one side an unrelated post hoc advantage."
+          },
+          {
+            "requirement_id": "G3-BR-027",
+            "material_interaction": "E2 and E3 comparator bindings preserve the shared eligibility principle while respecting typed execution constraints."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-003",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-006",
+      "primary_requirement": "G3-BR-003",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-016"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PROTECTED_SELECTION_LEAKAGE"
+      ],
+      "facts": {
+        "exclusion_reasons_preserved": true,
+        "material_comparators_preserved": true,
+        "protected_outcomes_used_for_selection": true,
+        "search_cutoff_predeclared": true,
+        "search_scope_predeclared": true
+      },
+      "rationale": "Scenario: A comparator search freezes its scope and cutoff and retains every considered E1/E2 system and exclusion explanation. Selection is then made using a protected-outcome-derived ranking supplied by a separate dashboard. The selector never receives individual protected examples, but the ranking determines which eligible comparator is selected. G3 basis: Protected outcomes may not determine comparator selection through an aggregate or intermediate channel. Complete search documentation does not cure outcome-conditioned selection.",
+      "adversarial_dimension": "Protected information enters comparator choice through an aggregate ranking rather than raw evaluation data.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-003",
+          "requirement_key": "baseline.strongest-applicable-selection",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/2/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-002",
+            "requirement_key": "baseline.pre-protected-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-016",
+            "requirement_key": "benchmark.contamination-exposure",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/15/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-002",
+            "material_interaction": "The baseline selection binding must precede protected inspection; an indirect ranking still crosses that boundary."
+          },
+          {
+            "requirement_id": "G3-BR-016",
+            "material_interaction": "Exposure provenance includes the protected information conveyed by the dashboard, not merely direct dataset access."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-003",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-007",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": false
+      },
+      "rationale": "Scenario: An agent outperforms a credibly implemented deterministic diagnostic anchor but loses to the strongest comparator required for its long-horizon hypothesis. Both results remain visible, and the report retains the failed primary hypothesis while describing only the diagnostic improvement. G3 basis: G3-BR-004 permits useful diagnostic findings alongside a failed stronger comparison, provided the anchor is not used to support general superiority.",
+      "adversarial_dimension": "A valid diagnostic improvement coexists with an explicitly unsuccessful claim-bearing comparison.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-004",
+          "requirement_key": "baseline.comparator-role-separation",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "The favorable diagnostic result remains secondary and does not replace the failed primary comparison."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-004",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-008",
+      "primary_requirement": "G3-BR-004",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "DIAGNOSTIC_ANCHOR_MASQUERADES_AS_STRONG_BASELINE"
+      ],
+      "facts": {
+        "anchor_role": "DIAGNOSTIC",
+        "candidate_beats_anchor": true,
+        "candidate_beats_strongest_comparator": false,
+        "reported_as_general_superiority": true
+      },
+      "rationale": "Scenario: A tool agent beats an explicitly labeled and credibly implemented diagnostic anchor but does not beat the required strongest matched agent. The consolidated claim nevertheless asserts general superiority on the strength of the anchor comparison, while retaining the stronger-comparator result in an appendix. G3 basis: The semantic role of the evidence controls the claim. Labeling an anchor diagnostic and preserving the adverse comparison do not allow its favorable result to substitute for the required comparator.",
+      "adversarial_dimension": "Correct evidence labels coexist with an impermissible general conclusion.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-004",
+          "requirement_key": "baseline.comparator-role-separation",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "Publication of the adverse primary result does not authorize promotion of a diagnostic success into support for that primary claim."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-004",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-009",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007",
+        "G3-BR-019"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_prior_transcript_available": false,
+        "baseline_retrieval_cache": "empty-development-memory-r1",
+        "candidate_prior_transcript_available": true,
+        "candidate_retrieval_cache": "permitted-development-memory-r1",
+        "persistent_state_matched": false,
+        "state_difference_is_treatment": true
+      },
+      "rationale": "Scenario: The preregistered treatment is access to persistent memory of permitted development interactions. The memory-enabled candidate has a populated retrieval cache and prior transcripts; the baseline has an empty cache and no transcripts. Other information and opportunities are matched, no protected outcomes enter memory, and the claim is restricted to the causal effect of this memory access. G3 basis: Information parity permits a material state difference that is the predeclared treatment itself. Requiring identical persistent state here would remove the intervention under study.",
+      "adversarial_dimension": "Different caches and transcript access are legitimate components of one declared memory treatment.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-005",
+          "requirement_key": "comparison.information-opportunity-parity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-019",
+            "requirement_key": "native.transfer-comparator-isolation",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/18/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "Both persistent information channels implement the claimed causal treatment rather than an unrelated advantage."
+          },
+          {
+            "requirement_id": "G3-BR-019",
+            "material_interaction": "The memory-access effect is identified separately and is not misrepresented as learned cross-family transfer."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-005",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-010",
+      "primary_requirement": "G3-BR-005",
+      "secondary_requirements": [
+        "G3-BR-007"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "PERSISTENT_INFORMATION_ASYMMETRY"
+      ],
+      "facts": {
+        "baseline_prior_transcript_available": true,
+        "baseline_retrieval_cache": "shared-public-index-r4",
+        "candidate_prior_transcript_available": false,
+        "candidate_retrieval_cache": "shared-public-index-r4",
+        "persistent_state_matched": false,
+        "state_difference_is_treatment": false
+      },
+      "rationale": "Scenario: Both agents use the same frozen public retrieval index and receive the same visible prompt. Only the baseline also receives an archived prior session containing task-specific resolutions. This baseline-only transcript access is not the treatment; the additional information materially changes its opportunity even though the cache identities match. G3 basis: G3-BR-005 covers indirect persistent information and advantages to either side. Matching one cache does not establish parity of prior transcripts.",
+      "adversarial_dimension": "A baseline-only alternate information channel survives superficially matched prompts and retrieval caches.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-005",
+          "requirement_key": "comparison.information-opportunity-parity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The transcript asymmetry has no predeclared causal role and therefore cannot be excused as legitimate treatment."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-005",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-011",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [
+        "G3-BR-025",
+        "G3-BR-010"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "controlled_replay": false,
+        "environment_mutable": true,
+        "paired_execution": false,
+        "same_snapshot": false,
+        "temporal_drift_qualified": true
+      },
+      "rationale": "Scenario: Two vision systems are compared during separately scheduled live sensor windows under a scientifically justified design declared before protected inspection. The changing scene cannot be snapshotted, paired, or faithfully replayed. The temporal-drift limitation is predeclared, and the report explicitly qualifies it and limits its inference accordingly; the remaining evaluation units, outcome rules, split, and hard constraints are governed consistently. G3 basis: G3-BR-006 explicitly allows a qualified temporal-drift limitation when stronger temporal controls are unavailable. Such a limited comparison does not assert equivalence that was never established.",
+      "adversarial_dimension": "An honest temporally qualified comparison remains admissible without a snapshot or replay.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-006",
+          "requirement_key": "comparison.evaluation-parity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/5/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-025",
+            "requirement_key": "evaluation.real-world-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-010",
+            "requirement_key": "comparison.reproducible-manifest",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/9/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-025",
+            "material_interaction": "The declared field window and restricted claim scope prevent temporal qualification from becoming a production-wide assertion."
+          },
+          {
+            "requirement_id": "G3-BR-010",
+            "material_interaction": "The manifest states the limits of reproducing the changing external scene."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-006",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-012",
+      "primary_requirement": "G3-BR-006",
+      "secondary_requirements": [
+        "G3-BR-009",
+        "G3-BR-025"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TEMPORAL_ENVIRONMENT_DRIFT_UNCONTROLLED"
+      ],
+      "facts": {
+        "controlled_replay": false,
+        "environment_mutable": true,
+        "paired_execution": false,
+        "same_snapshot": false,
+        "temporal_drift_qualified": false
+      },
+      "rationale": "Scenario: Candidate and baseline vision runs use the same evaluator and nominal location but occur on different live feeds after camera calibration and scene traffic change. There is no common snapshot, paired execution, or controlled replay, and the result is reported without a temporal-drift qualification. G3 basis: Matching evaluator identity and location cannot establish materially equivalent environment state when drift can affect results.",
+      "adversarial_dimension": "Nominal environment identity conceals materially different temporal states.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-006",
+          "requirement_key": "comparison.evaluation-parity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/5/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "requirement_key": "evaluation.real-world-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "Recording timestamps and camera identities would document drift but cannot by itself control or qualify its effect."
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "material_interaction": "A field comparison must preserve the actual environment and time scope on which its inference depends."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-006",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-013",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-022"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": true,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "Scenario: Across agent and structured-data tasks, the study explicitly tests whether access to a bounded expert intervention improves outcomes. Expert access is available only to the treatment arm, declared before inspection, and exactly matches the scientific distinction claimed. Resource and human-effort evidence are reported separately under the declared regime. G3 basis: G3-BR-007 permits material asymmetry when it is the predeclared causal intervention. Internal procedures and information opportunities need not be identical when that difference is the object of the claim.",
+      "adversarial_dimension": "Material human-access asymmetry is the treatment under study rather than an illicit comparison advantage.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-007",
+          "requirement_key": "comparison.declared-asymmetry",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "requirement_key": "resources.comparison-regime",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/21/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "The unequal interaction opportunity is explicitly bound to the intervention."
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "material_interaction": "The experiment does not conceal the extra human effort within a quality-only summary."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-007",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-014",
+      "primary_requirement": "G3-BR-007",
+      "secondary_requirements": [
+        "G3-BR-005"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ASYMMETRY_NOT_CAUSALLY_RELEVANT"
+      ],
+      "facts": {
+        "asymmetry_matches_claimed_treatment": false,
+        "asymmetry_predeclared": true,
+        "material_asymmetry": true
+      },
+      "rationale": "Scenario: An E2/E3 algorithm comparison predeclares that only the candidate receives an auxiliary oracle with task labels, but claims to isolate an internal optimization change under matched information. The label access is materially beneficial and unrelated to that optimization change. G3 basis: Advance declaration alone is insufficient: G3-BR-007 also requires the treatment asymmetry to correspond to the scientific distinction actually claimed.",
+      "adversarial_dimension": "A predeclared but causally irrelevant oracle advantage is presented as legitimate treatment.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-007",
+          "requirement_key": "comparison.declared-asymmetry",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "The additional label channel violates the matched-information interpretation of the comparison."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-007",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-015",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-003",
+        "G3-BR-022"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "asymmetry_scientifically_justified": true,
+        "baseline_manual_iterations": 4,
+        "candidate_manual_iterations": 0,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "Scenario: A preregistered comparison uses a frozen candidate requiring no manual tuning and a conventional baseline receiving four justified manual configuration iterations on permitted development evidence. Tuning spaces, expert and debugging opportunities, stopping, and selection are governed in advance; the baseline receives enough opportunity to be a credible comparator, and the difference is scientifically justified. G3 basis: G3-BR-008 governs opportunity and credible selection, not equality of observed manual iteration counts. The declared, justified baseline tuning does not weaken the comparison.",
+      "adversarial_dimension": "Zero candidate manual iterations and greater baseline tuning are legitimate under a governed opportunity policy.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-008",
+          "requirement_key": "comparison.tuning-selection-governance",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/7/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-003",
+            "requirement_key": "baseline.strongest-applicable-selection",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/2/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "requirement_key": "resources.comparison-regime",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/21/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-003",
+            "material_interaction": "Baseline tuning supports credible selection of the strongest eligible comparator rather than a deliberately weak baseline."
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "material_interaction": "The concrete iteration and human-effort measurements belong to Task 9; Task 8 governs their comparison meaning."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-008",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-016",
+      "primary_requirement": "G3-BR-008",
+      "secondary_requirements": [
+        "G3-BR-007"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TUNING_OPPORTUNITY_ASYMMETRY"
+      ],
+      "facts": {
+        "asymmetry_scientifically_justified": false,
+        "baseline_manual_iterations": 9,
+        "candidate_manual_iterations": 1,
+        "tuning_policy_predeclared": true
+      },
+      "rationale": "Scenario: A predeclared tuning policy grants a favored baseline nine expert-guided manual iterations and restricts the candidate to one, despite both requiring the same kind of tuning. The imbalance is intended to influence the comparison and has no scientific justification. G3 basis: A declared policy may still provide systematically greater tuning opportunity merely to weaken a comparison. G3-BR-008 applies to favoritism toward either side.",
+      "adversarial_dimension": "Predeclaration is used to legitimize an unjustified opportunity imbalance favoring the baseline.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-008",
+          "requirement_key": "comparison.tuning-selection-governance",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/7/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The tuning imbalance is unrelated to the claimed method distinction and cannot be justified merely as treatment."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-008",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-017",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-001",
+        "G3-BR-017"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "evaluator_revision": "UNAVAILABLE",
+        "evaluator_revision_available": false,
+        "evaluator_revision_field_present": true
+      },
+      "rationale": "Scenario: The agent comparison records its evaluator provider, advertised release, scoring configuration, and all obtainable provenance. The vendor does not supply an internal evaluator revision, so the manifest contains that material field with UNAVAILABLE and records the vendor nondisclosure as the reason. G3 basis: G3-BR-009 requires explicit unavailable provenance, not invention of an inaccessible revision. The field remains present and truthful.",
+      "adversarial_dimension": "A material version field is deliberately present with an unavailable value rather than a fabricated identifier.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-009",
+          "requirement_key": "comparison.provenance",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-001",
+            "requirement_key": "baseline.identity-version",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/0/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-017",
+            "requirement_key": "evaluation.evaluator-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-001",
+            "material_interaction": "The advertised release is not misrepresented as an immutable backend revision."
+          },
+          {
+            "requirement_id": "G3-BR-017",
+            "material_interaction": "Evaluator identity and its accessible configuration remain traceable despite the disclosed revision limitation."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-009",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-018",
+      "primary_requirement": "G3-BR-009",
+      "secondary_requirements": [
+        "G3-BR-017"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "AVAILABLE_PROVENANCE_NOT_RECORDED"
+      ],
+      "facts": {
+        "evaluator_revision": "UNKNOWN",
+        "evaluator_revision_available": true,
+        "evaluator_revision_field_present": true
+      },
+      "rationale": "Scenario: An evaluator returns its exact material revision in retained response headers, making that provenance available. The comparison manifest nevertheless leaves the revision field at UNKNOWN while using the resulting scores in its claim. G3 basis: An uncertainty sentinel is truthful only when it reflects actual information availability. G3-BR-009 requires preservation of obtainable material provenance.",
+      "adversarial_dimension": "Syntactic field completeness conceals an unjustified unknown value for accessible provenance.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-009",
+          "requirement_key": "comparison.provenance",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-017",
+            "requirement_key": "evaluation.evaluator-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-017",
+            "material_interaction": "Traceability of the claim-bearing evaluator depends on recording the revision actually available with its judgments."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-009",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-019",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-001",
+        "G3-BR-009"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "IRREPRODUCIBLE_EXTERNAL_DEPENDENCY"
+      },
+      "rationale": "Scenario: A versioned vision-comparison manifest preserves all obtainable inputs, configurations, captured outputs, and practical integrity checks. A retired external service was never immutably pinned, and the remaining artifacts cannot recreate its full behavior. The manifest explicitly classifies the comparison as IRREPRODUCIBLE_EXTERNAL_DEPENDENCY and explains the limitation rather than promising a rerun. G3 basis: G3-BR-010 permits this reproducibility class when justified. Honest preservation to the extent the underlying system permits is distinct from a false reconstruction claim.",
+      "adversarial_dimension": "An explicitly irreproducible external dependency is a valid manifest disposition.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-010",
+          "requirement_key": "comparison.reproducible-manifest",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/9/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-001",
+            "requirement_key": "baseline.identity-version",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/0/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-001",
+            "material_interaction": "The external provider limitation remains explicit rather than being disguised as exact pinning."
+          },
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "All accessible material provenance is retained even though it cannot recreate the unavailable backend."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-010",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-020",
+      "primary_requirement": "G3-BR-010",
+      "secondary_requirements": [
+        "G3-BR-001"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "FALSE_EXACT_RECONSTRUCTION"
+      ],
+      "facts": {
+        "external_api_unpinned": true,
+        "limitation_recorded": true,
+        "reproducibility_class": "EXACT_RECONSTRUCTION"
+      },
+      "rationale": "Scenario: The image pipeline and model wrapper are integrity checked, and the manifest openly notes that a remote segmentation API can change silently. Because the local artifacts can be rebuilt, the manifest nevertheless assigns EXACT_RECONSTRUCTION to the complete comparison including that unpinned service. G3 basis: G3-BR-010 requires the class to describe the actual reproducibility of the comparison. A limitation note cannot make an unsupported exact-reconstruction class correct.",
+      "adversarial_dimension": "Reconstructible local components are used to overstate reproducibility of the full external-dependent system.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-010",
+          "requirement_key": "comparison.reproducible-manifest",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/9/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-001",
+            "requirement_key": "baseline.identity-version",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/0/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-001",
+            "material_interaction": "Immutability of a client wrapper does not pin the external baseline behavior."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-010",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-021",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "outcome_driven_stopping": true,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": true
+      },
+      "rationale": "Scenario: A stochastic structured-data experiment preregisters its replication unit, sampling policy, outcome-dependent stopping rule, maximum attempt count, aggregation, uncertainty treatment, and variation sources. It stops when the declared boundary is reached, and repeats on the same evaluation units are not counted as independent new units. G3 basis: G3-BR-011 prohibits ungoverned outcome-driven optional stopping, not every outcome-dependent stopping procedure. A valid procedure governed before protected inspection remains permissible.",
+      "adversarial_dimension": "Outcome-dependent stopping is legitimate when its complete scientific treatment is predeclared.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-011",
+          "requirement_key": "comparison.stochastic-replication",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/10/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-012",
+            "requirement_key": "comparison.effect-uncertainty",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/11/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-012",
+            "material_interaction": "The uncertainty analysis respects the preregistered stopping design and keeps repeated observations within the actual dependency structure."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-011",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-022",
+      "primary_requirement": "G3-BR-011",
+      "secondary_requirements": [
+        "G3-BR-012"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "OPTIONAL_STOPPING"
+      ],
+      "facts": {
+        "outcome_driven_stopping": true,
+        "repeated_runs_claimed_independent": false,
+        "stopping_rule_predeclared": false
+      },
+      "rationale": "Scenario: A tabular-model study preserves every attempted run and does not claim repeated seeds are independent. After inspecting a favorable interim protected aggregate, the analyst stops taking further replications. No outcome-dependent stopping rule or corresponding uncertainty treatment was predeclared. G3 basis: Retaining all completed runs does not remove selection introduced by an unplanned outcome-conditioned stopping time. G3-BR-011 requires advance governance for that procedure.",
+      "adversarial_dimension": "Complete run retention is mistaken for protection against optional stopping.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-011",
+          "requirement_key": "comparison.stochastic-replication",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/10/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-012",
+            "requirement_key": "comparison.effect-uncertainty",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/11/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-012",
+            "material_interaction": "An ungoverned stopping decision changes the dependency and selection design relevant to the reported uncertainty."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-011",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-023",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-011",
+        "G3-BR-015"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "analysis_uses_independence_groups": true,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": false
+      },
+      "rationale": "Scenario: The comparison contains structured records and images from the same organizations, with unequal numbers of observations and repeated model seeds. Its predeclared effect and uncertainty analysis use the governed evaluation units, retain the organization-level independence groups and valid paired structure, and treat seed repetitions as within-unit observations rather than new independent cases. G3 basis: G3-BR-012 permits unequal cluster sizes and repeated stochastic measurements when the analysis honors the actual dependency design and material effect thresholds.",
+      "adversarial_dimension": "Cross-environment dependence and unequal cluster sizes are valid when preserved in the statistical design.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-012",
+          "requirement_key": "comparison.effect-uncertainty",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/11/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-011",
+            "requirement_key": "comparison.stochastic-replication",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/10/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-011",
+            "material_interaction": "Additional seeds add replication evidence without manufacturing independent evaluation units."
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "The documented task mixture and dependency structure are carried into the analysis instead of flattened away."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-012",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-024",
+      "primary_requirement": "G3-BR-012",
+      "secondary_requirements": [
+        "G3-BR-015"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "INDEPENDENCE_GROUP_IGNORED"
+      ],
+      "facts": {
+        "analysis_uses_independence_groups": false,
+        "analysis_uses_task7_evaluation_units": true,
+        "repeated_seeds_treated_independent": false
+      },
+      "rationale": "Scenario: An E2/E3 analysis uses the correct evaluation-unit identifiers and never counts repeated seeds as independent. It nevertheless pools records and images from shared organizations as independent units, ignoring their declared independence groups and shared acquisition effects. G3 basis: Correct unit identifiers alone do not satisfy G3-BR-012. Applicable independence groups and actual dependencies must also govern the uncertainty model.",
+      "adversarial_dimension": "Correct unit accounting conceals cross-environment pseudoreplication through a shared parent population.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-012",
+          "requirement_key": "comparison.effect-uncertainty",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/11/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "The benchmark preserves the shared-organization dependency structure, but the analysis fails to honor it."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-012",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-025",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [
+        "G3-BR-004",
+        "G3-BR-012"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "primary_claim_remains_failed": true,
+        "primary_metric_passed": false,
+        "secondary_promoted_after_outcome": false
+      },
+      "rationale": "Scenario: A structured-data model misses its preregistered primary effect threshold but improves a declared secondary measure. The secondary result is reported prominently with its diagnostic role intact, and the original primary claim remains failed. G3 basis: G3-BR-013 allows reporting secondary findings without promoting them into support for the unsuccessful primary claim. Reporting a real improvement is not itself selective-representation failure.",
+      "adversarial_dimension": "A favorable, visible secondary finding coexists with a preserved failed primary claim.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-013",
+          "requirement_key": "comparison.primary-measures-reporting",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-004",
+            "requirement_key": "baseline.comparator-role-separation",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-012",
+            "requirement_key": "comparison.effect-uncertainty",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/11/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-004",
+            "material_interaction": "A diagnostic finding can inform interpretation without substituting for the claim-bearing comparison."
+          },
+          {
+            "requirement_id": "G3-BR-012",
+            "material_interaction": "The primary effect threshold remains binding despite a favorable result on another measure."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-013",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-026",
+      "primary_requirement": "G3-BR-013",
+      "secondary_requirements": [],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_HOC_SECONDARY_PROMOTION"
+      ],
+      "facts": {
+        "primary_claim_remains_failed": false,
+        "primary_metric_passed": true,
+        "secondary_promoted_after_outcome": true
+      },
+      "rationale": "Scenario: The original primary measure passes. After inspecting all protected results, analysts additionally promote whichever secondary measure has the most favorable result into support for the original primary claim, although that role and selection policy were never predeclared. G3 basis: The ban on post-inspection secondary promotion in G3-BR-013 does not depend on the original primary measure failing. A primary success does not authorize outcome-driven expansion of its support.",
+      "adversarial_dimension": "A genuine primary success is used to excuse post hoc promotion of a selected secondary result.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-013",
+          "requirement_key": "comparison.primary-measures-reporting",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+        },
+        "secondary_semantic_sources": [],
+        "interaction_explanations": [],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-013",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-027",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-021",
+        "G3-BR-013"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": true,
+        "hard_constraint_bound_before_protected": true
+      },
+      "rationale": "Scenario: An adapted vision system improves mean recognition quality but violates a prebound locality constraint on a protected class. The locality violation is evaluated separately and prevents the claim from passing, while the performance improvement remains reported as an observation. G3 basis: G3-BR-014 governs honest claim disposition, not guaranteed experimental success. A favorable aggregate may be retained when it does not override a failed hard constraint.",
+      "adversarial_dimension": "Useful performance evidence is retained alongside a correctly blocking hard-constraint violation.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-014",
+          "requirement_key": "comparison.hard-constraints",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/13/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-021",
+            "requirement_key": "adaptive.ah2-retention-locality-rollback",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/20/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-021",
+            "material_interaction": "Adaptation locality remains a separate obligation rather than being absorbed into average recognition quality."
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "A favorable reported measure does not replace the blocked primary claim."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-014",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-028",
+      "primary_requirement": "G3-BR-014",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-022"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "HARD_CONSTRAINT_NOT_FROZEN"
+      ],
+      "facts": {
+        "constraint_affects_claim": true,
+        "constraint_violation_blocks_pass": true,
+        "hard_constraint_bound_before_protected": false
+      },
+      "rationale": "Scenario: After protected candidate and baseline outcomes are known, a reviewer introduces a new claim-affecting hard latency constraint that selectively disqualifies the baseline. The new constraint is enforced strictly and cannot be offset by average quality, but it was not bound before inspection. G3 basis: Strict enforcement alone does not satisfy G3-BR-014: applicable claim-affecting hard constraints must be bound before protected outcomes. A newly introduced criterion cannot retrospectively validate the original comparison.",
+      "adversarial_dimension": "An uncompromising hard constraint is applied with impermissible post-outcome timing.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-014",
+          "requirement_key": "comparison.hard-constraints",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/13/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-002",
+            "requirement_key": "baseline.pre-protected-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "requirement_key": "resources.comparison-regime",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/21/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-002",
+            "material_interaction": "Post-inspection changes to comparison conditions require governed successor evidence rather than rewriting the earlier claim."
+          },
+          {
+            "requirement_id": "G3-BR-022",
+            "material_interaction": "Resource-related hard constraints must respect the predeclared resource-comparison regime."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-014",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-029",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-025"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": false
+      },
+      "rationale": "Scenario: A vision benchmark intentionally oversamples rare severe occlusion cases. Its target population, sampling procedure, unequal weights, difficulty distribution, generator provenance, omissions, dependencies, and limited claim scope are documented and frozen before inspection. The same distribution and weights are retained after outcomes. G3 basis: G3-BR-015 requires a governed, interpretable portfolio, not uniform sampling or equal weights. A predeclared stress-oriented distribution is legitimate within its stated construct and scope.",
+      "adversarial_dimension": "Nonuniform difficulty and weighting are scientifically intentional rather than signs of manipulation.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-015",
+          "requirement_key": "benchmark.construct-coverage",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-025",
+            "requirement_key": "evaluation.real-world-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-025",
+            "material_interaction": "The claim remains limited to the documented stress portfolio rather than being silently generalized to natural field prevalence."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-015",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-030",
+      "primary_requirement": "G3-BR-015",
+      "secondary_requirements": [
+        "G3-BR-013"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "POST_OUTCOME_BENCHMARK_REWEIGHTING"
+      ],
+      "facts": {
+        "difficulty_distribution_preserved": true,
+        "sampling_rule_predeclared": true,
+        "weights_changed_after_outcomes": true
+      },
+      "rationale": "Scenario: Every sampled image and its original difficulty annotation remain in the archive, and the initial sampling rule was predeclared. After seeing protected failures, analysts lower the weights of the difficult images so the final aggregate reverses the conclusion. G3 basis: Preservation of images and difficulty metadata does not preserve a frozen conclusion-relevant weighting rule. G3-BR-015 prohibits outcome-conditioned portfolio reweighting.",
+      "adversarial_dimension": "A complete case archive hides selective reporting through changed weights rather than deleted cases.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-015",
+          "requirement_key": "benchmark.construct-coverage",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "Post-outcome weighting changes the claim-bearing aggregation even though the reported measure keeps the same name."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-015",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-031",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-009",
+        "G3-BR-015"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "benchmark_dynamic": true,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "UNKNOWN",
+        "dynamic_implies_clean": false
+      },
+      "rationale": "Scenario: A dynamic vision benchmark uses a generator with incompletely known training exposure. Construct, difficulty, generator provenance, evaluator, and replay controls are documented, but adequate cleanliness evidence is unavailable. Exposure remains explicitly UNKNOWN, and the report neither infers cleanliness from dynamism nor uses the uncertainty as protected-clean evidence. G3 basis: G3-BR-016 requires honest representation of unknown exposure. Dynamic generation need not be rejected merely because it cannot prove cleanliness, provided the uncertainty and resulting interpretation limits remain explicit.",
+      "adversarial_dimension": "A dynamic benchmark with unknown exposure has an honest, limited evidence disposition.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-016",
+          "requirement_key": "benchmark.contamination-exposure",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/15/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "Unknown generator exposure is preserved as material provenance rather than invented as absent."
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "Dynamism does not waive construct, difficulty, sampling, or scope documentation."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-016",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-032",
+      "primary_requirement": "G3-BR-016",
+      "secondary_requirements": [
+        "G3-BR-009"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "UNSUPPORTED_CLEAN_CONTAMINATION_CLAIM"
+      ],
+      "facts": {
+        "benchmark_dynamic": false,
+        "cleanliness_evidence_available": false,
+        "contamination_state": "CLEAN",
+        "dynamic_implies_clean": false
+      },
+      "rationale": "Scenario: A static image benchmark is declared CLEAN after its filenames and file layout are changed. There is no evidence ruling out material training or evaluation exposure, and the unchanged image content may have been seen. The claim does not rely on dynamic generation at all. G3 basis: G3-BR-016 requires evidence-grounded exposure provenance for static as well as dynamic benchmarks. Packaging changes alone cannot establish cleanliness.",
+      "adversarial_dimension": "Unsupported cleanliness outside the dynamic-benchmark special case.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-016",
+          "requirement_key": "benchmark.contamination-exposure",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/15/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "An unsupported CLEAN disposition invents certainty about material provenance rather than representing the exposure uncertainty."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-016",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-033",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-026"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "alternative_crosscheck_present": true,
+        "bias_control_performed": true,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": true,
+        "judge_same_family_as_candidate": true,
+        "relationship_recorded": true
+      },
+      "rationale": "Scenario: A claim-bearing judge for structured-record correction belongs to the candidate model family. Its identity, version, scoring procedure, configuration, construct, limitations, and family relationship are recorded. Relevant bias controls are performed, and a materially different blinded audit using source records cross-checks the judgments to the extent required by the claim. G3 basis: G3-BR-017 requires qualification of relevant coupling and bias, not automatic exclusion of every same-family judge. The declared controls and alternative path address the material risks.",
+      "adversarial_dimension": "Same-family judging is permissible with transparent qualification and an adequate different cross-check.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-017",
+          "requirement_key": "evaluation.evaluator-validity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-026",
+            "requirement_key": "evaluation.independent-verification",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/25/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-026",
+            "material_interaction": "The alternative audit supplies material verification separation rather than a nominally separate script using the same judgments."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-017",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-034",
+      "primary_requirement": "G3-BR-017",
+      "secondary_requirements": [
+        "G3-BR-009",
+        "G3-BR-026"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "EVALUATOR_VERSION_MISSING"
+      ],
+      "facts": {
+        "alternative_crosscheck_present": true,
+        "bias_control_performed": true,
+        "claim_depends_on_judge": true,
+        "evaluator_identity_present": true,
+        "evaluator_scoring_procedure_present": true,
+        "evaluator_version_present": false,
+        "judge_same_family_as_candidate": false,
+        "relationship_recorded": true
+      },
+      "rationale": "Scenario: A third-party judge from a different model family scores corrected structured records. Its identity, procedure, relationship, bias controls, and alternative audit are documented, but the material evaluator version field is entirely omitted, including any explicit UNKNOWN or UNAVAILABLE disposition. G3 basis: A claim-bearing evaluator still requires traceable version provenance under G3-BR-017. Independence and successful cross-checking do not excuse omission of that material field.",
+      "adversarial_dimension": "A well-cross-checked, different-family judge lacks essential version traceability.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-017",
+          "requirement_key": "evaluation.evaluator-validity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-026",
+            "requirement_key": "evaluation.independent-verification",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/25/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "If the revision cannot be obtained, it must be represented explicitly rather than silently omitted."
+          },
+          {
+            "requirement_id": "G3-BR-026",
+            "material_interaction": "Independent verification complements evaluator provenance; it does not replace it."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-017",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-035",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-014",
+        "G3-BR-025"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "claims_absence_of_side_effects": false,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "Scenario: The agent harness records observable actions, tool calls, retries, termination, and the final outcome, but cannot observe a remote tool service internal side effects. The observation boundary is explicit, that material unobserved state remains UNKNOWN, and no claim of absent side effects is made. Claim-affecting trajectory categories were declared beforehand; private chain-of-thought is not collected. G3 basis: G3-BR-018 accepts bounded observable evidence with explicit uncertainty. Missing access to hidden service state or private reasoning is not equivalent to a trajectory defect when the conclusion respects the boundary.",
+      "adversarial_dimension": "A successful visible outcome coexists with explicitly unknown hidden side effects.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-018",
+          "requirement_key": "e1.observable-trajectory-evidence",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/17/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-014",
+            "requirement_key": "comparison.hard-constraints",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/13/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "requirement_key": "evaluation.real-world-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-014",
+            "material_interaction": "A visible task success is not used to establish compliance with an unobserved hard constraint."
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "material_interaction": "The limited observation boundary constrains any real-world behavior claim."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-018",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-036",
+      "primary_requirement": "G3-BR-018",
+      "secondary_requirements": [
+        "G3-BR-021",
+        "G3-BR-014"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "UNOBSERVED_TREATED_AS_ABSENT"
+      ],
+      "facts": {
+        "claims_absence_of_side_effects": true,
+        "hidden_side_effects_observable": false,
+        "observation_boundary_declared": true,
+        "unobservable_state_disposition": "UNKNOWN"
+      },
+      "rationale": "Scenario: An agent trace explicitly states that downstream persistent writes are outside the observation boundary and records their state as UNKNOWN. Because no write appears in the visible trace, the comparison still claims that execution had no side effects. G3 basis: An explicit uncertainty field does not license a contradictory absence claim. G3-BR-018 prohibits treating unobserved behavior as evidence of absence.",
+      "adversarial_dimension": "Correct uncertainty metadata coexists with a scientifically incompatible absence conclusion.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-018",
+          "requirement_key": "e1.observable-trajectory-evidence",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/17/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-021",
+            "requirement_key": "adaptive.ah2-retention-locality-rollback",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/20/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-014",
+            "requirement_key": "comparison.hard-constraints",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/13/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-021",
+            "material_interaction": "An unobserved persistent write cannot be assumed absent when interpreting state restoration or rollback."
+          },
+          {
+            "requirement_id": "G3-BR-014",
+            "material_interaction": "A favorable outcome cannot establish an unobserved no-side-effect hard constraint."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-018",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-037",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-004"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "channel_classified_separately": true,
+        "claimed_as_learned_transfer": false,
+        "manual_target_engineering": true,
+        "target_specific_demonstrations": false,
+        "target_specific_onboarding": true,
+        "target_specific_prompt_engineering": true,
+        "target_specific_retrieval": true
+      },
+      "rationale": "Scenario: An N-H2 study includes an explicitly target-starting reference across E1 and E3. That reference receives target-specific onboarding, retrieval, prompts, and manual integration using permitted target development material. These channels are classified separately; their contribution is not claimed as learned cross-family transfer. A separate source-isolated comparison demonstrates the source-side learned contribution, and protected target outcomes do not tune the mechanism. G3 basis: G3-BR-019 requires separation of learned transfer from other information channels; it does not forbid an honestly labeled target-engineered reference.",
+      "adversarial_dimension": "Extensive target engineering is legitimate when separated from the learned-transfer claim.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-019",
+          "requirement_key": "native.transfer-comparator-isolation",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/18/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-004",
+            "requirement_key": "baseline.comparator-role-separation",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "The target-side information opportunity is disclosed and assigned to the correct reference role."
+          },
+          {
+            "requirement_id": "G3-BR-004",
+            "material_interaction": "The reference role prevents performance from being interpreted as evidence for a different claim-bearing mechanism."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-019",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-038",
+      "primary_requirement": "G3-BR-019",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-016"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "TARGET_INFORMATION_CHANNEL_HIDDEN"
+      ],
+      "facts": {
+        "channel_classified_separately": false,
+        "claimed_as_learned_transfer": true,
+        "manual_target_engineering": false,
+        "target_specific_demonstrations": true,
+        "target_specific_onboarding": true,
+        "target_specific_prompt_engineering": false,
+        "target_specific_retrieval": true
+      },
+      "rationale": "Scenario: A frozen source mechanism is moved to E2 and E3 targets without manual code or prompt edits. Automatic target onboarding supplies target-specific demonstrations and retrieval before measurement. The resulting gain is attributed to learned source-to-target transfer, and those target information channels are not classified separately. G3 basis: Absence of manual editing does not establish isolation of learned transfer. G3-BR-019 explicitly distinguishes onboarding, demonstrations, and retrieval from source-side learned advantage.",
+      "adversarial_dimension": "Automatic onboarding hides target information transfer behind an unchanged source mechanism.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-019",
+          "requirement_key": "native.transfer-comparator-isolation",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/18/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-016",
+            "requirement_key": "benchmark.contamination-exposure",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/15/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "The hidden retrieval and demonstration channels change information opportunity even when executable weights and source code stay fixed."
+          },
+          {
+            "requirement_id": "G3-BR-016",
+            "material_interaction": "Material target exposure must be represented regardless of whether a person or an automated onboarding process supplied it."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-019",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-039",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-007",
+        "G3-BR-005"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "baseline_adaptation_input": "feature-window-r11-without-audit-labels",
+        "candidate_adaptation_input": "feature-window-r11-with-delayed-audit-labels",
+        "difference_is_declared_treatment": true,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "Scenario: An A-H1 experiment binds its frozen pre-adaptation state, no-adaptation reference, strongest eligible matched adaptation baseline, and necessary conventional comparator. Its precise treatment is release of delayed audit labels to an otherwise governed adaptation procedure. Candidate and baseline therefore receive different adaptation inputs by design, with that difference declared before inspection; the claim concerns label access and does not assert algorithm superiority under equal information. G3 basis: G3-BR-020 inherits the declared-treatment exception to parity. A causally relevant input difference does not invalidate a properly bound comparator set.",
+      "adversarial_dimension": "Different adaptation-input contents are legitimate when access to that information is the exact treatment.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-020",
+          "requirement_key": "adaptive.ah1-comparator-set",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/19/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The input asymmetry corresponds to the stated causal comparison rather than an unrelated advantage."
+          },
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "Other information opportunities remain comparable, and the exceptional access is explicitly governed."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-020",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-040",
+      "primary_requirement": "G3-BR-020",
+      "secondary_requirements": [
+        "G3-BR-005",
+        "G3-BR-007"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ADAPTATION_INPUT_ASYMMETRY"
+      ],
+      "facts": {
+        "baseline_adaptation_input": "feature-window-r18",
+        "candidate_adaptation_input": "feature-window-r18-plus-audited-outcomes",
+        "difference_is_declared_treatment": false,
+        "strongest_applicable_baseline_used": true
+      },
+      "rationale": "Scenario: A study includes the strongest applicable adaptation baseline and claims an algorithm comparison under matched information. The candidate receives feature records plus audited outcome labels, while the baseline receives only the feature records. The extra labels are not the declared treatment, even though both inputs come from the same dated data window. G3 basis: The comparator identity alone cannot establish a fair adaptation comparison. G3-BR-020 requires governed adaptation-input access and information opportunity.",
+      "adversarial_dimension": "A strong comparator is starved of an outcome-information channel hidden by a shared data-window label.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-020",
+          "requirement_key": "adaptive.ah1-comparator-set",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/19/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-005",
+            "requirement_key": "comparison.information-opportunity-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/4/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-005",
+            "material_interaction": "Equal nominal dataset origin does not mean equal material information."
+          },
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The outcome-label advantage has no declared causal role in the claimed algorithm comparison."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-020",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-041",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-027",
+        "G3-BR-018"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "behavioral_restoration_checked": true,
+        "declared_rollback_success": true,
+        "persistent_index_restored": true,
+        "persistent_memory_material": false,
+        "persistent_memory_restored": false,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "Scenario: A governed rollback restores an agent policy and retrieval index and verifies protected post-rollback behavior. The declared state inventory establishes that the agent has no material persistent conversational memory; that nonexistent memory surface consequently has no restoration event. Applicable prior capability, locality, invariants, state restoration, and behavioral checks are preserved, and the rollback command succeeds. G3 basis: G3-BR-021 requires restoration of applicable material state surfaces. It does not require inventing or restoring persistent memory that the system does not have.",
+      "adversarial_dimension": "Successful rollback with an explicitly inapplicable memory-restoration surface.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-021",
+          "requirement_key": "adaptive.ah2-retention-locality-rollback",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/20/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-027",
+            "requirement_key": "comparison.environment-applicability-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/26/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-018",
+            "requirement_key": "e1.observable-trajectory-evidence",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/17/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-027",
+            "material_interaction": "The memory-surface exclusion is governed and verified as genuinely inapplicable without changing the rollback claim."
+          },
+          {
+            "requirement_id": "G3-BR-018",
+            "material_interaction": "The state inventory and observation boundary establish which restored surfaces the evidence actually covers."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-021",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-042",
+      "primary_requirement": "G3-BR-021",
+      "secondary_requirements": [
+        "G3-BR-018",
+        "G3-BR-014"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "ROLLBACK_BEHAVIOR_NOT_VERIFIED"
+      ],
+      "facts": {
+        "behavioral_restoration_checked": false,
+        "declared_rollback_success": true,
+        "persistent_index_restored": true,
+        "persistent_memory_material": true,
+        "persistent_memory_restored": true,
+        "rollback_command_succeeded": true
+      },
+      "rationale": "Scenario: An agent rollback command succeeds and checksums confirm restoration of the declared material memory and index snapshots. The report declares rollback success without any protected post-rollback behavioral check, assuming restored bytes guarantee restored behavior in the active runtime. G3 basis: G3-BR-021 requires applicable state and behavioral restoration. Command success and restored state snapshots do not substitute for the required behavioral verification.",
+      "adversarial_dimension": "Complete state checks and a successful invocation are substituted for behavioral restoration evidence.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-021",
+          "requirement_key": "adaptive.ah2-retention-locality-rollback",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/20/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-018",
+            "requirement_key": "e1.observable-trajectory-evidence",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/17/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-014",
+            "requirement_key": "comparison.hard-constraints",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/13/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-018",
+            "material_interaction": "Observable state evidence has a different boundary from evidence of the agent behavior after rollback."
+          },
+          {
+            "requirement_id": "G3-BR-014",
+            "material_interaction": "A rollback-related claim constraint cannot be marked satisfied solely through a favorable state-level proxy."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-021",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-043",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-007",
+        "G3-BR-008"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "quality_and_resource_reported_separately": true,
+        "resource_regime_frozen_before_protected": true,
+        "single_weighted_score_only": false
+      },
+      "rationale": "Scenario: An E1/E2 study preregisters an unconstrained-but-jointly-reported resource regime. Candidate and baseline use substantially different compute and human effort, and the candidate trades better quality for greater cost. All material resource dimensions and quality evidence remain separately reportable; no single weighted score is the sole result. G3 basis: G3-BR-022 permits a governed regime other than strict matching. Unequal resource use is legitimate when its meaning is declared beforehand and the quality-resource tradeoff remains visible.",
+      "adversarial_dimension": "Large resource inequality is permissible under an honestly reported predeclared regime.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-022",
+          "requirement_key": "resources.comparison-regime",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/21/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-008",
+            "requirement_key": "comparison.tuning-selection-governance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/7/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "The resource difference is classified as a governed regime difference rather than silently interpreted as equal-budget performance."
+          },
+          {
+            "requirement_id": "G3-BR-008",
+            "material_interaction": "Relevant human tuning opportunity remains governed separately from the concrete Task 9 measurements."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-022",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-044",
+      "primary_requirement": "G3-BR-022",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-007"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "RESOURCE_REGIME_NOT_FROZEN"
+      ],
+      "facts": {
+        "quality_and_resource_reported_separately": true,
+        "resource_regime_frozen_before_protected": false,
+        "single_weighted_score_only": false
+      },
+      "rationale": "Scenario: After the protected E2/E3 comparison reveals a candidate budget overrun, the team replaces the intended matched-budget interpretation with an unconstrained comparison. It reports quality and costs separately and uses no sole composite score, but the resource regime used for the final claim was not frozen before inspection. G3 basis: Transparent reporting does not cure post-outcome selection of the resource regime. G3-BR-022 requires that semantic comparison choice to precede protected inspection.",
+      "adversarial_dimension": "Full cost disclosure is used to excuse a retroactively changed resource comparison.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-022",
+          "requirement_key": "resources.comparison-regime",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/21/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-002",
+            "requirement_key": "baseline.pre-protected-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-007",
+            "requirement_key": "comparison.declared-asymmetry",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/6/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-002",
+            "material_interaction": "A changed resource regime is a material comparison-binding change that requires successor evidence."
+          },
+          {
+            "requirement_id": "G3-BR-007",
+            "material_interaction": "A resource asymmetry cannot receive its scientific justification only after its outcome is known."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-022",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-045",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-002",
+        "G3-BR-003"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": true,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "Scenario: A materially stronger eligible vision comparator becomes credibly known after the historical search cutoff. A dated review records the search scope, sources, and trigger evidence, initiates governed reassessment, and retains the historical result under its original as-of scope. Any recomparison is treated as successor evidence with Task 7 freshness and lineage. G3 basis: G3-BR-023 requires reassessment without pretending the stronger method was always known or erasing the earlier comparison. A preserved historical result may coexist with an active supersession review.",
+      "adversarial_dimension": "A new stronger comparator changes current evidence consequences without rewriting historical knowledge.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-023",
+          "requirement_key": "baseline.supersession-recomparison",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/22/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-002",
+            "requirement_key": "baseline.pre-protected-binding",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/1/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-003",
+            "requirement_key": "baseline.strongest-applicable-selection",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/2/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-002",
+            "material_interaction": "Reassessment creates successor evidence rather than rebinding the protected historical comparison."
+          },
+          {
+            "requirement_id": "G3-BR-003",
+            "material_interaction": "The original and updated searches each retain their own governed as-of scope."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-023",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-046",
+      "primary_requirement": "G3-BR-023",
+      "secondary_requirements": [
+        "G3-BR-024"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "BASELINE_REASSESSMENT_NOT_TRIGGERED"
+      ],
+      "facts": {
+        "credible_stronger_comparator_evidence": true,
+        "historical_result_preserved": true,
+        "reassessment_triggered": false,
+        "review_as_of_date_recorded": true
+      },
+      "rationale": "Scenario: A dated review preserves the historical vision result and records credible evidence of a materially relevant stronger comparator. Because that comparator cannot currently be implemented due to access restrictions, the team declines to trigger any reassessment and leaves the broader claim unchanged. G3 basis: Implementation difficulty does not remove the G3-BR-023 reassessment trigger. The evidence consequence must be governed even if the next step is a blocked or narrower claim instead of immediate recomparison.",
+      "adversarial_dimension": "Unavailable implementation is used as a reason to ignore a credible supersession trigger.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-023",
+          "requirement_key": "baseline.supersession-recomparison",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/22/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-024",
+            "requirement_key": "baseline.missing-comparator-disposition",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/23/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-024",
+            "material_interaction": "A missing required comparator can block or narrow the claim; it does not justify leaving the broader claim unreviewed."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-023",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-047",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-004",
+        "G3-BR-025"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "broader_claim_blocked": true,
+        "narrow_claim_implies_broader_superiority": false,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "Scenario: The strongest meaningful agent comparator required for a broad superiority claim cannot be reproduced. The broad claim remains blocked and its evidence gap stays visible. A separately scoped successor describes performance against an available diagnostic reference for a limited workflow, without implying the blocked general superiority claim. G3 basis: G3-BR-024 permits truthful narrower evidence while the required comparator is missing. It forbids laundering a weak substitute into support for the broader claim, not all further reporting.",
+      "adversarial_dimension": "A blocked broad claim coexists with an honestly narrowed successor and a retained evidence gap.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-024",
+          "requirement_key": "baseline.missing-comparator-disposition",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/23/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-004",
+            "requirement_key": "baseline.comparator-role-separation",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "requirement_key": "evaluation.real-world-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-004",
+            "material_interaction": "The available diagnostic reference keeps its limited role instead of becoming the missing claim-bearing comparator."
+          },
+          {
+            "requirement_id": "G3-BR-025",
+            "material_interaction": "The successor result remains within the represented workflow and does not imply production-wide capability."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-024",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-048",
+      "primary_requirement": "G3-BR-024",
+      "secondary_requirements": [
+        "G3-BR-004",
+        "G3-BR-013"
+      ],
+      "environment": "E1",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "NARROW_CLAIM_IMPLIES_BLOCKED_SUPERIORITY"
+      ],
+      "facts": {
+        "broader_claim_blocked": true,
+        "narrow_claim_implies_broader_superiority": true,
+        "original_evidence_gap_preserved": true,
+        "required_comparator_available": false
+      },
+      "rationale": "Scenario: The registry correctly marks a broad agent superiority claim blocked and preserves the missing comparator gap. A narrow successor nevertheless asserts a conclusion that entails superiority over the same unavailable comparator, presenting the narrower workflow result as sufficient evidence for the blocked broad conclusion. G3 basis: A correct status field and retained gap do not cure an incompatible semantic implication. G3-BR-024 forbids a narrower successor from implying the blocked broader claim.",
+      "adversarial_dimension": "Correct blocking metadata conceals a broader superiority assertion in the successor claim.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-024",
+          "requirement_key": "baseline.missing-comparator-disposition",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/23/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-004",
+            "requirement_key": "baseline.comparator-role-separation",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/3/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-004",
+            "material_interaction": "Evidence against an available limited comparator cannot substitute for the unavailable stronger comparator."
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "A restricted favorable result cannot be promoted into support for the original blocked claim."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-024",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-049",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015",
+        "G3-BR-006"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": false,
+        "time_window_declared": true
+      },
+      "rationale": "Scenario: A vision-system field study covers one declared organization, a restricted camera workflow, a defined population and environment, and a short fixed time window. Its sampling method and deployment assumptions are declared beforehand, all eligible sampled observations are retained, and the conclusion is explicitly limited to that scope rather than production readiness elsewhere. G3 basis: G3-BR-025 requires claim-proportionate real-world evidence and preserved scope. A narrow field study need not represent every tenant, workflow, or season when it makes no such claim.",
+      "adversarial_dimension": "Small, narrow real-world coverage is valid for an equally narrow claim.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-025",
+          "requirement_key": "evaluation.real-world-validity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-006",
+            "requirement_key": "comparison.evaluation-parity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/5/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "The declared population and sampling frame bound the inference rather than being treated as a universal benchmark."
+          },
+          {
+            "requirement_id": "G3-BR-006",
+            "material_interaction": "The fixed acquisition window preserves the temporal scope relevant to interpreting the field comparison."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-025",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-050",
+      "primary_requirement": "G3-BR-025",
+      "secondary_requirements": [
+        "G3-BR-015",
+        "G3-BR-013"
+      ],
+      "environment": "E3",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "REAL_WORLD_SELECTION_CHERRY_PICKED"
+      ],
+      "facts": {
+        "deployment_scope_declared": true,
+        "population_scope_declared": true,
+        "sampling_method_declared": true,
+        "selection_based_on_favorable_results": true,
+        "time_window_declared": true
+      },
+      "rationale": "Scenario: A field report documents its final deployment, population, sampling method, and time window. Those choices were made after inspecting results, retaining only camera locations and operating intervals where the candidate performed favorably while excluding materially relevant failure intervals from the claimed population. G3 basis: Documentation of the final scope does not make outcome-conditioned real-world selection representative of the stated claim. G3-BR-025 requires evidence that supports the exact population and operating scope claimed.",
+      "adversarial_dimension": "Complete final scope documentation conceals outcome-driven selection of favorable field conditions.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-025",
+          "requirement_key": "evaluation.real-world-validity",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/24/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "requirement_key": "comparison.primary-measures-reporting",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/12/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "Population and sampling choices capable of changing the conclusion require advance governance."
+          },
+          {
+            "requirement_id": "G3-BR-013",
+            "material_interaction": "Reporting only favorable real-world intervals is selective support for the claim despite complete metadata for the retained subset."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-025",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-051",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017",
+        "G3-BR-009"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "material_independent_path_present": true,
+        "same_judge_model": true,
+        "same_model_family": true,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "Scenario: Two automated E2/E3 checking paths share a judge model, model family, and preprocessing. Those common dependencies are explicitly disclosed. The verification plan adds a claim-proportionate third path that independently transforms original records and images, adjudicates without that judge family, and recomputes aggregation, addressing the material correlated-bias risk. G3 basis: G3-BR-026 does not require absence of every shared component. It requires disclosed common dependencies and a materially different path sufficient for the claim consequence.",
+      "adversarial_dimension": "Shared automated dependencies coexist with a sufficient independent path over the original evidence.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-026",
+          "requirement_key": "evaluation.independent-verification",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/25/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-017",
+            "requirement_key": "evaluation.evaluator-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-009",
+            "requirement_key": "comparison.provenance",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/8/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-017",
+            "material_interaction": "The different path cross-checks both judge coupling and preprocessing artifacts instead of merely repeating the same scores."
+          },
+          {
+            "requirement_id": "G3-BR-009",
+            "material_interaction": "The verification record preserves which dependencies are shared and which are independently exercised."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-026",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-052",
+      "primary_requirement": "G3-BR-026",
+      "secondary_requirements": [
+        "G3-BR-017",
+        "G3-BR-015"
+      ],
+      "environment": "CROSS_ENV",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "MATERIAL_INDEPENDENT_PATH_MISSING"
+      ],
+      "facts": {
+        "material_independent_path_present": false,
+        "same_judge_model": false,
+        "same_model_family": false,
+        "same_preprocessing": true,
+        "shared_dependencies_disclosed": true
+      },
+      "rationale": "Scenario: Two verification scripts use different judge models from different families, but both consume the same lossy preprocessing output that drops rare image labels and structured-record categories. That dependency is disclosed. The consequential comparison has no check against original data and no materially independent transformation or aggregation path. G3 basis: Different models and scripts do not establish independence from a shared material evidence defect. G3-BR-026 requires a sufficiently different path; disclosure alone does not supply it.",
+      "adversarial_dimension": "Model-family diversity masks a common preprocessing failure that no independent path can detect.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-026",
+          "requirement_key": "evaluation.independent-verification",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/25/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-017",
+            "requirement_key": "evaluation.evaluator-validity",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/16/requirement"
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "requirement_key": "benchmark.construct-coverage",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/14/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-017",
+            "material_interaction": "The shared transformation can create scoring artifacts regardless of judge-family diversity."
+          },
+          {
+            "requirement_id": "G3-BR-015",
+            "material_interaction": "Dropping rare categories affects benchmark coverage and the represented task population."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-026",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-053",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-018"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_ACCEPT",
+      "expected_violation_codes": [],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": true,
+        "environment_binding": "E2",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": false
+      },
+      "rationale": "Scenario: For a stateless batch tabular predictor, the governed applicability record identifies the E1 tool-action trajectory control in G3-BR-018 as NOT_APPLICABLE within E2. Review verifies that this experiment has no agent actions, tool execution, or persistent interactive side effects. Ordinary prediction outcomes, data provenance, evaluator evidence, and applicable hard constraints remain governed, so this omission does not change the claim meaning. G3 basis: G3-BR-027 permits an explicit, scoped, reasoned and verified non-applicability disposition. An E1-specific control need not be fabricated for an experiment that lacks its relevant behavior.",
+      "adversarial_dimension": "A typed environment binding legitimately excludes an inapplicable agent trajectory control.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-027",
+          "requirement_key": "comparison.environment-applicability-binding",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/26/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-018",
+            "requirement_key": "e1.observable-trajectory-evidence",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/17/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-018",
+            "material_interaction": "The affected control is explicitly G3-BR-018 within E2, where the verified experiment has no E1 execution trajectory to observe."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-027",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    },
+    {
+      "id": "G3-H2-054",
+      "primary_requirement": "G3-BR-027",
+      "secondary_requirements": [
+        "G3-BR-021"
+      ],
+      "environment": "E2",
+      "expectation": "MUST_REJECT",
+      "expected_violation_codes": [
+        "NOT_APPLICABLE_USED_AS_ESCAPE",
+        "NOT_APPLICABLE_CHANGES_CLAIM_MEANING"
+      ],
+      "facts": {
+        "applicability_state": "NOT_APPLICABLE",
+        "control_genuinely_inapplicable": false,
+        "environment_binding": "E2",
+        "governed_reason_present": true,
+        "omission_changes_claim_meaning": true
+      },
+      "rationale": "Scenario: A structured-data adaptive system updates a persistent neighbor index that materially influences its predictions. Its E2 applicability record identifies the index-restoration control under G3-BR-021 as NOT_APPLICABLE, with an explicit reason that index restoration is operationally expensive. The system still claims verified rollback even though omitting this material surface changes that claim meaning. G3 basis: A present reason and valid environment label do not make an applicable control inapplicable. G3-BR-027 forbids non-applicability as an escape from a control necessary to interpret the claim.",
+      "adversarial_dimension": "A documented non-applicability disposition substitutes inconvenience for scientific inapplicability.",
+      "generation_provenance": {
+        "generation_package_sha256": "ac273519cea881f75ea89ab9efa7eebac7eb2bf5a10a250a5d261c0e22e1074c",
+        "primary_semantic_source": {
+          "requirement_id": "G3-BR-027",
+          "requirement_key": "comparison.environment-applicability-binding",
+          "package_json_pointer": "/embedded_generation_3_requirements/requirements/26/requirement"
+        },
+        "secondary_semantic_sources": [
+          {
+            "requirement_id": "G3-BR-021",
+            "requirement_key": "adaptive.ah2-retention-locality-rollback",
+            "package_json_pointer": "/embedded_generation_3_requirements/requirements/20/requirement"
+          }
+        ],
+        "interaction_explanations": [
+          {
+            "requirement_id": "G3-BR-021",
+            "material_interaction": "The omitted index restoration is a material state surface required by the asserted rollback claim."
+          }
+        ],
+        "public_encoding_contract_pointer": "/embedded_public_evaluator_contract/requirements/G3-BR-027",
+        "construction": "New hypothetical scenario authored from the embedded G3 semantics, then encoded using the public fact vocabulary; no target behavior inferred or tested.",
+        "external_source_ids": []
+      }
+    }
+  ]
+}

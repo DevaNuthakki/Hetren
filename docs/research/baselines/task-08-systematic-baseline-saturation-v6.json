@@ -1,0 +1,212 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 6,
+  "state": "BALANCED_SATURATION_FOUND_NEW_PEER_REVIEWED_E1_E2_E3_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T05:06:43Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v8_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v8.json",
+      "sha256": "a11bf09956a80d4e499240523b76dffec123f17cc34dac902d8e4a9284a011c6"
+    },
+    "systematic_saturation_v5": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v5.json",
+      "sha256": "4f3b8c8cb2afeca058fef807359a38087d9cf2a5680f2fd816c124c7fe48b092"
+    }
+  },
+  "focus": [
+    "BALANCED_E1_AGENT",
+    "BALANCED_E2_STRUCTURED_ML",
+    "BALANCED_E3_VISION",
+    "N_H2_GENERAL_CROSS_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "ICLR 2026 test-time adaptation LLM agents environment interaction official code GTTA",
+    "Grounded Test-Time Adaptation LLM agents ICLR 2026 official implementation",
+    "ICLR 2026 tabular test-time adaptation source-free prior-free official code",
+    "Prior-free Tabular Test-time Adaptation PFT3A ICLR 2026 official code",
+    "CVPR 2026 VLM test-time adaptation mixed domain active sample selection official code Ramen",
+    "2026 peer reviewed agent test-time adaptation official github unseen environment",
+    "2026 peer reviewed structured tabular TTA official github source free",
+    "2026 cross-family learned decision transfer agent tabular vision peer reviewed",
+    "2026 learned adaptation policy common across language agent tabular vision official implementation",
+    "2026 transferable acquisition policy agents structured data vision cross modality",
+    "2026 VLM test-time adaptation mixed-domain stream official github",
+    "2026 tabular test-time adaptation TableShift ICLR official repository"
+  ],
+  "query_count": 12,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-GTTA",
+      "name": "Grounded Test-Time Adaptation / Test-Time Adaptation for LLM Agents via Environment Interaction",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "A-H1",
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_AGENT_TEST_TIME_ADAPTATION_COMPARATOR_CANDIDATE",
+        "N_H1_ENVIRONMENT_GROUNDING_AGENT_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openreview.net/pdf?id=OH4PE0TDo0"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/r2llab/GTTA"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_UNSEEN_AGENT_ENVIRONMENT_INTERACTION_SETTING_MATCHED",
+      "material_reason": "Peer-reviewed deployment-time adaptation for LLM agents using environment interaction, with distinct syntactic-alignment and dynamics-grounding mechanisms and official WebArena/BFCLv3/Tau-Bench implementation paths."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-PFT3A",
+      "name": "PFT3A",
+      "environment": "E2_STRUCTURED_ML",
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "A_H1_PRIOR_FREE_TABULAR_TTA_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICLR_2026_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rundohe/PFT3A"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_PRIOR_FREE_TABULAR_DISTRIBUTION_SHIFT_SETTING_MATCHED",
+      "material_reason": "Directly targets tabular label and feature shift while prohibiting source-data and source-prior access, making it materially distinct from FTAT, AdapTable and feature-decrement-specific methods already preserved."
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-RAMEN",
+      "name": "Ramen",
+      "environment": "E3_VISION",
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_roles": [
+        "A_H1_MIXED_DOMAIN_VLM_TTA_COMPARATOR_CANDIDATE",
+        "A_H2_STREAM_STABILITY_RELEVANT_DIAGNOSTIC"
+      ],
+      "evidence_status": "PEER_REVIEWED_CVPR_2026_FINDINGS_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026F/html/Bao_Ramen_Robust_Test-Time_Adaptation_of_Vision-Language_Models_with_Active_Sample_CVPRF_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/baowenxuan/Ramen"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MIXED_DOMAIN_VLM_STREAM_SETTING_MATCHED",
+      "material_reason": "Handles mixed-domain test streams through per-sample retrieval, domain-consistent active sample selection, prediction balancing and an embedding-gradient cache."
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 1,
+    "E3_VISION": 1
+  },
+  "peer_review_state": {
+    "all_new_material_candidates_peer_reviewed": true,
+    "peer_reviewed_new_candidate_ids": [
+      "DISCOVERY:T8-E1-GTTA",
+      "DISCOVERY:T8-E2-PFT3A",
+      "DISCOVERY:T8-E3-RAMEN"
+    ]
+  },
+  "n_h2_reference_research": [
+    {
+      "name": "Meta-TTL",
+      "source": "https://arxiv.org/abs/2604.00830",
+      "evidence_state": "PREPRINT_WITH_OFFICIAL_IMPLEMENTATION",
+      "relevance": "Learns an adaptation policy across language-agent tasks.",
+      "disposition": "WITHIN_E1_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The learned policy is demonstrated within language-agent environments rather than across Hetren E1, E2 and E3."
+    },
+    {
+      "name": "Learning-To-Measure",
+      "source": "https://github.com/reAIM-Lab/Learning-To-Measure",
+      "evidence_state": "ICML_2026_WITH_IMPLEMENTATION",
+      "relevance": "Learns acquisition behavior across structured-data tasks.",
+      "disposition": "WITHIN_E2_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "The transfer domain remains active feature acquisition over structured-data tasks."
+    },
+    {
+      "name": "Relational Task Extrapolator",
+      "source": "https://github.com/yixinw-lab/TaskExtrapolation",
+      "evidence_state": "ICML_2026_REFERENCE_WITH_IMPLEMENTATION",
+      "relevance": "Learns relations between tasks for extrapolation.",
+      "disposition": "TASK_RELATIONAL_REFERENCE_NOT_GENERAL_N_H2_COMPARATOR",
+      "reason": "No verified evidence establishes one common learned decision policy across agent, structured-ML and vision environment families."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "strong_within_family_transfer_references_exist": true,
+    "forcing_within_family_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_BALANCED_SATURATION_V6"
+  },
+  "screened_not_promoted": [
+    {
+      "name": "Test-Time Perturbation Tuning with Delayed Feedback for Vision-Language-Action Models",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Zang_Test-Time_Perturbation_Tuning_with_Delayed_Feedback_for_Vision-Language-Action_Models_CVPR_2026_paper.html",
+      "disposition": "SCENARIO_SPECIFIC_REFERENCE_NOT_PROMOTED",
+      "reason": "The governed comparator pool has not established a matched vision-language-action robotics/control experiment, so a VLA-specific adaptation method must not be forced into generic E1 or E3 roles."
+    },
+    {
+      "name": "Understanding Task Transfer in Vision-Language Models",
+      "source": "https://www.microsoft.com/en-us/research/publication/understanding-task-transfer-in-vision-language-models/",
+      "disposition": "TRANSFER_ANALYSIS_REFERENCE_NOT_N_H2_BASELINE",
+      "reason": "Studies transfer among vision-language perception tasks and does not provide a common learned decision-transfer comparator across E1, E2 and E3."
+    },
+    {
+      "name": "TTP adversarial VLM test-time adaptation",
+      "source": "https://openaccess.thecvf.com/content/CVPR2026/html/Li_TTP_Test-Time_Padding_for_Adversarial_Detection_and_Robust_Adaptation_on_CVPR_2026_paper.html",
+      "disposition": "ADVERSARIAL_SCENARIO_SPECIFIC_NOT_PROMOTED",
+      "reason": "Adversarial robustness is a materially narrower evaluation contract than the generic E3 adaptation role and is only applicable if such a protected adversarial experiment is declared."
+    }
+  ],
+  "coverage_observations": {
+    "E1": "NEW_PEER_REVIEWED_AGENT_TEST_TIME_ADAPTATION_COMPARATOR_FOUND",
+    "E2": "NEW_PEER_REVIEWED_PRIOR_FREE_TABULAR_TTA_COMPARATOR_FOUND",
+    "E3": "NEW_PEER_REVIEWED_MIXED_DOMAIN_VLM_TTA_COMPARATOR_FOUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_TRANSFER_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "This balanced saturation round produced one new peer-reviewed materially relevant comparator in each of E1, E2, and E3."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "new_peer_reviewed_candidate_is_automatically_strongest": false,
+    "peer_review_alone_establishes_applicability": false,
+    "within_family_transfer_evidence_proves_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B11_VERIFY_ADDENDUM_V9_AND_RUN_POST_BALANCED_SATURATION_ROUND"
+}

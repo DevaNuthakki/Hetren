@@ -1,0 +1,1532 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_REGISTRY",
+  "state": "DISCOVERY_IN_PROGRESS",
+  "recorded_at_utc": "2026-09-26T02:58:26Z",
+  "task": 8,
+  "governing_selection_preregistration": {
+    "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+    "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+  },
+  "external_discovery_log": {
+    "path": "docs/research/baselines/task-08-external-baseline-discovery-log-v1.json",
+    "sha256": "d345c33bf0a3ba1f55753a5f3f4548e760342517855522fdbbc9e5e6ce423bad"
+  },
+  "candidate_count": 34,
+  "candidates": [
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-REACT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ReAct",
+      "implementation_identity": "https://github.com/ysymyth/ReAct",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_COMPARATOR",
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING_IF_TASK_MATCHED"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2210.03629"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/ysymyth/ReAct"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Reflexion",
+      "implementation_identity": "https://github.com/noahshinn/reflexion",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_COMPARATOR_ROLE_CONDITIONAL",
+        "A_H1_CONVENTIONAL_UPDATE_COMPARATOR_IF_REQUIRED"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://papers.neurips.cc/paper_files/paper/2023/hash/1b44b878bb782e6954cd888628510e90-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/noahshinn/reflexion"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-AGENT-LIGHTNING",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Agent Lightning v1.0",
+      "implementation_identity": "https://github.com/microsoft/agent-lightning",
+      "implementation_version_or_revision": "v1.0_METHOD_VERSION; EXACT_GIT_REVISION_TO_BE_PINNED",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_COMPARATOR",
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING_IF_TASK_MATCHED",
+        "N_H2_TRANSFER_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2608.17528"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/microsoft/agent-lightning"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-AGENT-Q",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Agent Q",
+      "implementation_identity": "https://github.com/sentient-engineering/agent-q",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_COMPARATOR",
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING_IF_WEB_TASK_MATCHED"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2408.07199"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/sentient-engineering/agent-q"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-SWE-AGENT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SWE-agent",
+      "implementation_identity": "https://github.com/SWE-agent/SWE-agent",
+      "implementation_version_or_revision": "v1.1.0_CANDIDATE_RELEASE",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING_IF_SOFTWARE_ENGINEERING_TASK"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SWE-agent/SWE-agent"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION_RELEASES",
+          "url": "https://github.com/SWE-agent/SWE-agent/releases"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-GEPA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "GEPA",
+      "implementation_identity": "https://github.com/gepa-ai/gepa",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_CONVENTIONAL_UPDATE_COMPARATOR_IF_TEXTUAL_AGENT_CONFIGURATION"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2507.19457"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/gepa-ai/gepa"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-OPRO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "OPRO",
+      "implementation_identity": "https://github.com/google-deepmind/opro",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_CONVENTIONAL_UPDATE_COMPARATOR_IF_PROMPT_ADAPTATION"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2024/hash/3339f19c5fcee3ad74502947a32be9e6-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-deepmind/opro"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-TEXTGRAD",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TextGrad",
+      "implementation_identity": "https://github.com/zou-group/textgrad",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_CONVENTIONAL_UPDATE_COMPARATOR_IF_TEXTUAL_OPTIMIZATION"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zou-group/textgrad"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "PRIMARY_PUBLICATION_STILL_TO_BE_BOUND_IN_REGISTRY",
+        "ROLE_BINDING_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E1-CODEGYM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CodeGym tool-use RL",
+      "implementation_identity": "https://github.com/StigLidu/CodeGym",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_TRANSFER_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/1e4322fddd833f83c855660ac65e428d-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/StigLidu/CodeGym"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-OPTUNA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Optuna",
+      "implementation_identity": "https://github.com/optuna/optuna",
+      "implementation_version_or_revision": "v5.0.0_CANDIDATE_RELEASE",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_OR_ONLINE_SURROGATE_COMPARATOR_DEPENDING_SAMPLER"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/optuna/optuna"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-SMAC3",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SMAC3",
+      "implementation_identity": "https://github.com/automl/SMAC3",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_SURROGATE_COMPARATOR"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/SMAC3"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-FLAML",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FLAML",
+      "implementation_identity": "https://github.com/microsoft/FLAML",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_STRONGEST_MATCHED_CLAIM_BEARING_IF_AUTOML_TASK"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://www.microsoft.com/en-us/research/publication/flaml-a-fast-and-lightweight-automl-library/"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/microsoft/FLAML"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-AUTOSKLEARN2",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Auto-sklearn 2.0",
+      "implementation_identity": "https://github.com/automl/auto-sklearn",
+      "implementation_version_or_revision": "0.15.0_IMPLEMENTATION_RELEASE; METHOD_IS_AUTO_SKLEARN_2_0",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_COMPARATOR",
+        "N_H2_TRANSFER_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://jmlr.org/beta/papers/v23/21-0992.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/automl/auto-sklearn"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "OFFICIAL_REPOSITORY_LATEST_RELEASE_SURFACED_AS_0_15_0",
+        "MAINTENANCE_AND_RUNTIME_COMPATIBILITY_REQUIRE_REVIEW"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-AUTOGLUON",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AutoGluon Tabular",
+      "implementation_identity": "https://github.com/autogluon/autogluon",
+      "implementation_version_or_revision": "1.6.0_CANDIDATE_RELEASE",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "SYSTEM_LEVEL_STRONG_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/autogluon/autogluon"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION_RELEASES",
+          "url": "https://github.com/autogluon/autogluon/releases"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-TABICLV2",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TabICLv2",
+      "implementation_identity": "https://github.com/soda-inria/tabicl",
+      "implementation_version_or_revision": "V2_CHECKPOINT_FAMILY_20260212; TASK_SPECIFIC_CHECKPOINT_TO_BE_BOUND",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "DIAGNOSTIC_OR_SYSTEM_MODEL_BASELINE"
+      ],
+      "claim_bearing_or_diagnostic": "DIAGNOSTIC_OR_ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/soda-inria/tabicl"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-TABPFN",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TabPFN",
+      "implementation_identity": "TO_BE_BOUND_TO_OFFICIAL_IMPLEMENTATION_DURING_DEEP_REVIEW",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "DIAGNOSTIC_OR_SYSTEM_MODEL_BASELINE"
+      ],
+      "claim_bearing_or_diagnostic": "DIAGNOSTIC_OR_ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://www.nature.com/articles/s41586-024-08328-6"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-PFT3A",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PFT3A",
+      "implementation_identity": "https://github.com/rundohe/PFT3A",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_STRONGEST_MATCHED_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/718dd6fa696c6303ca13ad81836014ee-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/rundohe/PFT3A"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-FTAT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FTAT",
+      "implementation_identity": "OFFICIAL_IMPLEMENTATION_TO_BE_LOCATED",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34466"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "PRIMARY_RESEARCH_VERIFIED",
+        "OFFICIAL_IMPLEMENTATION_NOT_YET_BOUND"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-TABLOG",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TabLog",
+      "implementation_identity": "https://github.com/WeijieyingRen/TabLog",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v235/ren24b.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/WeijieyingRen/TabLog"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E2-METABO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MetaBO",
+      "implementation_identity": "https://github.com/boschresearch/MetaBO",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E2_STRUCTURED_ML"
+      ],
+      "hypothesis_roles": [
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H2_TRANSFER_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/boschresearch/MetaBO"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "TRANSFER_ACQUISITION_FUNCTION_METHOD",
+        "OFFICIAL_REPOSITORY_ARCHIVED",
+        "DIRECT_HETREN_CROSS_FAMILY_FIT_NOT_ESTABLISHED"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-BADGE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "BADGE",
+      "implementation_identity": "https://github.com/JordanAsh/badge",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_OR_FIXED_ACQUISITION_COMPARATOR"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/1906.03671"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/JordanAsh/badge"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-TYPICLUST",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "TypiClust",
+      "implementation_identity": "https://github.com/avihu111/TypiClust",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_OR_FIXED_ACQUISITION_COMPARATOR"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/hacohen22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/avihu111/TypiClust"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-PROBCOVER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ProbCover",
+      "implementation_identity": "https://github.com/avihu111/TypiClust",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_OR_FIXED_ACQUISITION_COMPARATOR"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2205.11320"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/avihu111/TypiClust"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-IALE",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "IALE",
+      "implementation_identity": "https://github.com/crispchris/IALE",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_ACQUISITION_COMPARATOR",
+        "N_H2_TRANSFER_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://www.jmlr.org/papers/v23/21-0387.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/crispchris/IALE"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "TRANSFER_ACROSS_IMAGE_DATASETS_AND_CLASSIFIER_ARCHITECTURES_REQUIRES_EXACT_ROLE_REVIEW"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-TENT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Tent",
+      "implementation_identity": "https://github.com/DequanWang/tent",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/DequanWang/tent"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "OFFICIAL_REPOSITORY_ARCHIVED",
+        "HISTORICALLY_FOUNDATIONAL_TTA_CANDIDATE_NOT_ASSUMED_STRONGEST"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-EATA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "EATA",
+      "implementation_identity": "https://github.com/mr-eggplant/EATA",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE",
+        "A_H2_RETENTION_RELEVANT_DIAGNOSTIC_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v162/niu22a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mr-eggplant/EATA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-COTTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "CoTTA",
+      "implementation_identity": "https://github.com/qinenergy/cotta",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1",
+        "A-H2"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE",
+        "A_H2_RETENTION_RELEVANT_DIAGNOSTIC_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2022/html/Wang_Continual_Test-Time_Domain_Adaptation_CVPR_2022_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/qinenergy/cotta"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-SAR",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SAR",
+      "implementation_identity": "https://github.com/mr-eggplant/SAR",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_STRONG_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mr-eggplant/SAR"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-FOA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "FOA",
+      "implementation_identity": "https://github.com/mr-eggplant/FOA",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v235/niu24a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/mr-eggplant/FOA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-MEMO",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MEMO",
+      "implementation_identity": "https://github.com/zhangmarvin/memo",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zhangmarvin/memo"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-SHOT",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "SHOT",
+      "implementation_identity": "https://github.com/tim-learn/SHOT",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_CONVENTIONAL_DOMAIN_ADAPTATION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v119/liang20a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/tim-learn/SHOT"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-PTA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Prototype-Based Test-Time Adaptation",
+      "implementation_identity": "https://github.com/hzhxmu/PTA",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE_IF_VLM_TASK"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.21360"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/hzhxmu/PTA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-VIT3",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "ViT3 Vision Test-Time Training",
+      "implementation_identity": "https://github.com/LeapLabTHU/ViTTT",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_OR_TEST_TIME_TRAINING_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/LeapLabTHU/ViTTT"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    },
+    {
+      "baseline_id": "CANDIDATE-ONLY:T8-E3-STATA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "StatA",
+      "implementation_identity": "https://github.com/MaxZanella/StatA",
+      "implementation_version_or_revision": "TO_BE_PINNED_BEFORE_FINAL_RETENTION",
+      "environment_families": [
+        "E3_VISION"
+      ],
+      "hypothesis_roles": [
+        "A-H1"
+      ],
+      "comparison_role": [
+        "A_H1_ADAPTATION_BASELINE_CANDIDATE_IF_VLM_TASK"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL",
+      "source_references": [
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/MaxZanella/StatA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_PER_GOVERNED_EXPERIMENT",
+      "information_access": "TO_BE_AUDITED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_OR_NOT_APPLICABLE",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_PER_EXPERIMENT"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED",
+      "reproducibility_and_pinning": "Official or primary source located where stated; immutable release/commit/checkpoint must be pinned before final retention.",
+      "license_or_access_status": "TO_BE_VERIFIED",
+      "known_limitations": [
+        "ROLE_BINDING_NOT_FINAL",
+        "VERSION_PIN_NOT_FINAL"
+      ],
+      "eligibility_status": "PENDING_DEEP_REVIEW",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "FIRST_PASS_EXTERNAL_DISCOVERY_AFTER_I3_BOUNDARY"
+    }
+  ],
+  "coverage_state": {
+    "E1": "IN_PROGRESS",
+    "E2": "IN_PROGRESS",
+    "E3": "IN_PROGRESS",
+    "N_H1": "IN_PROGRESS",
+    "N_H2": "IN_PROGRESS",
+    "A_H1": "IN_PROGRESS",
+    "A_H2": "CONTROL_AND_DIAGNOSTIC_REVIEW_IN_PROGRESS"
+  },
+  "search_stopping_rule_satisfied": false,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false,
+  "next_gate": "DEEP_REVIEW_ROLE_BINDING_VERSION_PINNING_AND_STRENGTH_EVIDENCE"
+}

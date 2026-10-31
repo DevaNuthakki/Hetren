@@ -1,0 +1,302 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 40,
+  "state": "SATURATION_V40_FOUND_NEW_DIRECT_MEMORY_CANDIDATES",
+  "recorded_at_utc": "2026-09-26T23:46:25Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "t_mem_arxiv_and_public_code_release_predate_cutoff": true,
+    "author_reported_emnlp_acceptance_not_required_for_t_mem_candidate_status": true,
+    "current_repository_heads_not_used_as_final_immutable_version_identity": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v42_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v42.json",
+      "sha256": "5d8bc2bf1968a8d0ac12566203c1a0b1c7b326dfcc5074cb4d22b621bd75e092"
+    },
+    "systematic_saturation_v39": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v39.json",
+      "sha256": "6beceafb14589be5570385df0e6a2fc18ba05dec5a2cf6e0b4909da13b90b476"
+    }
+  },
+  "focus": [
+    "SECOND_CONSECUTIVE_DIRECT_MEMORY_CONFIRMATION",
+    "ASSOCIATIVE_AND_TRIGGER_BASED_LONG_TERM_MEMORY",
+    "TEMPORAL_EPISODIC_MEMORY_APPLICABILITY",
+    "IMPLEMENTATION_AND_PUBLICATION_IDENTITY_RESOLUTION"
+  ],
+  "queries_executed": [
+    "T-Mem Memory That Anticipates Not Archives long-term conversational memory code",
+    "associative recall long-term agent memory trigger graph 2026 code",
+    "EMNLP 2026 long-term conversational memory agent executable",
+    "ARTEM spatial temporal episodic memory AAAI 2026 code",
+    "LightMem ICLR 2026 implementation agent memory",
+    "Memory is Reconstructed Not Retrieved Graph Memory ICML 2026",
+    "Fine-Mem long-horizon memory management ACL 2026 code",
+    "MemoryART AAAI 2026 adaptive resonance memory code",
+    "direct long-term memory comparator LLM agent 2026 executable",
+    "episodic semantic procedural agent memory 2026 code",
+    "associative agent memory LoCoMo Plus 2026 implementation",
+    "agent memory future trigger retrieval 2026",
+    "temporal episodic memory LLM agent 2026 peer reviewed",
+    "long-horizon memory management reinforcement learning 2026 ACL",
+    "ICML 2026 agent memory graph reconstruction",
+    "2026 agent memory direct retrieval comparator executable"
+  ],
+  "query_count": 16,
+  "candidate_specs_checked": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TMEM-TRIGGER",
+      "name": "T-Mem: Memory That Anticipates, Not Archives",
+      "aliases": [
+        "T-Mem",
+        "Memory That Anticipates, Not Archives"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DIRECT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_ASSOCIATIVE_RECALL_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "promotion_gate": "ELIGIBLE_IF_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+      "evidence_status": "PRE_CUTOFF_PUBLIC_PREPRINT_AND_EXECUTABLE_IMPLEMENTATION_VERIFIED_AUTHOR_REPORTED_EMNLP_ACCEPTANCE_NOT_REQUIRED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.15405"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/T-Mem"
+        }
+      ],
+      "material_reason": "Uses write-time descriptive and associative trigger families over item- and scene-level memory so memories can be reached even when the future query lacks surface similarity.",
+      "limits": [
+        "OFFICIAL_EMNLP_2026_PROCEEDINGS_ENTRY_NOT_USED_AS_ELIGIBILITY_EVIDENCE",
+        "LOCOMO_OR_LOCOMO_PLUS_STYLE_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH",
+        "BUILD_MODEL_QA_MODEL_EMBEDDER_RERANKER_AND_TRIGGER_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "aliases": [
+        "LightMem"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DIRECT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "promotion_gate": "ELIGIBLE_IF_LONG_TERM_MEMORY_ROLE_MATCHED",
+      "evidence_status": "ICLR_2026_AND_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/a05b72653ec5b473732129829ae04195-Abstract-Conference.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/zjunlp/LightMem"
+        }
+      ],
+      "material_reason": "Existing Task-8 identity; current evidence resolves executable implementation availability but must not create a duplicate candidate.",
+      "limits": [
+        "PREEXISTING_IDENTITY_EXPECTED",
+        "IMPLEMENTATION_STATUS_UPDATE_DOES_NOT_CREATE_NEW_BASELINE_IDENTITY"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+      "aliases": [
+        "MRAgent",
+        "Memory is Reconstructed, Not Retrieved"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_GRAPH_MEMORY_RECONSTRUCTION_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "promotion_gate": "ELIGIBLE_IF_GRAPH_MEMORY_ROLE_MATCHED",
+      "evidence_status": "OFFICIAL_ICML_2026_PROGRAM_TITLE_VERIFIED_EXISTING_CANDIDATE",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        }
+      ],
+      "material_reason": "Official ICML 2026 program now resolves the publication-venue identity for an already-promoted Task-8 candidate.",
+      "limits": [
+        "PREEXISTING_IDENTITY_EXPECTED",
+        "VENUE_RESOLUTION_DOES_NOT_CREATE_NEW_BASELINE_IDENTITY",
+        "FINAL_IMPLEMENTATION_REVISION_STILL_REQUIRES_CUTOFF_CONSISTENT_PINNING"
+      ]
+    }
+  ],
+  "identity_resolution": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TMEM-TRIGGER",
+      "name": "T-Mem: Memory That Anticipates, Not Archives",
+      "disposition": "NEW_MATERIAL_DIRECT_MEMORY_CANDIDATE",
+      "matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+      "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-LIGHTMEM",
+          "name": "LightMem: Lightweight and Efficient Memory-Augmented Generation",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v32.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+      "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "matches": [
+        {
+          "candidate_id": "DISCOVERY:T8-E1-MRAGENT-GRAPH",
+          "name": "Memory is Reconstructed, Not Retrieved: Graph Memory for LLM Agents",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v40.json"
+        }
+      ]
+    }
+  ],
+  "screened_references": [
+    {
+      "name": "ARTEM: Enhancing Large Language Model Agents with Spatial-Temporal Episodic Memory",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/39773",
+        "https://github.com/cassthm/ARTEM"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026_WITH_EXECUTABLE_RESEARCH_CODE",
+      "disposition": "TEMPORAL_EPISODIC_APPLICABILITY_GATE_RETAINED_NOT_PROMOTED_IN_GENERIC_DIRECT_MEMORY_TUPLE",
+      "reason": "Prior governed Task-8 evidence already placed ARTEM behind a temporal-episodic applicability gate; this confirmation pass does not redefine the experiment merely to add another candidate."
+    },
+    {
+      "name": "Fine-Mem: Fine-Grained Feedback Alignment for Long-Horizon Memory Management",
+      "sources": [
+        "https://aclanthology.org/2026.acl-long.900/",
+        "https://arxiv.org/abs/2601.08435"
+      ],
+      "evidence_state": "PEER_REVIEWED_ACL_2026",
+      "disposition": "EXECUTABLE_IMPLEMENTATION_GATE_REMAINS_UNRESOLVED",
+      "reason": "The method is materially relevant, but this bounded review still did not verify an official executable implementation suitable for governed reproduction."
+    },
+    {
+      "name": "MemoryART: Enhancing LLMs via Multi-Memory Models with Adaptive Resonance Theory for Healthcare Agents",
+      "sources": [
+        "https://ojs.aaai.org/index.php/AAAI/article/view/39205",
+        "https://github.com/dairkkriad/MemoryART"
+      ],
+      "evidence_state": "PEER_REVIEWED_AAAI_2026_WITH_EXECUTABLE_RESEARCH_CODE",
+      "disposition": "HEALTHCARE_SPECIFIC_INFORMATION_AND_TASK_APPLICABILITY_GATE",
+      "reason": "Its demonstrated long-term memory contract is specialized to multi-turn healthcare consultation; it is not promoted into the generic direct-memory role without a matched governed experiment."
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-TMEM-TRIGGER",
+      "name": "T-Mem: Memory That Anticipates, Not Archives",
+      "aliases": [
+        "T-Mem",
+        "Memory That Anticipates, Not Archives"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_DIRECT_LONG_TERM_MEMORY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H1_ASSOCIATIVE_RECALL_MEMORY_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "promotion_gate": "ELIGIBLE_IF_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MATCHED",
+      "evidence_status": "PRE_CUTOFF_PUBLIC_PREPRINT_AND_EXECUTABLE_IMPLEMENTATION_VERIFIED_AUTHOR_REPORTED_EMNLP_ACCEPTANCE_NOT_REQUIRED",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2606.15405"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/Sherlockwz/T-Mem"
+        }
+      ],
+      "material_reason": "Uses write-time descriptive and associative trigger families over item- and scene-level memory so memories can be reached even when the future query lacks surface similarity.",
+      "limits": [
+        "OFFICIAL_EMNLP_2026_PROCEEDINGS_ENTRY_NOT_USED_AS_ELIGIBILITY_EVIDENCE",
+        "LOCOMO_OR_LOCOMO_PLUS_STYLE_LONG_TERM_CONVERSATIONAL_MEMORY_ROLE_MUST_MATCH",
+        "BUILD_MODEL_QA_MODEL_EMBEDDER_RERANKER_AND_TRIGGER_CONFIGURATION_MUST_BE BOUND",
+        "CURRENT_REPOSITORY_HEAD_IS_NOT_FINAL_IMMUTABLE_VERSION_IDENTITY",
+        "DOES_NOT_ESTABLISH_GENERAL_N_H2_TRANSFER"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "evidence_updates": [
+    {
+      "candidate": "LightMem",
+      "status": "EXECUTABLE_IMPLEMENTATION_NOW_VERIFIED_BUT_IDENTITY_PREEXISTS_IF_MATCHED",
+      "creates_new_candidate_identity": false
+    },
+    {
+      "candidate": "MRAgent",
+      "status": "OFFICIAL_ICML_2026_PROGRAM_IDENTITY_NOW_VERIFIED_BUT_IDENTITY_PREEXISTS_IF_MATCHED",
+      "creates_new_candidate_identity": false
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_candidates_remain_within_e1": true,
+    "forcing_direct_memory_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V40"
+  },
+  "stopping_rule": {
+    "required_consecutive_no_new_material_rounds": 2,
+    "previous_counter": 1,
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one previously unpromoted materially relevant direct-memory identity was found, so the counter resets to zero."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "claim_limits": {
+    "t_mem_author_reported_acceptance_is_official_proceedings_verification": false,
+    "evidence_status_upgrade_creates_new_candidate": false,
+    "artem_is_generic_direct_memory_comparator": false,
+    "memoryart_is_generic_direct_memory_comparator": false,
+    "new_candidate_is_automatically_strongest": false,
+    "discovery_stopping_satisfaction_selects_baselines": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B45_VERIFY_ADDENDUM_V43_AND_CONTINUE_BOUNDED_REFINEMENT"
+}

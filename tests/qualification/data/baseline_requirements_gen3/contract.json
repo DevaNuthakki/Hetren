@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_QUALIFICATION_CONTRACT",
+  "state": "DEVELOPMENT_QUALIFICATION",
+  "authoritative": false,
+  "scientific_support_established": false,
+  "target_generation": 3,
+  "target_artifact": "docs/research/baselines/task-08-baseline-requirements-gen3.json",
+  "case_source_class": "KNOWN_DEVELOPMENT_CASE",
+  "fresh_holdout": false,
+  "protected_evaluation": false,
+  "purpose": "Development qualification of Generation 3 baseline-governance semantics using balanced positive and negative controls.",
+  "allowed_expectations": [
+    "MUST_ACCEPT",
+    "MUST_REJECT"
+  ],
+  "allowed_environments": [
+    "E1",
+    "E2",
+    "E3",
+    "CROSS_ENV"
+  ],
+  "minimum_case_count": 54,
+  "minimum_must_accept": 27,
+  "minimum_must_reject": 27,
+  "minimum_cases_per_requirement": 2,
+  "required_expectations_per_requirement": [
+    "MUST_ACCEPT",
+    "MUST_REJECT"
+  ],
+  "holdout_policy": "These cases are known development qualification cases from first creation. They must never be relabeled as fresh, unseen, protected, or independent scientific evidence.",
+  "completion_limit": "Passing this development set does not establish scientific support, Task 5 capability support, or Task 8 governing authority."
+}

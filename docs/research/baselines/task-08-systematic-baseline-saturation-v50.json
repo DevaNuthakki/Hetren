@@ -1,0 +1,246 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 50,
+  "state": "SATURATION_V50_FOUND_NEW_CANONICAL_LEGACY_E1_CANDIDATES",
+  "recorded_at_utc": "2026-09-27T01:30:56Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v52_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v52.json",
+      "sha256": "3c97b1ad111ecab4db451128bf237e8574519881e70ace356862b350241b2cf4"
+    },
+    "systematic_saturation_v49": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v49.json",
+      "sha256": "8f160f93352e5a9b294dd2d0c1ab5b493cf867db94c29435364b2dd3f186efc6"
+    }
+  },
+  "focus": [
+    "E1_CANONICAL_LEGACY_REASONING_ACTING",
+    "E1_TRIAL_AND_ERROR_REFLECTION_MEMORY",
+    "E1_FEEDBACK_DRIVEN_REPLANNING",
+    "E1_HYBRID_FAST_SLOW_INTERACTIVE_CONTROL",
+    "E1_TREE_SEARCH_AND_ENVIRONMENT_FEEDBACK"
+  ],
+  "bounded_candidate_universe_this_round": [
+    "ReAct: Synergizing Reasoning and Acting in Language Models",
+    "Reflexion: Language Agents with Verbal Reinforcement Learning",
+    "AdaPlanner: Adaptive Planning from Feedback with Language Models",
+    "SwiftSage: A Generative Agent with Fast and Slow Thinking for Complex Interactive Tasks",
+    "Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models"
+  ],
+  "queries_executed": [
+    "\"ReAct\" ICLR 2023 reasoning acting language models official code ALFWorld WebShop",
+    "\"Reflexion\" NeurIPS 2023 verbal reinforcement learning episodic memory official code",
+    "\"AdaPlanner\" NeurIPS 2023 adaptive planning feedback official code",
+    "\"SwiftSage\" NeurIPS 2023 ScienceWorld official implementation",
+    "\"Language Agent Tree Search\" ICML 2024 WebShop official code",
+    "2023 language agent episodic reflection memory ALFWorld peer reviewed",
+    "2023 adaptive agent planning environmental feedback ALFWorld MiniWoB peer reviewed",
+    "2023 interactive language agent fast slow planning ScienceWorld peer reviewed",
+    "2024 language agent tree search reflection environment feedback peer reviewed",
+    "canonical language agent baselines ReAct Reflexion AdaPlanner SwiftSage LATS"
+  ],
+  "query_count": 10,
+  "candidate_dispositions": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REACT",
+      "name": "ReAct: Synergizing Reasoning and Acting in Language Models",
+      "disposition": "PREEXISTING_PROMOTED_OR_RECORDED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REACT",
+          "name": "ReAct",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json"
+        },
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REACT",
+          "name": "",
+          "source_file": "docs/research/baselines/task-08-candidate-external-verification-v1.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-REFLEXION",
+      "name": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+      "disposition": "PREEXISTING_PROMOTED_OR_RECORDED_CANDIDATE_NOT_NEW",
+      "prior_matches": [
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": "Reflexion",
+          "source_file": "docs/research/baselines/task-08-concrete-baseline-candidate-registry.json"
+        },
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": "",
+          "source_file": "docs/research/baselines/task-08-candidate-external-verification-v2.json"
+        },
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": "Reflexion",
+          "source_file": "docs/research/baselines/task-08-legacy-agent-memory-identity-resolution-v1.json"
+        },
+        {
+          "candidate_id": "CANDIDATE-ONLY:T8-E1-REFLEXION",
+          "name": "",
+          "source_file": "docs/research/baselines/task-08-systematic-baseline-saturation-v48.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ADAPLANNER",
+      "name": "AdaPlanner: Adaptive Planning from Feedback with Language Models",
+      "disposition": "NEW_MATERIAL_CANONICAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SWIFTSAGE",
+      "name": "SwiftSage: A Generative Agent with Fast and Slow Thinking for Complex Interactive Tasks",
+      "disposition": "NEW_MATERIAL_CANONICAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LATS",
+      "name": "Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models",
+      "disposition": "NEW_MATERIAL_CANONICAL_LEGACY_E1_CANDIDATE",
+      "prior_matches": []
+    }
+  ],
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ADAPLANNER",
+      "name": "AdaPlanner: Adaptive Planning from Feedback with Language Models",
+      "aliases": [
+        "adaplanner",
+        "adaptive planning from feedback"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_FEEDBACK_DRIVEN_PLANNING_COMPARATOR_CANDIDATE",
+        "A_H1_CLOSED_LOOP_REPLANNING_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/b5c8c1c117618267944b2617add0a766-Abstract.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/haotiansun14/AdaPlanner"
+        }
+      ],
+      "material_reason": "Closed-loop agent planning method with in-plan and out-of-plan refinement from environmental feedback plus reuse of successful plans as demonstrations.",
+      "limits": [
+        "ALFWORLD_OR_MINIWOB_STYLE_INTERACTIVE_SETTING_REQUIRED",
+        "PLAN_REFINEMENT_AND_SKILL_DISCOVERY_CONFIGURATION_MUST_BE BOUND",
+        "SUCCESSFUL_PLAN_REUSE_INFORMATION_OPPORTUNITY_MUST_BE MATCHED",
+        "FEEDBACK_DRIVEN_REPLANNING_WITHIN_E1_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SWIFTSAGE",
+      "name": "SwiftSage: A Generative Agent with Fast and Slow Thinking for Complex Interactive Tasks",
+      "aliases": [
+        "swiftsage",
+        "fast and slow thinking"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_HYBRID_LEARNED_AND_DELIBERATIVE_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_NEURIPS_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/4b0eea69deea512c9e2c469187643dc2-Abstract-Conference.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/SwiftSage/SwiftSage"
+        }
+      ],
+      "material_reason": "Hybrid interactive agent combining a behavior-cloned small model for fast action selection with an LLM-based deliberate planning module on ScienceWorld.",
+      "limits": [
+        "SCIENCEWORLD_INTERACTIVE_SETTING_REQUIRED",
+        "SWIFT_BEHAVIOR_CLONING_MODEL_AND_SAGE_LLM_MUST_BE BOUND",
+        "V1_SCIENCEWORLD_CODE_MUST_BE DISTINGUISHED_FROM_LATER_SWIFTSAGE_V2",
+        "HYBRID_ARCHITECTURE_RESOURCE_PARITY_MUST_BE AUDITED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LATS",
+      "name": "Language Agent Tree Search Unifies Reasoning, Acting, and Planning in Language Models",
+      "aliases": [
+        "language agent tree search",
+        "lats"
+      ],
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_roles": [
+        "N_H1_TREE_SEARCH_REFLECTION_AGENT_COMPARATOR_CANDIDATE"
+      ],
+      "evidence_status": "PEER_REVIEWED_ICML_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v235/zhou24r.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/andyz245/LanguageAgentTreeSearch"
+        }
+      ],
+      "material_reason": "Combines language-model value functions, self-reflection, environment feedback, and Monte Carlo tree search for interactive WebShop decision-making and other reasoning tasks.",
+      "limits": [
+        "WEBSHOP_DECISION_MAKING_ROLE_MUST_BE SEPARATED_FROM_HOTPOTQA_AND_PROGRAMMING",
+        "TREE_SEARCH_ITERATION_GENERATION_AND_EVALUATION_BUDGETS_MUST_BE BOUND",
+        "BASE_MODEL_AND_VALUE_FUNCTION_PROMPTS_MUST_BE BOUND",
+        "SEARCH_COMPUTE_REQUIRES_TASK_9_RESOURCE_ACCOUNTING"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 3,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 3,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "canonical_legacy_e1_methods_do_not_establish_cross_family_transfer": true,
+    "status": "UNRESOLVED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "At least one canonical legacy E1 candidate was absent from the governed Task-8 candidate history."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "canonical_method_is_automatically_strongest": false,
+    "legacy_method_is_automatically_applicable": false,
+    "within_e1_learning_establishes_general_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B55_VERIFY_ADDENDUM_V53_AND_CONTINUE_BOUNDED_LEGACY_COVERAGE"
+}

@@ -1,0 +1,178 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 18,
+  "state": "SATURATION_V18_FOUND_NEW_MATERIAL_E1_XSKILL_CANDIDATE",
+  "recorded_at_utc": "2026-09-26T20:44:38Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "materiality_rule": {
+    "candidate_must_be_role_applicable": true,
+    "candidate_must_be_capable_of_altering_retained_comparator_set": true,
+    "mere_relatedness_or_newer_publication_does_not_reset_counter": true,
+    "scenario_specific_candidate_requires_matching_governed_experiment": true,
+    "preprint_only_redundant_mechanism_may_be_preserved_as_reference_without_resetting_counter": true
+  },
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_head_not_used_as_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v20_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v20.json",
+      "sha256": "1d6fd13e4b6ea0a45c8e4b352cb5c6e5d4aa0aac4851ae95c67d8f3764217fd9"
+    },
+    "systematic_saturation_v17": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v17.json",
+      "sha256": "972b5e5a697863bdda3fb6c9bfe27418e77f308754580dd65e527f7948fa8e29"
+    }
+  },
+  "focus": [
+    "E1_SELF_IMPROVING_SKILL_AND_EXPERIENCE_AGENTS",
+    "E2_POST_TABPFN_STRUCTURED_ML_CONFIRMATION",
+    "E3_POST_FOZO_STAR_ADTE_STAD_CONFIRMATION",
+    "N_H2_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+  ],
+  "queries_executed": [
+    "\"SAGE\" self-improving agent skill library ACL 2026 official code",
+    "\"Skill-Pro\" ICML 2026 official code skill augmented MDP",
+    "\"EvoTest\" ICLR 2026 evolutionary test-time learning official code",
+    "\"XSkill\" ICML 2026 continual learning experience skills multimodal agents",
+    "\"XSkill\" official github ICML 2026",
+    "\"Dynamic Dual-Granularity Skill Bank\" agentic RL official code",
+    "\"Co-Evolving LLM Decision and Skill Bank Agents\" official code",
+    "\"MemSkill\" self-evolving agents official code 2026",
+    "\"AutoRefine\" continual LLM agent refinement official code",
+    "\"Dynamic Dual-Granularity Skill Bank\" peer reviewed 2026",
+    "2026 peer reviewed structured tabular test-time adaptation official code",
+    "2026 peer reviewed active feature acquisition tabular official code",
+    "2026 peer reviewed VLM test-time adaptation official code after FOZO STAR ADTE",
+    "2026 cross-family learned decision transfer agent tabular vision official implementation",
+    "2026 common learned policy transfer across agent structured ML vision"
+  ],
+  "query_count": 15,
+  "new_material_candidates": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-XSKILL",
+      "name": "XSkill \u2014 Continual Learning from Experience and Skills in Multimodal Agents",
+      "environment": "E1_AGENT",
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_roles": [
+        "N_H1_MULTIMODAL_AGENT_EXPERIENCE_AND_SKILL_REUSE_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_TASK_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "evidence_status": "ICML_2026_OFFICIAL_PROGRAM_ENTRY_AND_PUBLIC_EXECUTABLE_IMPLEMENTATION_VERIFIED",
+      "sources": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.12056"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/XSkill-Agent/XSkill"
+        },
+        {
+          "class": "AUTHOR_PROJECT_RECORD",
+          "url": "https://xskill-agent.github.io/xskill_page/"
+        }
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTIMODAL_TOOL_AGENT_AND_EXPERIENCE_ACCUMULATION_SETTING_MATCHED",
+      "material_reason": "Adds a distinct continual-agent mechanism that jointly accumulates action-level experiences and structured task-level skills from multimodal trajectories and retrieves/adapts both during later tool-using tasks without parametric training.",
+      "classification_reason": "Classified as E1_AGENT because multi-step tool selection, orchestration, trajectory accumulation, and action generation are material dependencies; visual input alone does not convert the method into a generic E3 vision comparator.",
+      "limits": [
+        "MULTIMODAL_TOOL_AGENT_SETTING_REQUIRED",
+        "ACCUMULATION_AND_INFERENCE_PHASES_MUST_BE BOUND_SEPARATELY",
+        "MEMORY_BANK_CONTENT_AND_SKILL_DOCUMENT_CONFIGURATION_MUST_BE BOUND",
+        "BACKBONE_MODEL_TOOLSET_AND_VISUAL_INPUT_CONTRACT_MUST_BE MATCHED",
+        "ZERO_SHOT_CROSS_TASK_TRANSFER_REMAINS_WITHIN_AGENT_TASKS_AND_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    }
+  ],
+  "new_material_candidate_count": 1,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 1,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "reference_or_screened": [
+    {
+      "name": "D2Skill \u2014 Dynamic Dual-Granularity Skill Bank for Agentic RL",
+      "sources": [
+        "https://arxiv.org/abs/2603.28716",
+        "https://github.com/TU2021/D2Skill-AgenticRL"
+      ],
+      "evidence_state": "ARXIV_RESEARCH_WITH_EXECUTABLE_IMPLEMENTATION",
+      "relevance": "Maintains task-level and step-level skills and jointly evolves the policy and skill bank using interaction-derived utility signals.",
+      "disposition": "ONGOING_E1_RESEARCH_REFERENCE_NOT_NEW_CLAIM_BEARING_CANDIDATE_THIS_ROUND",
+      "reason": "The verified evidence is a public preprint with executable code, while the current E1 pool already contains stronger archival skill-library and skill-evolution comparators including SAGE and Skill-Pro. This bounded review did not verify an archival peer-reviewed publication that would alter the retained claim-bearing set."
+    },
+    {
+      "name": "COSPLAY \u2014 Co-Evolving LLM Decision and Skill Bank Agents",
+      "source": "https://arxiv.org/abs/2604.20987",
+      "evidence_state": "ARXIV_RESEARCH",
+      "relevance": "Co-evolves an LLM decision agent and a skill-bank agent from unlabeled interaction rollouts.",
+      "disposition": "ONGOING_E1_RESEARCH_REFERENCE_NOT_PROMOTED",
+      "reason": "No archival publication and governed executable implementation were verified in this pass, and the mechanism substantially overlaps the already populated E1 skill-bank/evolution comparison class."
+    },
+    {
+      "name": "MemSkill / AutoRefine family",
+      "disposition": "DISCOVERY_REFERENCE_QUEUE_NOT_PROMOTED",
+      "reason": "The bounded search surfaced current self-evolving memory/trajectory refinement research, but did not establish stronger role-matched provenance sufficient to displace or materially expand the governed SAGE, Skill-Pro, EvoTest, XSkill, EVOTOOL, and related E1 pool."
+    },
+    {
+      "name": "E2 post-Drift-Resilient-TabPFN refinement",
+      "disposition": "NO_NEW_DIRECTLY_MATCHED_E2_COMPARATOR_PROMOTED",
+      "reason": "The bounded structured-ML refinement produced no newly verified comparator that materially changes the existing tabular adaptation, feature-acquisition, optimization, or TabPFN-related role sets."
+    },
+    {
+      "name": "E3 post-FOZO/STAR/ADTE/STAD refinement",
+      "disposition": "NO_NEW_DIRECTLY_MATCHED_E3_COMPARATOR_PROMOTED",
+      "reason": "The bounded vision refinement produced no newly verified, role-matched method that materially changes the already broad VLM, temporal-shift, prompt, cache, and forward-only TTA candidate set."
+    }
+  ],
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "xskill_cross_task_transfer_is_within_e1": true,
+    "skill_pro_cross_task_or_cross_agent_reuse_is_within_e1": true,
+    "evotest_test_time_learning_is_within_e1": true,
+    "forcing_multimodal_agent_transfer_into_general_cross_family_role_prohibited": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V18"
+  },
+  "coverage_observations": {
+    "E1": "NEW_ICML_2026_MULTIMODAL_AGENT_CONTINUAL_SKILL_AND_EXPERIENCE_CANDIDATE_FOUND",
+    "E2": "NO_NEW_MATERIAL_ROLE_MATCH_PROMOTED_THIS_ROUND",
+    "E3": "NO_NEW_MATERIAL_ROLE_MATCH_PROMOTED_THIS_ROUND",
+    "N_H2": "GENERAL_CROSS_FAMILY_COMPARATOR_REMAINS_UNVERIFIED"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 0,
+    "reason": "XSkill is a materially distinct ICML-2026-listed executable multimodal-agent continual-learning comparator absent from the prior promoted Task-8 candidate set."
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "xskill_is_generic_e3_baseline": false,
+    "xskill_establishes_general_n_h2": false,
+    "preprint_reference_is_automatically_claim_bearing": false,
+    "new_candidate_is_automatically_strongest": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B23_VERIFY_ADDENDUM_V21_AND_RUN_NEXT_BOUNDED_ROLE_SPECIFIC_REFINEMENT"
+}

@@ -1,0 +1,133 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 35,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-26T22:58:16Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v34": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v34.json",
+      "sha256": "978fd440b33c4e49685e5192f177ebbb698feb0b1d79f49db96d13bd16ba5142"
+    },
+    "systematic_saturation_v32": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v32.json",
+      "sha256": "9a6501adfb5123e7aafcac630288ba2984f12360f5eff4c5c378ba98939012e0"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-PLUGMEM",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "PlugMem: A Task-Agnostic Plugin Memory Module for LLM Agents",
+      "implementation_identity": "https://github.com/TIMAN-group/PlugMem",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_TASK_AGNOSTIC_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H1_NON_LEARNED_OR_LIGHTLY_ADAPTED_MEMORY_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "OFFICIAL_CONFERENCE_PROGRAM",
+          "url": "https://icml.cc/Downloads/2026"
+        },
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2603.03296"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/TIMAN-group/PlugMem"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_TASK_AGNOSTIC_LONG_TERM_MEMORY_OR_WEB_AGENT_MEMORY_SETTING_MATCHED",
+        "WEB_AGENT_OR_OTHER_MATCHED_AGENT_TASK_REQUIRED_FOR_E1_CLAIM_BEARING_USE",
+        "MEMORY_GRAPH_EXTRACTION_RETRIEVAL_AND_REASONING_CONFIGURATION_MUST_BE BOUND",
+        "LIGHT_TASK_ADAPTATION_IF_USED_MUST_BE SEPARATELY BOUND",
+        "CONVERSATIONAL_QA_ONLY_RESULTS_MUST_NOT_BE USED_AS_E1_AGENT_EVIDENCE",
+        "Uses a compact knowledge-centric memory graph as a reusable task-agnostic memory module and evaluates the same memory design across heterogeneous tasks including WebArena, making it a materially relevant direct-memory comparator rather than a conversational-memory-only system."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_TASK_AGNOSTIC_LONG_TERM_MEMORY_OR_WEB_AGENT_MEMORY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V32"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-MEMQ",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "MemQ: Integrating Q-Learning into Self-Evolving Memory Agents over Provenance DAGs",
+      "implementation_identity": "https://github.com/jwliao-ai/MemQ",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "A-H1"
+      ],
+      "comparison_role": [
+        "N_H1_RUNTIME_MEMORY_CREDIT_ASSIGNMENT_COMPARATOR_CANDIDATE",
+        "A_H1_NONPARAMETRIC_RUNTIME_MEMORY_ADAPTATION_REFERENCE_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.08374"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/jwliao-ai/MemQ"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_RUNTIME_EPISODIC_MEMORY_CREDIT_ASSIGNMENT_SETTING_MATCHED",
+        "ARCHIVAL_PEER_REVIEW_NOT_VERIFIED",
+        "MUST_NOT_BE LABELLED_PEER_REVIEWED",
+        "PROVENANCE_DAG_CONSTRUCTION_GAMMA_LAMBDA_AND_MEMORY_UPDATE_CONFIGURATION_MUST_BE BOUND",
+        "FROZEN_MODEL_AND_NONPARAMETRIC_MEMORY_LEARNING_MUST_BE DISTINGUISHED_FROM_WEIGHT_ADAPTATION",
+        "Uses provenance-DAG TD-lambda credit propagation over episodic memories rather than treating retrieved memories independently, and evaluates runtime learning across OS interaction, function calling, code generation, multimodal reasoning and embodied reasoning."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_RUNTIME_EPISODIC_MEMORY_CREDIT_ASSIGNMENT_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DIRECT_MEMORY_SATURATION_PASS_V32"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

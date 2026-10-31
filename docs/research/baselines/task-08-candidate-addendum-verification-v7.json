@@ -1,0 +1,149 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 7,
+  "state": "ADDENDUM_V7_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-26T05:00:35Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v7": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v7.json",
+      "sha256": "d77bc869199f3e40637bb00a3098b237c508272d70bb2f1b2c1b99d659a38146"
+    },
+    "systematic_saturation_v4": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v4.json",
+      "sha256": "1c6f8112aee0a8e958ae3107bb73c6d62442db6c65baff0e24321b165abcb9c0"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ADAMEM",
+      "verification_state": "ICML_2026_LABELLED_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_TEST_TIME_MEMORY_ADAPTATION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "AdaMEM adapts language-agent behavior at test time without online model-parameter updates.",
+        "It combines long-term raw trajectory memory with dynamically generated short-term strategy memory.",
+        "The public research implementation contains ALFWorld and WebShop workflows and STEP-MFT training support."
+      ],
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2606.05684"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/yunx-z/AdaMEM"
+        }
+      ],
+      "limits": [
+        "EXACT_BASE_MODEL_AND_MEMORY_VARIANT_MUST_BE_BOUND",
+        "OFFLINE_TRAJECTORY_MEMORY_CORPUS_MUST_BE_BOUND",
+        "STEP_MFT_IF_USED_MUST_BE_SEPARATELY_BOUND",
+        "TEST_TIME_TOKEN_AND_MEMORY_RESOURCE_VALUES_REMAIN_TASK_9_OWNED",
+        "WITHIN_AGENT_MEMORY_ADAPTATION_DOES_NOT_ESTABLISH_GENERAL_N_H2"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-SEFA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_ACTIVE_FEATURE_ACQUISITION_COMPARATOR_CANDIDATE",
+      "verified_facts": [
+        "SEFA is published at ICML 2025.",
+        "It treats active feature acquisition as instance-wise sequential measurement decision-making.",
+        "The method uses stochastic latent encodings and prediction-gradient information rather than an RL acquisition policy.",
+        "The official implementation includes synthetic and real-data experiments plus reproducibility instructions."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/norcliffe25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/a-norcliffe/SEFA"
+        }
+      ],
+      "limits": [
+        "SEQUENTIAL_FEATURE_MEASUREMENT_DECISION_SURFACE_REQUIRED",
+        "FEATURE_COST_AND_STOPPING_POLICY_MUST_BE MATCHED",
+        "PREDICTOR_AND_LATENT_CONFIGURATION_MUST_BE BOUND",
+        "HYPERPARAMETER_TUNING_OPPORTUNITY_MUST_BE PARITY_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E2-XAI-AFA",
+      "verification_state": "PEER_REVIEWED_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E2_LEARNED_SEQUENTIAL_FEATURE_ACQUISITION_COMPARATOR",
+      "verified_facts": [
+        "The explainability-driven AFA method is published at ICML 2025.",
+        "It builds instance-specific feature rankings using local explanations.",
+        "A decision-transformer-based policy learns to sequentially acquire the next informative feature.",
+        "The official repository contains separate tabular and image experiment implementations."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/guney25a.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vkola-lab/icml2025"
+        }
+      ],
+      "limits": [
+        "ACTIVE_FEATURE_ACQUISITION_DECISION_SURFACE_REQUIRED",
+        "LOCAL_EXPLAINER_IDENTITY_AND_CONFIGURATION_MUST_BE BOUND",
+        "DECISION_TRANSFORMER_CHECKPOINT_AND_TRAINING_DATA_MUST_BE BOUND",
+        "FEATURE_ACQUISITION_COST_REGIME_MUST_BE MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E3-DLAE",
+      "verification_state": "PEER_REVIEWED_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E3_VLM_TEST_TIME_ADAPTATION_COMPARATOR",
+      "verified_facts": [
+        "DLAE is published at CVPR 2026.",
+        "It combines Dynamic Logit Adjustment with a Consistency-Guided Exploratory Cache.",
+        "The method is designed to reduce class-wise prediction bias and expand test-time sample coverage beyond only high-confidence samples.",
+        "The public research repository provides natural-shift and cross-dataset evaluation scripts for CLIP-style backbones."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Wu_Dynamic_Logits_Adjustment_and_Exploration_for_Test-Time_Adaptation_in_Vision_Language_Models_CVPR_2026_paper.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/whynotcooper/Dynamic-Logits-Adjustment-and-Exploration-for-Test-Time-Adaptation-in-Vision-Language-Models"
+        }
+      ],
+      "limits": [
+        "MATCHED_VLM_CLASSIFICATION_SETTING_REQUIRED",
+        "BACKBONE_AND_CLIP_IMPLEMENTATION_MUST_BE BOUND",
+        "CACHE_AND_LOGIT_ADJUSTMENT_CONFIGURATION_MUST_BE BOUND",
+        "NOT_AUTOMATICALLY_APPLICABLE_TO_NON_VLM_E3_TASKS"
+      ]
+    }
+  ],
+  "candidate_findings_count": 4,
+  "interpretation": {
+    "all_addendum_v7_candidates_have_role_level_external_review": true,
+    "all_addendum_v7_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false,
+    "establishes_any_hypothesis_pass": false
+  }
+}

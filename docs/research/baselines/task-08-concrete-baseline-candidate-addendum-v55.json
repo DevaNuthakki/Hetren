@@ -1,0 +1,185 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 55,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T01:43:08Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v54": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v54.json",
+      "sha256": "b1f412c60eeef7c981c29e74ed2d2d8e25b795f0c7a1cec9ff25c9ad552de741"
+    },
+    "systematic_saturation_v52": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v52.json",
+      "sha256": "569c6d3aaefb6a9ed9d6dca52322b4fdc0b1b665da64422c08fc334b36afffb7"
+    }
+  },
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-LLM-PLANNER",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "LLM-Planner: Few-Shot Grounded Planning for Embodied Agents with Large Language Models",
+      "implementation_identity": "https://github.com/OSU-NLP-Group/LLM-Planner",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_FEW_SHOT_GROUNDED_EMBODIED_PLANNING_COMPARATOR_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/ICCV2023/html/Song_LLM-Planner_Few-Shot_Grounded_Planning_for_Embodied_Agents_with_Large_Language_ICCV_2023_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/OSU-NLP-Group/LLM-Planner"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_FEW_SHOT_GROUNDED_ALFRED_STYLE_PLANNING_SETTING_MATCHED",
+        "ALFRED_OR_EQUIVALENT_EMBODIED_TASK_CONTRACT_REQUIRED",
+        "FEW_SHOT_EXAMPLE_ACCESS_AND_RETRIEVAL_CONFIGURATION_MUST_BE MATCHED",
+        "LOW_LEVEL_CONTROLLER_ACCESS_MUST_BE DECLARED",
+        "LLM_IDENTITY_AND_PROMPT_CONFIGURATION_MUST_BE BOUND",
+        "Provides a peer-reviewed executable few-shot physically grounded embodied planner with both high-level and end-to-end implementations."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_FEW_SHOT_GROUNDED_ALFRED_STYLE_PLANNING_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V52"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-VIMA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "VIMA: Robot Manipulation with Multimodal Prompts",
+      "implementation_identity": "https://github.com/vimalabs/VIMA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LEARNED_MULTIMODAL_EMBODIED_CONTROL_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_NOVEL_TASK_GENERALIZATION_REFERENCE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v202/jiang23b.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/vimalabs/VIMA"
+        },
+        {
+          "class": "OFFICIAL_BENCHMARK",
+          "url": "https://github.com/vimalabs/VimaBench"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_MULTIMODAL_PROMPT_CONDITIONED_ROBOT_MANIPULATION_SETTING_MATCHED",
+        "VIMA_BENCH_OR_EQUIVALENT_MANIPULATION_CONTRACT_REQUIRED",
+        "MULTIMODAL_PROMPT_INFORMATION_MUST_BE MATCHED",
+        "MODEL_CHECKPOINT_AND_CAPACITY_MUST_BE BOUND",
+        "OBJECT_DETECTOR_AND_OBSERVATION_PIPELINE_MUST_BE BOUND",
+        "WITHIN_E1_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "Provides a learned sequential embodied-control policy with multimodal prompts, released checkpoints, executable evaluation, and explicit novel-task generalization partitions."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_MULTIMODAL_PROMPT_CONDITIONED_ROBOT_MANIPULATION_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V52"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-RT1",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "RT-1: Robotics Transformer for Real-World Control at Scale",
+      "implementation_identity": "https://github.com/google-research/robotics_transformer",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_LANGUAGE_CONDITIONED_ROBOT_POLICY_COMPARATOR_ROLE_CONDITIONAL",
+        "N_H2_WITHIN_E1_MULTI_TASK_GENERALIZATION_REFERENCE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://roboticsproceedings.org/rss19/p025.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/google-research/robotics_transformer"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_AT_FINAL_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_LANGUAGE_CONDITIONED_REAL_WORLD_ROBOT_CONTROL_SETTING_MATCHED",
+        "REAL_ROBOT_CONTROL_CONTRACT_REQUIRED",
+        "TRAINED_CHECKPOINT_AND_DATA_REGIME_MUST_BE BOUND",
+        "OBSERVATION_ACTION_TOKENIZATION_MUST_BE MATCHED",
+        "SIM_REAL_OR_JOINT_TRAINING_VARIANTS_MUST_NOT_BE COLLAPSED",
+        "WITHIN_E1_GENERALIZATION_DOES_NOT_ESTABLISH_GENERAL_N_H2",
+        "Provides a peer-reviewed learned sequential robot-control transformer with official code, tests, and trained checkpoints for language-conditioned real-world control."
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_LANGUAGE_CONDITIONED_REAL_WORLD_ROBOT_CONTROL_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SATURATION_PASS_V52"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

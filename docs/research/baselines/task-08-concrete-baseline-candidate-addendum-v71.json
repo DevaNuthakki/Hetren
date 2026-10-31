@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 71,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T03:48:49Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v70": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v70.json",
+      "sha256": "de23501e8b3459df4daa7285170985ecbbd57395d6a9c595956aed9191cac4ca"
+    },
+    "systematic_saturation_v68": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v68.json",
+      "sha256": "a957f842f24d4f414deec287ef7980ebd94cdb07f6d5f89940b7e497d26566b5"
+    }
+  },
+  "candidate_count": 1,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ATOMICVLA",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AtomicVLA",
+      "implementation_identity": "https://github.com/zhanglk9/AtomicVLA",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_LONG_HORIZON_SKILL_COMPOSITION_VLA_DISPLACEMENT_CANDIDATE",
+        "N_H1_PLANNING_AND_EXECUTION_VLA_ROLE_CONDITIONAL"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_DISPLACEMENT_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://openaccess.thecvf.com/content/CVPR2026/html/Zhang_AtomicVLA_Unlocking_the_Potential_of_Atomic_Skill_Learning_in_Robots_CVPR_2026_paper.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zhanglk9/AtomicVLA"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "adaptation_input_access_if_applicable": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "LONG_HORIZON_SKILL_COMPOSITION_SETTING_REQUIRED",
+        "ATOMIC_SKILL_LIBRARY_AND_ROUTING_CONFIGURATION_MUST_BE BOUND",
+        "BASE_MODEL_AND_EXPERT_CONFIGURATION_MUST_BE BOUND",
+        "CONTINUAL_LEARNING_RESULTS_REQUIRE_SEPARATE_ROLE_MATCH",
+        "LIBERO_CALVIN_AND_REAL_WORLD_EVIDENCE_MUST_NOT_BE COLLAPSED"
+      ],
+      "eligibility_status": "ROLE_MATCHED_DISPLACEMENT_CANDIDATE_PENDING_FINAL_GATES",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "DISPLACEMENT_ONLY_SATURATION_PASS_V68"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}

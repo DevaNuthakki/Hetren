@@ -1,0 +1,195 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_SYSTEMATIC_BASELINE_SATURATION_PASS",
+  "saturation_generation": 46,
+  "state": "SATURATION_V46_FIRST_NO_NEW_MATERIAL_ROUND",
+  "recorded_at_utc": "2026-09-27T00:28:06Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "cutoff_policy": {
+    "candidate_public_evidence_must_predate_or_equal_cutoff": true,
+    "current_repository_state_is_not_final_immutable_version_identity": true,
+    "final_retained_revision_must_later_resolve_to_cutoff_consistent_state": true,
+    "post_cutoff_changes_cannot_create_retroactive_eligibility": true
+  },
+  "bindings": {
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    },
+    "addendum_v48_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v48.json",
+      "sha256": "01f0208a83f067e1114c23ca03e8397738b84bf6210d86de08e03a3efb9bef74"
+    },
+    "systematic_saturation_v45": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v45.json",
+      "sha256": "1d5b1acbd0f957c408fc762bae1c1e8b38a8c48523c3d3337e716e4fd508fbe1"
+    }
+  },
+  "scope": {
+    "environment": "E1_AGENT",
+    "hypothesis_scope": "N_H1_DIRECT_MEMORY_COMPARATOR_CLOSURE",
+    "reason": "Continue the bounded direct-memory refinement triggered by newly promoted MemAct and LTS without reopening unrelated environment families."
+  },
+  "queries_executed": [
+    "Memory as Action Autonomous Context Curation long-horizon agentic tasks paper code 2026",
+    "Learning to Share Selective Memory Efficient Parallel Agentic Systems paper code 2026",
+    "Memory as Action DCPO github",
+    "Learning to Share selective memory parallel agentic systems github",
+    "2026 agent memory long-horizon context curation memory selection ACL ICLR code",
+    "2026 multi-agent selective shared memory agentic systems paper github",
+    "2026 agent memory benchmark long horizon direct memory method paper github",
+    "2026 memory management agent LLM test time long horizon official code",
+    "Learning to Share ICML 2026 PMLR Fioresi",
+    "OCR-Memory github official code 2026",
+    "Memory-R1 agent memory github 2026",
+    "Fine-Mem agent memory github 2026",
+    "Meta-Cognitive Memory Policy Optimization long-horizon LLM agents github 2026",
+    "M star Every Task Deserves Its Own Memory Harness github",
+    "From Lossy to Verified Provenance-Aware Tiered Memory agents github",
+    "FileGram Grounding Agent Personalization file-system behavioral traces github"
+  ],
+  "query_count": 16,
+  "candidate_dispositions": [
+    {
+      "name": "Memory as Action: Autonomous Context Curation for Long-Horizon Agentic Tasks",
+      "candidate_id": "DISCOVERY:T8-E1-MEMACT-DCPO",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "reason": "Promoted in addendum-v48 and independently role-reviewed in verification-v48."
+    },
+    {
+      "name": "Learning to Share: Selective Memory for Efficient Parallel Agentic Systems",
+      "candidate_id": "DISCOVERY:T8-E1-LTS-SHARED-MEMORY",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "reason": "Promoted in addendum-v48 and independently role-reviewed in verification-v48."
+    },
+    {
+      "name": "Agentic Memory: Learning Unified Long-Term and Short-Term Memory Management for Large Language Model Agents",
+      "candidate_id": "DISCOVERY:T8-E1-AGEMEM-UNIFIED",
+      "disposition": "PREEXISTING_PROMOTED_CANDIDATE_NOT_NEW",
+      "reason": "AgeMem was promoted and verified in earlier governed direct-memory rounds."
+    },
+    {
+      "name": "OCR-Memory: Optical Context Retrieval for Long-Horizon Agent Memory",
+      "candidate_id": null,
+      "disposition": "RETAINED_BEHIND_EXECUTABLE_IMPLEMENTATION_GATE_NOT_NEW",
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://aclanthology.org/2026.acl-long.474/"
+        }
+      ],
+      "reason": "ACL 2026 peer review is verified, but this bounded pass did not verify an official executable research implementation suitable for governed reproduction. Prior Task-8 evidence already records the same implementation gate."
+    },
+    {
+      "name": "Memory-R1: Enhancing Large Language Model Agents to Manage and Utilize Memories via Reinforcement Learning",
+      "candidate_id": null,
+      "disposition": "RETAINED_BEHIND_CODE_RELEASE_GATE_NOT_NEW",
+      "sources": [
+        {
+          "class": "PUBLIC_PROJECT_REPOSITORY",
+          "url": "https://github.com/yansikuan/memory-r1"
+        }
+      ],
+      "reason": "The public project repository still states that implementation code is coming soon, so the historical executable-code gate remains unresolved."
+    },
+    {
+      "name": "Meta-Cognitive Memory Policy Optimization for Long-Horizon LLM Agents",
+      "candidate_id": null,
+      "disposition": "RETAINED_BEHIND_PREPRINT_AND_IMPLEMENTATION_GATE_NOT_NEW",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2605.30159"
+        }
+      ],
+      "reason": "The method is highly relevant memory-policy research, but archival peer review and an official executable implementation were not verified in this bounded pass. The earlier Task-8 MMPO implementation gate therefore remains intact."
+    },
+    {
+      "name": "From Lossy to Verified: A Provenance-Aware Tiered Memory for Agents",
+      "candidate_id": null,
+      "disposition": "ROLE_ADJACENT_LONG_CONTEXT_QA_REFERENCE_NOT_NEW",
+      "sources": [
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/FreedomIntelligence/Tiermem"
+        }
+      ],
+      "reason": "TierMem provides executable learned routing between summary and raw retrieval paths, but the reviewed implementation is framed around long-context question answering rather than a matched interactive E1 action-selection environment."
+    },
+    {
+      "name": "FileGram: Grounding Agent Personalization in File-System Behavioral Traces",
+      "candidate_id": null,
+      "disposition": "PERSONALIZATION_INFORMATION_OPPORTUNITY_GATE_NOT_NEW",
+      "sources": [
+        {
+          "class": "PRIMARY_PREPRINT",
+          "url": "https://arxiv.org/abs/2604.04901"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/synvo-ai/FileGram"
+        }
+      ],
+      "reason": "FileGramOS is executable and memory-centric, but its principal memory signal is personalized multimodal file-system behavioral traces. It requires a separately matched personalization information opportunity before becoming a claim-bearing E1 comparator."
+    },
+    {
+      "name": "M-star: Every Task Deserves Its Own Memory Harness",
+      "candidate_id": null,
+      "disposition": "META_OPTIMIZATION_PARITY_GATE_PRESERVED_NOT_NEW",
+      "sources": [
+        {
+          "class": "PRIMARY_RESEARCH",
+          "url": "https://arxiv.org/abs/2604.11811"
+        }
+      ],
+      "reason": "M-star automatically evolves task-specific memory programs and therefore remains behind the previously recorded meta-optimization and information-parity gate rather than being treated as a fixed direct-memory comparator."
+    }
+  ],
+  "new_material_candidates": [],
+  "new_material_candidate_count": 0,
+  "new_candidate_counts_by_environment": {
+    "E1_AGENT": 0,
+    "E2_STRUCTURED_ML": 0,
+    "E3_VISION": 0
+  },
+  "research_observations": {
+    "memact_duplicate_after_v48": true,
+    "lts_duplicate_after_v48": true,
+    "agemem_duplicate": true,
+    "ocr_memory_executable_gate_resolved": false,
+    "memory_r1_code_release_gate_resolved": false,
+    "mmpo_implementation_gate_resolved": false,
+    "tiermem_matches_current_interactive_e1_role": false,
+    "filegram_matches_current_information_opportunity": false,
+    "m_star_meta_optimization_parity_gate_resolved": false
+  },
+  "n_h2_state": {
+    "general_external_cross_environment_family_comparator_verified": false,
+    "direct_memory_scope_remains_e1_bounded": true,
+    "within_e1_memory_management_is_not_general_cross_family_transfer": true,
+    "status": "UNRESOLVED_AFTER_SATURATION_V46"
+  },
+  "stopping_rule": {
+    "satisfied": false,
+    "consecutive_no_new_material_candidate_rounds": 1,
+    "this_round_qualifies_as_no_new_material_round": true,
+    "reason": "The bounded high-relevance direct-memory refinement produced no previously unpromoted comparator that simultaneously cleared the role, information-opportunity, implementation, and reproducibility gates.",
+    "next_requirement": "ONE_ADDITIONAL_CONSECUTIVE_REASONABLE_NO_NEW_MATERIAL_REFINEMENT_REQUIRED"
+  },
+  "selection_state": {
+    "strongest_comparator_selected": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false,
+    "final_selection_authorized": false
+  },
+  "claim_limits": {
+    "no_new_this_round_means_no_other_method_exists": false,
+    "first_no_new_round_satisfies_stopping_rule": false,
+    "gated_reference_is_claim_bearing_baseline": false,
+    "within_e1_memory_evidence_establishes_n_h2": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  },
+  "next_gate": "I4B51_SECOND_CONSECUTIVE_BOUNDED_NO_NEW_MATERIAL_CONFIRMATION_REFINEMENT"
+}

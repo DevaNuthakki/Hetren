@@ -1,0 +1,130 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_GEN3_ATTEMPT_10_GENERATION_ENVIRONMENT_COMPARISON",
+  "state": "COMPARED_BEFORE_ATTEMPT_10_ENVIRONMENT_DECISION",
+  "successor_generation_attempt": 10,
+  "evidence_bindings": {
+    "attempt_9_failure_sha256": "957610200d7e1975052673e4ce5202edde12dea86b59d32fad7e55e70fc07b8e",
+    "attempt_9_disposition_sha256": "293a6be70c8afa1d1913f9a668d191f1cbdccb7bc222ae10487bad535eaf7c56",
+    "attempt_9_isolation_investigation_sha256": "857af7583a1c95eedb628b45151dcb689153b72fdc4f3673f748f21003078577",
+    "package_v9_sha256": "d43ae3a3362f216b86bd436ddfdbc109bbd2fd0506665ead314025b49264d876",
+    "attempt_9_attestation_sha256": "36b4bcdbabefaa146bb0a1b6bbc6bd498308f2eeda502892d8114e7d35808886",
+    "frozen_target_evaluator_sha256": "38e0a9f80e25da52fb4f310390505dedf0a57c0db4e02a9768747890f2f58c46"
+  },
+  "problem_to_solve": {
+    "established_issue": "OBSERVABILITY_SCOPE_MISMATCH",
+    "description": "Attempt 9 showed that user-visible ChatGPT UI state and generator-perceived context cannot be treated as the same auditable isolation domain.",
+    "exact_internal_provider_mechanism_known": false,
+    "successor_must_not_require_generator_to_self_audit_hidden_or_ui_only_state": true
+  },
+  "selection_criteria": {
+    "application_supplied_input_must_be_externally_recordable": true,
+    "application_supplied_input_must_be_hashable_before_generation": true,
+    "prior_conversation_state_must_be_omittable": true,
+    "tool_configuration_must_be_explicitly_controllable": true,
+    "package_bytes_must_be_bindable_to_exact_request": true,
+    "one_shot_generation_must_be_possible": true,
+    "generator_must_not_receive_predecessor_evidence": true,
+    "generator_must_not_be_asked_to_certify_hidden_provider_state": true,
+    "target_evaluator_must_remain_frozen": true,
+    "scientific_and_scoring_contracts_must_remain_frozen": true
+  },
+  "candidates": [
+    {
+      "candidate": "OPENAI_RESPONSES_API_EXPLICIT_SINGLE_REQUEST_ENVELOPE",
+      "status": "PREFERRED_PENDING_BENIGN_CAPABILITY_PREFLIGHT",
+      "application_input_auditability": "HIGH",
+      "advantages": [
+        "The exact application-supplied request body can be constructed, serialized, hashed, and preserved before generation.",
+        "No conversation object needs to be supplied.",
+        "No previous_response_id needs to be supplied.",
+        "The package can be embedded directly as base64 input_file data inside the same request.",
+        "No Files API upload is required when file_data is used.",
+        "The tools list can be explicitly empty.",
+        "store can be explicitly false.",
+        "The generator need not decide whether the UI had earlier messages or attachments."
+      ],
+      "limitations": [
+        "The application-level request envelope does not expose or prove absence of provider-internal system, safety, routing, or inference context.",
+        "store=false does not itself establish Zero Data Retention or zero abuse-monitoring retention.",
+        "API access, model availability, output capacity, and account configuration must be verified before protected use."
+      ],
+      "required_protected_request_properties": {
+        "single_foreground_request": true,
+        "conversation_parameter_omitted": true,
+        "previous_response_id_omitted": true,
+        "store_false": true,
+        "background_false": true,
+        "tools_empty": true,
+        "package_supplied_as_inline_file_data": true,
+        "no_file_search": true,
+        "no_web_search": true,
+        "no_code_interpreter": true,
+        "no_mcp": true,
+        "no_prior_response_items_replayed": true,
+        "request_payload_preserved_before_send": true,
+        "raw_response_preserved_before_validation": true
+      }
+    },
+    {
+      "candidate": "CHATGPT_UI_REDESIGNED_NON_SELF_AUDITING_GATE",
+      "status": "NOT_SELECTED_FOR_ATTEMPT_10",
+      "application_input_auditability": "LOWER",
+      "advantages": [
+        "Would preserve the previous user workflow and one-shot Temporary Chat procedure.",
+        "UI-visible state could still be externally attested by the user."
+      ],
+      "limitations": [
+        "Attempt 9 directly established that visible UI state and generator-perceived context cannot be assumed equivalent.",
+        "Removing generator self-audit would avoid the false equivalence test but would not make the underlying model-visible input envelope externally inspectable.",
+        "The selected environment would therefore retain an unresolved input-boundary ambiguity already observed in Attempt 9."
+      ]
+    }
+  ],
+  "conditional_selection": {
+    "candidate": "OPENAI_RESPONSES_API_EXPLICIT_SINGLE_REQUEST_ENVELOPE",
+    "selected_for_capability_preflight": true,
+    "selected_for_protected_generation": false,
+    "reason": "It provides the stronger externally auditable application-supplied input boundary and avoids relying on generator inference about ChatGPT UI state.",
+    "conditions_before_final_environment_decision": [
+      "API credentials available without exposing them in artifacts",
+      "benign non-Hetren Responses API request succeeds",
+      "required model is available",
+      "store=false request accepted",
+      "request can omit conversation",
+      "request can omit previous_response_id",
+      "request can use an empty tools list",
+      "JSON input_file via inline file_data is accepted",
+      "foreground response can be preserved exactly",
+      "sufficient output capacity exists for the 54-case artifact"
+    ]
+  },
+  "current_official_api_documentation_findings": {
+    "responses_requests_can_be_used_without_conversation_state": true,
+    "conversation_and_previous_response_id_are_explicit_state_mechanisms": true,
+    "response_storage_can_be_disabled_with_store_false": true,
+    "json_is_supported_as_responses_input_file": true,
+    "base64_file_data_is_supported_for_responses_file_input": true,
+    "tools_are_explicit_request_configuration": true,
+    "store_false_does_not_equal_zero_data_retention": true,
+    "default_abuse_monitoring_retention_may_be_up_to_30_days": true
+  },
+  "claim_limits": {
+    "does_not_claim_provider_internal_statelessness": true,
+    "does_not_claim_absence_of_provider_system_instructions": true,
+    "does_not_claim_absence_of_provider_safety_processing": true,
+    "does_not_claim_zero_data_retention": true,
+    "does_not_claim_api_capability_has_already_been_verified": true,
+    "does_not_establish_attempt_10_generation_authority": true
+  },
+  "decision_state": {
+    "preferred_environment_direction_selected": true,
+    "final_attempt_10_environment_selected": false,
+    "benign_api_capability_preflight_required": true,
+    "generation_environment_decision_attempt_10_authorized": false,
+    "package_v10_authorized": false,
+    "attempt_10_generation_authorized": false,
+    "target_freshness_available": true,
+    "next_step": "BENIGN_NON_HETREN_API_CAPABILITY_PREFLIGHT"
+  }
+}

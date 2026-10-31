@@ -1,0 +1,46 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_EXTERNAL_BASELINE_VERIFICATION_ATTEMPT",
+  "attempt": 78,
+  "state": "SECOND_CONSECUTIVE_DISPLACEMENT_ONLY_NO_NEW_MATERIAL_ROUND_DISCOVERY_STOPPING_SATISFIED",
+  "recorded_at_utc": "2026-09-27T05:09:57Z",
+  "task": 8,
+  "bindings": {
+    "attempt_77": {
+      "path": "tests/qualification/data/baseline_requirements_gen3/task_8_external_baseline_verification_attempt_77.json",
+      "sha256": "873a4a232bb0d4b9f22a7a26d52040bc4e054b407ac9944c031c1a198e1d1c2f"
+    },
+    "addendum_v76_verification": {
+      "path": "docs/research/baselines/task-08-candidate-addendum-verification-v76.json",
+      "sha256": "2b2f6513a3f3967e0abb6b267ea7808163353074394f17cd29ce2b58b5bb474b"
+    },
+    "systematic_saturation_v74": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v74.json",
+      "sha256": "ee2e3f77b2fc622956ad7428f698b3225efe0200a83488f612db500c3f88ae24"
+    },
+    "candidate_addendum_v77": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v77.json",
+      "sha256": "a0c3e557d50f942bee5dc0b7abcd4a6ad327301abe78dd1b2a0f788410169e43"
+    }
+  },
+  "state_summary": {
+    "empty_addendum_v76_verified": true,
+    "new_material_candidates_found": 0,
+    "candidate_addendum_v77_count": 0,
+    "general_n_h2_cross_family_comparator_verified": false,
+    "search_stopping_rule_satisfied": true,
+    "consecutive_no_new_candidate_refinements": 2,
+    "full_immutable_revision_pinning_complete": false,
+    "strength_ordering_complete": false,
+    "final_selection_authorized": false,
+    "concrete_baseline_frozen": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "next_gate": "POST_DISCOVERY_SELECTION_READINESS_AUDIT_BEFORE_IMMUTABLE_PINNING",
+  "claim_limits": {
+    "discovery_stopping_equals_final_selection": false,
+    "task_8_authority_established": false,
+    "scientific_support_established": false,
+    "any_hypothesis_pass_established": false
+  }
+}

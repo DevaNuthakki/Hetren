@@ -1,0 +1,125 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CANDIDATE_ADDENDUM_EXTERNAL_VERIFICATION",
+  "verification_generation": 53,
+  "state": "ADDENDUM_V53_ROLE_REVIEW_COMPLETE_NO_SELECTION",
+  "recorded_at_utc": "2026-09-27T01:36:42Z",
+  "task": 8,
+  "external_evidence_cutoff_utc": "2026-09-26T02:47:25Z",
+  "bindings": {
+    "candidate_addendum_v53": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v53.json",
+      "sha256": "d3cce6e53c696d37da541dbae2b105fe69cadad2b4d7863203d282b6ca005243"
+    },
+    "systematic_saturation_v50": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v50.json",
+      "sha256": "051223fc65e35cb6d2a5b8a4dc5e54e8766527d51b28fd84b0fe5089a5945234"
+    },
+    "selection_preregistration": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-selection-preregistration.json",
+      "sha256": "8c3045ba932ba9553a33c54c3dc096b9b08de1e4c5b0ffc32de370c6921f73ce"
+    }
+  },
+  "candidate_findings": [
+    {
+      "candidate_id": "DISCOVERY:T8-E1-ADAPLANNER",
+      "verification_state": "PEER_REVIEWED_NEURIPS_2023_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_CLOSED_LOOP_ADAPTIVE_PLANNING_COMPARATOR",
+      "verified_facts": [
+        "AdaPlanner is published at NeurIPS 2023.",
+        "It refines self-generated plans in response to environmental feedback.",
+        "It includes both in-plan and out-of-plan refinement.",
+        "Its published experiments include ALFWorld and MiniWoB++.",
+        "The official repository contains executable experiment notebooks."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/b5c8c1c117618267944b2617add0a766-Abstract.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/haotiansun14/AdaPlanner"
+        }
+      ],
+      "limits": [
+        "ALFWORLD_OR_MINIWOB_STYLE_TASK_MATCH_REQUIRED",
+        "BASE_MODEL_PROMPT_AND_SKILL_DISCOVERY_CONFIGURATION_MUST_BE_BOUND",
+        "IN_PLAN_AND_OUT_OF_PLAN_REFINEMENT_MUST_NOT_BE_COLLAPSED",
+        "FEEDBACK_ACCESS_MUST_BE PARITY_MATCHED"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-SWIFTSAGE",
+      "verification_state": "PEER_REVIEWED_NEURIPS_2023_AND_PUBLIC_RESEARCH_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_FAST_SLOW_INTERACTIVE_AGENT_COMPARATOR",
+      "verified_facts": [
+        "SwiftSage is published at NeurIPS 2023.",
+        "Its Swift module is a smaller behavior-cloned model.",
+        "Its Sage module uses a larger language model for deliberate subgoal planning.",
+        "The published evaluation uses complex interactive ScienceWorld tasks.",
+        "The public repository identifies its science_world branch as the code for the NeurIPS 2023 version."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/4b0eea69deea512c9e2c469187643dc2-Abstract-Conference.html"
+        },
+        {
+          "class": "PUBLIC_RESEARCH_IMPLEMENTATION",
+          "url": "https://github.com/SwiftSage/SwiftSage"
+        }
+      ],
+      "limits": [
+        "NEURIPS_2023_V1_MUST_BE BOUND_TO_THE_SCIENCE_WORLD_VERSION",
+        "SWIFT_AND_SAGE_MODEL_IDENTITIES_MUST_BE BOUND",
+        "ORACLE_TRAJECTORY_TRAINING_DATA_MUST_BE BOUND",
+        "CURRENT_V2_DEFAULT_BRANCH_MUST_NOT_BE MISTAKEN_FOR_THE_2023_BASELINE"
+      ]
+    },
+    {
+      "candidate_id": "DISCOVERY:T8-E1-LATS",
+      "verification_state": "PEER_REVIEWED_ICML_2024_AND_OFFICIAL_IMPLEMENTATION_VERIFIED",
+      "role_disposition": "E1_SEARCH_BASED_REASONING_ACTING_PLANNING_COMPARATOR",
+      "verified_facts": [
+        "LATS is published at ICML 2024.",
+        "It combines language-model reasoning and acting with Monte Carlo Tree Search.",
+        "It uses language-model value functions and self-reflection during search.",
+        "Environment feedback is part of its decision process.",
+        "The official implementation includes WebShop and HotPotQA experiment paths."
+      ],
+      "sources": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v235/zhou24r.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/andyz245/LanguageAgentTreeSearch"
+        }
+      ],
+      "limits": [
+        "MATCHED_INTERACTIVE_TASK_REQUIRED",
+        "TREE_SEARCH_BUDGET_MUST_BE TASK_9_ACCOUNTED",
+        "MODEL_VALUE_FUNCTION_AND_REFLECTION_CONFIGURATION_MUST_BE BOUND",
+        "PROGRAMMING_QA_AND_WEBSHOP_RESULTS_MUST_NOT_BE COLLAPSED"
+      ]
+    }
+  ],
+  "candidate_findings_count": 3,
+  "interpretation": {
+    "all_addendum_v53_candidates_have_role_level_external_review": true,
+    "all_addendum_v53_candidates_are_finally_eligible": false,
+    "all_full_immutable_revisions_pinned": false,
+    "information_parity_review_complete": false,
+    "strength_ordering_complete": false,
+    "protected_hetren_outcomes_used": false
+  },
+  "claim_limits": {
+    "peer_review_alone_establishes_strongest_status": false,
+    "selects_strongest_baseline": false,
+    "freezes_concrete_baseline": false,
+    "establishes_task_8_authority": false,
+    "establishes_scientific_support": false
+  }
+}

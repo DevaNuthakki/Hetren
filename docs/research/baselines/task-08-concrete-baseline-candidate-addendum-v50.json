@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_type": "TASK_8_CONCRETE_BASELINE_CANDIDATE_ADDENDUM",
+  "addendum_generation": 50,
+  "state": "DISCOVERY_ADDENDUM_NOT_GOVERNING",
+  "recorded_at_utc": "2026-09-27T00:34:42Z",
+  "task": 8,
+  "bindings": {
+    "candidate_addendum_v49": {
+      "path": "docs/research/baselines/task-08-concrete-baseline-candidate-addendum-v49.json",
+      "sha256": "41d50f77fe7490f69c3317abb892ad59a24c21ce6aedcb389a7965daceb2df48"
+    },
+    "systematic_saturation_v47": {
+      "path": "docs/research/baselines/task-08-systematic-baseline-saturation-v47.json",
+      "sha256": "7bf621613be4a67eb6fcce7e4c0e6d55e0d0f50a3c65a33d1f9ce3efb237c817"
+    }
+  },
+  "candidate_count": 2,
+  "candidates": [
+    {
+      "baseline_id": "DISCOVERY:T8-E1-AWM-WORKFLOW-MEMORY",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "Agent Workflow Memory",
+      "implementation_identity": "https://github.com/zorazrw/agent-workflow-memory",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1",
+        "N-H2"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_WORKFLOW_MEMORY_COMPARATOR_CANDIDATE",
+        "N_H2_WITHIN_E1_CROSS_TASK_TRANSFER_REFERENCE_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://proceedings.mlr.press/v267/wang25bx.html"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/zorazrw/agent-workflow-memory"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_WEB_AGENT_WORKFLOW_MEMORY_SETTING_MATCHED",
+        "AWM induces reusable workflows from prior action trajectories and uses them to guide subsequent multi-step web-agent actions in WebArena and Mind2Web.",
+        "CROSS_TASK_WEBSITE_AND_DOMAIN_GENERALIZATION_REMAINS_WITHIN_E1_WEB_AGENTS_AND_DOES_NOT_ESTABLISH_GENERAL_E1_E2_E3_TRANSFER"
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_WEB_AGENT_WORKFLOW_MEMORY_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_DIRECT_MEMORY_CONFIRMATION_LEGACY_IDENTITY_SWEEP"
+    },
+    {
+      "baseline_id": "DISCOVERY:T8-E1-ARIGRAPH",
+      "baseline_version": "UNPINNED_RESEARCH_CANDIDATE",
+      "name": "AriGraph: Learning Knowledge Graph World Models with Episodic Memory for LLM Agents",
+      "implementation_identity": "https://github.com/AIRI-Institute/AriGraph",
+      "implementation_version_or_revision": "FULL_IMMUTABLE_CUTOFF_CONSISTENT_REVISION_NOT_YET_BOUND",
+      "environment_families": [
+        "E1_AGENT"
+      ],
+      "hypothesis_roles": [
+        "N-H1"
+      ],
+      "comparison_role": [
+        "N_H1_NON_LEARNED_EPISODIC_SEMANTIC_GRAPH_MEMORY_COMPARATOR_CANDIDATE"
+      ],
+      "claim_bearing_or_diagnostic": "PEER_REVIEWED_ROLE_CONDITIONAL_RESEARCH_CANDIDATE",
+      "source_references": [
+        {
+          "class": "PEER_REVIEWED_PRIMARY_RESEARCH",
+          "url": "https://ijcai.org/proceedings/2025/2"
+        },
+        {
+          "class": "OFFICIAL_IMPLEMENTATION",
+          "url": "https://github.com/AIRI-Institute/AriGraph"
+        }
+      ],
+      "selection_evidence": "NOT_EVALUATED_FOR_FINAL_SELECTION",
+      "configuration": "TO_BE_BOUND_IF_RETAINED",
+      "information_access": "TO_BE_AUDITED_IF_RETAINED",
+      "tuning_and_selection_policy": "TO_BE_AUDITED_IF_RETAINED",
+      "resource_dimensions_requiring_task_9_values": [
+        "TO_BE_IDENTIFIED_IF_RETAINED"
+      ],
+      "evaluator_relationship": "TO_BE_AUDITED_IF_RETAINED",
+      "reproducibility_and_pinning": "NOT_FINAL",
+      "license_or_access_status": "TO_BE_VERIFIED_BEFORE_RETENTION",
+      "known_limitations": [
+        "MATERIAL_ELIGIBLE_IF_INTERACTIVE_TEXTWORLD_AGENT_SETTING_MATCHED",
+        "AriGraph constructs and updates semantic-plus-episodic graph memory while an agent explores interactive text environments and uses that memory for planning and action selection.",
+        "GENERALIZATION_TO_QA_DOES_NOT_ESTABLISH_HETREN_GENERAL_CROSS_ENVIRONMENT_FAMILY_TRANSFER"
+      ],
+      "eligibility_status": "MATERIAL_ELIGIBLE_IF_INTERACTIVE_TEXTWORLD_AGENT_SETTING_MATCHED",
+      "exclusion_reason_if_excluded": null,
+      "provenance": "SECOND_DIRECT_MEMORY_CONFIRMATION_LEGACY_IDENTITY_SWEEP"
+    }
+  ],
+  "prior_candidate_artifacts_rewritten": false,
+  "search_stopping_rule_satisfied": false,
+  "consecutive_no_new_candidate_refinements": 0,
+  "final_selection_performed": false,
+  "concrete_baselines_frozen": false,
+  "task_8_authority_established": false,
+  "scientific_support_established": false
+}
