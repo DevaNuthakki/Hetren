@@ -182,15 +182,13 @@ def test_generated_worlds_carry_no_fault_markers():
 # WorldSpec validation
 
 
-def test_world_spec_rejects_inconsistent_worlds():
+def test_world_spec_rejects_structurally_invalid_worlds():
     spec = generate_world(0)
     first, second = spec.accounts[0], spec.accounts[1]
 
     invalid = [
         lambda: replace(spec, accounts=spec.accounts + (first,)),
         lambda: replace(spec, directory=spec.directory + ((first.customer_ref, first.account_id),)),
-        lambda: replace(spec, directory=((first.customer_ref, "A-0001"),) + spec.directory[1:]),
-        lambda: replace(spec, tickets=(replace(spec.tickets[0], customer_ref="C-0001"),) + spec.tickets[1:]),
         lambda: replace(spec, tickets=(replace(spec.tickets[0], queue_id="Q-MISSING"),) + spec.tickets[1:]),
         lambda: replace(spec, queues=(replace(spec.queues[0], ticket_ids=("T-0001",)),) + spec.queues[1:]),
         lambda: replace(spec, tickets=()),

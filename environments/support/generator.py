@@ -182,7 +182,7 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
             )
         )
 
-    return WorldSpec(
+    spec = WorldSpec(
         tickets=tuple(ticket_records),
         accounts=account_records,
         queues=tuple(queue_records),
@@ -195,6 +195,8 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
             "tickets": tickets,
         },
     )
+    spec.require_clean()
+    return spec
 
 
 __all__ = [

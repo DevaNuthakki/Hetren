@@ -15,6 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
+from environments.support.fixtures import CLEAN_CHECKS
 from packages.contracts import ContractError
 
 
@@ -139,13 +140,18 @@ def answer_pairs() -> frozenset[tuple[str, str]]:
 
 
 def sensitive_tokens() -> frozenset[str]:
-    """Strings that must never appear on an agent- or Hetren-visible surface."""
+    """Strings that must never appear on an agent- or Hetren-visible surface.
+
+    Includes the world clean-check names: each one names what is wrong with
+    a faulty world, so on a Hetren-visible surface it would be an answer.
+    """
     tokens: set[str] = set(EVALUATOR_FIELD_NAMES)
     tokens.update(EXAMPLES)
     tokens.update(FAULTS)
     tokens.update(definition.fault_type for definition in FAULTS.values())
     tokens.update(verdict.value for verdict in SupportVerdict)
     tokens.update(condition.value for condition in EvidenceCondition)
+    tokens.update(CLEAN_CHECKS)
     return frozenset(tokens)
 
 
