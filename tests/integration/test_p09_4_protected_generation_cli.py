@@ -227,9 +227,63 @@ def test_wrong_confirmation_stops_before_protected_identity():
     )
 
 
+PROTECTED_BRANCH = (
+    "portfolio/v1-foundation"
+)
+
+WRONG_HEAD_STOP = (
+    "repository HEAD does not match explicitly expected HEAD"
+)
+
+WRONG_BRANCH_STOP = (
+    "protected generation requires portfolio/v1-foundation"
+)
+
+
+def _current_branch() -> str:
+    return subprocess.run(
+        [
+            "/usr/bin/git",
+            "branch",
+            "--show-current",
+        ],
+        cwd=REPO_ROOT,
+        text=True,
+        capture_output=True,
+        check=True,
+    ).stdout.strip()
+
+
+def _artifact_files() -> frozenset[Path]:
+    artifacts_root = (
+        REPO_ROOT
+        / "artifacts"
+    )
+
+    if not artifacts_root.exists():
+        return frozenset()
+
+    return frozenset(
+        path
+        for path in artifacts_root.rglob("*")
+        if path.is_file()
+    )
+
+
 def test_wrong_expected_head_stops_before_protected_identity():
     cli = (
         _load_cli()
+    )
+
+    # The CLI checks the branch before HEAD, so the exact HEAD error is
+    # only reachable on the protected branch.
+    on_protected_branch = (
+        _current_branch()
+        == PROTECTED_BRANCH
+    )
+
+    artifacts_before = (
+        _artifact_files()
     )
 
     result = subprocess.run(
@@ -259,13 +313,24 @@ def test_wrong_expected_head_stops_before_protected_identity():
         + result.stderr
     )
 
-    assert (
-        "repository HEAD does not match explicitly expected HEAD"
-        in combined
-    )
+    if on_protected_branch:
+        assert (
+            WRONG_HEAD_STOP
+            in combined
+        )
+    else:
+        assert (
+            WRONG_HEAD_STOP in combined
+            or WRONG_BRANCH_STOP in combined
+        )
 
     assert not (
         PROTECTED_ROOT.exists()
+    )
+
+    assert (
+        _artifact_files()
+        == artifacts_before
     )
 
 
