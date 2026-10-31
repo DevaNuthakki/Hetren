@@ -530,3 +530,19 @@ def test_verification_package_does_not_load_the_verifier():
     assert VERIFIER not in reached
     assert EVALUATOR not in reached
     assert runtime_violations(REPO_ROOT, ["packages.verification"]) == []
+
+
+def test_harness_and_recording_scripts_never_import_the_evaluator_directly():
+    modules, graph = _import_graph(REPO_ROOT)
+
+    for module in (
+        "packages.support_examples",
+        "packages.support_examples.harness",
+        "packages.support_examples.scenarios",
+        "scripts.record_recovery_example",
+        "scripts.record_support_captures",
+    ):
+        assert module in modules
+        assert not any(_within(name, EVALUATOR) for name in graph[module]), module
+
+    assert VERIFIER in graph["packages.support_examples.harness"]
