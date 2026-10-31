@@ -534,6 +534,12 @@ class RecordingModel(Model):
             handoffs=handoffs,
             prompt=prompt,
         )
+        if (
+            self.hetren_provenance is RunProvenance.LIVE
+            and getattr(model_settings, "store", None) is not False
+        ):
+            raise ContractError("live recording requires model_settings.store=False")
+
         response = await self._inner.get_response(
             system_instructions, input, model_settings, tools, output_schema,
             handoffs, tracing, previous_response_id=previous_response_id,

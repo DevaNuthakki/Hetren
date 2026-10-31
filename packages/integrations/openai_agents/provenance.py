@@ -91,6 +91,7 @@ class RunRecord:
     provenance: RunProvenance
     source_provenance: RunProvenance | None
     model_id: str
+    model_settings: dict[str, object]
     agent_name: str
     instructions_sha256: str
     task_input: str
@@ -143,6 +144,15 @@ class RunRecord:
         ):
             raise ContractError("stage_records must be a tuple of ToolStageRecord")
 
+        if not isinstance(self.model_settings, dict):
+            raise ContractError("model_settings must be a dict")
+
+        if (
+            self.provenance is RunProvenance.LIVE
+            and self.model_settings.get("store") is not False
+        ):
+            raise ContractError("a live run must record store=False")
+
         if not isinstance(self.sdk_evidence, SdkEvidence):
             raise ContractError("sdk_evidence must be SdkEvidence")
 
@@ -174,6 +184,7 @@ class RunRecord:
                 None if self.source_provenance is None else self.source_provenance.value
             ),
             "model_id": self.model_id,
+            "model_settings": self.model_settings,
             "agent_name": self.agent_name,
             "instructions_sha256": self.instructions_sha256,
             "task_input": self.task_input,

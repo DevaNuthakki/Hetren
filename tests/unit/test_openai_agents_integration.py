@@ -241,7 +241,7 @@ def test_run_records_require_neutral_run_ids(run_id):
 def test_run_record_validation():
     values = dict(
         run_id="run-0001", provenance=RunProvenance.SCRIPTED,
-        source_provenance=None, model_id="m",
+        source_provenance=None, model_id="m", model_settings={},
         agent_name="a", instructions_sha256="0" * 64, task_input="go",
         tool_definitions=(), initial_state_sha256="1" * 64,
         final_state_sha256="1" * 64, stage_records=(),
@@ -258,6 +258,9 @@ def test_run_record_validation():
         {"error": {"type": "X", "message_sha256": "0" * 64}},
         {"status": RunStatus.ERROR, "error": {"type": "X", "message": "free text"}},
         {"sdk_evidence": None},
+        {"model_settings": None},
+        {"provenance": RunProvenance.LIVE, "model_settings": {}},
+        {"provenance": RunProvenance.LIVE, "model_settings": {"store": True}},
         {"source_provenance": RunProvenance.LIVE},
         {"replay_capture_ids": ("capture-0001",)},
         {"provenance": RunProvenance.REPLAY},

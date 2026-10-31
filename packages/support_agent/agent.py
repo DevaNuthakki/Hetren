@@ -7,18 +7,23 @@ evaluation.
 
 Queue IDs are not hardcoded: ``queue_guide`` renders them from the
 environment's queue metadata when the agent is built.
+
+``MODEL_SETTINGS`` sets ``store=False`` so the provider does not retain live
+responses. The settings are part of every replay key and run manifest.
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
 
-from agents import Agent, Model, Tool
+from agents import Agent, Model, ModelSettings, Tool
 
 from environments.support.fixtures import SupportEnvironment
 
 
 AGENT_NAME = "support-agent"
+
+MODEL_SETTINGS = ModelSettings(store=False)
 
 BASE_INSTRUCTIONS = """\
 You are a customer-support routing agent.
@@ -65,12 +70,14 @@ def build_support_agent(
         instructions=support_instructions(environment),
         tools=list(tools),
         model=model,
+        model_settings=MODEL_SETTINGS,
     )
 
 
 __all__ = [
     "AGENT_NAME",
     "BASE_INSTRUCTIONS",
+    "MODEL_SETTINGS",
     "build_support_agent",
     "queue_guide",
     "support_instructions",

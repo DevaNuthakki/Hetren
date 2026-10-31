@@ -344,6 +344,8 @@ def run_manifest(record: object) -> dict[str, object]:
             None if record.source_provenance is None else record.source_provenance.value
         ),
         "model_id": record.model_id,
+        "model_settings": record.model_settings,
+        "store": record.model_settings.get("store"),
         "agent_name": record.agent_name,
         "instructions_sha256": record.instructions_sha256,
         "tool_definitions_sha256": record.tool_definitions_sha256,

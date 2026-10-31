@@ -5,7 +5,9 @@ Preconditions checked before the run:
 - the declared provenance matches the agent's model object;
 - the gateway has recorded nothing yet (one gateway per run);
 - the agent's tools are exactly the gateway's tools, so every tool call is
-  staged by the gateway.
+  staged by the gateway;
+- a LIVE run sets ``model_settings.store=False``, so the provider does not
+  retain responses.
 
 A replay miss, capture version mismatch, or capture conflict is an
 infrastructure failure, not agent behaviour, so ``ReplayMissError``,
@@ -95,6 +97,15 @@ def run_agent(
     if not isinstance(agent.instructions, str):
         raise ContractError("agent instructions must be static text")
 
+    model_settings = {
+        key: value
+        for key, value in agent.model_settings.to_json_dict().items()
+        if value is not None
+    }
+
+    if provenance is RunProvenance.LIVE and model_settings.get("store") is not False:
+        raise ContractError("live runs require model_settings.store=False")
+
     processor = install_local_tracing()
     trace_id = gen_trace_id()
     hooks = EvidenceHooks(clock=clock)
@@ -138,6 +149,7 @@ def run_agent(
         provenance=provenance,
         source_provenance=getattr(agent.model, "hetren_source_provenance", None),
         model_id=model_identity(agent.model),
+        model_settings=model_settings,
         agent_name=agent.name,
         instructions_sha256=canonical_sha256({"instructions": agent.instructions}),
         task_input=task_input,
