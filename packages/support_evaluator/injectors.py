@@ -5,9 +5,11 @@ targets, and returns the changed world plus an evaluator-side ``CaseTruth``.
 Injected worlds are structurally valid; fault worlds are not clean, and
 look-alikes may or may not be. Only the evaluator side imports this module.
 
-Behaviour-dependent kinds (F3, F4, F7 and the transient look-alike) change
-the world in a way that only some agents mishandle; whether a given run went
-wrong is decided from its outcome, not here.
+Behaviour-dependent kinds (F3, F4, F7 and every look-alike) change the world
+in a way that only some agents mishandle; whether a given run went wrong is
+decided from its outcome, not here. ``remedy_if_wrong`` is therefore never
+``no_intervention``: a look-alike run that went wrong (for example an agent
+that stopped on a legitimate merge) needs its outcome fixed.
 """
 
 from __future__ import annotations
@@ -261,7 +263,7 @@ def mishandled_tool_error(world: WorldSpec, rng: random.Random, variant: str) ->
 def transient_error_retried(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
     return _error_case(
         world, rng, kind="transient_error_retried", variant=variant,
-        persistent=False, remedy_if_wrong="no_intervention",
+        persistent=False, remedy_if_wrong="rerun",
     )
 
 
@@ -290,10 +292,8 @@ def misleading_ticket_text(world: WorldSpec, rng: random.Random, variant: str) -
         case_kind="misleading_ticket_text", case_variant=variant,
         target_ticket_id=ticket.ticket_id,
         expected_queue_id=expected, expected_account_id=target.account_id,
-        remedy_if_wrong="no_intervention" if variant == "claim_true" else "reroute",
-        remedy_if_wrong_arguments=() if variant == "claim_true" else (
-            {"ticket_id": ticket.ticket_id, "queue_id": expected},
-        ),
+        remedy_if_wrong="reroute",
+        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": expected},),
         world_changes=({
             "entity": "ticket_text", "ticket_id": ticket.ticket_id,
             "claimed_tier": claimed, "true_tier": target.tier,
@@ -450,7 +450,8 @@ def merged_account(world: WorldSpec, rng: random.Random, variant: str) -> Inject
         case_kind="merged_account", case_variant=variant,
         target_ticket_id=ticket.ticket_id,
         expected_queue_id=policy[target.tier], expected_account_id=target.account_id,
-        remedy_if_wrong="no_intervention",
+        remedy_if_wrong="reroute",
+        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": policy[target.tier]},),
         world_changes=({
             "entity": "merge", "account_id": target.account_id,
             "merged_customer_ref": old_ref, "ticket_id": ticket.ticket_id,
@@ -482,7 +483,8 @@ def recent_tier_change(world: WorldSpec, rng: random.Random, variant: str) -> In
         case_kind="recent_tier_change", case_variant=variant,
         target_ticket_id=ticket.ticket_id,
         expected_queue_id=policy[new_tier], expected_account_id=target.account_id,
-        remedy_if_wrong="no_intervention",
+        remedy_if_wrong="reroute",
+        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": policy[new_tier]},),
         world_changes=({
             "entity": "account", "account_id": target.account_id,
             "field": "tier", "before": target.tier, "after": new_tier,

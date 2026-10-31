@@ -68,8 +68,8 @@ class CaseTruth:
         if self.case_kind not in CASE_KINDS:
             raise ContractError("unknown case_kind")
 
-        if self.remedy_if_wrong not in REMEDIES:
-            raise ContractError("unknown remedy_if_wrong")
+        if self.remedy_if_wrong not in REMEDIES or self.remedy_if_wrong == "no_intervention":
+            raise ContractError("remedy_if_wrong must be a remedy for a wrong outcome")
 
         if self.target_ticket_id in self.regression_ticket_ids:
             raise ContractError("the target ticket cannot be a regression ticket")

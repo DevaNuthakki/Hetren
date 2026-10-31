@@ -7,11 +7,12 @@ from .agent import (
     support_instructions,
     task_message,
 )
-from .scripted_model import ScriptedSupportModel
+from .scripted_model import BEHAVIOURS, ScriptedSupportModel
 
 
 __all__ = [
     "AGENT_NAME",
+    "BEHAVIOURS",
     "ScriptedSupportModel",
     "build_support_agent",
     "queue_guide",
