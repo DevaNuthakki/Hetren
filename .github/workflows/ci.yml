@@ -6,6 +6,7 @@ on:
       - main
       - 'mvp/**'
       - 'portfolio/**'
+      - 'milestone-*/**'
   pull_request:
     branches:
       - main
@@ -29,6 +30,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v7
