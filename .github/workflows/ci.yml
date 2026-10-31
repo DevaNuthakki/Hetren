@@ -25,6 +25,11 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
 
+    env:
+      # Fixed location for tiktoken's vocabulary file, restored from the cache
+      # so CI does not download it on every run.
+      TIKTOKEN_CACHE_DIR: ${{ github.workspace }}/.cache/tiktoken
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v5
@@ -37,6 +42,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Cache tiktoken vocabulary
+        uses: actions/cache@v6
+        with:
+          path: .cache/tiktoken
+          key: tiktoken-0.14.0-o200k_base
+
       - name: Install CI Python dependencies
         shell: bash
         run: |
@@ -44,7 +55,7 @@ jobs:
 
           python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
-          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'openai', 'openai-agents')]"
+          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; assert version('tiktoken') == '0.14.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'openai', 'openai-agents', 'tiktoken')]"
 
       - name: Verify required repository boundaries
         shell: bash

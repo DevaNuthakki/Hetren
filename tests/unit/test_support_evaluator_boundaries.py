@@ -45,6 +45,7 @@ EVALUATOR_IMPORTERS = frozenset({VERIFIER})
 
 RESTRICTED_PREFIXES = (
     "packages.action_space",
+    "packages.hetren_evidence",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",
@@ -555,6 +556,7 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
         "packages.action_space.actions",
         "packages.action_space.catalog",
         "packages.action_space.execution",
+        "packages.hetren_evidence.compact",
         "environments.support.maintenance",
         "environments.support.generator",
     }
