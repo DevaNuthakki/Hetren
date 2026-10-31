@@ -1,0 +1,46 @@
+{
+  "capture_id": "capture-0004",
+  "component_digests": {
+    "handoffs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "input_items": "38bb128fd6efdeca01f715f9c256a4323db3edb83e6d0790cb584c9ccf03834f",
+    "model": "a44e58801a8cd438ce30d3ef277ba82552b91e2224db52567ee4054af17d7356",
+    "output_schema": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "prior_observations": "3d86ebcd9cbbea6b7fca791d58a736ceebb1f3367ef1d25d5aa368e0b011b27e",
+    "prompt": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "system_instructions": "46b1136c4ed8f64a23ec67705be659c277ae2f94f217ca3cbc3e4d804ea78bb6",
+    "tool_definitions": "eb84872b5065d8e0fde140c3c8c11ebd32978617db1af992f1e1494740dceac8"
+  },
+  "format": "hetren-model-capture",
+  "format_version": 1,
+  "key_sha256": "c89d1039e7b2477ad5d8609a243fd48cc4b9c25e3075f2c0e640b66cbcd87829",
+  "response": {
+    "output": [
+      {
+        "content": [
+          {
+            "annotations": [],
+            "logprobs": [],
+            "text": "Ticket T-1003 has been routed to the Q-PRIORITY queue for enterprise-tier accounts.",
+            "type": "output_text"
+          }
+        ],
+        "id": "msg_03f6a39f4845f397016ae65a51013087d183e9c7646deefd8f",
+        "role": "assistant",
+        "status": "completed",
+        "type": "message"
+      }
+    ],
+    "usage": {
+      "input_tokens": 578,
+      "output_tokens": 23,
+      "requests": 1,
+      "total_tokens": 601
+    }
+  },
+  "source_model_id": "gpt-4.1-mini-2025-04-14",
+  "source_provenance": "live",
+  "versions": {
+    "openai": "3.42.0",
+    "openai-agents": "0.24.0"
+  }
+}

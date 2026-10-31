@@ -1,0 +1,40 @@
+{
+  "capture_id": "capture-0002",
+  "component_digests": {
+    "handoffs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "input_items": "7182b9c628f011b669cdd407742d4fd1582ffe5be1863e54fce56e77edaf0c70",
+    "model": "a44e58801a8cd438ce30d3ef277ba82552b91e2224db52567ee4054af17d7356",
+    "output_schema": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "prior_observations": "d789187bec6a8c3b32a0e2496e0590a24bf18ffd7bf22d5b8757c0b34c89d41d",
+    "prompt": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "system_instructions": "46b1136c4ed8f64a23ec67705be659c277ae2f94f217ca3cbc3e4d804ea78bb6",
+    "tool_definitions": "eb84872b5065d8e0fde140c3c8c11ebd32978617db1af992f1e1494740dceac8"
+  },
+  "format": "hetren-model-capture",
+  "format_version": 1,
+  "key_sha256": "5a1d2d322fcfcd5daa3e4c05ae18691f71e5798b39814eb61ec3a99b7c665b7c",
+  "response": {
+    "output": [
+      {
+        "arguments": "{\"account_id\":\"A-2002\"}",
+        "call_id": "call_n83Jh5jMJSB85xcbJxkSXMC1",
+        "id": "fc_07dbf68e22013921016ae65a52839487d19e0f609b5b24c9f5",
+        "name": "lookup_account",
+        "status": "completed",
+        "type": "function_call"
+      }
+    ],
+    "usage": {
+      "input_tokens": 425,
+      "output_tokens": 19,
+      "requests": 1,
+      "total_tokens": 444
+    }
+  },
+  "source_model_id": "gpt-4.1-mini-2025-04-14",
+  "source_provenance": "live",
+  "versions": {
+    "openai": "3.42.0",
+    "openai-agents": "0.24.0"
+  }
+}

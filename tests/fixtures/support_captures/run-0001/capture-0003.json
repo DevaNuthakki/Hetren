@@ -1,0 +1,40 @@
+{
+  "capture_id": "capture-0003",
+  "component_digests": {
+    "handoffs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "input_items": "9ba95f5c0e214399848b69f6fe8c70854716b1ebb4e0b370baef264badc6c8f1",
+    "model": "a44e58801a8cd438ce30d3ef277ba82552b91e2224db52567ee4054af17d7356",
+    "output_schema": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "prior_observations": "7ad705705e1d4a7e07ea95a38c2e5f4f04b581abd1d39cfc317ab3bd5d5d0e73",
+    "prompt": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "system_instructions": "46b1136c4ed8f64a23ec67705be659c277ae2f94f217ca3cbc3e4d804ea78bb6",
+    "tool_definitions": "eb84872b5065d8e0fde140c3c8c11ebd32978617db1af992f1e1494740dceac8"
+  },
+  "format": "hetren-model-capture",
+  "format_version": 1,
+  "key_sha256": "ab99b9ca396fc68a2b1ce318f2a0b49573309d6f598f330252e9b4e9982440eb",
+  "response": {
+    "output": [
+      {
+        "arguments": "{\"queue_id\":\"Q-PRIORITY\",\"ticket_id\":\"T-1003\"}",
+        "call_id": "call_SAsdiFKw09ywylMmZCF3eJON",
+        "id": "fc_022c8b0689c19350016ae65756380c87d19c5892b7f381cf72",
+        "name": "route_ticket",
+        "status": "completed",
+        "type": "function_call"
+      }
+    ],
+    "usage": {
+      "input_tokens": 497,
+      "output_tokens": 28,
+      "requests": 1,
+      "total_tokens": 525
+    }
+  },
+  "source_model_id": "gpt-4.1-mini-2025-04-14",
+  "source_provenance": "live",
+  "versions": {
+    "openai": "3.42.0",
+    "openai-agents": "0.24.0"
+  }
+}

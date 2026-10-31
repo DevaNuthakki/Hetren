@@ -1,0 +1,46 @@
+{
+  "capture_id": "capture-0004",
+  "component_digests": {
+    "handoffs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "input_items": "0ea2f956fe8497962036e2e3ef113704dafee6010e5a33b99596766402022e98",
+    "model": "a44e58801a8cd438ce30d3ef277ba82552b91e2224db52567ee4054af17d7356",
+    "output_schema": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "prior_observations": "48820892d5661175f881e9c0bf3d82b5f26d29b479dece3b6842f2f9638f88b7",
+    "prompt": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+    "system_instructions": "46b1136c4ed8f64a23ec67705be659c277ae2f94f217ca3cbc3e4d804ea78bb6",
+    "tool_definitions": "eb84872b5065d8e0fde140c3c8c11ebd32978617db1af992f1e1494740dceac8"
+  },
+  "format": "hetren-model-capture",
+  "format_version": 1,
+  "key_sha256": "5b346585eef25502670f59761cbdb79a3ab540fe081ead0c73190368fc74cdae",
+  "response": {
+    "output": [
+      {
+        "content": [
+          {
+            "annotations": [],
+            "logprobs": [],
+            "text": "Ticket T-1002 has been assigned to the Q-GENERAL queue for standard-tier accounts.",
+            "type": "output_text"
+          }
+        ],
+        "id": "msg_07dbf68e22013921016ae65a53ff1887d18d05d7af493b8b59",
+        "role": "assistant",
+        "status": "completed",
+        "type": "message"
+      }
+    ],
+    "usage": {
+      "input_tokens": 565,
+      "output_tokens": 22,
+      "requests": 1,
+      "total_tokens": 587
+    }
+  },
+  "source_model_id": "gpt-4.1-mini-2025-04-14",
+  "source_provenance": "live",
+  "versions": {
+    "openai": "3.42.0",
+    "openai-agents": "0.24.0"
+  }
+}

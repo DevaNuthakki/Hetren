@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - 'mvp/**'
+      - 'portfolio/**'
+      - 'milestone-*/**'
   pull_request:
     branches:
       - main
@@ -28,6 +30,7 @@ jobs:
         uses: actions/checkout@v5
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -39,9 +42,9 @@ jobs:
         run: |
           set -euo pipefail
 
-          python -m pip install --disable-pip-version-check "jsonschema==4.26.0"
+          python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
-          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; print('jsonschema', version('jsonschema'))"
+          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'openai', 'openai-agents')]"
 
       - name: Verify required repository boundaries
         shell: bash
@@ -233,3 +236,25 @@ jobs:
           sha256sum -c docs/decisions/qualification/evidence/0008-set-e-first-run-evidence.sha256
 
           sha256sum -c docs/decisions/qualification/evidence/0008-set-e-remediation-2-regression-evidence.sha256
+
+
+      - name: Run modern portfolio tests
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pytest -q
+
+      - name: Verify deterministic portfolio demonstration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m packages.portfolio_demo
+
+          python -m packages.portfolio_demo --format json > /tmp/hetren-demo-1.json
+          python -m packages.portfolio_demo --format json > /tmp/hetren-demo-2.json
+
+          cmp -s /tmp/hetren-demo-1.json /tmp/hetren-demo-2.json
+
+          python -c "import json; from pathlib import Path; report=json.loads(Path('/tmp/hetren-demo-1.json').read_text(encoding='utf-8')); expected='e93f258ca3428f8c262d529ae24f2cc8370f72a7e8073ebea5833a9cafc97ffe'; assert report['report_sha256'] == expected; print('portfolio demo report_sha256', report['report_sha256'])"
