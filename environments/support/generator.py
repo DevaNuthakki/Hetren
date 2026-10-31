@@ -91,6 +91,14 @@ _ISSUES = (
     ("Cannot remove a user", "Removing a former employee returns an error."),
 )
 
+# Customer claims about their own tier. Shared by every case kind (and later
+# by healthy tickets), so a claim by itself never signals a problem.
+CLAIM_TEXTS = (
+    "We are on the {tier} plan, please handle this accordingly.",
+    "As a {tier}-tier customer we expect a fast response.",
+    "Our account is {tier}; please route this to the right team.",
+)
+
 MAX_ACCOUNTS = 60
 MAX_TICKETS = 200
 
@@ -200,6 +208,7 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
 
 
 __all__ = [
+    "CLAIM_TEXTS",
     "GENERATOR_NAME",
     "GENERATOR_VERSION",
     "MAX_ACCOUNTS",

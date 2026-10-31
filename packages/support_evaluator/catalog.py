@@ -17,6 +17,7 @@ from enum import StrEnum
 
 from environments.support.fixtures import CLEAN_CHECKS
 from packages.contracts import ContractError
+from packages.support_evaluator.cases import CASE_KINDS
 
 
 class SupportVerdict(StrEnum):
@@ -109,6 +110,13 @@ EVALUATOR_FIELD_NAMES = frozenset(
         "regression_expectations",
         "expected_verdict",
         "evaluator_verdict",
+        "case_kind",
+        "case_variant",
+        "family_id",
+        "remedy_if_wrong",
+        "remedy_if_wrong_arguments",
+        "world_changes",
+        "regression_ticket_ids",
     }
 )
 
@@ -152,6 +160,7 @@ def sensitive_tokens() -> frozenset[str]:
     tokens.update(verdict.value for verdict in SupportVerdict)
     tokens.update(condition.value for condition in EvidenceCondition)
     tokens.update(CLEAN_CHECKS)
+    tokens.update(CASE_KINDS)
     return frozenset(tokens)
 
 
