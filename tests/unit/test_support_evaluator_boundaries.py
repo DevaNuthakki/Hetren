@@ -495,3 +495,19 @@ def test_fixture_data_is_exempt_and_lookalikes_are_not_flagged(clean_tree):
     _plant(clean_tree, "packages/support_agent/agent.py", 'OTHER = ["T-10031", "XT-1003"]\n')
 
     assert literal_violations(clean_tree) == []
+
+
+def test_adapter_modules_are_covered_by_every_boundary_check():
+    expected = {
+        "packages.integrations.openai_agents.evidence",
+        "packages.integrations.openai_agents.hooks",
+        "packages.integrations.openai_agents.provenance",
+        "packages.integrations.openai_agents.runner",
+        "packages.integrations.openai_agents.tools",
+        "packages.integrations.openai_agents.tracing",
+        "packages.integrations.run_ids",
+        "packages.support_agent.agent",
+        "packages.support_agent.scripted_model",
+    }
+
+    assert expected <= set(restricted_modules(REPO_ROOT))

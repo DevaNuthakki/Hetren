@@ -20,18 +20,26 @@ from packages.action_gateway import (
     StageStatus,
     ToolGateway,
     ToolInvocationResult,
+    ToolStageRecord,
 )
 
 
-def tool_result_text(result: ToolInvocationResult) -> str:
-    if result.status is StageStatus.SUCCEEDED:
-        body: dict[str, object] = {"observation": result.observation}
-    elif result.status is StageStatus.FAILED:
-        body = {"error": result.error}
+def result_text_from_records(records: tuple[ToolStageRecord, ...]) -> str:
+    """The exact text the model receives for one invocation's records."""
+    last = records[-1]
+
+    if last.status is StageStatus.SUCCEEDED:
+        body: dict[str, object] = {"observation": last.payload["observation"]}
+    elif last.status is StageStatus.FAILED:
+        body = {"error": last.payload["error"]}
     else:
-        body = {"denied": result.records[-1].payload["reason"]}
+        body = {"denied": last.payload["reason"]}
 
     return json.dumps(body, sort_keys=True, ensure_ascii=False)
+
+
+def tool_result_text(result: ToolInvocationResult) -> str:
+    return result_text_from_records(result.records)
 
 
 def gateway_function_tools(gateway: ToolGateway) -> list[FunctionTool]:
@@ -63,5 +71,6 @@ def gateway_function_tools(gateway: ToolGateway) -> list[FunctionTool]:
 
 __all__ = [
     "gateway_function_tools",
+    "result_text_from_records",
     "tool_result_text",
 ]

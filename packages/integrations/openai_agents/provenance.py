@@ -12,7 +12,8 @@ recorded as live, or the reverse.
 
 Run records are what Hetren reads. The agent's own decisions are kept in a
 separate ``agent_output`` section so leakage scans can apply the right rules
-to each part.
+to each part. Run errors keep the exception type and a digest of its
+message: SDK messages are free text and may name tools and values.
 """
 
 from __future__ import annotations
@@ -29,6 +30,12 @@ from packages.contracts import (
     ContractError,
     canonical_sha256,
 )
+from packages.core.hetren_diagnosis.contracts import AgentTrace
+from packages.integrations.openai_agents.evidence import (
+    SdkEvidence,
+    build_run_trace,
+)
+from packages.integrations.openai_agents.hooks import text_sha256
 
 
 NEUTRAL_RUN_ID = re.compile(r"run-[0-9]{4}")
@@ -82,7 +89,10 @@ class RunRecord:
     instructions_sha256: str
     task_input: str
     tool_definitions: tuple[dict[str, object], ...]
+    initial_state_sha256: str
+    final_state_sha256: str
     stage_records: tuple[ToolStageRecord, ...]
+    sdk_evidence: SdkEvidence
     status: RunStatus
     error: dict[str, str] | None
     final_message: str | None
@@ -112,8 +122,14 @@ class RunRecord:
         ):
             raise ContractError("stage_records must be a tuple of ToolStageRecord")
 
+        if not isinstance(self.sdk_evidence, SdkEvidence):
+            raise ContractError("sdk_evidence must be SdkEvidence")
+
         if (self.status is RunStatus.ERROR) != (self.error is not None):
             raise ContractError("error is required exactly when status is error")
+
+        if self.error is not None and set(self.error) != {"type", "message_sha256"}:
+            raise ContractError("error must hold only type and message_sha256")
 
         if not isinstance(self.limitations, tuple) or not self.limitations:
             raise ContractError("limitations must be a non-empty tuple")
@@ -139,10 +155,13 @@ class RunRecord:
             "task_input": self.task_input,
             "tool_definitions": list(self.tool_definitions),
             "tool_definitions_sha256": self.tool_definitions_sha256,
+            "initial_state_sha256": self.initial_state_sha256,
+            "final_state_sha256": self.final_state_sha256,
             "stage_records": [
                 record.canonical_payload() for record in self.stage_records
             ],
             "stage_records_sha256": self.stage_records_sha256,
+            "sdk_evidence": self.sdk_evidence.canonical_payload(),
             "status": self.status.value,
             "error": self.error,
             "limitations": list(self.limitations),
@@ -150,6 +169,26 @@ class RunRecord:
 
     def agent_output_payload(self) -> dict[str, object]:
         return {"final_message": self.final_message}
+
+    def timing_payload(self) -> dict[str, object]:
+        """Wall-clock context; never part of any hash."""
+        return self.sdk_evidence.timing_payload()
+
+    def run_trace(self) -> AgentTrace:
+        return build_run_trace(
+            run_id=self.run_id,
+            stage_records=self.stage_records,
+            hook_events=self.sdk_evidence.hook_events,
+            initial_state_sha256=self.initial_state_sha256,
+            final_state_sha256=self.final_state_sha256,
+            task_input_sha256=text_sha256(self.task_input),
+            final_output_sha256=(
+                canonical_sha256({})
+                if self.final_message is None
+                else text_sha256(self.final_message)
+            ),
+            status_code=self.status.value,
+        )
 
     def canonical_payload(self) -> dict[str, object]:
         return {

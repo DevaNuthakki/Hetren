@@ -9,6 +9,7 @@ from .gateway import (
     GatedTool,
     ToolGateway,
     ToolInvocationResult,
+    raw_arguments_object,
 )
 from .stages import (
     StageStatus,
@@ -33,6 +34,7 @@ __all__ = [
     "ToolStage",
     "ToolStageRecord",
     "json_object",
+    "raw_arguments_object",
     "stage_records_sha256",
     "to_agent_trace",
 ]

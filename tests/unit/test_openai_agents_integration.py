@@ -18,6 +18,7 @@ from packages.integrations.openai_agents import (
     RunProvenance,
     RunRecord,
     RunStatus,
+    SdkEvidence,
     gateway_function_tools,
     model_identity,
     model_provenance,
@@ -197,7 +198,11 @@ def test_runner_records_model_errors_as_evidence():
     )
 
     assert record.status is RunStatus.ERROR
-    assert record.error == {"type": "RuntimeError", "message": "model unavailable"}
+    assert record.error == {
+        "type": "RuntimeError",
+        "message_sha256": canonical_sha256({"text": "model unavailable"}),
+    }
+    assert "model unavailable" not in json.dumps(record.canonical_payload())
     assert record.final_message is None
 
 
@@ -237,15 +242,20 @@ def test_run_record_validation():
     values = dict(
         run_id="run-0001", provenance=RunProvenance.SCRIPTED, model_id="m",
         agent_name="a", instructions_sha256="0" * 64, task_input="go",
-        tool_definitions=(), stage_records=(), status=RunStatus.COMPLETED,
-        error=None, final_message=None, limitations=("limit",),
+        tool_definitions=(), initial_state_sha256="1" * 64,
+        final_state_sha256="1" * 64, stage_records=(),
+        sdk_evidence=SdkEvidence(hook_events=(), spans=(), discrepancies=()),
+        status=RunStatus.COMPLETED, error=None, final_message=None,
+        limitations=("limit",),
     )
     RunRecord(**values)
 
     for overrides in (
         {"provenance": "scripted"},
         {"status": RunStatus.ERROR},
-        {"error": {"type": "X", "message": "y"}},
+        {"error": {"type": "X", "message_sha256": "0" * 64}},
+        {"status": RunStatus.ERROR, "error": {"type": "X", "message": "free text"}},
+        {"sdk_evidence": None},
         {"limitations": ()},
         {"stage_records": ({"not": "a record"},)},
         {"task_input": " "},

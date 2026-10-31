@@ -7,19 +7,33 @@ Preconditions checked before the run:
 - the agent's tools are exactly the gateway's tools, so every tool call is
   staged by the gateway.
 
-SDK tracing is disabled here. The local trace processor that maps SDK spans
-into Hetren evidence without exporting anything is added separately.
+Tracing goes only to the local processor (``install_local_tracing``) with
+``trace_include_sensitive_data=False``; see ``tracing.py`` for why. Hook
+events and spans are reconciled against the gateway's stage records and
+any disagreement is stored in the record.
 """
 
 from __future__ import annotations
 
-from agents import Agent, RunConfig, Runner
+from collections.abc import Callable
+from datetime import datetime, timezone
+
+from agents import Agent, RunConfig, Runner, gen_trace_id
 from agents.exceptions import MaxTurnsExceeded
 
 from packages.action_gateway import ToolGateway
 from packages.contracts import (
     ContractError,
     canonical_sha256,
+)
+from packages.integrations.openai_agents.evidence import (
+    SENSITIVE_DATA_CAPTURE,
+    SdkEvidence,
+    reconcile,
+)
+from packages.integrations.openai_agents.hooks import (
+    EvidenceHooks,
+    text_sha256,
 )
 from packages.integrations.openai_agents.provenance import (
     RunProvenance,
@@ -28,12 +42,19 @@ from packages.integrations.openai_agents.provenance import (
     model_identity,
     model_provenance,
 )
+from packages.integrations.openai_agents.tracing import install_local_tracing
 
 
 DEFAULT_LIMITATIONS = (
     "the run record does not establish that the agent's decisions are correct",
     "tool observations describe the environment as the gateway saw it",
 )
+
+WORKFLOW_NAME = "hetren-agent-run"
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
 
 def run_agent(
@@ -45,6 +66,7 @@ def run_agent(
     provenance: RunProvenance,
     max_turns: int = 10,
     limitations: tuple[str, ...] = DEFAULT_LIMITATIONS,
+    clock: Callable[[], str] | None = _utc_now,
 ) -> RunRecord:
     if not isinstance(provenance, RunProvenance):
         raise ContractError("provenance must be a RunProvenance")
@@ -63,25 +85,41 @@ def run_agent(
     if not isinstance(agent.instructions, str):
         raise ContractError("agent instructions must be static text")
 
+    processor = install_local_tracing()
+    trace_id = gen_trace_id()
+    hooks = EvidenceHooks(clock=clock)
+    initial_state = gateway.current_state_sha256()
+
     status = RunStatus.COMPLETED
     error: dict[str, str] | None = None
     final_message: str | None = None
+
+    processor.begin(trace_id)
 
     try:
         result = Runner.run_sync(
             agent,
             task_input,
             max_turns=max_turns,
-            run_config=RunConfig(tracing_disabled=True),
+            hooks=hooks,
+            run_config=RunConfig(
+                trace_id=trace_id,
+                workflow_name=WORKFLOW_NAME,
+                trace_include_sensitive_data=SENSITIVE_DATA_CAPTURE,
+            ),
         )
     except MaxTurnsExceeded:
         status = RunStatus.MAX_TURNS_EXCEEDED
     except Exception as exc:
         status = RunStatus.ERROR
-        error = {"type": type(exc).__name__, "message": str(exc)}
+        error = {"type": type(exc).__name__, "message_sha256": text_sha256(str(exc))}
     else:
         if result.final_output is not None:
             final_message = str(result.final_output)
+    finally:
+        spans = processor.finish(trace_id).records()
+
+    stage_records = gateway.records
 
     return RunRecord(
         run_id=run_id,
@@ -91,7 +129,14 @@ def run_agent(
         instructions_sha256=canonical_sha256({"instructions": agent.instructions}),
         task_input=task_input,
         tool_definitions=gateway.tool_definitions(),
-        stage_records=gateway.records,
+        initial_state_sha256=initial_state,
+        final_state_sha256=gateway.current_state_sha256(),
+        stage_records=stage_records,
+        sdk_evidence=SdkEvidence(
+            hook_events=hooks.events,
+            spans=spans,
+            discrepancies=reconcile(stage_records, hooks.events, spans),
+        ),
         status=status,
         error=error,
         final_message=final_message,
@@ -101,5 +146,6 @@ def run_agent(
 
 __all__ = [
     "DEFAULT_LIMITATIONS",
+    "WORKFLOW_NAME",
     "run_agent",
 ]

@@ -50,6 +50,30 @@ from packages.action_gateway.stages import (
 _GATEWAY_POLICY_ID = "gateway"
 
 
+def raw_arguments_object(raw_arguments: str) -> tuple[dict[str, object], bool]:
+    """Arguments object for raw model text, and whether it was well-formed.
+
+    Well-formed text is a JSON object (empty text counts as ``{}``); anything
+    else is preserved verbatim as ``{"raw_arguments": text}``. Hashing this
+    object gives the same ``arguments_sha256`` the gateway records.
+    """
+    if not isinstance(raw_arguments, str):
+        raise ContractError("raw_arguments must be text")
+
+    try:
+        parsed = json.loads(raw_arguments) if raw_arguments.strip() else {}
+    except json.JSONDecodeError:
+        parsed = None
+
+    if isinstance(parsed, dict):
+        try:
+            return json_object(parsed, "arguments"), True
+        except ContractError:
+            pass
+
+    return {"raw_arguments": raw_arguments}, False
+
+
 @dataclass(frozen=True)
 class GatedTool:
     name: str
@@ -125,6 +149,9 @@ class ToolGateway:
     def records(self) -> tuple[ToolStageRecord, ...]:
         return tuple(self._records)
 
+    def current_state_sha256(self) -> str:
+        return self._state_sha256()
+
     def tool_names(self) -> tuple[str, ...]:
         return tuple(sorted(self._tools))
 
@@ -197,24 +224,12 @@ class ToolGateway:
         raw_arguments: str,
     ) -> ToolInvocationResult:
         """Invoke from unparsed argument text, recording malformed input."""
-        if not isinstance(raw_arguments, str):
-            raise ContractError("raw_arguments must be text")
-
-        try:
-            parsed = json.loads(raw_arguments) if raw_arguments.strip() else {}
-        except json.JSONDecodeError:
-            parsed = None
-
-        if isinstance(parsed, dict):
-            try:
-                return self.invoke(tool_name, parsed)
-            except ContractError:
-                pass
+        arguments, well_formed = raw_arguments_object(raw_arguments)
 
         return self._invoke(
             tool_name,
-            {"raw_arguments": raw_arguments},
-            forced_denial="arguments_not_json",
+            arguments,
+            forced_denial=None if well_formed else "arguments_not_json",
         )
 
     def invoke(
@@ -330,4 +345,5 @@ __all__ = [
     "GatedTool",
     "ToolGateway",
     "ToolInvocationResult",
+    "raw_arguments_object",
 ]
