@@ -34,9 +34,11 @@ ELIGIBLE != deployment approval
 
 ## Quick start
 
-Use Python 3.12 and install the development dependencies:
+Use Python 3.12 (the version CI uses) in a virtual environment and install the pinned development dependencies (`jsonschema==4.26.0`, `pytest==7.4.4`):
 
 ```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements-dev.txt
 ```
 
@@ -79,7 +81,7 @@ Historical evidence snapshots under `docs/decisions/...` are preservation artifa
 
 ## Reproducibility
 
-The committed repository reproduces the portfolio demonstration without the developer historical untracked Task 8/9 working material.
+The committed repository reproduces the portfolio demonstration without the historical Task 8/9 working material, which is preserved on the `archive/sept-2026-evidence` branch.
 
 The deterministic JSON report contains provenance hashes for diagnosis, repair, candidate identity, execution, evaluation, verification, policy review, and the final report.
 
