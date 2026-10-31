@@ -34,6 +34,12 @@ from packages.support_evaluator import (
     RunRegistry,
     SupportVerdict,
 )
+from packages.support_evaluator.recordings import (
+    RECORDED_RUNS,
+    RECORDING_SOURCE_MODEL_ID,
+    example_run_ids,
+    first_run_number,
+)
 from packages.support_recovery import (
     ApplicationStatus,
     DiagnosisOutcome,
@@ -42,6 +48,32 @@ from packages.support_recovery import (
 
 
 RegressionRunner = Callable[[str], RunRecord]
+
+
+@dataclass(frozen=True)
+class ReplayPlanEntry:
+    """Where an example's committed recording starts, for offline replay."""
+
+    example_name: str
+    first_run_number: int
+    run_ids: tuple[str, ...]
+    source_model_id: str
+
+
+def recorded_replay_plan() -> tuple[ReplayPlanEntry, ...]:
+    """Read-only view of the evaluator's recordings map for the harness."""
+    return tuple(
+        ReplayPlanEntry(
+            example_name=example_name,
+            first_run_number=first_run_number(example_name),
+            run_ids=example_run_ids(example_name),
+            source_model_id=RECORDING_SOURCE_MODEL_ID,
+        )
+        for example_name in sorted(
+            {run.example_name for run in RECORDED_RUNS.values()},
+            key=lambda name: first_run_number(name),
+        )
+    )
 
 
 @dataclass(frozen=True)
@@ -188,7 +220,9 @@ class SupportVerifier:
 
 __all__ = [
     "RegressionRunner",
+    "ReplayPlanEntry",
     "SupportVerification",
     "SupportVerifier",
     "VerificationCheck",
+    "recorded_replay_plan",
 ]
