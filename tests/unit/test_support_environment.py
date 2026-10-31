@@ -1,4 +1,5 @@
 from dataclasses import FrozenInstanceError
+from functools import partial
 import json
 
 import pytest
@@ -16,6 +17,14 @@ from environments.support.tools import (
     lookup_account,
     read_ticket,
     route_ticket,
+)
+from packages.action_gateway import (
+    AllowAllPolicy,
+    AllowListPolicy,
+    GatedTool,
+    StageStatus,
+    ToolGateway,
+    to_agent_trace,
 )
 from packages.contracts import ContractError
 
@@ -43,6 +52,39 @@ def _observations(environment: SupportEnvironment) -> list[dict[str, object]]:
         )
 
     return observations
+
+
+def _support_gateway(environment: SupportEnvironment, policy=None) -> ToolGateway:
+    return ToolGateway(
+        tools=[
+            GatedTool(
+                name,
+                partial(function, environment),
+                SUPPORT_TOOL_SCHEMAS[name],
+                SUPPORT_TOOL_DESCRIPTIONS[name],
+            )
+            for name, function in SUPPORT_TOOLS.items()
+        ],
+        policy=policy or AllowAllPolicy(),
+        state_sha256=environment.state_sha256,
+    )
+
+
+def _gateway_session(environment: SupportEnvironment) -> ToolGateway:
+    """Allowed, denied and failed calls through the gateway."""
+    gateway = _support_gateway(
+        environment, policy=AllowListPolicy({"read_ticket", "lookup_account"})
+    )
+
+    for ticket_id in environment.ticket_ids():
+        ticket = gateway.invoke("read_ticket", {"ticket_id": ticket_id})
+        gateway.invoke(
+            "lookup_account", {"account_id": ticket.observation["account_id"]}
+        )
+
+    gateway.invoke("read_ticket", {"ticket_id": "T-9999"})
+    gateway.invoke("route_ticket", {"ticket_id": "T-1001", "queue_id": "Q-GENERAL"})
+    return gateway
 
 
 # Fixtures and reset
@@ -289,6 +331,9 @@ def test_fault_leaves_no_marker_in_environment_or_observations():
 
     assert set(vars(environment)) == attributes_before
 
+    gateway = _gateway_session(environment)
+    trace = to_agent_trace("run-0001", gateway.records)
+
     surfaces = json.dumps(
         {
             "snapshot": environment.snapshot(),
@@ -296,8 +341,21 @@ def test_fault_leaves_no_marker_in_environment_or_observations():
             "route": route_ticket(
                 environment, ticket_id="T-1001", queue_id="Q-GENERAL"
             ),
+            "stage_records": [
+                record.canonical_payload() for record in gateway.records
+            ],
+            "trace": trace.canonical_payload(),
         }
     ).lower()
+
+    assert {record.status for record in gateway.records} == {
+        StageStatus.PROPOSED,
+        StageStatus.ALLOWED,
+        StageStatus.DENIED,
+        StageStatus.STARTED,
+        StageStatus.SUCCEEDED,
+        StageStatus.FAILED,
+    }
 
     for marker in FAULT_MARKERS:
         assert marker not in surfaces, marker
@@ -337,3 +395,62 @@ def test_injection_requires_a_support_environment_and_known_fault():
         inject_fault(object(), IdentifierMappingSwap("C-3101", "C-3102"))  # type: ignore[arg-type]
     with pytest.raises(ContractError):
         inject_fault(SupportEnvironment(), object())  # type: ignore[arg-type]
+
+
+# Support tools through the generic gateway
+
+
+def test_unknown_ticket_becomes_failed_observation_with_unchanged_state():
+    environment = SupportEnvironment()
+
+    result = _support_gateway(environment).invoke(
+        "read_ticket", {"ticket_id": "T-9999"}
+    )
+
+    assert result.status is StageStatus.FAILED
+    assert result.error == {"type": "ContractError", "message": "unknown ticket_id"}
+    observed = result.records[-1]
+    assert observed.state_before_sha256 == observed.state_after_sha256
+    assert environment.state_sha256() == SEED_STATE_SHA256
+
+
+def test_denied_route_leaves_state_unchanged():
+    environment = SupportEnvironment()
+    gateway = _support_gateway(
+        environment, policy=AllowListPolicy({"read_ticket", "lookup_account"})
+    )
+
+    result = gateway.invoke(
+        "route_ticket", {"ticket_id": "T-1001", "queue_id": "Q-PRIORITY"}
+    )
+
+    assert result.status is StageStatus.DENIED
+    assert [record.stage.value for record in result.records] == [
+        "proposed", "authorized",
+    ]
+    assert environment.state_sha256() == SEED_STATE_SHA256
+    assert environment.get_ticket("T-1001").queue_id is None
+
+
+def test_allowed_route_records_the_state_change():
+    environment = SupportEnvironment()
+
+    result = _support_gateway(environment).invoke(
+        "route_ticket", {"ticket_id": "T-1001", "queue_id": "Q-PRIORITY"}
+    )
+
+    observed = result.records[-1]
+    assert result.status is StageStatus.SUCCEEDED
+    assert observed.state_before_sha256 == SEED_STATE_SHA256
+    assert observed.state_after_sha256 == environment.state_sha256() != SEED_STATE_SHA256
+
+
+def test_schema_invalid_support_arguments_are_denied():
+    environment = SupportEnvironment()
+
+    result = _support_gateway(environment).invoke(
+        "read_ticket", {"ticket_id": "ticket-1"}
+    )
+
+    assert result.status is StageStatus.DENIED
+    assert result.records[-1].payload["reason"] == "arguments_schema_invalid"
