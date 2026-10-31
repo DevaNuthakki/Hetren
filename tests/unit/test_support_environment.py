@@ -454,3 +454,75 @@ def test_schema_invalid_support_arguments_are_denied():
 
     assert result.status is StageStatus.DENIED
     assert result.records[-1].payload["reason"] == "arguments_schema_invalid"
+
+
+# Maintenance tools (never given to the agent)
+
+
+def test_maintenance_tools_are_separate_from_agent_tools():
+    from environments.support.tools import (
+        DIAGNOSTIC_TOOLS,
+        MAINTENANCE_TOOL_DESCRIPTIONS,
+        MAINTENANCE_TOOL_SCHEMAS,
+        RECOVERY_TOOLS,
+    )
+
+    assert set(DIAGNOSTIC_TOOLS) == {"resolve_customer_ref", "find_accounts_by_customer_ref"}
+    assert set(RECOVERY_TOOLS) == {"set_customer_mapping"}
+    assert set(MAINTENANCE_TOOL_SCHEMAS) == set(DIAGNOSTIC_TOOLS) | set(RECOVERY_TOOLS)
+    assert set(MAINTENANCE_TOOL_DESCRIPTIONS) == set(MAINTENANCE_TOOL_SCHEMAS)
+    assert set(SUPPORT_TOOLS).isdisjoint(MAINTENANCE_TOOL_SCHEMAS)
+
+
+def test_diagnostic_tools_are_read_only_and_report_directory_and_owners():
+    from environments.support.tools import find_accounts_by_customer_ref, resolve_customer_ref
+
+    environment = SupportEnvironment()
+    inject_fault(environment, IdentifierMappingSwap("C-3103", "C-3104"))
+    before = environment.state_sha256()
+
+    assert resolve_customer_ref(environment, customer_ref="C-3103") == {
+        "customer_ref": "C-3103", "account_id": "A-2004",
+    }
+    assert find_accounts_by_customer_ref(environment, customer_ref="C-3103") == {
+        "customer_ref": "C-3103", "account_ids": ["A-2003"],
+    }
+    assert environment.state_sha256() == before
+
+    with pytest.raises(ContractError):
+        find_accounts_by_customer_ref(environment, customer_ref="C-9999")
+
+
+def test_set_customer_mapping_reports_the_previous_value():
+    from environments.support.tools import set_customer_mapping
+
+    environment = SupportEnvironment()
+
+    assert set_customer_mapping(environment, customer_ref="C-3101", account_id="A-2002") == {
+        "customer_ref": "C-3101", "account_id": "A-2002", "previous_account_id": "A-2001",
+    }
+    assert environment.resolve_customer("C-3101") == "A-2002"
+
+    with pytest.raises(ContractError):
+        set_customer_mapping(environment, customer_ref="C-3101", account_id="A-9999")
+
+
+def test_maintenance_outputs_carry_no_fault_marker():
+    from environments.support.tools import (
+        find_accounts_by_customer_ref,
+        resolve_customer_ref,
+        set_customer_mapping,
+    )
+
+    environment = SupportEnvironment()
+    inject_fault(environment, IdentifierMappingSwap("C-3103", "C-3104"))
+    outputs = json.dumps(
+        [
+            resolve_customer_ref(environment, customer_ref="C-3103"),
+            find_accounts_by_customer_ref(environment, customer_ref="C-3104"),
+            set_customer_mapping(environment, customer_ref="C-3103", account_id="A-2003"),
+        ]
+    ).lower()
+
+    for marker in FAULT_MARKERS:
+        assert marker not in outputs, marker

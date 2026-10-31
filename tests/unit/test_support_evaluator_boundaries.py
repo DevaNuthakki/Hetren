@@ -509,6 +509,10 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
         "packages.integrations.run_ids",
         "packages.support_agent.agent",
         "packages.support_agent.scripted_model",
+        "packages.support_recovery",
+        "packages.support_recovery.diagnosis",
+        "packages.support_recovery.recovery",
+        "packages.support_recovery.sufficiency",
     }
 
     assert expected <= set(restricted_modules(REPO_ROOT))
@@ -516,3 +520,13 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
 
 def test_live_recording_script_is_scanned_for_direct_evaluator_imports():
     assert "scripts.record_support_captures" in _collect_modules(REPO_ROOT)
+
+
+def test_verification_package_does_not_load_the_verifier():
+    modules, graph = _import_graph(REPO_ROOT)
+
+    assert VERIFIER in modules
+    reached = _reachable("packages.verification", graph)
+    assert VERIFIER not in reached
+    assert EVALUATOR not in reached
+    assert runtime_violations(REPO_ROOT, ["packages.verification"]) == []

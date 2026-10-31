@@ -546,3 +546,42 @@ def test_malformed_raw_arguments_skip_the_policy():
     _gateway(Counter(), policy=RecordingPolicy()).invoke_raw("increment", "{oops")
 
     assert seen == []
+
+
+# Composite and exact-call policies
+
+
+def test_exact_calls_policy_allows_only_named_calls():
+    from packages.action_gateway import ExactCallsPolicy
+
+    counter = Counter()
+    gateway = _gateway(counter, policy=ExactCallsPolicy([("increment", {"amount": 2})]))
+
+    assert gateway.invoke("increment", {"amount": 2}).status is StageStatus.SUCCEEDED
+    denied = gateway.invoke("increment", {"amount": 3})
+    assert denied.status is StageStatus.DENIED
+    assert denied.records[-1].payload == {
+        "allowed": False, "reason": "call_outside_scope", "policy_id": "exact_calls",
+    }
+    assert gateway.invoke("read", {}).status is StageStatus.DENIED
+    assert counter.value == 2
+
+
+def test_all_of_policy_requires_every_policy_and_reports_the_first_denial():
+    from packages.action_gateway import AllOfPolicy, ExactCallsPolicy
+
+    counter = Counter()
+    policy = AllOfPolicy(
+        AllowListPolicy({"increment"}),
+        ExactCallsPolicy([("increment", {"amount": 1}), ("read", {})]),
+    )
+    gateway = _gateway(counter, policy=policy)
+
+    allowed = gateway.invoke("increment", {"amount": 1})
+    assert allowed.records[1].payload["policy_id"] == "all_of"
+    assert gateway.invoke("read", {}).records[-1].payload["reason"] == "tool_not_allowed"
+    assert gateway.invoke("increment", {"amount": 5}).records[-1].payload["reason"] == "call_outside_scope"
+    assert counter.value == 1
+
+    with pytest.raises(ContractError):
+        AllOfPolicy()

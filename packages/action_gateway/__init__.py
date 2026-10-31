@@ -1,6 +1,8 @@
 from .authorization import (
+    AllOfPolicy,
     AllowAllPolicy,
     AllowListPolicy,
+    ExactCallsPolicy,
     AuthorizationDecision,
     AuthorizationPolicy,
     ToolProposal,
@@ -22,8 +24,10 @@ from .stages import (
 
 
 __all__ = [
+    "AllOfPolicy",
     "AllowAllPolicy",
     "AllowListPolicy",
+    "ExactCallsPolicy",
     "AuthorizationDecision",
     "AuthorizationPolicy",
     "GatedTool",

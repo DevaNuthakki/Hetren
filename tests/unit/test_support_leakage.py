@@ -99,7 +99,7 @@ def _example_surfaces(example_name: str, run_id: str) -> dict[str, object]:
 def test_catalog_examples_are_consistent_with_the_environment():
     environment = SupportEnvironment()
 
-    assert set(EXAMPLES) == {"correct_run", "verified_recovery", "insufficient_evidence"}
+    assert set(EXAMPLES) == {"example_correct_run", "example_verified_recovery", "example_insufficient_evidence"}
 
     for spec in EXAMPLES.values():
         ticket = read_ticket(environment, ticket_id=spec.target_ticket_id)
@@ -160,31 +160,31 @@ def test_registry_binds_neutral_run_ids_to_examples():
     registry = RunRegistry()
 
     correct = registry.register(
-        run_id=allocator.allocate(), example_name="correct_run", fault_payload=None,
+        run_id=allocator.allocate(), example_name="example_correct_run", fault_payload=None,
     )
     recovery = registry.register(
         run_id=allocator.allocate(),
-        example_name="verified_recovery",
+        example_name="example_verified_recovery",
         fault_payload=_environment_fault("SUP-F-001").canonical_payload(),
     )
 
     assert (correct.run_id, correct.fault_id) == ("run-0001", None)
     assert (recovery.run_id, recovery.fault_id) == ("run-0002", "SUP-F-001")
-    assert registry.lookup("run-0002").spec.example_name == "verified_recovery"
+    assert registry.lookup("run-0002").spec.example_name == "example_verified_recovery"
     assert registry.run_ids() == ("run-0001", "run-0002")
 
 
 @pytest.mark.parametrize(
     ("run_id", "example_name", "fault_payload"),
     [
-        ("run-verified-1", "verified_recovery", None),
-        ("verified_recovery-0001", "verified_recovery", None),
+        ("run-verified-1", "example_verified_recovery", None),
+        ("verified_recovery-0001", "example_verified_recovery", None),
         ("run-0001", "unknown_example", None),
-        ("run-0001", "correct_run", {"fault_type": "identifier_mapping_swap"}),
-        ("run-0001", "verified_recovery", None),
+        ("run-0001", "example_correct_run", {"fault_type": "identifier_mapping_swap"}),
+        ("run-0001", "example_verified_recovery", None),
         (
             "run-0001",
-            "verified_recovery",
+            "example_verified_recovery",
             {
                 "fault_type": "identifier_mapping_swap",
                 "customer_ref_a": "C-3101",
@@ -202,11 +202,11 @@ def test_registry_rejects_invalid_registrations(run_id, example_name, fault_payl
 
 def test_registry_rejects_duplicates_and_unknown_lookups():
     registry = RunRegistry()
-    registry.register(run_id="run-0001", example_name="correct_run", fault_payload=None)
+    registry.register(run_id="run-0001", example_name="example_correct_run", fault_payload=None)
 
     with pytest.raises(ContractError):
         registry.register(
-            run_id="run-0001", example_name="correct_run", fault_payload=None,
+            run_id="run-0001", example_name="example_correct_run", fault_payload=None,
         )
     with pytest.raises(ContractError):
         registry.lookup("run-0002")
@@ -261,7 +261,7 @@ def _kinds(findings) -> set[str]:
     ("surface", "expected_kind"),
     [
         ({"stage_records": [{"payload": {"note": "SUP-F-001"}}]}, "sensitive_token"),
-        ({"prompt": "This run is the verified_recovery example."}, "sensitive_token"),
+        ({"prompt": "This run is the example_verified_recovery case."}, "sensitive_token"),
         ({"trace": {"events": [{"operation": "recovery_verified"}]}}, "sensitive_token"),
         ({"tool_output": {"detail": "identifier_mapping_swap active"}}, "sensitive_token"),
         ({"run_record": {"expected_queue_id": "Q-GENERAL"}}, "evaluator_field_name"),
@@ -281,7 +281,7 @@ def test_planted_content_leaks_are_caught(surface, expected_kind):
 
 
 def test_planted_leak_inside_real_stage_records_is_caught():
-    surfaces = _example_surfaces("verified_recovery", "run-0001")
+    surfaces = _example_surfaces("example_verified_recovery", "run-0001")
     surfaces["stage_records"][2]["payload"] = {"note": "fault SUP-F-001"}
 
     findings = scan_content(surfaces)
@@ -294,10 +294,10 @@ def test_planted_leak_inside_real_stage_records_is_caught():
 @pytest.mark.parametrize(
     ("surface", "identifier", "pattern"),
     [
-        ("run_id", "run-verified_recovery", NEUTRAL_RUN_ID),
-        ("run_id", "run-0001-correct_run", NEUTRAL_RUN_ID),
-        ("run_id", "insufficient_evidence", NEUTRAL_RUN_ID),
-        ("file_name", "correct_run.json", NEUTRAL_FILE_NAME),
+        ("run_id", "run-example_verified_recovery", NEUTRAL_RUN_ID),
+        ("run_id", "run-0001-example_correct_run", NEUTRAL_RUN_ID),
+        ("run_id", "example_insufficient_evidence", NEUTRAL_RUN_ID),
+        ("file_name", "example_correct_run.json", NEUTRAL_FILE_NAME),
         ("file_name", "capture-0001-SUP-F-001.json", NEUTRAL_FILE_NAME),
         ("file_name", "T-1003-Q-PRIORITY.json", NEUTRAL_FILE_NAME),
     ],

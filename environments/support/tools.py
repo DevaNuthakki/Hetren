@@ -114,13 +114,119 @@ READ_ONLY_TOOLS = frozenset(
 )
 
 
+# Maintenance tools. These are never given to the agent: diagnostic tools are
+# read-only probes for a separate diagnostic gateway, and the recovery tool is
+# the only write to the customer directory, behind its own permission.
+
+
+def resolve_customer_ref(
+    environment: SupportEnvironment,
+    *,
+    customer_ref: str,
+) -> dict[str, object]:
+    """The account the customer directory currently maps a reference to."""
+    return {
+        "customer_ref": customer_ref,
+        "account_id": environment.resolve_customer(customer_ref),
+    }
+
+
+def find_accounts_by_customer_ref(
+    environment: SupportEnvironment,
+    *,
+    customer_ref: str,
+) -> dict[str, object]:
+    """Accounts whose own record names this customer reference."""
+    environment.resolve_customer(customer_ref)
+
+    return {
+        "customer_ref": customer_ref,
+        "account_ids": [
+            account_id
+            for account_id in environment.account_ids()
+            if environment.get_account(account_id).customer_ref == customer_ref
+        ],
+    }
+
+
+def set_customer_mapping(
+    environment: SupportEnvironment,
+    *,
+    customer_ref: str,
+    account_id: str,
+) -> dict[str, object]:
+    previous_account_id = environment.resolve_customer(customer_ref)
+    environment.set_directory_entry(customer_ref, account_id)
+
+    return {
+        "customer_ref": customer_ref,
+        "account_id": account_id,
+        "previous_account_id": previous_account_id,
+    }
+
+
+_CUSTOMER_REF_SCHEMA = {"type": "string", "pattern": "^C-[0-9]{4}$"}
+
+DIAGNOSTIC_TOOLS: dict[str, SupportTool] = {
+    "resolve_customer_ref": resolve_customer_ref,
+    "find_accounts_by_customer_ref": find_accounts_by_customer_ref,
+}
+
+RECOVERY_TOOLS: dict[str, SupportTool] = {
+    "set_customer_mapping": set_customer_mapping,
+}
+
+MAINTENANCE_TOOL_DESCRIPTIONS: dict[str, str] = {
+    "resolve_customer_ref": (
+        "Report the account_id the customer directory maps a customer reference to."
+    ),
+    "find_accounts_by_customer_ref": (
+        "List the accounts whose own record names a customer reference."
+    ),
+    "set_customer_mapping": (
+        "Map one customer reference to one account in the customer directory."
+    ),
+}
+
+MAINTENANCE_TOOL_SCHEMAS: dict[str, dict[str, object]] = {
+    "resolve_customer_ref": {
+        "type": "object",
+        "properties": {"customer_ref": _CUSTOMER_REF_SCHEMA},
+        "required": ["customer_ref"],
+        "additionalProperties": False,
+    },
+    "find_accounts_by_customer_ref": {
+        "type": "object",
+        "properties": {"customer_ref": _CUSTOMER_REF_SCHEMA},
+        "required": ["customer_ref"],
+        "additionalProperties": False,
+    },
+    "set_customer_mapping": {
+        "type": "object",
+        "properties": {
+            "customer_ref": _CUSTOMER_REF_SCHEMA,
+            "account_id": {"type": "string", "pattern": "^A-[0-9]{4}$"},
+        },
+        "required": ["customer_ref", "account_id"],
+        "additionalProperties": False,
+    },
+}
+
+
 __all__ = [
+    "DIAGNOSTIC_TOOLS",
+    "MAINTENANCE_TOOL_DESCRIPTIONS",
+    "MAINTENANCE_TOOL_SCHEMAS",
     "READ_ONLY_TOOLS",
+    "RECOVERY_TOOLS",
     "SUPPORT_TOOLS",
     "SUPPORT_TOOL_DESCRIPTIONS",
     "SUPPORT_TOOL_SCHEMAS",
     "SupportTool",
+    "find_accounts_by_customer_ref",
     "lookup_account",
     "read_ticket",
+    "resolve_customer_ref",
     "route_ticket",
+    "set_customer_mapping",
 ]

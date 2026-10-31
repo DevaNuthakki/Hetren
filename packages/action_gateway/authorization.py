@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import re
 from typing import Protocol
 
-from packages.contracts import ContractError
+from packages.contracts import ContractError, canonical_sha256
 
 
 _REASON = re.compile(r"[a-z][a-z0-9_]{0,63}")
@@ -97,9 +97,61 @@ class AllowListPolicy:
         return AuthorizationDecision(False, "tool_not_allowed", self.policy_id)
 
 
+class ExactCallsPolicy:
+    """Allow only exact (tool name, arguments) pairs; deny everything else.
+
+    Used to bind a write tool to a frozen plan: even an allowed tool can only
+    make the calls the plan names.
+    """
+
+    policy_id = "exact_calls"
+
+    def __init__(self, calls: Iterable[tuple[str, dict[str, object]]]) -> None:
+        self._calls = frozenset(
+            (tool_name, canonical_sha256(arguments)) for tool_name, arguments in calls
+        )
+
+    def authorize(
+        self,
+        proposal: ToolProposal,
+    ) -> AuthorizationDecision:
+        if (proposal.tool_name, canonical_sha256(proposal.arguments)) in self._calls:
+            return AuthorizationDecision(True, "call_in_scope", self.policy_id)
+
+        return AuthorizationDecision(False, "call_outside_scope", self.policy_id)
+
+
+class AllOfPolicy:
+    """Allow only when every policy allows; the first denial is reported."""
+
+    policy_id = "all_of"
+
+    def __init__(self, *policies: AuthorizationPolicy) -> None:
+        if not policies:
+            raise ContractError("AllOfPolicy needs at least one policy")
+
+        self._policies = policies
+
+    def authorize(
+        self,
+        proposal: ToolProposal,
+    ) -> AuthorizationDecision:
+        decision = AuthorizationDecision(True, "all_allowed", self.policy_id)
+
+        for policy in self._policies:
+            decision = policy.authorize(proposal)
+
+            if not isinstance(decision, AuthorizationDecision) or not decision.allowed:
+                return decision
+
+        return AuthorizationDecision(True, "all_allowed", self.policy_id)
+
+
 __all__ = [
+    "AllOfPolicy",
     "AllowAllPolicy",
     "AllowListPolicy",
+    "ExactCallsPolicy",
     "AuthorizationDecision",
     "AuthorizationPolicy",
     "ToolProposal",

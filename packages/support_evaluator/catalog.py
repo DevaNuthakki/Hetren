@@ -63,8 +63,8 @@ FAULTS: dict[str, FaultDefinition] = {
 }
 
 EXAMPLES: dict[str, ExampleSpec] = {
-    "correct_run": ExampleSpec(
-        example_name="correct_run",
+    "example_correct_run": ExampleSpec(
+        example_name="example_correct_run",
         fault_id=None,
         evidence_condition=EvidenceCondition.COMPLETE,
         target_ticket_id="T-1003",
@@ -73,8 +73,8 @@ EXAMPLES: dict[str, ExampleSpec] = {
         regression_expectations={},
         expected_verdict=SupportVerdict.NO_INTERVENTION_CORRECT,
     ),
-    "verified_recovery": ExampleSpec(
-        example_name="verified_recovery",
+    "example_verified_recovery": ExampleSpec(
+        example_name="example_verified_recovery",
         fault_id="SUP-F-001",
         evidence_condition=EvidenceCondition.COMPLETE,
         target_ticket_id="T-1003",
@@ -83,8 +83,8 @@ EXAMPLES: dict[str, ExampleSpec] = {
         regression_expectations={"T-1002": "Q-GENERAL"},
         expected_verdict=SupportVerdict.RECOVERY_VERIFIED,
     ),
-    "insufficient_evidence": ExampleSpec(
-        example_name="insufficient_evidence",
+    "example_insufficient_evidence": ExampleSpec(
+        example_name="example_insufficient_evidence",
         fault_id="SUP-F-001",
         evidence_condition=EvidenceCondition.ACCOUNT_OBSERVATION_WITHHELD,
         target_ticket_id="T-1003",
