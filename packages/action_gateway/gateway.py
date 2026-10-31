@@ -15,12 +15,17 @@ Gate order for one invocation:
 A tool exception, or an observation that is not a JSON object, becomes a
 FAILED observation rather than an exception, and the after-state hash shows
 whether anything changed.
+
+``invoke_raw`` accepts the model's argument text unparsed. Text that is not a
+JSON object is recorded as PROPOSED (with the raw text) and AUTHORIZED denied
+with reason ``arguments_not_json``, so malformed calls remain evidence.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
+import json
 
 from jsonschema import Draft202012Validator
 from jsonschema.exceptions import SchemaError
@@ -186,10 +191,45 @@ class ToolGateway:
 
         return decision
 
+    def invoke_raw(
+        self,
+        tool_name: str,
+        raw_arguments: str,
+    ) -> ToolInvocationResult:
+        """Invoke from unparsed argument text, recording malformed input."""
+        if not isinstance(raw_arguments, str):
+            raise ContractError("raw_arguments must be text")
+
+        try:
+            parsed = json.loads(raw_arguments) if raw_arguments.strip() else {}
+        except json.JSONDecodeError:
+            parsed = None
+
+        if isinstance(parsed, dict):
+            try:
+                return self.invoke(tool_name, parsed)
+            except ContractError:
+                pass
+
+        return self._invoke(
+            tool_name,
+            {"raw_arguments": raw_arguments},
+            forced_denial="arguments_not_json",
+        )
+
     def invoke(
         self,
         tool_name: str,
         arguments: dict[str, object],
+    ) -> ToolInvocationResult:
+        return self._invoke(tool_name, arguments)
+
+    def _invoke(
+        self,
+        tool_name: str,
+        arguments: dict[str, object],
+        *,
+        forced_denial: str | None = None,
     ) -> ToolInvocationResult:
         arguments = json_object(arguments, "arguments")
         arguments_sha256 = canonical_sha256(arguments)
@@ -211,8 +251,10 @@ class ToolGateway:
             state_before_sha256=self._state_sha256(),
         )
 
-        decision = self._decide(
-            ToolProposal(invocation_id, tool_name, arguments)
+        decision = (
+            AuthorizationDecision(False, forced_denial, _GATEWAY_POLICY_ID)
+            if forced_denial is not None
+            else self._decide(ToolProposal(invocation_id, tool_name, arguments))
         )
 
         self._record(

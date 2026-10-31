@@ -198,26 +198,34 @@ print(json.dumps(sorted(name for name in sys.modules if name in sys.argv[3:])))
 
 
 def runtime_violations(root: Path, modules: list[str]) -> list[str]:
-    """Import each module in a fresh interpreter and inspect sys.modules."""
+    """Import each module in its own fresh interpreter and inspect sys.modules.
+
+    The interpreters run in parallel; each still imports exactly one module.
+    """
     violations: list[str] = []
     environment = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
 
-    for module in modules:
-        result = subprocess.run(
+    processes = {
+        module: subprocess.Popen(
             [sys.executable, "-I", "-c", _RUNTIME_PROBE, str(root), module,
              *FORBIDDEN_FOR_RESTRICTED],
             cwd=root,
             env=environment,
             text=True,
-            capture_output=True,
-            check=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
         )
+        for module in modules
+    }
 
-        if result.returncode != 0:
-            violations.append(f"{module}: import failed: {result.stderr.strip()}")
+    for module, process in processes.items():
+        stdout, stderr = process.communicate(timeout=120)
+
+        if process.returncode != 0:
+            violations.append(f"{module}: import failed: {stderr.strip()}")
             continue
 
-        for loaded in json.loads(result.stdout):
+        for loaded in json.loads(stdout):
             violations.append(f"{module}: loads {loaded} at runtime")
 
     return violations

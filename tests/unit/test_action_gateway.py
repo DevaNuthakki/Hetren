@@ -496,3 +496,53 @@ def test_gateway_source_has_no_environment_specific_logic():
     for path in sorted(GATEWAY_ROOT.glob("*.py")):
         source = path.read_text(encoding="utf-8")
         assert forbidden.search(source) is None, path.name
+
+
+# Raw (unparsed) arguments from a model
+
+
+def test_invoke_raw_parses_valid_json_like_invoke():
+    raw = _gateway(Counter()).invoke_raw("increment", '{"amount": 4}')
+    parsed = _gateway(Counter()).invoke("increment", {"amount": 4})
+
+    assert raw.status is StageStatus.SUCCEEDED
+    assert stage_records_sha256(raw.records) == stage_records_sha256(parsed.records)
+
+
+def test_invoke_raw_treats_empty_text_as_no_arguments():
+    assert _gateway(Counter()).invoke_raw("read", "").status is StageStatus.SUCCEEDED
+
+
+@pytest.mark.parametrize(
+    "raw",
+    ['{"amount": 4', "not json", "[1, 2]", '"text"', "NaN", '{"amount": NaN}'],
+)
+def test_malformed_raw_arguments_are_recorded_as_denied_evidence(raw):
+    counter = Counter()
+    gateway = _gateway(counter)
+
+    result = gateway.invoke_raw("increment", raw)
+
+    assert result.status is StageStatus.DENIED
+    assert _stages(result.records) == [("proposed", "proposed"), ("authorized", "denied")]
+    assert result.records[0].payload == {"arguments": {"raw_arguments": raw}}
+    assert result.records[1].payload == {
+        "allowed": False, "reason": "arguments_not_json", "policy_id": "gateway",
+    }
+    assert counter.calls == []
+    assert gateway.records == result.records
+
+
+def test_malformed_raw_arguments_skip_the_policy():
+    seen = []
+
+    class RecordingPolicy:
+        policy_id = "recording"
+
+        def authorize(self, proposal):
+            seen.append(proposal)
+            return AuthorizationDecision(True, "recorded", self.policy_id)
+
+    _gateway(Counter(), policy=RecordingPolicy()).invoke_raw("increment", "{oops")
+
+    assert seen == []
