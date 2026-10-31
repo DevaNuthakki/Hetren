@@ -44,6 +44,7 @@ VERIFIER = "packages.verification.support_verification"
 EVALUATOR_IMPORTERS = frozenset({VERIFIER})
 
 RESTRICTED_PREFIXES = (
+    "packages.action_space",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",
@@ -60,6 +61,7 @@ LITERAL_EXEMPT_MODULES = frozenset({"environments.support.fixtures"})
 # an answer oracle. Future diagnosis/model packages named packages.hetren_*
 # are covered automatically.
 HETREN_SIDE_PREFIXES = (
+    "packages.action_space",
     "packages.support_recovery",
     "packages.core.hetren_diagnosis",
 )
@@ -550,6 +552,11 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
         "packages.support_recovery.diagnosis",
         "packages.support_recovery.recovery",
         "packages.support_recovery.sufficiency",
+        "packages.action_space.actions",
+        "packages.action_space.catalog",
+        "packages.action_space.execution",
+        "environments.support.maintenance",
+        "environments.support.generator",
     }
 
     assert expected <= set(restricted_modules(REPO_ROOT))

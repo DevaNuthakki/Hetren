@@ -33,7 +33,7 @@ Environment error messages describe the observation only.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import re
 
 from packages.contracts import (
@@ -736,6 +736,47 @@ class SupportEnvironment:
             {source.account_id: source for source in self._spec.account_sources}
         )
         self._tool_error_calls = [0] * len(self._spec.tool_errors)
+
+    def fork(self) -> "SupportEnvironment":
+        """An independent copy of the current state, for sandboxed execution.
+
+        Includes the tool-error call counters, so a call in the fork sees the
+        same remaining scheduled failures it would see here. Changes to either
+        environment never affect the other.
+        """
+        copy = SupportEnvironment(self._spec)
+        copy._tickets = dict(self._tickets)
+        copy._accounts = dict(self._accounts)
+        copy._queues = dict(self._queues)
+        copy._directory = dict(self._directory)
+        copy._sources = dict(self._sources)
+        copy._tool_error_calls = list(self._tool_error_calls)
+        return copy
+
+    def tool_error_calls(self) -> tuple[int, ...]:
+        """Runtime call counters per tool-error rule (not part of the snapshot)."""
+        return tuple(self._tool_error_calls)
+
+    def directory_entry(self, customer_ref: str) -> str | None:
+        """The account a reference maps to, or None if it is not in the directory."""
+        _require_id(customer_ref, _CUSTOMER_REF, "customer_ref")
+        return self._directory.get(customer_ref)
+
+    def map_customer(self, customer_ref: str, account_id: str) -> str | None:
+        """Map a reference (existing or not) to an existing account; returns the previous account."""
+        _require_id(customer_ref, _CUSTOMER_REF, "customer_ref")
+        self.get_account(account_id)
+        previous = self._directory.get(customer_ref)
+        self._directory[customer_ref] = account_id
+        return previous
+
+    def restore_account_from_source(self, account_id: str) -> tuple[Account, Account]:
+        """Replace an account's tier, version and timestamp with its source record."""
+        before = self.get_account(account_id)
+        source = self._sources[account_id]
+        after = replace(before, tier=source.tier, version=source.version, updated_at=source.updated_at)
+        self._accounts[account_id] = after
+        return before, after
 
     def account_source(self, account_id: str) -> SourceRecord:
         self.get_account(account_id)
