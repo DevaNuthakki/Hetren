@@ -240,11 +240,13 @@ def test_run_records_require_neutral_run_ids(run_id):
 
 def test_run_record_validation():
     values = dict(
-        run_id="run-0001", provenance=RunProvenance.SCRIPTED, model_id="m",
+        run_id="run-0001", provenance=RunProvenance.SCRIPTED,
+        source_provenance=None, model_id="m",
         agent_name="a", instructions_sha256="0" * 64, task_input="go",
         tool_definitions=(), initial_state_sha256="1" * 64,
         final_state_sha256="1" * 64, stage_records=(),
         sdk_evidence=SdkEvidence(hook_events=(), spans=(), discrepancies=()),
+        replay_capture_ids=(), recorded_capture_ids=(),
         status=RunStatus.COMPLETED, error=None, final_message=None,
         limitations=("limit",),
     )
@@ -256,6 +258,15 @@ def test_run_record_validation():
         {"error": {"type": "X", "message_sha256": "0" * 64}},
         {"status": RunStatus.ERROR, "error": {"type": "X", "message": "free text"}},
         {"sdk_evidence": None},
+        {"source_provenance": RunProvenance.LIVE},
+        {"replay_capture_ids": ("capture-0001",)},
+        {"provenance": RunProvenance.REPLAY},
+        {"provenance": RunProvenance.REPLAY, "source_provenance": RunProvenance.REPLAY},
+        {
+            "provenance": RunProvenance.REPLAY,
+            "source_provenance": RunProvenance.LIVE,
+            "recorded_capture_ids": ("capture-0001",),
+        },
         {"limitations": ()},
         {"stage_records": ({"not": "a record"},)},
         {"task_input": " "},

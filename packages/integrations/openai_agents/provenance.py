@@ -10,6 +10,11 @@ Provenance is declared by the caller and checked against the model object
 (``hetren_provenance`` attribute), so a scripted or replayed run cannot be
 recorded as live, or the reverse.
 
+A REPLAY run also records ``source_provenance``: whether the replayed
+captures came from a live or a scripted model. A replay of scripted captures
+therefore cannot be presented as a replay of a live run. Non-replay runs
+have no source provenance.
+
 Run records are what Hetren reads. The agent's own decisions are kept in a
 separate ``agent_output`` section so leakage scans can apply the right rules
 to each part. Run errors keep the exception type and a digest of its
@@ -84,6 +89,7 @@ def model_identity(model: object) -> str:
 class RunRecord:
     run_id: str
     provenance: RunProvenance
+    source_provenance: RunProvenance | None
     model_id: str
     agent_name: str
     instructions_sha256: str
@@ -93,6 +99,8 @@ class RunRecord:
     final_state_sha256: str
     stage_records: tuple[ToolStageRecord, ...]
     sdk_evidence: SdkEvidence
+    replay_capture_ids: tuple[str, ...]
+    recorded_capture_ids: tuple[str, ...]
     status: RunStatus
     error: dict[str, str] | None
     final_message: str | None
@@ -107,6 +115,19 @@ class RunRecord:
 
         if not isinstance(self.provenance, RunProvenance):
             raise ContractError("provenance must be a RunProvenance")
+
+        if self.provenance is RunProvenance.REPLAY:
+            if self.source_provenance not in (RunProvenance.LIVE, RunProvenance.SCRIPTED):
+                raise ContractError("a replay run needs a live or scripted source provenance")
+        elif self.source_provenance is not None or self.replay_capture_ids:
+            raise ContractError("only replay runs have a source provenance or replayed captures")
+
+        if self.provenance is RunProvenance.REPLAY and self.recorded_capture_ids:
+            raise ContractError("a replay run cannot record captures")
+
+        for name in ("replay_capture_ids", "recorded_capture_ids"):
+            if not isinstance(getattr(self, name), tuple):
+                raise ContractError(f"{name} must be a tuple")
 
         if not isinstance(self.status, RunStatus):
             raise ContractError("status must be a RunStatus")
@@ -149,6 +170,9 @@ class RunRecord:
             "schema_version": 1,
             "run_id": self.run_id,
             "provenance": self.provenance.value,
+            "source_provenance": (
+                None if self.source_provenance is None else self.source_provenance.value
+            ),
             "model_id": self.model_id,
             "agent_name": self.agent_name,
             "instructions_sha256": self.instructions_sha256,
@@ -162,6 +186,8 @@ class RunRecord:
             ],
             "stage_records_sha256": self.stage_records_sha256,
             "sdk_evidence": self.sdk_evidence.canonical_payload(),
+            "replay_capture_ids": list(self.replay_capture_ids),
+            "recorded_capture_ids": list(self.recorded_capture_ids),
             "status": self.status.value,
             "error": self.error,
             "limitations": list(self.limitations),

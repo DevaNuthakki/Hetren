@@ -340,6 +340,9 @@ def run_manifest(record: object) -> dict[str, object]:
         "schema_version": 1,
         "run_id": record.run_id,
         "provenance": record.provenance.value,
+        "source_provenance": (
+            None if record.source_provenance is None else record.source_provenance.value
+        ),
         "model_id": record.model_id,
         "agent_name": record.agent_name,
         "instructions_sha256": record.instructions_sha256,

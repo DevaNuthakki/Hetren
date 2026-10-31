@@ -7,6 +7,11 @@ Preconditions checked before the run:
 - the agent's tools are exactly the gateway's tools, so every tool call is
   staged by the gateway.
 
+A replay miss, capture version mismatch, or capture conflict is an
+infrastructure failure, not agent behaviour, so ``ReplayMissError``,
+``ReplayVersionError`` and ``CaptureConflictError`` propagate instead of
+being recorded as a run error.
+
 Tracing goes only to the local processor (``install_local_tracing``) with
 ``trace_include_sensitive_data=False``; see ``tracing.py`` for why. Hook
 events and spans are reconciled against the gateway's stage records and
@@ -41,6 +46,11 @@ from packages.integrations.openai_agents.provenance import (
     RunStatus,
     model_identity,
     model_provenance,
+)
+from packages.integrations.openai_agents.replay import (
+    CaptureConflictError,
+    ReplayMissError,
+    ReplayVersionError,
 )
 from packages.integrations.openai_agents.tracing import install_local_tracing
 
@@ -110,6 +120,8 @@ def run_agent(
         )
     except MaxTurnsExceeded:
         status = RunStatus.MAX_TURNS_EXCEEDED
+    except (ReplayMissError, ReplayVersionError, CaptureConflictError):
+        raise
     except Exception as exc:
         status = RunStatus.ERROR
         error = {"type": type(exc).__name__, "message_sha256": text_sha256(str(exc))}
@@ -124,6 +136,7 @@ def run_agent(
     return RunRecord(
         run_id=run_id,
         provenance=provenance,
+        source_provenance=getattr(agent.model, "hetren_source_provenance", None),
         model_id=model_identity(agent.model),
         agent_name=agent.name,
         instructions_sha256=canonical_sha256({"instructions": agent.instructions}),
@@ -137,6 +150,8 @@ def run_agent(
             spans=spans,
             discrepancies=reconcile(stage_records, hooks.events, spans),
         ),
+        replay_capture_ids=tuple(getattr(agent.model, "used_capture_ids", ())),
+        recorded_capture_ids=tuple(getattr(agent.model, "recorded_capture_ids", ())),
         status=status,
         error=error,
         final_message=final_message,

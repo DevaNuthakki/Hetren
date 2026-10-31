@@ -23,6 +23,21 @@ from .provenance import (
     model_identity,
     model_provenance,
 )
+from .replay import (
+    CAPTURE_FILE_NAME,
+    Capture,
+    CaptureConflictError,
+    CaptureStore,
+    RecordingModel,
+    RecordingModelProvider,
+    ReplayKey,
+    ReplayMissError,
+    ReplayModel,
+    ReplayModelProvider,
+    ReplayVersionError,
+    installed_versions,
+    replay_key,
+)
 from .runner import (
     DEFAULT_LIMITATIONS,
     WORKFLOW_NAME,
@@ -41,7 +56,20 @@ from .tracing import (
 
 
 __all__ = [
+    "CAPTURE_FILE_NAME",
+    "Capture",
+    "CaptureConflictError",
+    "CaptureStore",
     "DEFAULT_LIMITATIONS",
+    "RecordingModel",
+    "RecordingModelProvider",
+    "ReplayKey",
+    "ReplayMissError",
+    "ReplayModel",
+    "ReplayModelProvider",
+    "ReplayVersionError",
+    "installed_versions",
+    "replay_key",
     "Discrepancy",
     "DiscrepancyKind",
     "EvidenceHooks",

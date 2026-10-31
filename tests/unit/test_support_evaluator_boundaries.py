@@ -502,6 +502,7 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
         "packages.integrations.openai_agents.evidence",
         "packages.integrations.openai_agents.hooks",
         "packages.integrations.openai_agents.provenance",
+        "packages.integrations.openai_agents.replay",
         "packages.integrations.openai_agents.runner",
         "packages.integrations.openai_agents.tools",
         "packages.integrations.openai_agents.tracing",
@@ -511,3 +512,7 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
     }
 
     assert expected <= set(restricted_modules(REPO_ROOT))
+
+
+def test_live_recording_script_is_scanned_for_direct_evaluator_imports():
+    assert "scripts.record_support_captures" in _collect_modules(REPO_ROOT)
