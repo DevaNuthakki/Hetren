@@ -77,6 +77,21 @@ def _pick_ticket(spec: WorldSpec, rng: random.Random, account: Account):
     return rng.choice(_tickets_of(spec, account.customer_ref))
 
 
+def _pick_target(spec: WorldSpec, rng: random.Random, forced_ticket: str | None):
+    """Target account and ticket; ``forced_ticket`` pins the ticket (no random draws)."""
+    if forced_ticket is None:
+        account = _pick_account(spec, rng)
+        return account, _pick_ticket(spec, rng, account)
+
+    ticket = next((t for t in spec.tickets if t.ticket_id == forced_ticket), None)
+
+    if ticket is None:
+        raise ContractError("forced ticket is not in the world")
+
+    owner_id = dict(spec.directory)[ticket.customer_ref]
+    return next(a for a in spec.accounts if a.account_id == owner_id), ticket
+
+
 def _with_account(spec: WorldSpec, account_id: str, **changes) -> WorldSpec:
     return replace(
         spec,
@@ -135,10 +150,9 @@ def _truth(**fields) -> CaseTruth:
 # F1
 
 
-def mapping_swap(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def mapping_swap(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     other = rng.choice([a for a in world.accounts if a.tier != target.tier])
     directory = dict(world.directory)
 
@@ -183,10 +197,9 @@ def mapping_swap(world: WorldSpec, rng: random.Random, variant: str) -> Injected
 # F2
 
 
-def stale_account_record(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def stale_account_record(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     new_tier = _other_tier(target.tier)
     changed_at = _change_time(rng)
     spec = replace(
@@ -205,7 +218,7 @@ def stale_account_record(world: WorldSpec, rng: random.Random, variant: str) -> 
         target_ticket_id=ticket.ticket_id,
         expected_queue_id=policy[new_tier], expected_account_id=target.account_id,
         remedy_if_wrong="restore_from_source",
-        remedy_if_wrong_arguments=({"account_id": target.account_id},),
+        remedy_if_wrong_arguments=({"entity": "account", "id": target.account_id},),
         world_changes=({
             "entity": "account_source", "account_id": target.account_id,
             "field": "tier", "working": target.tier, "source": new_tier,
@@ -220,10 +233,9 @@ def stale_account_record(world: WorldSpec, rng: random.Random, variant: str) -> 
 # F3 and the transient look-alike
 
 
-def _error_case(world, rng, *, kind, variant, persistent, remedy_if_wrong):
+def _error_case(world, rng, *, kind, variant, persistent, remedy_if_wrong, forced_ticket=None):
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     # Only read tools fail, so a read-only retry probe can tell transient
     # from persistent errors without changing anything.
     tool_name = "lookup_account" if kind == "transient_error_retried" else rng.choice(
@@ -249,7 +261,7 @@ def _error_case(world, rng, *, kind, variant, persistent, remedy_if_wrong):
     ))
 
 
-def mishandled_tool_error(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def mishandled_tool_error(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     if variant not in ("transient", "persistent"):
         raise ContractError("unknown variant")
 
@@ -257,26 +269,27 @@ def mishandled_tool_error(world: WorldSpec, rng: random.Random, variant: str) ->
     return _error_case(
         world, rng, kind="mishandled_tool_error", variant=variant,
         persistent=persistent, remedy_if_wrong="abstain" if persistent else "rerun",
+        forced_ticket=forced_ticket,
     )
 
 
-def transient_error_retried(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def transient_error_retried(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     return _error_case(
         world, rng, kind="transient_error_retried", variant=variant,
         persistent=False, remedy_if_wrong="rerun",
+        forced_ticket=forced_ticket,
     )
 
 
 # F4
 
 
-def misleading_ticket_text(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def misleading_ticket_text(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     if variant not in ("claim_false", "claim_true"):
         raise ContractError("unknown variant")
 
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     claimed = target.tier if variant == "claim_true" else _other_tier(target.tier)
     claim = rng.choice(CLAIM_TEXTS).format(tier=claimed)
     spec = replace(
@@ -308,10 +321,9 @@ def misleading_ticket_text(world: WorldSpec, rng: random.Random, variant: str) -
 # F5
 
 
-def missing_account(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def missing_account(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     directory = dict(world.directory)
 
     if variant == "unmapped_ref":
@@ -354,10 +366,9 @@ def missing_account(world: WorldSpec, rng: random.Random, variant: str) -> Injec
 # F6 (held out)
 
 
-def queue_misconfiguration(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def queue_misconfiguration(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     priority, general = policy["enterprise"], policy["standard"]
     descriptions = {q.queue_id: q.description for q in world.queues}
     swapped = {priority: descriptions[general], general: descriptions[priority]}
@@ -389,13 +400,12 @@ def queue_misconfiguration(world: WorldSpec, rng: random.Random, variant: str) -
 _DRIFT_INDEX = {"case": 0, "abbreviation": 2, "whitespace": 3}
 
 
-def tier_format_drift(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def tier_format_drift(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     if variant not in _DRIFT_INDEX:
         raise ContractError("unknown variant")
 
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     drifted = TIER_VARIANTS[target.tier][_DRIFT_INDEX[variant]]
     spec = replace(
         _with_account(world, target.account_id, tier=drifted),
@@ -407,7 +417,7 @@ def tier_format_drift(world: WorldSpec, rng: random.Random, variant: str) -> Inj
         target_ticket_id=ticket.ticket_id,
         expected_queue_id=policy[target.tier], expected_account_id=target.account_id,
         remedy_if_wrong="restore_from_source",
-        remedy_if_wrong_arguments=({"account_id": target.account_id},),
+        remedy_if_wrong_arguments=({"entity": "account", "id": target.account_id},),
         world_changes=({
             "entity": "account", "account_id": target.account_id,
             "field": "tier", "before": target.tier, "after": drifted,
@@ -422,10 +432,9 @@ def tier_format_drift(world: WorldSpec, rng: random.Random, variant: str) -> Inj
 # Look-alikes
 
 
-def merged_account(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def merged_account(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     old_ref = _unused_ref(world, rng)
     merged_at = _change_time(rng)
     spec = replace(
@@ -463,10 +472,9 @@ def merged_account(world: WorldSpec, rng: random.Random, variant: str) -> Inject
     ))
 
 
-def recent_tier_change(world: WorldSpec, rng: random.Random, variant: str) -> InjectedCase:
+def recent_tier_change(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
     policy = _policy(world)
-    target = _pick_account(world, rng)
-    ticket = _pick_ticket(world, rng, target)
+    target, ticket = _pick_target(world, rng, forced_ticket)
     new_tier = _other_tier(target.tier)
     changed_at = _change_time(rng)
     updated = replace(target, tier=new_tier, version=target.version + 1, updated_at=changed_at)
@@ -517,6 +525,7 @@ def inject(
     world: WorldSpec,
     rng: random.Random,
     variant: str | None = None,
+    forced_ticket: str | None = None,
 ) -> InjectedCase:
     try:
         injector, variants = INJECTORS[kind]
@@ -529,7 +538,7 @@ def inject(
     if chosen not in variants:
         raise ContractError("unknown variant")
 
-    return injector(world, rng, chosen)
+    return injector(world, rng, chosen, forced_ticket)
 
 
 __all__ = [

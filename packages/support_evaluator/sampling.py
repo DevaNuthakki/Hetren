@@ -43,12 +43,13 @@ class SampledCase:
     steps: tuple[dict[str, object], ...]
 
 
-def run_planned_case(planned: PlannedCase) -> tuple[InjectedCase, SupportEnvironment, RunRecord]:
-    case = inject(
-        planned.case_kind, generate_world(planned.world_seed),
-        random.Random(planned.case_seed), planned.case_variant,
-    )
-    environment = SupportEnvironment(case.spec)
+def run_agent_on(
+    environment: SupportEnvironment,
+    ticket_id: str,
+    behaviour: str,
+    run_id: str = "run-0001",
+) -> RunRecord:
+    """Run the scripted agent with one behaviour on an existing environment."""
     gateway = ToolGateway(
         tools=[
             GatedTool(name, partial(f, environment), SUPPORT_TOOL_SCHEMAS[name], SUPPORT_TOOL_DESCRIPTIONS[name])
@@ -57,14 +58,23 @@ def run_planned_case(planned: PlannedCase) -> tuple[InjectedCase, SupportEnviron
         policy=AllowListPolicy(SUPPORT_TOOLS),
         state_sha256=environment.state_sha256,
     )
-    record = run_agent(
+    return run_agent(
         agent=build_support_agent(
             environment=environment, tools=gateway_function_tools(gateway),
-            model=ScriptedSupportModel(planned.behaviour),
+            model=ScriptedSupportModel(behaviour),
         ),
-        task_input=task_message(case.truth.target_ticket_id), gateway=gateway,
-        run_id="run-0001", provenance=RunProvenance.SCRIPTED,
+        task_input=task_message(ticket_id), gateway=gateway,
+        run_id=run_id, provenance=RunProvenance.SCRIPTED,
     )
+
+
+def run_planned_case(planned: PlannedCase) -> tuple[InjectedCase, SupportEnvironment, RunRecord]:
+    case = inject(
+        planned.case_kind, generate_world(planned.world_seed),
+        random.Random(planned.case_seed), planned.case_variant,
+    )
+    environment = SupportEnvironment(case.spec)
+    record = run_agent_on(environment, case.truth.target_ticket_id, planned.behaviour)
     return case, environment, record
 
 
@@ -108,6 +118,7 @@ def sample_case(planned: PlannedCase) -> SampledCase:
 
 __all__ = [
     "SampledCase",
+    "run_agent_on",
     "run_planned_case",
     "sample_case",
 ]

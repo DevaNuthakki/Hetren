@@ -161,6 +161,7 @@ def sensitive_tokens() -> frozenset[str]:
     tokens.update(condition.value for condition in EvidenceCondition)
     tokens.update(CLEAN_CHECKS)
     tokens.update(CASE_KINDS)
+    tokens.add("twin-")  # twin group IDs are evaluator-only
     return frozenset(tokens)
 
 

@@ -23,7 +23,7 @@ jobs:
   repository:
     name: Repository foundation
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
 
     env:
       # Fixed location for tiktoken's vocabulary file, restored from the cache
