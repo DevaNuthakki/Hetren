@@ -10,6 +10,11 @@ belong to without changing the ticket itself.
 
 ``SupportEnvironment.reset()`` restores the exact seed state, including the
 directory, so every run starts from the same ``state_sha256``.
+
+A ``WorldSpec`` is the complete starting world. ``DEFAULT_WORLD`` is the
+Milestone 1 world; ``environments.support.generator`` builds others from a
+seed. The environment snapshot has the same format for every world, so the
+default world's state hash is unchanged.
 """
 
 from __future__ import annotations
@@ -219,27 +224,130 @@ def _seed_directory() -> dict[str, str]:
     }
 
 
+@dataclass(frozen=True)
+class WorldSpec:
+    """A complete, validated starting world.
+
+    ``generator`` records how a generated world was made (name, version,
+    seed, size); it is ``None`` for the Milestone 1 default world. It is part
+    of the spec's identity but never of the environment snapshot.
+    """
+
+    tickets: tuple[Ticket, ...]
+    accounts: tuple[Account, ...]
+    queues: tuple[Queue, ...]
+    directory: tuple[tuple[str, str], ...]
+    generator: dict[str, object] | None = None
+
+    def __post_init__(self) -> None:
+        for name, kind in (("tickets", Ticket), ("accounts", Account), ("queues", Queue)):
+            values = getattr(self, name)
+
+            if not isinstance(values, tuple) or not values:
+                raise ContractError(f"{name} must be a non-empty tuple")
+
+            if not all(isinstance(value, kind) for value in values):
+                raise ContractError(f"{name} must hold {kind.__name__} records")
+
+        ticket_ids = [ticket.ticket_id for ticket in self.tickets]
+        account_ids = [account.account_id for account in self.accounts]
+        queue_ids = [queue.queue_id for queue in self.queues]
+        refs = [ref for ref, _ in self.directory]
+
+        for name, values in (
+            ("ticket_id", ticket_ids), ("account_id", account_ids),
+            ("queue_id", queue_ids), ("directory customer_ref", refs),
+        ):
+            if len(set(values)) != len(values):
+                raise ContractError(f"{name} values must be unique")
+
+        for ref, account_id in self.directory:
+            _require_id(ref, _CUSTOMER_REF, "directory customer_ref")
+
+            if account_id not in account_ids:
+                raise ContractError("directory maps to an unknown account")
+
+        for ticket in self.tickets:
+            if ticket.customer_ref not in refs:
+                raise ContractError("ticket customer_ref is not in the directory")
+
+            if ticket.queue_id is not None and ticket.queue_id not in queue_ids:
+                raise ContractError("ticket is assigned to an unknown queue")
+
+        for queue in self.queues:
+            for ticket_id in queue.ticket_ids:
+                if ticket_id not in ticket_ids:
+                    raise ContractError("queue holds an unknown ticket")
+
+    def canonical_payload(self) -> dict[str, object]:
+        return {
+            "record_type": "SupportWorldSpec",
+            "schema_version": 1,
+            "generator": self.generator,
+            "tickets": [ticket.canonical_payload() for ticket in self.tickets],
+            "accounts": [account.canonical_payload() for account in self.accounts],
+            "queues": [queue.canonical_payload() for queue in self.queues],
+            "directory": {ref: account_id for ref, account_id in sorted(self.directory)},
+        }
+
+    @property
+    def world_sha256(self) -> str:
+        return canonical_sha256(self.canonical_payload())
+
+    @classmethod
+    def from_payload(cls, payload: dict[str, object]) -> "WorldSpec":
+        if payload.get("record_type") != "SupportWorldSpec" or payload.get("schema_version") != 1:
+            raise ContractError("unsupported world spec payload")
+
+        return cls(
+            tickets=tuple(Ticket(**item) for item in payload["tickets"]),
+            accounts=tuple(Account(**item) for item in payload["accounts"]),
+            queues=tuple(
+                Queue(**{**item, "ticket_ids": tuple(item["ticket_ids"])})
+                for item in payload["queues"]
+            ),
+            directory=tuple(sorted(payload["directory"].items())),
+            generator=payload["generator"],
+        )
+
+
+DEFAULT_WORLD = WorldSpec(
+    tickets=_SEED_TICKETS,
+    accounts=_SEED_ACCOUNTS,
+    queues=_SEED_QUEUES,
+    directory=tuple(sorted(_seed_directory().items())),
+)
+
+
 class SupportEnvironment:
     """Mutable synthetic stores with an exact, hashable snapshot."""
 
-    def __init__(self) -> None:
+    def __init__(self, spec: WorldSpec = DEFAULT_WORLD) -> None:
+        if not isinstance(spec, WorldSpec):
+            raise ContractError("spec must be a WorldSpec")
+
+        self._spec = spec
         self.reset()
 
+    @property
+    def spec(self) -> WorldSpec:
+        return self._spec
+
     def reset(self) -> None:
-        """Restore every store and the customer directory to the seed."""
+        """Restore every store and the customer directory to the spec."""
         self._tickets = {
             ticket.ticket_id: ticket
-            for ticket in _SEED_TICKETS
+            for ticket in self._spec.tickets
         }
         self._accounts = {
             account.account_id: account
-            for account in _SEED_ACCOUNTS
+            for account in self._spec.accounts
         }
         self._queues = {
             queue.queue_id: queue
-            for queue in _SEED_QUEUES
+            for queue in self._spec.queues
         }
-        self._directory = _seed_directory()
+        self._directory = dict(self._spec.directory)
 
     def ticket_ids(self) -> tuple[str, ...]:
         return tuple(sorted(self._tickets))
@@ -366,8 +474,10 @@ class SupportEnvironment:
 
 __all__ = [
     "Account",
+    "DEFAULT_WORLD",
     "Queue",
     "SupportEnvironment",
     "TICKET_STATUSES",
     "Ticket",
+    "WorldSpec",
 ]
