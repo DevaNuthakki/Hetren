@@ -15,6 +15,11 @@ world equals the live run's. Categories:
   ``no_intervention``); no probe-sequence label;
 - ``excluded``: otherwise; reported separately, never in headline metrics.
 
+After the live confirmation phase, ``finalize_live_labels`` moves an excluded
+run whose confirmed recovery held to ``live_confirmed_target``: its label is
+that recovery, verified by one live re-run of the target ticket (regression
+tickets are not re-run live).
+
 Outputs (in the live test directory): ``evaluator/live_labels.jsonl`` and
 ``hetren_visible.jsonl`` (run ID and steps, the same step format as the
 dataset; final-label-only and excluded runs have only the first input).
@@ -69,7 +74,7 @@ from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.sampling import run_agent_on
 
 
-CATEGORIES = ("proxy_matched", "final_label_only", "excluded")
+CATEGORIES = ("proxy_matched", "final_label_only", "live_confirmed_target", "excluded")
 OUTPUT_LIMIT = LIVE_TEST_MODEL_SETTINGS.max_tokens
 RE_RUN_RECOVERIES = ("rerun", "set_mapping", "restore_from_source")
 
@@ -347,6 +352,42 @@ def confirmation_results(live_dir: Path) -> list[dict]:
     return results
 
 
+def finalize_live_labels(live_dir: Path) -> dict[str, object]:
+    """Apply confirmation results: write ``evaluator/live_labels_final.jsonl``
+    and ``hetren_visible_final.jsonl`` (the labelling outputs stay unchanged)."""
+    live_dir = Path(live_dir)
+    labels = [json.loads(line) for line in (live_dir / "evaluator" / "live_labels.jsonl").open(encoding="utf-8")]
+    visible = {row["run_id"]: row for row in map(json.loads, (live_dir / "hetren_visible.jsonl").open(encoding="utf-8"))}
+    results = {r["run_id"]: r for r in confirmation_results(live_dir)}
+    final_labels, final_visible = [], []
+
+    for row in labels:
+        result = results.get(row["run_id"])
+        record = visible[row["run_id"]]
+
+        if row["category"] == "excluded" and result is not None and result["confirmed"]:
+            row = {**row, "category": "live_confirmed_target", "label": result["action"], "rule": "live_confirmed_target"}
+            record = {"run_id": row["run_id"], "steps": [{"input": record["steps"][0]["input"], "target": result["action"]}]}
+
+        row = {**row, "confirmation": None if result is None else {"reason": result["reason"], "confirmed": result["confirmed"]}}
+        final_labels.append(row)
+        final_visible.append(record)
+
+    evaluator = "".join(_line(row) for row in final_labels)
+    hetren = "".join(_line(row) for row in final_visible)
+    (live_dir / "evaluator" / "live_labels_final.jsonl").write_text(evaluator, encoding="utf-8")
+    (live_dir / "hetren_visible_final.jsonl").write_text(hetren, encoding="utf-8")
+    return {
+        "runs": len(final_labels),
+        "categories": dict(Counter(row["category"] for row in final_labels)),
+        "confirmations_failed": sorted(r for r, res in results.items() if not res["confirmed"]),
+        "files": {
+            "evaluator/live_labels_final.jsonl": hashlib.sha256(evaluator.encode("utf-8")).hexdigest(),
+            "hetren_visible_final.jsonl": hashlib.sha256(hetren.encode("utf-8")).hexdigest(),
+        },
+    }
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
 
@@ -354,7 +395,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--live-dir", required=True, type=Path)
     parser.add_argument("--processes", type=int, default=1)
     parser.add_argument("--export-confirmations", action="store_true", help="write confirm/ actions instead of labelling")
+    parser.add_argument("--finalize", action="store_true", help="apply recorded confirmation results")
     args = parser.parse_args(argv)
+
+    if args.finalize:
+        print(json.dumps(finalize_live_labels(args.live_dir), indent=2, sort_keys=True))
+        return 0
 
     if args.export_confirmations:
         print(json.dumps(export_confirmations(args.live_dir), indent=2, sort_keys=True))
@@ -371,6 +417,7 @@ __all__ = [
     "confirmation_results",
     "confirmation_runs",
     "export_confirmations",
+    "finalize_live_labels",
     "label_live",
     "label_live_run",
     "replay_live_run",
