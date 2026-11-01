@@ -46,6 +46,7 @@ EVALUATOR_IMPORTERS = frozenset({VERIFIER})
 RESTRICTED_PREFIXES = (
     "packages.action_space",
     "packages.hetren_evidence",
+    "packages.hetren_baselines",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",

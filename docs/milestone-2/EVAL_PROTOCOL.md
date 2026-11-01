@@ -145,6 +145,33 @@ The recent-tier-change look-alike normally uses an account the generator already
 - an untrained small model
 - a strong general model: `gpt-4.1`
 
+Every baseline is a policy over compact evidence, run by `packages/support_evaluator/episodes.py`: the policy gets the dataset's first input, each probe runs through the probe gateway on a fork of the run's end state (so probing never changes the scored state), and the episode ends at the first decision or recovery, or with a failure when the policy asks for a fifth probe or returns an invalid action. The final action is scored with the labeller's `verify_label` on the unprobed end state: decisions must be right, recoveries must verify by execution (any verified recovery counts; exact match with the smallest label is reported separately). Metric formulas are provisional until task 12.
+
+### Rules baseline (v1)
+
+`packages/hetren_baselines/rules.py`, `RULES_POLICY_VERSION = 1`. Written and debugged on the train split only, then frozen and run once on validation. It has no rules for the held-out families. It stays frozen: it is not tuned on validation, on later dataset tiers, or on test results.
+
+Validation (splits v1, 550 primary cases):
+
+| metric | rules v1 |
+|---|---|
+| decision accuracy | 99.6% (548/550) |
+| verified recovery rate | 100% (254/254) |
+| wrong interventions on healthy runs | 0% (0/171) |
+| `insufficient_evidence` recall / precision | 100% / 100% (93) |
+| `abstain` recall / precision | 93.8% (30/32) / 100% |
+| exact match with the label | 82.7% |
+| mean probes (all / healthy) | 1.43 / 2.31 (probe oracle: 0.61 / 0.88) |
+| compound slice / recent-target faulty slice | 0/2 / 114/114 |
+
+All per-family accuracies are 100% except stale account record (64/66): both errors are compound cases (text-following agent), where the rules restore the account and the label is `abstain`. In-distribution validation is therefore nearly solved by hand-written rules; decision accuracy there does not separate methods, and differences must come from probe cost, compound cases, held-out families, live runs, and the harder tier (dataset v3, proposed).
+
+### Small model baseline and evaluation settings
+
+- **Model:** `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`, Apache-2.0) is the primary model for the untrained baseline and Milestone 3 fine-tuning; `HuggingFaceTB/SmolLM3-3B` (revision `a07cc9a04f16550a088caea529712d1d335b0ac1`, Apache-2.0) is the backup.
+- **Hardware:** Kaggle T4 (16 GB).
+- **Evaluation settings, identical for the untrained baseline and the fine-tuned model:** fp16 weights (T4 has no bf16); for the fine-tuned model, QLoRA adapters merged into the fp16 base before evaluation; the model's own chat template (non-thinking; for SmolLM3, reasoning off); greedy decoding (`do_sample=False`), `max_new_tokens=128`, no repetition penalty; the same prompt module as the `gpt-4.1` baseline; the output is parsed with `parse_action`, and anything unparsable is an invalid-action failure. Library versions are recorded with each run.
+
 ## Spending rules
 
 Live budget:
