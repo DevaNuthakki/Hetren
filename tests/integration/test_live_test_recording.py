@@ -161,6 +161,7 @@ def _args(export, captures, **overrides):
     values = dict(
         specs=export / "specs", captures=captures, model="gpt-4.1-mini-2025-04-14",
         max_usd=1.0, limit=None, input_usd_per_mtok=0.40, output_usd_per_mtok=1.60, confirm_live=True,
+        confirmations=None, confirm_captures=None,
     )
     values.update(overrides)
     return argparse.Namespace(**values)

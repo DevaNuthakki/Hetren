@@ -33,6 +33,7 @@ from typing import Any
 
 from environments.support.fixtures import SupportEnvironment, WorldSpec
 from environments.support.generator import generate_world
+from environments.support.maintenance import MAINTENANCE_VERB_TOOLS
 from environments.support.tools import SUPPORT_TOOL_DESCRIPTIONS, SUPPORT_TOOL_SCHEMAS, SUPPORT_TOOLS
 from packages.action_gateway import AllowListPolicy, GatedTool, ToolGateway
 from packages.action_space import Action
@@ -61,6 +62,7 @@ from packages.support_evaluator.labeler import (
     outcome_checks,
     probe_oracle,
     unexplained_absences,
+    world_checks,
 )
 from packages.support_evaluator.live import LIVE_MAX_TURNS
 from packages.support_evaluator.plan import PlannedCase
@@ -74,6 +76,11 @@ RE_RUN_RECOVERIES = ("rerun", "set_mapping", "restore_from_source")
 
 def replay_live_run(spec: dict, case_spec: WorldSpec, captures: Path, model_id: str):
     environment = SupportEnvironment(case_spec)
+    return environment, replay_on(environment, spec, captures, model_id)
+
+
+def replay_on(environment: SupportEnvironment, spec: dict, captures: Path, model_id: str):
+    """Replay recorded live captures exactly on ``environment`` (mutating it)."""
     gateway = ToolGateway(
         tools=[
             GatedTool(name, partial(f, environment), SUPPORT_TOOL_SCHEMAS[name], SUPPORT_TOOL_DESCRIPTIONS[name])
@@ -95,7 +102,22 @@ def replay_live_run(spec: dict, case_spec: WorldSpec, captures: Path, model_id: 
     if record.status is RunStatus.ERROR or len(model.used_capture_ids) != len(CaptureStore(captures).captures()):
         raise ContractError(f"{spec['run_id']}: live run does not replay exactly")
 
-    return environment, record
+    return record
+
+
+def _rebuild(live_dir: Path, run_id: str):
+    spec = json.loads((live_dir / "specs" / f"{run_id}.json").read_text(encoding="utf-8"))
+    row = next(
+        r for r in map(json.loads, (live_dir / "evaluator" / "live_plan.jsonl").open(encoding="utf-8"))
+        if r["run_id"] == run_id
+    )
+    planned = PlannedCase(**row["planned"])
+    case = inject(planned.case_kind, generate_world(planned.world_seed), random.Random(planned.case_seed), planned.case_variant)
+
+    if case.spec.canonical_payload() != spec["world"] or case.truth.canonical_payload() != row["truth"]:
+        raise ContractError(f"{run_id}: rebuilt case does not match the exported spec")
+
+    return spec, planned, case
 
 
 def _proxy_label(planned, case, environment, evidence, abstracted, renaming, behaviour):
@@ -125,17 +147,7 @@ def _proxy_label(planned, case, environment, evidence, abstracted, renaming, beh
 
 def label_live_run(live_dir: str, run_id: str, model_id: str) -> dict[str, Any]:
     live_dir = Path(live_dir)
-    spec = json.loads((live_dir / "specs" / f"{run_id}.json").read_text(encoding="utf-8"))
-    row = next(
-        r for r in map(json.loads, (live_dir / "evaluator" / "live_plan.jsonl").open(encoding="utf-8"))
-        if r["run_id"] == run_id
-    )
-    planned = PlannedCase(**row["planned"])
-    case = inject(planned.case_kind, generate_world(planned.world_seed), random.Random(planned.case_seed), planned.case_variant)
-
-    if case.spec.canonical_payload() != spec["world"] or case.truth.canonical_payload() != row["truth"]:
-        raise ContractError(f"{run_id}: rebuilt case does not match the exported spec")
-
+    spec, planned, case = _rebuild(live_dir, run_id)
     captures = live_dir / "captures" / run_id
     environment, record = replay_live_run(spec, case.spec, captures, model_id)
     evidence = record.evidence_payload()
@@ -237,13 +249,117 @@ def confirmation_runs(labels: list[dict]) -> list[dict]:
     ]
 
 
+def confirmation_actions(live_dir: Path, labels: list[dict], model_id: str) -> list[dict]:
+    """The recovery to confirm live for each selected run, and why it was selected.
+
+    - ``proxy_recovery``: proxy-matched recovery labels that re-run the agent;
+    - ``compound``: excluded runs whose matching proxies disagree only between
+      one re-run recovery and ``abstain`` (the recovery is confirmed);
+    - ``unmatched``: excluded runs with no matching behaviour; the candidate is
+      the labeler's smallest verified recovery with ``trust`` re-running.
+    """
+    live_dir = Path(live_dir)
+    selected = [
+        {"run_id": row["run_id"], "reason": "proxy_recovery", "action": row["label"]}
+        for row in confirmation_runs(labels)
+    ]
+
+    for row in labels:
+        if row["category"] != "excluded":
+            continue
+
+        if row["matching_behaviours"]:
+            recoveries = {
+                canonical_sha256(label): label for label in row["proxy_candidates"].values()
+                if label["action"] == "recover"
+            }
+            others = {label["verb"] for label in row["proxy_candidates"].values() if label["action"] != "recover"}
+
+            if len(recoveries) == 1 and others <= {"abstain"}:
+                (action,) = recoveries.values()
+
+                if action["verb"] in RE_RUN_RECOVERIES:
+                    selected.append({"run_id": row["run_id"], "reason": "compound", "action": action})
+            continue
+
+        spec, _, case = _rebuild(live_dir, row["run_id"])
+        environment, record = replay_live_run(spec, case.spec, live_dir / "captures" / row["run_id"], model_id)
+        candidate = label_run(case, environment, record.evidence_payload(), "trust").label
+
+        if candidate["action"] == "recover" and candidate["verb"] in RE_RUN_RECOVERIES:
+            selected.append({"run_id": row["run_id"], "reason": "unmatched", "action": candidate})
+
+    return sorted(selected, key=lambda item: item["run_id"])
+
+
+def export_confirmations(live_dir: Path) -> dict[str, object]:
+    """Write ``confirm/run-NNNN.json`` (run ID and action) and the evaluator's reasons."""
+    live_dir = Path(live_dir)
+    out = live_dir / "confirm"
+
+    if out.exists() and any(out.iterdir()):
+        raise FileExistsError(f"{out} must be empty or new")
+
+    model_id = json.loads((live_dir / "captures" / "ledger.json").read_text(encoding="utf-8"))["model"]
+    labels = [json.loads(line) for line in (live_dir / "evaluator" / "live_labels.jsonl").open(encoding="utf-8")]
+    selected = confirmation_actions(live_dir, labels, model_id)
+    out.mkdir(parents=True, exist_ok=True)
+
+    for item in selected:
+        (out / f"{item['run_id']}.json").write_text(_line({"run_id": item["run_id"], "action": item["action"]}), encoding="utf-8")
+
+    reasons = "".join(_line(item) for item in selected)
+    (live_dir / "evaluator" / "confirmations.jsonl").write_text(reasons, encoding="utf-8")
+    return {
+        "runs": len(selected),
+        "by_reason": dict(Counter(item["reason"] for item in selected)),
+        "by_verb": dict(Counter(item["action"]["verb"] for item in selected)),
+        "files": {"evaluator/confirmations.jsonl": hashlib.sha256(reasons.encode("utf-8")).hexdigest()},
+    }
+
+
+def confirmation_results(live_dir: Path) -> list[dict]:
+    """Replay each recorded confirmation on its rebuilt state and check the world."""
+    live_dir = Path(live_dir)
+    model_id = json.loads((live_dir / "captures" / "ledger.json").read_text(encoding="utf-8"))["model"]
+    results = []
+
+    for item in map(json.loads, (live_dir / "evaluator" / "confirmations.jsonl").open(encoding="utf-8")):
+        run_id, action = item["run_id"], item["action"]
+        spec, planned, case = _rebuild(live_dir, run_id)
+        environment, _ = replay_live_run(spec, case.spec, live_dir / "captures" / run_id, model_id)
+
+        if action["verb"] != "rerun":
+            MAINTENANCE_VERB_TOOLS[action["verb"]](environment, **action["args"])
+
+        record = replay_on(environment, spec, live_dir / "confirm-captures" / run_id, model_id)
+        checks = world_checks(environment, case.truth)
+        results.append({
+            **item,
+            "case_kind": planned.case_kind,
+            "case_variant": planned.case_variant,
+            "held_out": planned.case_kind in HELD_OUT_KINDS,
+            "status": record.status.value,
+            "checks": checks,
+            "confirmed": all(checks.values()),
+        })
+
+    return results
+
+
 def main(argv: list[str] | None = None) -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="Label recorded live test runs.")
     parser.add_argument("--live-dir", required=True, type=Path)
     parser.add_argument("--processes", type=int, default=1)
+    parser.add_argument("--export-confirmations", action="store_true", help="write confirm/ actions instead of labelling")
     args = parser.parse_args(argv)
+
+    if args.export_confirmations:
+        print(json.dumps(export_confirmations(args.live_dir), indent=2, sort_keys=True))
+        return 0
+
     print(json.dumps(label_live(args.live_dir, processes=args.processes, progress=True), indent=2, sort_keys=True))
     return 0
 
@@ -251,10 +367,14 @@ def main(argv: list[str] | None = None) -> int:
 __all__ = [
     "CATEGORIES",
     "OUTPUT_LIMIT",
+    "confirmation_actions",
+    "confirmation_results",
     "confirmation_runs",
+    "export_confirmations",
     "label_live",
     "label_live_run",
     "replay_live_run",
+    "replay_on",
 ]
 
 

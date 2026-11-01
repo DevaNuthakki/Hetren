@@ -49,6 +49,7 @@ def recorded(tmp_path_factory):
     args = argparse.Namespace(
         specs=live_dir / "specs", captures=live_dir / "captures", model=MODEL, max_usd=1.0, limit=None,
         input_usd_per_mtok=0.40, output_usd_per_mtok=1.60, confirm_live=True,
+        confirmations=None, confirm_captures=None,
     )
     assert script.record_runs(args, FakeLive, tiktoken.get_encoding("o200k_base")) == 0
     plans = {r["planned"]["case_kind"]: r for r in map(json.loads, (live_dir / "evaluator" / "live_plan.jsonl").open())}
@@ -84,3 +85,46 @@ def test_without_a_matching_behaviour_only_rerun_free_labels_survive(recorded, m
 
     assert faulty["evaluator"]["category"] == "excluded"
     assert faulty["evaluator"]["label"] is None
+
+
+def _confirm(live_dir, entries):
+    """Write confirmation actions, record them with the fake live model, and check them."""
+    (live_dir / "confirm").mkdir(exist_ok=True)
+    lines = []
+
+    for run_id, action in entries:
+        (live_dir / "confirm" / f"{run_id}.json").write_text(json.dumps({"run_id": run_id, "action": action}))
+        lines.append(json.dumps({"run_id": run_id, "reason": "proxy_recovery", "action": action}) + "\n")
+
+    (live_dir / "evaluator" / "confirmations.jsonl").write_text("".join(lines))
+    spec = importlib.util.spec_from_file_location("record_live_test", REPO_ROOT / "scripts" / "record_live_test.py")
+    script = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(script)
+    args = argparse.Namespace(
+        specs=live_dir / "specs", captures=live_dir / "captures", model=MODEL, max_usd=1.0, limit=None,
+        confirmations=live_dir / "confirm", confirm_captures=live_dir / "confirm-captures",
+        input_usd_per_mtok=0.40, output_usd_per_mtok=1.60, confirm_live=True,
+    )
+    before = json.loads((live_dir / "captures" / "ledger.json").read_text())
+    assert script.record_runs(args, FakeLive, tiktoken.get_encoding("o200k_base")) == 0
+    after = json.loads((live_dir / "captures" / "ledger.json").read_text())
+    return before, after, {r["run_id"]: r for r in live_labels.confirmation_results(live_dir)}
+
+
+def test_confirmation_reruns_on_the_replayed_end_state(recorded):
+    live_dir, plans = recorded
+    rerun = {"action": "recover", "verb": "rerun", "args": {}}
+    transient = plans["transient_error_retried"]["run_id"]
+    persistent = next(r["run_id"] for r in plans.values() if r["planned"]["case_kind"] == "mishandled_tool_error")
+    variant = plans["mishandled_tool_error"]["planned"]["case_variant"]
+
+    before, after, results = _confirm(live_dir, [(transient, rerun), (persistent, rerun)])
+
+    # The transient error's failures were used up by the recorded run, so the
+    # re-run succeeds; a persistent error still fails.
+    assert results[transient]["confirmed"] is True
+    assert results[persistent]["confirmed"] is (variant == "transient")
+    assert after["completed"] == before["completed"]
+    assert set(after["confirmed"]) == {transient, persistent}
+    assert after["spend"]["calls"] > before["spend"]["calls"]
+    assert sorted(p.name for p in (live_dir / "confirm-captures").iterdir()) == sorted([transient, persistent])
