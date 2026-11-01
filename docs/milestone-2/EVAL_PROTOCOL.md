@@ -67,6 +67,35 @@ Probe outcomes are compared up to renaming. IDs, canonical tiers (including in k
 
 Splits are by fault family, generator seed, and agent source. Scripted agents produce training data. Live `gpt-4.1-mini` runs are used only for testing. F6 and F7 never appear in training or validation.
 
+| split | contents | use |
+|---|---|---|
+| `train` | scripted runs, the 8 training families | training |
+| `validation` | scripted runs, the 8 training families | tuning and baselines |
+| `test_in_distribution` | scripted runs, the 8 training families | final evaluation only |
+| `test_held_out` | scripted runs, F6 and F7 only | final evaluation only |
+| live test (task 10) | live `gpt-4.1-mini` runs | final evaluation only |
+
+No test split is used for tuning, model selection, prompt changes or threshold choices.
+
+Rules (implemented in `packages/support_evaluator/splits.py`; frozen lists in `docs/milestone-2/splits-v1/`):
+
+- **Fault family.** F6 and F7 primary cases go to `test_held_out` with all their partners, and `test_held_out` contains nothing else. A partner record of F6 or F7 that belongs to a training-family case is dropped (reason "held-out partner outside test_held_out"), so training never sees F6 or F7 worlds, not even as contrast partners.
+- **World seed.** Seeds used by any F6 or F7 primary are reserved for `test_held_out`. Other cases on a reserved seed are dropped with their partners (reason "seed reserved for held-out"). The remaining seeds go to `validation` (hash bucket below 0.15), `test_in_distribution` (0.15 to 0.30) or `train` (the rest) by a seeded hash. No world seed appears in two splits.
+- **Twin groups.** A primary and its partners always share a split.
+- **Agent source.** The four splits above are scripted runs. Live runs form the separate live test split when they are recorded.
+
+Dropped records are listed in `dropped.tsv` (case ID and reason).
+
+Splits v1 (seed 2026) on dataset v2 (primary cases / partner records):
+
+- `train` 2723 / 2472
+- `validation` 550 / 478
+- `test_in_distribution` 560 / 514
+- `test_held_out` 960 / 948 (F6 480, F7 480)
+- dropped: 822 held-out partners; 12 seed-reserved records (7 primaries, 5 partners)
+
+Compound cases: 16 train, 2 validation, 3 `test_in_distribution`. Per-split counts per kind, label and behaviour are in the split manifest.
+
 ## Metrics
 
 - verified recovery rate
