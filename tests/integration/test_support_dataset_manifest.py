@@ -21,6 +21,10 @@ from packages.support_evaluator.dataset import (
 from packages.support_evaluator.plan import cross_plan
 
 
+# Builds and labels datasets; runs in the slow CI job.
+pytestmark = pytest.mark.slow
+
+
 MANIFEST = Path(__file__).resolve().parents[2] / "docs" / "milestone-2" / "dataset-v2.manifest.json"
 
 

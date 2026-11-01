@@ -12,6 +12,10 @@ from packages.support_evaluator.dataset import build_dataset
 from packages.support_evaluator.plan import PlannedCase, cross_plan
 
 
+# Builds and labels datasets; runs in the slow CI job.
+pytestmark = pytest.mark.slow
+
+
 ENCODING = tiktoken.get_encoding("o200k_base")
 KINDS = ("mapping_swap", "missing_account")  # small datasets keep CI fast
 

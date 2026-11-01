@@ -205,6 +205,7 @@ def full_labels():
     return {key: label_case(PlannedCase(*key, WORLD_SEED, CASE_SEED)) for key in cases}
 
 
+@pytest.mark.slow
 def test_f1_and_the_merged_account_form_one_twin_group(full_labels):
     f1 = full_labels[("mapping_swap", "swap", "trust")].probe_label
     merged = full_labels[("merged_account", "default", "trust")].probe_label
@@ -219,6 +220,7 @@ def test_f1_and_the_merged_account_form_one_twin_group(full_labels):
     assert f1.determined and merged.determined
 
 
+@pytest.mark.slow
 def test_proactive_detection_twins_are_resolved_by_configuration_not_history(full_labels):
     stale = full_labels[("stale_account_record", "default", "trust")].probe_label
     recent = full_labels[("recent_tier_change", "default", "trust")].probe_label
@@ -236,6 +238,7 @@ def test_proactive_detection_twins_are_resolved_by_configuration_not_history(ful
     assert {verb for verb, _ in probes(stale)} & {"compare_with_source", "history", "inspect"}
 
 
+@pytest.mark.slow
 def test_twin_cases_carry_counterfactual_partners(full_labels):
     f1 = full_labels[("mapping_swap", "swap", "trust")]
     partner_kinds = {p["counterfactual"].split("/")[0] for p in f1.partners}
@@ -245,6 +248,7 @@ def test_twin_cases_carry_counterfactual_partners(full_labels):
     assert full_labels[("missing_account", "deleted_account", "trust")].partners == ()
 
 
+@pytest.mark.slow
 def test_unambiguous_runs_need_no_probes_and_have_no_twin(full_labels):
     deleted = full_labels[("missing_account", "deleted_account", "trust")].probe_label
 
@@ -253,6 +257,7 @@ def test_unambiguous_runs_need_no_probes_and_have_no_twin(full_labels):
     assert deleted.initial_label_entropy == 0
 
 
+@pytest.mark.slow
 def test_probe_labels_are_valid_actions_within_budget(full_labels):
     for label in full_labels.values():
         assert len(label.probe_label.probes) <= PROBE_BUDGET
@@ -261,6 +266,7 @@ def test_probe_labels_are_valid_actions_within_budget(full_labels):
             assert parse_action(probe).kind == "probe"
 
 
+@pytest.mark.slow
 def test_twin_group_ids_are_stable_and_evaluator_only(full_labels):
     again = label_case(PlannedCase("mapping_swap", "swap", "trust", WORLD_SEED, CASE_SEED))
     twin = full_labels[("mapping_swap", "swap", "trust")].probe_label.twin_group_id
@@ -275,6 +281,7 @@ def test_twin_group_ids_are_stable_and_evaluator_only(full_labels):
     assert_no_leaks(scan_content({"compact": json.loads(compact)}))
 
 
+@pytest.mark.slow
 def test_case_label_provenance_is_complete(full_labels):
     payload = full_labels[("mapping_swap", "swap", "trust")].provenance_payload()
 
