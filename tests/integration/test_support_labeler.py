@@ -80,6 +80,7 @@ EXPECTED = {
     ("merged_account", "default"):                  (N, N, RO, N, N),
     ("recent_tier_change", "default"):              (N, N, N, N, N),
     ("transient_error_retried", "default"):         (RR, N, RR, RR, RR),
+    ("clean_world", "default"):                     (N, N, N, N, N),
 }
 
 EXPECTED_RULE = {
@@ -211,20 +212,37 @@ def test_f1_and_the_merged_account_form_one_twin_group(full_labels):
     assert f1.twin_group_id is not None
     assert f1.twin_group_id == merged.twin_group_id
     assert "merged_account/default" in f1.consistent
-    assert [p["verb"] for p in f1.probes] == ["find_owners"]
+    # The separating probe reads the ownership or merge record itself.
+    assert [(p["verb"], p["args"].get("entity")) for p in f1.probes] in (
+        [("find_owners", None)], [("inspect", "account")], [("history", "account")],
+    )
     assert f1.determined and merged.determined
 
 
-def test_proactive_detection_families_share_a_twin_group_resolved_by_comparing_with_source(full_labels):
-    ids = {full_labels[k].probe_label.twin_group_id for k in (
-        ("stale_account_record", "default", "trust"),
-        ("recent_tier_change", "default", "trust"),
-        ("queue_misconfiguration", "description_swap", "trust"),
-    )}
-
-    assert len(ids) == 1 and None not in ids
+def test_proactive_detection_twins_are_resolved_by_configuration_not_history(full_labels):
     stale = full_labels[("stale_account_record", "default", "trust")].probe_label
-    assert [p["verb"] for p in stale.probes] == ["compare_with_source"]
+    recent = full_labels[("recent_tier_change", "default", "trust")].probe_label
+    f6 = full_labels[("queue_misconfiguration", "description_swap", "trust")].probe_label
+
+    for label in (stale, recent, f6):
+        assert label.twin_group_id is not None
+
+    probes = lambda label: [(p["verb"], p["args"].get("entity")) for p in label.probes]
+    # F6 is told apart through the routing policy; history never separates it
+    # from the recent tier change, which comes from the generator.
+    assert ("inspect", "routing_policy") in probes(f6)
+    assert ("inspect", "routing_policy") in probes(recent)
+    assert ("history", "account") not in probes(recent)
+    assert {verb for verb, _ in probes(stale)} & {"compare_with_source", "history", "inspect"}
+
+
+def test_twin_cases_carry_counterfactual_partners(full_labels):
+    f1 = full_labels[("mapping_swap", "swap", "trust")]
+    partner_kinds = {p["counterfactual"].split("/")[0] for p in f1.partners}
+
+    assert "merged_account" in partner_kinds
+    assert all(p["steps"][-1]["target"]["action"] in ("recover", "decide") for p in f1.partners)
+    assert full_labels[("missing_account", "deleted_account", "trust")].partners == ()
 
 
 def test_unambiguous_runs_need_no_probes_and_have_no_twin(full_labels):

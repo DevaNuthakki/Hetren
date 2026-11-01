@@ -27,12 +27,19 @@ from environments.support.fixtures import (
     WorldSpec,
     derive_routing,
 )
-from environments.support.generator import CLAIM_TEXTS
+from datetime import timedelta
+
+from environments.support.generator import (
+    CLAIM_TEXTS,
+    RECENT_DAYS,
+    RECENT_MARGIN_DAYS,
+    format_time,
+    parse_time,
+    random_time,
+    strip_claims,
+)
 from packages.contracts import ContractError
 from packages.support_evaluator.cases import CASE_KINDS, CaseTruth
-
-
-CHANGE_AS_OF = "2026-06-01T00:00:00Z"
 
 
 @dataclass(frozen=True)
@@ -119,8 +126,9 @@ def _unused_ref(spec: WorldSpec, rng: random.Random) -> str:
             return ref
 
 
-def _change_time(rng: random.Random) -> str:
-    return f"2026-05-{rng.randrange(1, 29):02d}T{rng.randrange(0, 24):02d}:00:00Z"
+def _change_time(rng: random.Random, world: WorldSpec, after: str) -> str:
+    """A change time after ``after`` (the account's own last update) and before ``as_of``."""
+    return random_time(rng, after, world.as_of)
 
 
 def _regression(
@@ -201,7 +209,7 @@ def stale_account_record(world: WorldSpec, rng: random.Random, variant: str, for
     policy = _policy(world)
     target, ticket = _pick_target(world, rng, forced_ticket)
     new_tier = _other_tier(target.tier)
-    changed_at = _change_time(rng)
+    changed_at = _change_time(rng, world, target.updated_at)
     spec = replace(
         world,
         account_sources=world.account_sources + (
@@ -210,7 +218,6 @@ def stale_account_record(world: WorldSpec, rng: random.Random, variant: str, for
         account_history=world.account_history + (
             AccountEvent(target.account_id, "tier_changed", changed_at, (("tier", new_tier),)),
         ),
-        as_of=CHANGE_AS_OF,
     )
 
     return InjectedCase(spec, _truth(
@@ -295,7 +302,7 @@ def misleading_ticket_text(world: WorldSpec, rng: random.Random, variant: str, f
     spec = replace(
         world,
         tickets=tuple(
-            replace(t, body=f"{t.body} {claim}") if t.ticket_id == ticket.ticket_id else t
+            replace(t, body=f"{strip_claims(t.body)} {claim}") if t.ticket_id == ticket.ticket_id else t
             for t in world.tickets
         ),
     )
@@ -341,7 +348,10 @@ def missing_account(world: WorldSpec, rng: random.Random, variant: str, forced_t
             raise ContractError("world is too small to delete an account")
 
         spec = replace(
-            world, accounts=tuple(a for a in world.accounts if a.account_id != target.account_id),
+            world,
+            accounts=tuple(a for a in world.accounts if a.account_id != target.account_id),
+            account_sources=tuple(s for s in world.account_sources if s.account_id != target.account_id),
+            account_history=tuple(e for e in world.account_history if e.account_id != target.account_id),
         )
         truth_fields = dict(
             expected_queue_id=policy["unresolved"], expected_account_id=None,
@@ -436,7 +446,7 @@ def merged_account(world: WorldSpec, rng: random.Random, variant: str, forced_ti
     policy = _policy(world)
     target, ticket = _pick_target(world, rng, forced_ticket)
     old_ref = _unused_ref(world, rng)
-    merged_at = _change_time(rng)
+    merged_at = _change_time(rng, world, target.updated_at)
     spec = replace(
         _with_directory(
             _with_account(
@@ -452,7 +462,6 @@ def merged_account(world: WorldSpec, rng: random.Random, variant: str, forced_ti
         account_history=world.account_history + (
             AccountEvent(target.account_id, "merged", merged_at, (("customer_ref", old_ref),)),
         ),
-        as_of=CHANGE_AS_OF,
     )
 
     return InjectedCase(spec, _truth(
@@ -472,34 +481,88 @@ def merged_account(world: WorldSpec, rng: random.Random, variant: str, forced_ti
     ))
 
 
-def recent_tier_change(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
-    policy = _policy(world)
-    target, ticket = _pick_target(world, rng, forced_ticket)
-    new_tier = _other_tier(target.tier)
-    changed_at = _change_time(rng)
-    updated = replace(target, tier=new_tier, version=target.version + 1, updated_at=changed_at)
-    spec = replace(
-        _with_account(world, target.account_id, tier=new_tier, version=updated.version, updated_at=changed_at),
-        account_sources=world.account_sources + (SourceRecord.of(updated),),
-        account_history=world.account_history + (
-            AccountEvent(target.account_id, "tier_changed", changed_at, (("tier", new_tier),)),
-        ),
-        as_of=CHANGE_AS_OF,
+def _recently_changed(world: WorldSpec, account: Account) -> bool:
+    """The generator's notion of a recent tier change (consistent with its source)."""
+    window_start = parse_time(world.as_of) - timedelta(days=RECENT_DAYS)
+    return any(
+        event.account_id == account.account_id
+        and event.kind == "tier_changed"
+        and event.at == account.updated_at
+        and parse_time(event.at) >= window_start
+        for event in world.account_history
     )
+
+
+def recent_tier_change(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
+    """A healthy world whose target account had a recent, consistent tier change.
+
+    Recent changes come from the generator, independently of case kind, so
+    this look-alike adds nothing to history. Without a forced ticket it picks
+    an account the generator already changed recently; only if a world has
+    none does it convert one exactly as the generator would (one event, source
+    consistent). With a forced ticket on an account without a recent change it
+    does not apply, so counterfactual enumeration never manufactures a history
+    difference.
+    """
+    policy = _policy(world)
+    changes: tuple[dict[str, object], ...] = ()
+    spec = world
+
+    if forced_ticket is not None:
+        target, ticket = _pick_target(world, rng, forced_ticket)
+
+        if not _recently_changed(world, target):
+            raise ContractError("target account has no recent tier change")
+    else:
+        recent = [a for a in world.accounts if _recently_changed(world, a) and _tickets_of(world, a.customer_ref)]
+
+        if recent:
+            target = rng.choice(recent)
+            ticket = _pick_ticket(world, rng, target)
+        else:
+            target, ticket = _pick_target(world, rng, None)
+            as_of = parse_time(world.as_of)
+            changed_at = random_time(
+                rng,
+                format_time(as_of - timedelta(days=RECENT_DAYS)),
+                format_time(as_of - timedelta(days=RECENT_MARGIN_DAYS)),
+            )
+            spec = replace(
+                _with_account(world, target.account_id, version=target.version + 1, updated_at=changed_at),
+                account_history=world.account_history + (
+                    AccountEvent(target.account_id, "tier_changed", changed_at, (("tier", target.tier),)),
+                ),
+            )
+            changes = ({"entity": "account_history", "account_id": target.account_id, "event": "tier_changed"},)
 
     return InjectedCase(spec, _truth(
         case_kind="recent_tier_change", case_variant=variant,
         target_ticket_id=ticket.ticket_id,
-        expected_queue_id=policy[new_tier], expected_account_id=target.account_id,
+        expected_queue_id=policy[target.tier], expected_account_id=target.account_id,
         remedy_if_wrong="reroute",
-        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": policy[new_tier]},),
-        world_changes=({
-            "entity": "account", "account_id": target.account_id,
-            "field": "tier", "before": target.tier, "after": new_tier,
-        },),
+        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": policy[target.tier]},),
+        world_changes=changes,
         regression_ticket_ids=_regression(
             spec, rng, target_ticket_id=ticket.ticket_id,
             affected_refs={target.customer_ref}, affected_accounts={target.account_id},
+        ),
+    ))
+
+
+def clean_world(world: WorldSpec, rng: random.Random, variant: str, forced_ticket: str | None = None) -> InjectedCase:
+    policy = _policy(world)
+    target, ticket = _pick_target(world, rng, forced_ticket)
+
+    return InjectedCase(world, _truth(
+        case_kind="clean_world", case_variant=variant,
+        target_ticket_id=ticket.ticket_id,
+        expected_queue_id=policy[target.tier], expected_account_id=target.account_id,
+        remedy_if_wrong="reroute",
+        remedy_if_wrong_arguments=({"ticket_id": ticket.ticket_id, "queue_id": policy[target.tier]},),
+        world_changes=(),
+        regression_ticket_ids=_regression(
+            world, rng, target_ticket_id=ticket.ticket_id,
+            affected_refs=set(), affected_accounts=set(),
         ),
     ))
 
@@ -515,6 +578,7 @@ INJECTORS: dict[str, tuple[Callable[..., InjectedCase], tuple[str, ...]]] = {
     "merged_account": (merged_account, ("default",)),
     "recent_tier_change": (recent_tier_change, ("default",)),
     "transient_error_retried": (transient_error_retried, ("default",)),
+    "clean_world": (clean_world, ("default",)),
 }
 
 assert set(INJECTORS) == set(CASE_KINDS)
@@ -542,7 +606,6 @@ def inject(
 
 
 __all__ = [
-    "CHANGE_AS_OF",
     "INJECTORS",
     "InjectedCase",
     "inject",

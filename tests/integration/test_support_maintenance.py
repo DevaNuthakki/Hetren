@@ -92,7 +92,8 @@ def test_merged_account_needs_inspect_or_history_to_tell_apart_from_f1():
     record = _probe(environment, "inspect", entity="account", id=account_id).observation["record"]
     assert ticket.customer_ref in record["merged_customer_refs"]
     events = _probe(environment, "history", entity="account", id=account_id).observation["events"]
-    assert [event["kind"] for event in events] == ["merged"]
+    # Generated accounts may also carry an ordinary, unrelated tier change.
+    assert [event["kind"] for event in events].count("merged") == 1
 
 
 def test_compare_with_source_shows_raw_values_for_f2_f7_and_the_recent_change():

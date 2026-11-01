@@ -18,6 +18,7 @@ from .catalog import (
     sensitive_tokens,
 )
 from .cases import (
+    BASELINE_KINDS,
     CASE_KINDS,
     CaseTruth,
     FAMILIES,
@@ -42,6 +43,7 @@ from .registry import (
 
 
 __all__ = [
+    "BASELINE_KINDS",
     "CASE_KINDS",
     "CaseTruth",
     "EVALUATOR_FIELD_NAMES",

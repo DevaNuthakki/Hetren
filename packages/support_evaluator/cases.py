@@ -38,7 +38,12 @@ LOOKALIKES = (
     "transient_error_retried",
 )
 
-CASE_KINDS = tuple(FAMILIES) + LOOKALIKES
+# A world with nothing injected. Used as a counterfactual hypothesis (the most
+# common alternative to a proactive-detection fault); not part of the default
+# dataset plan.
+BASELINE_KINDS = ("clean_world",)
+
+CASE_KINDS = tuple(FAMILIES) + LOOKALIKES + BASELINE_KINDS
 
 HELD_OUT_KINDS = ("queue_misconfiguration", "tier_format_drift")
 
@@ -79,6 +84,10 @@ class CaseTruth:
         return FAMILIES.get(self.case_kind)
 
     @property
+    def is_baseline(self) -> bool:
+        return self.case_kind in BASELINE_KINDS
+
+    @property
     def is_lookalike(self) -> bool:
         return self.case_kind in LOOKALIKES
 
@@ -106,6 +115,20 @@ class CaseTruth:
     def truth_sha256(self) -> str:
         return canonical_sha256(self.canonical_payload())
 
+    @classmethod
+    def from_payload(cls, payload: dict[str, object]) -> "CaseTruth":
+        return cls(
+            case_kind=payload["case_kind"],
+            case_variant=payload["case_variant"],
+            target_ticket_id=payload["target_ticket_id"],
+            expected_queue_id=payload["expected_queue_id"],
+            expected_account_id=payload["expected_account_id"],
+            remedy_if_wrong=payload["remedy_if_wrong"],
+            remedy_if_wrong_arguments=tuple(payload["remedy_if_wrong_arguments"]),
+            world_changes=tuple(payload["world_changes"]),
+            regression_ticket_ids=tuple(payload["regression_ticket_ids"]),
+        )
+
 
 def case_answer_pairs(truth: CaseTruth) -> frozenset[tuple[str, str]]:
     """(ticket, expected value) pairs that would reveal this case's answer."""
@@ -118,6 +141,7 @@ def case_answer_pairs(truth: CaseTruth) -> frozenset[tuple[str, str]]:
 
 
 __all__ = [
+    "BASELINE_KINDS",
     "CASE_KINDS",
     "CaseTruth",
     "FAMILIES",

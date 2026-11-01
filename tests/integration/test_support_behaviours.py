@@ -28,7 +28,7 @@ from packages.support_agent import (
 )
 from packages.support_evaluator import CASE_KINDS
 from packages.support_evaluator.injectors import INJECTORS, inject
-from packages.support_evaluator.plan import cross_plan
+from packages.support_evaluator.plan import DEFAULT_PLAN_KINDS, cross_plan
 
 
 @pytest.fixture(autouse=True)
@@ -200,6 +200,7 @@ EXPECTED = {
     ("merged_account", "default"):                (C, C, U, C, C),
     ("recent_tier_change", "default"):            (C, C, C, C, C),
     ("transient_error_retried", "default"):       (U, C, U, U, U),
+    ("clean_world", "default"):                   (C, C, C, C, C),
 }
 
 
@@ -226,9 +227,10 @@ def test_plan_crosses_every_kind_with_every_behaviour_equally():
     plan = cross_plan(per_cell=6, seed=0)
     cells = Counter((case.case_kind, case.behaviour) for case in plan)
 
-    assert set(cells) == {(kind, behaviour) for kind in CASE_KINDS for behaviour in BEHAVIOURS}
+    assert set(cells) == {(kind, behaviour) for kind in DEFAULT_PLAN_KINDS for behaviour in BEHAVIOURS}
     assert set(cells.values()) == {6}
-    assert len(plan) == len(CASE_KINDS) * len(BEHAVIOURS) * 6
+    assert len(plan) == len(DEFAULT_PLAN_KINDS) * len(BEHAVIOURS) * 6
+    assert set(CASE_KINDS) - set(DEFAULT_PLAN_KINDS) == {"clean_world"}
 
 
 def test_behaviour_carries_no_information_about_the_family():
@@ -249,7 +251,8 @@ def test_behaviour_carries_no_information_about_the_family():
 def test_variants_cycle_evenly_within_each_kind_and_behaviour():
     plan = cross_plan(per_cell=6, seed=0)
 
-    for kind, (_, variants) in INJECTORS.items():
+    for kind in DEFAULT_PLAN_KINDS:
+        variants = INJECTORS[kind][1]
         for behaviour in BEHAVIOURS:
             counts = Counter(
                 c.case_variant for c in plan if c.case_kind == kind and c.behaviour == behaviour

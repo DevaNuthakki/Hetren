@@ -25,8 +25,8 @@ DEFAULT_WORLD_SHA256 = "d53b7319dabab431dc8f802c498e9345960a26dd8a9cf36bc7d29324
 
 # Drift guards: these change only when GENERATOR_VERSION should change.
 PINNED_WORLDS = {
-    0: "2d172fbeacf2fb85ed4f237c94f258addba26ae9fe2beb6b7b07c08538a37c4f",
-    1: "31bbf4980c34d635b834be8979b153fa1b1ac1ba9e24b9bd1aadec1c6630f46e",
+    0: "245a8af172e7192a8778cb96e1afc5de4bc9bf0f5dfbf4a4ee0cc2a35a114319",
+    1: "77c6e46902b67588317b7448511d65324572a513e0756a31fee2449b2a55ec50",
 }
 
 FAULT_MARKERS = ("fault", "swap", "identifier_mapping", "inject")
@@ -47,7 +47,9 @@ def test_snapshot_format_is_the_same_for_every_world():
     default_keys = set(SupportEnvironment().snapshot())
     generated = SupportEnvironment(generate_world(3)).snapshot()
 
-    assert set(generated) == default_keys
+    # Generated worlds add only non-default extensions (history, world clock).
+    assert default_keys <= set(generated)
+    assert set(generated) - default_keys <= {"account_history", "as_of"}
     assert "generator" not in json.dumps(generated)
 
 

@@ -57,6 +57,12 @@ Labels are per run, not per world. A run whose final outcome already matches the
 
 Labels come from execution, never from a model. A recovery label is a recovery that, applied in a sandboxed copy of the world and followed by re-running the task, passes verification, including regression checks on unaffected tickets. Probe labels come from simple counterfactual enumeration: a probe sequence is sufficient when every candidate world consistent with its observations has the same verified outcome.
 
+### Known limitation: short probe sequences
+
+Probe labels come from deliberately simple counterfactual enumeration: one world per case kind and variant (plus a clean world with nothing injected), injected into the same base world on the same ticket. Within such small hypothesis sets the label is usually settled by zero or one probe, occasionally two, so probe sequences are short. Richer enumeration (several worlds per kind, combined faults) would produce longer investigations and is left for later work.
+
+Probe outcomes are compared up to renaming. IDs, canonical tiers (including in keys), timestamps and versions become placeholders, and free-text labels whose wording follows tier or role (account names, queue names, queue description templates) are reduced or dropped. A probe can therefore only separate hypotheses by relational evidence, not by random values or wording.
+
 ## Splits
 
 Splits are by fault family, generator seed, and agent source. Scripted agents produce training data. Live `gpt-4.1-mini` runs are used only for testing. F6 and F7 never appear in training or validation.
@@ -71,6 +77,18 @@ Splits are by fault family, generator seed, and agent source. Scripted agents pr
 All metrics are reported per family, with held-out families reported separately.
 
 **Proactive-detection families:** F2 (stale account record) and F6 (queue misconfiguration) leave no anomaly in the run itself; only a probe reveals them. Probing runs that look healthy is allowed within the probe budget, and these two families are reported as a separate proactive-detection group.
+
+### Evaluation slices
+
+Metrics are computed on primary cases only; counterfactual partner records never count. Besides the per-family and held-out reports, every method is reported on these evaluator-side slices (defined in `evaluator/tags.jsonl`):
+
+- **Compound cases** (`compound`): a recovery or abstain label that differs from the case's own remedy because a second problem prevents the intended single fix. In dataset v2 these are the 21 stale-account-record (F2) cases with the text-following agent: a true tier claim written before the tier changed becomes false, so after `restore_from_source` the agent still follows the claim and no single recovery verifies; the label is `abstain`. They are kept and reported separately.
+- **Recent-target stress slice** (`target_recent`): faulty cases (for example F2 and F6) whose target account had a recent tier change. The recent-tier-change look-alike is recent by definition and always healthy, so recency carries a small residual association with `no_intervention` (shortcut-audit lift about +0.04). This slice detects a learned "recent → healthy" shortcut. Recency is not visible in the first step's input; it appears only after probing.
+- **Length-matched slice** (`first_input_tokens`): input length predicts the label well above chance (lift about +0.22) because it reflects run structure (withheld records, errors, early stops). Results are also reported within first-input token-length bins (deciles), and reweighted so every label has the same length distribution, to separate genuine reasoning from length cues.
+
+### Known residual: recent-tier-change conversions
+
+The recent-tier-change look-alike normally uses an account the generator already changed recently, so it adds nothing to history and history cannot separate it from F6. In about 5% of worlds no such account has tickets, and the injector converts one (one event, consistent with its source record). On that ticket the F6 counterfactual's account then has no recent change, so history does separate them. In dataset v2, 12 of 400 recent-tier-change primary cases are resolved this way; the other 388 use `inspect routing_policy`.
 
 ## Baselines
 

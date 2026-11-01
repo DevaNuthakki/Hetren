@@ -34,6 +34,8 @@ to multi-valued probe outcomes), within the probe budget.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import partial
+import json
 import random
 import re
 import time
@@ -46,7 +48,8 @@ from environments.support.fixtures import (
 )
 from environments.support.generator import generate_world
 from environments.support.maintenance import MAINTENANCE_VERB_TOOLS
-from packages.action_space import PROBE_BUDGET, Action
+from packages.action_gateway import GatedTool
+from packages.action_space import PROBE_BUDGET, VERBS, Action, probe_gateway
 from packages.contracts import ContractError, canonical_sha256
 from packages.core.hetren_diagnosis.planner import entropy
 from packages.hetren_evidence import compact_evidence
@@ -404,7 +407,14 @@ def verify_label(
 
 _ID = re.compile(r"\b([TACQ])-[0-9A-Z]{3,12}\b")
 _TIER = re.compile(r"\b(" + "|".join(CANONICAL_TIERS) + r")\b")
-_DROPPED_KEYS = frozenset({"display_name", "region"})
+# Free-text labels whose wording follows tier or role (account names, queue
+# names such as "Premium desk") would re-reveal identity the renaming removes.
+_DROPPED_KEYS = frozenset({"display_name", "region", "name"})
+
+# Timestamps and versions are renamed by value, so probe outcomes compare
+# relations (working equals source, one time equals another) rather than
+# the random values the generator draws independently of the case kind.
+_RELATIONAL_KEYS = {"updated_at": "time", "at": "time", "version": "version"}
 
 
 @dataclass
@@ -451,7 +461,16 @@ class Renaming:
                     continue
 
                 renamed = self._name("tier", key) if key in CANONICAL_TIERS else key
-                result[renamed] = self.apply(item)
+
+                if key in _RELATIONAL_KEYS and isinstance(item, (str, int)) and not isinstance(item, bool):
+                    result[renamed] = self._name(_RELATIONAL_KEYS[key], f"{key}:{item}")
+                elif key == "description" and isinstance(item, str):
+                    # Queue descriptions are reduced to the tier they route;
+                    # their wording templates differ per queue.
+                    tiers = re.findall(r"(tier#[0-9]+)-tier", self.text(item))
+                    result[renamed] = f"routes:{tiers[0]}" if tiers else "routes:none"
+                else:
+                    result[renamed] = self.apply(item)
 
             return result
 
@@ -523,7 +542,11 @@ def _probe_menu(renaming: Renaming, compact: dict[str, Any]) -> list[tuple[str, 
     tickets = [n for n in renaming.names.values() if n.startswith("T#")]
     accounts = [n for n in renaming.names.values() if n.startswith("A#")]
     refs = [n for n in renaming.names.values() if n.startswith("C#")]
+    queues = [n for n in renaming.names.values() if n.startswith("Q#")]
+    # Queue and policy probes come first, so configuration evidence wins
+    # ties against account history.
     menu: list[tuple[str, dict[str, str]]] = [("inspect", {"entity": "routing_policy"})]
+    menu += [("inspect", {"entity": "queue", "id": queue}) for queue in queues[:2]]
 
     for ticket in tickets[:1]:
         menu.append(("inspect", {"entity": "ticket", "id": ticket}))
@@ -551,7 +574,7 @@ def _run_probe(hypothesis: Hypothesis, verb: str, args: tuple) -> str:
 
     for key, value in args:
         concrete[key] = (
-            hypothesis.renaming.concrete(value) if "#" in value and not value.startswith("tier#") else value
+            hypothesis.renaming.concrete(value) if value[:2] in ("T#", "A#", "C#", "Q#") else value
         )
 
     try:
@@ -615,6 +638,22 @@ def probe_oracle(actual: Hypothesis, consistent: list[Hypothesis], abstracted: d
     return chosen, _label_entropy(remaining) == 0
 
 
+def withhold_observation(evidence: dict[str, Any]) -> dict[str, Any]:
+    """Drop one tool call's attempted and observed records (the second call, or the only one)."""
+    withheld = json.loads(json.dumps(evidence))
+    invocations = list(dict.fromkeys(r["invocation_id"] for r in withheld["stage_records"]))
+
+    if not invocations:
+        return withheld
+
+    target = invocations[1] if len(invocations) > 1 else invocations[0]
+    withheld["stage_records"] = [
+        r for r in withheld["stage_records"]
+        if not (r["invocation_id"] == target and r["stage"] in ("attempted", "observed"))
+    ]
+    return withheld
+
+
 @dataclass(frozen=True)
 class CaseLabel:
     planned: PlannedCase
@@ -622,6 +661,8 @@ class CaseLabel:
     run_label: RunLabel
     probe_label: ProbeLabel
     seconds: float
+    steps: tuple[dict[str, object], ...] = ()
+    partners: tuple[dict[str, object], ...] = ()
 
     def provenance_payload(self) -> dict[str, object]:
         return {
@@ -641,8 +682,51 @@ class CaseLabel:
         }
 
 
+def _concrete_probes(renaming: Renaming, probes) -> list[dict[str, object]]:
+    actions = []
+
+    for verb, args in probes:
+        concrete = {
+            key: (renaming.concrete(value) if value[:2] in ("T#", "A#", "C#", "Q#") else value)
+            for key, value in args
+        }
+        actions.append(Action("probe", verb, concrete).canonical_payload())
+
+    return actions
+
+
+def _steps(environment, evidence, probe_actions, final_label) -> list[dict[str, object]]:
+    """Training steps: the input before each probe with that probe, then the final label."""
+    gateway = probe_gateway(
+        [
+            GatedTool(verb, partial(f, environment), VERBS[verb].args_schema, VERBS[verb].description)
+            for verb, f in MAINTENANCE_VERB_TOOLS.items()
+        ],
+        environment.state_sha256,
+    )
+    steps = []
+
+    for action in probe_actions:
+        steps.append({"input": compact_evidence(evidence, [r.canonical_payload() for r in gateway.records]),
+                      "target": action})
+        gateway.invoke(action["verb"], action["args"])
+
+    steps.append({"input": compact_evidence(evidence, [r.canonical_payload() for r in gateway.records]),
+                  "target": final_label})
+    return steps
+
+
 def label_case(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
-    """Label one planned case: run label, probe label and twin group."""
+    """Label one planned case: run label, probe label, twin group and steps.
+
+    ``steps`` are the training examples: the compact input before each
+    probe paired with that probe, then the input after all probes paired
+    with the final label. Withheld-evidence cases get ``withhold_observation``
+    unless another transform is given.
+    """
+    if evidence_transform is None and planned.evidence_condition == "withheld":
+        evidence_transform = withhold_observation
+
     started = time.perf_counter()
     actual_case = inject(
         planned.case_kind, generate_world(planned.world_seed),
@@ -682,14 +766,27 @@ def label_case(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
             }
         )[:16]
 
-    probe_actions = []
+    probe_actions = _concrete_probes(renaming, probes)
+    steps = _steps(environment, evidence, probe_actions, run_label.label)
+    partners = []
 
-    for verb, args in probes:
-        concrete = {
-            key: (renaming.concrete(value) if "#" in value and not value.startswith("tier#") else value)
-            for key, value in args
-        }
-        probe_actions.append(Action("probe", verb, concrete).canonical_payload())
+    if twin_id is not None:
+        # Counterfactual partners: the other consistent worlds, each with the
+        # probe path the oracle takes from its own observations.
+        for hypothesis in consistent[1:]:
+            partner_probes, _ = probe_oracle(hypothesis, consistent, abstracted)
+            partners.append(
+                {
+                    "counterfactual": hypothesis.key,
+                    "truth": hypothesis.case.truth.canonical_payload(),
+                    "world_sha256": hypothesis.case.spec.world_sha256,
+                    "rule": hypothesis.label.rule,
+                    "steps": _steps(
+                        hypothesis.environment, hypothesis.evidence,
+                        _concrete_probes(hypothesis.renaming, partner_probes), hypothesis.label.label,
+                    ),
+                }
+            )
 
     return CaseLabel(
         planned=planned,
@@ -703,6 +800,8 @@ def label_case(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
             twin_group_id=twin_id,
         ),
         seconds=time.perf_counter() - started,
+        steps=tuple(steps),
+        partners=tuple(partners),
     )
 
 
@@ -719,5 +818,6 @@ __all__ = [
     "outcome_checks",
     "unexplained_absences",
     "verify_label",
+    "withhold_observation",
     "world_checks",
 ]

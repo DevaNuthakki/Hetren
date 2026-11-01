@@ -11,6 +11,13 @@ Determinism: one ``random.Random(seed)`` drives every choice, in a fixed
 order. ``GENERATOR_VERSION`` changes whenever that order or a pool changes,
 and every spec records the generator name, version, seed and size.
 
+Account history is independent of any fault: every account gets a random
+version and ``updated_at``, and about ``RECENT_CHANGE_PROBABILITY`` of them
+were changed recently (within ``RECENT_DAYS`` of the world's fixed
+``as_of``), with a matching ``tier_changed`` event. Faults and look-alikes
+are layered on top, so timestamps, versions and recent changes carry no
+information about the case kind.
+
 Pools hold only synthetic text. Queue descriptions always say
 ``<tier>-tier`` so the routing rule stays expressible; the triage queue's
 description never names a tier.
@@ -18,12 +25,14 @@ description never names a tier.
 
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 import random
 
 from packages.contracts import ContractError
 
 from environments.support.fixtures import (
     Account,
+    AccountEvent,
     Queue,
     Ticket,
     WorldSpec,
@@ -31,7 +40,35 @@ from environments.support.fixtures import (
 
 
 GENERATOR_NAME = "support-world-generator"
-GENERATOR_VERSION = 1
+GENERATOR_VERSION = 3
+
+WORLD_AS_OF = "2026-06-01T00:00:00Z"
+HISTORY_START = "2025-01-01T00:00:00Z"
+RECENT_DAYS = 30
+RECENT_MARGIN_DAYS = 3
+RECENT_CHANGE_PROBABILITY = 0.3
+TRUE_CLAIM_PROBABILITY = 0.25
+
+_TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+
+
+def parse_time(value: str) -> datetime:
+    return datetime.strptime(value, _TIME_FORMAT).replace(tzinfo=timezone.utc)
+
+
+def format_time(value: datetime) -> str:
+    return value.strftime(_TIME_FORMAT)
+
+
+def random_time(rng: random.Random, start: str, end: str) -> str:
+    """A whole-hour time strictly after ``start`` and strictly before ``end``."""
+    low, high = parse_time(start), parse_time(end)
+    hours = int((high - low).total_seconds() // 3600)
+
+    if hours < 2:
+        raise ContractError("time window is too small")
+
+    return format_time(low + timedelta(hours=rng.randrange(1, hours)))
 
 TIERS = ("enterprise", "standard")
 TIER_WEIGHTS = (0.4, 0.6)
@@ -91,13 +128,27 @@ _ISSUES = (
     ("Cannot remove a user", "Removing a former employee returns an error."),
 )
 
-# Customer claims about their own tier. Shared by every case kind (and later
-# by healthy tickets), so a claim by itself never signals a problem.
+# Customer claims about their own tier. Every generated world puts a true
+# claim (the account's real tier) on about TRUE_CLAIM_PROBABILITY of its
+# tickets, so a claim by itself never signals a problem; only a false claim,
+# injected by the misleading-text fault, does.
 CLAIM_TEXTS = (
     "We are on the {tier} plan, please handle this accordingly.",
     "As a {tier}-tier customer we expect a fast response.",
     "Our account is {tier}; please route this to the right team.",
 )
+
+def strip_claims(body: str) -> str:
+    """The ticket body without any appended tier claim."""
+    for template in CLAIM_TEXTS:
+        prefix = template.split("{tier}")[0]
+        position = body.find(" " + prefix)
+
+        if position >= 0:
+            body = body[:position]
+
+    return body
+
 
 MAX_ACCOUNTS = 60
 MAX_TICKETS = 200
@@ -175,9 +226,14 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
     )
 
     ticket_records = []
+    tier_of = {account.customer_ref: account.tier for account in account_records}
 
     for index in range(tickets):
         subject, body = rng.choice(_ISSUES)
+
+        if rng.random() < TRUE_CLAIM_PROBABILITY:
+            body = f"{body} {rng.choice(CLAIM_TEXTS).format(tier=tier_of[ticket_refs[index]])}"
+
         ticket_records.append(
             Ticket(
                 ticket_id=f"T-{ticket_numbers[index]}",
@@ -189,6 +245,36 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
                 status="open",
             )
         )
+
+    as_of = parse_time(WORLD_AS_OF)
+    recent_start = format_time(as_of - timedelta(days=RECENT_DAYS))
+    # Recent changes stop a few days before as_of, so a fault or look-alike
+    # layered on top always has room for a later change.
+    recent_end = format_time(as_of - timedelta(days=RECENT_MARGIN_DAYS))
+    old_end = format_time(as_of - timedelta(days=2 * RECENT_DAYS))
+    dated_accounts = []
+    history = []
+
+    for account in account_records:
+        version = rng.randint(1, 4)
+
+        if rng.random() < RECENT_CHANGE_PROBABILITY:
+            updated_at = random_time(rng, recent_start, recent_end)
+            version += 1
+            history.append(
+                AccountEvent(account.account_id, "tier_changed", updated_at, (("tier", account.tier),))
+            )
+        else:
+            updated_at = random_time(rng, HISTORY_START, old_end)
+
+        dated_accounts.append(
+            Account(
+                account.account_id, account.customer_ref, account.display_name,
+                account.tier, account.region, version, updated_at,
+            )
+        )
+
+    account_records = tuple(dated_accounts)
 
     spec = WorldSpec(
         tickets=tuple(ticket_records),
@@ -202,6 +288,8 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
             "accounts": accounts,
             "tickets": tickets,
         },
+        account_history=tuple(history),
+        as_of=WORLD_AS_OF,
     )
     spec.require_clean()
     return spec
@@ -209,6 +297,15 @@ def generate_world(seed: int, *, accounts: int = 8, tickets: int = 12) -> WorldS
 
 __all__ = [
     "CLAIM_TEXTS",
+    "RECENT_CHANGE_PROBABILITY",
+    "TRUE_CLAIM_PROBABILITY",
+    "RECENT_DAYS",
+    "RECENT_MARGIN_DAYS",
+    "WORLD_AS_OF",
+    "format_time",
+    "parse_time",
+    "random_time",
+    "strip_claims",
     "GENERATOR_NAME",
     "GENERATOR_VERSION",
     "MAX_ACCOUNTS",

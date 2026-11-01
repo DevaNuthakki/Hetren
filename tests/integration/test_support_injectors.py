@@ -65,9 +65,10 @@ EXPECTED_EFFECT = {
     ("merged_account", "default"): "correct",
     ("recent_tier_change", "default"): "correct",
     ("transient_error_retried", "default"): "unrouted",
+    ("clean_world", "default"): "correct",
 }
 
-CLEAN_KINDS = {"misleading_ticket_text", "merged_account", "recent_tier_change"}
+CLEAN_KINDS = {"misleading_ticket_text", "merged_account", "recent_tier_change", "clean_world"}
 
 
 @pytest.fixture(autouse=True)
@@ -114,7 +115,7 @@ def _effect(environment, truth):
 
 def test_every_case_kind_has_an_injector_with_variants():
     assert set(INJECTORS) == set(CASE_KINDS)
-    assert set(CASE_KINDS) == set(FAMILIES) | set(LOOKALIKES)
+    assert set(CASE_KINDS) == set(FAMILIES) | set(LOOKALIKES) | {"clean_world"}
     assert set(EXPECTED_EFFECT) == set(ALL_CASES)
     assert set(HELD_OUT_KINDS) == {"queue_misconfiguration", "tier_format_drift"}
 
