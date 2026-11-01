@@ -11,6 +11,16 @@ when the policy asks for more than ``PROBE_BUDGET`` probes.
 unprobed end state: a decision must be the right one, and a recovery must be
 verified by execution (not necessarily the label's smallest change).
 
+Tier 2 episodes (``max_recoveries`` 2) continue after a first recovery: the
+harness applies it through a gateway scoped to exactly that call (and
+re-runs the task where the verb calls for it), the policy sees the
+``compact-evidence-v2`` input, may probe again on a fork of the new state
+(the probe budget is shared), and gives a second recovery or
+``no_intervention`` (stop). ``score`` then re-checks the whole sequence with
+``verify_sequence``; any other decision after a recovery is scored wrong.
+A policy run with ``max_recoveries=1`` on tier 2 (the frozen rules baseline)
+ends at its first recovery, which counts as an implicit stop.
+
 Metric definitions here are provisional until task 12 fixes them in
 EVAL_PROTOCOL.md.
 """
@@ -32,11 +42,11 @@ from packages.action_gateway import GatedTool
 from packages.action_space import PROBE_BUDGET, VERBS, parse_action, probe_gateway
 from packages.contracts import ContractError
 from packages.hetren_evidence import compact_evidence
-from packages.support_evaluator.cases import HELD_OUT_KINDS
 from packages.support_evaluator.injectors import inject
 from packages.support_evaluator.labeler import verify_label, withhold_observation
 from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.sampling import run_agent_on
+from packages.support_evaluator.sequences import STOP, TIER2_MAX_RECOVERIES, apply_recovery, verify_sequence
 
 
 Policy = Callable[[dict[str, Any]], dict[str, Any]]
@@ -50,6 +60,8 @@ class PreparedCase:
     environment: SupportEnvironment
     evidence: dict[str, Any]
     label: dict[str, Any]
+    max_recoveries: int = 1
+    targets: tuple[dict[str, Any], ...] = ()  # tier 2: the label's non-probe targets in order
 
 
 def prepare(visible: dict, evaluator: dict) -> PreparedCase:
@@ -64,47 +76,104 @@ def prepare(visible: dict, evaluator: dict) -> PreparedCase:
     if compact_evidence(evidence) != visible["steps"][0]["input"]:
         raise ContractError(f"{visible['case_id']}: rebuilt input differs from the dataset")
 
-    return PreparedCase(visible["case_id"], planned, case, environment, evidence, visible["steps"][-1]["target"])
+    targets = tuple(step["target"] for step in visible["steps"] if step["target"]["action"] != "probe")
+    max_recoveries = TIER2_MAX_RECOVERIES if evaluator.get("tier", 1) == 2 else 1
+    return PreparedCase(visible["case_id"], planned, case, environment, evidence, visible["steps"][-1]["target"],
+                        max_recoveries, targets if max_recoveries > 1 else ())
 
 
-def run_episode(policy: Policy, prepared: PreparedCase, budget: int = PROBE_BUDGET) -> dict[str, Any]:
-    probe_env = prepared.environment.fork()
-    gateway = probe_gateway(
+def _probe_gateway(environment: SupportEnvironment):
+    return probe_gateway(
         [
-            GatedTool(verb, partial(f, probe_env), VERBS[verb].args_schema, VERBS[verb].description)
+            GatedTool(verb, partial(f, environment), VERBS[verb].args_schema, VERBS[verb].description)
             for verb, f in MAINTENANCE_VERB_TOOLS.items()
         ],
-        probe_env.state_sha256,
+        environment.state_sha256,
     )
+
+
+def run_episode(
+    policy: Policy,
+    prepared: PreparedCase,
+    budget: int = PROBE_BUDGET,
+    max_recoveries: int | None = None,
+) -> dict[str, Any]:
+    limit = prepared.max_recoveries if max_recoveries is None else max_recoveries
+    working = prepared.environment.fork()
+    gateways = [_probe_gateway(working.fork())]
+    applied = []
     probes: list[dict[str, Any]] = []
+    recoveries: list[dict[str, Any]] = []
+
+    def records(gateway):
+        return [r.canonical_payload() for r in gateway.records]
+
+    def end(final, failure=None):
+        return {"final": final, "recoveries": recoveries, "probes": probes, "failure": failure}
 
     while True:
-        compact = compact_evidence(prepared.evidence, [r.canonical_payload() for r in gateway.records])
+        compact = compact_evidence(
+            prepared.evidence, records(gateways[0]),
+            [a.compact_input(records(g)) for a, g in zip(applied, gateways[1:])],
+        )
 
         try:
             action = parse_action(policy(compact)).canonical_payload()
         except Exception as exc:
-            return {"final": None, "probes": probes, "failure": f"invalid_action:{type(exc).__name__}"}
+            return end(None, f"invalid_action:{type(exc).__name__}")
 
-        if action["action"] != "probe":
-            return {"final": action, "probes": probes, "failure": None}
+        if action["action"] == "decide":
+            return end(action)
+
+        if action["action"] == "recover":
+            recoveries.append(action)
+
+            if len(recoveries) == limit:
+                return end(action)
+
+            applied.append(apply_recovery(working, prepared.case.truth.target_ticket_id, prepared.planned.behaviour, action))
+            gateways.append(_probe_gateway(working.fork()))
+            continue
 
         if len(probes) == budget:
-            return {"final": None, "probes": probes, "failure": "probe_budget_exceeded"}
+            return end(None, "probe_budget_exceeded")
 
         probes.append(action)
-        gateway.invoke(action["verb"], action["args"])
+        gateways[-1].invoke(action["verb"], action["args"])
 
 
 def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
     final = episode["final"]
     label = prepared.label
+    recoveries = episode.get("recoveries", [])
     correct = False
+    row: dict[str, Any] = {}
 
-    if final is not None:
-        correct = verify_label(
-            prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour, final,
+    if prepared.max_recoveries == 1:
+        if final is not None:
+            correct = verify_label(
+                prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour, final,
+            )
+
+        exact = final == label
+    else:
+        decision = final if final is not None and final["action"] == "decide" else None
+
+        if final is not None:
+            correct = verify_sequence(
+                prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour,
+                recoveries, decision,
+            )
+
+        actions = list(recoveries) + (
+            [decision] if decision is not None else [STOP] if final is not None and len(recoveries) < TIER2_MAX_RECOVERIES else []
         )
+        label = prepared.targets[0]
+        exact = actions == list(prepared.targets)
+        row = {
+            "label_targets": list(prepared.targets),
+            "label_recoveries": sum(t["action"] == "recover" for t in prepared.targets),
+        }
 
     return {
         "case_id": prepared.case_id,
@@ -112,13 +181,16 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
         "case_variant": prepared.planned.case_variant,
         "behaviour": prepared.planned.behaviour,
         "evidence_condition": prepared.planned.evidence_condition,
-        "held_out": prepared.planned.case_kind in HELD_OUT_KINDS,
+        "held_out": prepared.case.truth.held_out,
+        "tier": 2 if prepared.max_recoveries > 1 else 1,
         "label": label,
         "final": final,
+        "recoveries": list(recoveries),
         "failure": episode["failure"],
         "probes": episode["probes"],
         "correct": correct,
-        "exact": final == label,
+        "exact": exact,
+        **row,
     }
 
 
@@ -131,6 +203,10 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
     def label_kind(row):
         return row["label"]["action"], row["label"]["verb"]
 
+    def first_action(row):
+        # The policy's first non-probe action: in tier 2 a stop after a recovery is not a decision.
+        return row["recoveries"][0] if row["recoveries"] else (row["final"] or {})
+
     recover = [r for r in rows if r["label"]["action"] == "recover"]
     healthy = [r for r in rows if label_kind(r) == ("decide", "no_intervention")]
     result: dict[str, object] = {
@@ -138,10 +214,10 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
         "decision_accuracy": _rate(sum(r["correct"] for r in rows), len(rows)),
         "exact_match": _rate(sum(r["exact"] for r in rows), len(rows)),
         "verified_recovery_rate": _rate(
-            sum(r["correct"] and (r["final"] or {}).get("action") == "recover" for r in recover), len(recover),
+            sum(r["correct"] and bool(r["recoveries"]) for r in recover), len(recover),
         ),
         "wrong_interventions_on_healthy": _rate(
-            sum((r["final"] or {}).get("action") == "recover" for r in healthy), len(healthy),
+            sum(bool(r["recoveries"]) for r in healthy), len(healthy),
         ),
         "mean_probes": round(sum(len(r["probes"]) for r in rows) / len(rows), 3) if rows else None,
         "mean_probes_on_healthy": round(sum(len(r["probes"]) for r in healthy) / len(healthy), 3) if healthy else None,
@@ -150,10 +226,26 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
 
     for verb in ("insufficient_evidence", "abstain", "no_intervention"):
         truth = [r for r in rows if label_kind(r) == ("decide", verb)]
-        chosen = [r for r in rows if (r["final"] or {}).get("verb") == verb]
+        chosen = [r for r in rows if first_action(r).get("verb") == verb]
         result[verb] = {
             "recall": _rate(sum(r["correct"] for r in truth), len(truth)),
             "precision": _rate(sum(r["correct"] for r in chosen), len(chosen)),
+        }
+
+    tier2 = [r for r in rows if r["tier"] == 2]
+
+    if tier2:
+        fixed = [r for r in tier2 if r["label_recoveries"] >= 1]
+        two = [r for r in tier2 if r["label_recoveries"] == 2]
+        result["sequence"] = {
+            "exact_sequence_match": _rate(sum(r["exact"] for r in tier2), len(tier2)),
+            "longer_than_label": _rate(
+                sum(r["correct"] and len(r["recoveries"]) > r["label_recoveries"] for r in fixed), len(fixed),
+            ),
+            "stopped_after_one_of_two": _rate(
+                sum(len(r["recoveries"]) == 1 and (r["final"] or {}).get("action") in ("decide", "recover") for r in two),
+                len(two),
+            ),
         }
 
     by_family = defaultdict(list)

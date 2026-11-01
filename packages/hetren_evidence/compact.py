@@ -5,6 +5,12 @@ of malformed arguments, whether it was allowed and why not, outcome,
 observation or error, and whether it changed state), the run status and
 run-error type, SDK discrepancy kinds, and probe results in the same shape.
 
+After a recovery (tier 2), the input also lists each recovery applied so
+far: the action, its result, the task's re-run (``null`` for a reroute,
+which re-runs nothing) and the probes made after it. Inputs without
+recoveries carry no ``recoveries`` key and keep ``compact-evidence-v1``;
+inputs with recoveries are ``compact-evidence-v2``.
+
 Dropped: model ID and settings (they name the agent behaviour), provenance
 and source provenance, capture IDs, every hash, invocation and call IDs,
 sequence numbers, timestamps, SDK versions and hook events, instructions and
@@ -26,10 +32,15 @@ from packages.contracts import ContractError
 
 
 COMPACT_FORMAT = "compact-evidence-v1"
+COMPACT_FORMAT_V2 = "compact-evidence-v2"
 
 # Upper bound for one step's rendered input (o200k_base tokens, the gpt-4.1
 # encoding). Measured over 300 sampled cases with 0-4 probes: max 585.
 EVIDENCE_TOKEN_BUDGET = 800
+
+# Tier 2 inputs after a recovery carry a second run: before probes they
+# measured at most 583 tokens, and probes add up to about 300.
+TIER2_EVIDENCE_TOKEN_BUDGET = 1200
 
 
 def _steps(stage_records: Sequence[Mapping[str, Any]]) -> list[dict[str, object]]:
@@ -72,29 +83,59 @@ def _steps(stage_records: Sequence[Mapping[str, Any]]) -> list[dict[str, object]
     return steps
 
 
-def compact_evidence(
-    evidence: Mapping[str, Any],
-    probe_records: Sequence[Mapping[str, Any]] = (),
-) -> dict[str, object]:
-    """Build the compact input from ``RunRecord.evidence_payload()`` JSON."""
+def _run(evidence: Mapping[str, Any]) -> dict[str, object]:
     if evidence.get("record_type") != "AgentRunRecord":
         raise ContractError("evidence must be an agent run record payload")
 
     error = evidence.get("error")
+    return {"status": evidence["status"], "error_type": None if error is None else error["type"]}
 
+
+def _recovery(recovery: Mapping[str, Any]) -> dict[str, object]:
+    """One applied recovery: ``action``, its gateway ``records`` (none for
+    ``rerun``), the ``rerun`` evidence payload or None, and ``probe_records``."""
+    records = recovery.get("records") or []
+
+    if records:
+        result = {key: value for key, value in _steps(records)[0].items() if key not in ("tool", "args")}
+    else:
+        result = {"outcome": "succeeded", "changed_state": True}
+
+    rerun = recovery.get("rerun")
     return {
-        "format": COMPACT_FORMAT,
+        "action": dict(recovery["action"]),
+        "result": result,
+        "rerun": None if rerun is None else {"run": _run(rerun), "steps": _steps(rerun.get("stage_records") or [])},
+        "probes": _steps(recovery.get("probe_records") or []),
+    }
+
+
+def compact_evidence(
+    evidence: Mapping[str, Any],
+    probe_records: Sequence[Mapping[str, Any]] = (),
+    recoveries: Sequence[Mapping[str, Any]] = (),
+) -> dict[str, object]:
+    """Build the compact input from ``RunRecord.evidence_payload()`` JSON.
+
+    ``probe_records`` are the probes made before any recovery; each of
+    ``recoveries`` is described in ``_recovery``.
+    """
+    run = _run(evidence)
+    compact = {
+        "format": COMPACT_FORMAT_V2 if recoveries else COMPACT_FORMAT,
         "task": evidence["task_input"],
-        "run": {
-            "status": evidence["status"],
-            "error_type": None if error is None else error["type"],
-        },
+        "run": run,
         "steps": _steps(evidence.get("stage_records") or []),
         "discrepancies": sorted(
             item["kind"] for item in (evidence.get("sdk_evidence") or {}).get("discrepancies") or []
         ),
         "probes": _steps(probe_records),
     }
+
+    if recoveries:
+        compact["recoveries"] = [_recovery(recovery) for recovery in recoveries]
+
+    return compact
 
 
 def render_evidence(compact: Mapping[str, object]) -> str:
@@ -104,7 +145,9 @@ def render_evidence(compact: Mapping[str, object]) -> str:
 
 __all__ = [
     "COMPACT_FORMAT",
+    "COMPACT_FORMAT_V2",
     "EVIDENCE_TOKEN_BUDGET",
+    "TIER2_EVIDENCE_TOKEN_BUDGET",
     "compact_evidence",
     "render_evidence",
 ]

@@ -537,12 +537,21 @@ def counterfactuals(planned: PlannedCase, actual: InjectedCase) -> list[tuple[st
 # Probe oracle
 
 
-def _probe_menu(renaming: Renaming, compact: dict[str, Any]) -> list[tuple[str, dict[str, str]]]:
-    """Probes over the run's own entities, written with placeholders."""
-    tickets = [n for n in renaming.names.values() if n.startswith("T#")]
-    accounts = [n for n in renaming.names.values() if n.startswith("A#")]
-    refs = [n for n in renaming.names.values() if n.startswith("C#")]
-    queues = [n for n in renaming.names.values() if n.startswith("Q#")]
+def _probe_menu(
+    renaming: Renaming,
+    compact: dict[str, Any],
+    prefer: tuple[str, ...] = (),
+) -> list[tuple[str, dict[str, str]]]:
+    """Probes over the run's own entities, written with placeholders.
+
+    ``prefer`` lists placeholders to consider first (tier 2 step 2: the
+    entities named by the recovery and its re-run).
+    """
+    names = list(dict.fromkeys([*prefer, *renaming.names.values()]))
+    tickets = [n for n in names if n.startswith("T#")]
+    accounts = [n for n in names if n.startswith("A#")]
+    refs = [n for n in names if n.startswith("C#")]
+    queues = [n for n in names if n.startswith("Q#")]
     # Queue and policy probes come first, so configuration evidence wins
     # ties against account history.
     menu: list[tuple[str, dict[str, str]]] = [("inspect", {"entity": "routing_policy"})]
@@ -604,12 +613,18 @@ class ProbeLabel:
     twin_group_id: str | None
 
 
-def probe_oracle(actual: Hypothesis, consistent: list[Hypothesis], abstracted: dict[str, Any]) -> tuple[list, bool]:
+def probe_oracle(
+    actual: Hypothesis,
+    consistent: list[Hypothesis],
+    abstracted: dict[str, Any],
+    budget: int = PROBE_BUDGET,
+    prefer: tuple[str, ...] = (),
+) -> tuple[list, bool]:
     remaining = list(consistent)
-    menu = _probe_menu(actual.renaming, abstracted)
+    menu = _probe_menu(actual.renaming, abstracted, prefer)
     chosen: list[tuple[str, tuple]] = []
 
-    while _label_entropy(remaining) > 0 and len(chosen) < PROBE_BUDGET:
+    while _label_entropy(remaining) > 0 and len(chosen) < budget:
         best, best_gain = None, 0.0
         current = _label_entropy(remaining)
 
@@ -663,9 +678,10 @@ class CaseLabel:
     seconds: float
     steps: tuple[dict[str, object], ...] = ()
     partners: tuple[dict[str, object], ...] = ()
+    sequence: Any = None  # tier 2: the SequenceLabel (packages.support_evaluator.sequences)
 
     def provenance_payload(self) -> dict[str, object]:
-        return {
+        payload = {
             "record_type": "SupportCaseLabel",
             "schema_version": 1,
             "case_kind": self.case.truth.case_kind,
@@ -680,6 +696,11 @@ class CaseLabel:
                 "twin_group_id": self.probe_label.twin_group_id,
             },
         }
+
+        if self.sequence is not None:
+            payload["sequence_label"] = self.sequence.provenance_payload()
+
+        return payload
 
 
 def _concrete_probes(renaming: Renaming, probes) -> list[dict[str, object]]:

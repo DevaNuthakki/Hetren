@@ -26,7 +26,7 @@ Healthy look-alikes, all labelled `no_intervention`:
 
 ## Action space
 
-All probes and recoveries are generic verbs over entity types, shared by every family. No family has its own verb. Each episode has a probe budget of about 4 and ends with exactly one recovery or decision.
+All probes and recoveries are generic verbs over entity types, shared by every family. No family has its own verb. Each episode has a probe budget of 4. In tier 1 (dataset v2) an episode ends with exactly one recovery or decision; tier 2 (dataset v3) allows up to two recoveries (see "Tier 2: up to two recoveries").
 
 - **Retry probe:** a read-only probe re-calls a read tool (`read_ticket` or `lookup_account`) that failed in the run, which distinguishes transient from persistent errors before acting. F3 injects errors into read tools only, so this probe always applies.
 - **No queue restore:** `restore_from_source` is not available for queues. Queue misconfiguration (F6) therefore has no verified recovery and is an escalation case.
@@ -62,6 +62,30 @@ Labels come from execution, never from a model. A recovery label is a recovery t
 Probe labels come from deliberately simple counterfactual enumeration: one world per case kind and variant (plus a clean world with nothing injected), injected into the same base world on the same ticket. Within such small hypothesis sets the label is usually settled by zero or one probe, occasionally two, so probe sequences are short. Richer enumeration (several worlds per kind, combined faults) would produce longer investigations and is left for later work.
 
 Probe outcomes are compared up to renaming. IDs, canonical tiers (including in keys), timestamps and versions become placeholders, and free-text labels whose wording follows tier or role (account names, queue names, queue description templates) are reduced or dropped. A probe can therefore only separate hypotheses by relational evidence, not by random values or wording.
+
+## Tier 2: up to two recoveries
+
+Dataset v2 is frozen as **tier 1**: one recovery or decision per episode, labels and inputs unchanged. Dataset v3 is **tier 2** and allows up to two recoveries, because some cases have two faults that are each fixable (for example an identifier swap together with a stale account record), and an operator would fix both. Every metric is reported per tier.
+
+**Episode.** Probes as in tier 1; the probe budget of 4 is shared across the whole episode. A recovery is applied through a gateway scoped to exactly the proposed call; `set_mapping`, `restore_from_source` and `rerun` are followed by a re-run of the task with the same behaviour, and `reroute` re-runs nothing. The policy then sees the input after the recovery, may probe again (on a fork of the new state), and gives either a second recovery, which ends the episode, or `no_intervention`, meaning stop: the outcome is now right.
+
+**Input after a recovery** (`compact-evidence-v2`): the tier 1 input plus a `recoveries` list; each entry holds the action, its result, the task's re-run (`null` after a reroute) and the probes made after it. Inputs before any recovery carry no `recoveries` key and stay `compact-evidence-v1`, byte for byte.
+
+**Sequence labels.** Every tier 1 label is kept except `abstain` for "no verified recovery". A persistent tool error is never searched past: the error masks what else is wrong, and the label stays as in tier 1. Otherwise the label is the shortest verified sequence of two recoveries, or `abstain` when none verifies. A sequence verifies when the final state passes the tier 1 checks (outcome, account record, queue configuration) and every regression ticket still routes correctly. The first recovery is a state-changing `set_mapping` or `restore_from_source` (a first `reroute` is undone by any later re-run, and a first `rerun` adds nothing because a world edit re-runs the task); the second is any candidate on the state after the first. Ties are broken by (verb 1, verb 2, hash 1, hash 2) in the tier 1 recovery order (`rerun` < `reroute` < `set_mapping` < `restore_from_source`). The search is pruned without changing the label (commuting world edits are tried once, pairs that cannot map the target's reference to the expected account are skipped, and the search stops at the first verified pair in tie-break order); a naive search over every pair is kept as the test oracle.
+
+**Training steps.** A tier 2 case labelled with a recovery has: probes, the first recovery, probes after it, then the second recovery or `no_intervention`. Cases labelled `abstain`, `no_intervention` or `insufficient_evidence` have one decision step as in tier 1. Step 1's probes reduce the label entropy over the first action; at step 2 the hypotheses still consistent get the same first recovery (renamed into their own world), are filtered again by the abstracted post-recovery input, and the probes reduce the entropy over the second action, considering first the entities the recovery and its re-run name. On the tier 2 sample, 10.6% of compound cases stay undetermined within the budget, four fifths of them pairs with queue misconfiguration (F6); single-fault cases are all determined.
+
+**Scoring.** The whole sequence is re-checked by execution on the unprobed end state: every applied recovery is re-applied in order and the final state must verify. After a recovery, only `no_intervention` can close an episode. Tier 2 adds three metrics:
+
+- **exact sequence match:** the policy's non-probe actions equal the label's;
+- **verified but longer than the label:** correct, with more recoveries than the label (among cases whose label has a recovery);
+- **stopped after one of two:** the policy applied one recovery and stopped where the label needs two.
+
+**Token budget.** Tier 2 inputs have a budget of 1,200 tokens (tier 1 stays 800). On a tier 2 sample (1,565 cases: one variant per kind pair and every single-fault variant, 6 worlds × 5 behaviours; 7,379 inputs including partners), the largest input was 797 o200k_base tokens and 831 tokens with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer at the pinned revision; 164 post-recovery inputs exceed 800 tokens with the Qwen tokenizer, none exceed 1,200 with either. The budget is checked again on the full v3 sample.
+
+### Known limitation: no partial fix and escalate
+
+After a first recovery the policy cannot partially fix and then escalate: `abstain` after a recovery is scored wrong. A case where one fault is fixable and the other is not (for example a mapping swap with a queue misconfiguration) is labelled `abstain` before any recovery.
 
 ## Splits
 
@@ -150,6 +174,8 @@ Every baseline is a policy over compact evidence, run by `packages/support_evalu
 ### Rules baseline (v1)
 
 `packages/hetren_baselines/rules.py`, `RULES_POLICY_VERSION = 1`. Written and debugged on the train split only, then frozen and run once on validation. It has no rules for the held-out families. It stays frozen: it is not tuned on validation, on later dataset tiers, or on test results.
+
+On tier 2, rules v1 is run as a single-recovery policy: its episode ends at its first recovery, which counts as an implicit stop. It cannot perform two-step recoveries by design, so its results on cases whose label needs two recoveries are reported as a baseline limitation, not as a rules failure to fix.
 
 Validation (splits v1, 550 primary cases):
 
