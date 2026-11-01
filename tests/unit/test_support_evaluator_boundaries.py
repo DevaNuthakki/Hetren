@@ -587,6 +587,7 @@ def test_harness_and_recording_scripts_never_import_the_evaluator_directly():
         "packages.support_examples.scenarios",
         "scripts.record_recovery_example",
         "scripts.record_support_captures",
+        "scripts.record_live_test",
     ):
         assert module in modules
         assert not any(_within(name, EVALUATOR) for name in graph[module]), module

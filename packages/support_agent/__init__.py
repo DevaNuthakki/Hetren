@@ -2,6 +2,7 @@
 
 from .agent import (
     AGENT_NAME,
+    LIVE_TEST_MODEL_SETTINGS,
     build_support_agent,
     queue_guide,
     support_instructions,
@@ -13,6 +14,7 @@ from .scripted_model import BEHAVIOURS, ScriptedSupportModel
 __all__ = [
     "AGENT_NAME",
     "BEHAVIOURS",
+    "LIVE_TEST_MODEL_SETTINGS",
     "ScriptedSupportModel",
     "build_support_agent",
     "queue_guide",

@@ -96,6 +96,14 @@ Splits v1 (seed 2026) on dataset v2 (primary cases / partner records):
 
 Compound cases: 16 train, 2 validation, 3 `test_in_distribution`. Per-split counts per kind, label and behaviour are in the split manifest.
 
+### Live test split (task 10)
+
+- **Plan:** 30 cases per case kind for all 10 kinds (held-out families included), variants cycled evenly, on world seeds from 1,000,000 to 1,999,999 (dataset seeds are below 1,000,000, so no live world appears in another split). Export: `python -m packages.support_evaluator.live --out artifacts/milestone-2/live-test-v1 --per-kind 30 --seed 2027`.
+- **What the recording script sees:** `specs/run-NNNN.json` only (world spec and ticket ID, shuffled, neutral run IDs). Kinds, variants and truth stay in `evaluator/live_plan.jsonl`.
+- **Recording:** `scripts/record_live_test.py`, model `gpt-4.1-mini-2025-04-14`, `store=False`, 300 output tokens per call, 10 turns per run, a hard dollar cap checked before every call, a resumable ledger. Run only by the operator.
+- **Labels:** each live run is replayed from its captures on its world and labelled by the same execution-based labeler. Sandbox reruns and counterfactual hypotheses need an agent to re-run; they use every scripted behaviour whose compact evidence on that world equals the live run's. If all matching behaviours give the same label, that is the label. Runs with no matching behaviour, or with disagreeing labels, are reported separately and excluded from headline metrics. (The 3 Milestone 1 live examples all match `trust`.)
+- **Low-count families:** results are reported per family and per variant with counts, never pooled only. Scripted proxies suggest the live model will rarely fail on misleading ticket text (F4, only text-following fails) and on tier format drift (F7, case and whitespace variants are easy to normalise), so their faulty-run counts may be small.
+
 ## Metrics
 
 - verified recovery rate
