@@ -47,6 +47,43 @@ CASE_KINDS = tuple(FAMILIES) + LOOKALIKES + BASELINE_KINDS
 
 HELD_OUT_KINDS = ("queue_misconfiguration", "tier_format_drift")
 
+# Dataset v3 (tier 2): two injections on one target ticket. The variant names
+# both components, "<kind>.<variant>+<kind>.<variant>", in CASE_KINDS order.
+COMPOUND_KIND = "compound"
+
+
+def compound_variant(first: tuple[str, str], second: tuple[str, str]) -> str:
+    pair = sorted((first, second), key=lambda item: CASE_KINDS.index(item[0]))
+
+    if pair[0][0] == pair[1][0]:
+        raise ContractError("a compound needs two different kinds")
+
+    return "+".join(f"{kind}.{variant}" for kind, variant in pair)
+
+
+def parse_compound(variant: str) -> tuple[tuple[str, str], tuple[str, str]]:
+    try:
+        first, second = (tuple(part.split(".", 1)) for part in variant.split("+"))
+    except ValueError:
+        raise ContractError("malformed compound variant") from None
+
+    if compound_variant(first, second) != variant or not all(k in CASE_KINDS for k, _ in (first, second)):
+        raise ContractError("malformed compound variant")
+
+    return first, second
+
+
+def component_kinds(case_kind: str, case_variant: str) -> tuple[str, ...]:
+    if case_kind == COMPOUND_KIND:
+        return tuple(kind for kind, _ in parse_compound(case_variant))
+
+    return (case_kind,)
+
+
+def is_held_out(case_kind: str, case_variant: str) -> bool:
+    """Held out when the kind, or any compound component, is a held-out family."""
+    return any(kind in HELD_OUT_KINDS for kind in component_kinds(case_kind, case_variant))
+
 REMEDIES = (
     "set_mapping",
     "restore_from_source",
@@ -70,7 +107,9 @@ class CaseTruth:
     regression_ticket_ids: tuple[str, ...]
 
     def __post_init__(self) -> None:
-        if self.case_kind not in CASE_KINDS:
+        if self.case_kind == COMPOUND_KIND:
+            parse_compound(self.case_variant)
+        elif self.case_kind not in CASE_KINDS:
             raise ContractError("unknown case_kind")
 
         if self.remedy_if_wrong not in REMEDIES or self.remedy_if_wrong == "no_intervention":
@@ -93,7 +132,7 @@ class CaseTruth:
 
     @property
     def held_out(self) -> bool:
-        return self.case_kind in HELD_OUT_KINDS
+        return is_held_out(self.case_kind, self.case_variant)
 
     def canonical_payload(self) -> dict[str, object]:
         return {
@@ -143,10 +182,15 @@ def case_answer_pairs(truth: CaseTruth) -> frozenset[tuple[str, str]]:
 __all__ = [
     "BASELINE_KINDS",
     "CASE_KINDS",
+    "COMPOUND_KIND",
     "CaseTruth",
     "FAMILIES",
     "HELD_OUT_KINDS",
     "LOOKALIKES",
     "REMEDIES",
     "case_answer_pairs",
+    "component_kinds",
+    "compound_variant",
+    "is_held_out",
+    "parse_compound",
 ]

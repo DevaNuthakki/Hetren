@@ -39,7 +39,7 @@ from environments.support.generator import (
     strip_claims,
 )
 from packages.contracts import ContractError
-from packages.support_evaluator.cases import CASE_KINDS, CaseTruth
+from packages.support_evaluator.cases import CASE_KINDS, COMPOUND_KIND, CaseTruth
 
 
 @dataclass(frozen=True)
@@ -591,6 +591,12 @@ def inject(
     variant: str | None = None,
     forced_ticket: str | None = None,
 ) -> InjectedCase:
+    if kind == COMPOUND_KIND:
+        from packages.support_evaluator.compound import inject_compound
+
+        world.require_clean()
+        return inject_compound(world, rng, variant, forced_ticket)
+
     try:
         injector, variants = INJECTORS[kind]
     except KeyError:

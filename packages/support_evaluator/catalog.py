@@ -17,7 +17,7 @@ from enum import StrEnum
 
 from environments.support.fixtures import CLEAN_CHECKS
 from packages.contracts import ContractError
-from packages.support_evaluator.cases import CASE_KINDS
+from packages.support_evaluator.cases import CASE_KINDS, COMPOUND_KIND
 
 
 class SupportVerdict(StrEnum):
@@ -161,6 +161,7 @@ def sensitive_tokens() -> frozenset[str]:
     tokens.update(condition.value for condition in EvidenceCondition)
     tokens.update(CLEAN_CHECKS)
     tokens.update(CASE_KINDS)
+    tokens.add(COMPOUND_KIND)
     tokens.add("twin-")  # twin group IDs are evaluator-only
     return frozenset(tokens)
 
