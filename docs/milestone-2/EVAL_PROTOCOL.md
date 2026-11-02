@@ -285,7 +285,13 @@ Its errors are compound pairs: the two-recovery labels it cannot reach by design
 
 ### Model baseline prompt (`gpt-4.1` and the small model)
 
-Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.py` (`PROMPT_VERSION = 1`). Each policy call is stateless: the system prompt describes the task, the generic action catalog (every verb with its description and argument schema), the probe budget, the decision definitions and, in tier 2, the rules for a second recovery; the user message is the step's compact evidence exactly as `render_evidence` writes it, with probe results and applied recoveries. The prompt names no fault family, case kind or agent behaviour. The reply is stripped of surrounding whitespace and one enclosing Markdown code fence (the same for every model) and must then parse with `parse_action`; anything else is an invalid-action failure. The system prompt is 1,268 o200k_base tokens in tier 1 and 1,361 in tier 2 (1,245 and 1,338 `Qwen/Qwen3-4B-Instruct-2507` tokens).
+Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.py` (current `PROMPT_VERSION = 2`; every version stays reproducible and its text is pinned by a test). Each policy call is stateless: the system prompt describes the task, the generic action catalog (every verb with its description and argument schema), the probe budget, the decision definitions and, in tier 2, the rules for a second recovery; the user message is the step's compact evidence exactly as `render_evidence` writes it, with probe results and applied recoveries. The prompt names no fault family, case kind or agent behaviour. The reply is stripped of surrounding whitespace and one enclosing Markdown code fence (the same for every model) and must then parse with `parse_action`; anything else is an invalid-action failure. The version 2 system prompt is 1,466 o200k_base tokens in tier 1 and 1,559 in tier 2 (1,449 and 1,542 `Qwen/Qwen3-4B-Instruct-2507` tokens); version 1 was 1,268 and 1,361.
+
+**Prompt versions.** Each version is measured and reported separately on validation, and the strongest becomes the baseline prompt for the test splits; no prompt is changed after test results are seen.
+
+- **Version 1:** the output format given only as `{"action": "<probe|recover|decide>", "verb": "<verb>", "args": {...}}`.
+- **Version 2 (format fix only):** every verb is listed with its action type (`- inspect (action "probe"): ...`), each action type has one example (placeholder IDs), and the format line says that `action` is the action type, never the verb. Nothing else changes (a test checks that removing these additions gives version 1 exactly), probing gets no extra encouragement, and parsing stays strict.
+- **Possible version 3 (not built):** if `gpt-4.1` still almost never probes under version 2, a version that explains generically, without naming fault families, what each probe reveals.
 
 ### `gpt-4.1` baseline
 
@@ -293,7 +299,22 @@ Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.p
 
 Measured on the validation inputs along the labelled path (the fewest calls an episode can take): tier 1 885 calls, 1,365,791 input and 24,322 output tokens; tier 2 785 calls, 1,347,013 and 21,171. At $2.00 / $8.00 per million input / output tokens this is $5.79 without caching ($2.76 with automatic prompt caching of the system prompt); if every case used the most calls allowed (5 in tier 1, 6 in tier 2), $20.49. The model is expected to probe more than the labels, so spend falls between these, about $9 without caching.
 
-**Deprecation.** OpenAI deprecated `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` on 2026-10-14; both are removed from the API on 2027-01-14 (recommended replacement `gpt-6-luna`). The live agent model (`gpt-4.1-mini-2025-04-14`) is therefore deprecated. All existing captures (Milestone 1 examples, live test v1 and its label confirmations) replay offline without the API and are kept unchanged. Any new `gpt-4.1` or `gpt-4.1-mini` run, including the `gpt-4.1` baseline on the held-out test, must finish before 2027-01-14.
+**Validation run, prompt version 1** (2026-11-02; 800 cases, 867 calls, $2.858 including a 5-case pilot; no API errors or discarded episodes, no reply at the output limit; prompt caching applied to 87 calls):
+
+| | tier 1 (550) | tier 2 (250) |
+|---|---|---|
+| decision accuracy, strict (protocol scoring) | 18.7% (103) | 7.2% (18) |
+| episodes ended by an invalid action | 193 | 206 |
+| lenient lower bound (see below) | 37.1% (204) | 21.2% (53) |
+| cases with any probe | 9 | 20 |
+
+- **Format failures:** 399 of 867 replies (46%) put the verb in the `action` field (for example `{"action": "insufficient_evidence", "verb": "insufficient_evidence", ...}`), which `parse_action` rejects. This is a weakness of the version 1 prompt, which gave the format without an example; it led to version 2.
+- **Lenient lower bound** (diagnostic only, never a headline metric): every verb belongs to exactly one action type, so an invalid reply whose intent is unambiguous was re-scored offline with the type taken from its verb. In tier 1, 101 of the 193 become correct and 84 stay wrong; 8 were probes, whose episodes would have continued and cannot be scored without new calls. In tier 2, 35 become correct and 91 stay wrong; 80 were probes or first recoveries that would have continued.
+- **`gpt-4.1` rarely probes:** it probed in 9 of 550 tier 1 cases and 20 of 250 tier 2 cases, and otherwise decided from the run alone. In all 47 tier 1 cases where both the label and its reply were `set_mapping`, it named the right customer reference but the wrong account: without `find_owners` it could not know the true owner. It also chose `no_intervention` on stale records that only a probe reveals (34) and `insufficient_evidence` on transient tool errors labelled `rerun` (60).
+
+The version 2 run uses a new output directory, its own ledger and a $9 cap.
+
+**Deprecation.** OpenAI deprecated `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` on 2026-10-14; both are removed from the API on 2027-01-14 (recommended replacement `gpt-6-luna`). On 2026-11-02 the API's model list (`GET /v1/models`) confirmed `shutdown_date` 2027-01-14 for both, and none for `gpt-6-luna`. The live agent model (`gpt-4.1-mini-2025-04-14`) is therefore deprecated. All existing captures (Milestone 1 examples, live test v1 and its label confirmations) replay offline without the API and are kept unchanged. Any new `gpt-4.1` or `gpt-4.1-mini` run, including the `gpt-4.1` baseline on the held-out test, must finish before 2027-01-14.
 
 ### Small model baseline and evaluation settings
 

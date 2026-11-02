@@ -15,7 +15,7 @@ import socket
 import pytest
 
 from packages.hetren_baselines.local_model import Generation, library_versions
-from packages.hetren_baselines.prompt import system_prompt
+from packages.hetren_baselines.prompt import PROMPT_VERSION, system_prompt
 from packages.hetren_evidence import render_evidence
 from packages.support_evaluator import local_model_baseline as runner
 from packages.support_evaluator.dataset import build_dataset
@@ -81,7 +81,7 @@ def test_scores_logs_and_resumes(tiny, tmp_path):
     assert len(rows) == len(primaries) and all(r["correct"] and r["exact"] for r in rows)
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").open(encoding="utf-8")]
     assert len(calls) == steps and all(c["finite"] and not c["discarded"] for c in calls)
-    assert json.loads((tmp_path / "metadata.json").read_text())["prompt_version"] == 1
+    assert json.loads((tmp_path / "metadata.json").read_text())["prompt_version"] == PROMPT_VERSION
     assert (tmp_path / "summary-tier1.json").exists()
 
     # A restart scores nothing again; different settings are refused.

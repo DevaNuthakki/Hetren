@@ -12,6 +12,15 @@ agent behaviour.
 and one enclosing Markdown code fence, the same for every model; the rest
 must parse with ``parse_action``, otherwise the episode ends with an
 invalid-action failure.
+
+Versions (each measured and reported separately; ``system_prompt`` keeps
+every version reproducible):
+
+- 1: the output format given only as ``"<probe|recover|decide>"``. On
+  validation, ``gpt-4.1`` put the verb in the ``action`` field in 46% of
+  replies.
+- 2: format fix only. Every verb is listed with its action type, and each
+  type has one example. Nothing else changes, and parsing stays strict.
 """
 
 from __future__ import annotations
@@ -22,20 +31,37 @@ import re
 from packages.action_space import PROBE_BUDGET, VERBS
 
 
-PROMPT_VERSION = 1
+PROMPT_VERSION = 2
+PROMPT_VERSIONS = (1, 2)
+
+# One example per action type (version 2); the IDs are placeholders.
+EXAMPLES = {
+    "probe": {"action": "probe", "verb": "inspect", "args": {"entity": "ticket", "id": "T-0000"}},
+    "recover": {"action": "recover", "verb": "set_mapping", "args": {"customer_ref": "C-0000", "account_id": "A-0000"}},
+    "decide": {"action": "decide", "verb": "no_intervention", "args": {}},
+}
 
 _FENCE = re.compile(r"^```(?:json)?\s*\n?(.*?)\n?```$", re.DOTALL)
 
 
-def _catalog(kind: str) -> str:
-    return "\n".join(
-        f"- {name}: {spec.description} args: {json.dumps(spec.args_schema, sort_keys=True, separators=(',', ':'))}"
+def _catalog(kind: str, version: int) -> str:
+    lines = "\n".join(
+        f"- {name}{f' (action \"{kind}\")' if version >= 2 else ''}: {spec.description} "
+        f"args: {json.dumps(spec.args_schema, sort_keys=True, separators=(',', ':'))}"
         for name, spec in VERBS.items() if spec.kind == kind
     )
 
+    if version >= 2:
+        lines += f"\nExample: {json.dumps(EXAMPLES[kind])}"
 
-def system_prompt(max_recoveries: int = 1) -> str:
+    return lines
+
+
+def system_prompt(max_recoveries: int = 1, version: int = PROMPT_VERSION) -> str:
     """The system prompt; ``max_recoveries`` 2 adds the tier 2 rules."""
+    if version not in PROMPT_VERSIONS:
+        raise ValueError(f"unknown prompt version {version}")
+
     if max_recoveries == 1:
         ending = (
             "The episode ends at your first recover or decide action. Choose the smallest change that fixes "
@@ -51,21 +77,30 @@ def system_prompt(max_recoveries: int = 1) -> str:
             f"at your recovery number {max_recoveries}. Choose the smallest changes that fix the run."
         )
 
+    if version >= 2:
+        format_rule = (
+            "Reply with exactly one action as a single JSON object and nothing else. \"action\" is the action "
+            "type, one of \"probe\", \"recover\" or \"decide\", never the verb; \"verb\" is one of the verbs "
+            "below; \"args\" are its arguments:"
+        )
+    else:
+        format_rule = "Reply with exactly one action as a single JSON object and nothing else:"
+
     return f"""You review a customer-support agent's run and decide what, if anything, to do about it.
 
 The user message is a JSON record of one run: the task, every tool call the agent made (arguments, outcome, observation or error, and whether it changed state), the run status, and the results of the probes you have made so far.
 
-Reply with exactly one action as a single JSON object and nothing else:
+{format_rule}
 {{"action": "<probe|recover|decide>", "verb": "<verb>", "args": {{...}}}}
 
 Probes are read-only checks on a copy of the current system. You may make at most {PROBE_BUDGET} probes; asking for another ends the episode as a failure. Each probe's result is added to the record you see next.
-{_catalog("probe")}
+{_catalog("probe", version)}
 
 Recoveries change the real system and are checked by execution: the fix must make the run's outcome correct without breaking other tickets.
-{_catalog("recover")}
+{_catalog("recover", version)}
 
 Decisions end the episode.
-{_catalog("decide")}
+{_catalog("decide", version)}
 
 - no_intervention: the run's outcome is already correct.
 - insufficient_evidence: an observation the task requires is absent from the record and nothing explains the absence (it was withheld, truncated or never attempted). A failed tool call is itself an observation, not missing evidence. List the missing observations as short snake_case codes.
@@ -73,7 +108,7 @@ Decisions end the episode.
 
 {ending}
 
-IDs in args must be IDs that appear in the record."""
+IDs in args must be IDs that appear in the record{" (the IDs in the examples are placeholders)" if version >= 2 else ""}."""
 
 
 def user_message(compact_text: str) -> str:
@@ -89,7 +124,9 @@ def action_text(reply: str) -> str:
 
 
 __all__ = [
+    "EXAMPLES",
     "PROMPT_VERSION",
+    "PROMPT_VERSIONS",
     "action_text",
     "system_prompt",
     "user_message",
