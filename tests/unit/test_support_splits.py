@@ -24,17 +24,20 @@ SPLIT_DIR = ROOT / "docs" / "milestone-2" / "splits-v1"
 DATASET_MANIFEST = ROOT / "docs" / "milestone-2" / "dataset-v2.manifest.json"
 
 
-def primary(case_id, kind, world_seed, group=None):
+def primary(case_id, kind, world_seed, group=None, variant="default"):
     return {
         "case_id": case_id, "role": "primary", "twin_group_id": group,
         "planned": {"case_kind": kind, "world_seed": world_seed},
+        "truth": {"case_kind": kind, "case_variant": variant},
     }
 
 
 def partner(case_id, of, counterfactual, group):
+    kind, variant = counterfactual.split("/")
     return {
         "case_id": case_id, "role": "partner", "primary_case_id": of,
         "counterfactual": counterfactual, "twin_group_id": group,
+        "truth": {"case_kind": kind, "case_variant": variant},
     }
 
 
@@ -51,6 +54,23 @@ def synthetic():
     cases.append(primary("shared", "mapping_swap", world_seed=2, group="gs"))
     cases.append(partner("shared-partner", "shared", "clean_world/0", "gs"))
     return cases
+
+
+def test_a_compound_is_held_out_when_either_component_is():
+    held_out = "mapping_swap.swap+queue_misconfiguration.description_swap"
+    training = "mapping_swap.swap+stale_account_record.default"
+    cases = [
+        primary("held", "compound", world_seed=1, group="g1", variant=held_out),
+        partner("held-partner", "held", f"compound/{training}", "g1"),
+        primary("train", "compound", world_seed=2, group="g2", variant=training),
+        partner("train-partner", "train", f"compound/{held_out}", "g2"),
+        partner("train-partner-2", "train", "mapping_swap/swap", "g2"),
+    ]
+    split_of, dropped = assign(cases)
+
+    assert split_of["held"] == split_of["held-partner"] == "test_held_out"
+    assert split_of["train"] != "test_held_out" and split_of["train-partner-2"] == split_of["train"]
+    assert dropped == {"train-partner": HELD_OUT_PARTNER}
 
 
 def assign(cases, seed=0):

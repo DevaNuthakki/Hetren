@@ -25,6 +25,12 @@ is byte-identical for the same parameters.
 
 Results are appended to ``<out>.partial.jsonl`` as each case finishes, so a
 failure late in a long build does not lose finished work.
+
+Tier 2 (dataset v3, ``build_dataset_tier2``) labels plan slots
+(``tier2_slots``) with ``label_case_tier2``. A slot takes its candidates in
+order (``slot_candidates``) and keeps the first that injects and labels; the
+skipped candidates and their reasons are recorded evaluator-side
+(``redraws``). Records carry ``tier: 2`` and the sequence label.
 """
 
 from __future__ import annotations
@@ -37,9 +43,18 @@ from pathlib import Path
 import random
 
 from environments.support.generator import GENERATOR_NAME, GENERATOR_VERSION, generate_world
+from packages.contracts import ContractError
+from packages.support_evaluator.cases import is_held_out
 from packages.support_evaluator.injectors import _recently_changed, inject
 from packages.support_evaluator.labeler import label_case
-from packages.support_evaluator.plan import PlannedCase, cross_plan, planned_payload
+from packages.support_evaluator.plan import (
+    PlannedCase,
+    Tier2Slot,
+    cross_plan,
+    planned_payload,
+    slot_candidates,
+    tier2_slots,
+)
 
 
 DATASET_FORMAT = "hetren-support-dataset"
@@ -55,10 +70,15 @@ def _summary(sandbox: dict[str, object]) -> dict[str, object]:
     }
 
 
-def label_planned(planned: PlannedCase) -> dict[str, object]:
-    """Label one case; returns its primary record and any partner records (no IDs)."""
-    labelled = label_case(planned)
+def label_planned(planned: PlannedCase, labeller=label_case, extra: dict | None = None) -> dict[str, object]:
+    """Label one case; returns its primary record and any partner records (no IDs).
+
+    ``extra`` fields go into every evaluator record (tier 2: ``tier``, and
+    ``redraws`` on the primary).
+    """
+    labelled = labeller(planned)
     provenance = labelled.provenance_payload()
+    extra = extra or {}
     run = provenance["run_label"]
     run["sandboxes"] = [_summary(sandbox) for sandbox in run["sandboxes"]]
     twin = labelled.probe_label.twin_group_id
@@ -73,6 +93,8 @@ def label_planned(planned: PlannedCase) -> dict[str, object]:
             "twin_group_id": twin,
             "run_label": run,
             "probe_label": provenance["probe_label"],
+            **({"sequence_label": provenance["sequence_label"]} if "sequence_label" in provenance else {}),
+            **extra,
         },
         "labeling_seconds": round(labelled.seconds, 3),
     }
@@ -87,6 +109,7 @@ def label_planned(planned: PlannedCase) -> dict[str, object]:
                 "world_sha256": partner["world_sha256"],
                 "twin_group_id": twin,
                 "rule": partner["rule"],
+                **{key: value for key, value in extra.items() if key != "redraws"},
             },
         }
         for partner in labelled.partners
@@ -94,9 +117,40 @@ def label_planned(planned: PlannedCase) -> dict[str, object]:
     return {"primary": primary, "partners": partners}
 
 
+def label_slot(slot: Tier2Slot, seed: int, index: int) -> dict[str, object]:
+    """Label tier 2 slot ``index``: its first candidate that injects.
+
+    Only injection redraws: the fault (or a compound's two faults) or the
+    distractors not fitting the world. Skipped candidates are recorded with
+    their reason in the primary's ``redraws``. The label never causes a
+    redraw: undetermined, ``abstain`` and every other outcome are kept, and
+    an error while labelling stops the build.
+    """
+    from packages.support_evaluator.distractors import inject_planned
+    from packages.support_evaluator.sequences import label_case_tier2
+
+    redraws = []
+
+    for planned in slot_candidates(slot, seed, index):
+        try:
+            inject_planned(planned)
+        except ContractError as exc:
+            redraws.append({"world_seed": planned.world_seed, "case_seed": planned.case_seed, "reason": str(exc)})
+            continue
+
+        return label_planned(planned, label_case_tier2, {"tier": 2, "slot": index, "redraws": redraws})
+
+    raise ContractError(f"tier 2 slot {index} found no candidate that fits")
+
+
 def _label_indexed(item: tuple[int, PlannedCase]) -> tuple[int, dict[str, object]]:
     index, planned = item
     return index, label_planned(planned)
+
+
+def _label_slot_indexed(item: tuple[int, Tier2Slot, int]) -> tuple[int, dict[str, object]]:
+    index, slot, seed = item
+    return index, label_slot(slot, seed, index)
 
 
 def preflight(plan: tuple[PlannedCase, ...]) -> None:
@@ -171,9 +225,47 @@ def build_dataset(
 
     plan = cross_plan(per_cell, seed, kinds=kinds, withheld_per_cell=withheld_per_cell)
     preflight(plan)
+    results = _label_all(partial, list(enumerate(plan)), _label_indexed, processes, progress, chunksize=4)
+    parameters = {
+        "per_cell": per_cell, "seed": seed, "withheld_per_cell": withheld_per_cell,
+        "kinds": list(kinds) if kinds else "default",
+    }
+    return _write_dataset(out_dir, results, seed, parameters)
 
-    indexed = list(enumerate(plan))
-    results: list = [None] * len(plan)
+
+def build_dataset_tier2(
+    out_dir: Path,
+    *,
+    seed: int,
+    per_cell: dict[str, int] | None = None,
+    withheld_per_cell: dict[str, int] | None = None,
+    processes: int = 1,
+    progress: bool = False,
+    **groups,
+) -> dict[str, object]:
+    """Dataset v3: label every ``tier2_slots`` slot (``groups`` restricts pairs or kinds, for tests)."""
+    out_dir = Path(out_dir)
+    partial = out_dir.with_name(out_dir.name + ".partial.jsonl")
+
+    if out_dir.exists() and any(out_dir.iterdir()):
+        raise FileExistsError(f"{out_dir} must be empty or new")
+
+    if partial.exists():
+        raise FileExistsError(f"{partial} already exists")
+
+    slots = tier2_slots(seed, per_cell, withheld_per_cell, **groups)
+    items = [(index, slot, seed) for index, slot in enumerate(slots)]
+    # Slots vary widely in cost; chunks of one keep the workers balanced.
+    results = _label_all(partial, items, _label_slot_indexed, processes, progress, chunksize=1)
+    parameters = {
+        "tier": 2, "seed": seed, "per_cell": per_cell or {}, "withheld_per_cell": withheld_per_cell or {},
+        **{name: [list(g) if isinstance(g, tuple) else g for g in value] for name, value in sorted(groups.items())},
+    }
+    return _write_dataset(out_dir, results, seed, parameters)
+
+
+def _label_all(partial: Path, items: list, labeller, processes: int, progress: bool, chunksize: int) -> list:
+    results: list = [None] * len(items)
     partial.parent.mkdir(parents=True, exist_ok=True)
 
     with partial.open("w", encoding="utf-8") as sink:
@@ -182,20 +274,24 @@ def build_dataset(
             sink.write(record_line({"plan_index": index, **result}))
             sink.flush()
 
-            if progress and (done % 200 == 0 or done == len(plan)):
-                print(f"labelled {done}/{len(plan)}", flush=True)
+            if progress and (done % 200 == 0 or done == len(items)):
+                print(f"labelled {done}/{len(items)}", flush=True)
 
         if processes > 1:
             with get_context("spawn").Pool(processes) as pool:
                 # Results stream back as they finish; the first error stops the run.
                 for done, (index, result) in enumerate(
-                    pool.imap_unordered(_label_indexed, indexed, chunksize=4), start=1,
+                    pool.imap_unordered(labeller, items, chunksize=chunksize), start=1,
                 ):
                     record(index, result, done)
         else:
-            for done, (index, planned) in enumerate(indexed, start=1):
-                record(index, label_planned(planned), done)
+            for done, item in enumerate(items, start=1):
+                record(*labeller(item), done)
 
+    return results
+
+
+def _write_dataset(out_dir: Path, results: list, seed: int, parameters: dict) -> dict[str, object]:
     records = flatten(results)
     ids = assign_case_ids(records, seed)
     ranked = sorted(range(len(records)), key=lambda row: ids[row])
@@ -228,10 +324,7 @@ def build_dataset(
         "format": DATASET_FORMAT,
         "format_version": DATASET_FORMAT_VERSION,
         "generator": {"name": GENERATOR_NAME, "version": GENERATOR_VERSION},
-        "plan": {
-            "per_cell": per_cell, "seed": seed, "withheld_per_cell": withheld_per_cell,
-            "kinds": list(kinds) if kinds else "default",
-        },
+        "plan": parameters,
         "counts": {
             "primary_cases": roles.count("primary"),
             "partner_records": roles.count("partner"),
@@ -285,7 +378,8 @@ def write_tags(out_dir: Path) -> str:
     ``compound``: see ``is_compound``. ``target_recent``: the target account
     had a recent tier change (recent-target stress slice).
     ``first_input_tokens``: o200k_base tokens of the first step's input
-    (length-matched slice).
+    (length-matched slice). Tier 2 adds ``recoveries`` (in the label),
+    ``distractors`` and ``held_out``.
     """
     import tiktoken
 
@@ -301,14 +395,20 @@ def write_tags(out_dir: Path) -> str:
         if case["role"] != "primary":
             continue
 
-        tags.append(
-            {
-                "case_id": case["case_id"],
-                "compound": is_compound(case["truth"], record["steps"][-1]["target"]),
-                "target_recent": _target_recent(case),
-                "first_input_tokens": len(encoding.encode(render_evidence(record["steps"][0]["input"]))),
-            }
-        )
+        targets = [step["target"] for step in record["steps"] if step["target"]["action"] != "probe"]
+        tag = {
+            "case_id": case["case_id"],
+            "compound": is_compound(case["truth"], targets[0]),
+            "target_recent": _target_recent(case),
+            "first_input_tokens": len(encoding.encode(render_evidence(record["steps"][0]["input"]))),
+        }
+
+        if case.get("tier", 1) == 2:
+            tag["recoveries"] = sum(target["action"] == "recover" for target in targets)
+            tag["distractors"] = len(case["truth"].get("distractor_changes", []))
+            tag["held_out"] = is_held_out(case["truth"]["case_kind"], case["truth"]["case_variant"])
+
+        tags.append(tag)
 
     digest = _write_jsonl(out_dir / "evaluator" / "tags.jsonl", tags)
     manifest_path = out_dir / "manifest.json"
@@ -370,6 +470,9 @@ def committed_manifest(out_dir: Path, primaries: int = 8, partners: int = 2) -> 
         **manifest,
         "data_location": f"artifacts/milestone-2/{out_dir.name} (gitignored)",
         "regenerate": (
+            f"python -m packages.support_evaluator.dataset --out <dir> --tier 2 --seed {manifest['plan']['seed']} "
+            "--processes <n>"
+            if manifest["plan"].get("tier") == 2 else
             "python -m packages.support_evaluator.dataset --out <dir> "
             f"--per-cell {manifest['plan']['per_cell']} --seed {manifest['plan']['seed']} "
             f"--withheld-per-cell {manifest['plan']['withheld_per_cell']} --processes <n>"
@@ -384,7 +487,8 @@ def main(argv: list[str] | None = None) -> int:
 
     parser = argparse.ArgumentParser(description="Build a labelled Milestone 2 dataset.")
     parser.add_argument("--out", required=True, type=Path)
-    parser.add_argument("--per-cell", required=True, type=int)
+    parser.add_argument("--tier", type=int, choices=(1, 2), default=1)
+    parser.add_argument("--per-cell", type=int)
     parser.add_argument("--seed", required=True, type=int)
     parser.add_argument("--withheld-per-cell", type=int, default=0)
     parser.add_argument("--processes", type=int, default=1)
@@ -392,11 +496,18 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     started = time.perf_counter()
-    result = build_dataset(
-        args.out, per_cell=args.per_cell, seed=args.seed,
-        withheld_per_cell=args.withheld_per_cell, processes=args.processes,
-        kinds=tuple(args.kinds) if args.kinds else None, progress=True,
-    )
+
+    if args.tier == 2:
+        # The tier 2 plan's sizes are fixed (TIER2_PER_CELL).
+        result = build_dataset_tier2(args.out, seed=args.seed, processes=args.processes, progress=True)
+    elif args.per_cell is None:
+        parser.error("--per-cell is required for tier 1")
+    else:
+        result = build_dataset(
+            args.out, per_cell=args.per_cell, seed=args.seed,
+            withheld_per_cell=args.withheld_per_cell, processes=args.processes,
+            kinds=tuple(args.kinds) if args.kinds else None, progress=True,
+        )
     seconds = result["seconds"]
     print(json.dumps(result["manifest"], indent=2, sort_keys=True))
     print(f"wall seconds: {time.perf_counter() - started:.1f}")

@@ -103,6 +103,22 @@ A distractor never touches the target ticket, its reference, its true owner or e
 
 On a measurement sample (every single-fault variant and six compound variants, 4 worlds × 5 behaviours × 1 and 2 distractors; 920 runs), labels and runs were unchanged in every run. A distractor changed some probe observation on the oracle's probe menu in 6.0% of runs, all in cases whose own fault is a mapping swap: there the run names a second account (the swap partner), and a stale record, merge history or swap on that account shows up when probed. Elsewhere the run and the probes reach only the target's chain, which distractors may not touch, so distractors there are not observable.
 
+### Dataset v3 plan and splits
+
+**Plan** (`tier2_slots` in `packages/support_evaluator/plan.py`; build with `python -m packages.support_evaluator.dataset --tier 2 --seed <seed> --out <dir> --processes <n>`): 2,040 primary cases.
+
+- 25 training compound pairs (the 10 pairs of F1–F5 and the 15 pairs of F1–F5 with a look-alike) × 5 behaviours × 8 = 1,000;
+- 10 held-out compound pairs (F6 or F7 with F1–F5) × 5 behaviours × 8 = 400;
+- 8 single kinds (F1–F5 and the three look-alikes) × 5 behaviours × 16 = 640.
+
+Within each group × behaviour cell, variants cycle evenly; one case in eight has evidence withheld (dataset v2 used one in six; cells of 8 and 16 divide evenly by 8), and distractor counts 0, 1 and 2 are shuffled, both at random, so neither depends on kind, variant or behaviour. Each slot draws its world seed (2,000,000–2,999,999, disjoint from dataset v2 and the live test) and case seed from its own random stream and keeps its first candidate that injects. Only injection redraws (the fault, a compound's two faults, or the distractors not fitting the world); skipped candidates and their reasons are recorded evaluator-side (`redraws`), so selection effects can be audited. The label never causes a redraw: undetermined, `abstain` and every other outcome are kept, and an error while labelling stops the build. Records carry `tier: 2` and the sequence label.
+
+**Splits** follow the splits v1 rules on world seed, twin groups and agent source. A compound is held out when either component is F6 or F7: its primary goes to `test_held_out` with all its partners, and held-out partner records of training cases are dropped. The held-out check uses each record's own truth (kind and, for compounds, both components); on dataset v2 this rebuilds splits v1 identically.
+
+**Token budget rule** (decided before the full v3 build): if tier 2 inputs exceed 1,200 tokens but the maximum stays under about 1,800 with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer, the tier 2 budget is raised to cover the maximum; probe results are never truncated or compressed. Anything above about 1,800 stops the work for a decision. On the 105-case measurement sample (1,855 inputs, primaries and partners), the largest input was 920 Qwen tokens and 873 o200k_base tokens.
+
+**No live slice yet.** Tier 2 has no live `gpt-4.1-mini` test slice. A compound live slice, and a `recent_changes` probe that would make distractors observable in every family, are deferred until after training.
+
 ### Known limitation: no partial fix and escalate
 
 After a first recovery the policy cannot partially fix and then escalate: `abstain` after a recovery is scored wrong. A case where one fault is fixable and the other is not (for example a mapping swap with a queue misconfiguration) is labelled `abstain` before any recovery.

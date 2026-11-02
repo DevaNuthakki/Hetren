@@ -6,16 +6,25 @@ therefore independent of family: knowing which behaviour produced a run says
 nothing about which fault, if any, the world contains.
 
 Seeds are drawn from one ``random.Random(seed)`` so a plan is reproducible.
+
+Tier 2 (dataset v3) plans slots instead (``tier2_slots``): kind or compound
+pair, variant, behaviour, evidence condition and distractor count, balanced
+the same way, with withheld evidence and distractor counts assigned at random
+within each cell so neither depends on kind, variant or behaviour. Each slot
+draws its world and case seeds from its own random stream
+(``slot_candidates``), so any slot can be rebuilt alone; candidates that do
+not fit their world are skipped when the dataset is built.
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from itertools import combinations, product
 import random
 
 from packages.contracts import ContractError
 from packages.support_agent import BEHAVIOURS
-from packages.support_evaluator.cases import BASELINE_KINDS
+from packages.support_evaluator.cases import BASELINE_KINDS, COMPOUND_KIND, FAMILIES, HELD_OUT_KINDS, LOOKALIKES
 from packages.support_evaluator.injectors import INJECTORS
 
 # Kinds in the default dataset plan: every family and look-alike. Baseline
@@ -85,9 +94,93 @@ def cross_plan(
     return tuple(plan)
 
 
+# Tier 2 (dataset v3)
+
+TRAINING_FAMILIES = tuple(kind for kind in FAMILIES if kind not in HELD_OUT_KINDS)
+TIER2_PAIRS = tuple(combinations(TRAINING_FAMILIES, 2)) + tuple(product(TRAINING_FAMILIES, LOOKALIKES))
+TIER2_HELD_OUT_PAIRS = tuple(product(HELD_OUT_KINDS, TRAINING_FAMILIES))
+TIER2_SINGLE_KINDS = TRAINING_FAMILIES + LOOKALIKES
+TIER2_PER_CELL = {"compound": 8, "held_out": 8, "single": 16}
+TIER2_WORLD_SEEDS = (2_000_000, 3_000_000)  # disjoint from v2 (< 1,000,000) and live test (1,000,000-1,999,999)
+TIER2_MAX_CANDIDATES = 50
+
+
+@dataclass(frozen=True)
+class Tier2Slot:
+    case_kind: str
+    case_variant: str
+    behaviour: str
+    evidence_condition: str
+    distractors: int
+
+
+def _pair_variants(pair: tuple[str, str]) -> tuple[str, ...]:
+    from packages.support_evaluator.compound import compound_variants
+
+    return compound_variants(pair)
+
+
+def tier2_slots(
+    seed: int,
+    per_cell: dict[str, int] | None = None,
+    withheld_per_cell: dict[str, int] | None = None,
+    pairs: tuple = TIER2_PAIRS,
+    held_out_pairs: tuple = TIER2_HELD_OUT_PAIRS,
+    single_kinds: tuple = TIER2_SINGLE_KINDS,
+) -> tuple[Tier2Slot, ...]:
+    """The balanced tier 2 plan: compound pairs, held-out pairs and single kinds, each crossed with every behaviour.
+
+    Within each group x behaviour cell, variants cycle evenly; one case in
+    eight has evidence withheld (unless ``withheld_per_cell`` says otherwise)
+    and distractor counts 0, 1 and 2 are shuffled, both at random.
+    """
+    per_cell = {**TIER2_PER_CELL, **(per_cell or {})}
+    withheld_per_cell = {group: per_cell[group] // 8 for group in per_cell} | (withheld_per_cell or {})
+    groups = [("compound", COMPOUND_KIND, _pair_variants(pair)) for pair in pairs]
+    groups += [("held_out", COMPOUND_KIND, _pair_variants(pair)) for pair in held_out_pairs]
+    groups += [("single", kind, INJECTORS[kind][1]) for kind in single_kinds]
+    rng = random.Random(f"{seed}:tier2")
+    slots: list[Tier2Slot] = []
+
+    for group, kind, variants in groups:
+        count = per_cell[group]
+
+        for behaviour in BEHAVIOURS:
+            withheld = set(rng.sample(range(count), withheld_per_cell[group]))
+            distractors = [index % 3 for index in range(count)]
+            rng.shuffle(distractors)
+
+            for index in range(count):
+                slots.append(Tier2Slot(
+                    kind, variants[index % len(variants)], behaviour,
+                    "withheld" if index in withheld else "complete", distractors[index],
+                ))
+
+    return tuple(slots)
+
+
+def slot_candidates(slot: Tier2Slot, seed: int, index: int):
+    """The slot's planned cases in draw order, from the slot's own random stream."""
+    rng = random.Random(f"{seed}:tier2:{index}")
+
+    for _ in range(TIER2_MAX_CANDIDATES):
+        yield PlannedCase(
+            slot.case_kind, slot.case_variant, slot.behaviour,
+            rng.randrange(*TIER2_WORLD_SEEDS), rng.randrange(1_000_000), slot.evidence_condition, slot.distractors,
+        )
+
+
 __all__ = [
     "DEFAULT_PLAN_KINDS",
     "PlannedCase",
+    "TIER2_HELD_OUT_PAIRS",
+    "TIER2_PAIRS",
+    "TIER2_PER_CELL",
+    "TIER2_SINGLE_KINDS",
+    "TIER2_WORLD_SEEDS",
+    "Tier2Slot",
     "cross_plan",
     "planned_payload",
+    "slot_candidates",
+    "tier2_slots",
 ]

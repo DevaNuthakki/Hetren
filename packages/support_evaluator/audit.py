@@ -82,6 +82,11 @@ def scan_dataset(visible: list[dict], evaluator: list[dict]) -> dict[str, object
     }
 
 
+def label_of(record: dict) -> str:
+    """The record's label: its non-probe actions in order (tier 2 can have two recoveries, then stop)."""
+    return ">".join(s["target"]["verb"] for s in record["steps"] if s["target"]["action"] != "probe")
+
+
 # Features
 
 
@@ -226,7 +231,7 @@ SPURIOUS_FEATURES = ("ticket_text", "recency_days", "history_events")
 
 def shortcut_audit(visible: list[dict], evaluator: list[dict], encoding) -> list[FeatureResult]:
     visible, evaluator = primaries(visible, evaluator)
-    labels = [record["steps"][-1]["target"]["verb"] for record in visible]
+    labels = [label_of(record) for record in visible]
     features = [case_features(r, c, encoding) for r, c in zip(visible, evaluator)]
     baseline = Counter(labels).most_common(1)[0][1] / len(labels)
     results = []
@@ -248,6 +253,7 @@ __all__ = [
     "FeatureResult",
     "SPURIOUS_FEATURES",
     "case_features",
+    "label_of",
     "load_dataset",
     "primaries",
     "scan_dataset",

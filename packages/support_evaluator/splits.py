@@ -5,7 +5,8 @@ Rules:
 - Held-out families (F6 queue misconfiguration, F7 tier format drift) appear
   only in ``test_held_out``, which contains nothing else: their primary cases
   go there with all their partners, and any partner record of a held-out kind
-  outside it is dropped. Metrics use primaries only.
+  outside it is dropped. A compound is held out when either component is
+  (``is_held_out``). Metrics use primaries only.
 - Splitting is by world seed. Seeds used by held-out primaries are reserved
   for ``test_held_out``; other cases on a reserved seed are dropped with their
   partners. Every other seed goes to validation, ``test_in_distribution`` or
@@ -28,7 +29,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from packages.support_evaluator.cases import HELD_OUT_KINDS
+from packages.support_evaluator.cases import COMPOUND_KIND, HELD_OUT_KINDS, component_kinds, is_held_out
 
 
 SPLIT_FORMAT = "hetren-support-splits"
@@ -45,10 +46,17 @@ def _seed_bucket(world_seed: int, seed: int) -> float:
 
 
 def _kind_of(case: dict) -> str:
-    if case["role"] == "partner":
-        return case["counterfactual"].split("/")[0]
+    """The case's kind; a compound reads ``compound:<kind>+<kind>``."""
+    truth = case["truth"]
 
-    return case["planned"]["case_kind"]
+    if truth["case_kind"] == COMPOUND_KIND:
+        return "compound:" + "+".join(component_kinds(truth["case_kind"], truth["case_variant"]))
+
+    return truth["case_kind"]
+
+
+def _held_out(case: dict) -> bool:
+    return is_held_out(case["truth"]["case_kind"], case["truth"]["case_variant"])
 
 
 def assign_splits(
@@ -60,12 +68,12 @@ def assign_splits(
 ) -> tuple[dict[str, str], dict[str, str]]:
     """case_id -> split for every kept record, and case_id -> reason for dropped ones."""
     primaries = [c for c in evaluator if c["role"] == "primary"]
-    reserved = {c["planned"]["world_seed"] for c in primaries if c["planned"]["case_kind"] in HELD_OUT_KINDS}
+    reserved = {c["planned"]["world_seed"] for c in primaries if _held_out(c)}
 
     def split_of_primary(case: dict) -> str | None:
         world_seed = case["planned"]["world_seed"]
 
-        if case["planned"]["case_kind"] in HELD_OUT_KINDS:
+        if _held_out(case):
             return "test_held_out"
 
         if world_seed in reserved:
@@ -97,7 +105,7 @@ def assign_splits(
 
         if split is None:
             dropped[case["case_id"]] = SEED_RESERVED
-        elif split != "test_held_out" and _kind_of(case) in HELD_OUT_KINDS:
+        elif split != "test_held_out" and _held_out(case):
             dropped[case["case_id"]] = HELD_OUT_PARTNER
         else:
             split_of[case["case_id"]] = split
@@ -107,7 +115,9 @@ def assign_splits(
 
 def _counts(cases: list[dict], visible_by_id: dict[str, dict], tags: dict[str, dict]) -> dict[str, object]:
     def label(case):
-        return visible_by_id[case["case_id"]]["steps"][-1]["target"]["verb"]
+        # The label's non-probe actions (tier 2 can have two recoveries, then stop).
+        steps = visible_by_id[case["case_id"]]["steps"]
+        return ">".join(s["target"]["verb"] for s in steps if s["target"]["action"] != "probe")
 
     primaries = [c for c in cases if c["role"] == "primary"]
     partners = [c for c in cases if c["role"] == "partner"]

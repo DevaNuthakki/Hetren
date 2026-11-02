@@ -292,7 +292,8 @@ jobs:
     name: Slow tests (dataset and labelling)
     if: github.event_name != 'push' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    # The tier 2 (dataset v3) build test labels a tiny dataset; about 12 minutes locally.
+    timeout-minutes: 30
 
     env:
       TIKTOKEN_CACHE_DIR: ${{ github.workspace }}/.cache/tiktoken
