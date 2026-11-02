@@ -219,6 +219,8 @@ Undetermined primary cases per split: train 30, validation 8, `test_in_distribut
 
 All metrics are reported per family, with held-out families reported separately.
 
+**Failed recovery calls.** A proposed recovery whose tool call fails (an unknown ticket, queue or account, or any other environment error) is scored wrong in both tiers and at either step of a tier 2 sequence, even if a later step would verify, and the reason is recorded in the row's `recovery_failures`. `set_mapping` with a customer reference that does not exist yet is not a failed call: the directory accepts new references by design, so it is an ordinary change scored by execution. This rule was added after a `gpt-4.1` reroute to an unknown queue stopped a run; re-scoring every recorded episode (rules v1 and `gpt-4.1` on both tiers) changed no result. One `gpt-4.1` prompt version 1 tier 2 episode (`case-002287`) had a failed first step (unknown account) and was already scored wrong.
+
 **Undetermined cases.** A case is undetermined when no probe sequence within the budget separates every hypothesis consistent with the run (`probe_label.determined` is false). Undetermined cases are included in decision metrics: their final labels come from execution, not from the probe oracle. They are excluded from probe-efficiency metrics (probe counts and comparisons with the oracle's probe sequence), and their count is reported with every result.
 
 **Proactive-detection families:** F2 (stale account record) and F6 (queue misconfiguration) leave no anomaly in the run itself; only a probe reveals them. Probing runs that look healthy is allowed within the probe budget, and these two families are reported as a separate proactive-detection group.

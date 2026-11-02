@@ -17,7 +17,7 @@ import tiktoken
 
 from packages.hetren_baselines.prompt import action_text, system_prompt
 from packages.hetren_evidence import render_evidence
-from packages.support_evaluator import gpt41_baseline
+from packages.support_evaluator import episodes, gpt41_baseline
 from packages.support_evaluator.dataset import build_dataset
 
 
@@ -136,3 +136,35 @@ def test_action_text_strips_one_fence_only():
     assert action_text('```json\n{"a": 1}\n```') == '{"a": 1}'
     assert action_text('```\n{"a": 1}\n```') == '{"a": 1}'
     assert action_text('Answer: {"a": 1}') == 'Answer: {"a": 1}'
+
+
+def test_a_case_logged_but_not_scored_is_replayed_without_new_calls(tiny, tmp_path, monkeypatch):
+    directory, split, primaries = tiny
+    script = _script()
+    fake = LabelReplay(primaries)
+    real_score = episodes.score
+
+    def crash(prepared, episode):
+        raise RuntimeError("scoring crashed")
+
+    # The run stops while scoring its first case, after paying for its calls.
+    monkeypatch.setattr(episodes, "score", crash)
+    with pytest.raises(RuntimeError, match="scoring crashed"):
+        script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING)
+
+    paid = len(fake.requests)
+    ledger = json.loads((tmp_path / "ledger.json").read_text(encoding="utf-8"))["spend"]
+    assert paid == len(primaries[0]["steps"]) and not (tmp_path / "rows-tier1.jsonl").exists()
+
+    # Resuming scores that case from its logged replies: no new calls, same ledger, no duplicate log lines.
+    monkeypatch.setattr(episodes, "score", real_score)
+    assert script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING) == 0
+
+    rows = [json.loads(line) for line in (tmp_path / "rows-tier1.jsonl").open(encoding="utf-8")]
+    assert rows[0]["case_id"] == primaries[0]["case_id"] and rows[0]["correct"]
+    steps = sum(len(v["steps"]) for v in primaries)
+    assert len(fake.requests) == steps  # only the other cases were called
+    after = json.loads((tmp_path / "ledger.json").read_text(encoding="utf-8"))["spend"]
+    assert after["calls"] == ledger["calls"] + steps - paid
+    calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").open(encoding="utf-8")]
+    assert len(calls) == steps and len({(c["case_id"], c["call"]) for c in calls}) == steps

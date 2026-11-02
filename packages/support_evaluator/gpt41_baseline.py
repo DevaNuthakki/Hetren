@@ -23,7 +23,11 @@ stop the script (they never count as model failures).
 ``<out>/ledger.json`` records usage after every call; ``<out>/calls.jsonl``
 logs every call (case, usage, reply); ``<out>/rows-tier<N>.jsonl`` holds the
 scored episodes. A restart skips cases already scored, and one cap covers
-everything in ``<out>``. ``<out>/summary-tier<N>.json`` is written when a
+everything in ``<out>``. A case whose calls were logged (not discarded) but
+which has no scored row, because the run stopped while scoring it, is
+replayed from its logged replies without new calls, so nothing is paid
+twice; if the replayed episode asks for a different number of calls, the
+script stops. ``<out>/summary-tier<N>.json`` is written when a
 split completes.
 """
 
@@ -44,6 +48,7 @@ MAX_OUTPUT_TOKENS = 128
 CALL_OVERHEAD_TOKENS = 10
 EXIT_BUDGET = 3
 EXIT_API_ERROR = 4
+EXIT_REPLAY_MISMATCH = 5
 
 
 class Halt(Exception):
@@ -107,6 +112,16 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
     if args.limit is not None:
         pending = pending[: args.limit]
 
+    # Paid calls of cases that were never scored (the run stopped while scoring).
+    logged: dict[str, list[dict]] = {}
+
+    if (out / "calls.jsonl").exists():
+        for line in (out / "calls.jsonl").open(encoding="utf-8"):
+            call = json.loads(line)
+
+            if not call["discarded"] and call["case_id"] not in done:
+                logged.setdefault(call["case_id"], []).append(call)
+
     system = system_prompt(2 if tier == 2 else 1)
     system_tokens = len(encoding.encode(system))
     print(f"tier {tier}: {len(cases)} cases, {len(done)} done, scoring {len(pending)}")
@@ -116,6 +131,15 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
         case_id = v["case_id"]
         halt: list[tuple[int, str]] = []
         calls = []
+        replay = logged.get(case_id)
+
+        def replayed(compact):
+            if len(calls) == len(replay):
+                halt.append((EXIT_REPLAY_MISMATCH, f"the replayed episode asked for more than {len(replay)} logged calls"))
+                raise Halt
+
+            calls.append(replay[len(calls)])
+            return action_text(calls[-1]["reply"] or "")
 
         def policy(compact):
             user = user_message(render_evidence(compact))
@@ -148,10 +172,14 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             return action_text(response.output_text or "")
 
         prepared = prepare(v, e)
-        episode = run_episode(policy, prepared)
+        episode = run_episode(replayed if replay else policy, prepared)
 
-        with (out / "calls.jsonl").open("a", encoding="utf-8") as log:
-            log.writelines(json.dumps({**c, "discarded": bool(halt)}) + "\n" for c in calls)
+        if replay and not halt and len(calls) != len(replay):
+            halt.append((EXIT_REPLAY_MISMATCH, f"the replayed episode used {len(calls)} of {len(replay)} logged calls"))
+
+        if not replay:
+            with (out / "calls.jsonl").open("a", encoding="utf-8") as log:
+                log.writelines(json.dumps({**c, "discarded": bool(halt)}) + "\n" for c in calls)
 
         if halt:
             code, reason = halt[0]
@@ -165,7 +193,8 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             rows.write(json.dumps(row, sort_keys=True) + "\n")
 
         done.add(case_id)
-        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls, spent ${ledger.spent_usd:.4f}")
+        source = " (replayed from the call log, no new calls)" if replay else ""
+        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls{source}, spent ${ledger.spent_usd:.4f}")
 
     if len(done) == len(cases):
         rows = [json.loads(line) for line in rows_path.open(encoding="utf-8")]

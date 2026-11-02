@@ -255,7 +255,14 @@ def run_sandbox(
     if action.verb == "rerun":
         changed = True
     else:
-        MAINTENANCE_VERB_TOOLS[action.verb](sandbox, **action.args)
+        try:
+            MAINTENANCE_VERB_TOOLS[action.verb](sandbox, **action.args)
+        except ContractError:
+            # Only a proposed action can name an unknown ID (candidates come
+            # from the world): its call fails, so it is not verified.
+            return SandboxResult(action=action.canonical_payload(), changed_state=False, checks={},
+                                 regression_ok=None, verified=False)
+
         changed = sandbox.state_sha256() != before
 
     if changed and action.verb in ("rerun", "set_mapping", "restore_from_source"):

@@ -9,7 +9,10 @@ when the policy asks for more than ``PROBE_BUDGET`` probes.
 
 ``score`` checks the final action with the labeler's ``verify_label`` on the
 unprobed end state: a decision must be the right one, and a recovery must be
-verified by execution (not necessarily the label's smallest change).
+verified by execution (not necessarily the label's smallest change). A
+recovery whose tool call fails (an unknown ticket, queue, account or
+customer reference, or any other environment error) is scored wrong in both
+tiers, at either step, and the reason is recorded in ``recovery_failures``.
 
 Tier 2 episodes (``max_recoveries`` 2) continue after a first recovery: the
 harness applies it through a gateway scoped to exactly that call (and
@@ -141,15 +144,30 @@ def run_episode(
         gateways[-1].invoke(action["verb"], action["args"])
 
 
+def recovery_failures(prepared: PreparedCase, recoveries: list[dict[str, Any]]) -> list[dict[str, object]]:
+    """Apply the episode's recoveries in order on a fork; every one whose tool call fails."""
+    sandbox = prepared.environment.fork()
+    failures = []
+
+    for step, action in enumerate(recoveries):
+        applied = apply_recovery(sandbox, prepared.case.truth.target_ticket_id, prepared.planned.behaviour, action)
+
+        if applied.failure is not None:
+            failures.append({"step": step, "verb": action["verb"], "error": applied.failure})
+
+    return failures
+
+
 def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
     final = episode["final"]
     label = prepared.label
     recoveries = episode.get("recoveries", [])
     correct = False
     row: dict[str, Any] = {}
+    failures = recovery_failures(prepared, recoveries)
 
     if prepared.max_recoveries == 1:
-        if final is not None:
+        if final is not None and not failures:
             correct = verify_label(
                 prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour, final,
             )
@@ -158,7 +176,7 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
     else:
         decision = final if final is not None and final["action"] == "decide" else None
 
-        if final is not None:
+        if final is not None and not failures:
             correct = verify_sequence(
                 prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour,
                 recoveries, decision,
@@ -193,6 +211,7 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
         "probes": episode["probes"],
         "correct": correct,
         "exact": exact,
+        "recovery_failures": failures,
         **row,
     }
 
@@ -310,6 +329,7 @@ __all__ = [
     "PreparedCase",
     "evaluate",
     "prepare",
+    "recovery_failures",
     "run_episode",
     "score",
     "summarize",

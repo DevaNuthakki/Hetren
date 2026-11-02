@@ -122,6 +122,19 @@ class AppliedRecovery:
         return {"action": self.action, "records": list(self.records), "rerun": self.rerun,
                 "probe_records": list(probe_records)}
 
+    @property
+    def failure(self) -> str | None:
+        """Why the recovery's tool call failed (for example an unknown ID), or None."""
+        for record in self.records:
+            if record["stage"] == "authorized" and not record["payload"].get("allowed"):
+                return f"denied: {record['payload'].get('reason')}"
+
+            if record["stage"] == "observed" and record["status"] == "failed":
+                error = record["payload"]["error"]
+                return f"{error['type']}: {error['message']}"
+
+        return None
+
 
 def apply_recovery(environment: SupportEnvironment, ticket_id: str, behaviour: str, action: dict) -> AppliedRecovery:
     """Apply one recovery in place, through a gateway scoped to exactly that call."""
