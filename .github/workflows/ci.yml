@@ -249,6 +249,9 @@ jobs:
 
           sha256sum -c docs/decisions/qualification/evidence/0008-set-e-remediation-2-regression-evidence.sha256
 
+          # The frozen Milestone 2 evaluation protocol (changes only as dated amendments, re-pinned in the same commit).
+          sha256sum -c docs/milestone-2/EVAL_PROTOCOL.sha256
+
 
       - name: Verify every test runs in the fast or slow job
         shell: bash

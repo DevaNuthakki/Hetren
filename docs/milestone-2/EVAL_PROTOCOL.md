@@ -1,6 +1,6 @@
 # Milestone 2 Evaluation Protocol
 
-**Status: DRAFT. Not frozen.** This document is completed and frozen (hash-pinned in CI) as the last Milestone 2 task. Held-out test numbers for any method are produced only after it is frozen.
+**Status: FROZEN** on 2026-11-02, with the code at commit `5806b64` (the commit before the freeze). This document is hash-pinned in CI (`docs/milestone-2/EVAL_PROTOCOL.sha256`). Test-split numbers for any method are produced only under this frozen protocol. Changes are made only as dated entries under "Amendments"; a change to a definition behind reported test results requires a new protocol version, never an edit.
 
 ## Purpose
 
@@ -521,9 +521,16 @@ Full file lists: `docs/milestone-2/dataset-v2.manifest.json`, `dataset-v3.manife
 
 Versions: world generator `support-world-generator` version 3; dataset format `hetren-support-dataset` version 1; evidence formats `compact-evidence-v1` and `compact-evidence-v2`; rules baseline `RULES_POLICY_VERSION = 1`; model prompt version 2 (version 1 kept; both pinned by hash in `tests/unit/test_hetren_baselines_prompt.py`); `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` (removed from the API on 2027-01-14); `Qwen/Qwen3-4B-Instruct-2507` revision `cdbee75f17c01a7cc42f958dc650907174af0554`. The code commit at the freeze is recorded with the freeze.
 
-## Open items before freezing
+## Amendments
 
-- ~~dataset, split and generator hashes~~ (done: "Frozen artifacts")
-- ~~complete verb and entity list~~ (done: "Verbs and entities")
-- ~~per-family labeling details and the results of the labelability checkpoint~~ (done: "Per-family labelling and the labelability checkpoint")
-- ~~the exact metric formulas and reporting format~~ (done: "Metrics")
+Dated changes after the freeze, newest last. Each entry states what changes, why, and which test runs (by their number in `docs/milestone-2/TEST_RUN_LOG.md`) it applies to; it is added before the first test run it affects. The pinned hash is updated in the same commit.
+
+None yet.
+
+## Items completed before freezing
+
+- dataset, split and generator hashes ("Frozen artifacts")
+- complete verb and entity list ("Verbs and entities")
+- per-family labelling details and the results of the labelability checkpoint ("Per-family labelling and the labelability checkpoint")
+- the exact metric formulas and reporting format ("Metrics")
+- primary endpoints, the claim rule and test-set access ("Metrics", "Test-split evaluation")
