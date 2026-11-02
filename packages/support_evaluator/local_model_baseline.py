@@ -15,6 +15,9 @@ seconds, reply), ``rows-tier<N>.jsonl`` (scored episodes; a restart
 skips cases already scored) and ``summary-tier<N>.json`` when the split is
 complete. A generation error stops the run and discards that episode.
 
+It runs on exactly one visible GPU and stops otherwise; the GPU's name is
+recorded in the metadata.
+
 ``--smoke N`` runs a seeded sample of N cases into ``<out>/smoke-tier<N>/``
 and checks fp16: it passes when every generated step's logits are finite
 and no reply is empty. Parse failures are reported but do not fail it (they
@@ -173,12 +176,21 @@ def main(argv: list[str] | None = None) -> int:
             print(f"STOP: {path} does not exist", file=sys.stderr)
             return 2
 
+    import torch
+
     from packages.hetren_baselines.local_model import MAX_NEW_TOKENS, TransformersModel, library_versions
+
+    # The protocol evaluates on one T4; Kaggle's T4 option has two, so the notebook hides the second.
+    if torch.cuda.device_count() != 1:
+        print(f"STOP: {torch.cuda.device_count()} GPUs visible; exactly one is required (set CUDA_VISIBLE_DEVICES=0)",
+              file=sys.stderr)
+        return 2
 
     model = TransformersModel(args.model, args.revision, args.dtype)
     metadata = {
         "model": args.model, "revision": args.revision, "dtype": args.dtype,
         "max_new_tokens": MAX_NEW_TOKENS, "decoding": "greedy", "libraries": library_versions(),
+        "gpu": torch.cuda.get_device_name(0), "visible_gpus": 1,
     }
     return run_baseline(args, model, metadata)
 
