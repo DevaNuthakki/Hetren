@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import AsyncIterator
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from functools import partial
 import hashlib
 import json
@@ -47,7 +47,7 @@ from packages.support_agent import (
     task_message,
 )
 from packages.support_evaluator.injectors import INJECTORS, inject
-from packages.support_evaluator.plan import DEFAULT_PLAN_KINDS, PlannedCase
+from packages.support_evaluator.plan import DEFAULT_PLAN_KINDS, PlannedCase, planned_payload
 
 
 LIVE_FORMAT = "hetren-support-live-test"
@@ -108,7 +108,7 @@ def export_live(out_dir: Path, *, per_kind: int, seed: int) -> dict[str, object]
         spec = _line({"run_id": run_id, "ticket_id": case.truth.target_ticket_id, "world": case.spec.canonical_payload()})
         (out_dir / "specs" / f"{run_id}.json").write_text(spec, encoding="utf-8")
         spec_hashes[run_id] = hashlib.sha256(spec.encode("utf-8")).hexdigest()
-        evaluator_lines.append(_line({"run_id": run_id, "planned": asdict(planned), "truth": case.truth.canonical_payload()}))
+        evaluator_lines.append(_line({"run_id": run_id, "planned": planned_payload(planned), "truth": case.truth.canonical_payload()}))
 
     evaluator_text = "".join(evaluator_lines)
     (out_dir / "evaluator" / "live_plan.jsonl").write_text(evaluator_text, encoding="utf-8")

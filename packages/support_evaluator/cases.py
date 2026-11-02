@@ -105,6 +105,8 @@ class CaseTruth:
     remedy_if_wrong_arguments: tuple[dict[str, str], ...]
     world_changes: tuple[dict[str, object], ...]
     regression_ticket_ids: tuple[str, ...]
+    # Tier 2: irrelevant inconsistencies added away from the target (see distractors.py).
+    distractor_changes: tuple[dict[str, object], ...] = ()
 
     def __post_init__(self) -> None:
         if self.case_kind == COMPOUND_KIND:
@@ -135,7 +137,7 @@ class CaseTruth:
         return is_held_out(self.case_kind, self.case_variant)
 
     def canonical_payload(self) -> dict[str, object]:
-        return {
+        payload = {
             "record_type": "SupportCaseTruth",
             "schema_version": 1,
             "case_kind": self.case_kind,
@@ -149,6 +151,11 @@ class CaseTruth:
             "world_changes": list(self.world_changes),
             "regression_ticket_ids": list(self.regression_ticket_ids),
         }
+
+        if self.distractor_changes:
+            payload["distractor_changes"] = list(self.distractor_changes)
+
+        return payload
 
     @property
     def truth_sha256(self) -> str:
@@ -166,6 +173,7 @@ class CaseTruth:
             remedy_if_wrong_arguments=tuple(payload["remedy_if_wrong_arguments"]),
             world_changes=tuple(payload["world_changes"]),
             regression_ticket_ids=tuple(payload["regression_ticket_ids"]),
+            distractor_changes=tuple(payload.get("distractor_changes", ())),
         )
 
 

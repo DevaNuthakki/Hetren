@@ -10,7 +10,7 @@ Seeds are drawn from one ``random.Random(seed)`` so a plan is reproducible.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 import random
 
 from packages.contracts import ContractError
@@ -31,6 +31,17 @@ class PlannedCase:
     world_seed: int
     case_seed: int
     evidence_condition: str = "complete"
+    distractors: int = 0  # tier 2: irrelevant inconsistencies added away from the target
+
+
+def planned_payload(planned: PlannedCase) -> dict[str, object]:
+    """``PlannedCase`` as JSON; ``distractors`` only when set, so tier 1 records are unchanged."""
+    payload = asdict(planned)
+
+    if not planned.distractors:
+        del payload["distractors"]
+
+    return payload
 
 
 def cross_plan(
@@ -78,4 +89,5 @@ __all__ = [
     "DEFAULT_PLAN_KINDS",
     "PlannedCase",
     "cross_plan",
+    "planned_payload",
 ]

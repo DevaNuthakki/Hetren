@@ -117,6 +117,7 @@ EVALUATOR_FIELD_NAMES = frozenset(
         "remedy_if_wrong_arguments",
         "world_changes",
         "regression_ticket_ids",
+        "distractor_changes",
     }
 )
 
@@ -162,6 +163,7 @@ def sensitive_tokens() -> frozenset[str]:
     tokens.update(CLEAN_CHECKS)
     tokens.update(CASE_KINDS)
     tokens.add(COMPOUND_KIND)
+    tokens.add("distractor")
     tokens.add("twin-")  # twin group IDs are evaluator-only
     return frozenset(tokens)
 

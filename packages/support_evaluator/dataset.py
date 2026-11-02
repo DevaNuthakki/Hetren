@@ -30,7 +30,6 @@ failure late in a long build does not lose finished work.
 from __future__ import annotations
 
 from collections.abc import Iterable
-from dataclasses import asdict
 import hashlib
 import json
 from multiprocessing import get_context
@@ -40,7 +39,7 @@ import random
 from environments.support.generator import GENERATOR_NAME, GENERATOR_VERSION, generate_world
 from packages.support_evaluator.injectors import _recently_changed, inject
 from packages.support_evaluator.labeler import label_case
-from packages.support_evaluator.plan import PlannedCase, cross_plan
+from packages.support_evaluator.plan import PlannedCase, cross_plan, planned_payload
 
 
 DATASET_FORMAT = "hetren-support-dataset"
@@ -68,7 +67,7 @@ def label_planned(planned: PlannedCase) -> dict[str, object]:
         "visible": {"steps": list(labelled.steps)},
         "evaluator": {
             "role": "primary",
-            "planned": asdict(planned),
+            "planned": planned_payload(planned),
             "truth": labelled.case.truth.canonical_payload(),
             "world_sha256": labelled.case.spec.world_sha256,
             "twin_group_id": twin,
@@ -82,7 +81,7 @@ def label_planned(planned: PlannedCase) -> dict[str, object]:
             "visible": {"steps": partner["steps"]},
             "evaluator": {
                 "role": "partner",
-                "planned": asdict(planned),
+                "planned": planned_payload(planned),
                 "counterfactual": partner["counterfactual"],
                 "truth": partner["truth"],
                 "world_sha256": partner["world_sha256"],

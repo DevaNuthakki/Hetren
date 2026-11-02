@@ -32,17 +32,15 @@ from dataclasses import dataclass
 from functools import partial
 import json
 from pathlib import Path
-import random
 from typing import Any, Callable
 
 from environments.support.fixtures import SupportEnvironment
-from environments.support.generator import generate_world
 from environments.support.maintenance import MAINTENANCE_VERB_TOOLS
 from packages.action_gateway import GatedTool
 from packages.action_space import PROBE_BUDGET, VERBS, parse_action, probe_gateway
 from packages.contracts import ContractError
 from packages.hetren_evidence import compact_evidence
-from packages.support_evaluator.injectors import inject
+from packages.support_evaluator.distractors import inject_planned
 from packages.support_evaluator.labeler import verify_label, withhold_observation
 from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.sampling import run_agent_on
@@ -66,7 +64,7 @@ class PreparedCase:
 
 def prepare(visible: dict, evaluator: dict) -> PreparedCase:
     planned = PlannedCase(**evaluator["planned"])
-    case = inject(planned.case_kind, generate_world(planned.world_seed), random.Random(planned.case_seed), planned.case_variant)
+    case, _ = inject_planned(planned)
     environment = SupportEnvironment(case.spec)
     evidence = run_agent_on(environment, case.truth.target_ticket_id, planned.behaviour).evidence_payload()
 

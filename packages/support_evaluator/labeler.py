@@ -745,6 +745,9 @@ def label_case(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
     with the final label. Withheld-evidence cases get ``withhold_observation``
     unless another transform is given.
     """
+    if planned.distractors:
+        raise ContractError("distractors are a tier 2 feature: use label_case_tier2")
+
     if evidence_transform is None and planned.evidence_condition == "withheld":
         evidence_transform = withhold_observation
 

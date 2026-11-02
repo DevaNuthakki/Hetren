@@ -45,7 +45,6 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from functools import partial
 import json
-import random
 import re
 import time
 from typing import Any
@@ -57,7 +56,8 @@ from packages.action_gateway import GatedTool
 from packages.action_space import PROBE_BUDGET, VERBS, Action, probe_gateway, recovery_gateway
 from packages.contracts import ContractError, canonical_sha256
 from packages.hetren_evidence import compact_evidence
-from packages.support_evaluator.injectors import InjectedCase, inject
+from packages.support_evaluator.distractors import apply_distractors, inject_planned
+from packages.support_evaluator.injectors import InjectedCase
 from packages.support_evaluator.labeler import (
     RECOVERY_ORDER,
     CaseLabel,
@@ -481,15 +481,15 @@ def _consistent_hypothesis(key, case, behaviour, abstracted):
 def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
     """Label one planned case for tier 2: sequence label, two-phase probes, twin group and steps.
 
-    Counterfactuals are run first and only those consistent with the run's
-    input are labelled.
+    Counterfactuals carry the case's distractors; they are run first and
+    only those consistent with the run's input are labelled.
     """
     if evidence_transform is None and planned.evidence_condition == "withheld":
         evidence_transform = withhold_observation
 
     started = time.perf_counter()
-    actual_case = inject(planned.case_kind, generate_world(planned.world_seed),
-                         random.Random(planned.case_seed), planned.case_variant)
+    actual_case, distractors = inject_planned(planned)
+    world = generate_world(planned.world_seed)
     environment = SupportEnvironment(actual_case.spec)
     evidence = run_agent_on(environment, actual_case.truth.target_ticket_id, planned.behaviour).evidence_payload()
 
@@ -498,11 +498,27 @@ def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel
 
     abstracted, renaming = abstract(compact_evidence(evidence))
     sequence = label_sequence(actual_case, environment, evidence, planned.behaviour)
+
+    if distractors:
+        base, _ = inject_planned(replace(planned, distractors=0))
+        base_environment = SupportEnvironment(base.spec)
+        base_evidence = run_agent_on(base_environment, base.truth.target_ticket_id, planned.behaviour).evidence_payload()
+
+        if evidence_transform is not None:
+            base_evidence = evidence_transform(base_evidence)
+
+        if label_sequence(base, base_environment, base_evidence, planned.behaviour).targets != sequence.targets:
+            raise ContractError("distractors changed the label")
     actual = _with_target(Hypothesis("actual", actual_case, environment, evidence, renaming, sequence.single), sequence.first)
     consistent, sequences = [actual], {"actual": sequence}
 
     if sequence.single.rule != "unexplained_absence":
         for key, case in counterfactuals(planned, actual_case):
+            case = apply_distractors(world, case, distractors)
+
+            if case is None:
+                continue
+
             found = _consistent_hypothesis(key, case, planned.behaviour, abstracted)
 
             if found is not None:
@@ -517,7 +533,7 @@ def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel
         twin_id = "twin-" + canonical_sha256(
             {
                 "tier": 2,
-                "world": generate_world(planned.world_seed).world_sha256,
+                "world": world.world_sha256,
                 "ticket": actual_case.truth.target_ticket_id,
                 "behaviour": planned.behaviour,
                 "evidence": abstracted,

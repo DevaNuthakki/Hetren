@@ -83,6 +83,14 @@ Dataset v2 is frozen as **tier 1**: one recovery or decision per episode, labels
 
 **Token budget.** Tier 2 inputs have a budget of 1,200 tokens (tier 1 stays 800). On a tier 2 sample (1,565 cases: one variant per kind pair and every single-fault variant, 6 worlds × 5 behaviours; 7,379 inputs including partners), the largest input was 797 o200k_base tokens and 831 tokens with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer at the pinned revision; 164 post-recovery inputs exceed 800 tokens with the Qwen tokenizer, none exceed 1,200 with either. The budget is checked again on the full v3 sample.
 
+### Distractors
+
+Tier 2 cases can carry 1–2 distractors: irrelevant inconsistencies away from the target, each a training-family injection pinned to another ticket (a stale record on another account, a mapping swap between two other references, a transient or persistent error rule on another ticket's lookup, a recent tier change or merge history on another account). Tier format drift (F7) is a distractor only in cases that are already held out; queue misconfiguration (F6) is never a distractor, because it changes the global queue configuration that verification checks.
+
+A distractor never touches the target ticket, its reference, its true owner or expected account, or the regression tickets with their references and owners; the target's recomputed outcome must be unchanged; and the agent's run on the target must be identical with and without it for every behaviour (checked by execution, because a case's own fault can bring another account into the run, such as a swap partner). Placements that fail are redrawn. Tier 2 labelling re-checks by execution that the label equals the label without distractors. Counterfactual hypotheses carry the same distractors, so hypotheses differ only in the case's own fault.
+
+On a measurement sample (every single-fault variant and six compound variants, 4 worlds × 5 behaviours × 1 and 2 distractors; 920 runs), labels and runs were unchanged in every run. A distractor changed some probe observation on the oracle's probe menu in 6.0% of runs, all in cases whose own fault is a mapping swap: there the run names a second account (the swap partner), and a stale record, merge history or swap on that account shows up when probed. Elsewhere the run and the probes reach only the target's chain, which distractors may not touch, so distractors there are not observable.
+
 ### Known limitation: no partial fix and escalate
 
 After a first recovery the policy cannot partially fix and then escalate: `abstain` after a recovery is scored wrong. A case where one fault is fixable and the other is not (for example a mapping swap with a queue misconfiguration) is labelled `abstain` before any recovery.
