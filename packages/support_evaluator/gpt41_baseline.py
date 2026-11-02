@@ -23,7 +23,7 @@ stop the script (they never count as model failures).
 ``<out>/ledger.json`` records usage after every call and the one dataset
 used for each tier (a different dataset for a tier in the same ``<out>``
 stops the script); ``<out>/calls.jsonl`` logs every call (tier, dataset,
-case, usage, reply); ``<out>/rows-tier<N>.jsonl`` holds the scored episodes
+case, usage, reply); ``<out>/rows-tier<N>-<split>.jsonl`` holds the scored episodes
 (``rows-live.jsonl`` for the live split, given with ``--live`` instead of
 ``--dataset`` and ``--split``: live runs are replayed from their captures
 and scored by their label category, see ``live_episodes``).
@@ -33,7 +33,7 @@ cap covers everything in ``<out>``. A case whose calls were logged (not
 discarded) but which has no scored row, because the run stopped while
 scoring it, is replayed from its logged replies without new calls, so
 nothing is paid twice; if the replayed episode asks for a different number
-of calls, the script stops. ``<out>/summary-tier<N>.json`` (``summary-live.json``)
+of calls, the script stops. ``<out>/summary-tier<N>-<split>.json`` (``summary-live.json``)
 is written when a split completes.
 """
 
@@ -139,7 +139,13 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
         recoveries, tags_path = tier, Path(args.dataset) / "evaluator" / "tags.jsonl"
         cases = [(v["case_id"], partial(prepare, v, e), score) for v, e in primaries]
 
-    name = "live" if tier == "live" else f"tier{tier}"
+    # Rows and summaries are per split: several splits of one tier can share an output directory and its cap.
+    name = "live" if tier == "live" else f"tier{tier}-{Path(args.split).stem}"
+
+    if tier != "live" and (out / f"rows-tier{tier}.jsonl").exists():
+        print(f"STOP: {out} holds rows written before rows were named by split; use a new --out", file=sys.stderr)
+        return 2
+
     recorded = document.setdefault("datasets", {}).setdefault(str(tier), dataset)
 
     if recorded != dataset:

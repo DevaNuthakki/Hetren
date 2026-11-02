@@ -98,13 +98,13 @@ def test_scores_logs_and_resumes(tiny, tmp_path):
     assert all(r["instructions"] == system_prompt(1) and r["store"] is False and r["temperature"] == 0
                and r["max_output_tokens"] == 128 for r in fake.requests)
 
-    rows = [json.loads(line) for line in (tmp_path / "rows-tier1.jsonl").open(encoding="utf-8")]
+    rows = [json.loads(line) for line in (tmp_path / "rows-tier1-split.jsonl").open(encoding="utf-8")]
     assert len(rows) == len(primaries) and all(r["correct"] and r["exact"] for r in rows)
     ledger = json.loads((tmp_path / "ledger.json").read_text(encoding="utf-8"))
     assert ledger["spend"]["calls"] == steps and ledger["spend"]["input_tokens"] == 1500 * steps
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").open(encoding="utf-8")]
     assert len(calls) == steps and not any(c["discarded"] or c["at_output_limit"] for c in calls)
-    assert json.loads((tmp_path / "summary-tier1.json").read_text())["decision_accuracy"]["k"] == len(primaries)
+    assert json.loads((tmp_path / "summary-tier1-split.json").read_text())["decision_accuracy"]["k"] == len(primaries)
 
     # A restart scores nothing again.
     assert script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING) == 0
@@ -118,7 +118,7 @@ def test_stops_before_a_call_that_could_pass_the_cap(tiny, tmp_path):
 
     # One call costs at most about (1,700 input x 1.1) at $2/M + 128 output at $8/M = $0.0048.
     assert script.run_baseline(_args(directory, split, tmp_path, max_usd=0.004), fake, ENCODING) == script.EXIT_BUDGET
-    assert fake.requests == [] and not (tmp_path / "rows-tier1.jsonl").exists()
+    assert fake.requests == [] and not (tmp_path / "rows-tier1-split.jsonl").exists()
 
 
 def test_api_errors_stop_without_scoring(tiny, tmp_path):
@@ -129,7 +129,7 @@ def test_api_errors_stop_without_scoring(tiny, tmp_path):
         raise ConnectionError("service unavailable")
 
     assert script.run_baseline(_args(directory, split, tmp_path), fails, ENCODING) == script.EXIT_API_ERROR
-    assert not (tmp_path / "rows-tier1.jsonl").exists()
+    assert not (tmp_path / "rows-tier1-split.jsonl").exists()
 
 
 def test_action_text_strips_one_fence_only():
@@ -155,13 +155,13 @@ def test_a_case_logged_but_not_scored_is_replayed_without_new_calls(tiny, tmp_pa
 
     paid = len(fake.requests)
     ledger = json.loads((tmp_path / "ledger.json").read_text(encoding="utf-8"))["spend"]
-    assert paid == len(primaries[0]["steps"]) and not (tmp_path / "rows-tier1.jsonl").exists()
+    assert paid == len(primaries[0]["steps"]) and not (tmp_path / "rows-tier1-split.jsonl").exists()
 
     # Resuming scores that case from its logged replies: no new calls, same ledger, no duplicate log lines.
     monkeypatch.setattr(episodes, "score", real_score)
     assert script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING) == 0
 
-    rows = [json.loads(line) for line in (tmp_path / "rows-tier1.jsonl").open(encoding="utf-8")]
+    rows = [json.loads(line) for line in (tmp_path / "rows-tier1-split.jsonl").open(encoding="utf-8")]
     assert rows[0]["case_id"] == primaries[0]["case_id"] and rows[0]["correct"]
     steps = sum(len(v["steps"]) for v in primaries)
     assert len(fake.requests) == steps  # only the other cases were called
@@ -204,7 +204,7 @@ def test_datasets_sharing_case_ids_never_share_logged_calls(tiny, tmp_path):
     assert len(stops) == len(primaries)
     assert all(r["instructions"] == system_prompt(2) for r in stops)
 
-    rows = [json.loads(line) for line in (out / "rows-tier2.jsonl").open(encoding="utf-8")]
+    rows = [json.loads(line) for line in (out / "rows-tier2-split.jsonl").open(encoding="utf-8")]
     assert [r["case_id"] for r in rows] == [v["case_id"] for v in primaries]
     assert all(r["final"]["verb"] == "no_intervention" and r["tier"] == 2 for r in rows)
 
@@ -233,3 +233,23 @@ def test_one_dataset_per_tier_and_untagged_logs_stop(tiny, tmp_path):
     (out / "calls.jsonl").write_text("".join(json.dumps({k: v for k, v in c.items() if k not in ("tier", "dataset", "dataset_sha256")}) + "\n"
                                              for c in calls), encoding="utf-8")
     assert script.run_baseline(_args(directory, split, out), LabelReplay(primaries), ENCODING) == 2
+
+
+def test_two_splits_of_one_tier_keep_separate_rows_and_summaries(tiny, tmp_path):
+    directory, split, primaries = tiny
+    script = _script()
+    out = tmp_path / "out"
+    first, second = tmp_path / "first.txt", tmp_path / "second.txt"
+    first.write_text("".join(v["case_id"] + "\n" for v in primaries[:2]))
+    second.write_text("".join(v["case_id"] + "\n" for v in primaries[2:]))
+
+    for split_file in (first, second):
+        assert script.run_baseline(_args(directory, split_file, out), LabelReplay(primaries), ENCODING) == 0
+
+    assert len((out / "rows-tier1-first.jsonl").read_text().splitlines()) == 2
+    assert len((out / "rows-tier1-second.jsonl").read_text().splitlines()) == len(primaries) - 2
+    assert json.loads((out / "summary-tier1-second.json").read_text())["cases"] == len(primaries) - 2
+
+    # A directory with rows from before split-named rows is refused.
+    (out / "rows-tier1.jsonl").write_text("")
+    assert script.run_baseline(_args(directory, first, out), LabelReplay(primaries), ENCODING) == 2
