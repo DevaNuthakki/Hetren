@@ -165,3 +165,34 @@ def test_the_runner_needs_one_source(tmp_path, monkeypatch):
     assert gpt41_baseline.main(base) == 2
     assert gpt41_baseline.main(base + ["--live", str(tmp_path), "--dataset", str(tmp_path)]) == 2
     assert gpt41_baseline.main(base + ["--dataset", str(tmp_path)]) == 2
+
+
+def test_the_small_model_runner_covers_the_live_split(recorded, tmp_path):
+    from packages.hetren_baselines.local_model import Generation
+    from packages.support_evaluator import local_model_baseline
+
+    proxied, _ = recorded
+    answers = {render_evidence(s["input"]): s["target"] for v, _ in live_cases(proxied) for s in v["steps"]}
+
+    def generate(system, user):
+        return Generation(json.dumps(answers[user]), 1800, 25, True, False)
+
+    args = argparse.Namespace(live=proxied, dataset=None, split=None, out=tmp_path, smoke=None, limit=None)
+    assert local_model_baseline.run_baseline(args, generate, {"model": "fake"}) == 0
+
+    rows = [json.loads(line) for line in (tmp_path / "rows-live.jsonl").open()]
+    assert len(rows) == len(live_cases(proxied)) and all(r["correct"] for r in rows)
+    assert all(c["tier"] == "live" for c in map(json.loads, (tmp_path / "calls.jsonl").open()))
+    assert "live_categories" in json.loads((tmp_path / "summary-live.json").read_text())
+
+
+def test_the_rules_runner_covers_the_live_split(recorded, tmp_path):
+    from packages.support_evaluator.rules_baseline import run_rules
+
+    proxied, _ = recorded
+    args = argparse.Namespace(live=proxied, dataset=None, split=None, out=tmp_path, processes=2)
+    assert run_rules(args, {"policy": "rules", "commit": "test"}) == 0
+
+    rows = [json.loads(line) for line in (tmp_path / "rows-live.jsonl").open()]
+    assert [r["case_id"] for r in rows] == [v["run_id"] for v, _ in live_cases(proxied)]
+    assert all(r["live_category"] == "proxy_matched" and r["tier"] == 1 for r in rows)

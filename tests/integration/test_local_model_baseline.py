@@ -51,7 +51,7 @@ def tiny(tmp_path_factory):
 
 
 def _args(directory, split, out, smoke=None):
-    return argparse.Namespace(dataset=directory, split=split, out=out, smoke=smoke, limit=None)
+    return argparse.Namespace(dataset=directory, split=split, live=None, out=out, smoke=smoke, limit=None)
 
 
 class LabelReplay:
@@ -77,12 +77,12 @@ def test_scores_logs_and_resumes(tiny, tmp_path):
 
     steps = sum(len(v["steps"]) for v in primaries)
     assert len(model.prompts) == steps and all(system == system_prompt(1) for system, _ in model.prompts)
-    rows = [json.loads(line) for line in (tmp_path / "rows-tier1.jsonl").open(encoding="utf-8")]
+    rows = [json.loads(line) for line in (tmp_path / "rows-tier1-split.jsonl").open(encoding="utf-8")]
     assert len(rows) == len(primaries) and all(r["correct"] and r["exact"] for r in rows)
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").open(encoding="utf-8")]
     assert len(calls) == steps and all(c["finite"] and not c["discarded"] for c in calls)
     assert json.loads((tmp_path / "metadata.json").read_text())["prompt_version"] == PROMPT_VERSION
-    assert (tmp_path / "summary-tier1.json").exists()
+    assert (tmp_path / "summary-tier1-split.json").exists()
 
     # A restart scores nothing again; different settings are refused.
     assert runner.run_baseline(_args(directory, split, tmp_path), model, METADATA) == 0
@@ -97,20 +97,20 @@ def test_generation_errors_stop_without_scoring(tiny, tmp_path):
         raise RuntimeError("CUDA out of memory")
 
     assert runner.run_baseline(_args(directory, split, tmp_path), fails, METADATA) == runner.EXIT_GENERATION_ERROR
-    assert not (tmp_path / "rows-tier1.jsonl").exists()
+    assert not (tmp_path / "rows-tier1-split.jsonl").exists()
 
 
 def test_smoke_passes_on_finite_logits_and_reports_parse_failures(tiny, tmp_path):
     directory, split, primaries = tiny
 
     assert runner.run_baseline(_args(directory, split, tmp_path, smoke=3), LabelReplay(primaries), METADATA) == 0
-    report = json.loads((tmp_path / "smoke-tier1" / "smoke_report.json").read_text())
+    report = json.loads((tmp_path / "smoke-tier1-split" / "smoke_report.json").read_text())
     assert report["cases"] == 3 and report["fp16_ok"] and report["non_finite_calls"] == 0
 
     # Unparsable replies are the untrained model's failures, not a precision failure.
     garbled = LabelReplay(primaries, text="I think the ticket is fine.")
     assert runner.run_baseline(_args(directory, split, tmp_path / "garbled", smoke=3), garbled, METADATA) == 0
-    report = json.loads((tmp_path / "garbled" / "smoke-tier1" / "smoke_report.json").read_text())
+    report = json.loads((tmp_path / "garbled" / "smoke-tier1-split" / "smoke_report.json").read_text())
     assert report["fp16_ok"] and report["invalid_action_episodes"] == 3
 
 
@@ -120,7 +120,7 @@ def test_smoke_fails_on_non_finite_logits_or_empty_replies(tiny, tmp_path, model
     model = LabelReplay(primaries, **model_kwargs)
 
     assert runner.run_baseline(_args(directory, split, tmp_path, smoke=3), model, METADATA) == runner.EXIT_SMOKE_FAILED
-    assert not json.loads((tmp_path / "smoke-tier1" / "smoke_report.json").read_text())["fp16_ok"]
+    assert not json.loads((tmp_path / "smoke-tier1-split" / "smoke_report.json").read_text())["fp16_ok"]
 
 
 def test_library_versions_need_no_gpu_libraries():

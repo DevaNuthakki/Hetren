@@ -18,7 +18,7 @@ import tiktoken
 
 from packages.hetren_baselines.prompt import action_text, system_prompt
 from packages.hetren_evidence import render_evidence
-from packages.support_evaluator import episodes, gpt41_baseline
+from packages.support_evaluator import case_sources, gpt41_baseline
 from packages.support_evaluator.dataset import build_dataset
 
 
@@ -143,13 +143,13 @@ def test_a_case_logged_but_not_scored_is_replayed_without_new_calls(tiny, tmp_pa
     directory, split, primaries = tiny
     script = _script()
     fake = LabelReplay(primaries)
-    real_score = episodes.score
+    real_score = case_sources.score
 
     def crash(prepared, episode):
         raise RuntimeError("scoring crashed")
 
     # The run stops while scoring its first case, after paying for its calls.
-    monkeypatch.setattr(episodes, "score", crash)
+    monkeypatch.setattr(case_sources, "score", crash)
     with pytest.raises(RuntimeError, match="scoring crashed"):
         script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING)
 
@@ -158,7 +158,7 @@ def test_a_case_logged_but_not_scored_is_replayed_without_new_calls(tiny, tmp_pa
     assert paid == len(primaries[0]["steps"]) and not (tmp_path / "rows-tier1-split.jsonl").exists()
 
     # Resuming scores that case from its logged replies: no new calls, same ledger, no duplicate log lines.
-    monkeypatch.setattr(episodes, "score", real_score)
+    monkeypatch.setattr(case_sources, "score", real_score)
     assert script.run_baseline(_args(directory, split, tmp_path), fake, ENCODING) == 0
 
     rows = [json.loads(line) for line in (tmp_path / "rows-tier1-split.jsonl").open(encoding="utf-8")]

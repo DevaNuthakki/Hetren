@@ -40,12 +40,12 @@ is written when a split completes.
 from __future__ import annotations
 
 import argparse
-from functools import partial
-import hashlib
 import json
 import os
 from pathlib import Path
 import sys
+
+from packages.support_evaluator.case_sources import add_source_arguments, source_arguments_error
 
 CONFIRMATION_FLAG = "--confirm-live"
 DEFAULT_MODEL = "gpt-4.1-2025-04-14"
@@ -65,9 +65,7 @@ class Halt(Exception):
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--dataset", type=Path, help="dataset directory (v2 for tier 1, v3 for tier 2)")
-    parser.add_argument("--split", type=Path, help="split file, e.g. docs/milestone-2/splits-v1/validation.txt")
-    parser.add_argument("--live", type=Path, help="live test directory instead of --dataset and --split")
+    add_source_arguments(parser)
     parser.add_argument("--out", required=True, type=Path, help="output directory (holds ledger.json)")
     parser.add_argument("--model", default=DEFAULT_MODEL)
     parser.add_argument("--max-usd", type=float, help="hard spending cap for everything in the ledger together")
@@ -83,8 +81,8 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
     from packages.hetren_baselines.prompt import PROMPT_VERSION, action_text, system_prompt, user_message
     from packages.hetren_evidence import render_evidence
     from packages.integrations.openai_agents.budget import INPUT_SAFETY_FACTOR, Prices, SpendLedger
-    from packages.support_evaluator.episodes import prepare, run_episode, score, summarize
-    from packages.support_evaluator.live_episodes import live_cases, live_model_id, prepare_live, score_live
+    from packages.support_evaluator.case_sources import load_source
+    from packages.support_evaluator.episodes import run_episode
 
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -110,38 +108,10 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
         document["spend"] = ledger.payload()
         ledger_path.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    # Each case: its ID, how to prepare it and how to score its episode.
-    if getattr(args, "live", None):
-        # The live split (tier 1 episodes), identified by the hash of its final visible records.
-        live_dir = Path(args.live)
-        model_id = live_model_id(live_dir)
-        dataset = {
-            "name": live_dir.name,
-            "visible_sha256": hashlib.sha256((live_dir / "hetren_visible_final.jsonl").read_bytes()).hexdigest(),
-        }
-        tier, recoveries, tags_path = "live", 1, None
-        cases = [
-            (v["run_id"], partial(prepare_live, live_dir, v, row, model_id),
-             lambda prepared, episode, row=row: score_live(prepared, row, episode))
-            for v, row in live_cases(live_dir)
-        ]
-    else:
-        # A dataset is identified by its manifest's hash of the visible records.
-        dataset = {
-            "name": Path(args.dataset).name,
-            "visible_sha256": json.loads((Path(args.dataset) / "manifest.json").read_text(encoding="utf-8"))["files"]["hetren_visible.jsonl"],
-        }
-        members = set(Path(args.split).read_text(encoding="utf-8").split())
-        visible = map(json.loads, (Path(args.dataset) / "hetren_visible.jsonl").open(encoding="utf-8"))
-        evaluator = map(json.loads, (Path(args.dataset) / "evaluator" / "cases.jsonl").open(encoding="utf-8"))
-        primaries = [(v, e) for v, e in zip(visible, evaluator) if v["case_id"] in members and e["role"] == "primary"]
-        tier = 2 if primaries and primaries[0][1].get("tier", 1) == 2 else 1
-        recoveries, tags_path = tier, Path(args.dataset) / "evaluator" / "tags.jsonl"
-        cases = [(v["case_id"], partial(prepare, v, e), score) for v, e in primaries]
+    source = load_source(getattr(args, "dataset", None), getattr(args, "split", None), getattr(args, "live", None))
+    tier, name, dataset = source.tier, source.name, source.dataset
 
     # Rows and summaries are per split: several splits of one tier can share an output directory and its cap.
-    name = "live" if tier == "live" else f"tier{tier}-{Path(args.split).stem}"
-
     if tier != "live" and (out / f"rows-tier{tier}.jsonl").exists():
         print(f"STOP: {out} holds rows written before rows were named by split; use a new --out", file=sys.stderr)
         return 2
@@ -154,7 +124,7 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
 
     rows_path = out / f"rows-{name}.jsonl"
     done = {json.loads(line)["case_id"] for line in rows_path.open(encoding="utf-8")} if rows_path.exists() else set()
-    pending = [case for case in cases if case[0] not in done]
+    pending = [case for case in source.cases if case.case_id not in done]
 
     if args.limit is not None:
         pending = pending[: args.limit]
@@ -176,12 +146,13 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             if not call["discarded"] and call["case_id"] not in done:
                 logged.setdefault(call["case_id"], []).append(call)
 
-    system = system_prompt(recoveries)
+    system = system_prompt(source.recoveries)
     system_tokens = len(encoding.encode(system))
-    print(f"{name}: {len(cases)} cases, {len(done)} done, scoring {len(pending)}")
+    print(f"{name}: {len(source.cases)} cases, {len(done)} done, scoring {len(pending)}")
     print(f"spent so far ${ledger.spent_usd:.4f} of ${ledger.cap_usd:.2f} cap")
 
-    for case_id, prepare_case, score_case in pending:
+    for case in pending:
+        case_id = case.case_id
         halt: list[tuple[int, str]] = []
         calls = []
         replay = logged.get(case_id)
@@ -225,7 +196,7 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             })
             return action_text(response.output_text or "")
 
-        prepared = prepare_case()
+        prepared = case.prepare()
         episode = run_episode(replayed if replay else policy, prepared)
 
         if replay and not halt and len(calls) != len(replay):
@@ -241,29 +212,20 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             print(f"spent ${ledger.spent_usd:.4f}; {len(done)} cases scored")
             return code
 
-        row = score_case(prepared, episode)
+        row = case.score(prepared, episode)
 
         with rows_path.open("a", encoding="utf-8") as rows:
             rows.write(json.dumps(row, sort_keys=True) + "\n")
 
         done.add(case_id)
-        source = " (replayed from the call log, no new calls)" if replay else ""
-        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls{source}, spent ${ledger.spent_usd:.4f}")
+        replayed_note = " (replayed from the call log, no new calls)" if replay else ""
+        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls{replayed_note}, spent ${ledger.spent_usd:.4f}")
 
-    if len(done) == len(cases):
+    if len(done) == len(source.cases):
         rows = [json.loads(line) for line in rows_path.open(encoding="utf-8")]
-        tags = {t["case_id"]: t for t in map(json.loads, tags_path.open(encoding="utf-8"))} if tags_path else None
-        summary = summarize(rows, tags)
+        (out / f"summary-{name}.json").write_text(json.dumps(source.summarize(rows), indent=2) + "\n", encoding="utf-8")
 
-        if tier == "live":
-            summary["live_categories"] = {
-                category: summarize([r for r in rows if r["live_category"] == category])["decision_accuracy"]
-                for category in sorted({r["live_category"] for r in rows})
-            }
-
-        (out / f"summary-{name}.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-
-    print(f"done: {len(done)} of {len(cases)} cases scored, spent ${ledger.spent_usd:.4f}")
+    print(f"done: {len(done)} of {len(source.cases)} cases scored, spent ${ledger.spent_usd:.4f}")
     return 0
 
 
@@ -282,19 +244,11 @@ def main(argv: list[str] | None = None) -> int:
         print("STOP: OPENAI_API_KEY is not set", file=sys.stderr)
         return 2
 
-    if args.live is not None:
-        one_source = args.dataset is None and args.split is None
-    else:
-        one_source = args.dataset is not None and args.split is not None
+    error = source_arguments_error(args)
 
-    if not one_source:
-        print("STOP: give either --dataset and --split, or --live", file=sys.stderr)
+    if error is not None:
+        print(f"STOP: {error}", file=sys.stderr)
         return 2
-
-    for path in (args.live,) if args.live else (args.dataset, args.split):
-        if not path.exists():
-            print(f"STOP: {path} does not exist", file=sys.stderr)
-            return 2
 
     import tiktoken
     from openai import OpenAI

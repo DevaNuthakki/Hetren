@@ -1,7 +1,9 @@
 """Run the small model baseline on a split's primary cases (local GPU, no API).
 
-Run on Kaggle (see ``notebooks/milestone-2/qwen_untrained_baseline.ipynb``)
-with ``python -m packages.support_evaluator.local_model_baseline``. Each
+Run on Kaggle (see ``notebooks/milestone-2/qwen_untrained_baseline.ipynb``
+for validation and ``qwen_untrained_test.ipynb`` for the test splits) with
+``python -m packages.support_evaluator.local_model_baseline`` and either
+``--dataset`` and ``--split`` or ``--live`` (``case_sources``). Each
 policy call is one stateless generation with the shared prompt
 (``packages.hetren_baselines.prompt``) and the settings in
 ``packages.hetren_baselines.local_model``; episodes run and are scored
@@ -11,16 +13,16 @@ Outputs in ``<out>``: ``metadata.json`` (model, revision, dtype, prompt
 version, library versions; a restart with different settings stops),
 ``calls.jsonl`` (every call: tier, dataset and case, since case IDs repeat
 across datasets; prompt and reply tokens, finite logits, token limit,
-seconds, reply), ``rows-tier<N>.jsonl`` (scored episodes; a restart
-skips cases already scored) and ``summary-tier<N>.json`` when the split is
-complete. A generation error stops the run and discards that episode.
+seconds, reply), ``rows-<name>.jsonl`` (scored episodes, named by tier and
+split or ``live``; a restart skips cases already scored) and
+``summary-<name>.json`` when the split is complete. A generation error stops the run and discards that episode.
 
 It runs on exactly one visible GPU and stops otherwise; the GPU's name is
 recorded in the metadata, with the code's commit (``bundle_commit``: from
 the Kaggle bundle's ``BUNDLE.json``, else ``git rev-parse HEAD``; the run
 stops if neither is available).
 
-``--smoke N`` runs a seeded sample of N cases into ``<out>/smoke-tier<N>/``
+``--smoke N`` runs a seeded sample of N cases into ``<out>/smoke-<name>/``
 and checks fp16: it passes when every generated step's logits are finite
 and no reply is empty. Parse failures are reported but do not fail it (they
 measure the untrained model, not the precision).
@@ -35,6 +37,8 @@ import random
 import sys
 import time
 
+from packages.support_evaluator.case_sources import add_source_arguments, load_source, source_arguments_error
+
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXIT_GENERATION_ERROR = 4
@@ -46,8 +50,7 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     from packages.hetren_baselines.local_model import QWEN_MODEL, QWEN_REVISION
 
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--dataset", required=True, type=Path, help="dataset directory (v2 for tier 1, v3 for tier 2)")
-    parser.add_argument("--split", required=True, type=Path, help="split file, e.g. docs/milestone-2/splits-v1/validation.txt")
+    add_source_arguments(parser)
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--model", default=QWEN_MODEL)
     parser.add_argument("--revision", default=QWEN_REVISION)
@@ -57,27 +60,20 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def _cases(dataset: Path, split: Path) -> list[tuple[dict, dict]]:
-    members = set(Path(split).read_text(encoding="utf-8").split())
-    visible = map(json.loads, (Path(dataset) / "hetren_visible.jsonl").open(encoding="utf-8"))
-    evaluator = map(json.loads, (Path(dataset) / "evaluator" / "cases.jsonl").open(encoding="utf-8"))
-    return [(v, e) for v, e in zip(visible, evaluator) if v["case_id"] in members and e["role"] == "primary"]
-
-
 def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]) -> int:
     """Score pending cases; ``generate(system, user)`` returns a ``Generation``."""
     from packages.hetren_baselines.prompt import PROMPT_VERSION, action_text, system_prompt, user_message
     from packages.hetren_evidence import render_evidence
-    from packages.support_evaluator.episodes import prepare, run_episode, score, summarize
+    from packages.support_evaluator.episodes import run_episode
 
-    cases = _cases(args.dataset, args.split)
-    tier = 2 if cases and cases[0][1].get("tier", 1) == 2 else 1
+    source = load_source(getattr(args, "dataset", None), getattr(args, "split", None), getattr(args, "live", None))
+    tier, name, cases = source.tier, source.name, list(source.cases)
     out = Path(args.out)
 
     if args.smoke is not None:
         cases = sorted(random.Random(f"{SMOKE_SEED}:{tier}").sample(cases, min(args.smoke, len(cases))),
-                       key=lambda c: c[0]["case_id"])
-        out = out / f"smoke-tier{tier}"
+                       key=lambda c: c.case_id)
+        out = out / f"smoke-{name}"
 
     out.mkdir(parents=True, exist_ok=True)
     metadata = {**metadata, "prompt_version": PROMPT_VERSION}
@@ -92,18 +88,18 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
     else:
         metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
-    rows_path = out / f"rows-tier{tier}.jsonl"
+    rows_path = out / f"rows-{name}.jsonl"
     done = {json.loads(line)["case_id"] for line in rows_path.open(encoding="utf-8")} if rows_path.exists() else set()
-    pending = [(v, e) for v, e in cases if v["case_id"] not in done]
+    pending = [case for case in cases if case.case_id not in done]
 
     if args.limit is not None:
         pending = pending[: args.limit]
 
-    system = system_prompt(2 if tier == 2 else 1)
-    print(f"tier {tier}: {len(cases)} cases, {len(done)} done, scoring {len(pending)}")
+    system = system_prompt(source.recoveries)
+    print(f"{name}: {len(cases)} cases, {len(done)} done, scoring {len(pending)}")
 
-    for v, e in pending:
-        case_id = v["case_id"]
+    for case in pending:
+        case_id = case.case_id
         halt: list[str] = []
         calls = []
 
@@ -116,12 +112,12 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
                 halt.append(f"{type(exc).__name__}: {exc}")
                 raise
 
-            calls.append({"tier": tier, "dataset": Path(args.dataset).name, "case_id": case_id, "call": len(calls),
+            calls.append({"tier": tier, "dataset": source.dataset["name"], "case_id": case_id, "call": len(calls),
                           **generation.payload(),
                           "seconds": round(time.perf_counter() - started, 3)})
             return action_text(generation.text)
 
-        prepared = prepare(v, e)
+        prepared = case.prepare()
         episode = run_episode(policy, prepared)
 
         with (out / "calls.jsonl").open("a", encoding="utf-8") as log:
@@ -131,7 +127,7 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
             print(f"STOP at {case_id}: {halt[0]}; this episode is discarded", file=sys.stderr)
             return EXIT_GENERATION_ERROR
 
-        row = score(prepared, episode)
+        row = case.score(prepared, episode)
 
         with rows_path.open("a", encoding="utf-8") as rows:
             rows.write(json.dumps(row, sort_keys=True) + "\n")
@@ -141,19 +137,18 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
 
     if len(done) == len(cases):
         rows = [json.loads(line) for line in rows_path.open(encoding="utf-8")]
-        tags = {t["case_id"]: t for t in map(json.loads, (Path(args.dataset) / "evaluator" / "tags.jsonl").open(encoding="utf-8"))}
-        (out / f"summary-tier{tier}.json").write_text(json.dumps(summarize(rows, tags), indent=2) + "\n", encoding="utf-8")
+        (out / f"summary-{name}.json").write_text(json.dumps(source.summarize(rows), indent=2) + "\n", encoding="utf-8")
 
     if args.smoke is not None:
-        return smoke_report(out, tier)
+        return smoke_report(out, name)
 
     print(f"done: {len(done)} of {len(cases)} cases scored")
     return 0
 
 
-def smoke_report(out: Path, tier: int) -> int:
+def smoke_report(out: Path, name: str) -> int:
     calls = [json.loads(line) for line in (out / "calls.jsonl").open(encoding="utf-8")]
-    rows = [json.loads(line) for line in (out / f"rows-tier{tier}.jsonl").open(encoding="utf-8")]
+    rows = [json.loads(line) for line in (out / f"rows-{name}.jsonl").open(encoding="utf-8")]
     report = {
         "cases": len(rows),
         "calls": len(calls),
@@ -190,10 +185,11 @@ def bundle_commit(root: Path = REPO_ROOT) -> str | None:
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(sys.argv[1:] if argv is None else argv)
 
-    for path in (args.dataset, args.split):
-        if not path.exists():
-            print(f"STOP: {path} does not exist", file=sys.stderr)
-            return 2
+    error = source_arguments_error(args)
+
+    if error is not None:
+        print(f"STOP: {error}", file=sys.stderr)
+        return 2
 
     commit = bundle_commit()
 
