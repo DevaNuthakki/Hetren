@@ -9,8 +9,9 @@ exactly as for ``gpt-4.1``.
 
 Outputs in ``<out>``: ``metadata.json`` (model, revision, dtype, prompt
 version, library versions; a restart with different settings stops),
-``calls.jsonl`` (every call: prompt and reply tokens, finite logits, token
-limit, seconds, reply), ``rows-tier<N>.jsonl`` (scored episodes; a restart
+``calls.jsonl`` (every call: tier, dataset and case, since case IDs repeat
+across datasets; prompt and reply tokens, finite logits, token limit,
+seconds, reply), ``rows-tier<N>.jsonl`` (scored episodes; a restart
 skips cases already scored) and ``summary-tier<N>.json`` when the split is
 complete. A generation error stops the run and discards that episode.
 
@@ -109,7 +110,8 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
                 halt.append(f"{type(exc).__name__}: {exc}")
                 raise
 
-            calls.append({"case_id": case_id, "call": len(calls), **generation.payload(),
+            calls.append({"tier": tier, "dataset": Path(args.dataset).name, "case_id": case_id, "call": len(calls),
+                          **generation.payload(),
                           "seconds": round(time.perf_counter() - started, 3)})
             return action_text(generation.text)
 

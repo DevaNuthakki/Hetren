@@ -9,6 +9,7 @@
 
 import argparse
 import json
+import shutil
 import socket
 from types import SimpleNamespace
 
@@ -168,3 +169,67 @@ def test_a_case_logged_but_not_scored_is_replayed_without_new_calls(tiny, tmp_pa
     assert after["calls"] == ledger["calls"] + steps - paid
     calls = [json.loads(line) for line in (tmp_path / "calls.jsonl").open(encoding="utf-8")]
     assert len(calls) == steps and len({(c["case_id"], c["call"]) for c in calls}) == steps
+
+
+def _as_tier2_copy(directory, split, tmp_path):
+    """The same cases (same case IDs) marked as a tier 2 dataset."""
+    copy = tmp_path / "tier2-copy"
+    shutil.copytree(directory, copy)
+    cases = [json.loads(line) for line in (copy / "evaluator" / "cases.jsonl").open(encoding="utf-8")]
+    (copy / "evaluator" / "cases.jsonl").write_text("".join(json.dumps({**c, "tier": 2}) + "\n" for c in cases), encoding="utf-8")
+    tags = [json.loads(line) for line in (copy / "evaluator" / "tags.jsonl").open(encoding="utf-8")]
+    (copy / "evaluator" / "tags.jsonl").write_text("".join(json.dumps({**t, "compound_pair": False}) + "\n" for t in tags), encoding="utf-8")
+    return copy, split
+
+
+def test_datasets_sharing_case_ids_never_share_logged_calls(tiny, tmp_path):
+    directory, split, primaries = tiny
+    script = _script()
+    out = tmp_path / "out"
+
+    # Tier 1 runs to the end; every case ID now has logged calls.
+    tier1 = LabelReplay(primaries)
+    assert script.run_baseline(_args(directory, split, out), tier1, ENCODING) == 0
+
+    # Tier 2 has the same case IDs: each case is called afresh, never replayed from tier 1's calls.
+    copy, split2 = _as_tier2_copy(directory, split, tmp_path)
+    stops = []
+
+    def stop(**request):
+        stops.append(request)
+        usage = SimpleNamespace(input_tokens=1500, output_tokens=20, input_tokens_details=None)
+        return SimpleNamespace(output_text='{"action": "decide", "verb": "no_intervention", "args": {}}', usage=usage)
+
+    assert script.run_baseline(_args(copy, split2, out), stop, ENCODING) == 0
+    assert len(stops) == len(primaries)
+    assert all(r["instructions"] == system_prompt(2) for r in stops)
+
+    rows = [json.loads(line) for line in (out / "rows-tier2.jsonl").open(encoding="utf-8")]
+    assert [r["case_id"] for r in rows] == [v["case_id"] for v in primaries]
+    assert all(r["final"]["verb"] == "no_intervention" and r["tier"] == 2 for r in rows)
+
+    calls = [json.loads(line) for line in (out / "calls.jsonl").open(encoding="utf-8")]
+    assert {c["tier"] for c in calls} == {1, 2} and sum(c["tier"] == 2 for c in calls) == len(primaries)
+    ledger = json.loads((out / "ledger.json").read_text(encoding="utf-8"))
+    assert set(ledger["datasets"]) == {"1", "2"}
+
+
+def test_one_dataset_per_tier_and_untagged_logs_stop(tiny, tmp_path):
+    directory, split, primaries = tiny
+    script = _script()
+    out = tmp_path / "out"
+    assert script.run_baseline(_args(directory, split, out), LabelReplay(primaries), ENCODING) == 0
+
+    # Another tier 1 dataset in the same output directory is refused.
+    other = tmp_path / "other"
+    shutil.copytree(directory, other)
+    manifest = json.loads((other / "manifest.json").read_text(encoding="utf-8"))
+    manifest["files"]["hetren_visible.jsonl"] = "0" * 64
+    (other / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+    assert script.run_baseline(_args(other, split, out), LabelReplay(primaries), ENCODING) == 2
+
+    # A call log written before calls carried their tier and dataset is refused.
+    calls = [json.loads(line) for line in (out / "calls.jsonl").open(encoding="utf-8")]
+    (out / "calls.jsonl").write_text("".join(json.dumps({k: v for k, v in c.items() if k not in ("tier", "dataset", "dataset_sha256")}) + "\n"
+                                             for c in calls), encoding="utf-8")
+    assert script.run_baseline(_args(directory, split, out), LabelReplay(primaries), ENCODING) == 2

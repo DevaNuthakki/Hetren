@@ -20,14 +20,17 @@ nothing is sent, the episode is discarded and the script stops. Cached input
 is charged at the full input price, so real spend is lower. API errors also
 stop the script (they never count as model failures).
 
-``<out>/ledger.json`` records usage after every call; ``<out>/calls.jsonl``
-logs every call (case, usage, reply); ``<out>/rows-tier<N>.jsonl`` holds the
-scored episodes. A restart skips cases already scored, and one cap covers
-everything in ``<out>``. A case whose calls were logged (not discarded) but
-which has no scored row, because the run stopped while scoring it, is
-replayed from its logged replies without new calls, so nothing is paid
-twice; if the replayed episode asks for a different number of calls, the
-script stops. ``<out>/summary-tier<N>.json`` is written when a
+``<out>/ledger.json`` records usage after every call and the one dataset
+used for each tier (a different dataset for a tier in the same ``<out>``
+stops the script); ``<out>/calls.jsonl`` logs every call (tier, dataset,
+case, usage, reply); ``<out>/rows-tier<N>.jsonl`` holds the scored episodes.
+Case IDs repeat across datasets, so calls are matched to cases by tier,
+dataset and case ID together. A restart skips cases already scored, and one
+cap covers everything in ``<out>``. A case whose calls were logged (not
+discarded) but which has no scored row, because the run stopped while
+scoring it, is replayed from its logged replies without new calls, so
+nothing is paid twice; if the replayed episode asks for a different number
+of calls, the script stops. ``<out>/summary-tier<N>.json`` is written when a
 split completes.
 """
 
@@ -100,11 +103,22 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
         document["spend"] = ledger.payload()
         ledger_path.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
+    # A dataset is identified by its manifest's hash of the visible records.
+    dataset = {
+        "name": Path(args.dataset).name,
+        "visible_sha256": json.loads((Path(args.dataset) / "manifest.json").read_text(encoding="utf-8"))["files"]["hetren_visible.jsonl"],
+    }
     members = set(Path(args.split).read_text(encoding="utf-8").split())
     visible = map(json.loads, (Path(args.dataset) / "hetren_visible.jsonl").open(encoding="utf-8"))
     evaluator = map(json.loads, (Path(args.dataset) / "evaluator" / "cases.jsonl").open(encoding="utf-8"))
     cases = [(v, e) for v, e in zip(visible, evaluator) if v["case_id"] in members and e["role"] == "primary"]
     tier = 2 if cases and cases[0][1].get("tier", 1) == 2 else 1
+    recorded = document.setdefault("datasets", {}).setdefault(str(tier), dataset)
+
+    if recorded != dataset:
+        print(f"STOP: {out} holds tier {tier} results for dataset {recorded['name']}, not {dataset['name']}", file=sys.stderr)
+        return 2
+
     rows_path = out / f"rows-tier{tier}.jsonl"
     done = {json.loads(line)["case_id"] for line in rows_path.open(encoding="utf-8")} if rows_path.exists() else set()
     pending = [(v, e) for v, e in cases if v["case_id"] not in done]
@@ -112,12 +126,19 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
     if args.limit is not None:
         pending = pending[: args.limit]
 
-    # Paid calls of cases that were never scored (the run stopped while scoring).
+    # Paid calls of this tier's cases that were never scored (the run stopped while scoring).
     logged: dict[str, list[dict]] = {}
 
     if (out / "calls.jsonl").exists():
         for line in (out / "calls.jsonl").open(encoding="utf-8"):
             call = json.loads(line)
+
+            if "tier" not in call:
+                print("STOP: calls.jsonl has calls without tier and dataset; annotate them first", file=sys.stderr)
+                return 2
+
+            if (call["tier"], call["dataset_sha256"]) != (tier, dataset["visible_sha256"]):
+                continue
 
             if not call["discarded"] and call["case_id"] not in done:
                 logged.setdefault(call["case_id"], []).append(call)
@@ -164,6 +185,7 @@ def run_baseline(args: argparse.Namespace, create, encoding) -> int:
             save()
             details = getattr(usage, "input_tokens_details", None)
             calls.append({
+                "tier": tier, "dataset": dataset["name"], "dataset_sha256": dataset["visible_sha256"],
                 "case_id": case_id, "call": len(calls), "estimate": estimate,
                 "input_tokens": usage.input_tokens, "cached_tokens": getattr(details, "cached_tokens", None),
                 "output_tokens": usage.output_tokens, "at_output_limit": usage.output_tokens >= MAX_OUTPUT_TOKENS,
