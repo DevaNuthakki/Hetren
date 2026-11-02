@@ -5,10 +5,18 @@
   no search past a persistent tool error.
 - Episodes apply recoveries one at a time and are scored on the whole
   sequence; tier 1 inputs and labels are unchanged.
+- Richer hypotheses: several draws per variant and every v3 compound pair,
+  an adaptive probe menu, and one partner record per distinct label.
+
+Fast tests label with tier 1's hypothesis set (``small_hypotheses``); the
+full tier 2 set runs in the slow job.
 """
 
+import json
 import random
+import re
 import socket
+from types import SimpleNamespace
 
 import pytest
 import tiktoken
@@ -26,18 +34,24 @@ from packages.hetren_evidence import (
 )
 from packages.support_agent import BEHAVIOURS
 from packages.support_evaluator import scan_case_content
+from packages.support_evaluator import sequences
+from packages.support_evaluator.cases import COMPOUND_KIND
+from packages.support_evaluator.compound import TIER2_COMPOUND_VARIANTS
 from packages.support_evaluator.episodes import PreparedCase, run_episode, score, summarize
 from packages.support_evaluator.injectors import inject
-from packages.support_evaluator.labeler import abstract, label_case, label_run
+from packages.support_evaluator.labeler import Renaming, abstract, counterfactuals, label_case, label_run
 from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.sampling import run_agent_on
 from packages.support_evaluator.sequences import (
     STOP,
+    TIER2_DRAWS,
+    _partner_choices,
     apply_recovery,
     label_case_tier2,
     label_sequence,
     naive_pairs,
     search_pairs,
+    tier2_counterfactuals,
     verify_sequence,
 )
 
@@ -53,6 +67,12 @@ def no_network(monkeypatch):
 
     monkeypatch.setattr(socket.socket, "connect", refuse)
     monkeypatch.setattr(socket, "create_connection", refuse)
+
+
+@pytest.fixture
+def small_hypotheses(monkeypatch):
+    """Tier 1's hypothesis set, so fast tests exercise episodes without the full enumeration."""
+    monkeypatch.setattr(sequences, "tier2_counterfactuals", counterfactuals)
 
 
 def _case(kind, variant, seeds=range(5000, 5040)):
@@ -204,7 +224,7 @@ def _tier2(kind, variant, behaviour="trust"):
     return label_case_tier2(PlannedCase(kind, variant, behaviour, seed, seed - 5000, "complete"))
 
 
-def test_tier2_steps_fix_then_check_and_stay_leak_free_within_budget():
+def test_tier2_steps_fix_then_check_and_stay_leak_free_within_budget(small_hypotheses):
     labelled = _tier2("compound", SWAP_STALE)
     targets = [s["target"] for s in labelled.steps if s["target"]["action"] != "probe"]
 
@@ -218,7 +238,7 @@ def test_tier2_steps_fix_then_check_and_stay_leak_free_within_budget():
         assert abstract(partner["steps"][0]["input"])[0] == abstract(labelled.steps[0]["input"])[0]
 
 
-def test_tier2_keeps_tier1_first_steps_for_a_single_fault():
+def test_tier2_keeps_tier1_first_steps_for_a_single_fault(small_hypotheses):
     kind, variant = "stale_account_record", "default"
     seed, _ = _case(kind, variant)
     planned = PlannedCase(kind, variant, "trust", seed, seed - 5000, "complete")
@@ -241,7 +261,7 @@ def _replay(steps):
     return lambda compact: queue.pop(0)
 
 
-def test_episodes_score_the_whole_sequence():
+def test_episodes_score_the_whole_sequence(small_hypotheses):
     labelled = _tier2("compound", SWAP_STALE)
     prepared = _prepared_tier2(labelled)
     first = labelled.sequence.recoveries[0]
@@ -257,9 +277,80 @@ def test_episodes_score_the_whole_sequence():
     assert sequence["stopped_after_one_of_two"] == {"n": 3, "k": 2, "rate": 0.6667}
 
 
-def test_rules_v1_on_a_single_fault_counts_its_recovery_as_an_implicit_stop():
+def test_rules_v1_on_a_single_fault_counts_its_recovery_as_an_implicit_stop(small_hypotheses):
     labelled = _tier2("stale_account_record", "default")
     prepared = _prepared_tier2(labelled)
     row = score(prepared, run_episode(rules_policy, prepared, max_recoveries=1))
 
     assert row["correct"] and row["exact"] and row["tier"] == 2
+
+
+def test_tier2_hypotheses_add_draws_and_compounds_without_duplicate_worlds():
+    seed, case = _case("mapping_swap", "swap")
+    planned = PlannedCase("mapping_swap", "swap", "trust", seed, seed - 5000, "complete")
+    worlds = tier2_counterfactuals(planned, case)
+    keys = [key for key, _ in worlds]
+    hashes = [c.spec.world_sha256 for _, c in worlds]
+
+    assert len(set(hashes)) == len(hashes) and case.spec.world_sha256 not in hashes
+    assert all(c.truth.target_ticket_id == case.truth.target_ticket_id for _, c in worlds)
+    assert any(key.startswith("mapping_swap/swap#") for key in keys)  # other draws of the case's own variant
+    assert {key.split("/", 1)[1] for key in keys if key.startswith(COMPOUND_KIND)} <= set(TIER2_COMPOUND_VARIANTS)
+    assert sum(key.startswith(COMPOUND_KIND) for key in keys) > 50
+    assert all(int(key.split("#")[1]) < TIER2_DRAWS for key in keys if "#" in key)
+
+    # Draw 0 is tier 1's world for every variant tier 1 also lists.
+    tier1 = {key: c.spec.world_sha256 for key, c in counterfactuals(planned, case)}
+    assert {key: h for key, h in zip(keys, hashes) if key in tier1} == {k: h for k, h in tier1.items() if h in hashes}
+
+
+def _hypothesis(key, label_ref):
+    renaming = Renaming()
+    renaming.apply({"ref": "C-AAAA"})
+    targets = ({"action": "recover", "verb": "set_mapping", "args": {"customer_ref": "C-AAAA", "account_id": label_ref}},)
+    return SimpleNamespace(key=key, renaming=renaming), SimpleNamespace(targets=targets)
+
+
+def test_one_partner_per_distinct_label_chosen_by_a_seeded_hash():
+    # A-1111 and A-2222 are unseen accounts: both become A#1, the same label.
+    pairs = [_hypothesis("a", "A-1111"), _hypothesis("b", "A-2222"), _hypothesis("c", "C-AAAA")]
+    others = [h for h, _ in pairs]
+    labels = {h.key: seq for h, seq in pairs}
+
+    chosen = _partner_choices("twin-1", others, labels)
+    assert len(chosen) == 2 and "c" in {h.key for h in chosen}
+    assert chosen == _partner_choices("twin-1", list(reversed(others)), labels)  # not enumeration order
+
+    picks = {next(h.key for h in _partner_choices(f"twin-{i}", others, labels) if h.key != "c") for i in range(20)}
+    assert picks == {"a", "b"}  # the seed decides, so neither variant is always preferred
+
+
+_ID = re.compile(r"\b[TACQ]-[0-9A-Z]{3,12}\b")
+
+
+@pytest.mark.slow
+def test_adaptive_menu_reaches_a_fault_behind_a_failed_read():
+    # A transient error hides the account step: tier 1's static menu cannot
+    # separate what lies behind it; revealing probes can.
+    variant = "mishandled_tool_error.transient+missing_account.deleted_account"
+    labelled = None
+
+    for seed in range(5000, 5040):
+        try:
+            labelled = label_case_tier2(PlannedCase(COMPOUND_KIND, variant, "give_up", seed, seed - 5000, "complete"))
+        except ContractError:
+            continue
+
+        if labelled.probe_label.initial_label_entropy > 0:
+            break
+
+    assert labelled is not None and labelled.probe_label.determined and len(labelled.probe_label.probes) >= 2
+    assert scan_case_content({"steps": labelled.steps}, labelled.case.truth) == ()
+
+    for steps in [labelled.steps] + [p["steps"] for p in labelled.partners]:
+        assert scan_case_content({"steps": steps}, labelled.case.truth) == ()
+
+        for step in steps:
+            if step["target"]["action"] == "probe":
+                named = set(_ID.findall(json.dumps(step["target"]["args"])))
+                assert named <= set(_ID.findall(json.dumps(step["input"])))  # only entities the policy has seen

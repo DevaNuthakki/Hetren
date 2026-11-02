@@ -33,7 +33,7 @@ to multi-valued probe outcomes), within the probe budget.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from functools import partial
 import json
 import random
@@ -503,13 +503,21 @@ class Hypothesis:
         return canonical_sha256({"verb": self.label.verb, "args": args})
 
 
-def _hypothesis(key, case, behaviour) -> tuple[Hypothesis, dict[str, Any]]:
+def _hypothesis(key, case, behaviour, abstracted) -> Hypothesis | None:
+    """The counterfactual's hypothesis if its input matches ``abstracted``, else None.
+
+    The run is compared first; only consistent worlds pay for sandbox labelling.
+    """
     environment = SupportEnvironment(case.spec)
     record = run_agent_on(environment, case.truth.target_ticket_id, behaviour)
     evidence = record.evidence_payload()
-    abstracted, renaming = abstract(compact_evidence(evidence))
+    other, renaming = abstract(compact_evidence(evidence))
+
+    if other != abstracted:
+        return None
+
     label = label_run(case, environment, evidence, behaviour)
-    return Hypothesis(key, case, environment, evidence, renaming, label), abstracted
+    return Hypothesis(key, case, environment, evidence, renaming, label)
 
 
 def counterfactuals(planned: PlannedCase, actual: InjectedCase) -> list[tuple[str, InjectedCase]]:
@@ -537,25 +545,13 @@ def counterfactuals(planned: PlannedCase, actual: InjectedCase) -> list[tuple[st
 # Probe oracle
 
 
-def _probe_menu(
-    renaming: Renaming,
-    compact: dict[str, Any],
-    prefer: tuple[str, ...] = (),
-) -> list[tuple[str, dict[str, str]]]:
-    """Probes over the run's own entities, written with placeholders.
-
-    ``prefer`` lists placeholders to consider first (tier 2 step 2: the
-    entities named by the recovery and its re-run).
-    """
-    names = list(dict.fromkeys([*prefer, *renaming.names.values()]))
+def _entity_menu(names: list[str]) -> list[tuple[str, dict[str, str]]]:
+    """Probes over the placeholders in ``names``: queues, a ticket, references, then an account."""
     tickets = [n for n in names if n.startswith("T#")]
     accounts = [n for n in names if n.startswith("A#")]
     refs = [n for n in names if n.startswith("C#")]
     queues = [n for n in names if n.startswith("Q#")]
-    # Queue and policy probes come first, so configuration evidence wins
-    # ties against account history.
-    menu: list[tuple[str, dict[str, str]]] = [("inspect", {"entity": "routing_policy"})]
-    menu += [("inspect", {"entity": "queue", "id": queue}) for queue in queues[:2]]
+    menu = [("inspect", {"entity": "queue", "id": queue}) for queue in queues[:2]]
 
     for ticket in tickets[:1]:
         menu.append(("inspect", {"entity": "ticket", "id": ticket}))
@@ -570,15 +566,38 @@ def _probe_menu(
             ("history", {"entity": "account", "id": account}),
         ]
 
+    return menu
+
+
+def _probe_menu(
+    renaming: Renaming,
+    compact: dict[str, Any],
+    prefer: tuple[str, ...] = (),
+    revealed: tuple[str, ...] = (),
+) -> list[tuple[str, dict[str, str]]]:
+    """Probes over the run's own entities, written with placeholders.
+
+    ``prefer`` lists placeholders to consider first (tier 2 step 2: the
+    entities named by the recovery and its re-run). ``revealed`` lists
+    entities that earlier probe observations named (tier 2's adaptive menu);
+    their probes come after the run's own.
+    """
+    names = list(dict.fromkeys([*prefer, *renaming.names.values()]))
+    # Queue and policy probes come first, so configuration evidence wins
+    # ties against account history.
+    menu: list[tuple[str, dict[str, str]]] = [("inspect", {"entity": "routing_policy"})]
+    menu += _entity_menu(names)
+
     for step in compact["steps"]:
         if step["tool"] in READ_TOOLS and step["outcome"] == "failed" and step["error"]["type"] == UNAVAILABLE_ERROR:
             target = next(iter(step["args"].values()))
             menu.append(("retry", {"tool": step["tool"], "target": renaming.copy().text(target)}))
 
+    menu += _entity_menu(list(revealed))
     return list(dict.fromkeys((verb, tuple(sorted(args.items()))) for verb, args in menu))
 
 
-def _run_probe(hypothesis: Hypothesis, verb: str, args: tuple) -> str:
+def _observe(hypothesis: Hypothesis, verb: str, args: tuple) -> Any:
     concrete = {}
 
     for key, value in args:
@@ -591,7 +610,11 @@ def _run_probe(hypothesis: Hypothesis, verb: str, args: tuple) -> str:
     except Exception as exc:
         observation = {"error": str(exc)}
 
-    return canonical_sha256(hypothesis.renaming.copy().apply(observation))
+    return observation
+
+
+def _run_probe(hypothesis: Hypothesis, verb: str, args: tuple) -> str:
+    return canonical_sha256(hypothesis.renaming.copy().apply(_observe(hypothesis, verb, args)))
 
 
 def _label_entropy(hypotheses: list[Hypothesis]) -> float:
@@ -651,6 +674,95 @@ def probe_oracle(
         remaining = [h for h in remaining if _run_probe(h, *best) == observed]
 
     return chosen, _label_entropy(remaining) == 0
+
+
+def adaptive_probe_oracle(
+    actual: Hypothesis,
+    consistent: list[Hypothesis],
+    abstracted: dict[str, Any],
+    budget: int = PROBE_BUDGET,
+    prefer: tuple[str, ...] = (),
+) -> tuple[list, bool, list[Hypothesis]]:
+    """``probe_oracle`` with a menu that grows with what probes reveal (tier 2).
+
+    After each chosen probe, every hypothesis still consistent extends a copy
+    of its renaming with that probe's observation, and the entities the
+    observation named in ``actual``'s world join the menu (``revealed``). A
+    probe can therefore only name entities the run or an earlier probe
+    showed. A probe that only reveals entities has no immediate gain, so
+    when no probe gains, the one whose best follow-up gains most in
+    expectation is chosen (two-step lookahead), if any does. Returns the
+    probes, whether the label is determined, and the hypotheses still
+    consistent, with their extended renamings (``actual``'s among them,
+    under its own key).
+    """
+    known = set(actual.renaming.names.values())
+    remaining = [replace(h, renaming=h.renaming.copy()) for h in consistent]
+    chosen: list[tuple[str, tuple]] = []
+
+    def menu_for(group: list[Hypothesis]) -> list:
+        # Hypotheses in one outcome group saw the same abstract observations,
+        # so any member's renaming names the same revealed placeholders.
+        revealed = tuple(n for n in group[0].renaming.names.values() if n not in known)
+        return [q for q in _probe_menu(actual.renaming, abstracted, prefer, revealed) if q not in chosen]
+
+    def split(group: list[Hypothesis], probe) -> list[list[Hypothesis]]:
+        outcomes: dict[str, list[Hypothesis]] = {}
+
+        for hypothesis in group:
+            outcomes.setdefault(_run_probe(hypothesis, *probe), []).append(hypothesis)
+
+        return list(outcomes.values())
+
+    def expected(group: list[Hypothesis], probe) -> float:
+        return sum(len(part) / len(group) * _label_entropy(part) for part in split(group, probe))
+
+    def best_by(score, menu) -> tuple:
+        best, best_gain = None, 0.0
+
+        for probe in menu:
+            gain = score(probe)
+
+            if gain > best_gain + 1e-12:
+                best, best_gain = probe, gain
+
+        return best
+
+    def extended(group: list[Hypothesis], probe) -> list[Hypothesis]:
+        group = [replace(h, renaming=h.renaming.copy()) for h in group]
+
+        for hypothesis in group:
+            hypothesis.renaming.apply(_observe(hypothesis, *probe))
+
+        return group
+
+    def lookahead(probe) -> float:
+        if len(chosen) + 2 > budget:
+            return 0.0
+
+        after = 0.0
+
+        for part in split(remaining, probe):
+            part = extended(part, probe)
+            follow = [q for q in menu_for(part) if q != probe]
+            after += len(part) / len(remaining) * min([_label_entropy(part)] + [expected(part, q) for q in follow])
+
+        return current - after
+
+    while _label_entropy(remaining) > 0 and len(chosen) < budget:
+        current = _label_entropy(remaining)
+        menu = menu_for(remaining)
+        best = best_by(lambda probe: current - expected(remaining, probe), menu) or best_by(lookahead, menu)
+
+        if best is None:
+            break
+
+        chosen.append(best)
+        mine = next(h for h in remaining if h.key == actual.key)
+        observed = _run_probe(mine, *best)
+        remaining = extended([h for h in remaining if _run_probe(h, *best) == observed], best)
+
+    return chosen, _label_entropy(remaining) == 0, remaining
 
 
 def withhold_observation(evidence: dict[str, Any]) -> dict[str, Any]:
@@ -771,9 +883,9 @@ def label_case(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
 
     if run_label.rule != "unexplained_absence":
         for key, case in counterfactuals(planned, actual_case):
-            hypothesis, other = _hypothesis(key, case, planned.behaviour)
+            hypothesis = _hypothesis(key, case, planned.behaviour, abstracted)
 
-            if other == abstracted:
+            if hypothesis is not None:
                 consistent.append(hypothesis)
 
     initial = _label_entropy(consistent)
@@ -836,6 +948,7 @@ __all__ = [
     "RunLabel",
     "SandboxResult",
     "abstract",
+    "adaptive_probe_oracle",
     "candidate_recoveries",
     "label_case",
     "label_run",

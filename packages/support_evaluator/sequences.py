@@ -38,6 +38,19 @@ recovery (renamed into their own world), are filtered again by the
 abstracted post-recovery input, and the probes reduce the entropy over the
 second action (``post_recovery_label``), considering first the entities the
 recovery and its re-run name.
+
+Hypotheses (``tier2_counterfactuals``) are richer than tier 1's one draw of
+every other single variant: every single variant (the case's own included)
+in ``TIER2_DRAWS`` random draws, so the same symptom can come from different
+partners or targets, and every dataset v3 compound pair, all carrying the
+case's distractors. Worlds identical to one already listed are dropped.
+Each world is run first, and only those consistent with the run's input
+are labelled. The probe menu is adaptive (``adaptive_probe_oracle``):
+entities an earlier probe revealed can be probed next, so a fault behind a
+failed read or outside the run can still be reached. A case still
+undetermined after that is genuinely ambiguous and is kept, flagged.
+Partner records are written for one hypothesis per distinct label, chosen
+by a seeded hash; the oracle uses every hypothesis.
 """
 
 from __future__ import annotations
@@ -45,6 +58,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from functools import partial
 import json
+import random
 import re
 import time
 from typing import Any
@@ -56,8 +70,10 @@ from packages.action_gateway import GatedTool
 from packages.action_space import PROBE_BUDGET, VERBS, Action, probe_gateway, recovery_gateway
 from packages.contracts import ContractError, canonical_sha256
 from packages.hetren_evidence import compact_evidence
+from packages.support_evaluator.cases import COMPOUND_KIND
+from packages.support_evaluator.compound import TIER2_COMPOUND_VARIANTS
 from packages.support_evaluator.distractors import apply_distractors, inject_planned
-from packages.support_evaluator.injectors import InjectedCase
+from packages.support_evaluator.injectors import INJECTORS, InjectedCase, inject
 from packages.support_evaluator.labeler import (
     RECOVERY_ORDER,
     CaseLabel,
@@ -66,13 +82,11 @@ from packages.support_evaluator.labeler import (
     RunLabel,
     _concrete_probes,
     _label_entropy,
-    _run_probe,
     abstract,
+    adaptive_probe_oracle,
     candidate_recoveries,
-    counterfactuals,
     label_run,
     outcome_checks,
-    probe_oracle,
     regression_holds,
     retry_failed_reads,
     unexplained_absences,
@@ -85,6 +99,7 @@ from packages.support_evaluator.sampling import run_agent_on
 
 
 TIER2_MAX_RECOVERIES = 2
+TIER2_DRAWS = 3
 WORLD_EDITS = ("set_mapping", "restore_from_source")
 RERUN_AFTER = ("rerun", "set_mapping", "restore_from_source")
 STOP = Action("decide", "no_intervention", {}).canonical_payload()
@@ -345,8 +360,12 @@ def _probe_gateway(environment: SupportEnvironment):
 
 
 def _probe_steps(environment, make_input, probe_actions, final) -> tuple[list[dict], list[dict]]:
-    """Steps (input before each probe with that probe, then ``final``) and the probe records."""
-    gateway = _probe_gateway(environment)
+    """Steps (input before each probe with that probe, then ``final``) and the probe records.
+
+    Probes run in a fork, as in episodes: a ``retry`` advances tool-error
+    counters, which must not reach the state a recovery is applied to.
+    """
+    gateway = _probe_gateway(environment.fork())
     steps = []
 
     def records():
@@ -387,21 +406,37 @@ class _Phase2:
     abstracted: dict
 
 
-def _probe_records(hypothesis: Hypothesis, probe_actions: list[dict]) -> list[dict]:
-    gateway = _probe_gateway(hypothesis.environment.fork())
+def _probe_records(hypothesis: Hypothesis, probe_actions: list[dict], cache: dict) -> list[dict]:
+    """The records of ``probe_actions`` run in a fork of ``hypothesis``'s world (shared through ``cache``)."""
+    key = ("records", hypothesis.key, canonical_sha256(probe_actions))
 
-    for action in probe_actions:
-        gateway.invoke(action["verb"], action["args"])
+    if key not in cache:
+        gateway = _probe_gateway(hypothesis.environment.fork())
 
-    return [r.canonical_payload() for r in gateway.records]
+        for action in probe_actions:
+            gateway.invoke(action["verb"], action["args"])
+
+        cache[key] = [r.canonical_payload() for r in gateway.records]
+
+    return cache[key]
 
 
-def _after_first(hypothesis: Hypothesis, records: list[dict], first: dict, behaviour: str) -> _Phase2:
-    """Apply ``first`` in ``hypothesis``'s world (after step 1's probe ``records``) and build its step 2 view."""
-    post = hypothesis.environment.fork()
-    applied = apply_recovery(post, hypothesis.case.truth.target_ticket_id, behaviour, first)
+def _after_first(hypothesis: Hypothesis, records: list[dict], first: dict, behaviour: str, cache: dict) -> _Phase2:
+    """Apply ``first`` in ``hypothesis``'s world (after step 1's probe ``records``) and build its step 2 view.
+
+    Probes never change the world, so the post-recovery state and its label
+    depend only on the hypothesis and ``first``: ``cache`` shares them across
+    the case's episodes (everything that uses the state forks it).
+    """
+    key = (hypothesis.key, canonical_sha256(first))
+
+    if key not in cache:
+        post = hypothesis.environment.fork()
+        applied = apply_recovery(post, hypothesis.case.truth.target_ticket_id, behaviour, first)
+        cache[key] = post, applied, post_recovery_label(hypothesis.case, post, behaviour)
+
+    post, applied, label = cache[key]
     abstracted, renaming = abstract(compact_evidence(hypothesis.evidence, records, [applied.compact_input()]))
-    label = post_recovery_label(hypothesis.case, post, behaviour)
     return _Phase2(
         Hypothesis(hypothesis.key, hypothesis.case, post, hypothesis.evidence, renaming,
                    replace(hypothesis.label, label=label)),
@@ -410,11 +445,17 @@ def _after_first(hypothesis: Hypothesis, records: list[dict], first: dict, behav
 
 
 def _episode(actual: Hypothesis, consistent: list[Hypothesis], abstracted: dict, sequence: SequenceLabel,
-             behaviour: str) -> tuple[list[dict], list[dict], bool]:
-    """Steps, concrete probes and determinedness of one tier 2 episode seen from ``actual``."""
+             behaviour: str, cache: dict) -> tuple[list[dict], list[dict], bool]:
+    """Steps, concrete probes and determinedness of one tier 2 episode seen from ``actual``.
+
+    Both phases use the adaptive menu: probes may name entities earlier
+    probes revealed, written with each hypothesis's extended renaming.
+    """
     initial = _label_entropy(consistent)
-    probes, determined = probe_oracle(actual, consistent, abstracted) if initial > 0 else ([], True)
-    probe_actions = _concrete_probes(actual.renaming, probes)
+    probes, determined, remaining = (
+        adaptive_probe_oracle(actual, consistent, abstracted) if initial > 0 else ([], True, consistent)
+    )
+    probe_actions = _concrete_probes(next(h for h in remaining if h.key == actual.key).renaming, probes)
 
     if not sequence.recoveries:
         steps, _ = _probe_steps(actual.environment, lambda r: compact_evidence(actual.evidence, r), probe_actions, sequence.decision)
@@ -422,10 +463,8 @@ def _episode(actual: Hypothesis, consistent: list[Hypothesis], abstracted: dict,
 
     first = sequence.recoveries[0]
     steps, _ = _probe_steps(actual.environment, lambda r: compact_evidence(actual.evidence, r), probe_actions, first)
-    observed = {p: _run_probe(actual, *p) for p in probes}
-    remaining = [h for h in consistent if all(_run_probe(h, *p) == observed[p] for p in probes)]
 
-    mine = _after_first(actual, _probe_records(actual, probe_actions), first, behaviour)
+    mine = _after_first(actual, _probe_records(actual, probe_actions, cache), first, behaviour, cache)
     second = sequence.targets[1]
 
     if mine.hypothesis.label.label != second:
@@ -435,16 +474,16 @@ def _episode(actual: Hypothesis, consistent: list[Hypothesis], abstracted: dict,
     phase2 = [mine.hypothesis]
 
     for hypothesis in remaining:
-        if hypothesis is actual:
+        if hypothesis.key == actual.key:
             continue
 
-        records = _probe_records(hypothesis, _concrete_probes(hypothesis.renaming, probes))
+        records = _probe_records(hypothesis, _concrete_probes(hypothesis.renaming, probes), cache)
         translated = _translate(first, source, abstract(compact_evidence(hypothesis.evidence, records))[1])
 
         if translated is None:
             continue
 
-        theirs = _after_first(hypothesis, records, translated, behaviour)
+        theirs = _after_first(hypothesis, records, translated, behaviour, cache)
 
         if theirs.abstracted == mine.abstracted:
             phase2.append(theirs.hypothesis)
@@ -452,11 +491,11 @@ def _episode(actual: Hypothesis, consistent: list[Hypothesis], abstracted: dict,
     budget = PROBE_BUDGET - len(probe_actions)
     latest = mine.abstracted["recoveries"][-1]
     prefer = tuple(dict.fromkeys(_PLACEHOLDER.findall(json.dumps([latest["action"], latest["rerun"]]))))
-    probes2, determined2 = (
-        probe_oracle(mine.hypothesis, phase2, mine.abstracted, budget, prefer)
-        if _label_entropy(phase2) > 0 and budget > 0 else ([], _label_entropy(phase2) == 0)
+    probes2, determined2, remaining2 = (
+        adaptive_probe_oracle(mine.hypothesis, phase2, mine.abstracted, budget, prefer)
+        if _label_entropy(phase2) > 0 and budget > 0 else ([], _label_entropy(phase2) == 0, phase2)
     )
-    probe_actions2 = _concrete_probes(mine.hypothesis.renaming, probes2)
+    probe_actions2 = _concrete_probes(next(h for h in remaining2 if h.key == actual.key).renaming, probes2)
     steps2, _ = _probe_steps(
         mine.hypothesis.environment,
         lambda r: compact_evidence(actual.evidence, mine.records, [mine.applied.compact_input(r)]),
@@ -478,11 +517,64 @@ def _consistent_hypothesis(key, case, behaviour, abstracted):
     return _with_target(Hypothesis(key, case, environment, evidence, renaming, sequence.single), sequence.first), sequence
 
 
+def tier2_counterfactuals(planned: PlannedCase, actual: InjectedCase) -> list[tuple[str, InjectedCase]]:
+    """Counterfactual worlds on the same ticket: single variants in several draws and every v3 compound pair.
+
+    Draw 0 of a single variant uses tier 1's random stream for it; worlds
+    identical to the actual world or to an earlier one are dropped.
+    """
+    world = generate_world(planned.world_seed)
+    target = actual.truth.target_ticket_id
+    seen = {actual.spec.world_sha256}
+    choices = [(kind, variant, TIER2_DRAWS) for kind, (_, variants) in INJECTORS.items() for variant in variants]
+    choices += [(COMPOUND_KIND, variant, 1) for variant in TIER2_COMPOUND_VARIANTS]
+    worlds = []
+
+    for kind, variant, draws in choices:
+        for draw in range(draws):
+            suffix = f":{draw}" if draw else ""
+
+            try:
+                case = inject(kind, world, random.Random(f"{planned.case_seed}:{kind}:{variant}{suffix}"), variant,
+                              forced_ticket=target)
+            except ContractError:
+                continue
+
+            if case.spec.world_sha256 not in seen:
+                seen.add(case.spec.world_sha256)
+                worlds.append((f"{kind}/{variant}" + (f"#{draw}" if draw else ""), case))
+
+    return worlds
+
+
+def _partner_choices(twin_id: str, others: list[Hypothesis], sequences: dict[str, SequenceLabel]) -> list[Hypothesis]:
+    """One hypothesis per distinct label (the sequence written with its own placeholders).
+
+    Within a label, the hypothesis with the smallest hash of the twin ID and
+    its key is chosen, so no variant is systematically preferred by
+    enumeration order; the chosen ones are returned in that hash order.
+    """
+    def rank(hypothesis: Hypothesis) -> str:
+        return canonical_sha256({"twin": twin_id, "counterfactual": hypothesis.key})
+
+    chosen: dict[str, Hypothesis] = {}
+
+    for hypothesis in others:
+        label = canonical_sha256(hypothesis.renaming.copy().apply(list(sequences[hypothesis.key].targets)))
+
+        if label not in chosen or rank(hypothesis) < rank(chosen[label]):
+            chosen[label] = hypothesis
+
+    return sorted(chosen.values(), key=rank)
+
+
 def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel:
     """Label one planned case for tier 2: sequence label, two-phase probes, twin group and steps.
 
-    Counterfactuals carry the case's distractors; they are run first and
-    only those consistent with the run's input are labelled.
+    Counterfactuals (``tier2_counterfactuals``) carry the case's distractors;
+    they are run first and only those consistent with the run's input are
+    labelled. The oracle uses every consistent hypothesis; partner records
+    are written for one hypothesis per distinct label (``_partner_choices``).
     """
     if evidence_transform is None and planned.evidence_condition == "withheld":
         evidence_transform = withhold_observation
@@ -513,20 +605,24 @@ def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel
     consistent, sequences = [actual], {"actual": sequence}
 
     if sequence.single.rule != "unexplained_absence":
-        for key, case in counterfactuals(planned, actual_case):
-            case = apply_distractors(world, case, distractors)
+        seen = {actual_case.spec.world_sha256}
 
-            if case is None:
+        for key, case in tier2_counterfactuals(planned, actual_case):
+            with_distractors = apply_distractors(world, case, distractors)
+
+            if with_distractors is None or with_distractors.spec.world_sha256 in seen:
                 continue
 
-            found = _consistent_hypothesis(key, case, planned.behaviour, abstracted)
+            seen.add(with_distractors.spec.world_sha256)
+            found = _consistent_hypothesis(key, with_distractors, planned.behaviour, abstracted)
 
             if found is not None:
                 consistent.append(found[0])
                 sequences[key] = found[1]
 
     initial = _label_entropy(consistent)
-    steps, probe_actions, determined = _episode(actual, consistent, abstracted, sequence, planned.behaviour)
+    cache: dict = {}
+    steps, probe_actions, determined = _episode(actual, consistent, abstracted, sequence, planned.behaviour, cache)
     twin_id = None
 
     if initial > 0:
@@ -543,8 +639,9 @@ def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel
     partners = []
 
     if twin_id is not None:
-        for hypothesis in consistent[1:]:
-            partner_steps, _, _ = _episode(hypothesis, consistent, abstracted, sequences[hypothesis.key], planned.behaviour)
+        for hypothesis in _partner_choices(twin_id, consistent[1:], sequences):
+            partner_steps, _, _ = _episode(hypothesis, consistent, abstracted, sequences[hypothesis.key], planned.behaviour,
+                                           cache)
             partners.append(
                 {
                     "counterfactual": hypothesis.key,
@@ -575,6 +672,7 @@ def label_case_tier2(planned: PlannedCase, evidence_transform=None) -> CaseLabel
 
 __all__ = [
     "STOP",
+    "TIER2_DRAWS",
     "TIER2_MAX_RECOVERIES",
     "AppliedRecovery",
     "SequenceLabel",
@@ -585,5 +683,6 @@ __all__ = [
     "post_recovery_label",
     "search_pairs",
     "sequence_verified",
+    "tier2_counterfactuals",
     "verify_sequence",
 ]

@@ -133,9 +133,9 @@ def _proxy_label(planned, case, environment, evidence, abstracted, renaming, beh
 
     if run_label.rule != "unexplained_absence":
         for key, other_case in counterfactuals(planned, case):
-            hypothesis, other = _hypothesis(key, other_case, behaviour)
+            hypothesis = _hypothesis(key, other_case, behaviour, abstracted)
 
-            if other == abstracted:
+            if hypothesis is not None:
                 consistent.append(hypothesis)
 
     initial = _label_entropy(consistent)

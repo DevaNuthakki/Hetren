@@ -139,6 +139,7 @@ def test_tier1_records_are_unchanged_and_tier1_labelling_refuses_distractors():
         label_case(replace(planned, distractors=1))
 
 
+@pytest.mark.slow
 def test_tier2_labels_with_distractors_are_leak_free():
     planned, (case, _) = _planned("compound", "mapping_swap.swap+stale_account_record.default", 2)
     labelled = label_case_tier2(planned)

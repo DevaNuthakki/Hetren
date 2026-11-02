@@ -25,7 +25,15 @@ import random
 
 from environments.support.fixtures import WorldSpec
 from packages.contracts import ContractError
-from packages.support_evaluator.cases import CASE_KINDS, COMPOUND_KIND, CaseTruth, compound_variant, parse_compound
+from packages.support_evaluator.cases import (
+    CASE_KINDS,
+    COMPOUND_KIND,
+    FAMILIES,
+    LOOKALIKES,
+    CaseTruth,
+    compound_variant,
+    parse_compound,
+)
 from packages.support_evaluator.injectors import INJECTORS, InjectedCase, _policy
 
 
@@ -208,7 +216,15 @@ def compound_variants(kinds: tuple[str, ...]) -> tuple[str, ...]:
     )
 
 
+# Dataset v3 pairs: every pair of families and look-alikes except two look-alikes.
+TIER2_COMPOUND_VARIANTS = tuple(
+    variant for variant in compound_variants(tuple(FAMILIES) + LOOKALIKES)
+    if not {kind for kind, _ in parse_compound(variant)} <= set(LOOKALIKES)
+)
+
+
 __all__ = [
+    "TIER2_COMPOUND_VARIANTS",
     "affected",
     "compound_variants",
     "expected_outcome",
