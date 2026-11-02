@@ -283,6 +283,18 @@ Tier 2 validation (splits v2, 250 primary cases; single-recovery policy):
 
 Its errors are compound pairs: the two-recovery labels it cannot reach by design, and pairs where its first fix is not the label's (mapping swap with stale record 0/6, with transient error retried 1/8, with missing account 1/7). Distractors do not lower its accuracy.
 
+### Model baseline prompt (`gpt-4.1` and the small model)
+
+Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.py` (`PROMPT_VERSION = 1`). Each policy call is stateless: the system prompt describes the task, the generic action catalog (every verb with its description and argument schema), the probe budget, the decision definitions and, in tier 2, the rules for a second recovery; the user message is the step's compact evidence exactly as `render_evidence` writes it, with probe results and applied recoveries. The prompt names no fault family, case kind or agent behaviour. The reply is stripped of surrounding whitespace and one enclosing Markdown code fence (the same for every model) and must then parse with `parse_action`; anything else is an invalid-action failure. The system prompt is 1,268 o200k_base tokens in tier 1 and 1,361 in tier 2 (1,245 and 1,338 `Qwen/Qwen3-4B-Instruct-2507` tokens).
+
+### `gpt-4.1` baseline
+
+`python -m packages.support_evaluator.gpt41_baseline`, run only by the operator: model `gpt-4.1-2025-04-14`, Responses API (standard, not Batch), `store=False`, temperature 0, 128 output tokens per call. It runs on all 800 validation primary cases: 550 tier 1 (splits v1 on dataset v2) and 250 tier 2 (splits v2 on dataset v3), with one `--max-usd 12` cap and one ledger for both tiers. Before every call the projected spend (provider-reported spend so far, plus the exact o200k_base count of both messages and a 10-token formatting allowance with a 10% margin, plus the full output limit) is checked against the cap; if it would pass, nothing is sent and the run stops. Cached input is charged at the full price in the cap. Hitting the cap or an API error discards the current episode (it is re-run on restart) and never counts as a model failure. Every call is logged with its usage and reply, and calls that reach the output limit are flagged.
+
+Measured on the validation inputs along the labelled path (the fewest calls an episode can take): tier 1 885 calls, 1,365,791 input and 24,322 output tokens; tier 2 785 calls, 1,347,013 and 21,171. At $2.00 / $8.00 per million input / output tokens this is $5.79 without caching ($2.76 with automatic prompt caching of the system prompt); if every case used the most calls allowed (5 in tier 1, 6 in tier 2), $20.49. The model is expected to probe more than the labels, so spend falls between these, about $9 without caching.
+
+**Deprecation.** OpenAI deprecated `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` on 2026-10-14; both are removed from the API on 2027-01-14 (recommended replacement `gpt-6-luna`). The live agent model (`gpt-4.1-mini-2025-04-14`) is therefore deprecated. All existing captures (Milestone 1 examples, live test v1 and its label confirmations) replay offline without the API and are kept unchanged. Any new `gpt-4.1` or `gpt-4.1-mini` run, including the `gpt-4.1` baseline on the held-out test, must finish before 2027-01-14.
+
 ### Small model baseline and evaluation settings
 
 - **Model:** `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`, Apache-2.0) is the primary model for the untrained baseline and Milestone 3 fine-tuning; `HuggingFaceTB/SmolLM3-3B` (revision `a07cc9a04f16550a088caea529712d1d335b0ac1`, Apache-2.0) is the backup.
@@ -294,7 +306,7 @@ Its errors are compound pairs: the two-recovery labels it cannot reach by design
 Live budget:
 
 - about 300 live `gpt-4.1-mini` test runs;
-- a `gpt-4.1` baseline on 500 cases. It runs on validation in Milestone 2 and on the held-out test only after this protocol is frozen, as the first step of Milestone 3. The Batch API should be considered to halve the cost.
+- a `gpt-4.1` baseline on the 800 validation cases (550 tier 1, 250 tier 2), standard API, hard cap $12 for both tiers together, with its own ledger. It runs on validation in Milestone 2 and on the held-out test only after this protocol is frozen, as the first step of Milestone 3, before the model's removal on 2027-01-14. The Batch API was not used: episodes are interactive (each probe result feeds the next call), so Batch would need one batch round per step.
 
 Before any step that costs money, the operator is told what will run, the exact token estimate measured from real sample cases, the cost, and the hard spending cap the script enforces. Live calls are run only by the operator, never automatically.
 
