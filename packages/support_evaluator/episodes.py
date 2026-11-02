@@ -150,12 +150,16 @@ def run_episode(
 
 
 def recovery_failures(prepared: PreparedCase, recoveries: list[dict[str, Any]]) -> list[dict[str, object]]:
-    """Apply the episode's recoveries in order on a fork; every one whose tool call fails."""
+    """Apply the episode's recoveries' tool calls in order on a fork; every one that fails.
+
+    The task is not re-run between them: whether a call fails depends only
+    on the IDs it names."""
     sandbox = prepared.environment.fork()
     failures = []
 
     for step, action in enumerate(recoveries):
-        applied = apply_recovery(sandbox, prepared.case.truth.target_ticket_id, prepared.planned.behaviour, action)
+        applied = apply_recovery(sandbox, prepared.case.truth.target_ticket_id, prepared.planned.behaviour, action,
+                                 rerun_task=False)
 
         if applied.failure is not None:
             failures.append({"step": step, "verb": action["verb"], "error": applied.failure})
@@ -163,7 +167,9 @@ def recovery_failures(prepared: PreparedCase, recoveries: list[dict[str, Any]]) 
     return failures
 
 
-def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
+def score(prepared: PreparedCase, episode: dict[str, Any], verify: Callable[[dict], bool] | None = None) -> dict[str, Any]:
+    """Score an episode by execution; ``verify(final)`` replaces the tier 1 check where no agent can re-run
+    (live runs whose label was confirmed live, see ``live_episodes``)."""
     final = episode["final"]
     label = prepared.label
     recoveries = episode.get("recoveries", [])
@@ -173,7 +179,7 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
 
     if prepared.max_recoveries == 1:
         if final is not None and not failures:
-            correct = verify_label(
+            correct = verify(final) if verify is not None else verify_label(
                 prepared.case, prepared.environment, prepared.evidence, prepared.planned.behaviour, final,
             )
 

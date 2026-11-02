@@ -136,8 +136,13 @@ class AppliedRecovery:
         return None
 
 
-def apply_recovery(environment: SupportEnvironment, ticket_id: str, behaviour: str, action: dict) -> AppliedRecovery:
-    """Apply one recovery in place, through a gateway scoped to exactly that call."""
+def apply_recovery(
+    environment: SupportEnvironment, ticket_id: str, behaviour: str, action: dict, rerun_task: bool = True,
+) -> AppliedRecovery:
+    """Apply one recovery in place, through a gateway scoped to exactly that call.
+
+    ``rerun_task=False`` skips the task's re-run (only the tool call matters,
+    as when checking whether the call fails)."""
     parsed = Action(action["action"], action["verb"], action["args"])
     before = environment.state_sha256()
     records: tuple[dict[str, object], ...] = ()
@@ -153,7 +158,7 @@ def apply_recovery(environment: SupportEnvironment, ticket_id: str, behaviour: s
     changed = parsed.verb == "rerun" or environment.state_sha256() != before
     rerun = None
 
-    if changed and parsed.verb in RERUN_AFTER:
+    if rerun_task and changed and parsed.verb in RERUN_AFTER:
         rerun = run_agent_on(environment, ticket_id, behaviour).evidence_payload()
 
     return AppliedRecovery(parsed.canonical_payload(), records, changed, rerun)

@@ -16,7 +16,9 @@ skips cases already scored) and ``summary-tier<N>.json`` when the split is
 complete. A generation error stops the run and discards that episode.
 
 It runs on exactly one visible GPU and stops otherwise; the GPU's name is
-recorded in the metadata.
+recorded in the metadata, with the code's commit (``bundle_commit``: from
+the Kaggle bundle's ``BUNDLE.json``, else ``git rev-parse HEAD``; the run
+stops if neither is available).
 
 ``--smoke N`` runs a seeded sample of N cases into ``<out>/smoke-tier<N>/``
 and checks fp16: it passes when every generated step's logits are finite
@@ -34,6 +36,7 @@ import sys
 import time
 
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
 EXIT_GENERATION_ERROR = 4
 EXIT_SMOKE_FAILED = 5
 SMOKE_SEED = "smoke"
@@ -168,6 +171,22 @@ def smoke_report(out: Path, tier: int) -> int:
     return 0 if report["fp16_ok"] else EXIT_SMOKE_FAILED
 
 
+def bundle_commit(root: Path = REPO_ROOT) -> str | None:
+    """The commit the code comes from: the bundle's ``BUNDLE.json``, else git, else None."""
+    import subprocess
+
+    bundle = Path(root) / "BUNDLE.json"
+
+    if bundle.exists():
+        return json.loads(bundle.read_text(encoding="utf-8"))["commit"]
+
+    try:
+        return subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, check=True, capture_output=True,
+                              text=True).stdout.strip() or None
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(sys.argv[1:] if argv is None else argv)
 
@@ -175,6 +194,12 @@ def main(argv: list[str] | None = None) -> int:
         if not path.exists():
             print(f"STOP: {path} does not exist", file=sys.stderr)
             return 2
+
+    commit = bundle_commit()
+
+    if commit is None:
+        print("STOP: the code's commit is unknown (no BUNDLE.json and no git checkout)", file=sys.stderr)
+        return 2
 
     import torch
 
@@ -190,7 +215,7 @@ def main(argv: list[str] | None = None) -> int:
     metadata = {
         "model": args.model, "revision": args.revision, "dtype": args.dtype,
         "max_new_tokens": MAX_NEW_TOKENS, "decoding": "greedy", "libraries": library_versions(),
-        "gpu": torch.cuda.get_device_name(0), "visible_gpus": 1,
+        "gpu": torch.cuda.get_device_name(0), "visible_gpus": 1, "bundle_commit": commit,
     }
     return run_baseline(args, model, metadata)
 
