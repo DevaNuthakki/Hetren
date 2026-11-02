@@ -104,6 +104,24 @@ TIER2_PER_CELL = {"compound": 8, "held_out": 8, "single": 16}
 TIER2_WORLD_SEEDS = (2_000_000, 3_000_000)  # disjoint from v2 (< 1,000,000) and live test (1,000,000-1,999,999)
 TIER2_MAX_CANDIDATES = 50
 
+# Compound variants whose two faults can never coexist on one target: every
+# draw conflicts at injection. The plan leaves them out (tested: each never
+# fits, and every remaining plan variant does).
+_TARGET_DIRECTORY = "both faults rewrite the target reference's directory entry"
+_DELETED = "the second fault changes the account the first deletes"
+IMPOSSIBLE_COMPOUND_VARIANTS = {
+    "mapping_swap.swap+missing_account.unmapped_ref": _TARGET_DIRECTORY,
+    "mapping_swap.redirect+missing_account.unmapped_ref": _TARGET_DIRECTORY,
+    "mapping_swap.nway+missing_account.unmapped_ref": _TARGET_DIRECTORY,
+    "missing_account.deleted_account+merged_account.default": _DELETED + " (merge history)",
+    "missing_account.deleted_account+tier_format_drift.case": _DELETED + " (tier drift)",
+    "missing_account.deleted_account+tier_format_drift.abbreviation": _DELETED + " (tier drift)",
+    "missing_account.deleted_account+tier_format_drift.whitespace": _DELETED + " (tier drift)",
+    "stale_account_record.default+tier_format_drift.case": "both faults rewrite the target account's source record",
+    "stale_account_record.default+tier_format_drift.abbreviation": "both faults rewrite the target account's source record",
+    "stale_account_record.default+tier_format_drift.whitespace": "both faults rewrite the target account's source record",
+}
+
 
 @dataclass(frozen=True)
 class Tier2Slot:
@@ -115,9 +133,35 @@ class Tier2Slot:
 
 
 def _pair_variants(pair: tuple[str, str]) -> tuple[str, ...]:
+    """The pair's compound variants that can occur (``IMPOSSIBLE_COMPOUND_VARIANTS`` left out)."""
     from packages.support_evaluator.compound import compound_variants
 
-    return compound_variants(pair)
+    return tuple(v for v in compound_variants(pair) if v not in IMPOSSIBLE_COMPOUND_VARIANTS)
+
+
+def _held_out_groups(held_out_pairs: tuple, per_cell: int) -> list[tuple[tuple[str, str], int]]:
+    """Held-out pairs with their cell sizes: each held-out family keeps ``per_cell`` x its pair count.
+
+    A pair with no possible variant (F7 with F2) gives its cases to the
+    family's other pairs, evenly.
+    """
+    families: dict[str, list] = {}
+
+    for pair in held_out_pairs:
+        families.setdefault(pair[0], []).append(pair)
+
+    groups = []
+
+    for family, family_pairs in families.items():
+        possible = [pair for pair in family_pairs if _pair_variants(pair)]
+        size, left = divmod(per_cell * len(family_pairs), len(possible))
+
+        if left:
+            raise ContractError(f"{family}: {per_cell * len(family_pairs)} cases do not split evenly over {len(possible)} pairs")
+
+        groups += [(pair, size) for pair in possible]
+
+    return groups
 
 
 def tier2_slots(
@@ -130,23 +174,26 @@ def tier2_slots(
 ) -> tuple[Tier2Slot, ...]:
     """The balanced tier 2 plan: compound pairs, held-out pairs and single kinds, each crossed with every behaviour.
 
-    Within each group x behaviour cell, variants cycle evenly; one case in
-    eight has evidence withheld (unless ``withheld_per_cell`` says otherwise)
-    and distractor counts 0, 1 and 2 are shuffled, both at random.
+    Within each group x behaviour cell, variants cycle evenly over the
+    variants that can occur; one case in eight (rounded down) has evidence
+    withheld unless ``withheld_per_cell`` says otherwise, and distractor
+    counts 0, 1 and 2 are shuffled, both at random. Each held-out family
+    keeps its share when one of its pairs is impossible (``_held_out_groups``).
     """
     per_cell = {**TIER2_PER_CELL, **(per_cell or {})}
-    withheld_per_cell = {group: per_cell[group] // 8 for group in per_cell} | (withheld_per_cell or {})
-    groups = [("compound", COMPOUND_KIND, _pair_variants(pair)) for pair in pairs]
-    groups += [("held_out", COMPOUND_KIND, _pair_variants(pair)) for pair in held_out_pairs]
-    groups += [("single", kind, INJECTORS[kind][1]) for kind in single_kinds]
+    withheld_per_cell = withheld_per_cell or {}
+    groups = [("compound", COMPOUND_KIND, _pair_variants(pair), per_cell["compound"]) for pair in pairs]
+    groups += [
+        ("held_out", COMPOUND_KIND, _pair_variants(pair), size)
+        for pair, size in _held_out_groups(held_out_pairs, per_cell["held_out"])
+    ]
+    groups += [("single", kind, INJECTORS[kind][1], per_cell["single"]) for kind in single_kinds]
     rng = random.Random(f"{seed}:tier2")
     slots: list[Tier2Slot] = []
 
-    for group, kind, variants in groups:
-        count = per_cell[group]
-
+    for group, kind, variants, count in groups:
         for behaviour in BEHAVIOURS:
-            withheld = set(rng.sample(range(count), withheld_per_cell[group]))
+            withheld = set(rng.sample(range(count), withheld_per_cell.get(group, count // 8)))
             distractors = [index % 3 for index in range(count)]
             rng.shuffle(distractors)
 
@@ -172,6 +219,7 @@ def slot_candidates(slot: Tier2Slot, seed: int, index: int):
 
 __all__ = [
     "DEFAULT_PLAN_KINDS",
+    "IMPOSSIBLE_COMPOUND_VARIANTS",
     "PlannedCase",
     "TIER2_HELD_OUT_PAIRS",
     "TIER2_PAIRS",

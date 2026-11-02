@@ -1,20 +1,27 @@
-"""The tier 2 (dataset v3) plan: balanced slots and per-slot seed streams."""
+"""The tier 2 (dataset v3) plan: balanced slots, per-slot seed streams,
+impossible compound variants and the injection preflight."""
 
 from collections import Counter
 from itertools import islice
+import random
 
 import pytest
 
 from packages.contracts import ContractError
 from packages.support_agent import BEHAVIOURS
+from environments.support.generator import generate_world
 from packages.support_evaluator import dataset, distractors
 from packages.support_evaluator.cases import COMPOUND_KIND, HELD_OUT_KINDS, is_held_out, parse_compound
+from packages.support_evaluator.injectors import inject
 from packages.support_evaluator.plan import (
+    IMPOSSIBLE_COMPOUND_VARIANTS,
     TIER2_HELD_OUT_PAIRS,
     TIER2_PAIRS,
     TIER2_SINGLE_KINDS,
     TIER2_WORLD_SEEDS,
     slot_candidates,
+    Tier2Slot,
+    _pair_variants,
     tier2_slots,
 )
 
@@ -34,7 +41,15 @@ def test_plan_sizes_and_groups():
     held_out = [s for s in slots if is_held_out(s.case_kind, s.case_variant)]
     assert len(held_out) == 400 and all(s.case_kind == COMPOUND_KIND for s in held_out)
     assert not any(k in HELD_OUT_KINDS for s in slots if s.case_kind != COMPOUND_KIND for k in [s.case_kind])
-    assert set(Counter(_group(s) for s in slots).values()) == {40, 80}
+    assert not any(s.case_variant in IMPOSSIBLE_COMPOUND_VARIANTS for s in slots)
+
+    # F7 with F2 is impossible: its cases go evenly to F7's other pairs, so
+    # F6 and F7 compounds stay at 200 each.
+    groups = Counter(_group(s) for s in slots)
+    assert ("stale_account_record", "tier_format_drift") not in groups
+    assert sum(n for g, n in groups.items() if "tier_format_drift" in g) == 200
+    assert sum(n for g, n in groups.items() if "queue_misconfiguration" in g) == 200
+    assert set(groups.values()) == {40, 50, 80}
 
 
 def test_behaviour_withheld_and_distractors_are_balanced_within_every_cell():
@@ -94,3 +109,40 @@ def test_only_injection_redraws_and_labelling_errors_stop_the_build(monkeypatch)
     monkeypatch.setattr(dataset, "label_planned", lambda planned, labeller, extra: fails(planned))
     with pytest.raises(ContractError, match="changed the label"):
         dataset.label_slot(slot, 7, 0)
+
+
+def _fits(variant, worlds=40):
+    fits = 0
+
+    for i in range(worlds):
+        try:
+            inject(COMPOUND_KIND, generate_world(2_500_000 + i), random.Random(i), variant)
+            fits += 1
+        except ContractError:
+            pass
+
+    return fits
+
+
+def test_listed_impossible_variants_never_fit_and_every_plan_variant_does():
+    planned = {v for pair in TIER2_PAIRS + TIER2_HELD_OUT_PAIRS for v in _pair_variants(pair)}
+
+    assert set(IMPOSSIBLE_COMPOUND_VARIANTS).isdisjoint(planned)
+
+    for variant in IMPOSSIBLE_COMPOUND_VARIANTS:
+        assert _fits(variant) == 0, variant
+
+    for variant in sorted(planned):
+        assert _fits(variant) > 0, variant
+
+
+def test_preflight_reports_slots_that_cannot_be_filled():
+    possible = tier2_slots(7)[0]
+    impossible = Tier2Slot(COMPOUND_KIND, "mapping_swap.swap+missing_account.unmapped_ref", "trust", "complete", 0)
+
+    assert dataset.preflight_tier2((possible,), 7)["unfillable"] == []
+
+    with pytest.raises(ContractError, match="cannot be filled") as error:
+        dataset.preflight_tier2((possible, impossible), 7)
+
+    assert '"slot": 1' in str(error.value) and "conflicting change to directory" in str(error.value)

@@ -36,6 +36,7 @@ skipped candidates and their reasons are recorded evaluator-side
 from __future__ import annotations
 
 from collections.abc import Iterable
+from dataclasses import asdict
 import hashlib
 import json
 from multiprocessing import get_context
@@ -148,6 +149,47 @@ def _label_indexed(item: tuple[int, PlannedCase]) -> tuple[int, dict[str, object
     return index, label_planned(planned)
 
 
+def _fill_slot(item: tuple[int, Tier2Slot, int]) -> tuple[int, int | None, dict[str, int]]:
+    """(slot index, candidate number that injects or None, failure reasons) for one slot."""
+    from packages.support_evaluator.distractors import inject_planned
+
+    index, slot, seed = item
+    reasons: dict[str, int] = {}
+
+    for number, planned in enumerate(slot_candidates(slot, seed, index)):
+        try:
+            inject_planned(planned)
+            return index, number, reasons
+        except ContractError as exc:
+            reason = " ".join(word for word in str(exc).split() if not any(c.isdigit() for c in word))
+            reasons[reason] = reasons.get(reason, 0) + 1
+
+    return index, None, reasons
+
+
+def preflight_tier2(slots: tuple[Tier2Slot, ...], seed: int, processes: int = 1) -> dict[str, object]:
+    """Attempt injection for every slot before labelling; ``ContractError`` with a report if any cannot be filled."""
+    items = [(index, slot, seed) for index, slot in enumerate(slots)]
+
+    if processes > 1:
+        with get_context("spawn").Pool(processes) as pool:
+            filled = pool.map(_fill_slot, items, chunksize=8)
+    else:
+        filled = [_fill_slot(item) for item in items]
+
+    empty = [(index, reasons) for index, number, reasons in filled if number is None]
+    report = {
+        "slots": len(slots),
+        "unfillable": [{"slot": index, **asdict(slots[index]), "reasons": reasons} for index, reasons in empty],
+        "candidates_skipped": sum(number for _, number, _ in filled if number is not None),
+    }
+
+    if empty:
+        raise ContractError("tier 2 preflight: slots that cannot be filled\n" + json.dumps(report["unfillable"], indent=2))
+
+    return report
+
+
 def _label_slot_indexed(item: tuple[int, Tier2Slot, int]) -> tuple[int, dict[str, object]]:
     index, slot, seed = item
     return index, label_slot(slot, seed, index)
@@ -254,6 +296,11 @@ def build_dataset_tier2(
         raise FileExistsError(f"{partial} already exists")
 
     slots = tier2_slots(seed, per_cell, withheld_per_cell, **groups)
+    preflight = preflight_tier2(slots, seed, processes)
+
+    if progress:
+        print(f"preflight: {preflight['slots']} slots fill ({preflight['candidates_skipped']} candidates skipped)", flush=True)
+
     items = [(index, slot, seed) for index, slot in enumerate(slots)]
     # Slots vary widely in cost; chunks of one keep the workers balanced.
     results = _label_all(partial, items, _label_slot_indexed, processes, progress, chunksize=1)
@@ -488,6 +535,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Build a labelled Milestone 2 dataset.")
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--tier", type=int, choices=(1, 2), default=1)
+    parser.add_argument("--preflight-only", action="store_true", help="tier 2: check every slot injects, then stop")
     parser.add_argument("--per-cell", type=int)
     parser.add_argument("--seed", required=True, type=int)
     parser.add_argument("--withheld-per-cell", type=int, default=0)
@@ -496,6 +544,12 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     started = time.perf_counter()
+
+    if args.tier == 2 and args.preflight_only:
+        report = preflight_tier2(tier2_slots(args.seed), args.seed, args.processes)
+        print(json.dumps(report, indent=2))
+        print(f"wall seconds: {time.perf_counter() - started:.1f}")
+        return 0
 
     if args.tier == 2:
         # The tier 2 plan's sizes are fixed (TIER2_PER_CELL).

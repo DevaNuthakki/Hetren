@@ -108,10 +108,21 @@ On a measurement sample (every single-fault variant and six compound variants, 4
 **Plan** (`tier2_slots` in `packages/support_evaluator/plan.py`; build with `python -m packages.support_evaluator.dataset --tier 2 --seed <seed> --out <dir> --processes <n>`): 2,040 primary cases.
 
 - 25 training compound pairs (the 10 pairs of F1–F5 and the 15 pairs of F1–F5 with a look-alike) × 5 behaviours × 8 = 1,000;
-- 10 held-out compound pairs (F6 or F7 with F1–F5) × 5 behaviours × 8 = 400;
+- held-out compound pairs, 400 in all: F6 with each of F1–F5 × 5 behaviours × 8 = 200, and F7 with F1, F3, F4 and F5 × 5 behaviours × 10 = 200 (F7 with F2 cannot occur, see below, so its 40 cases go evenly to F7's other pairs);
 - 8 single kinds (F1–F5 and the three look-alikes) × 5 behaviours × 16 = 640.
 
-Within each group × behaviour cell, variants cycle evenly; one case in eight has evidence withheld (dataset v2 used one in six; cells of 8 and 16 divide evenly by 8), and distractor counts 0, 1 and 2 are shuffled, both at random, so neither depends on kind, variant or behaviour. Each slot draws its world seed (2,000,000–2,999,999, disjoint from dataset v2 and the live test) and case seed from its own random stream and keeps its first candidate that injects. Only injection redraws (the fault, a compound's two faults, or the distractors not fitting the world); skipped candidates and their reasons are recorded evaluator-side (`redraws`), so selection effects can be audited. The label never causes a redraw: undetermined, `abstain` and every other outcome are kept, and an error while labelling stops the build. Records carry `tier: 2` and the sequence label.
+Within each group × behaviour cell, variants cycle evenly over the variants that can occur; one case in eight has evidence withheld (one in ten in the F7 held-out cells of 10; 250 of 2,040 overall; dataset v2 used one in six), and distractor counts 0, 1 and 2 are shuffled, both at random, so neither depends on kind, variant or behaviour. Each slot draws its world seed (2,000,000–2,999,999, disjoint from dataset v2 and the live test) and case seed from its own random stream and keeps its first candidate that injects. Only injection redraws (the fault, a compound's two faults, or the distractors not fitting the world); skipped candidates and their reasons are recorded evaluator-side (`redraws`), so selection effects can be audited. The label never causes a redraw: undetermined, `abstain` and every other outcome are kept, and an error while labelling stops the build. Records carry `tier: 2` and the sequence label.
+
+**Impossible compounds.** Some compound variants can never occur: their two faults conflict at injection on every draw. The plan leaves them out (`IMPOSSIBLE_COMPOUND_VARIANTS` in `plan.py`; a test checks that each never fits on 40 worlds and that every remaining plan variant fits at least once):
+
+| compound | variants left out | reason |
+|---|---|---|
+| F1 mapping swap + F5 missing account | swap, redirect, nway with `unmapped_ref` (3 of 6) | both faults rewrite the target reference's directory entry |
+| F5 missing account + merged account | `deleted_account` with merge history (1 of 2) | the merge history is on the account the fault deletes |
+| F5 missing account + F7 tier drift | `deleted_account` with case, abbreviation, whitespace (3 of 6) | the tier drift is on the account the fault deletes |
+| F2 stale record + F7 tier drift | all 3 | both faults rewrite the target account's source record |
+
+Before labelling, a preflight attempts injection for every slot and stops with a report if any slot cannot be filled.
 
 **Splits** follow the splits v1 rules on world seed, twin groups and agent source. A compound is held out when either component is F6 or F7: its primary goes to `test_held_out` with all its partners, and held-out partner records of training cases are dropped. The held-out check uses each record's own truth (kind and, for compounds, both components); on dataset v2 this rebuilds splits v1 identically.
 

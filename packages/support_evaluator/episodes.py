@@ -40,6 +40,7 @@ from packages.action_gateway import GatedTool
 from packages.action_space import PROBE_BUDGET, VERBS, parse_action, probe_gateway
 from packages.contracts import ContractError
 from packages.hetren_evidence import compact_evidence
+from packages.support_evaluator.cases import COMPOUND_KIND, component_kinds
 from packages.support_evaluator.distractors import inject_planned
 from packages.support_evaluator.labeler import verify_label, withhold_observation
 from packages.support_evaluator.plan import PlannedCase
@@ -175,7 +176,11 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "case_id": prepared.case_id,
-        "case_kind": prepared.planned.case_kind,
+        # A compound reads "compound:<kind>+<kind>", so per-family results keep pairs apart.
+        "case_kind": (
+            f"{COMPOUND_KIND}:" + "+".join(component_kinds(prepared.planned.case_kind, prepared.planned.case_variant))
+            if prepared.planned.case_kind == COMPOUND_KIND else prepared.planned.case_kind
+        ),
         "case_variant": prepared.planned.case_variant,
         "behaviour": prepared.planned.behaviour,
         "evidence_condition": prepared.planned.evidence_condition,
@@ -272,7 +277,10 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
     return result
 
 
-def evaluate(policy: Policy, dataset_dir: Path, split_file: Path) -> tuple[list[dict[str, Any]], dict[str, object]]:
+def evaluate(
+    policy: Policy, dataset_dir: Path, split_file: Path, max_recoveries: int | None = None,
+) -> tuple[list[dict[str, Any]], dict[str, object]]:
+    """Score ``policy`` on a split's primaries; ``max_recoveries=1`` runs a single-recovery policy (rules v1) on tier 2."""
     dataset_dir = Path(dataset_dir)
     members = set(Path(split_file).read_text(encoding="utf-8").split())
     visible = map(json.loads, (dataset_dir / "hetren_visible.jsonl").open(encoding="utf-8"))
@@ -285,7 +293,7 @@ def evaluate(policy: Policy, dataset_dir: Path, split_file: Path) -> tuple[list[
             continue
 
         prepared = prepare(v, e)
-        rows.append(score(prepared, run_episode(policy, prepared)))
+        rows.append(score(prepared, run_episode(policy, prepared, max_recoveries=max_recoveries)))
 
     return rows, summarize(rows, tags)
 
