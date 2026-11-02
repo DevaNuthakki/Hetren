@@ -293,7 +293,9 @@ Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.p
 
 - **Version 1:** the output format given only as `{"action": "<probe|recover|decide>", "verb": "<verb>", "args": {...}}`.
 - **Version 2 (format fix only):** every verb is listed with its action type (`- inspect (action "probe"): ...`), each action type has one example (placeholder IDs), and the format line says that `action` is the action type, never the verb. Nothing else changes (a test checks that removing these additions gives version 1 exactly), probing gets no extra encouragement, and parsing stays strict.
-- **Possible version 3 (not built):** if `gpt-4.1` still almost never probes under version 2, a version that explains generically, without naming fault families, what each probe reveals.
+- **Version 3 (not built):** a version explaining generically what each probe reveals was considered and set aside on 2026-11-02. The catalog already says what each probe returns; what `gpt-4.1` lacks is diagnostic know-how (which inconsistency calls for which fix), which cannot be taught generically without describing the fault families, and the same hints would enter the small model's prompt.
+- **Test-split baseline prompt:** version 2 is the `gpt-4.1` baseline prompt for the test splits (and for the untrained and fine-tuned small model).
+- **Planned Milestone 3 experiment (not built):** a fairer stronger baseline, `gpt-4.1` and `gpt-6-luna` with few-shot examples drawn only from the train split (never hand-written diagnostic hints), measured on validation like every prompt version. `gpt-6-luna` is decided in Milestone 3 after a 20-case pilot.
 
 ### `gpt-4.1` baseline
 
@@ -314,7 +316,35 @@ Measured on the validation inputs along the labelled path (the fewest calls an e
 - **Lenient lower bound** (diagnostic only, never a headline metric): every verb belongs to exactly one action type, so an invalid reply whose intent is unambiguous was re-scored offline with the type taken from its verb. In tier 1, 102 of the 193 become correct and 83 stay wrong; 8 were probes, whose episodes would have continued and cannot be scored without new calls. In tier 2, 35 become correct and 91 stay wrong; 80 were probes or first recoveries that would have continued.
 - **`gpt-4.1` rarely probes:** it probed in 9 of 550 tier 1 cases and 20 of 250 tier 2 cases, and otherwise decided from the run alone. In all 47 tier 1 cases where both the label and its reply were `set_mapping`, it named the right customer reference but the wrong account: without `find_owners` it could not know the true owner. It also chose `no_intervention` on stale records that only a probe reveals (34) and `insufficient_evidence` on transient tool errors labelled `rerun` (60).
 
-The version 2 run uses a new output directory, its own ledger and a $9 cap.
+**Validation run, prompt version 2** (2026-11-02; 1,508 calls, $5.691 including a 5-case pilot, cap $9; no API errors, no unparsable reply, no reply at the output limit; prompt caching applied to 24 calls):
+
+| | rules v1 | `gpt-4.1` v1 | `gpt-4.1` v2 |
+|---|---|---|---|
+| tier 1 decision accuracy (550) | 99.6% (548) | 18.7% (103) | 32.2% (177) |
+| tier 2 decision accuracy (250) | 86.0% (215) | 7.2% (18) | 17.6% (44) |
+| tier 1 exact match | 82.7% | 12.5% (69) | 20.4% (112) |
+| tier 2 exact match | 73.6% (184) | 2.8% (7) | 15.6% (39) |
+| tier 1 cases with a probe / mean probes | – / 1.43 | 9 / 0.02 | 239 / 0.50 |
+| tier 2 cases with a probe / mean probes | – / 1.51 | 20 / 0.08 | 193 / 1.31 |
+
+- **Format:** every version 2 reply parsed. The format fix raised accuracy, and probing, but the model mostly probes with `resolve`, `inspect` and `retry`; `find_owners` (which reveals a reference's true owner) was used 21 times, all in tier 2, `compare_with_source` twice and `history` never. In tier 2, 12 of the 14 correct recoveries came from episodes that used `find_owners`.
+- **Tier 1 recoveries: 0 of 254 correct.** Mapping errors: 53 times `set_mapping` with the right reference and the wrong account, never after `find_owners`; 53 healthy runs also got an unneeded `set_mapping`. Stale records: all 54 answered `no_intervention` (only `compare_with_source` or `history` reveals them). Transient errors labelled `rerun`: 52 `no_intervention` and 26 `insufficient_evidence`, despite 58 retries. `reroute` labels: mostly `abstain` (29). Three reroutes named queues that do not exist (scored wrong under the failed-recovery rule).
+- **Tier 1 decisions:** `no_intervention` 112/171, `insufficient_evidence` 65/93, `abstain` 0/32 (answered `insufficient_evidence`).
+- **Tier 2:** 0 of 23 two-recovery labels; after one recovery the model always stopped (85 `no_intervention`, 1 `abstain`); 4 episodes asked for a fifth probe.
+- **Spend:** `gpt-4.1` validation runs together $8.549 (version 1 $2.858, version 2 $5.691).
+
+**Test-split cost (estimate for planning).** The version 2 baseline on every test split runs after the protocol freeze and must finish before 2027-01-14. Estimated from the labelled path on each split (version 2 system prompt, exact o200k_base counts), scaled by what version 2 actually spent relative to its labelled path on validation (0.92 in tier 1, 0.85 in tier 2):
+
+| split | cases | expected | worst case (most calls allowed) |
+|---|---|---|---|
+| tier 1 `test_in_distribution` (splits v1) | 560 | $3.15 | $13.55 |
+| tier 1 `test_held_out` (splits v1) | 960 | $4.60 | $22.31 |
+| tier 2 `test_in_distribution` (splits v2) | 256 | $2.68 | $9.05 |
+| tier 2 `test_held_out` (splits v2) | 400 | $3.93 | $13.88 |
+| live test v1 (tier 1 format) | 300 | $1.73 | $7.26 |
+| total | 2,476 | $16.08 | $66.05 |
+
+The live split needs a runner adapter for live records (their worlds come from the specs and captures, not from a dataset plan); it is not built yet.
 
 **Deprecation.** OpenAI deprecated `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` on 2026-10-14; both are removed from the API on 2027-01-14 (recommended replacement `gpt-6-luna`). On 2026-11-02 the API's model list (`GET /v1/models`) confirmed `shutdown_date` 2027-01-14 for both, and none for `gpt-6-luna`. The live agent model (`gpt-4.1-mini-2025-04-14`) is therefore deprecated. All existing captures (Milestone 1 examples, live test v1 and its label confirmations) replay offline without the API and are kept unchanged. Any new `gpt-4.1` or `gpt-4.1-mini` run, including the `gpt-4.1` baseline on the held-out test, must finish before 2027-01-14.
 
