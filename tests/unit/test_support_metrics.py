@@ -131,3 +131,32 @@ def test_attach_case_facts_reads_the_evaluator_records(tmp_path):
 def test_interval_contains_the_rate(k, n):
     low, high = wilson(k, n)
     assert low <= k / n <= high
+
+
+def test_paired_bootstrap_needs_the_same_cases_and_is_seeded():
+    from packages.support_evaluator.metrics import paired_bootstrap
+
+    a = [row(f"c{i}", NOOP, NOOP, True) for i in range(40)]
+    b = [row(f"c{i}", NOOP, NOOP if i % 2 else FIX, bool(i % 2)) for i in range(40)]
+
+    result = paired_bootstrap(a, b, resamples=2000)
+    assert result == paired_bootstrap(a, b, resamples=2000)
+    # A is right on every case and B on half: A better on accuracy, B intervenes on 20 healthy runs.
+    assert result["decision_accuracy"]["verdict"] == "A better" and result["decision_accuracy"]["difference"] == 0.5
+    assert result["wrong_interventions_on_healthy"]["verdict"] == "A better"
+    assert result["wrong_interventions_on_healthy"]["difference"] == -0.5
+
+    same = paired_bootstrap(a, a, resamples=500)
+    assert same["decision_accuracy"]["verdict"] == "no significant difference"
+    assert same["decision_accuracy"]["ci95"] == [0.0, 0.0]
+
+    with pytest.raises(ValueError, match="same cases"):
+        paired_bootstrap(a, b[:-1])
+
+
+def test_a_small_difference_is_not_significant():
+    from packages.support_evaluator.metrics import paired_bootstrap
+
+    a = [row(f"c{i}", NOOP, NOOP, i % 3 != 0) for i in range(60)]
+    b = [row(f"c{i}", NOOP, NOOP, i % 3 != 0 or i == 3) for i in range(60)]
+    assert paired_bootstrap(a, b, resamples=2000)["decision_accuracy"]["verdict"] == "no significant difference"

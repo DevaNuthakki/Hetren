@@ -9,6 +9,10 @@ labels come from execution). Probe-efficiency metrics use only determined
 rows (``probe_label.determined``), and the undetermined count is reported
 with them.
 
+``paired_bootstrap`` compares two systems on the same cases (the claim rule
+for the primary endpoints); ``python -m packages.support_evaluator.metrics
+--rows <a.jsonl> --against <b.jsonl> ...`` adds that comparison.
+
 ``python -m packages.support_evaluator.metrics --rows <rows.jsonl>
 --dataset <dir> --out <summary.json>`` re-summarizes recorded rows: rows
 written before a row carried ``determined`` and ``oracle_probes`` get them
@@ -31,6 +35,8 @@ DECISIONS = ("insufficient_evidence", "abstain", "no_intervention")
 PROACTIVE_KINDS = ("stale_account_record", "queue_misconfiguration")
 LENGTH_BINS = 10
 Z95 = 1.959964
+BOOTSTRAP_RESAMPLES = 10_000
+BOOTSTRAP_SEED = 2026
 
 
 def wilson(k: int, n: int) -> list[float] | None:
@@ -211,6 +217,62 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
     return result
 
 
+def _primary_endpoints(rows: list[dict[str, Any]]) -> dict[str, list[tuple[str, float]]]:
+    """Per case values of the primary endpoints: correct (all cases), intervened (healthy cases)."""
+    return {
+        "decision_accuracy": [(r["case_id"], float(r["correct"])) for r in rows],
+        "wrong_interventions_on_healthy": [(r["case_id"], float(bool(r["recoveries"]))) for r in rows if _healthy(r)],
+    }
+
+
+def paired_bootstrap(
+    rows_a: list[dict[str, Any]], rows_b: list[dict[str, Any]],
+    resamples: int = BOOTSTRAP_RESAMPLES, seed: int = BOOTSTRAP_SEED,
+) -> dict[str, dict[str, object]]:
+    """System A minus system B on the primary endpoints, with a paired percentile bootstrap 95% interval.
+
+    Both systems must have been scored on exactly the same cases; each resample
+    draws cases with replacement and applies the draw to both systems. A is
+    "better" only if the interval excludes zero in its favour (higher
+    accuracy, fewer wrong interventions); otherwise there is no significant
+    difference.
+    """
+    import random
+
+    if sorted(r["case_id"] for r in rows_a) != sorted(r["case_id"] for r in rows_b):
+        raise ValueError("a paired comparison needs both systems scored on the same cases")
+
+    a, b = _primary_endpoints(rows_a), _primary_endpoints(rows_b)
+    result = {}
+
+    for endpoint in a:
+        b_values = dict(b[endpoint])
+        pairs = [(value, b_values[case_id]) for case_id, value in sorted(a[endpoint])]
+        n = len(pairs)
+
+        if not n:
+            result[endpoint] = {"n": 0, "difference": None, "ci95": None, "verdict": "no cases"}
+            continue
+
+        rng = random.Random(f"{seed}:{endpoint}")
+        observed = sum(x - y for x, y in pairs) / n
+        diffs = sorted(
+            sum(x - y for x, y in (pairs[rng.randrange(n)] for _ in range(n))) / n for _ in range(resamples)
+        )
+        low, high = diffs[int(0.025 * resamples)], diffs[int(0.975 * resamples) - 1]
+        favour = 1 if endpoint == "decision_accuracy" else -1
+
+        if low > 0 or high < 0:
+            verdict = "A better" if favour * observed > 0 else "B better"
+        else:
+            verdict = "no significant difference"
+
+        result[endpoint] = {"n": n, "difference": round(observed, 4), "ci95": [round(low, 4), round(high, 4)],
+                            "verdict": verdict}
+
+    return result
+
+
 def attach_case_facts(rows: list[dict[str, Any]], dataset_dir: Path) -> list[dict[str, Any]]:
     """Rows with ``determined`` and ``oracle_probes`` from the dataset's evaluator records.
 
@@ -243,11 +305,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--rows", required=True, type=Path)
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--against", type=Path, help="rows of a second system on the same cases (paired bootstrap)")
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
     rows = attach_case_facts([json.loads(line) for line in args.rows.open(encoding="utf-8")], args.dataset)
     tags = {t["case_id"]: t for t in map(json.loads, (args.dataset / "evaluator" / "tags.jsonl").open(encoding="utf-8"))}
-    args.out.write_text(json.dumps(summarize(rows, tags), indent=2) + "\n", encoding="utf-8")
+    summary = summarize(rows, tags)
+
+    if args.against is not None:
+        other = attach_case_facts([json.loads(line) for line in args.against.open(encoding="utf-8")], args.dataset)
+        summary["paired_comparison"] = {"against": str(args.against), **paired_bootstrap(rows, other)}
+
+    args.out.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {args.out}")
     return 0
 
@@ -263,6 +332,7 @@ __all__ = [
     "label_key",
     "label_kind",
     "length_metrics",
+    "paired_bootstrap",
     "probe_metrics",
     "rate",
     "sequence_metrics",

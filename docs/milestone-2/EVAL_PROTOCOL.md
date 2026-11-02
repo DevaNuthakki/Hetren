@@ -159,7 +159,7 @@ Dataset v2 is frozen as **tier 1**: one recovery or decision per episode, labels
 - **verified but longer than the label:** correct, with more recoveries than the label (among cases whose label has a recovery);
 - **stopped after one of two:** the policy applied one recovery and stopped where the label needs two.
 
-**Token budget.** Tier 2 inputs have a budget of 1,200 tokens (tier 1 stays 800). On a tier 2 sample (1,565 cases: one variant per kind pair and every single-fault variant, 6 worlds × 5 behaviours; 7,379 inputs including partners), the largest input was 797 o200k_base tokens and 831 tokens with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer at the pinned revision; 164 post-recovery inputs exceed 800 tokens with the Qwen tokenizer, none exceed 1,200 with either. The budget is checked again on the full v3 sample.
+**Token budget.** Tier 2 inputs have a budget of 1,200 tokens (tier 1 stays 800). On a tier 2 sample (1,565 cases: one variant per kind pair and every single-fault variant, 6 worlds × 5 behaviours; 7,379 inputs including partners), the largest input was 797 o200k_base tokens and 831 tokens with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer at the pinned revision; 164 post-recovery inputs exceed 800 tokens with the Qwen tokenizer, none exceed 1,200 with either. On the full dataset v3 (31,365 inputs) the largest input was 946 Qwen and 901 o200k_base tokens, so the budget stays 1,200 (see "Dataset v3 plan and splits").
 
 ### Tier 2 hypotheses and probe menu
 
@@ -291,6 +291,10 @@ Undetermined primary cases per split: train 30, validation 8, `test_in_distribut
 
 ## Metrics
 
+**Primary endpoints.** For each tier, on `test_in_distribution` and on `test_held_out` separately: **decision accuracy**, and **wrong interventions on healthy runs**. On the live split, the same two. Every other metric is secondary (descriptive; no claim rests on it).
+
+**Claim rule.** A system is "better" than another on a primary endpoint only if the paired bootstrap 95% interval for the difference, computed on the same cases, excludes zero in its favour (higher accuracy, or fewer wrong interventions); otherwise the result is reported as "no significant difference". The bootstrap (`paired_bootstrap` in `metrics.py`) resamples cases with replacement 10,000 times (seed 2026), applies each draw to both systems, and takes the 2.5th and 97.5th percentiles of the difference A − B; for wrong interventions it resamples the healthy cases. The two systems must have been scored on exactly the same cases. No correction for multiple comparisons is applied; every comparison made is reported.
+
 Implemented in `packages/support_evaluator/metrics.py` (`summarize`); `python -m packages.support_evaluator.metrics --rows <rows.jsonl> --dataset <dir> --out <summary.json>` re-summarizes recorded rows. Metrics are computed on the primary cases of one split and one tier at a time (partners never count). Every rate is reported as k / n with a Wilson 95% interval.
 
 Notation: R is the set of scored episodes; for an episode r, *label(r)* is its label's first non-probe action (tier 2: the first target), *first(r)* is the policy's first non-probe action (its first recovery, or its final decision), *correct(r)* is the execution check of `score` (tier 1 `verify_label`, tier 2 `verify_sequence`; failed recovery calls are wrong, see below), and *probes(r)* is its probe count. Healthy runs H = {r : label(r) = `no_intervention`}; faulty runs with a fix F = {r : label(r) is a recovery}.
@@ -341,7 +345,7 @@ The recent-tier-change look-alike normally uses an account the generator already
 - an untrained small model
 - a strong general model: `gpt-4.1`
 
-Every baseline is a policy over compact evidence, run by `packages/support_evaluator/episodes.py`: the policy gets the dataset's first input, each probe runs through the probe gateway on a fork of the run's end state (so probing never changes the scored state), and the episode ends at the first decision or recovery, or with a failure when the policy asks for a fifth probe or returns an invalid action. The final action is scored with the labeller's `verify_label` on the unprobed end state: decisions must be right, recoveries must verify by execution (any verified recovery counts; exact match with the smallest label is reported separately). Metric formulas are provisional until task 12.
+Every baseline is a policy over compact evidence, run by `packages/support_evaluator/episodes.py`: the policy gets the dataset's first input, each probe runs through the probe gateway on a fork of the run's end state (so probing never changes the scored state), and the episode ends at the first decision or recovery, or with a failure when the policy asks for a fifth probe or returns an invalid action. The final action is scored with the labeller's `verify_label` on the unprobed end state: decisions must be right, recoveries must verify by execution (any verified recovery counts; exact match with the smallest label is reported separately). The metric formulas are defined under "Metrics".
 
 ### Rules baseline (v1)
 
@@ -362,7 +366,7 @@ Validation (splits v1, 550 primary cases):
 | mean probes (all / healthy) | 1.43 / 2.31 (probe oracle: 0.61 / 0.88) |
 | compound slice / recent-target faulty slice | 0/2 / 114/114 |
 
-All per-family accuracies are 100% except stale account record (64/66): both errors are compound cases (text-following agent), where the rules restore the account and the label is `abstain`. In-distribution validation is therefore nearly solved by hand-written rules; decision accuracy there does not separate methods, and differences must come from probe cost, compound cases, held-out families, live runs, and the harder tier (dataset v3, proposed).
+All per-family accuracies are 100% except stale account record (64/66): both errors are compound cases (text-following agent), where the rules restore the account and the label is `abstain`. In-distribution validation is therefore nearly solved by hand-written rules; decision accuracy there does not separate methods, and differences must come from probe cost, compound cases, held-out families, live runs, and the harder tier (dataset v3, tier 2).
 
 Tier 2 validation (splits v2, 250 primary cases; single-recovery policy):
 
@@ -474,12 +478,24 @@ The live split runs with `--live artifacts/milestone-2/live-test-v1` instead of 
 
 The untrained small model is level with `gpt-4.1` on decision accuracy (overlapping intervals) with a different error profile: it almost never intervenes on a healthy run, but 166 of its 1,705 replies are invalid (118 put a verb under the wrong action type, such as `recover` with `retry`; 45 name a verb outside the catalog, mostly the agent's own tool `lookup_account`), it often exhausts the probe budget, its 51 failed recovery calls all name accounts that do not exist, and it never chooses `abstain` correctly. These are the Milestone 3 training targets alongside the diagnostic know-how both models lack.
 
+## Test-split evaluation
+
+**Systems** (declared before any test run): rules v1 (`RULES_POLICY_VERSION = 1`), `gpt-4.1-2025-04-14` with prompt version 2, untrained `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`) with prompt version 2, and the fine-tuned Qwen3-4B (Milestone 3) with prompt version 2. Every system runs on the same splits: tier 1 `test_in_distribution` (560) and `test_held_out` (960) of splits v1, tier 2 `test_in_distribution` (256) and `test_held_out` (400) of splits v2, and live test v1 (300), each with its tier's settings (rules v1 as a single-recovery policy on tier 2; the small models with the settings under "Small model baseline and evaluation settings").
+
+**Access rules.**
+
+- Checkpoints, prompts, decoding and every other setting are chosen on validation only. No test result is used to choose, tune or change anything.
+- Each declared candidate is evaluated on each test split once. A run that fails or stops (cap, API error, crash) is resumed or repeated only to complete the same declared evaluation, never to change it, and the failure is logged.
+- Every test run is logged in `docs/milestone-2/TEST_RUN_LOG.md`, committed to the repository, including failed, stopped and aborted runs, before its results are used.
+- Any further system or setting (for example the Milestone 3 few-shot `gpt-4.1` and `gpt-6-luna` experiments) is added as a dated amendment below before its first test run.
+
 ## Spending rules
 
 Live budget:
 
 - about 300 live `gpt-4.1-mini` test runs;
 - a `gpt-4.1` baseline on the 800 validation cases (550 tier 1, 250 tier 2), standard API, hard cap $12 for both tiers together, with its own ledger. It runs on validation in Milestone 2 and on the held-out test only after this protocol is frozen, as the first step of Milestone 3, before the model's removal on 2027-01-14. The Batch API was not used: episodes are interactive (each probe result feeds the next call), so Batch would need one batch round per step.
+- the `gpt-4.1` prompt version 2 baseline on every test split and the live split (2,476 cases: tier 1 and tier 2 `test_in_distribution` and `test_held_out`, and live test v1), after the freeze and before 2027-01-14, with one hard cap of $24 and its own ledger (estimate under "`gpt-4.1` baseline").
 
 Before any step that costs money, the operator is told what will run, the exact token estimate measured from real sample cases, the cost, and the hard spending cap the script enforces. Live calls are run only by the operator, never automatically.
 
