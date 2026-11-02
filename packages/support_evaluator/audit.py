@@ -22,10 +22,10 @@ from pathlib import Path
 import random
 import re
 
-from environments.support.generator import generate_world, parse_time
+from environments.support.generator import parse_time
 from packages.hetren_evidence import render_evidence
 from packages.support_evaluator.cases import CaseTruth
-from packages.support_evaluator.injectors import inject
+from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.leakage import scan_case_content
 
 
@@ -100,11 +100,10 @@ def _ticket_text(first_input: dict) -> str:
 
 
 def _timestamp_features(case: dict) -> dict[str, float]:
-    planned = case["planned"]
-    spec = inject(
-        planned["case_kind"], generate_world(planned["world_seed"]),
-        random.Random(planned["case_seed"]), planned["case_variant"],
-    ).spec
+    # The world as the model sees it when probing: with the case's distractors (tier 2).
+    from packages.support_evaluator.distractors import inject_planned
+
+    spec = inject_planned(PlannedCase(**case["planned"]))[0].spec
     truth = case["truth"]
     directory = dict(spec.directory)
     ticket = next(t for t in spec.tickets if t.ticket_id == truth["target_ticket_id"])

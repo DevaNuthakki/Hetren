@@ -9,7 +9,7 @@ import tiktoken
 from packages.hetren_baselines import rules_policy
 from packages.hetren_evidence import TIER2_EVIDENCE_TOKEN_BUDGET, render_evidence
 from packages.support_evaluator.audit import label_of, load_dataset, scan_dataset, shortcut_audit
-from packages.support_evaluator.cases import is_held_out
+from packages.support_evaluator.cases import COMPOUND_KIND, is_held_out
 from packages.support_evaluator.dataset import build_dataset_tier2, label_slot, record_line
 from packages.support_evaluator.episodes import prepare, run_episode, score
 from packages.support_evaluator.plan import TIER2_WORLD_SEEDS, tier2_slots
@@ -134,6 +134,7 @@ def test_tags_and_shortcut_audit_use_the_whole_label(tiny):
         assert tag["recoveries"] == sum(s["target"]["action"] == "recover" for s in record["steps"])
         assert tag["distractors"] == case["planned"].get("distractors", 0)
         assert tag["held_out"] == is_held_out(case["truth"]["case_kind"], case["truth"]["case_variant"])
+        assert tag["compound_pair"] == (case["truth"]["case_kind"] == COMPOUND_KIND)
 
     assert any(">" in label_of(r) for r, _ in primaries)  # a two-step label: recovery, then stop or recovery
     assert {r.feature for r in shortcut_audit(visible, evaluator, ENCODING)} >= {"ticket_text", "input_tokens"}

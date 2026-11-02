@@ -45,7 +45,7 @@ import random
 
 from environments.support.generator import GENERATOR_NAME, GENERATOR_VERSION, generate_world
 from packages.contracts import ContractError
-from packages.support_evaluator.cases import is_held_out
+from packages.support_evaluator.cases import COMPOUND_KIND, is_held_out
 from packages.support_evaluator.injectors import _recently_changed, inject
 from packages.support_evaluator.labeler import label_case
 from packages.support_evaluator.plan import (
@@ -408,11 +408,9 @@ def is_compound(truth: dict[str, object], label: dict[str, object]) -> bool:
 
 
 def _target_recent(case: dict[str, object]) -> bool:
-    planned = case["planned"]
-    spec = inject(
-        planned["case_kind"], generate_world(planned["world_seed"]),
-        random.Random(planned["case_seed"]), planned["case_variant"],
-    ).spec
+    from packages.support_evaluator.distractors import inject_planned
+
+    spec = inject_planned(PlannedCase(**case["planned"]))[0].spec
     ticket = next(t for t in spec.tickets if t.ticket_id == case["truth"]["target_ticket_id"])
     account_id = dict(spec.directory).get(ticket.customer_ref)
     account = next((a for a in spec.accounts if a.account_id == account_id), None)
@@ -426,7 +424,8 @@ def write_tags(out_dir: Path) -> str:
     had a recent tier change (recent-target stress slice).
     ``first_input_tokens``: o200k_base tokens of the first step's input
     (length-matched slice). Tier 2 adds ``recoveries`` (in the label),
-    ``distractors`` and ``held_out``.
+    ``distractors``, ``held_out`` and ``compound_pair`` (the case is a
+    planned compound of two faults; ``compound`` keeps its tier 1 meaning).
     """
     import tiktoken
 
@@ -454,6 +453,7 @@ def write_tags(out_dir: Path) -> str:
             tag["recoveries"] = sum(target["action"] == "recover" for target in targets)
             tag["distractors"] = len(case["truth"].get("distractor_changes", []))
             tag["held_out"] = is_held_out(case["truth"]["case_kind"], case["truth"]["case_variant"])
+            tag["compound_pair"] = case["truth"]["case_kind"] == COMPOUND_KIND
 
         tags.append(tag)
 

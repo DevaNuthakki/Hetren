@@ -274,6 +274,13 @@ def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -
             )
         }
 
+        if tier2:
+            # Tier 2: the planned compounds of two faults (``compound`` keeps its tier 1 meaning).
+            result["slices"]["compound_pair"] = _rate(
+                sum(r["correct"] for r in tier2 if tags[r["case_id"]]["compound_pair"]),
+                sum(tags[r["case_id"]]["compound_pair"] for r in tier2),
+            )
+
     return result
 
 

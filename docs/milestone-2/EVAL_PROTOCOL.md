@@ -128,6 +128,17 @@ Before labelling, a preflight attempts injection for every slot and stops with a
 
 **Token budget rule** (decided before the full v3 build): if tier 2 inputs exceed 1,200 tokens but the maximum stays under about 1,800 with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer, the tier 2 budget is raised to cover the maximum; probe results are never truncated or compressed. Anything above about 1,800 stops the work for a decision. On the 105-case measurement sample (1,855 inputs, primaries and partners), the largest input was 920 Qwen tokens and 873 o200k_base tokens.
 
+**Dataset v3 build (seed 2028).** 2,040 primary cases and 6,358 partner records (8,398 records, 31,365 steps); manifest `docs/milestone-2/dataset-v3.manifest.json` (a test re-labels a seeded sample of 10 records from the plan and checks every line byte for byte). Labelling took 73 minutes on 11 processes (22.9 s per case on average, median 10.4 s, max 107 s). Every slot filled; 469 candidates in 151 slots were skipped at injection, all because the recent-tier-change component found no target account with a recent tier change (the same 469 the preflight skipped).
+
+- **Leakage and marker scans:** 0 findings on all 8,398 records.
+- **Tokens (every step input, primaries and partners):** maximum 946 `Qwen/Qwen3-4B-Instruct-2507` tokens and 901 o200k_base tokens; tier-1-format inputs at most 556 and 517. Nothing exceeds 1,000, so the budget rule does not apply and the tier 2 budget stays at 1,200.
+- **Determinedness:** 1,986 of 2,040 primary cases (97.4%) have a determined probe label. The 54 undetermined cases are kept and flagged (scoring rule under Metrics): merged account 11, mapping swap 8, mapping swap + F6 6, mapping swap + transient error retried 6, mishandled tool error 4, mishandled tool error + transient error retried 4, mapping swap + mishandled tool error 3, mapping swap + recent tier change 3, missing account 3, missing account + recent tier change 2, and 1 each for mishandled tool error + recent tier change, missing account + F6, missing account + F7, missing account + transient error retried.
+- **Probes** (cases with complete evidence): mean 1.79 per case; 0: 258, 1: 437, 2: 645, 3: 319, 4: 131 (61% need two or more).
+- **Labels:** `no_intervention` 402, `abstain` 339, `restore_from_source` then stop 254, `insufficient_evidence` 250, `set_mapping` then stop 228, `reroute` then stop 189, `rerun` then stop 146, `set_mapping` then `restore_from_source` 137, `set_mapping` then `rerun` 53, `restore_from_source` then `reroute` 24, `set_mapping` then `reroute` 18 (232 two-recovery labels). Distractors: 0 in 770 cases, 1 in 710, 2 in 560.
+- **Shortcut audit** (lift over the majority label, dataset v2 → v3): input tokens +0.221 → +0.153, step count +0.100 → +0.122, error present +0.075 → +0.111, source gap +0.079 → +0.080, ticket text −0.103 → −0.122, recency +0.039 → +0.026, account history events +0.006 → +0.088 (see below).
+
+**History events.** The number of history events on the target account rises from +0.006 lift in dataset v2 to +0.088 in v3. The cause is mechanical: a stale-record (F2) or recent-tier-change component adds one event to the target account's history, and those components produce the `restore_from_source` labels (for example, 98 of the 254 `restore_from_source` then stop cases have two or more events, against none of the 228 `set_mapping` then stop cases). History is visible only through a probe (`history`), never in the first input, so this is evidence that has to be found, not a shortcut in the input. The audit counts history in the world as the model sees it when probing, distractors included (+0.088; +0.089 without distractors).
+
 **No live slice yet.** Tier 2 has no live `gpt-4.1-mini` test slice. A compound live slice, and a `recent_changes` probe that would make distractors observable in every family, are deferred until after training.
 
 ### Known limitation: no partial fix and escalate
@@ -148,7 +159,7 @@ Splits are by fault family, generator seed, and agent source. Scripted agents pr
 
 No test split is used for tuning, model selection, prompt changes or threshold choices.
 
-Rules (implemented in `packages/support_evaluator/splits.py`; frozen lists in `docs/milestone-2/splits-v1/`):
+Rules (implemented in `packages/support_evaluator/splits.py`; frozen lists in `docs/milestone-2/splits-v1/` for dataset v2 and `docs/milestone-2/splits-v2/` for dataset v3):
 
 - **Fault family.** F6 and F7 primary cases go to `test_held_out` with all their partners, and `test_held_out` contains nothing else. A partner record of F6 or F7 that belongs to a training-family case is dropped (reason "held-out partner outside test_held_out"), so training never sees F6 or F7 worlds, not even as contrast partners.
 - **World seed.** Seeds used by any F6 or F7 primary are reserved for `test_held_out`. Other cases on a reserved seed are dropped with their partners (reason "seed reserved for held-out"). The remaining seeds go to `validation` (hash bucket below 0.15), `test_in_distribution` (0.15 to 0.30) or `train` (the rest) by a seeded hash. No world seed appears in two splits.
@@ -166,6 +177,18 @@ Splits v1 (seed 2026) on dataset v2 (primary cases / partner records):
 - dropped: 822 held-out partners; 12 seed-reserved records (7 primaries, 5 partners)
 
 Compound cases: 16 train, 2 validation, 3 `test_in_distribution`. Per-split counts per kind, label and behaviour are in the split manifest.
+
+Splits v2 (seed 2028) on dataset v3 (primary cases / partner records):
+
+- `train` 1133 / 2335
+- `validation` 250 / 507
+- `test_in_distribution` 256 / 517
+- `test_held_out` 400 / 1208 (F6 compounds 200: 40 with each of F1–F5; F7 compounds 200: 50 with each of F1, F3, F4, F5)
+- dropped: 1,788 held-out partners; 4 seed-reserved records (1 primary, 3 partners)
+
+The dropped primary is `case-001703` (stale account record, single fault): its world seed 2,055,083 was also drawn by a held-out compound case, so the seed rule drops it with its partners. The plan draws 2,040 seeds from a million, so about two such collisions were expected; the case is accepted as dropped rather than regenerated, and the in-distribution splits hold 1,639 of the planned 1,640 cases.
+
+Undetermined primary cases per split: train 30, validation 8, `test_in_distribution` 8, `test_held_out` 8.
 
 ### Live test split (task 10)
 
@@ -196,6 +219,8 @@ Compound cases: 16 train, 2 validation, 3 `test_in_distribution`. Per-split coun
 
 All metrics are reported per family, with held-out families reported separately.
 
+**Undetermined cases.** A case is undetermined when no probe sequence within the budget separates every hypothesis consistent with the run (`probe_label.determined` is false). Undetermined cases are included in decision metrics: their final labels come from execution, not from the probe oracle. They are excluded from probe-efficiency metrics (probe counts and comparisons with the oracle's probe sequence), and their count is reported with every result.
+
 **Proactive-detection families:** F2 (stale account record) and F6 (queue misconfiguration) leave no anomaly in the run itself; only a probe reveals them. Probing runs that look healthy is allowed within the probe budget, and these two families are reported as a separate proactive-detection group.
 
 ### Evaluation slices
@@ -204,6 +229,7 @@ Metrics are computed on primary cases only; counterfactual partner records never
 
 - **Compound cases** (`compound`): a recovery or abstain label that differs from the case's own remedy because a second problem prevents the intended single fix. In dataset v2 these are the 21 stale-account-record (F2) cases with the text-following agent: a true tier claim written before the tier changed becomes false, so after `restore_from_source` the agent still follows the claim and no single recovery verifies; the label is `abstain`. They are kept and reported separately.
 - **Recent-target stress slice** (`target_recent`): faulty cases (for example F2 and F6) whose target account had a recent tier change. The recent-tier-change look-alike is recent by definition and always healthy, so recency carries a small residual association with `no_intervention` (shortcut-audit lift about +0.04). This slice detects a learned "recent → healthy" shortcut. Recency is not visible in the first step's input; it appears only after probing.
+- **Compound pairs** (`compound_pair`, tier 2): planned compounds of two faults (1,400 of the 2,040 dataset v3 primary cases). The `compound` tag keeps its tier 1 meaning on tier 2 (a label that differs from the case's own remedy), so it is not the compound-pair slice.
 - **Length-matched slice** (`first_input_tokens`): input length predicts the label well above chance (lift about +0.22) because it reflects run structure (withheld records, errors, early stops). Results are also reported within first-input token-length bins (deciles), and reweighted so every label has the same length distribution, to separate genuine reasoning from length cues.
 
 ### Known residual: recent-tier-change conversions
@@ -238,6 +264,24 @@ Validation (splits v1, 550 primary cases):
 | compound slice / recent-target faulty slice | 0/2 / 114/114 |
 
 All per-family accuracies are 100% except stale account record (64/66): both errors are compound cases (text-following agent), where the rules restore the account and the label is `abstain`. In-distribution validation is therefore nearly solved by hand-written rules; decision accuracy there does not separate methods, and differences must come from probe cost, compound cases, held-out families, live runs, and the harder tier (dataset v3, proposed).
+
+Tier 2 validation (splits v2, 250 primary cases; single-recovery policy):
+
+| metric | rules v1 |
+|---|---|
+| decision accuracy | 86.0% (215/250) |
+| exact sequence match | 73.6% (184/250) |
+| verified recovery rate | 75.5% (105/139) |
+| wrong interventions on healthy runs | 0% (0/54) |
+| `insufficient_evidence` recall / precision | 100% / 100% (31) |
+| `abstain` recall / precision | 96.2% (25/26) / 100% |
+| `no_intervention` recall / precision | 100% (54/54) / 91.5% (54/59) |
+| mean probes (all / healthy) | 1.51 / 2.44 |
+| single-fault cases / compound pairs | 99.0% (100/101) / 77.2% (115/149) |
+| two-recovery labels | 0/23 (by design) |
+| 0 / 1 / 2 distractors | 84.5% (82/97) / 86.3% (69/80) / 87.7% (64/73) |
+
+Its errors are compound pairs: the two-recovery labels it cannot reach by design, and pairs where its first fix is not the label's (mapping swap with stale record 0/6, with transient error retried 1/8, with missing account 1/7). Distractors do not lower its accuracy.
 
 ### Small model baseline and evaluation settings
 

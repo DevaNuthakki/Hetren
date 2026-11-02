@@ -1,14 +1,17 @@
 """Split assignment rules, and the committed frozen split files.
 
-The committed lists live in ``docs/milestone-2/splits-v1``; the dataset they
-index is gitignored, so the second group of tests checks only the files
-against their own manifest and the dataset manifest.
+The committed lists live in ``docs/milestone-2/splits-v1`` (dataset v2) and
+``splits-v2`` (dataset v3); the datasets they index are gitignored, so the
+second group of tests checks only the files against their own manifest and
+the dataset manifest.
 """
 
 from collections import defaultdict
 import hashlib
 import json
 from pathlib import Path
+
+import pytest
 
 from packages.support_evaluator.splits import (
     DROPPED_FILE,
@@ -20,8 +23,8 @@ from packages.support_evaluator.splits import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
-SPLIT_DIR = ROOT / "docs" / "milestone-2" / "splits-v1"
-DATASET_MANIFEST = ROOT / "docs" / "milestone-2" / "dataset-v2.manifest.json"
+DOCS = ROOT / "docs" / "milestone-2"
+COMMITTED = (("splits-v1", "dataset-v2.manifest.json"), ("splits-v2", "dataset-v3.manifest.json"))
 
 
 def primary(case_id, kind, world_seed, group=None, variant="default"):
@@ -124,13 +127,15 @@ def test_assignment_is_deterministic_and_seeded():
     assert assign(cases, seed=1)[0] != first
 
 
-def test_committed_split_files_match_their_manifest():
-    manifest = json.loads((SPLIT_DIR / "manifest.json").read_text(encoding="utf-8"))
-    dataset = json.loads(DATASET_MANIFEST.read_text(encoding="utf-8"))
+@pytest.mark.parametrize("split_dir, dataset_manifest", COMMITTED)
+def test_committed_split_files_match_their_manifest(split_dir, dataset_manifest):
+    split_dir = DOCS / split_dir
+    manifest = json.loads((split_dir / "manifest.json").read_text(encoding="utf-8"))
+    dataset = json.loads((DOCS / dataset_manifest).read_text(encoding="utf-8"))
     members = {}
 
     for name, digest in manifest["files"].items():
-        data = (SPLIT_DIR / name).read_bytes()
+        data = (split_dir / name).read_bytes()
         assert hashlib.sha256(data).hexdigest() == digest, name
         lines = data.decode("utf-8").splitlines()
         members[name] = [line.split("\t")[0] for line in lines]
@@ -148,6 +153,11 @@ def test_committed_split_files_match_their_manifest():
         counts = manifest["counts"][split]
         assert len(members[f"{split}.txt"]) == counts["primary_cases"] + counts["partner_records"]
 
-    assert set(manifest["counts"]["test_held_out"]["by_kind"]) == {"queue_misconfiguration", "tier_format_drift"}
+    # test_held_out holds F6/F7 cases only: singles in splits v1, compounds with an F6/F7 part in splits v2.
+    held_out_kinds = manifest["counts"]["test_held_out"]["by_kind"]
+    assert held_out_kinds and all(
+        set(kind.removeprefix("compound:").split("+")) & {"queue_misconfiguration", "tier_format_drift"}
+        for kind in held_out_kinds
+    )
     kept_primaries = sum(manifest["counts"][s]["primary_cases"] for s in SPLITS)
     assert 0 <= dataset["counts"]["primary_cases"] - kept_primaries <= manifest["dropped"].get(SEED_RESERVED, 0)
