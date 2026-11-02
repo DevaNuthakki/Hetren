@@ -212,10 +212,28 @@ Undetermined primary cases per split: train 30, validation 8, `test_in_distribut
 
 ## Metrics
 
-- verified recovery rate
-- wrong interventions on healthy runs
-- correct `insufficient_evidence` and `abstain` decisions
-- probe count, including probe count on healthy runs as a cost metric
+Implemented in `packages/support_evaluator/metrics.py` (`summarize`); `python -m packages.support_evaluator.metrics --rows <rows.jsonl> --dataset <dir> --out <summary.json>` re-summarizes recorded rows. Metrics are computed on the primary cases of one split and one tier at a time (partners never count). Every rate is reported as k / n with a Wilson 95% interval.
+
+Notation: R is the set of scored episodes; for an episode r, *label(r)* is its label's first non-probe action (tier 2: the first target), *first(r)* is the policy's first non-probe action (its first recovery, or its final decision), *correct(r)* is the execution check of `score` (tier 1 `verify_label`, tier 2 `verify_sequence`; failed recovery calls are wrong, see below), and *probes(r)* is its probe count. Healthy runs H = {r : label(r) = `no_intervention`}; faulty runs with a fix F = {r : label(r) is a recovery}.
+
+Decision metrics (every r in R, undetermined cases included):
+
+- **decision accuracy** = |{r ∈ R : correct(r)}| / |R|
+- **exact match** = |{r : the policy's non-probe actions equal the label's, in order}| / |R| (tier 2: the whole sequence, an implicit stop after one recovery included)
+- **verified recovery rate** = |{r ∈ F : correct(r) and r applied a recovery}| / |F|
+- **wrong interventions on healthy runs** = |{r ∈ H : r applied any recovery}| / |H|
+- **decision recall and precision**, for d ∈ {`insufficient_evidence`, `abstain`, `no_intervention`}: recall = |{r : label(r) = d, correct(r)}| / |{r : label(r) = d}|; precision = |{r : first(r) = d, correct(r)}| / |{r : first(r) = d}|
+- **invalid actions** = |{r : the episode ended on an unparsable or invalid action}| / |R|; failures are also counted by type, and episodes with a failed recovery call are counted.
+
+Probe-efficiency metrics (determined cases D = {r ∈ R : `probe_label.determined`} only; |R \ D| is reported as `undetermined` with them):
+
+- **mean probes** = Σ_{r ∈ D} probes(r) / |D|; **mean probes on healthy runs** over D ∩ H (a cost metric)
+- **oracle mean probes** = Σ_{r ∈ D} o(r) / |D|, where o(r) is the length of the probe oracle's sequence; **mean excess probes** = Σ_{r ∈ D} (probes(r) − o(r)) / |D| (negative when the policy probes less than the oracle)
+- **probe budget exceeded** = |{r : the policy asked for a fifth probe}| / |R|
+
+Tier 2 sequence metrics: **exact sequence match**; **longer than label** = |{r : correct(r), more recoveries than the label}| / |{r : the label has a recovery}|; **stopped after one of two** = |{r : one recovery then a closing action}| / |{r : the label has two recoveries}|; **two-recovery labels** = accuracy on the cases whose label has two recoveries.
+
+Groups (each with decision accuracy, mean probes over its determined cases, and its undetermined count): every family (`case_kind`; compounds as `compound:<kind>+<kind>`), training families and held-out families separately, and the proactive-detection group (single-fault F2 and F6 cases). Slices from `tags.jsonl` are listed under "Evaluation slices"; the length-matched slice reports accuracy within first-input token deciles of R (decile edges from R) and a **length-reweighted accuracy** = Σ w(r)·correct(r) / Σ w(r), with w(r) = P(bin(r)) / P(bin(r) | label(r)) (the whole label for tier 2), so every label has the overall length distribution.
 
 All metrics are reported per family, with held-out families reported separately.
 
@@ -351,7 +369,7 @@ The live split needs a runner adapter for live records (their worlds come from t
 ### Small model baseline and evaluation settings
 
 - **Model:** `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`, Apache-2.0) is the primary model for the untrained baseline and Milestone 3 fine-tuning; `HuggingFaceTB/SmolLM3-3B` (revision `a07cc9a04f16550a088caea529712d1d335b0ac1`, Apache-2.0) is the backup.
-- **Hardware:** Kaggle T4 (16 GB).
+- **Hardware:** one Kaggle T4 (16 GB). Kaggle's T4 accelerator has two GPUs; the notebook makes only the first visible (`CUDA_VISIBLE_DEVICES=0`), and the runner stops unless exactly one GPU is visible and records its name.
 - **Evaluation settings, identical for the untrained baseline and the fine-tuned model:** fp16 weights (T4 has no bf16); for the fine-tuned model, QLoRA adapters merged into the fp16 base before evaluation; the model's own chat template (non-thinking; for SmolLM3, reasoning off); greedy decoding (`do_sample=False`), `max_new_tokens=128`, no repetition penalty; the same prompt module as the `gpt-4.1` baseline; the output is parsed with `parse_action`, and anything unparsable is an invalid-action failure. Library versions are recorded with each run.
 - **Untrained baseline run (Kaggle):** `notebooks/milestone-2/qwen_untrained_baseline.ipynb` runs `python -m packages.support_evaluator.local_model_baseline` on the same 800 validation cases as `gpt-4.1`, one generation at a time (batched fp16 decoding can differ slightly from unbatched), with the code and data packed by `scripts/build_kaggle_bundle.py` (a commit plus datasets v2 and v3, each data file checked against its committed manifest). Every call is logged with its prompt and reply tokens, whether its raw logits were finite, whether it reached the token limit, and its time; model, revision, dtype, prompt version and library versions are recorded, and a restart with different settings stops.
 - **fp16 smoke test first:** 20 seeded cases (10 tier 1, 10 tier 2). It passes when every generated step's logits are finite and no reply is empty; unparsable replies are reported but count as the model's failures, not a precision failure. If it fails, the full run does not start, and any change of precision (for example fp32 across two T4s) is a protocol decision.
@@ -370,4 +388,4 @@ Before any step that costs money, the operator is told what will run, the exact 
 - dataset, split and generator hashes
 - complete verb and entity list
 - per-family labeling details and the results of the labelability checkpoint
-- the exact metric formulas and reporting format
+- ~~the exact metric formulas and reporting format~~ (done: "Metrics")

@@ -274,7 +274,7 @@ def test_episodes_score_the_whole_sequence(small_hypotheses):
     assert not stopped["correct"] and not rules["correct"] and len(rules["recoveries"]) == 1
     sequence = summarize([replayed, stopped, rules])["sequence"]
     assert sequence["exact_sequence_match"]["k"] == 1
-    assert sequence["stopped_after_one_of_two"] == {"n": 3, "k": 2, "rate": 0.6667}
+    assert {k: sequence["stopped_after_one_of_two"][k] for k in ("n", "k", "rate")} == {"n": 3, "k": 2, "rate": 0.6667}
 
 
 def test_rules_v1_on_a_single_fault_counts_its_recovery_as_an_implicit_stop(small_hypotheses):

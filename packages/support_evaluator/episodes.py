@@ -24,13 +24,13 @@ re-runs the task where the verb calls for it), the policy sees the
 A policy run with ``max_recoveries=1`` on tier 2 (the frozen rules baseline)
 ends at its first recovery, which counts as an implicit stop.
 
-Metric definitions here are provisional until task 12 fixes them in
-EVAL_PROTOCOL.md.
+Each row also carries the case's ``determined`` flag and the probe
+oracle's probe count (``oracle_probes``) for the probe-efficiency metrics;
+``summarize`` is ``metrics.summarize`` (formulas in EVAL_PROTOCOL.md).
 """
 
 from __future__ import annotations
 
-from collections import Counter, defaultdict
 from dataclasses import dataclass
 from functools import partial
 import json
@@ -46,6 +46,7 @@ from packages.hetren_evidence import compact_evidence
 from packages.support_evaluator.cases import COMPOUND_KIND, component_kinds
 from packages.support_evaluator.distractors import inject_planned
 from packages.support_evaluator.labeler import verify_label, withhold_observation
+from packages.support_evaluator.metrics import summarize
 from packages.support_evaluator.plan import PlannedCase
 from packages.support_evaluator.sampling import run_agent_on
 from packages.support_evaluator.sequences import STOP, TIER2_MAX_RECOVERIES, apply_recovery, verify_sequence
@@ -64,6 +65,8 @@ class PreparedCase:
     label: dict[str, Any]
     max_recoveries: int = 1
     targets: tuple[dict[str, Any], ...] = ()  # tier 2: the label's non-probe targets in order
+    determined: bool = True  # the probe oracle separated every consistent hypothesis
+    oracle_probes: int | None = None
 
 
 def prepare(visible: dict, evaluator: dict) -> PreparedCase:
@@ -80,8 +83,10 @@ def prepare(visible: dict, evaluator: dict) -> PreparedCase:
 
     targets = tuple(step["target"] for step in visible["steps"] if step["target"]["action"] != "probe")
     max_recoveries = TIER2_MAX_RECOVERIES if evaluator.get("tier", 1) == 2 else 1
+    probe_label = evaluator["probe_label"]
     return PreparedCase(visible["case_id"], planned, case, environment, evidence, visible["steps"][-1]["target"],
-                        max_recoveries, targets if max_recoveries > 1 else ())
+                        max_recoveries, targets if max_recoveries > 1 else (),
+                        probe_label["determined"], len(probe_label["probes"]))
 
 
 def _probe_gateway(environment: SupportEnvironment):
@@ -212,95 +217,10 @@ def score(prepared: PreparedCase, episode: dict[str, Any]) -> dict[str, Any]:
         "correct": correct,
         "exact": exact,
         "recovery_failures": failures,
+        "determined": prepared.determined,
+        "oracle_probes": prepared.oracle_probes,
         **row,
     }
-
-
-def _rate(numerator: int, denominator: int) -> dict[str, object]:
-    return {"n": denominator, "k": numerator, "rate": round(numerator / denominator, 4) if denominator else None}
-
-
-def summarize(rows: list[dict[str, Any]], tags: dict[str, dict] | None = None) -> dict[str, object]:
-    """Provisional metrics (task 12 fixes the formulas)."""
-    def label_kind(row):
-        return row["label"]["action"], row["label"]["verb"]
-
-    def first_action(row):
-        # The policy's first non-probe action: in tier 2 a stop after a recovery is not a decision.
-        return row["recoveries"][0] if row["recoveries"] else (row["final"] or {})
-
-    recover = [r for r in rows if r["label"]["action"] == "recover"]
-    healthy = [r for r in rows if label_kind(r) == ("decide", "no_intervention")]
-    result: dict[str, object] = {
-        "cases": len(rows),
-        "decision_accuracy": _rate(sum(r["correct"] for r in rows), len(rows)),
-        "exact_match": _rate(sum(r["exact"] for r in rows), len(rows)),
-        "verified_recovery_rate": _rate(
-            sum(r["correct"] and bool(r["recoveries"]) for r in recover), len(recover),
-        ),
-        "wrong_interventions_on_healthy": _rate(
-            sum(bool(r["recoveries"]) for r in healthy), len(healthy),
-        ),
-        "mean_probes": round(sum(len(r["probes"]) for r in rows) / len(rows), 3) if rows else None,
-        "mean_probes_on_healthy": round(sum(len(r["probes"]) for r in healthy) / len(healthy), 3) if healthy else None,
-        "failures": dict(Counter(r["failure"] for r in rows if r["failure"])),
-    }
-
-    for verb in ("insufficient_evidence", "abstain", "no_intervention"):
-        truth = [r for r in rows if label_kind(r) == ("decide", verb)]
-        chosen = [r for r in rows if first_action(r).get("verb") == verb]
-        result[verb] = {
-            "recall": _rate(sum(r["correct"] for r in truth), len(truth)),
-            "precision": _rate(sum(r["correct"] for r in chosen), len(chosen)),
-        }
-
-    tier2 = [r for r in rows if r["tier"] == 2]
-
-    if tier2:
-        fixed = [r for r in tier2 if r["label_recoveries"] >= 1]
-        two = [r for r in tier2 if r["label_recoveries"] == 2]
-        result["sequence"] = {
-            "exact_sequence_match": _rate(sum(r["exact"] for r in tier2), len(tier2)),
-            "longer_than_label": _rate(
-                sum(r["correct"] and len(r["recoveries"]) > r["label_recoveries"] for r in fixed), len(fixed),
-            ),
-            "stopped_after_one_of_two": _rate(
-                sum(len(r["recoveries"]) == 1 and (r["final"] or {}).get("action") in ("decide", "recover") for r in two),
-                len(two),
-            ),
-        }
-
-    by_family = defaultdict(list)
-
-    for row in rows:
-        by_family[row["case_kind"]].append(row)
-
-    result["by_family"] = {
-        kind: {
-            "held_out": group[0]["held_out"],
-            "decision_accuracy": _rate(sum(r["correct"] for r in group), len(group)),
-            "mean_probes": round(sum(len(r["probes"]) for r in group) / len(group), 3),
-        }
-        for kind, group in sorted(by_family.items())
-    }
-
-    if tags is not None:
-        result["slices"] = {
-            name: _rate(sum(r["correct"] for r in group), len(group))
-            for name, group in (
-                ("compound", [r for r in rows if tags[r["case_id"]]["compound"]]),
-                ("target_recent_faulty", [r for r in rows if tags[r["case_id"]]["target_recent"] and label_kind(r) != ("decide", "no_intervention")]),
-            )
-        }
-
-        if tier2:
-            # Tier 2: the planned compounds of two faults (``compound`` keeps its tier 1 meaning).
-            result["slices"]["compound_pair"] = _rate(
-                sum(r["correct"] for r in tier2 if tags[r["case_id"]]["compound_pair"]),
-                sum(tags[r["case_id"]]["compound_pair"] for r in tier2),
-            )
-
-    return result
 
 
 def evaluate(
