@@ -1,14 +1,17 @@
 """The weighted loss normalisation of ``qlora.micro_step`` on CPU, with a tiny
 model: 16 micro-batches of one example, accumulated by accelerate, give the
 same gradient as one effective batch of 16 with loss Σᵢ wᵢ·ℓᵢ / 16 (and not
-Σᵢ wᵢ·ℓᵢ / Σᵢ wᵢ). Needs ``torch`` and ``accelerate``, which the repository's
-test environment does not install, so it is skipped there."""
+Σᵢ wᵢ·ℓᵢ / Σᵢ wᵢ). Needs ``torch`` and ``accelerate``: the slow CI job
+installs both (CPU torch) and checks they import, so it runs there; anywhere
+without them it is skipped."""
 
 import copy
 import random
 from types import SimpleNamespace
 
 import pytest
+
+pytestmark = pytest.mark.slow
 
 torch = pytest.importorskip("torch")
 accelerate = pytest.importorskip("accelerate")
