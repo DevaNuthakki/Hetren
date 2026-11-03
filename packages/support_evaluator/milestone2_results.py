@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """Write docs/milestone-2/RESULTS.md from the recorded test-split rows (offline, no model call).
 
 Every table is recomputed from the ``rows-<set>.jsonl`` files of test runs
@@ -8,8 +7,8 @@ from the ``summary-<set>.json`` the run wrote. The prose around the tables is
 fixed text in this script. The rows are gitignored, so this runs on the
 operator's machine.
 
-``python scripts/milestone2_results.py`` rewrites the document;
-``--check`` only compares it with the committed file.
+``python -m packages.support_evaluator.milestone2_results`` rewrites the
+document; ``--check`` only compares it with the committed file.
 """
 
 from __future__ import annotations
@@ -20,8 +19,11 @@ import json
 from pathlib import Path
 import sys
 
+from packages.support_evaluator.case_sources import load_source
+from packages.support_evaluator.metrics import paired_bootstrap
 
-REPO_ROOT = Path(__file__).resolve().parents[1]
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 RESULTS = REPO_ROOT / "docs" / "milestone-2" / "RESULTS.md"
 BASELINES = REPO_ROOT / "artifacts" / "milestone-2" / "baselines"
 QWEN_A = BASELINES / "qwen-untrained-test" / "qwen-untrained-test-session-A"
@@ -134,10 +136,6 @@ def _difference(e) -> str:
 
 def load() -> dict[tuple[str, str], tuple[list[dict], dict]]:
     """(test set, system) -> (rows, summary), every summary checked against the one the run wrote."""
-    sys.path.insert(0, str(REPO_ROOT))
-
-    from packages.support_evaluator.case_sources import load_source
-
     data = {}
 
     for set_name, arguments, qwen in SETS:
@@ -160,8 +158,6 @@ def load() -> dict[tuple[str, str], tuple[list[dict], dict]]:
 
 
 def tables(data) -> list[str]:
-    from packages.support_evaluator.metrics import paired_bootstrap
-
     sets = [name for name, _, _ in SETS]
     out = []
     p = out.append
@@ -276,3 +272,11 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+__all__ = [
+    "load",
+    "render",
+    "row_files",
+    "tables",
+]

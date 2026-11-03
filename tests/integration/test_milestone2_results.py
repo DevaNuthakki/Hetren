@@ -1,18 +1,11 @@
-"""docs/milestone-2/RESULTS.md is exactly what scripts/milestone2_results.py
-generates from the recorded test rows. The rows are gitignored, so the full
-regeneration runs only where they exist (the operator's machine); the fixed
-prose is always checked."""
-
-import importlib.util
-from pathlib import Path
+"""docs/milestone-2/RESULTS.md is exactly what
+``packages.support_evaluator.milestone2_results`` generates from the recorded
+test rows. The rows are gitignored, so the full regeneration runs only where
+they exist (the operator's machine); the fixed prose is always checked."""
 
 import pytest
 
-
-ROOT = Path(__file__).resolve().parents[2]
-spec = importlib.util.spec_from_file_location("milestone2_results", ROOT / "scripts" / "milestone2_results.py")
-results = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(results)
+from packages.support_evaluator import milestone2_results as results
 
 
 def test_the_committed_results_keep_the_scripts_fixed_text():
