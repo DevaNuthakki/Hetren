@@ -69,6 +69,19 @@ class TransformersModel:
         )
 
 
+def platform_name() -> str:
+    """Where the run executes: ``kaggle``, ``colab`` or ``local`` (Amendment 1 records it with each run)."""
+    import os
+
+    if os.environ.get("KAGGLE_KERNEL_RUN_TYPE") or os.path.isdir("/kaggle/input"):
+        return "kaggle"
+
+    if os.environ.get("COLAB_RELEASE_TAG") or os.environ.get("COLAB_GPU") is not None:
+        return "colab"
+
+    return "local"
+
+
 def library_versions() -> dict[str, str]:
     from importlib.metadata import version
     import platform
@@ -92,4 +105,5 @@ __all__ = [
     "QWEN_REVISION",
     "TransformersModel",
     "library_versions",
+    "platform_name",
 ]

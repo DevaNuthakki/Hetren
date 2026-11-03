@@ -1,0 +1,122 @@
+{
+  "format": "hetren-train-v1",
+  "protocol": "docs/milestone-2/EVAL_PROTOCOL.md, Amendment 1 (2026-11-03)",
+  "prompt_version": 2,
+  "system_prompt_sha256": {
+    "1": "43324de829e9c353309b0bf0aa643510d2994af2ecc8c88d77c4a80fc7f288f6",
+    "2": "5337c091e1f293a71bb827cde86da032e2aa40db6a090fdd6926f3f305d236c4"
+  },
+  "sources": {
+    "1": {
+      "dataset": "dataset-v2",
+      "hetren_visible.jsonl": "c8080f9b4c17ccc32cba759906932d740042e5a03d4986f1660ba336d07a4f09",
+      "evaluator/cases.jsonl": "5338dfaba18e646e77787ed8ac1d51de386a44ceeb71803957175db7ced7db81",
+      "split": "docs/milestone-2/splits-v1/train.txt",
+      "split_sha256": "8430b709e8899d65f44d7fe7b9c5e511cbcb018c017816e36c678f0090f1409e"
+    },
+    "2": {
+      "dataset": "dataset-v3",
+      "hetren_visible.jsonl": "d4dea08176d779d6e087cb0f65890c767aeefe8dec652def745449c6f4ce35f8",
+      "evaluator/cases.jsonl": "1d50180a5ee89da4f8f16942c3c32996428c8a351efc19d7c074fb871c6d03af",
+      "split": "docs/milestone-2/splits-v2/train.txt",
+      "split_sha256": "da2b3b00de49b78e2241176ef69f9a1c71aedca47a5729c9ad54c84766cdaec2"
+    }
+  },
+  "raw_examples": {
+    "1": 10415,
+    "2": 13096
+  },
+  "removed": {
+    "1": {
+      "duplicates": 3430,
+      "conflicting_inputs": 2,
+      "conflicting_examples": 4
+    },
+    "2": {
+      "duplicates": 2882,
+      "conflicting_inputs": 56,
+      "conflicting_examples": 112
+    }
+  },
+  "examples": {
+    "1": 6981,
+    "2": 10101
+  },
+  "by_kind": {
+    "1": {
+      "decide": 2006,
+      "probe": 2629,
+      "recover": 2346
+    },
+    "2": {
+      "decide": 910,
+      "post_recovery_decide": 1761,
+      "post_recovery_probe": 341,
+      "post_recovery_recover": 642,
+      "probe": 4299,
+      "recover": 2148
+    }
+  },
+  "by_verb": {
+    "1": {
+      "abstain": 254,
+      "compare_with_source": 576,
+      "find_owners": 1321,
+      "history": 7,
+      "inspect": 583,
+      "insufficient_evidence": 439,
+      "no_intervention": 1313,
+      "reroute": 280,
+      "rerun": 392,
+      "restore_from_source": 556,
+      "retry": 142,
+      "set_mapping": 1118
+    },
+    "2": {
+      "abstain": 261,
+      "compare_with_source": 669,
+      "find_owners": 800,
+      "history": 1029,
+      "inspect": 1625,
+      "insufficient_evidence": 139,
+      "no_intervention": 2271,
+      "reroute": 743,
+      "rerun": 488,
+      "resolve": 251,
+      "restore_from_source": 706,
+      "retry": 266,
+      "set_mapping": 853
+    }
+  },
+  "by_role": {
+    "1": {
+      "partner": 3589,
+      "primary": 3392
+    },
+    "2": {
+      "partner": 7307,
+      "primary": 2794
+    }
+  },
+  "weights": {
+    "1": {
+      "abstain": 1.3995,
+      "history": 3.0,
+      "insufficient_evidence": 1.0645,
+      "reroute": 1.333,
+      "rerun": 1.1266,
+      "retry": 1.8718
+    },
+    "2": {
+      "abstain": 1.6447,
+      "compare_with_source": 1.0273,
+      "insufficient_evidence": 2.2537,
+      "rerun": 1.2028,
+      "resolve": 1.6771,
+      "retry": 1.6292
+    }
+  },
+  "files": {
+    "train.jsonl": "afea958424a31c23851576853ee536beabf73b7cd3b5e2bb89d26ad8bf1abb8b"
+  }
+}
