@@ -525,7 +525,63 @@ Versions: world generator `support-world-generator` version 3; dataset format `h
 
 Dated changes after the freeze, newest last. Each entry states what changes, why, and which test runs (by their number in `docs/milestone-2/TEST_RUN_LOG.md`) it applies to; it is added before the first test run it affects. The pinned hash is updated in the same commit.
 
-None yet.
+### Amendment 1 (2026-11-03): fine-tuned Qwen3-4B training, checkpoint selection and evaluation platforms
+
+**What it covers:** the declared system "fine-tuned Qwen3-4B (Milestone 3) with prompt version 2": its training data and settings, its epoch budget, how its checkpoint is chosen on validation, and where it may be evaluated. **Why:** to fix all of these before any training run or validation result exists, and to allow a second evaluation platform. **Applies to:** every validation evaluation of the fine-tuned model and every test run of it (the first will be test run #5). Nothing here changes a dataset, split, label, metric, the claim rule, any other system or any Milestone 2 result.
+
+**Training data (train split only).**
+
+- **Source:** the `train` split only: dataset v2 with splits v1 (tier 1) and dataset v3 with splits v2 (tier 2). Primaries and their contrast partners are both included. Training on twin partners is in effect the contrastive twin idea; a comparison with and without partners is a possible later experiment and needs its own amendment.
+- **Examples:** one per labelled step of each record: probes, the first decision or recovery, and in tier 2 the steps after a recovery (a probe, a second recovery or a stop). System message: prompt version 2 for the record's tier; user message: that step's compact evidence (`render_evidence`); assistant message: the target action as JSON with its keys in the order `action`, `verb`, `args`. The model's own chat template (non-thinking); loss on the assistant tokens only.
+- **Deduplication:** an example that occurs more than once (same system, user and target message) is kept once (twins share their first probe steps); an input (same system and user message) that occurs with more than one target is dropped entirely (58 inputs, 116 examples). Expected result: 17,082 examples (tier 1 6,981, tier 2 10,101; 32.6M tokens with the pinned tokenizer). The builder stops if its counts differ, and a manifest of the training file (counts per tier, step kind and verb, and its sha256) is committed before training.
+- **Rare-label weights:** within each tier, a target verb with c examples gets weight w = min(3, max(1, √(m ÷ c))), where m is the median of the tier's per-verb counts (tier 1 497.5, tier 2 706). Weights multiply each example's loss; no example is duplicated. Resulting weights (every other verb 1):
+
+  | tier | weights |
+  |---|---|
+  | 1 | `history` 3.0, `retry` 1.87, `abstain` 1.40, `reroute` 1.33, `rerun` 1.13, `insufficient_evidence` 1.06 |
+  | 2 | `insufficient_evidence` 2.25, `resolve` 1.68, `abstain` 1.64, `retry` 1.63, `rerun` 1.20, `compare_with_source` 1.03 |
+
+**Training settings.**
+
+| setting | value |
+|---|---|
+| base | `Qwen/Qwen3-4B-Instruct-2507`, revision `cdbee75f17c01a7cc42f958dc650907174af0554` |
+| method | QLoRA: 4-bit NF4 base with double quantisation, fp16 compute, LoRA weights in fp32 with loss scaling |
+| LoRA | rank 16, alpha 32, dropout 0.05, on `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`, `up_proj`, `down_proj` |
+| optimiser | paged 8-bit AdamW, learning rate 1e-4, cosine schedule with 3% warmup, gradient clipping 1.0, no weight decay |
+| batch | effective batch 16 (micro-batch 1 per GPU with gradient accumulation) |
+| sequence length | 2,560 (longer than every example; nothing is truncated), no packing |
+| memory | gradient checkpointing |
+| seed | 2029 (data order, LoRA initialisation, dropout) |
+| libraries | `transformers` 4.56.2; `peft`, `bitsandbytes`, `trl` and `torch` versions fixed by the throughput pilot and recorded |
+
+**Epoch budget.**
+
+- **Throughput pilot:** at most one GPU hour on Kaggle, on train data only. It measures tokens per second, peak memory and fp16 stability on one T4 and on two T4s (data parallel), and fixes the training library versions. Its weights are discarded and never evaluated.
+- **Rule:** training uses the fastest configuration that runs stably. If its projected time for one epoch (32.6M tokens ÷ measured tokens per second) is at most 14 hours, one full epoch is trained. Otherwise every non-probe example is kept and the probe examples of both tiers are subsampled at one seeded rate (seed 2029) so the projected time is 14 hours; if the non-probe examples alone take longer, training does not start and this is reported. The pilot's measurements and the resulting budget are logged before training starts.
+- **Hardware:** training may use two GPUs (data parallel); the one-GPU rule under "Small model baseline and evaluation settings" applies to evaluation. Training may span sessions, resuming from saved checkpoints with their optimiser state.
+- **Non-finite loss:** training resumes from the last saved checkpoint at half the learning rate, and this is logged; at a second occurrence training stops and this is reported.
+
+**Checkpoint selection (validation only).**
+
+- **Candidates:** four checkpoints, at 25%, 50%, 75% and 100% of the training budget's optimiser steps. Each is evaluated as this protocol requires: adapters merged into the fp16 base, with the declared evaluation settings.
+- **Selection subset:** 300 validation primary cases: 200 tier 1 (splits v1 `validation`, dataset v2) and 100 tier 2 (splits v2 `validation`, dataset v3). Within each tier the cases are stratified by case kind (allocation proportional to the kind's count, largest remainder) and drawn with seed 2029. The two case lists are committed before the first checkpoint evaluation.
+- **Score:** S = ½(A₁ + A₂) − W, where A₁ and A₂ are decision accuracy on the tier 1 and tier 2 subset cases, and W is the pooled wrong-intervention rate on the healthy subset runs of both tiers (wrong interventions in both tiers ÷ healthy runs in both tiers). The checkpoint with the highest S is chosen; exact ties go to the earlier checkpoint.
+- **Runs:** each candidate's subset evaluation runs once (resumed or repeated only to complete it), and all four run on the same platform and library versions. The chosen checkpoint then runs on the full validation split (550 tier 1, 250 tier 2) for reporting; that result does not change the choice.
+- **Monitoring only (never used for the choice):** validation loss; and on every validation evaluation, per tier, `insufficient_evidence` precision and `abstain` recall, reported with the protocol's metrics.
+- **Reference and contingency:** untrained Qwen3-4B's S on the same 300-case subset is computed from its existing validation rows (no new run) and logged when the subset lists are committed. If the chosen checkpoint's S does not exceed that reference, the result is reported as it is; any further training attempt needs its own dated amendment before it starts, and every attempt stays logged.
+- **Test:** only the chosen checkpoint is evaluated on the test splits, once per split, under "Test-split evaluation".
+
+**Validation log.** Every validation evaluation of the fine-tuned model is logged in `docs/milestone-3/VALIDATION_LOG.md`, including failed and stopped ones. Each entry gives the date, the checkpoint (optimiser step and adapter sha256), the cases, the platform, GPU, library versions and bundle commit, the output file hashes, and S, A₁, A₂, W and the monitored rates. Every training run is logged there too, including failed, stopped and aborted ones, with its date, platform, settings, the optimiser steps reached and its outcome; so are the throughput pilot and the resulting budget.
+
+**Evaluation platforms** (extends "Hardware" under "Small model baseline and evaluation settings"). Validation and test evaluations of the fine-tuned model may run on Kaggle or Google Colab, provided:
+
+- exactly one T4 is visible;
+- the weights are fp16 and the declared evaluation settings are used;
+- the code and data come from a bundle built by `scripts/build_kaggle_bundle.py`;
+- `transformers` is 4.56.2.
+
+Each run records the platform, the GPU name, the number of visible GPUs, library versions (Python, `torch`, `transformers`, `accelerate`, `tokenizers`, `peft`), the bundle commit and the adapter sha256. Outputs may be stored on Google Drive; the files used are copied into `artifacts/` and their hashes logged.
 
 ## Items completed before freezing
 
