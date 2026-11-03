@@ -5,6 +5,10 @@ They do not record stages, authorize calls, or know whether a fault is
 active; staging and authorization belong to the generic wrapper in
 ``packages/action_gateway``.
 
+Agent tools first apply the world's tool-error schedule, so a scheduled
+failure is indistinguishable from a real outage: the tool raises with an
+observation-only message ("service unavailable").
+
 ``read_ticket`` resolves the ticket's ``customer_ref`` through the customer
 directory and reports the resolved ``account_id``. ``lookup_account`` reports
 the account's own ``customer_ref``, so the two observations can be compared.
@@ -22,6 +26,7 @@ def read_ticket(
     *,
     ticket_id: str,
 ) -> dict[str, object]:
+    environment.check_tool_errors("read_ticket", ticket_id)
     ticket = environment.get_ticket(ticket_id)
 
     return {
@@ -37,7 +42,8 @@ def lookup_account(
     *,
     account_id: str,
 ) -> dict[str, object]:
-    return environment.get_account(account_id).canonical_payload()
+    environment.check_tool_errors("lookup_account", account_id)
+    return environment.get_account(account_id).public_payload()
 
 
 def route_ticket(
@@ -46,6 +52,7 @@ def route_ticket(
     ticket_id: str,
     queue_id: str,
 ) -> dict[str, object]:
+    environment.check_tool_errors("route_ticket", ticket_id)
     previous_queue_id = environment.get_ticket(ticket_id).queue_id
     updated = environment.assign_ticket(ticket_id, queue_id)
 

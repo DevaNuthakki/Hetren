@@ -44,6 +44,9 @@ VERIFIER = "packages.verification.support_verification"
 EVALUATOR_IMPORTERS = frozenset({VERIFIER})
 
 RESTRICTED_PREFIXES = (
+    "packages.action_space",
+    "packages.hetren_evidence",
+    "packages.hetren_baselines",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",
@@ -54,6 +57,18 @@ RESTRICTED_PREFIXES = (
 FORBIDDEN_FOR_RESTRICTED = (EVALUATOR, VERIFIER)
 
 LITERAL_EXEMPT_MODULES = frozenset({"environments.support.fixtures"})
+
+# Hetren's diagnosis and recovery code receives tools from the harness and
+# must never import the subject environment, whose clean checks would act as
+# an answer oracle. Future diagnosis/model packages named packages.hetren_*
+# are covered automatically.
+HETREN_SIDE_PREFIXES = (
+    "packages.action_space",
+    "packages.support_recovery",
+    "packages.core.hetren_diagnosis",
+)
+HETREN_NAME_PREFIX = "packages.hetren_"
+ENVIRONMENT = "environments.support"
 
 
 def _within(module: str, prefix: str) -> bool:
@@ -197,7 +212,11 @@ print(json.dumps(sorted(name for name in sys.modules if name in sys.argv[3:])))
 """
 
 
-def runtime_violations(root: Path, modules: list[str]) -> list[str]:
+def runtime_violations(
+    root: Path,
+    modules: list[str],
+    forbidden: tuple[str, ...] = FORBIDDEN_FOR_RESTRICTED,
+) -> list[str]:
     """Import each module in its own fresh interpreter and inspect sys.modules.
 
     The interpreters run in parallel; each still imports exactly one module.
@@ -207,8 +226,7 @@ def runtime_violations(root: Path, modules: list[str]) -> list[str]:
 
     processes = {
         module: subprocess.Popen(
-            [sys.executable, "-I", "-c", _RUNTIME_PROBE, str(root), module,
-             *FORBIDDEN_FOR_RESTRICTED],
+            [sys.executable, "-I", "-c", _RUNTIME_PROBE, str(root), module, *forbidden],
             cwd=root,
             env=environment,
             text=True,
@@ -227,6 +245,29 @@ def runtime_violations(root: Path, modules: list[str]) -> list[str]:
 
         for loaded in json.loads(stdout):
             violations.append(f"{module}: loads {loaded} at runtime")
+
+    return violations
+
+
+def hetren_side_modules(root: Path) -> list[str]:
+    return [
+        module
+        for module in sorted(_collect_modules(root))
+        if any(_within(module, prefix) for prefix in HETREN_SIDE_PREFIXES)
+        or module.startswith(HETREN_NAME_PREFIX)
+    ]
+
+
+def environment_violations(root: Path) -> list[str]:
+    modules, graph = _import_graph(root)
+    violations: list[str] = []
+
+    for module in hetren_side_modules(root):
+        if any(_within(name, ENVIRONMENT) for name in _reachable(module, graph)):
+            violations.append(f"{module}: reaches {ENVIRONMENT}")
+
+        if ENVIRONMENT in modules[module].read_text(encoding="utf-8"):
+            violations.append(f"{module}: names {ENVIRONMENT} in source")
 
     return violations
 
@@ -513,6 +554,12 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
         "packages.support_recovery.diagnosis",
         "packages.support_recovery.recovery",
         "packages.support_recovery.sufficiency",
+        "packages.action_space.actions",
+        "packages.action_space.catalog",
+        "packages.action_space.execution",
+        "packages.hetren_evidence.compact",
+        "environments.support.maintenance",
+        "environments.support.generator",
     }
 
     assert expected <= set(restricted_modules(REPO_ROOT))
@@ -541,8 +588,62 @@ def test_harness_and_recording_scripts_never_import_the_evaluator_directly():
         "packages.support_examples.scenarios",
         "scripts.record_recovery_example",
         "scripts.record_support_captures",
+        "scripts.record_live_test",
     ):
         assert module in modules
         assert not any(_within(name, EVALUATOR) for name in graph[module]), module
 
     assert VERIFIER in graph["packages.support_examples.harness"]
+
+
+# Hetren-side code never imports the subject environment
+
+
+def test_hetren_side_code_never_reaches_the_environment():
+    modules = hetren_side_modules(REPO_ROOT)
+
+    assert "packages.support_recovery.diagnosis" in modules
+    assert "packages.core.hetren_diagnosis.planner" in modules
+    assert environment_violations(REPO_ROOT) == []
+    assert runtime_violations(REPO_ROOT, modules, (ENVIRONMENT,)) == []
+
+
+@pytest.mark.parametrize(
+    ("relative", "source", "expected"),
+    [
+        (
+            "packages/support_recovery/diagnosis.py",
+            "from environments.support.fixtures import CLEAN_CHECKS\n",
+            "packages.support_recovery.diagnosis: reaches environments.support",
+        ),
+        (
+            "packages/support_recovery/diagnosis.py",
+            "import importlib\nimportlib.import_module('environments.support.fixtures')\n",
+            "packages.support_recovery.diagnosis: names environments.support in source",
+        ),
+        (
+            "packages/hetren_model/policy.py",
+            "import environments.support.fixtures\n",
+            "packages.hetren_model.policy: reaches environments.support",
+        ),
+    ],
+)
+def test_planted_environment_imports_are_caught(clean_tree, relative, source, expected):
+    _plant(clean_tree, "environments/support/fixtures.py", "CLEAN_CHECKS = ()\n")
+    _plant(clean_tree, relative, source)
+
+    assert expected in environment_violations(clean_tree)
+
+
+def test_planted_transitive_environment_import_is_caught(clean_tree):
+    # support_recovery imports action_gateway; a gateway that imports the
+    # environment would hand Hetren the clean checks indirectly.
+    _plant(clean_tree, "environments/support/fixtures.py", "CLEAN_CHECKS = ()\n")
+    _plant(clean_tree, "packages/action_gateway/__init__.py", "from environments.support import fixtures\ngate = 1\n")
+
+    violations = environment_violations(clean_tree)
+
+    assert "packages.support_recovery.diagnosis: reaches environments.support" in violations
+    assert runtime_violations(
+        clean_tree, ["packages.support_recovery.diagnosis"], (ENVIRONMENT,),
+    ) == ["packages.support_recovery.diagnosis: loads environments.support at runtime"]

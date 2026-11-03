@@ -41,6 +41,7 @@ from packages.support_evaluator.catalog import (
     answer_pairs,
     sensitive_tokens,
 )
+from packages.support_evaluator.cases import CaseTruth, case_answer_pairs
 from packages.support_evaluator.registry import NEUTRAL_RUN_ID
 
 
@@ -149,10 +150,14 @@ def scan_content(
     surfaces: Mapping[str, object],
     *,
     check_answers: bool = True,
+    extra_pairs: frozenset[tuple[str, str]] = frozenset(),
 ) -> tuple[LeakFinding, ...]:
-    """Scan named JSON-compatible surfaces for evaluator-only content."""
+    """Scan named JSON-compatible surfaces for evaluator-only content.
+
+    ``extra_pairs`` adds per-case answer pairs (see ``scan_case_content``).
+    """
     tokens = sensitive_tokens()
-    pairs = answer_pairs() if check_answers else frozenset()
+    pairs = (answer_pairs() | extra_pairs) if check_answers else frozenset()
     findings: list[LeakFinding] = []
 
     for surface, value in surfaces.items():
@@ -161,6 +166,18 @@ def scan_content(
         )
 
     return tuple(findings)
+
+
+def scan_case_content(
+    surfaces: Mapping[str, object],
+    truth: CaseTruth,
+) -> tuple[LeakFinding, ...]:
+    """Scan Hetren- or agent-visible surfaces of one generated case.
+
+    Adds the case's own answer pairs (target ticket with its expected queue
+    and account) to the standing checks.
+    """
+    return scan_content(surfaces, extra_pairs=case_answer_pairs(truth))
 
 
 def scan_agent_outputs(
@@ -205,6 +222,7 @@ __all__ = [
     "NEUTRAL_RUN_ID",
     "assert_no_leaks",
     "scan_agent_outputs",
+    "scan_case_content",
     "scan_content",
     "scan_identifiers",
 ]

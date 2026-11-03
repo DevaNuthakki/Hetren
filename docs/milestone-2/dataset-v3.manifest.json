@@ -1,0 +1,104 @@
+{
+  "counts": {
+    "partner_records": 6358,
+    "primary_cases": 2040,
+    "records": 8398,
+    "steps": 31365
+  },
+  "data_location": "artifacts/milestone-2/dataset-v3 (gitignored)",
+  "files": {
+    "evaluator/cases.jsonl": "1d50180a5ee89da4f8f16942c3c32996428c8a351efc19d7c074fb871c6d03af",
+    "evaluator/tags.jsonl": "819e780262d62b6bfbc48229ec07cc9b2a105e975647b7ff192444d70de492a3",
+    "hetren_visible.jsonl": "d4dea08176d779d6e087cb0f65890c767aeefe8dec652def745449c6f4ce35f8"
+  },
+  "format": "hetren-support-dataset",
+  "format_version": 1,
+  "generator": {
+    "name": "support-world-generator",
+    "version": 3
+  },
+  "plan": {
+    "per_cell": {},
+    "seed": 2028,
+    "tier": 2,
+    "withheld_per_cell": {}
+  },
+  "regenerate": "python -m packages.support_evaluator.dataset --out <dir> --tier 2 --seed 2028 --processes <n>",
+  "sample": [
+    {
+      "case_id": "case-001806",
+      "evaluator_line_sha256": "5660a14fe0035260339dfc2e1bda2c67964c22feca9b36ae3867cbef84a2f724",
+      "plan_index": 1925,
+      "position": 0,
+      "visible_line_sha256": "d2f892cfe7b54f0a59bed849ddab9b065c48f364e2e68562bd46a9795141f486"
+    },
+    {
+      "case_id": "case-001831",
+      "evaluator_line_sha256": "6bc03b61401e4ed1707a5a5389b2c6aa43da2458c52aaf11ac3f38dc5d5f33d1",
+      "plan_index": 1026,
+      "position": 0,
+      "visible_line_sha256": "b4d73ac141cbca241be7109d4a3e1e08e09be16e4fb8fc94b403a6cb6bb423b4"
+    },
+    {
+      "case_id": "case-003391",
+      "evaluator_line_sha256": "ea0dcb1fc463b9d5aa88cfa9e7a99cbad21ba18355c98b5afff956ff30dba129",
+      "plan_index": 1329,
+      "position": 0,
+      "visible_line_sha256": "3d45ddf564d8d824e0ac30bbc90e02294ce0d5a56293bb11f0bb5f70fc42f705"
+    },
+    {
+      "case_id": "case-004672",
+      "evaluator_line_sha256": "b7476d6042fae67e83891d4e3c635c5142488b05aadf5c0dc93e22ea37416c13",
+      "plan_index": 19,
+      "position": 1,
+      "primary_case_id": "case-006400",
+      "visible_line_sha256": "5ab4812cdaf7cad3ce79f074c77a3d9855c535649de0cfc1cb934f478287b934"
+    },
+    {
+      "case_id": "case-004919",
+      "evaluator_line_sha256": "ef273e756c83c33d0ffc00768fb3dae87848bbe9f20d3f6ceaa1ec2a42998898",
+      "plan_index": 157,
+      "position": 0,
+      "visible_line_sha256": "5bb94365d259d63539b7bfb6be7e56ecbb67e02f73c94184026fd3cd8344afe9"
+    },
+    {
+      "case_id": "case-005615",
+      "evaluator_line_sha256": "09a4701cb85043c9102977fa9f39c7b0fbc58d10e0a70de364b31834d50e62bb",
+      "plan_index": 1624,
+      "position": 0,
+      "visible_line_sha256": "594871b641e99c5be577fddd7e90c7636d73e4dd083e061742dcfcc0efaae90d"
+    },
+    {
+      "case_id": "case-006162",
+      "evaluator_line_sha256": "83459b4a18207cdb7bcbb382db4953835d9b6c816c69c2fc21f78823bb7cd953",
+      "plan_index": 1542,
+      "position": 0,
+      "visible_line_sha256": "8323b274192a14ece29542d7f4af1df2027f2382932cc9a3c07b14f6677615b2"
+    },
+    {
+      "case_id": "case-006984",
+      "evaluator_line_sha256": "a7182ae5e98ae33a392e83e9168c5c0c42899cc1447140f58aa9ac41f16d79f0",
+      "plan_index": 1113,
+      "position": 0,
+      "visible_line_sha256": "dfb1da0ceb620d7619cc32f98325dd56d95039a3edcf827f27dbf1c65d0f22c0"
+    },
+    {
+      "case_id": "case-007354",
+      "evaluator_line_sha256": "7c00f9a8ef1a06914d41288e6a0cc3d7368bca700c6a3763874f3d41cd1c7abc",
+      "plan_index": 3,
+      "position": 0,
+      "visible_line_sha256": "bd72b20f325058533eb4e4b6a54768d405087fb37a5150344e0ba94df8e44285"
+    },
+    {
+      "case_id": "case-007848",
+      "evaluator_line_sha256": "be42f0825aaeb8e9aec6d5468fcd3c7dee78497a330eee475ec4cab61d351d16",
+      "plan_index": 1386,
+      "position": 3,
+      "primary_case_id": "case-004932",
+      "visible_line_sha256": "9b829edc0f4add163801ca79de0ef020b7b5754581fd2661adb4be9e5942c79c"
+    }
+  ],
+  "timing_file": {
+    "evaluator/labeling_time.jsonl": "6e43688b41901672d0fec101af1226ce8d9578313e2823eab254a304b84b25b1"
+  }
+}

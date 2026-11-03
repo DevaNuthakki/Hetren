@@ -1,0 +1,536 @@
+# Milestone 2 Evaluation Protocol
+
+**Status: FROZEN** on 2026-11-02, with the code at commit `5806b64` (the commit before the freeze). This document is hash-pinned in CI (`docs/milestone-2/EVAL_PROTOCOL.sha256`). Test-split numbers for any method are produced only under this frozen protocol. Changes are made only as dated entries under "Amendments"; a change to a definition behind reported test results requires a new protocol version, never an edit.
+
+## Purpose
+
+Measure whether a diagnosis-and-recovery method fixes failed support-agent runs when a fix is possible, stays out of healthy runs, and says so when evidence is missing or no available recovery works. Results are reported per fault family, with held-out families reported separately.
+
+## Fault families
+
+| ID | Family | Split role |
+|---|---|---|
+| F1 | Customer-to-account mapping swap | train / validation / test |
+| F2 | Stale account record | train / validation / test |
+| F3 | Mishandled tool error | train / validation / test |
+| F4 | Misleading ticket text | train / validation / test |
+| F5 | Missing account | train / validation / test |
+| F6 | Queue misconfiguration | **held out: test only** |
+| F7 | Tier format drift | **held out: test only** |
+
+Healthy look-alikes, all labelled `no_intervention`:
+
+- legitimately merged account (detectable through the account history probe and `merged_customer_refs`);
+- recent tier change (working record equals the source of truth);
+- transient tool error that the agent successfully retried.
+
+## Action space
+
+All probes and recoveries are generic verbs over entity types, shared by every family. No family has its own verb. Each episode has a probe budget of 4. In tier 1 (dataset v2) an episode ends with exactly one recovery or decision; tier 2 (dataset v3) allows up to two recoveries (see "Tier 2: up to two recoveries").
+
+- **Retry probe:** a read-only probe re-calls a read tool (`read_ticket` or `lookup_account`) that failed in the run, which distinguishes transient from persistent errors before acting. F3 injects errors into read tools only, so this probe always applies.
+- **No queue restore:** `restore_from_source` is not available for queues. Queue misconfiguration (F6) therefore has no verified recovery and is an escalation case.
+
+Decisions:
+
+- `no_intervention`
+- `insufficient_evidence`
+- `abstain`
+
+### Verbs and entities (complete list)
+
+The catalog is `VERBS` in `packages/action_space/catalog.py`; every action is `{"action": <kind>, "verb": <verb>, "args": {...}}`, validated against the verb's JSON schema (`parse_action`; extra or missing keys are invalid). Entities and their ID formats:
+
+| entity | ID format | where it appears |
+|---|---|---|
+| ticket | `T-NNNN` | the task, `read_ticket`, `route_ticket` |
+| account | `A-NNNN` | `read_ticket` (resolved account), `lookup_account` |
+| customer reference | `C-NNNN` | tickets and accounts (`customer_ref`) |
+| queue | `Q-` + 3–12 capitals | `route_ticket`, queue records |
+| routing policy | (single, no ID) | `inspect` |
+
+| verb | kind | args | effect |
+|---|---|---|---|
+| `inspect` | probe | `{entity: ticket\|account\|queue, id}` or `{entity: routing_policy}` | the entity's full current record, or the routing policy |
+| `resolve` | probe | `{customer_ref}` | the account the customer directory maps the reference to |
+| `find_owners` | probe | `{customer_ref}` | the accounts whose own record names the reference |
+| `compare_with_source` | probe | `{entity: account, id}` | the account's working tier, version and timestamp next to the system of record's (no verdict) |
+| `history` | probe | `{entity: account, id}` | the account's recorded events |
+| `retry` | probe | `{tool: read_ticket, target: T-…}` or `{tool: lookup_account, target: A-…}` | re-calls a read tool through the world's tool-error schedule |
+| `set_mapping` | recover | `{customer_ref, account_id}` | maps the reference to an existing account (a reference may be new); then the task re-runs |
+| `restore_from_source` | recover | `{entity: account, id}` | replaces the account's working values with the system of record's; then the task re-runs (no queue restore exists) |
+| `reroute` | recover | `{ticket_id, queue_id}` | moves one ticket to a queue; nothing re-runs |
+| `rerun` | recover | `{}` | re-runs the original task on the current state |
+| `no_intervention` | decide | `{}` | the run needs no change (in tier 2 after a recovery: stop) |
+| `insufficient_evidence` | decide | `{missing: [snake_case codes, ≥ 1]}` | a required observation is absent without explanation |
+| `abstain` | decide | `{reason: snake_case code}` | the evidence is complete but no available recovery fixes the run |
+
+Decision arguments (`missing`, `reason`) are not scored. Probes run on a fork and never change the scored state; a probe naming an unknown ID returns a failed observation. The agent's own tools in the run are `read_ticket`, `lookup_account` and `route_ticket`; they are never actions.
+
+## Decision definitions
+
+**insufficient_evidence**: a required observation is absent from the record and the absence is unexplained, because it was withheld, truncated, or never attempted. A failed tool call is itself an observation: a run whose lookup failed with "unknown account_id" or "service unavailable" has complete evidence of that failure, so it is not `insufficient_evidence`.
+
+**abstain**: the evidence is complete, but no recovery in the action space verifies. This includes persistent tool errors (F3) and escalation cases such as F6.
+
+**F3 labels**: a transient error (the retry probe succeeds) is labelled `rerun`. A persistent error (the retry probe fails again) is labelled `abstain`. Sandboxes copy the tool-error call counters, so a retried or re-run call sees the same remaining failures it would see in the original world.
+
+**F6 label**: `abstain`. F6 is held out, so it tests correct abstention on a problem never seen in training.
+
+**F5 with several verified recoveries**: prefer the smallest verified change. That is `set_mapping` if a unique owner exists, otherwise reroute to triage.
+
+**F4 when the ticket's claim matches the true tier**: the run is healthy, and the label is `no_intervention`.
+
+## Labels
+
+Labels are per run, not per world. A run whose final outcome already matches the expected queue and account is labelled `no_intervention`, whatever faults the world contains. The case's `remedy_if_wrong` applies only when the outcome is wrong. This matters for families whose effect depends on the agent's behaviour (F3, F4, F7 and the transient look-alike).
+
+Labels come from execution, never from a model. A recovery label is a recovery that, applied in a sandboxed copy of the world and followed by re-running the task, passes verification, including regression checks on unaffected tickets. Probe labels come from simple counterfactual enumeration: a probe sequence is sufficient when every candidate world consistent with its observations has the same verified outcome.
+
+### Known limitation: short probe sequences
+
+Probe labels come from deliberately simple counterfactual enumeration: one world per case kind and variant (plus a clean world with nothing injected), injected into the same base world on the same ticket. Within such small hypothesis sets the label is usually settled by zero or one probe, occasionally two, so probe sequences are short. This limitation stays for tier 1 (dataset v2 is frozen); tier 2 uses richer enumeration (see "Tier 2 hypotheses and probe menu").
+
+Probe outcomes are compared up to renaming. IDs, canonical tiers (including in keys), timestamps and versions become placeholders, and free-text labels whose wording follows tier or role (account names, queue names, queue description templates) are reduced or dropped. A probe can therefore only separate hypotheses by relational evidence, not by random values or wording.
+
+### Per-family labelling and the labelability checkpoint
+
+Run labels follow fixed rules in order (`label_run`): an unexplained absence gives `insufficient_evidence` (rule `unexplained_absence`); a correct outcome gives `no_intervention` (`outcome_correct`); a persistent tool error on the retry probe gives `abstain` unless `rerun` verifies (`persistent_tool_error`); otherwise the smallest recovery verified in forked sandboxes (`smallest_verified_change`), or `abstain` (`no_verified_recovery`). Tier 2 adds the shortest verified two-recovery sequence (`shortest_verified_sequence`) and `abstain` when none verifies (`no_verified_sequence`).
+
+| family | expected labels when the outcome is wrong | how a probe reveals it |
+|---|---|---|
+| F1 mapping swap | `set_mapping` to the reference's true owner | `resolve` against `find_owners` |
+| F2 stale account record | `restore_from_source` (`abstain` when a text-following agent's now-false claim blocks the single fix) | `compare_with_source`, `history` |
+| F3 mishandled tool error | `rerun` (transient) or `abstain` (persistent) | `retry` |
+| F4 misleading ticket text | `reroute` when the agent followed the text; `no_intervention` when the claim is true | `inspect` account / routing policy |
+| F5 missing account | `set_mapping` if a unique owner exists, otherwise `reroute` to triage | `find_owners` |
+| F6 queue misconfiguration (held out) | `abstain` (no queue restore) | `inspect` routing policy / queue |
+| F7 tier format drift (held out) | `restore_from_source` when the source holds the canonical tier | `compare_with_source` |
+| look-alikes (merged account, recent tier change, transient error retried) | `no_intervention` when the outcome is right | `history`, `compare_with_source`, `retry` |
+
+**Labelability checkpoint (results).** Every planned case was labelled by execution; no case was dropped or redrawn because of its label (dataset v3 redraws only at injection, all for "target account has no recent tier change"). Per kind (primary cases; "determined" is the share with a determined probe label; probes are the oracle's mean on complete-evidence cases):
+
+Dataset v2 (tier 1, 480 cases per kind, 80 with evidence withheld):
+
+| kind | determined | twin | oracle probes | labels |
+|---|---|---|---|---|
+| F1 mapping swap | 100% | 63% | 0.76 | `set_mapping` 400, `insufficient_evidence` 80 |
+| F2 stale account record | 100% | 83% | 2.00 | `restore_from_source` 379, `abstain` 21, `insufficient_evidence` 80 |
+| F3 mishandled tool error | 100% | 25% | 0.29 | `abstain` 200, `rerun` 161, `no_intervention` 39, `insufficient_evidence` 80 |
+| F4 misleading ticket text | 100% | 5% | 0.12 | `no_intervention` 358, `reroute` 42, `insufficient_evidence` 80 |
+| F5 missing account | 100% | 0% | 0.00 | `set_mapping` 201, `reroute` 199, `insufficient_evidence` 80 |
+| F6 queue misconfiguration | 100% | 83% | 1.00 | `abstain` 400, `insufficient_evidence` 80 |
+| F7 tier format drift | 100% | 0% | 0.00 | `restore_from_source` 279, `no_intervention` 121, `insufficient_evidence` 80 |
+| merged account | 100% | 60% | 0.71 | `no_intervention` 320, `reroute` 80, `insufficient_evidence` 80 |
+| recent tier change | 100% | 83% | 1.97 | `no_intervention` 400, `insufficient_evidence` 80 |
+| transient error retried | 100% | 17% | 0.21 | `rerun` 320, `no_intervention` 80, `insufficient_evidence` 80 |
+
+Dataset v3 (tier 2): single kinds 80 cases each (10 withheld), compounds 1,400 in all (per pair in the v3 report above):
+
+| kind | determined | twin | oracle probes | labels |
+|---|---|---|---|---|
+| F1 mapping swap | 90.0% | 88% | 3.33 | `set_mapping`>stop 70, `insufficient_evidence` 10 |
+| F2 stale account record | 100% | 88% | 2.00 | `restore_from_source`>stop 66, `restore_from_source`>`reroute` 4, `insufficient_evidence` 10 |
+| F3 mishandled tool error | 95.0% | 74% | 1.46 | `abstain` 36, `rerun`>stop 27, `no_intervention` 7, `insufficient_evidence` 10 |
+| F4 misleading ticket text | 100% | 54% | 0.77 | `no_intervention` 63, `reroute`>stop 7, `insufficient_evidence` 10 |
+| F5 missing account | 96.3% | 88% | 2.53 | `set_mapping`>stop 36, `reroute`>stop 34, `insufficient_evidence` 10 |
+| merged account | 86.3% | 88% | 2.24 | `no_intervention` 56, `reroute`>stop 14, `insufficient_evidence` 10 |
+| recent tier change | 100% | 88% | 1.96 | `no_intervention` 70, `insufficient_evidence` 10 |
+| transient error retried | 100% | 88% | 2.76 | `rerun`>stop 56, `no_intervention` 14, `insufficient_evidence` 10 |
+| compounds (all pairs) | 98.0% | 72% | 1.64 | `abstain` 303, `no_intervention` 192, `restore_from_source`>stop 188, `insufficient_evidence` 170, two-recovery sequences 228, … |
+
+The live test's labelability is reported under "Live test split" (234 + 6 training-family runs and 43 + 17 held-out runs labelled; none excluded).
+
+## Tier 2: up to two recoveries
+
+Dataset v2 is frozen as **tier 1**: one recovery or decision per episode, labels and inputs unchanged. Dataset v3 is **tier 2** and allows up to two recoveries, because some cases have two faults that are each fixable (for example an identifier swap together with a stale account record), and an operator would fix both. Every metric is reported per tier.
+
+**Episode.** Probes as in tier 1; the probe budget of 4 is shared across the whole episode. A recovery is applied through a gateway scoped to exactly the proposed call; `set_mapping`, `restore_from_source` and `rerun` are followed by a re-run of the task with the same behaviour, and `reroute` re-runs nothing. The policy then sees the input after the recovery, may probe again (on a fork of the new state), and gives either a second recovery, which ends the episode, or `no_intervention`, meaning stop: the outcome is now right.
+
+**Input after a recovery** (`compact-evidence-v2`): the tier 1 input plus a `recoveries` list; each entry holds the action, its result, the task's re-run (`null` after a reroute) and the probes made after it. Inputs before any recovery carry no `recoveries` key and stay `compact-evidence-v1`, byte for byte.
+
+**Sequence labels.** Every tier 1 label is kept except `abstain` for "no verified recovery". A persistent tool error is never searched past: the error masks what else is wrong, and the label stays as in tier 1. Otherwise the label is the shortest verified sequence of two recoveries, or `abstain` when none verifies. A sequence verifies when the final state passes the tier 1 checks (outcome, account record, queue configuration) and every regression ticket still routes correctly. The first recovery is a state-changing `set_mapping` or `restore_from_source` (a first `reroute` is undone by any later re-run, and a first `rerun` adds nothing because a world edit re-runs the task); the second is any candidate on the state after the first. Ties are broken by (verb 1, verb 2, hash 1, hash 2) in the tier 1 recovery order (`rerun` < `reroute` < `set_mapping` < `restore_from_source`). The search is pruned without changing the label (commuting world edits are tried once, pairs that cannot map the target's reference to the expected account are skipped, and the search stops at the first verified pair in tie-break order); a naive search over every pair is kept as the test oracle.
+
+**Training steps.** A tier 2 case labelled with a recovery has: probes, the first recovery, probes after it, then the second recovery or `no_intervention`. Cases labelled `abstain`, `no_intervention` or `insufficient_evidence` have one decision step as in tier 1. Step 1's probes reduce the label entropy over the first action; at step 2 the hypotheses still consistent get the same first recovery (renamed into their own world), are filtered again by the abstracted post-recovery input, and the probes reduce the entropy over the second action, considering first the entities the recovery and its re-run name.
+
+**Scoring.** The whole sequence is re-checked by execution on the unprobed end state: every applied recovery is re-applied in order and the final state must verify. After a recovery, only `no_intervention` can close an episode. Tier 2 adds three metrics:
+
+- **exact sequence match:** the policy's non-probe actions equal the label's;
+- **verified but longer than the label:** correct, with more recoveries than the label (among cases whose label has a recovery);
+- **stopped after one of two:** the policy applied one recovery and stopped where the label needs two.
+
+**Token budget.** Tier 2 inputs have a budget of 1,200 tokens (tier 1 stays 800). On a tier 2 sample (1,565 cases: one variant per kind pair and every single-fault variant, 6 worlds × 5 behaviours; 7,379 inputs including partners), the largest input was 797 o200k_base tokens and 831 tokens with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer at the pinned revision; 164 post-recovery inputs exceed 800 tokens with the Qwen tokenizer, none exceed 1,200 with either. On the full dataset v3 (31,365 inputs) the largest input was 946 Qwen and 901 o200k_base tokens, so the budget stays 1,200 (see "Dataset v3 plan and splits").
+
+### Tier 2 hypotheses and probe menu
+
+**Hypotheses.** Tier 2 counterfactual worlds, all on the same base world and ticket and carrying the case's distractors, are: every single variant, the case's own included, in 3 random draws (the first is tier 1's world for that variant), so the same symptom can come from different partners or targets; and every dataset v3 compound pair. Worlds identical to one already listed are dropped. Each world's run is compared with the case's first; only consistent worlds are labelled (the same consistency-first order is used for tier 1, whose output is unchanged: the dataset v2 manifest regenerates identically).
+
+**Adaptive probe menu.** Tier 1's menu holds probes over the entities in the agent's run. In tier 2, entities that an earlier probe's observation named join the menu after the run's own (for example a `retry` that returns the ticket reveals its reference; `inspect routing_policy` reveals queues). A probe can therefore only name entities the run or an earlier probe showed; on the measurement sample, no probe argument named an ID absent from its step's input (519 probe steps). A probe that only reveals entities has no immediate gain, so when no probe gains, the oracle picks the probe whose best follow-up gains most in expectation (two-step lookahead), within the same budget of 4. A case still undetermined after that is genuinely ambiguous under the menu and budget: it is kept, flagged, and reported per kind; no label is forced.
+
+**Partner records.** The oracle uses every consistent hypothesis, but partner records are written for one hypothesis per distinct sequence label (written with its own placeholders). Within a label, the partner is the hypothesis with the smallest hash of the twin ID and its key, so no variant is systematically preferred by enumeration order.
+
+**Probes run in forks.** In tier 2 labelling every probe runs in a fork, as in episodes: a `retry` advances tool-error counters, which must not reach the state a recovery is applied to. (Tier 1 labelling probes the run's environment directly; re-labelling all 202 dataset v2 cases that use `retry` with forked probes changed no record.)
+
+On a measurement sample (105 cases: every single-fault variant and one compound variant per kind pair, 2 worlds, 0–2 distractors; labels identical to the tier 1 hypothesis set's), the richer set raised twin cases from 42% to 87% and probes per case from 0.47 to 1.89 (61% of cases need two or more); 97.1% of cases are determined. The three undetermined were one each of mapping swap, merged account, and queue misconfiguration with merged account. Counts per kind on the full v3 dataset are reported with it.
+
+### Distractors
+
+Tier 2 cases can carry 1–2 distractors: irrelevant inconsistencies away from the target, each a training-family injection pinned to another ticket (a stale record on another account, a mapping swap between two other references, a transient or persistent error rule on another ticket's lookup, a recent tier change or merge history on another account). Tier format drift (F7) is a distractor only in cases that are already held out; queue misconfiguration (F6) is never a distractor, because it changes the global queue configuration that verification checks.
+
+A distractor never touches the target ticket, its reference, its true owner or expected account, or the regression tickets with their references and owners; the target's recomputed outcome must be unchanged; and the agent's run on the target must be identical with and without it for every behaviour (checked by execution, because a case's own fault can bring another account into the run, such as a swap partner). Placements that fail are redrawn. Tier 2 labelling re-checks by execution that the label equals the label without distractors. Counterfactual hypotheses carry the same distractors, so hypotheses differ only in the case's own fault.
+
+On a measurement sample (every single-fault variant and six compound variants, 4 worlds × 5 behaviours × 1 and 2 distractors; 920 runs), labels and runs were unchanged in every run. A distractor changed some probe observation on the oracle's probe menu in 6.0% of runs, all in cases whose own fault is a mapping swap: there the run names a second account (the swap partner), and a stale record, merge history or swap on that account shows up when probed. Elsewhere the run and the probes reach only the target's chain, which distractors may not touch, so distractors there are not observable.
+
+### Dataset v3 plan and splits
+
+**Plan** (`tier2_slots` in `packages/support_evaluator/plan.py`; build with `python -m packages.support_evaluator.dataset --tier 2 --seed <seed> --out <dir> --processes <n>`): 2,040 primary cases.
+
+- 25 training compound pairs (the 10 pairs of F1–F5 and the 15 pairs of F1–F5 with a look-alike) × 5 behaviours × 8 = 1,000;
+- held-out compound pairs, 400 in all: F6 with each of F1–F5 × 5 behaviours × 8 = 200, and F7 with F1, F3, F4 and F5 × 5 behaviours × 10 = 200 (F7 with F2 cannot occur, see below, so its 40 cases go evenly to F7's other pairs);
+- 8 single kinds (F1–F5 and the three look-alikes) × 5 behaviours × 16 = 640.
+
+Within each group × behaviour cell, variants cycle evenly over the variants that can occur; one case in eight has evidence withheld (one in ten in the F7 held-out cells of 10; 250 of 2,040 overall; dataset v2 used one in six), and distractor counts 0, 1 and 2 are shuffled, both at random, so neither depends on kind, variant or behaviour. Each slot draws its world seed (2,000,000–2,999,999, disjoint from dataset v2 and the live test) and case seed from its own random stream and keeps its first candidate that injects. Only injection redraws (the fault, a compound's two faults, or the distractors not fitting the world); skipped candidates and their reasons are recorded evaluator-side (`redraws`), so selection effects can be audited. The label never causes a redraw: undetermined, `abstain` and every other outcome are kept, and an error while labelling stops the build. Records carry `tier: 2` and the sequence label.
+
+**Impossible compounds.** Some compound variants can never occur: their two faults conflict at injection on every draw. The plan leaves them out (`IMPOSSIBLE_COMPOUND_VARIANTS` in `plan.py`; a test checks that each never fits on 40 worlds and that every remaining plan variant fits at least once):
+
+| compound | variants left out | reason |
+|---|---|---|
+| F1 mapping swap + F5 missing account | swap, redirect, nway with `unmapped_ref` (3 of 6) | both faults rewrite the target reference's directory entry |
+| F5 missing account + merged account | `deleted_account` with merge history (1 of 2) | the merge history is on the account the fault deletes |
+| F5 missing account + F7 tier drift | `deleted_account` with case, abbreviation, whitespace (3 of 6) | the tier drift is on the account the fault deletes |
+| F2 stale record + F7 tier drift | all 3 | both faults rewrite the target account's source record |
+
+Before labelling, a preflight attempts injection for every slot and stops with a report if any slot cannot be filled.
+
+**Splits** follow the splits v1 rules on world seed, twin groups and agent source. A compound is held out when either component is F6 or F7: its primary goes to `test_held_out` with all its partners, and held-out partner records of training cases are dropped. The held-out check uses each record's own truth (kind and, for compounds, both components); on dataset v2 this rebuilds splits v1 identically.
+
+**Token budget rule** (decided before the full v3 build): if tier 2 inputs exceed 1,200 tokens but the maximum stays under about 1,800 with the `Qwen/Qwen3-4B-Instruct-2507` tokenizer, the tier 2 budget is raised to cover the maximum; probe results are never truncated or compressed. Anything above about 1,800 stops the work for a decision. On the 105-case measurement sample (1,855 inputs, primaries and partners), the largest input was 920 Qwen tokens and 873 o200k_base tokens.
+
+**Dataset v3 build (seed 2028).** 2,040 primary cases and 6,358 partner records (8,398 records, 31,365 steps); manifest `docs/milestone-2/dataset-v3.manifest.json` (a test re-labels a seeded sample of 10 records from the plan and checks every line byte for byte). Labelling took 73 minutes on 11 processes (22.9 s per case on average, median 10.4 s, max 107 s). Every slot filled; 469 candidates in 151 slots were skipped at injection, all because the recent-tier-change component found no target account with a recent tier change (the same 469 the preflight skipped).
+
+- **Leakage and marker scans:** 0 findings on all 8,398 records.
+- **Tokens (every step input, primaries and partners):** maximum 946 `Qwen/Qwen3-4B-Instruct-2507` tokens and 901 o200k_base tokens; tier-1-format inputs at most 556 and 517. Nothing exceeds 1,000, so the budget rule does not apply and the tier 2 budget stays at 1,200.
+- **Determinedness:** 1,986 of 2,040 primary cases (97.4%) have a determined probe label. The 54 undetermined cases are kept and flagged (scoring rule under Metrics): merged account 11, mapping swap 8, mapping swap + F6 6, mapping swap + transient error retried 6, mishandled tool error 4, mishandled tool error + transient error retried 4, mapping swap + mishandled tool error 3, mapping swap + recent tier change 3, missing account 3, missing account + recent tier change 2, and 1 each for mishandled tool error + recent tier change, missing account + F6, missing account + F7, missing account + transient error retried.
+- **Probes** (cases with complete evidence): mean 1.79 per case; 0: 258, 1: 437, 2: 645, 3: 319, 4: 131 (61% need two or more).
+- **Labels:** `no_intervention` 402, `abstain` 339, `restore_from_source` then stop 254, `insufficient_evidence` 250, `set_mapping` then stop 228, `reroute` then stop 189, `rerun` then stop 146, `set_mapping` then `restore_from_source` 137, `set_mapping` then `rerun` 53, `restore_from_source` then `reroute` 24, `set_mapping` then `reroute` 18 (232 two-recovery labels). Distractors: 0 in 770 cases, 1 in 710, 2 in 560.
+- **Shortcut audit** (lift over the majority label, dataset v2 → v3): input tokens +0.221 → +0.153, step count +0.100 → +0.122, error present +0.075 → +0.111, source gap +0.079 → +0.080, ticket text −0.103 → −0.122, recency +0.039 → +0.026, account history events +0.006 → +0.088 (see below).
+
+**History events.** The number of history events on the target account rises from +0.006 lift in dataset v2 to +0.088 in v3. The cause is mechanical: a stale-record (F2) or recent-tier-change component adds one event to the target account's history, and those components produce the `restore_from_source` labels (for example, 98 of the 254 `restore_from_source` then stop cases have two or more events, against none of the 228 `set_mapping` then stop cases). History is visible only through a probe (`history`), never in the first input, so this is evidence that has to be found, not a shortcut in the input. The audit counts history in the world as the model sees it when probing, distractors included (+0.088; +0.089 without distractors).
+
+**No live slice yet.** Tier 2 has no live `gpt-4.1-mini` test slice. A compound live slice, and a `recent_changes` probe that would make distractors observable in every family, are deferred until after training.
+
+### Known limitation: no partial fix and escalate
+
+After a first recovery the policy cannot partially fix and then escalate: `abstain` after a recovery is scored wrong. A case where one fault is fixable and the other is not (for example a mapping swap with a queue misconfiguration) is labelled `abstain` before any recovery.
+
+## Splits
+
+Splits are by fault family, generator seed, and agent source. Scripted agents produce training data. Live `gpt-4.1-mini` runs are used only for testing. F6 and F7 never appear in training or validation.
+
+| split | contents | use |
+|---|---|---|
+| `train` | scripted runs, the 8 training families | training |
+| `validation` | scripted runs, the 8 training families | tuning and baselines |
+| `test_in_distribution` | scripted runs, the 8 training families | final evaluation only |
+| `test_held_out` | scripted runs, F6 and F7 only | final evaluation only |
+| live test (task 10) | live `gpt-4.1-mini` runs | final evaluation only |
+
+No test split is used for tuning, model selection, prompt changes or threshold choices.
+
+Rules (implemented in `packages/support_evaluator/splits.py`; frozen lists in `docs/milestone-2/splits-v1/` for dataset v2 and `docs/milestone-2/splits-v2/` for dataset v3):
+
+- **Fault family.** F6 and F7 primary cases go to `test_held_out` with all their partners, and `test_held_out` contains nothing else. A partner record of F6 or F7 that belongs to a training-family case is dropped (reason "held-out partner outside test_held_out"), so training never sees F6 or F7 worlds, not even as contrast partners.
+- **World seed.** Seeds used by any F6 or F7 primary are reserved for `test_held_out`. Other cases on a reserved seed are dropped with their partners (reason "seed reserved for held-out"). The remaining seeds go to `validation` (hash bucket below 0.15), `test_in_distribution` (0.15 to 0.30) or `train` (the rest) by a seeded hash. No world seed appears in two splits.
+- **Twin groups.** A primary and its partners always share a split.
+- **Agent source.** The four splits above are scripted runs. Live runs form the separate live test split when they are recorded.
+
+Dropped records are listed in `dropped.tsv` (case ID and reason).
+
+Splits v1 (seed 2026) on dataset v2 (primary cases / partner records):
+
+- `train` 2723 / 2472
+- `validation` 550 / 478
+- `test_in_distribution` 560 / 514
+- `test_held_out` 960 / 948 (F6 480, F7 480)
+- dropped: 822 held-out partners; 12 seed-reserved records (7 primaries, 5 partners)
+
+Compound cases: 16 train, 2 validation, 3 `test_in_distribution`. Per-split counts per kind, label and behaviour are in the split manifest.
+
+Splits v2 (seed 2028) on dataset v3 (primary cases / partner records):
+
+- `train` 1133 / 2335
+- `validation` 250 / 507
+- `test_in_distribution` 256 / 517
+- `test_held_out` 400 / 1208 (F6 compounds 200: 40 with each of F1–F5; F7 compounds 200: 50 with each of F1, F3, F4, F5)
+- dropped: 1,788 held-out partners; 4 seed-reserved records (1 primary, 3 partners)
+
+The dropped primary is `case-001703` (stale account record, single fault): its world seed 2,055,083 was also drawn by a held-out compound case, so the seed rule drops it with its partners. The plan draws 2,040 seeds from a million, so about two such collisions were expected; the case is accepted as dropped rather than regenerated, and the in-distribution splits hold 1,639 of the planned 1,640 cases.
+
+Undetermined primary cases per split: train 30, validation 8, `test_in_distribution` 8, `test_held_out` 8.
+
+### Live test split (task 10)
+
+- **Plan:** 30 cases per case kind for all 10 kinds (held-out families included), variants cycled evenly, on world seeds from 1,000,000 to 1,999,999 (dataset seeds are below 1,000,000, so no live world appears in another split). Export: `python -m packages.support_evaluator.live --out artifacts/milestone-2/live-test-v1 --per-kind 30 --seed 2027`.
+- **What the recording script sees:** `specs/run-NNNN.json` only (world spec and ticket ID, shuffled, neutral run IDs). Kinds, variants and truth stay in `evaluator/live_plan.jsonl`.
+- **Recording:** `scripts/record_live_test.py`, model `gpt-4.1-mini-2025-04-14`, `store=False`, 300 output tokens per call, 10 turns per run, a hard dollar cap checked before every call, a resumable ledger. Run only by the operator.
+- **Labels:** each live run is replayed from its captures on its world and labelled by the same execution-based labeler. The final label always comes from the live run's own evidence and final state. The labeler's first two rules (unexplained absence, outcome correct) need no re-run. Recovery verification (sandbox re-runs) and probe labels (counterfactual hypotheses) need an agent to re-run; for those, the labeler uses every scripted behaviour whose compact evidence on that world equals the live run's. Each live run falls into exactly one category:
+  - **proxy-matched:** at least one scripted behaviour matches and all matching behaviours give the same label. The run gets its full label (final decision and probe sequence).
+  - **final-label-only:** no matching behaviour (or matching behaviours disagree), but the final label needs no re-run (`no_intervention` or `insufficient_evidence`). It counts in headline decision metrics. It has no probe-sequence label: any probe sequence that ends in the correct decision is scored correct, and its probe count is still reported as a cost.
+  - **excluded:** no matching behaviour (or disagreeing labels) and the final label needs recovery verification. Reported separately, never in headline metrics; the label-confirmation phase below may later verify these live.
+  - **live-confirmed (target ticket):** an excluded run whose candidate recovery was applied and confirmed by one live re-run of the target ticket. Its label is that recovery. It counts in headline metrics and has no probe-sequence label (scored like final-label-only runs).
+
+  Counts of each category are reported per family. In the 10-run pilot, 9 runs were proxy-matched; the tenth (tier format drift, abbreviation, routed correctly by the live model, which no scripted behaviour does) is final-label-only. The 3 Milestone 1 live examples all match `trust`.
+- **Label confirmation (separate phase, operator-run after a cost estimate and approval):** for each live run whose label is a recovery, apply that recovery in a fork and re-run the live model once. Runs where the live model still fails are flagged and reported. It shares the $1.00 total cap and ledger with recording.
+  - **Scope:** confirmation re-ran only the target ticket. The labeller's regression checks (re-running the agent on the other tickets after a recovery) rely on scripted proxies for live runs and were not run live.
+  - **Selection:** proxy-matched recoveries that re-run the agent (114), excluded compound F2 runs where matching proxies disagreed only between `restore_from_source` and `abstain` (4, confirming `restore_from_source`), and excluded runs without a matching behaviour (2, confirming the labeller's smallest verified recovery with `trust` re-running). `reroute` labels need no agent re-run and were not confirmed live.
+  - **Result (live test v1):** 120 of 120 confirmed, $0.1037; no call reached the output limit. The 6 excluded runs became live-confirmed (target ticket): 4 stale-account-record, 2 missing-account. Final categories: training families 234 proxy-matched and 6 live-confirmed; held-out families 43 proxy-matched and 17 final-label-only; none excluded. Total live spend $0.3309 of the $1.00 cap.
+- **Output limit:** any live call whose output reaches the 300-token limit is flagged (read from the capture's usage). None did in the pilot (maximum 28 tokens).
+- **Reporting:** live results report training families and held-out families (F6, F7) separately.
+- **Baseline episodes on the live split** (`packages/support_evaluator/live_episodes.py`): each live run's world is rebuilt from the plan and checked against its spec, and its captures are replayed exactly (no API call), so a policy starts from the live run's own end state; the first input must equal the live record's. Episodes are tier 1. Proxy-matched runs are verified by execution with a matching scripted behaviour standing in for the live agent where a recovery re-runs the task; final-label-only runs (`no_intervention`, `insufficient_evidence`) are settled without any re-run; live-confirmed runs accept only the confirmed recovery; excluded runs are never scored. Runs without a probe-sequence label (17 final-label-only, 6 live-confirmed) count as undetermined for probe-efficiency metrics. Replaying every label offline through the runner scores all 300 runs correct (277 proxy-matched, 17 final-label-only, 6 live-confirmed; 60 held out).
+- **Low-count families:** results are reported per family and per variant with counts, never pooled only. Scripted proxies suggest the live model will rarely fail on misleading ticket text (F4, only text-following fails) and on tier format drift (F7, case and whitespace variants are easy to normalise), so their faulty-run counts may be small.
+
+## Metrics
+
+**Primary endpoints.** For each tier, on `test_in_distribution` and on `test_held_out` separately: **decision accuracy**, and **wrong interventions on healthy runs**. On the live split, the same two. Every other metric is secondary (descriptive; no claim rests on it).
+
+**Claim rule.** A system is "better" than another on a primary endpoint only if the paired bootstrap 95% interval for the difference, computed on the same cases, excludes zero in its favour (higher accuracy, or fewer wrong interventions); otherwise the result is reported as "no significant difference". The bootstrap (`paired_bootstrap` in `metrics.py`) resamples cases with replacement 10,000 times (seed 2026), applies each draw to both systems, and takes the 2.5th and 97.5th percentiles of the difference A − B; for wrong interventions it resamples the healthy cases. The two systems must have been scored on exactly the same cases. No correction for multiple comparisons is applied; every comparison made is reported.
+
+Implemented in `packages/support_evaluator/metrics.py` (`summarize`); `python -m packages.support_evaluator.metrics --rows <rows.jsonl> --dataset <dir> --out <summary.json>` re-summarizes recorded rows. Metrics are computed on the primary cases of one split and one tier at a time (partners never count). Every rate is reported as k / n with a Wilson 95% interval.
+
+Notation: R is the set of scored episodes; for an episode r, *label(r)* is its label's first non-probe action (tier 2: the first target), *first(r)* is the policy's first non-probe action (its first recovery, or its final decision), *correct(r)* is the execution check of `score` (tier 1 `verify_label`, tier 2 `verify_sequence`; failed recovery calls are wrong, see below), and *probes(r)* is its probe count. Healthy runs H = {r : label(r) = `no_intervention`}; faulty runs with a fix F = {r : label(r) is a recovery}.
+
+Decision metrics (every r in R, undetermined cases included):
+
+- **decision accuracy** = |{r ∈ R : correct(r)}| / |R|
+- **exact match** = |{r : the policy's non-probe actions equal the label's, in order}| / |R| (tier 2: the whole sequence, an implicit stop after one recovery included)
+- **verified recovery rate** = |{r ∈ F : correct(r) and r applied a recovery}| / |F|
+- **wrong interventions on healthy runs** = |{r ∈ H : r applied any recovery}| / |H|
+- **decision recall and precision**, for d ∈ {`insufficient_evidence`, `abstain`, `no_intervention`}: recall = |{r : label(r) = d, correct(r)}| / |{r : label(r) = d}|; precision = |{r : first(r) = d, correct(r)}| / |{r : first(r) = d}|
+- **invalid actions** = |{r : the episode ended on an unparsable or invalid action}| / |R|; failures are also counted by type, and episodes with a failed recovery call are counted.
+
+Probe-efficiency metrics (determined cases D = {r ∈ R : `probe_label.determined`} only; |R \ D| is reported as `undetermined` with them):
+
+- **mean probes** = Σ_{r ∈ D} probes(r) / |D|; **mean probes on healthy runs** over D ∩ H (a cost metric)
+- **oracle mean probes** = Σ_{r ∈ D} o(r) / |D|, where o(r) is the length of the probe oracle's sequence; **mean excess probes** = Σ_{r ∈ D} (probes(r) − o(r)) / |D| (negative when the policy probes less than the oracle)
+- **probe budget exceeded** = |{r : the policy asked for a fifth probe}| / |R|
+
+Tier 2 sequence metrics: **exact sequence match**; **longer than label** = |{r : correct(r), more recoveries than the label}| / |{r : the label has a recovery}|; **stopped after one of two** = |{r : one recovery then a closing action}| / |{r : the label has two recoveries}|; **two-recovery labels** = accuracy on the cases whose label has two recoveries.
+
+Groups (each with decision accuracy, mean probes over its determined cases, and its undetermined count): every family (`case_kind`; compounds as `compound:<kind>+<kind>`), training families and held-out families separately, and the proactive-detection group (single-fault F2 and F6 cases). Slices from `tags.jsonl` are listed under "Evaluation slices"; the length-matched slice reports accuracy within first-input token deciles of R (decile edges from R) and a **length-reweighted accuracy** = Σ w(r)·correct(r) / Σ w(r), with w(r) = P(bin(r)) / P(bin(r) | label(r)) (the whole label for tier 2), so every label has the overall length distribution.
+
+All metrics are reported per family, with held-out families reported separately.
+
+**Failed recovery calls.** A proposed recovery whose tool call fails (an unknown ticket, queue or account, or any other environment error) is scored wrong in both tiers and at either step of a tier 2 sequence, even if a later step would verify, and the reason is recorded in the row's `recovery_failures`. `set_mapping` with a customer reference that does not exist yet is not a failed call: the directory accepts new references by design, so it is an ordinary change scored by execution. This rule was added after a `gpt-4.1` reroute to an unknown queue stopped a run; re-scoring every recorded episode (rules v1 and `gpt-4.1` on both tiers) changed no result. One `gpt-4.1` prompt version 1 tier 2 episode (`case-002287`) had a failed first step (unknown account) and was already scored wrong.
+
+**Undetermined cases.** A case is undetermined when no probe sequence within the budget separates every hypothesis consistent with the run (`probe_label.determined` is false). Undetermined cases are included in decision metrics: their final labels come from execution, not from the probe oracle. They are excluded from probe-efficiency metrics (probe counts and comparisons with the oracle's probe sequence), and their count is reported with every result.
+
+**Proactive-detection families:** F2 (stale account record) and F6 (queue misconfiguration) leave no anomaly in the run itself; only a probe reveals them. Probing runs that look healthy is allowed within the probe budget, and these two families are reported as a separate proactive-detection group.
+
+### Evaluation slices
+
+Metrics are computed on primary cases only; counterfactual partner records never count. Besides the per-family and held-out reports, every method is reported on these evaluator-side slices (defined in `evaluator/tags.jsonl`):
+
+- **Compound cases** (`compound`): a recovery or abstain label that differs from the case's own remedy because a second problem prevents the intended single fix. In dataset v2 these are the 21 stale-account-record (F2) cases with the text-following agent: a true tier claim written before the tier changed becomes false, so after `restore_from_source` the agent still follows the claim and no single recovery verifies; the label is `abstain`. They are kept and reported separately.
+- **Recent-target stress slice** (`target_recent`): faulty cases (for example F2 and F6) whose target account had a recent tier change. The recent-tier-change look-alike is recent by definition and always healthy, so recency carries a small residual association with `no_intervention` (shortcut-audit lift about +0.04). This slice detects a learned "recent → healthy" shortcut. Recency is not visible in the first step's input; it appears only after probing.
+- **Compound pairs** (`compound_pair`, tier 2): planned compounds of two faults (1,400 of the 2,040 dataset v3 primary cases). The `compound` tag keeps its tier 1 meaning on tier 2 (a label that differs from the case's own remedy), so it is not the compound-pair slice.
+- **Length-matched slice** (`first_input_tokens`): input length predicts the label well above chance (lift about +0.22) because it reflects run structure (withheld records, errors, early stops). Results are also reported within first-input token-length bins (deciles), and reweighted so every label has the same length distribution, to separate genuine reasoning from length cues.
+
+### Known residual: recent-tier-change conversions
+
+The recent-tier-change look-alike normally uses an account the generator already changed recently, so it adds nothing to history and history cannot separate it from F6. In about 5% of worlds no such account has tickets, and the injector converts one (one event, consistent with its source record). On that ticket the F6 counterfactual's account then has no recent change, so history does separate them. In dataset v2, 12 of 400 recent-tier-change primary cases are resolved this way; the other 388 use `inspect routing_policy`.
+
+## Baselines
+
+- extended rules (built on training families only)
+- an untrained small model
+- a strong general model: `gpt-4.1`
+
+Every baseline is a policy over compact evidence, run by `packages/support_evaluator/episodes.py`: the policy gets the dataset's first input, each probe runs through the probe gateway on a fork of the run's end state (so probing never changes the scored state), and the episode ends at the first decision or recovery, or with a failure when the policy asks for a fifth probe or returns an invalid action. The final action is scored with the labeller's `verify_label` on the unprobed end state: decisions must be right, recoveries must verify by execution (any verified recovery counts; exact match with the smallest label is reported separately). The metric formulas are defined under "Metrics".
+
+### Rules baseline (v1)
+
+`packages/hetren_baselines/rules.py`, `RULES_POLICY_VERSION = 1`. Written and debugged on the train split only, then frozen and run once on validation. It has no rules for the held-out families. It stays frozen: it is not tuned on validation, on later dataset tiers, or on test results.
+
+On tier 2, rules v1 is run as a single-recovery policy: its episode ends at its first recovery, which counts as an implicit stop. It cannot perform two-step recoveries by design, so its results on cases whose label needs two recoveries are reported as a baseline limitation, not as a rules failure to fix.
+
+Validation (splits v1, 550 primary cases):
+
+| metric | rules v1 |
+|---|---|
+| decision accuracy | 99.6% (548/550) |
+| verified recovery rate | 100% (254/254) |
+| wrong interventions on healthy runs | 0% (0/171) |
+| `insufficient_evidence` recall / precision | 100% / 100% (93) |
+| `abstain` recall / precision | 93.8% (30/32) / 100% |
+| exact match with the label | 82.7% |
+| mean probes (all / healthy) | 1.43 / 2.31 (probe oracle: 0.61 / 0.88) |
+| compound slice / recent-target faulty slice | 0/2 / 114/114 |
+
+All per-family accuracies are 100% except stale account record (64/66): both errors are compound cases (text-following agent), where the rules restore the account and the label is `abstain`. In-distribution validation is therefore nearly solved by hand-written rules; decision accuracy there does not separate methods, and differences must come from probe cost, compound cases, held-out families, live runs, and the harder tier (dataset v3, tier 2).
+
+Tier 2 validation (splits v2, 250 primary cases; single-recovery policy):
+
+| metric | rules v1 |
+|---|---|
+| decision accuracy | 86.0% (215/250) |
+| exact sequence match | 73.6% (184/250) |
+| verified recovery rate | 75.5% (105/139) |
+| wrong interventions on healthy runs | 0% (0/54) |
+| `insufficient_evidence` recall / precision | 100% / 100% (31) |
+| `abstain` recall / precision | 96.2% (25/26) / 100% |
+| `no_intervention` recall / precision | 100% (54/54) / 91.5% (54/59) |
+| mean probes (all / healthy) | 1.51 / 2.44 |
+| single-fault cases / compound pairs | 99.0% (100/101) / 77.2% (115/149) |
+| two-recovery labels | 0/23 (by design) |
+| 0 / 1 / 2 distractors | 84.5% (82/97) / 86.3% (69/80) / 87.7% (64/73) |
+
+Its errors are compound pairs: the two-recovery labels it cannot reach by design, and pairs where its first fix is not the label's (mapping swap with stale record 0/6, with transient error retried 1/8, with missing account 1/7). Distractors do not lower its accuracy.
+
+### Model baseline prompt (`gpt-4.1` and the small model)
+
+Every model baseline uses one prompt module, `packages/hetren_baselines/prompt.py` (current `PROMPT_VERSION = 2`; every version stays reproducible and its text is pinned by a test). Each policy call is stateless: the system prompt describes the task, the generic action catalog (every verb with its description and argument schema), the probe budget, the decision definitions and, in tier 2, the rules for a second recovery; the user message is the step's compact evidence exactly as `render_evidence` writes it, with probe results and applied recoveries. The prompt names no fault family, case kind or agent behaviour. The reply is stripped of surrounding whitespace and one enclosing Markdown code fence (the same for every model) and must then parse with `parse_action`; anything else is an invalid-action failure. The version 2 system prompt is 1,466 o200k_base tokens in tier 1 and 1,559 in tier 2 (1,449 and 1,542 `Qwen/Qwen3-4B-Instruct-2507` tokens); version 1 was 1,268 and 1,361.
+
+**Prompt versions.** Each version is measured and reported separately on validation, and the strongest becomes the baseline prompt for the test splits; no prompt is changed after test results are seen.
+
+- **Version 1:** the output format given only as `{"action": "<probe|recover|decide>", "verb": "<verb>", "args": {...}}`.
+- **Version 2 (format fix only):** every verb is listed with its action type (`- inspect (action "probe"): ...`), each action type has one example (placeholder IDs), and the format line says that `action` is the action type, never the verb. Nothing else changes (a test checks that removing these additions gives version 1 exactly), probing gets no extra encouragement, and parsing stays strict.
+- **Version 3 (not built):** a version explaining generically what each probe reveals was considered and set aside on 2026-11-02. The catalog already says what each probe returns; what `gpt-4.1` lacks is diagnostic know-how (which inconsistency calls for which fix), which cannot be taught generically without describing the fault families, and the same hints would enter the small model's prompt.
+- **Test-split baseline prompt:** version 2 is the `gpt-4.1` baseline prompt for the test splits (and for the untrained and fine-tuned small model).
+- **Planned Milestone 3 experiment (not built):** a fairer stronger baseline, `gpt-4.1` and `gpt-6-luna` with few-shot examples drawn only from the train split (never hand-written diagnostic hints), measured on validation like every prompt version. `gpt-6-luna` is decided in Milestone 3 after a 20-case pilot.
+
+### `gpt-4.1` baseline
+
+`python -m packages.support_evaluator.gpt41_baseline`, run only by the operator: model `gpt-4.1-2025-04-14`, Responses API (standard, not Batch), `store=False`, temperature 0, 128 output tokens per call. It runs on all 800 validation primary cases: 550 tier 1 (splits v1 on dataset v2) and 250 tier 2 (splits v2 on dataset v3), with one `--max-usd 12` cap and one ledger for both tiers. Before every call the projected spend (provider-reported spend so far, plus the exact o200k_base count of both messages and a 10-token formatting allowance with a 10% margin, plus the full output limit) is checked against the cap; if it would pass, nothing is sent and the run stops. Cached input is charged at the full price in the cap. Hitting the cap or an API error discards the current episode (it is re-run on restart) and never counts as a model failure. Every call is logged with its tier, dataset, usage and reply, and calls that reach the output limit are flagged. Case IDs repeat across datasets (the tier 1 and tier 2 validation splits share 84), so calls are matched to cases by tier, dataset and case ID together, and an output directory holds one dataset per tier. A case whose calls were paid but which was never scored (the run stopped while scoring it) is scored on restart from its logged replies, without new calls.
+
+Measured on the validation inputs along the labelled path (the fewest calls an episode can take): tier 1 885 calls, 1,365,791 input and 24,322 output tokens; tier 2 785 calls, 1,347,013 and 21,171. At $2.00 / $8.00 per million input / output tokens this is $5.79 without caching ($2.76 with automatic prompt caching of the system prompt); if every case used the most calls allowed (5 in tier 1, 6 in tier 2), $20.49. The model is expected to probe more than the labels, so spend falls between these, about $9 without caching.
+
+**Validation run, prompt version 1** (2026-11-02; 800 cases, 867 calls, $2.858 including a 5-case pilot; no API errors or discarded episodes, no reply at the output limit; prompt caching applied to 87 calls):
+
+| | tier 1 (550) | tier 2 (250) |
+|---|---|---|
+| decision accuracy, strict (protocol scoring) | 18.7% (103) | 7.2% (18) |
+| episodes ended by an invalid action | 193 | 206 |
+| lenient lower bound (see below) | 37.3% (205) | 21.2% (53) |
+| cases with any probe | 9 | 20 |
+
+- **Format failures:** 399 of 867 replies (46%) put the verb in the `action` field (for example `{"action": "insufficient_evidence", "verb": "insufficient_evidence", ...}`), which `parse_action` rejects. This is a weakness of the version 1 prompt, which gave the format without an example; it led to version 2.
+- **Lenient lower bound** (diagnostic only, never a headline metric): every verb belongs to exactly one action type, so an invalid reply whose intent is unambiguous was re-scored offline with the type taken from its verb. In tier 1, 102 of the 193 become correct and 83 stay wrong; 8 were probes, whose episodes would have continued and cannot be scored without new calls. In tier 2, 35 become correct and 91 stay wrong; 80 were probes or first recoveries that would have continued.
+- **`gpt-4.1` rarely probes:** it probed in 9 of 550 tier 1 cases and 20 of 250 tier 2 cases, and otherwise decided from the run alone. In all 47 tier 1 cases where both the label and its reply were `set_mapping`, it named the right customer reference but the wrong account: without `find_owners` it could not know the true owner. It also chose `no_intervention` on stale records that only a probe reveals (34) and `insufficient_evidence` on transient tool errors labelled `rerun` (60).
+
+**Validation run, prompt version 2** (2026-11-02; 1,508 calls, $5.691 including a 5-case pilot, cap $9; no API errors, no unparsable reply, no reply at the output limit; prompt caching applied to 24 calls):
+
+| | rules v1 | `gpt-4.1` v1 | `gpt-4.1` v2 |
+|---|---|---|---|
+| tier 1 decision accuracy (550) | 99.6% (548) | 18.7% (103) | 32.2% (177) |
+| tier 2 decision accuracy (250) | 86.0% (215) | 7.2% (18) | 17.6% (44) |
+| tier 1 exact match | 82.7% | 12.5% (69) | 20.4% (112) |
+| tier 2 exact match | 73.6% (184) | 2.8% (7) | 15.6% (39) |
+| tier 1 cases with a probe / mean probes | – / 1.43 | 9 / 0.02 | 239 / 0.50 |
+| tier 2 cases with a probe / mean probes | – / 1.51 | 20 / 0.08 | 193 / 1.31 |
+
+- **Format:** every version 2 reply parsed. The format fix raised accuracy, and probing, but the model mostly probes with `resolve`, `inspect` and `retry`; `find_owners` (which reveals a reference's true owner) was used 21 times, all in tier 2, `compare_with_source` twice and `history` never. In tier 2, 12 of the 14 correct recoveries came from episodes that used `find_owners`.
+- **Tier 1 recoveries: 0 of 254 correct.** Mapping errors: 53 times `set_mapping` with the right reference and the wrong account, never after `find_owners`; 53 healthy runs also got an unneeded `set_mapping`. Stale records: all 54 answered `no_intervention` (only `compare_with_source` or `history` reveals them). Transient errors labelled `rerun`: 52 `no_intervention` and 26 `insufficient_evidence`, despite 58 retries. `reroute` labels: mostly `abstain` (29). Three reroutes named queues that do not exist (scored wrong under the failed-recovery rule).
+- **Tier 1 decisions:** `no_intervention` 112/171, `insufficient_evidence` 65/93, `abstain` 0/32 (answered `insufficient_evidence`).
+- **Tier 2:** 0 of 23 two-recovery labels; after one recovery the model always stopped (85 `no_intervention`, 1 `abstain`); 4 episodes asked for a fifth probe.
+- **Spend:** `gpt-4.1` validation runs together $8.549 (version 1 $2.858, version 2 $5.691).
+
+**Test-split cost (estimate for planning).** The version 2 baseline on every test split runs after the protocol freeze and must finish before 2027-01-14. Estimated from the labelled path on each split (version 2 system prompt, exact o200k_base counts), scaled by what version 2 actually spent relative to its labelled path on validation (0.92 in tier 1, 0.85 in tier 2):
+
+| split | cases | expected | worst case (most calls allowed) |
+|---|---|---|---|
+| tier 1 `test_in_distribution` (splits v1) | 560 | $3.15 | $13.55 |
+| tier 1 `test_held_out` (splits v1) | 960 | $4.60 | $22.31 |
+| tier 2 `test_in_distribution` (splits v2) | 256 | $2.68 | $9.05 |
+| tier 2 `test_held_out` (splits v2) | 400 | $3.93 | $13.88 |
+| live test v1 (tier 1 format) | 300 | $1.73 | $7.26 |
+| total | 2,476 | $16.08 | $66.05 |
+
+The live split runs with `--live artifacts/milestone-2/live-test-v1` instead of `--dataset` and `--split` (see "Live test split").
+
+**Deprecation.** OpenAI deprecated `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` on 2026-10-14; both are removed from the API on 2027-01-14 (recommended replacement `gpt-6-luna`). On 2026-11-02 the API's model list (`GET /v1/models`) confirmed `shutdown_date` 2027-01-14 for both, and none for `gpt-6-luna`. The live agent model (`gpt-4.1-mini-2025-04-14`) is therefore deprecated. All existing captures (Milestone 1 examples, live test v1 and its label confirmations) replay offline without the API and are kept unchanged. Any new `gpt-4.1` or `gpt-4.1-mini` run, including the `gpt-4.1` baseline on the held-out test, must finish before 2027-01-14.
+
+### Small model baseline and evaluation settings
+
+- **Model:** `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`, Apache-2.0) is the primary model for the untrained baseline and Milestone 3 fine-tuning; `HuggingFaceTB/SmolLM3-3B` (revision `a07cc9a04f16550a088caea529712d1d335b0ac1`, Apache-2.0) is the backup.
+- **Hardware:** one Kaggle T4 (16 GB). Kaggle's T4 accelerator has two GPUs; the notebook makes only the first visible (`CUDA_VISIBLE_DEVICES=0`), and the runner stops unless exactly one GPU is visible and records its name.
+- **Evaluation settings, identical for the untrained baseline and the fine-tuned model:** fp16 weights (T4 has no bf16); for the fine-tuned model, QLoRA adapters merged into the fp16 base before evaluation; the model's own chat template (non-thinking; for SmolLM3, reasoning off); greedy decoding (`do_sample=False`), `max_new_tokens=128`, no repetition penalty; the same prompt module as the `gpt-4.1` baseline; the output is parsed with `parse_action`, and anything unparsable is an invalid-action failure. Library versions are recorded with each run.
+- **Untrained baseline run (Kaggle):** `notebooks/milestone-2/qwen_untrained_baseline.ipynb` runs `python -m packages.support_evaluator.local_model_baseline` on the same 800 validation cases as `gpt-4.1`, one generation at a time (batched fp16 decoding can differ slightly from unbatched), with the code and data packed by `scripts/build_kaggle_bundle.py` (a commit plus datasets v2 and v3, each data file checked against its committed manifest). Every call is logged with its prompt and reply tokens, whether its raw logits were finite, whether it reached the token limit, and its time; model, revision, dtype, prompt version and library versions are recorded, and a restart with different settings stops.
+- **fp16 smoke test first:** 20 seeded cases (10 tier 1, 10 tier 2). It passes when every generated step's logits are finite and no reply is empty; unparsable replies are reported but count as the model's failures, not a precision failure. If it fails, the full run does not start, and any change of precision (for example fp32 across two T4s) is a protocol decision.
+- **Bundle commit:** from Milestone 3 on, `metadata.json` records the code's commit (`bundle_commit`, read from the bundle's `BUNDLE.json`); the runner stops if it is unknown. The Milestone 2 run predates this; its commit (beb9b5e) is established from the fields its outputs carry.
+
+**Untrained validation run** (Kaggle, 2026-11-02, bundle beb9b5e; one Tesla T4, fp16, prompt version 2; Python 3.13.16, torch 2.11.0+cu130, transformers 4.56.2, accelerate 1.10.1, tokenizers 0.22.2; about 3 hours, 5.0 s per call on average). The fp16 smoke test passed (no non-finite logits, no empty reply); over all 1,705 calls no logits were non-finite, no reply was empty and none reached the 128-token limit (longest 41 tokens; longest prompt 2,287 tokens). All 550 tier 1 and 250 tier 2 validation cases were scored; re-scoring every row with the current scorer changed nothing. Results (Wilson 95% intervals; probe metrics leave out the 8 undetermined tier 2 cases):
+
+| | rules v1 | `gpt-4.1` v2 | Qwen3-4B untrained |
+|---|---|---|---|
+| tier 1 decision accuracy | 99.6% | 32.2% [28.4, 36.2] | 28.2% [24.6, 32.1] |
+| tier 1 exact match | 82.7% | 20.4% | 25.6% |
+| tier 1 verified recovery rate | 100% | 0.0% | 8.7% |
+| tier 1 wrong interventions on healthy runs | 0.0% | 34.5% | 0.0% |
+| tier 1 invalid actions | 0% | 0% | 23.4% |
+| tier 1 mean probes (oracle 0.61) / fifth-probe requests | 1.43 / 0 | 0.50 / 0 | 0.98 / 23 |
+| tier 2 decision accuracy | 86.0% | 17.6% [13.4, 22.8] | 15.2% [11.3, 20.2] |
+| tier 2 exact sequence match | 73.6% | 15.6% | 14.8% |
+| tier 2 verified recovery rate | 75.5% | 10.1% | 4.3% |
+| tier 2 wrong interventions on healthy runs | 0.0% | 48.1% | 3.7% |
+| tier 2 invalid actions | 0% | 0% | 14.8% |
+| tier 2 mean probes (oracle 1.54) / fifth-probe requests | 1.52 / 0 | 1.31 / 4 | 1.32 / 30 |
+| two-recovery labels (tier 2) | 0% | 0% | 0% |
+
+The untrained small model is level with `gpt-4.1` on decision accuracy (overlapping intervals) with a different error profile: it almost never intervenes on a healthy run, but 166 of its 1,705 replies are invalid (118 put a verb under the wrong action type, such as `recover` with `retry`; 45 name a verb outside the catalog, mostly the agent's own tool `lookup_account`), it often exhausts the probe budget, its 51 failed recovery calls all name accounts that do not exist, and it never chooses `abstain` correctly. These are the Milestone 3 training targets alongside the diagnostic know-how both models lack.
+
+## Test-split evaluation
+
+**Systems** (declared before any test run): rules v1 (`RULES_POLICY_VERSION = 1`), `gpt-4.1-2025-04-14` with prompt version 2, untrained `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`) with prompt version 2, and the fine-tuned Qwen3-4B (Milestone 3) with prompt version 2. Every system runs on the same splits: tier 1 `test_in_distribution` (560) and `test_held_out` (960) of splits v1, tier 2 `test_in_distribution` (256) and `test_held_out` (400) of splits v2, and live test v1 (300), each with its tier's settings (rules v1 as a single-recovery policy on tier 2; the small models with the settings under "Small model baseline and evaluation settings").
+
+**Access rules.**
+
+- Checkpoints, prompts, decoding and every other setting are chosen on validation only. No test result is used to choose, tune or change anything.
+- Each declared candidate is evaluated on each test split once. A run that fails or stops (cap, API error, crash) is resumed or repeated only to complete the same declared evaluation, never to change it, and the failure is logged.
+- Every test run is logged in `docs/milestone-2/TEST_RUN_LOG.md`, committed to the repository, including failed, stopped and aborted runs, before its results are used.
+- Any further system or setting (for example the Milestone 3 few-shot `gpt-4.1` and `gpt-6-luna` experiments) is added as a dated amendment below before its first test run.
+
+## Spending rules
+
+Live budget:
+
+- about 300 live `gpt-4.1-mini` test runs;
+- a `gpt-4.1` baseline on the 800 validation cases (550 tier 1, 250 tier 2), standard API, hard cap $12 for both tiers together, with its own ledger. It runs on validation in Milestone 2 and on the held-out test only after this protocol is frozen, as the first step of Milestone 3, before the model's removal on 2027-01-14. The Batch API was not used: episodes are interactive (each probe result feeds the next call), so Batch would need one batch round per step.
+- the `gpt-4.1` prompt version 2 baseline on every test split and the live split (2,476 cases: tier 1 and tier 2 `test_in_distribution` and `test_held_out`, and live test v1), after the freeze and before 2027-01-14, with one hard cap of $24 and its own ledger (estimate under "`gpt-4.1` baseline").
+
+Before any step that costs money, the operator is told what will run, the exact token estimate measured from real sample cases, the cost, and the hard spending cap the script enforces. Live calls are run only by the operator, never automatically.
+
+## Frozen artifacts
+
+Data files are gitignored; their hashes are committed and checked by tests (dataset and split manifests by re-labelling samples and re-hashing split lists in CI; the live manifest against the local data where it exists).
+
+| artifact | file | sha256 |
+|---|---|---|
+| dataset v2 (tier 1), seed 2026 | `hetren_visible.jsonl` | `c8080f9b4c17ccc32cba759906932d740042e5a03d4986f1660ba336d07a4f09` |
+| | `evaluator/cases.jsonl` | `5338dfaba18e646e77787ed8ac1d51de386a44ceeb71803957175db7ced7db81` |
+| | `evaluator/tags.jsonl` | `4304996a499c310bc5e0ac7adbb0baeb17e39d0b69f7d4547b666548bbeddd66` |
+| dataset v3 (tier 2), seed 2028 | `hetren_visible.jsonl` | `d4dea08176d779d6e087cb0f65890c767aeefe8dec652def745449c6f4ce35f8` |
+| | `evaluator/cases.jsonl` | `1d50180a5ee89da4f8f16942c3c32996428c8a351efc19d7c074fb871c6d03af` |
+| | `evaluator/tags.jsonl` | `819e780262d62b6bfbc48229ec07cc9b2a105e975647b7ff192444d70de492a3` |
+| splits v1 (dataset v2), seed 2026 | `manifest.json` | `894008c01522d249345e5f612a4616c2e714a62cb906e10374edf228983ccaf3` |
+| splits v2 (dataset v3), seed 2028 | `manifest.json` | `ed166891f3fd1bba5b57c96c6053381d7c4d67d7f50abcae31d7554cbe8a85ca` |
+| live test v1, seed 2027 | `hetren_visible_final.jsonl` | `3abadaef0699385f661d36e40a91588f9a76c4db89f77a3d1e0dccd293e640b2` |
+| | `evaluator/live_labels_final.jsonl` | `61510f5aaa2428f0db1f64fb847363a89ab3f3d142887bbc2c0db188f0ca509f` |
+| | `captures/` (all files) | `e18c06b77597890f150b5bce1313a8d8669a1aeecb680be18245eb217ce7c347` |
+
+Full file lists: `docs/milestone-2/dataset-v2.manifest.json`, `dataset-v3.manifest.json`, `splits-v1/manifest.json`, `splits-v2/manifest.json` and `live-test-v1.manifest.json` (which also pins the specs, the plan, the confirmations and their captures).
+
+Versions: world generator `support-world-generator` version 3; dataset format `hetren-support-dataset` version 1; evidence formats `compact-evidence-v1` and `compact-evidence-v2`; rules baseline `RULES_POLICY_VERSION = 1`; model prompt version 2 (version 1 kept; both pinned by hash in `tests/unit/test_hetren_baselines_prompt.py`); `gpt-4.1-2025-04-14` and `gpt-4.1-mini-2025-04-14` (removed from the API on 2027-01-14); `Qwen/Qwen3-4B-Instruct-2507` revision `cdbee75f17c01a7cc42f958dc650907174af0554`. The code commit at the freeze is recorded with the freeze.
+
+## Amendments
+
+Dated changes after the freeze, newest last. Each entry states what changes, why, and which test runs (by their number in `docs/milestone-2/TEST_RUN_LOG.md`) it applies to; it is added before the first test run it affects. The pinned hash is updated in the same commit.
+
+None yet.
+
+## Items completed before freezing
+
+- dataset, split and generator hashes ("Frozen artifacts")
+- complete verb and entity list ("Verbs and entities")
+- per-family labelling details and the results of the labelability checkpoint ("Per-family labelling and the labelability checkpoint")
+- the exact metric formulas and reporting format ("Metrics")
+- primary endpoints, the claim rule and test-set access ("Metrics", "Test-split evaluation")

@@ -10,6 +10,9 @@ environment's queue metadata when the agent is built.
 
 ``MODEL_SETTINGS`` sets ``store=False`` so the provider does not retain live
 responses. The settings are part of every replay key and run manifest.
+``LIVE_TEST_MODEL_SETTINGS`` adds an output-token limit so a spending cap
+can bound every live test call; it is used for the Milestone 2 live test
+split only, so Milestone 1 replay keys are unchanged.
 """
 
 from __future__ import annotations
@@ -24,6 +27,7 @@ from environments.support.fixtures import SupportEnvironment
 AGENT_NAME = "support-agent"
 
 MODEL_SETTINGS = ModelSettings(store=False)
+LIVE_TEST_MODEL_SETTINGS = ModelSettings(store=False, max_tokens=300)
 
 BASE_INSTRUCTIONS = """\
 You are a customer-support routing agent.
@@ -64,19 +68,24 @@ def build_support_agent(
     environment: SupportEnvironment,
     tools: Sequence[Tool],
     model: Model | str,
+    model_settings: ModelSettings = MODEL_SETTINGS,
 ) -> Agent:
+    if model_settings.store is not False:
+        raise ValueError("the support agent requires store=False")
+
     return Agent(
         name=AGENT_NAME,
         instructions=support_instructions(environment),
         tools=list(tools),
         model=model,
-        model_settings=MODEL_SETTINGS,
+        model_settings=model_settings,
     )
 
 
 __all__ = [
     "AGENT_NAME",
     "BASE_INSTRUCTIONS",
+    "LIVE_TEST_MODEL_SETTINGS",
     "MODEL_SETTINGS",
     "build_support_agent",
     "queue_guide",

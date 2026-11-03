@@ -1,0 +1,51 @@
+{
+  "categories": {
+    "final_label_only": 17,
+    "live_confirmed_target": 6,
+    "proxy_matched": 277
+  },
+  "composition": {
+    "mapping_swap/nway": 10,
+    "mapping_swap/redirect": 10,
+    "mapping_swap/swap": 10,
+    "merged_account/default": 30,
+    "mishandled_tool_error/persistent": 15,
+    "mishandled_tool_error/transient": 15,
+    "misleading_ticket_text/claim_false": 15,
+    "misleading_ticket_text/claim_true": 15,
+    "missing_account/deleted_account": 15,
+    "missing_account/unmapped_ref": 15,
+    "queue_misconfiguration/description_swap": 30,
+    "recent_tier_change/default": 30,
+    "stale_account_record/default": 30,
+    "tier_format_drift/abbreviation": 10,
+    "tier_format_drift/case": 10,
+    "tier_format_drift/whitespace": 10,
+    "transient_error_retried/default": 30
+  },
+  "data_location": "artifacts/milestone-2/live-test-v1 (gitignored)",
+  "files": {
+    "captures/": "e18c06b77597890f150b5bce1313a8d8669a1aeecb680be18245eb217ce7c347",
+    "confirm-captures/": "6670035f1b6c6cb1431418c484e0c4e6503013da2230f00ca5212375fdfe48c9",
+    "confirm/": "c3046aea5a8a50f6c3df0e31162e8825352c791e1a505a1b6fb33ab270a1a901",
+    "evaluator/confirmation_results.jsonl": "b470d3107f1116ba1de630da8bbd5eb92d2f7c80c1b413d2ba992dfa6819c9e2",
+    "evaluator/confirmations.jsonl": "49372d47389bff4779ee0b50c5ecf615af4bdc364879912b1c60cda6e634c594",
+    "evaluator/live_labels_final.jsonl": "61510f5aaa2428f0db1f64fb847363a89ab3f3d142887bbc2c0db188f0ca509f",
+    "evaluator/live_plan.jsonl": "eb50e6e3d483744bc06a4fb65c0f36550b30f243926baa079f2dcac078e5cb6a",
+    "hetren_visible_final.jsonl": "3abadaef0699385f661d36e40a91588f9a76c4db89f77a3d1e0dccd293e640b2",
+    "specs": "c1eb9c1dbacc86bfd04685b39d72314936049b9a2d1947c155e368b79e5d5cab"
+  },
+  "format": "hetren-support-live-test",
+  "format_version": 1,
+  "model": "gpt-4.1-mini-2025-04-14",
+  "parameters": {
+    "per_kind": 30,
+    "seed": 2027,
+    "seed_range": [
+      1000000,
+      2000000
+    ]
+  },
+  "regenerate": "python -m packages.support_evaluator.live --out artifacts/milestone-2/live-test-v1 --per-kind 30 --seed 2027",
+  "runs": 300
+}

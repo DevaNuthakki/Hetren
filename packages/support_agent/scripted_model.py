@@ -7,9 +7,22 @@ decides the next step the way the instructions describe:
 read_ticket -> lookup_account -> route_ticket -> one-sentence reply.
 
 It chooses the queue by matching the looked-up account tier against the
-queue guide in the system instructions, and it trusts every observation as
-given. It has no access to faults or expected outcomes, so a corrupted
-identifier mapping leads it to a wrong but internally consistent route.
+queue guide in the system instructions. It has no access to faults or
+expected outcomes.
+
+Behaviours (independent of any fault; the dataset crosses every behaviour
+with every case kind):
+
+- ``trust`` (default): trusts every observation, ignores ticket text, and
+  stops at the first failed or denied call. This is the Milestone 1 model,
+  unchanged, including its model ID.
+- ``retry``: like ``trust``, but repeats a failed call once before stopping.
+- ``give_up``: like ``trust``, but also stops when the account does not name
+  the ticket's customer, or when no queue matches the account tier.
+- ``follow_text``: like ``trust``, but routes by a tier the ticket body
+  claims, if it claims one.
+- ``case_sensitive``: like ``trust``, but matches the account tier against
+  the queue guide exactly, without normalising case.
 """
 
 from __future__ import annotations
@@ -31,6 +44,9 @@ from packages.integrations.openai_agents.provenance import RunProvenance
 
 _TICKET_ID = re.compile(r"\bT-[0-9]{4}\b")
 _QUEUE_LINE = re.compile(r"^- (Q-[A-Z]{3,12}) \(([^)]*)\): (.+)$", re.MULTILINE)
+_GUIDE_TIER = re.compile(r"([a-z]+)-tier")
+
+BEHAVIOURS = ("trust", "retry", "give_up", "follow_text", "case_sensitive")
 
 
 def _field(item: Any, name: str) -> Any:
@@ -61,19 +77,21 @@ def _user_text(input_items: str | list[Any]) -> str:
     return "\n".join(parts)
 
 
-def _tool_results(input_items: str | list[Any]) -> list[tuple[str, dict[str, Any]]]:
-    """(tool name, parsed result) pairs in transcript order."""
+def _tool_calls(input_items: str | list[Any]) -> list[tuple[str, str, dict[str, Any]]]:
+    """(tool name, raw arguments, parsed result) in transcript order."""
     if isinstance(input_items, str):
         return []
 
-    names: dict[str, str] = {}
-    results: list[tuple[str, dict[str, Any]]] = []
+    calls: dict[str, tuple[str, str]] = {}
+    results: list[tuple[str, str, dict[str, Any]]] = []
 
     for item in input_items:
         kind = _field(item, "type")
 
         if kind == "function_call":
-            names[str(_field(item, "call_id"))] = str(_field(item, "name"))
+            calls[str(_field(item, "call_id"))] = (
+                str(_field(item, "name")), str(_field(item, "arguments") or ""),
+            )
         elif kind == "function_call_output":
             call_id = str(_field(item, "call_id"))
             output = _field(item, "output")
@@ -83,17 +101,47 @@ def _tool_results(input_items: str | list[Any]) -> list[tuple[str, dict[str, Any
             except json.JSONDecodeError:
                 parsed = {"error": {"type": "UnparseableToolOutput"}}
 
-            results.append((names.get(call_id, "unknown"), parsed))
+            name, arguments = calls.get(call_id, ("unknown", ""))
+            results.append((name, arguments, parsed))
 
     return results
+
+
+def _tool_results(input_items: str | list[Any]) -> list[tuple[str, dict[str, Any]]]:
+    """(tool name, parsed result) pairs in transcript order."""
+    return [(name, result) for name, _, result in _tool_calls(input_items)]
+
+
+def _guide(system_instructions: str | None) -> list[tuple[str, str]]:
+    return [
+        (queue_id, description)
+        for queue_id, _name, description in _QUEUE_LINE.findall(system_instructions or "")
+    ]
+
+
+def _claimed_tier(body: str, tiers: list[str]) -> str | None:
+    text = body.casefold()
+    found = [
+        (match.start(), tier)
+        for tier in tiers
+        if (match := re.search(rf"\b{re.escape(tier)}\b", text))
+    ]
+    return min(found)[1] if found else None
 
 
 class ScriptedSupportModel(Model):
     hetren_provenance = RunProvenance.SCRIPTED
     hetren_model_id = "scripted-support-model-v1"
 
-    def __init__(self) -> None:
+    def __init__(self, behaviour: str = "trust") -> None:
+        if behaviour not in BEHAVIOURS:
+            raise ValueError(f"unknown behaviour: {behaviour}")
+
+        self.behaviour = behaviour
         self.turns = 0
+
+        if behaviour != "trust":
+            self.hetren_model_id = f"{ScriptedSupportModel.hetren_model_id}+{behaviour}"
 
     def _call(self, call_number: int, name: str, arguments: dict[str, str]) -> ResponseFunctionToolCall:
         return ResponseFunctionToolCall(
@@ -119,14 +167,25 @@ class ScriptedSupportModel(Model):
         system_instructions: str | None,
         input_items: str | list[Any],
     ) -> ResponseFunctionToolCall | ResponseOutputMessage:
-        results = _tool_results(input_items)
+        results = _tool_calls(input_items)
         call_number = len(results) + 1
-        done = {name: result for name, result in results}
+        done: dict[str, dict[str, Any]] = {}
 
-        for name, result in results:
+        for index, (name, arguments, result) in enumerate(results):
             if "error" in result or "denied" in result:
+                same = [i for i, (n, a, _) in enumerate(results) if (n, a) == (name, arguments)]
+
+                if self.behaviour == "retry" and "error" in result:
+                    if same[-1] > index:
+                        continue
+
+                    if len(same) == 1 and index == len(results) - 1:
+                        return self._call(call_number, name, json.loads(arguments or "{}"))
+
                 reason = result.get("denied") or result.get("error", {}).get("type")
                 return self._reply(f"I could not complete the request: {name} returned {reason}.")
+
+            done[name] = result
 
         match = _TICKET_ID.search(_user_text(input_items))
 
@@ -143,14 +202,27 @@ class ScriptedSupportModel(Model):
         if "lookup_account" not in done:
             return self._call(call_number, "lookup_account", {"account_id": ticket["account_id"]})
 
-        tier = str(done["lookup_account"]["observation"]["tier"]).casefold()
+        account = done["lookup_account"]["observation"]
+        exact = self.behaviour == "case_sensitive"
+        tier = str(account["tier"]) if exact else str(account["tier"]).casefold()
+        guide = _guide(system_instructions)
+
+        if self.behaviour == "give_up" and account.get("customer_ref") != ticket.get("customer_ref"):
+            return self._reply("I stopped: the account record does not name the ticket's customer.")
+
+        if self.behaviour == "follow_text":
+            tiers = sorted({t for _, d in guide for t in _GUIDE_TIER.findall(d.casefold())})
+            tier = _claimed_tier(str(ticket.get("body", "")), tiers) or tier
 
         if "route_ticket" not in done:
-            for queue_id, _name, description in _QUEUE_LINE.findall(system_instructions or ""):
-                if f"{tier}-tier" in description.casefold():
+            for queue_id, description in guide:
+                if f"{tier}-tier" in (description if exact else description.casefold()):
                     return self._call(
                         call_number, "route_ticket", {"ticket_id": ticket_id, "queue_id": queue_id},
                     )
+
+            if self.behaviour == "give_up":
+                return self._reply(f"I stopped: no queue matches the {tier} tier.")
 
             return self._reply(f"No queue matches the {tier} tier for {ticket_id}.")
 
@@ -183,5 +255,6 @@ class ScriptedSupportModel(Model):
 
 
 __all__ = [
+    "BEHAVIOURS",
     "ScriptedSupportModel",
 ]

@@ -1,0 +1,227 @@
+{
+  "counts": {
+    "test_held_out": {
+      "by_behaviour": {
+        "case_sensitive": 192,
+        "follow_text": 192,
+        "give_up": 192,
+        "retry": 192,
+        "trust": 192
+      },
+      "by_kind": {
+        "queue_misconfiguration": 480,
+        "tier_format_drift": 480
+      },
+      "by_label": {
+        "abstain": 400,
+        "insufficient_evidence": 160,
+        "no_intervention": 121,
+        "restore_from_source": 279
+      },
+      "partner_records": 948,
+      "partners_by_kind": {
+        "clean_world": 400,
+        "misleading_ticket_text": 30,
+        "recent_tier_change": 118,
+        "stale_account_record": 400
+      },
+      "primary_cases": 960,
+      "slices": {
+        "compound": 0,
+        "target_recent": 295
+      },
+      "twin_groups": 400,
+      "world_seeds": 960
+    },
+    "test_in_distribution": {
+      "by_behaviour": {
+        "case_sensitive": 116,
+        "follow_text": 120,
+        "give_up": 109,
+        "retry": 102,
+        "trust": 113
+      },
+      "by_kind": {
+        "mapping_swap": 63,
+        "merged_account": 74,
+        "mishandled_tool_error": 70,
+        "misleading_ticket_text": 59,
+        "missing_account": 76,
+        "recent_tier_change": 74,
+        "stale_account_record": 74,
+        "transient_error_retried": 70
+      },
+      "by_label": {
+        "abstain": 36,
+        "insufficient_evidence": 108,
+        "no_intervention": 176,
+        "reroute": 47,
+        "rerun": 61,
+        "restore_from_source": 55,
+        "set_mapping": 77
+      },
+      "partner_records": 514,
+      "partners_by_kind": {
+        "clean_world": 125,
+        "mapping_swap": 226,
+        "merged_account": 41,
+        "mishandled_tool_error": 23,
+        "misleading_ticket_text": 3,
+        "recent_tier_change": 18,
+        "stale_account_record": 67,
+        "transient_error_retried": 11
+      },
+      "primary_cases": 560,
+      "slices": {
+        "compound": 3,
+        "target_recent": 194
+      },
+      "twin_groups": 245,
+      "world_seeds": 558
+    },
+    "train": {
+      "by_behaviour": {
+        "case_sensitive": 544,
+        "follow_text": 548,
+        "give_up": 540,
+        "retry": 551,
+        "trust": 540
+      },
+      "by_kind": {
+        "mapping_swap": 351,
+        "merged_account": 334,
+        "mishandled_tool_error": 329,
+        "misleading_ticket_text": 362,
+        "missing_account": 337,
+        "recent_tier_change": 330,
+        "stale_account_record": 339,
+        "transient_error_retried": 341
+      },
+      "by_label": {
+        "abstain": 153,
+        "insufficient_evidence": 439,
+        "no_intervention": 848,
+        "reroute": 228,
+        "rerun": 340,
+        "restore_from_source": 269,
+        "set_mapping": 446
+      },
+      "partner_records": 2472,
+      "partners_by_kind": {
+        "clean_world": 583,
+        "mapping_swap": 1035,
+        "merged_account": 225,
+        "mishandled_tool_error": 145,
+        "misleading_ticket_text": 56,
+        "recent_tier_change": 97,
+        "stale_account_record": 298,
+        "transient_error_retried": 33
+      },
+      "primary_cases": 2723,
+      "slices": {
+        "compound": 16,
+        "target_recent": 962
+      },
+      "twin_groups": 1145,
+      "world_seeds": 2722
+    },
+    "validation": {
+      "by_behaviour": {
+        "case_sensitive": 107,
+        "follow_text": 99,
+        "give_up": 117,
+        "retry": 114,
+        "trust": 113
+      },
+      "by_kind": {
+        "mapping_swap": 66,
+        "merged_account": 71,
+        "mishandled_tool_error": 81,
+        "misleading_ticket_text": 57,
+        "missing_account": 66,
+        "recent_tier_change": 76,
+        "stale_account_record": 66,
+        "transient_error_retried": 67
+      },
+      "by_label": {
+        "abstain": 32,
+        "insufficient_evidence": 93,
+        "no_intervention": 171,
+        "reroute": 45,
+        "rerun": 78,
+        "restore_from_source": 54,
+        "set_mapping": 77
+      },
+      "partner_records": 478,
+      "partners_by_kind": {
+        "clean_world": 114,
+        "mapping_swap": 202,
+        "merged_account": 38,
+        "mishandled_tool_error": 27,
+        "misleading_ticket_text": 11,
+        "recent_tier_change": 17,
+        "stale_account_record": 58,
+        "transient_error_retried": 11
+      },
+      "primary_cases": 550,
+      "slices": {
+        "compound": 2,
+        "target_recent": 218
+      },
+      "twin_groups": 223,
+      "world_seeds": 549
+    }
+  },
+  "dataset": {
+    "files": {
+      "evaluator/cases.jsonl": "5338dfaba18e646e77787ed8ac1d51de386a44ceeb71803957175db7ced7db81",
+      "evaluator/tags.jsonl": "4304996a499c310bc5e0ac7adbb0baeb17e39d0b69f7d4547b666548bbeddd66",
+      "hetren_visible.jsonl": "c8080f9b4c17ccc32cba759906932d740042e5a03d4986f1660ba336d07a4f09"
+    },
+    "generator": {
+      "name": "support-world-generator",
+      "version": 3
+    },
+    "plan": {
+      "kinds": "default",
+      "per_cell": 96,
+      "seed": 2026,
+      "withheld_per_cell": 16
+    }
+  },
+  "dropped": {
+    "held-out partner outside test_held_out": 822,
+    "seed reserved for held-out": 12
+  },
+  "files": {
+    "dropped.tsv": "ad4283c55a165296685f35f8d7d1c47e7056f1fda3763f765ff1f3e26eca60e9",
+    "test_held_out.txt": "ff1a6b9265d78f39ca8c80cb387d83527cafc36c8bcf746ed0f799ca21255fb4",
+    "test_in_distribution.txt": "b8b34d4c78996cbd7c9eb611c74fdd5a929c89cd0175f90856670cdecee3fa8d",
+    "train.txt": "8430b709e8899d65f44d7fe7b9c5e511cbcb018c017816e36c678f0090f1409e",
+    "validation.txt": "89f251d1881127a5ec9aef11a4fabe6f474d3c8e924722b03e3277fa3df1af2a"
+  },
+  "format": "hetren-support-splits",
+  "format_version": 1,
+  "parameters": {
+    "seed": 2026,
+    "test_fraction": 0.15,
+    "validation_fraction": 0.15
+  },
+  "regenerate": "python -m packages.support_evaluator.splits --dataset artifacts/milestone-2/dataset-v2 --out artifacts/milestone-2/splits-v1 --seed 2026 --validation-fraction 0.15 --test-fraction 0.15",
+  "rules": {
+    "agent_source": "scripted cases only; live runs form a separate test split",
+    "held_out_kinds": [
+      "queue_misconfiguration",
+      "tier_format_drift"
+    ],
+    "held_out_seeds_reserved_for": "test_held_out (other cases on them are dropped)",
+    "split_unit": "world_seed",
+    "twin_partners": "same split as their primary; held-out-kind partners dropped outside test_held_out",
+    "use": {
+      "test_held_out": "final evaluation only",
+      "test_in_distribution": "final evaluation only",
+      "train": "training",
+      "validation": "tuning and baselines"
+    }
+  }
+}

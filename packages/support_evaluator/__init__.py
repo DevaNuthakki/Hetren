@@ -17,11 +17,21 @@ from .catalog import (
     fault,
     sensitive_tokens,
 )
+from .cases import (
+    BASELINE_KINDS,
+    CASE_KINDS,
+    CaseTruth,
+    FAMILIES,
+    HELD_OUT_KINDS,
+    LOOKALIKES,
+    case_answer_pairs,
+)
 from .leakage import (
     LeakFinding,
     NEUTRAL_FILE_NAME,
     assert_no_leaks,
     scan_agent_outputs,
+    scan_case_content,
     scan_content,
     scan_identifiers,
 )
@@ -33,7 +43,15 @@ from .registry import (
 
 
 __all__ = [
+    "BASELINE_KINDS",
+    "CASE_KINDS",
+    "CaseTruth",
     "EVALUATOR_FIELD_NAMES",
+    "FAMILIES",
+    "HELD_OUT_KINDS",
+    "LOOKALIKES",
+    "case_answer_pairs",
+    "scan_case_content",
     "EXAMPLES",
     "EvidenceCondition",
     "ExampleSpec",

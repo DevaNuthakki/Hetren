@@ -15,7 +15,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
+from environments.support.fixtures import CLEAN_CHECKS
 from packages.contracts import ContractError
+from packages.support_evaluator.cases import CASE_KINDS, COMPOUND_KIND
 
 
 class SupportVerdict(StrEnum):
@@ -108,6 +110,14 @@ EVALUATOR_FIELD_NAMES = frozenset(
         "regression_expectations",
         "expected_verdict",
         "evaluator_verdict",
+        "case_kind",
+        "case_variant",
+        "family_id",
+        "remedy_if_wrong",
+        "remedy_if_wrong_arguments",
+        "world_changes",
+        "regression_ticket_ids",
+        "distractor_changes",
     }
 )
 
@@ -139,13 +149,22 @@ def answer_pairs() -> frozenset[tuple[str, str]]:
 
 
 def sensitive_tokens() -> frozenset[str]:
-    """Strings that must never appear on an agent- or Hetren-visible surface."""
+    """Strings that must never appear on an agent- or Hetren-visible surface.
+
+    Includes the world clean-check names: each one names what is wrong with
+    a faulty world, so on a Hetren-visible surface it would be an answer.
+    """
     tokens: set[str] = set(EVALUATOR_FIELD_NAMES)
     tokens.update(EXAMPLES)
     tokens.update(FAULTS)
     tokens.update(definition.fault_type for definition in FAULTS.values())
     tokens.update(verdict.value for verdict in SupportVerdict)
     tokens.update(condition.value for condition in EvidenceCondition)
+    tokens.update(CLEAN_CHECKS)
+    tokens.update(CASE_KINDS)
+    tokens.add(COMPOUND_KIND)
+    tokens.add("distractor")
+    tokens.add("twin-")  # twin group IDs are evaluator-only
     return frozenset(tokens)
 
 

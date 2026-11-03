@@ -356,3 +356,25 @@ def test_agent_outputs_may_name_their_decisions():
 )
 def test_agent_outputs_still_fail_field_name_and_token_checks(outputs, expected_kind):
     assert expected_kind in _kinds(scan_agent_outputs(outputs))
+
+
+
+# Clean-check names are answers on Hetren-visible surfaces
+
+
+def test_clean_check_names_are_sensitive_tokens():
+    from environments.support.fixtures import CLEAN_CHECKS
+
+    assert set(CLEAN_CHECKS) <= sensitive_tokens()
+
+
+@pytest.mark.parametrize("surface_name", ["diagnosis_input", "probe_output", "run_record"])
+def test_planted_clean_check_names_are_caught(surface_name):
+    from environments.support.fixtures import CLEAN_CHECKS
+
+    for check in CLEAN_CHECKS:
+        findings = scan_content({surface_name: {"note": f"failed {check}"}})
+        assert [(f.kind, f.detail) for f in findings] == [("sensitive_token", check)], check
+
+        key_findings = scan_content({surface_name: {check: True}})
+        assert ("sensitive_token", check) in [(f.kind, f.detail) for f in key_findings]

@@ -20,10 +20,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Fast job: every push. Repository checks and every test not marked slow.
   repository:
     name: Repository foundation
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 10
+
+    env:
+      # Fixed location for tiktoken's vocabulary file, restored from the cache
+      # so CI does not download it on every run.
+      TIKTOKEN_CACHE_DIR: ${{ github.workspace }}/.cache/tiktoken
 
     steps:
       - name: Check out repository
@@ -37,6 +43,12 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Cache tiktoken vocabulary
+        uses: actions/cache@v6
+        with:
+          path: .cache/tiktoken
+          key: tiktoken-0.14.0-o200k_base
+
       - name: Install CI Python dependencies
         shell: bash
         run: |
@@ -44,7 +56,7 @@ jobs:
 
           python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
-          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'openai', 'openai-agents')]"
+          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('pytest-xdist') == '3.8.0'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; assert version('tiktoken') == '0.14.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'pytest-xdist', 'openai', 'openai-agents', 'tiktoken')]"
 
       - name: Verify required repository boundaries
         shell: bash
@@ -237,13 +249,31 @@ jobs:
 
           sha256sum -c docs/decisions/qualification/evidence/0008-set-e-remediation-2-regression-evidence.sha256
 
+          # The frozen Milestone 2 evaluation protocol (changes only as dated amendments, re-pinned in the same commit).
+          sha256sum -c docs/milestone-2/EVAL_PROTOCOL.sha256
 
-      - name: Run modern portfolio tests
+
+      - name: Verify every test runs in the fast or slow job
         shell: bash
         run: |
           set -euo pipefail
 
-          python -m pytest -q
+          count() { python -m pytest --collect-only -q "$@" | grep -c '::' || true; }
+
+          all=$(count)
+          fast=$(count -m 'not slow')
+          slow=$(count -m slow)
+          echo "tests: all $all, fast $fast, slow $slow"
+
+          test "$slow" -gt 0
+          test $((fast + slow)) -eq "$all"
+
+      - name: Run modern portfolio tests (fast)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pytest -q -m 'not slow' -n auto --dist loadfile
 
       - name: Verify deterministic portfolio demonstration
         shell: bash
@@ -258,3 +288,46 @@ jobs:
           cmp -s /tmp/hetren-demo-1.json /tmp/hetren-demo-2.json
 
           python -c "import json; from pathlib import Path; report=json.loads(Path('/tmp/hetren-demo-1.json').read_text(encoding='utf-8')); expected='e93f258ca3428f8c262d529ae24f2cc8370f72a7e8073ebea5833a9cafc97ffe'; assert report['report_sha256'] == expected; print('portfolio demo report_sha256', report['report_sha256'])"
+
+  # Slow job: dataset regeneration and full case labelling. Pull requests,
+  # pushes to main and manual runs only.
+  slow:
+    name: Slow tests (dataset and labelling)
+    if: github.event_name != 'push' || github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    # The tier 2 (dataset v3) build test labels a tiny dataset; about 12 minutes locally.
+    timeout-minutes: 30
+
+    env:
+      TIKTOKEN_CACHE_DIR: ${{ github.workspace }}/.cache/tiktoken
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      - name: Cache tiktoken vocabulary
+        uses: actions/cache@v6
+        with:
+          path: .cache/tiktoken
+          key: tiktoken-0.14.0-o200k_base
+
+      - name: Install CI Python dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pip install --disable-pip-version-check -r requirements-dev.txt
+
+      - name: Run slow tests
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pytest -q -m slow -n auto --dist loadfile
