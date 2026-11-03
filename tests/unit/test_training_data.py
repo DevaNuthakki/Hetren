@@ -9,12 +9,13 @@ from pathlib import Path
 import pytest
 
 from packages.support_evaluator.training_data import (
-    SOURCES, build, deduplicate, step_kind, target_text, verb_weights,
+    SOURCES, build, build_budget, deduplicate, select_probes, step_kind, target_text, verb_weights,
 )
 
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = ROOT / "docs" / "milestone-3" / "train-v1.manifest.json"
+BUDGET = ROOT / "docs" / "milestone-3" / "train-v1-budget.json"
 
 
 def _example(user, verb, tier=1, action="decide"):
@@ -54,7 +55,29 @@ def test_weights_are_capped_square_roots_of_the_median_ratio_and_never_below_one
     assert weights["very_rare"] == 3.0
 
 
-@pytest.mark.skipif(not all((ROOT / d / "hetren_visible.jsonl").exists() for d, _ in SOURCES.values()),
-                    reason="datasets are gitignored")
+def test_the_budget_keeps_every_non_probe_example_and_a_seeded_share_of_each_tiers_probes():
+    rows = [{"tier": tier, "kind": kind, "case_id": f"case-{tier}-{i}", "step": 0}
+            for tier in (1, 2) for i, kind in enumerate(["probe"] * 10 + ["post_recovery_probe"] * 10 + ["decide"] * 5)]
+    selected, record = select_probes(rows, 0.75)
+
+    assert [r for r in rows if r["kind"] == "decide"] == [r for r in selected if r["kind"] == "decide"]
+    assert record["tiers"]["1"]["probes_kept"] == record["tiers"]["2"]["probes_kept"] == 15
+    assert len(record["dropped"]) == 10 and record["examples"] == len(selected) == 40
+    assert select_probes(rows, 0.75) == (selected, record)  # seeded
+    assert [r for r in rows if r in selected] == selected  # file order kept
+
+
+DATA = pytest.mark.skipif(not all((ROOT / d / "hetren_visible.jsonl").exists() for d, _ in SOURCES.values()),
+                          reason="datasets are gitignored")
+
+
+@DATA
 def test_the_build_matches_the_committed_manifest(tmp_path):
     assert build(tmp_path) == json.loads(MANIFEST.read_text(encoding="utf-8"))
+
+
+@DATA
+def test_the_budget_selection_matches_the_committed_record(tmp_path):
+    build(tmp_path)
+
+    assert build_budget(tmp_path, 0.9707) == json.loads(BUDGET.read_text(encoding="utf-8"))

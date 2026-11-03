@@ -75,3 +75,24 @@ def test_training_examples_start_the_target_exactly_where_generation_starts():
 def test_a_template_that_adds_text_before_the_target_is_refused():
     with pytest.raises(ValueError, match="chat template"):
         encode(FakeTokenizer(think=True), ROW)
+
+
+def test_the_budgeted_epoch_has_1055_steps_and_checkpoints_at_each_quarter():
+    from packages.hetren_baselines.qlora import checkpoint_steps, total_steps
+
+    assert total_steps(16_869) == 1_055
+    assert checkpoint_steps(1_055) == [264, 528, 792, 1_055]
+
+
+def test_only_the_newest_resume_only_checkpoint_is_kept_and_candidates_never_go(tmp_path):
+    from packages.hetren_baselines.qlora import RESUME_EVERY, checkpoint_name, checkpoint_steps, prune_resume_checkpoints
+
+    for name in ("resume-0066", "resume-0132", "checkpoint-0264", "resume-0330"):
+        (tmp_path / name).mkdir()
+
+    assert prune_resume_checkpoints(tmp_path, 330) == ["resume-0066", "resume-0132"]
+    assert sorted(p.name for p in tmp_path.iterdir()) == ["checkpoint-0264", "resume-0330"]
+    assert prune_resume_checkpoints(tmp_path, 528) == ["resume-0330"]
+    assert checkpoint_name(396, False) == "resume-0396" and checkpoint_name(528, True) == "checkpoint-0528"
+    # Every candidate except the last falls on a resume interval, so the candidate is the resume point there.
+    assert [step % RESUME_EVERY for step in checkpoint_steps(1_055)] == [0, 0, 0, 1_055 % RESUME_EVERY]

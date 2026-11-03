@@ -18,10 +18,18 @@ Implements ``EVAL_PROTOCOL.md``, Amendment 1, "Training data":
 
 The builder stops unless the counts are the ones Amendment 1 records.
 
+Epoch budget (Amendment 1, "Epoch budget"): with ``--probe-rate R`` it also
+writes ``train-budget.jsonl``, which keeps every non-probe example and, in
+each tier, round(R × n) of the tier's n probe examples, drawn without
+replacement by ``random.Random("2029:tier<N>:probes")`` from the probe
+examples in file order; kept examples stay in file order. ``budget.json``
+records the rate, the counts and every dropped example (tier, case ID, step).
+
 ``python -m packages.support_evaluator.training_data --out <dir>`` writes
 ``train.jsonl`` and ``manifest.json``; with ``--check <manifest>`` it stops
 unless its manifest equals the committed one
-(``docs/milestone-3/train-v1.manifest.json``).
+(``docs/milestone-3/train-v1.manifest.json``), and with ``--check-budget``
+unless ``budget.json`` equals ``docs/milestone-3/train-v1-budget.json``.
 """
 
 from __future__ import annotations
@@ -32,6 +40,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+import random
 from statistics import median
 import sys
 
@@ -42,6 +51,7 @@ from packages.hetren_evidence import render_evidence
 REPO_ROOT = Path(__file__).resolve().parents[2]
 PROMPT_VERSION = 2
 WEIGHT_CAP = 3.0
+SEED = 2029
 SOURCES = {
     1: ("artifacts/milestone-2/dataset-v2", "docs/milestone-2/splits-v1/train.txt"),
     2: ("artifacts/milestone-2/dataset-v3", "docs/milestone-2/splits-v2/train.txt"),
@@ -130,6 +140,26 @@ def verb_weights(examples: list[dict]) -> dict[str, float]:
     return {verb: min(WEIGHT_CAP, max(1.0, math.sqrt(middle / count))) for verb, count in sorted(counts.items())}
 
 
+def select_probes(rows: list[dict], probe_rate: float, seed: int = SEED) -> tuple[list[dict], dict[str, object]]:
+    """Every non-probe example, and round(rate × n) of each tier's n probe examples; the record of what was dropped."""
+    dropped, record = set(), {"probe_rate": probe_rate, "seed": seed, "tiers": {}}
+
+    for tier in (1, 2):
+        probes = [i for i, r in enumerate(rows) if r["tier"] == tier and r["kind"].endswith("probe")]
+        keep = math.floor(probe_rate * len(probes) + 0.5)
+        kept = set(random.Random(f"{seed}:tier{tier}:probes").sample(probes, keep))
+        dropped |= set(probes) - kept
+        record["tiers"][str(tier)] = {
+            "examples": sum(r["tier"] == tier for r in rows), "probe_examples": len(probes),
+            "probes_kept": keep, "probes_dropped": len(probes) - keep,
+        }
+
+    selected = [r for i, r in enumerate(rows) if i not in dropped]
+    record["examples"] = len(selected)
+    record["dropped"] = [[rows[i]["tier"], rows[i]["case_id"], rows[i]["step"]] for i in sorted(dropped)]
+    return selected, record
+
+
 def build(out: Path, root: Path = REPO_ROOT) -> dict[str, object]:
     out.mkdir(parents=True, exist_ok=True)
     rows, manifest = [], {
@@ -190,19 +220,50 @@ def build(out: Path, root: Path = REPO_ROOT) -> dict[str, object]:
     return manifest
 
 
+def build_budget(out: Path, probe_rate: float) -> dict[str, object]:
+    """``train-budget.jsonl`` from ``train.jsonl`` (written by ``build``) under the epoch budget, and its record."""
+    rows = [json.loads(line) for line in (out / "train.jsonl").open(encoding="utf-8")]
+    selected, record = select_probes(rows, probe_rate)
+    path = out / "train-budget.jsonl"
+
+    with path.open("w", encoding="utf-8") as handle:
+        handle.writelines(json.dumps(row, sort_keys=True) + "\n" for row in selected)
+
+    record["files"] = {"train.jsonl": _sha256(out / "train.jsonl"), "train-budget.jsonl": _sha256(path)}
+    (out / "budget.json").write_text(json.dumps(record, indent=1) + "\n", encoding="utf-8")
+    return record
+
+
+def _matches(path: Path | None, built: dict) -> bool:
+    return path is None or json.loads(path.read_text(encoding="utf-8")) == built
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--check", type=Path, help="committed manifest the build must equal")
+    parser.add_argument("--probe-rate", type=float, help="the epoch budget's probe rate (writes train-budget.jsonl)")
+    parser.add_argument("--check-budget", type=Path, help="committed budget record the selection must equal")
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
     manifest = build(args.out)
 
-    if args.check is not None and json.loads(args.check.read_text(encoding="utf-8")) != manifest:
+    if not _matches(args.check, manifest):
         print(f"STOP: the built training data does not match {args.check}", file=sys.stderr)
         return 1
 
     print(f"wrote {args.out / 'train.jsonl'}: {sum(manifest['examples'].values())} examples "
           f"(tier 1 {manifest['examples']['1']}, tier 2 {manifest['examples']['2']})")
+
+    if args.probe_rate is not None:
+        record = build_budget(args.out, args.probe_rate)
+
+        if not _matches(args.check_budget, record):
+            print(f"STOP: the budget selection does not match {args.check_budget}", file=sys.stderr)
+            return 1
+
+        print(f"wrote {args.out / 'train-budget.jsonl'}: {record['examples']} examples "
+              f"({len(record['dropped'])} probe examples dropped at rate {args.probe_rate})")
+
     return 0
 
 
@@ -212,8 +273,10 @@ if __name__ == "__main__":
 
 __all__ = [
     "build",
+    "build_budget",
     "deduplicate",
     "raw_examples",
+    "select_probes",
     "step_kind",
     "target_text",
     "verb_weights",
