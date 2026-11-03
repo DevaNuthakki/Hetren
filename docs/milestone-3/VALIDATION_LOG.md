@@ -40,19 +40,71 @@ Run by the operator with `notebooks/milestone-3/qlora_throughput_pilot.ipynb` (1
 
 Under Amendment 1's rule, the fastest stable configuration is **two T4s at 638.9 tokens per second**. One epoch would take 14.17 hours, more than the 14-hour budget, so:
 
-- **every non-probe example is kept**, and **probe examples are kept at rate 0.9707** (seed 2029), which brings the projected time to 14.0 hours;
-- this keeps about 7,056 of the 7,269 probe examples (tier 1: 2,629; tier 2: 4,640), so about 16,870 examples in all;
-- that is about 1,055 optimiser steps of 16 examples, with checkpoints at 25%, 50%, 75% and 100% of those steps.
+- **every non-probe example is kept**, and **probe examples are kept at rate 0.9707** (seed 2029), which brings the projected time to 14.0 hours.
 
-The training builder makes and records the exact selection, with its counts and hash, when training starts. Training takes two Kaggle sessions (12 hours at most each) and resumes from a saved checkpoint with its optimiser state.
+**Exact selection** (`python -m packages.support_evaluator.training_data --out <dir> --probe-rate 0.9707`; in each tier round(rate × n) probe examples, drawn by `random.Random("2029:tier<N>:probes")`):
+
+| tier | examples | probe examples | probes kept | probes dropped |
+|---|---|---|---|---|
+| 1 | 6,981 | 2,629 | 2,552 | 77 |
+| 2 | 10,101 | 4,640 | 4,504 | 136 |
+
+- **Result:** 16,869 examples, so 1,055 optimiser steps (1,054 of 16 and a last one of 5).
+- **Checkpoints:** at steps 264, 528, 792 and 1,055.
+- **Record:** `docs/milestone-3/train-v1-budget.json` (sha256 `2f7698a93c1f7e565d75f11de052c11296e1c8f4abb03cd90bb6bca9f1b6644a`) lists all 213 dropped examples (tier, case ID, step).
+- **Hashes:** `train.jsonl` `afea958424a31c23851576853ee536beabf73b7cd3b5e2bb89d26ad8bf1abb8b`, `train-budget.jsonl` `2652513a03cd8a88993ea2adc17cc7a06881e345571c3edc724393a6405fee47`.
+
+**The last step has 5 examples, divided by 5.** Each optimiser step's weighted loss Σᵢ wᵢ·ℓᵢ is divided by the number of examples in that step (`train_step` in `packages/hetren_baselines/qlora.py`). That is 16 for steps 1–1,054, and 5 for step 1,055, whose loss is divided by 5.
+
+Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `notebooks/milestone-3/qlora_training.ipynb`:
+- **Session 1:** steps 1–528, ending at the 528 checkpoint.
+- **Session 2:** resumes from the 528 checkpoint, verified by hash, and runs steps 529–1,055.
+
+**Checkpoints.**
+- **Candidates:** the four selection candidates, `checkpoint-0264`, `checkpoint-0528`, `checkpoint-0792` and `checkpoint-1055`.
+- **Resume-only:** written every 66 optimiser steps in between (`resume-<step>`, at 66, 132, 198, 330, …). They are never evaluated, and only the newest is kept: each new checkpoint of either kind removes older resume-only ones. Steps 264, 528 and 792 are multiples of 66, so there the candidate is also the resume point.
+- **Contents:** both kinds hold the same state (LoRA weights, adapter, optimiser, scheduler, fp16 loss scaler, each process's RNG states and the step reached), with every file's sha256 in `state.json`.
+
+**Resuming.** After a session ends, crashes or stops on a non-finite loss, training resumes from the latest saved checkpoint. The checkpoint's `state.json` must match the sha256 recorded when it was saved: the last `"checkpoint"` entry in `train-log.jsonl`, also printed by the notebook. Every file must match its hash in `state.json`.
+- **After a session boundary or a crash:** the same learning rate.
+- **After a non-finite loss:** half the learning rate (Amendment 1). A second non-finite loss stops training.
+- **Before the first checkpoint (step 66):** training restarts from step 0, at half the learning rate if the cause was a non-finite loss.
+
+**Every resume is logged below:** the checkpoint resumed from and its `state.json` sha256, the reason (session boundary, crash or non-finite loss), the learning-rate scale, and the steps then run.
 
 ## Training runs
 
 None yet.
 
+## Selection subset
+
+**Lists:** `docs/milestone-3/selection-subset-v1/`, written by `python -m packages.support_evaluator.selection_subset write` (seed 2029), and checked against a fresh draw with `--check`.
+
+| tier | source | cases | strata | list sha256 |
+|---|---|---|---|---|
+| 1 | dataset v2, splits v1 `validation` (550 primaries) | 200 | 8 case kinds | `c0f43cf3dd9633416ad4bcba97b7806b3521bf47490e18310fac4621501cb2e4` |
+| 2 | dataset v3, splits v2 `validation` (250 primaries) | 100 | 33 families: 8 single kinds and 25 compound pairs | `431d72886873679c558db70fe71687315be397a373535b62c35bf7a0b40e489c` |
+
+- **Allocation:** proportional to each family's count, with largest remainders. One tier 2 pair, `compound:mapping_swap+misleading_ticket_text`, gets no place.
+- **Manifest:** per-family counts and source hashes, sha256 `bde881f24d294060ef4ec38b6c8aec33ddf7f1387078c9ab40fa72f10899fba5`.
+- **Strata:** compounds are stratified by pair (`compound:<kind>+<kind>`, the protocol's family key), not as one "compound" kind.
+
 ## Reference: untrained Qwen3-4B on the selection subset
 
-Pending. It is computed from the untrained validation rows (no new run) when the subset lists are committed.
+Computed on 2026-11-03 from the existing untrained validation rows, with no new run. Command: `python -m packages.support_evaluator.selection_subset score --tier1 <rows-tier1.jsonl> --tier2 <rows-tier2.jsonl>`.
+
+The source rows come from the Milestone 2 validation run on Kaggle (2026-11-02, bundle `beb9b5e`, one Tesla T4, fp16, prompt version 2): `artifacts/milestone-2/baselines/qwen-untrained-validation/qwen-untrained/`, `rows-tier1.jsonl` `773b8dbccbbf9a340fe3b0675eca00eca374295e90d0b6c614e32c0b07ead836` and `rows-tier2.jsonl` `c0371fc8e3da5680c1973f1a760fa77c654460c4c8d213bd9e4853b97454be83`. Each subset case's family matches its row's.
+
+| S | A₁ (tier 1) | A₂ (tier 2) | W (healthy, pooled) |
+|---|---|---|---|
+| **0.1947** | 25.5% (51/200) [20.0, 32.0] | 16.0% (16/100) [10.1, 24.4] | 1.3% (1/78) [0.2, 6.9] |
+
+| monitoring | tier 1 | tier 2 |
+|---|---|---|
+| `insufficient_evidence` precision | 8.9% (4/45) [3.5, 20.7] | 3.2% (1/31) [0.6, 16.2] |
+| `abstain` recall | 0.0% (0/17) [0.0, 18.4] | 0.0% (0/11) [0.0, 25.9] |
+
+Under Amendment 1, if the chosen checkpoint's S does not exceed 0.1947, the result is reported as it is, and any further training attempt needs its own dated amendment first.
 
 ## Validation evaluations
 

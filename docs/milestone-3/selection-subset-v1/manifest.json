@@ -1,0 +1,67 @@
+{
+  "seed": 2029,
+  "protocol": "docs/milestone-2/EVAL_PROTOCOL.md, Amendment 1 (2026-11-03)",
+  "tiers": {
+    "1": {
+      "dataset": "dataset-v2",
+      "split": "docs/milestone-2/splits-v1/validation.txt",
+      "split_sha256": "89f251d1881127a5ec9aef11a4fabe6f474d3c8e924722b03e3277fa3df1af2a",
+      "validation_primaries": 550,
+      "cases": 200,
+      "per_kind": {
+        "mapping_swap": 24,
+        "merged_account": 26,
+        "mishandled_tool_error": 29,
+        "misleading_ticket_text": 21,
+        "missing_account": 24,
+        "recent_tier_change": 28,
+        "stale_account_record": 24,
+        "transient_error_retried": 24
+      },
+      "list_sha256": "c0f43cf3dd9633416ad4bcba97b7806b3521bf47490e18310fac4621501cb2e4"
+    },
+    "2": {
+      "dataset": "dataset-v3",
+      "split": "docs/milestone-2/splits-v2/validation.txt",
+      "split_sha256": "ccc5ed746282e5da7427ac23e38fa3d25002837745803db8b9e12f83f2b594c0",
+      "validation_primaries": 250,
+      "cases": 100,
+      "per_kind": {
+        "compound:mapping_swap+merged_account": 4,
+        "compound:mapping_swap+mishandled_tool_error": 4,
+        "compound:mapping_swap+misleading_ticket_text": 0,
+        "compound:mapping_swap+missing_account": 3,
+        "compound:mapping_swap+recent_tier_change": 3,
+        "compound:mapping_swap+stale_account_record": 2,
+        "compound:mapping_swap+transient_error_retried": 3,
+        "compound:mishandled_tool_error+merged_account": 4,
+        "compound:mishandled_tool_error+misleading_ticket_text": 2,
+        "compound:mishandled_tool_error+missing_account": 2,
+        "compound:mishandled_tool_error+recent_tier_change": 2,
+        "compound:mishandled_tool_error+transient_error_retried": 2,
+        "compound:misleading_ticket_text+merged_account": 3,
+        "compound:misleading_ticket_text+missing_account": 4,
+        "compound:misleading_ticket_text+recent_tier_change": 2,
+        "compound:misleading_ticket_text+transient_error_retried": 2,
+        "compound:missing_account+merged_account": 3,
+        "compound:missing_account+recent_tier_change": 3,
+        "compound:missing_account+transient_error_retried": 1,
+        "compound:stale_account_record+merged_account": 2,
+        "compound:stale_account_record+mishandled_tool_error": 3,
+        "compound:stale_account_record+misleading_ticket_text": 3,
+        "compound:stale_account_record+missing_account": 1,
+        "compound:stale_account_record+recent_tier_change": 2,
+        "compound:stale_account_record+transient_error_retried": 1,
+        "mapping_swap": 5,
+        "merged_account": 2,
+        "mishandled_tool_error": 6,
+        "misleading_ticket_text": 6,
+        "missing_account": 6,
+        "recent_tier_change": 5,
+        "stale_account_record": 5,
+        "transient_error_retried": 4
+      },
+      "list_sha256": "431d72886873679c558db70fe71687315be397a373535b62c35bf7a0b40e489c"
+    }
+  }
+}
