@@ -74,7 +74,33 @@ Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `not
 
 ## Training runs
 
-None yet.
+| # | date (UTC) | platform and GPUs | bundle | settings | steps | outcome | resumed from |
+|---|---|---|---|---|---|---|---|
+| 1 | 2026-11-03 19:19:54 – 2026-11-04 02:34:42 (session 1) | Kaggle, Tesla T4 ×2 (two processes) | `7e9089e` (bundle sha256 `efa9e303140a279eebf338f04a8b799ce87fce00e569c6303168f2471f5ba943`) | Amendment 1's, as recorded in each run file; data `train-budget.jsonl` `2652513a…`, 16,869 examples, 1,055 steps; LR scale 1.0 | GPU smoke check 0 → 2 and 1 → 2; training 0 → 528 | completed: no non-finite loss; candidate `checkpoint-0264` and `checkpoint-0528` written | none (fresh start) |
+
+**Run 1 (session 1), as verified on 2026-11-03:**
+
+- **Archive:** `qlora-train-session-1.tar.gz` sha256 `5425b2782b6bceb017cce63eab30bf588b139d80a5fb15993ec3b25214ae4381` (611,231,985 bytes), extracted to `artifacts/milestone-3/training-session-1/` (gitignored).
+- **GPU smoke check** (19:19:54–19:22:45, `qlora-smoke/`, weights never used):
+  - two steps straight, writing `checkpoint-0001` (`state.json` `ebbff688…`) and `checkpoint-0002` (`255499ca…`);
+  - then a resume from `checkpoint-0001`, its hash verified, repeating step 2 (`checkpoint-0002` `d49ee1db…`);
+  - both completed, so saving and loading the 8-bit paged optimiser, the fp16 loss scaler and the adapter work on the GPU. The two step-2 checkpoints differ, which is allowed: bit-identity on the GPU was declared informational only. The smoke checkpoints themselves were not archived.
+- **Training** (19:23:16–02:34:42, run file `run-steps-0000-0528.json` `outcome: completed`, `steps_reached: 528`):
+  - `train-log.jsonl` has one start entry, steps 1–528 once each in order, and eight checkpoint entries;
+  - **no non-finite loss**. Step 1 was skipped by the fp16 loss scaler while it calibrated (as in the pilot), so the scheduler advanced 527 times. The logged learning rates match the cosine schedule (warm-up 32 steps, peak 1e-4 at step 33, 5.25e-5 after step 528) exactly;
+  - 49.0 s per step on average (7.19 h of steps);
+  - mean loss per 66 steps: 0.275, 0.058, 0.042, 0.035, 0.034, 0.035, 0.033, 0.034.
+- **Checkpoints:**
+  - resume-only checkpoints at 66, 132, 198, 330, 396 and 462, each removed by the next checkpoint as declared;
+  - the two candidates were kept. Every file in each matches its sha256 in `state.json`, and each `state.json` matches the hash logged when it was saved;
+  - `checkpoint-0528`'s `state.json` sha256 also matches the one the notebook printed at the end of the session, as confirmed by the operator.
+
+| checkpoint | step | `state.json` sha256 | adapter (`adapter_model.safetensors`) sha256 |
+|---|---|---|---|
+| `checkpoint-0264` | 264 | `ae7e31e7c23181e4cf30ff55da71210212a0dc63477b7627ce2f9efd24361273` | `40e3a030000d07d8da9187a1007007cf07b96f7ca66d9671132b1950da5f1d89` |
+| `checkpoint-0528` | 528 | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | `8976b6528b89fe22db3a7295dd55048300b2284a81ee30b0587005300e2bf4bf` |
+
+**Resumes:** none yet. Session 2 resumes from `checkpoint-0528` (`state.json` `613ac6d5…`) at a session boundary, LR scale 1.0, steps 529–1,055.
 
 ## Selection subset
 
