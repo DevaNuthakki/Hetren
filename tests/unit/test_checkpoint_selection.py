@@ -7,7 +7,7 @@ import json
 
 import pytest
 
-from packages.support_evaluator.checkpoint_selection import REFERENCE_S, choose, verify_adapter
+from packages.support_evaluator.checkpoint_selection import REFERENCE_S, choose, main, verify_adapter
 
 
 def _checkpoint(tmp_path, step=528, candidate=True):
@@ -34,6 +34,15 @@ def test_a_candidate_is_used_only_with_its_logged_hashes(tmp_path):
 
     with pytest.raises(ValueError, match="does not match"):
         verify_adapter(directory, digest)
+
+
+def test_full_validation_stops_unless_the_choice_has_its_logged_hash(tmp_path):
+    directory, digest = _checkpoint(tmp_path)
+    choice = tmp_path / "choice.json"
+    choice.write_text('{"chosen": "checkpoint-0528"}', encoding="utf-8")
+
+    assert main(["validate", "--checkpoint", str(directory), "--state-sha256", digest, "--choice", str(choice),
+                 "--choice-sha256", "0" * 64, "--tier", "1", "--out", str(tmp_path / "out")]) == 2  # before torch
 
 
 def test_only_the_four_declared_candidates_are_evaluated(tmp_path):

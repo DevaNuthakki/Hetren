@@ -9,7 +9,7 @@ import shutil
 
 import pytest
 
-from packages.support_evaluator.checkpoint_selection import evaluate
+from packages.support_evaluator.checkpoint_selection import evaluate, validate
 from packages.support_evaluator.dataset import build_dataset
 from packages.support_evaluator.local_model_baseline import EXIT_SMOKE_FAILED
 from packages.support_evaluator.selection_subset import SOURCES
@@ -76,6 +76,44 @@ def test_a_failed_smoke_test_stops_before_the_subset_run(subset, tmp_path):
     assert evaluate(CANDIDATE, out, LabelReplay(primaries, finite=False), METADATA, root=root, subset_dir=lists,
                     sizes=sizes) == EXIT_SMOKE_FAILED
     assert not list(out.glob("rows-*.jsonl")) and not (out / "selection.json").exists()
+
+
+CHOICE = {"chosen": "checkpoint-0528", "S": 0.7, "state_sha256": "s", "adapter_sha256": "a"}
+
+
+@pytest.fixture
+def validation(tiny, tmp_path):
+    """Tier 1's source and validation split point at the tiny dataset and all its primaries."""
+    directory, primaries = tiny
+    root = tmp_path / "root"
+    shutil.copytree(directory, root / SOURCES[1][0])
+    split = root / SOURCES[1][1]
+    split.parent.mkdir(parents=True)
+    split.write_text("".join(v["case_id"] + "\n" for v in primaries), encoding="utf-8")
+    return root, primaries
+
+
+def test_the_chosen_checkpoint_runs_the_full_validation_split_smoke_test_first(validation, tmp_path):
+    root, primaries = validation
+    out = tmp_path / "tier1"
+
+    assert validate(CANDIDATE, CHOICE, 1, out, LabelReplay(primaries), METADATA, root=root,
+                    sizes={1: len(primaries)}) == 0
+
+    result = json.loads((out / "validation-tier1.json").read_text(encoding="utf-8"))
+    assert result["cases"] == len(primaries) and result["decision_accuracy"]["rate"] == 1.0
+    assert result["wrong_interventions_on_healthy"]["k"] == 0 and set(result["monitoring"]) == {
+        "insufficient_evidence_precision", "abstain_recall"}
+    assert "smoke-tier1-validation/smoke_report.json" in result["files"] and "rows-tier1-validation.jsonl" in result["files"]
+
+
+def test_only_the_chosen_checkpoint_runs_on_full_validation(validation, tmp_path):
+    root, primaries = validation
+    model = LabelReplay(primaries)
+
+    assert validate({**CANDIDATE, "adapter_sha256": "b"}, CHOICE, 1, tmp_path / "tier1", model, METADATA, root=root,
+                    sizes={1: len(primaries)}) == 2
+    assert not model.prompts
 
 
 def test_another_adapter_cannot_resume_the_same_output(subset, tmp_path):
