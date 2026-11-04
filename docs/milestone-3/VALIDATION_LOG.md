@@ -168,6 +168,7 @@ Training is complete. Checkpoint selection follows below under "Validation evalu
 - **Allocation:** proportional to each family's count, with largest remainders. One tier 2 pair, `compound:mapping_swap+misleading_ticket_text`, gets no place.
 - **Manifest:** per-family counts and source hashes, sha256 `bde881f24d294060ef4ec38b6c8aec33ddf7f1387078c9ab40fa72f10899fba5`.
 - **Strata:** compounds are stratified by pair (`compound:<kind>+<kind>`, the protocol's family key), not as one "compound" kind.
+- **Label-replay ceiling: S = 0.995** (A₁ 200/200, A₂ 99/100, W 0/78). Measured on 2026-11-04 with a dry run of `checkpoint_selection evaluate` and a fake model that answers each step's evidence with the label for that evidence; no model, no GPU. The one miss is tier 2 `case-001369`: after its first recovery, its evidence also occurs in other dataset v3 records with a different label (`restore_from_source` and `no_intervention`), one of the conflicting inputs that training drops. So no model that answers from the visible evidence alone can reach S = 1 on this subset.
 
 ## Reference: untrained Qwen3-4B on the selection subset
 
@@ -187,5 +188,18 @@ The source rows come from the Milestone 2 validation run on Kaggle (2026-11-02, 
 Under Amendment 1, if the chosen checkpoint's S does not exceed 0.1947, the result is reported as it is, and any further training attempt needs its own dated amendment first.
 
 ## Validation evaluations
+
+**Setup for checkpoint selection** (`notebooks/milestone-3/qlora_checkpoint_selection.ipynb`, `packages/support_evaluator/checkpoint_selection.py`):
+
+- **Each candidate:**
+  - its `state.json` must match the sha256 logged above, and its adapter files the hashes in `state.json`;
+  - the adapter is merged into the fp16 base and evaluated with the declared settings on exactly one visible T4;
+  - the fp16 smoke test runs first (10 seeded subset cases per tier), then the 200 + 100 subset cases;
+  - `selection.json` records S, A₁, A₂, W, the monitored rates, the metadata and every output's sha256.
+- **Choice:** `choose` requires all four candidates, evaluated with the same platform, GPU type, libraries and bundle commit.
+- **Two candidates at a time on Kaggle's two T4s** (approved by the operator on 2026-11-04):
+  - each evaluation process sees exactly one T4 (`CUDA_VISIBLE_DEVICES=0` or `1`) and decodes one reply at a time;
+  - the notebook's `schedule.jsonl` records each candidate's GPU, start and end times (UTC) and exit code;
+  - each evaluation entry below gives its GPU and which candidate ran at the same time.
 
 None yet.
