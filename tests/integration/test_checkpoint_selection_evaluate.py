@@ -140,6 +140,25 @@ def test_the_chosen_checkpoint_runs_a_test_split_once_and_prints_no_result(valid
     assert not other.prompts
 
 
+def test_the_smoke_test_alone_runs_the_validation_runs_smoke_cases(validation, tmp_path):
+    root, primaries = validation
+    shutil.copytree(root / SOURCES[1][0], root / SOURCES[2][0])  # both tiers on the tiny dataset
+    split2 = root / SOURCES[2][1]
+    split2.parent.mkdir(parents=True)
+    shutil.copy(root / SOURCES[1][1], split2)
+    smoke_out, full_out = tmp_path / "smoke", tmp_path / "full"
+
+    assert selection.smoke_validation(CANDIDATE, CHOICE, smoke_out, LabelReplay(primaries), METADATA, root=root) == 0
+    validate(CANDIDATE, CHOICE, 1, full_out, LabelReplay(primaries), METADATA, root=root, sizes={1: len(primaries)})
+
+    ids = lambda d: [json.loads(line)["case_id"] for line in (d / "smoke-tier1-validation" / "rows-tier1-validation.jsonl").open()]
+    assert ids(smoke_out) == ids(full_out)  # the same seeded cases as the full validation run's smoke test
+    assert not list(smoke_out.glob("rows-*.jsonl"))  # nothing beyond the smoke test
+
+    assert selection.smoke_validation(CANDIDATE, CHOICE, tmp_path / "bad", LabelReplay(primaries, finite=False), METADATA,
+                                      root=root) == selection.EXIT_SMOKE_FAILED
+
+
 def test_another_adapter_cannot_resume_the_same_output(subset, tmp_path):
     root, lists, sizes, primaries = subset
     out = tmp_path / "out"

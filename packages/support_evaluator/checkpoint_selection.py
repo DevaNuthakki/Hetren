@@ -40,8 +40,10 @@ test split, once, under "Test-split evaluation": tier 1 or tier 2
 ``test_in_distribution`` or ``test_held_out``, or live test v1. A restart
 only completes the same split. It prints completeness only; the results
 are read after the run is logged in ``docs/milestone-2/TEST_RUN_LOG.md``.
-The fp16 smoke test is not repeated: the same checkpoint passed it on
-validation, on the same platform and libraries.
+The fp16 smoke test is not repeated on the platform where the checkpoint
+passed it. On a new platform, ``smoke`` runs it first: the same 10 seeded
+validation cases per tier as the full validation run, whose episodes can
+then be compared across the two platforms.
 
 Commands::
 
@@ -269,6 +271,28 @@ def test_split(candidate: dict[str, object], choice: dict[str, object], split: s
     return 0
 
 
+def smoke_validation(candidate: dict[str, object], choice: dict[str, object], out: Path, generate,
+                     metadata: dict[str, object], *, root: Path = REPO_ROOT) -> int:
+    """The fp16 smoke test of the chosen checkpoint alone, on a new platform: the same 10 seeded validation cases
+    per tier as the full validation run's smoke test, so their episodes can be compared across platforms."""
+    if (candidate["state_sha256"], candidate["adapter_sha256"]) != (choice["state_sha256"], choice["adapter_sha256"]):
+        print(f"STOP: {candidate['checkpoint']} is not the chosen checkpoint ({choice['chosen']})", file=sys.stderr)
+        return 2
+
+    metadata = {**metadata, "candidate": candidate}
+
+    for tier in (1, 2):
+        args = argparse.Namespace(dataset=Path(root) / SOURCES[tier][0], split=Path(root) / SOURCES[tier][1], live=None,
+                                  out=Path(out), smoke=SMOKE_CASES, limit=None)
+        code = _smoke(args, generate, metadata, tier, "the test run")
+
+        if code != 0:
+            return code
+
+    print("fp16 smoke test passed on both tiers")
+    return 0
+
+
 def choose(results: list[dict[str, object]]) -> dict[str, object]:
     """Amendment 1's rule over the four candidates: the highest S; exact ties go to the earlier checkpoint."""
     steps = sorted(r["step"] for r in results)
@@ -318,6 +342,12 @@ def main(argv: list[str] | None = None) -> int:
     test.add_argument("--choice-sha256", required=True, help="choice.json's sha256 as logged")
     test.add_argument("--split", required=True, choices=sorted(TEST_SPLITS))
     test.add_argument("--out", required=True, type=Path)
+    smoke = commands.add_parser("smoke", help="the chosen checkpoint's fp16 smoke test alone, on a new platform")
+    smoke.add_argument("--checkpoint", required=True, type=Path)
+    smoke.add_argument("--state-sha256", required=True, help="the checkpoint's state.json sha256 logged when it was saved")
+    smoke.add_argument("--choice", required=True, type=Path, help="choice.json of the selection run")
+    smoke.add_argument("--choice-sha256", required=True, help="choice.json's sha256 as logged")
+    smoke.add_argument("--out", required=True, type=Path)
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
     if args.command == "choose":
@@ -331,7 +361,7 @@ def main(argv: list[str] | None = None) -> int:
     candidate = verify_adapter(args.checkpoint, args.state_sha256)
     choice = None
 
-    if args.command in ("validate", "test"):
+    if args.command in ("validate", "test", "smoke"):
         if sha256_file(args.choice) != args.choice_sha256.strip():
             print(f"STOP: {args.choice} does not have the logged sha256 {args.choice_sha256}", file=sys.stderr)
             return 2
@@ -374,6 +404,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "test":
         return test_split(candidate, choice, args.split, args.out, model, metadata)
+
+    if args.command == "smoke":
+        return smoke_validation(candidate, choice, args.out, model, metadata)
 
     return evaluate(candidate, args.out, model, metadata)
 
