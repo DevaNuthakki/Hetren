@@ -273,3 +273,50 @@ Under Amendment 1, if the chosen checkpoint's S does not exceed 0.1947, the resu
 - **On the selection subset:** `checkpoint-0792`'s tier 1 `abstain` recall is 11.8% (2/17), against 88.2% (15/17) for `checkpoint-0264`.
 - **Why it matters for `test_held_out`:** that split holds only F6 and F7 (EVAL_PROTOCOL.md, "Splits"). F6, queue misconfiguration, is labelled `abstain` whenever its evidence is complete ("F6 label"). Its tier 1 primaries are `abstain` 400 and `insufficient_evidence` 80 (the evidence-withheld cases), from the dataset v2 labelability table in the protocol, not from test data.
 - **F6 was never seen in training or validation**, so tier 1 held-out F6 accuracy may be low. This is a known risk, stated before testing. It does not reopen the choice, which is final under Amendment 1.
+
+### Full validation of `checkpoint-0792` (2026-11-04, for reporting only)
+
+**Run:**
+- Kaggle notebook `hetren-qlora-full-validation`, version `validation-run-1`; GPU T4 ×2 with one T4 visible to each process; environment pinned.
+- Bundle `edca36c9bb31871cb35978b09523d5e07da89de1` (sha256 `415f3d5c0a42c263bd5111273bb2fa55f489d59ad7144f0ffc7ac123eb7d88ec`).
+- `checkpoint-0792` (`state.json` `d6230ff6…`, adapter `5647f93f…`), checked against `choice.json` (`d41a7ef5…`).
+- Platform, GPU type, libraries and adapter merge identical to the selection run.
+
+**Concurrency** (`schedule.jsonl` `9fa82d7ae48c0d0d84ac6663e4c5ef93601fdce157b66d6b8b1a50a7ef03f83d`): tier 1 on GPU 0, 19:02:34–19:53:37 UTC (0.85 h); tier 2 on GPU 1, 19:02:34–20:00:22 UTC (0.96 h). The two tiers ran at the same time.
+
+**Outputs:** archive `qlora-validation.tar.gz` sha256 `8ee97528a676c754b8bff4a3887a5b29e33644024b132b61e038e55d2e3aae35` (the notebook printed the same), extracted to `artifacts/milestone-3/validation-run-1/` (gitignored). All 23 files were checked against the archive.
+
+**Verified on 2026-11-04:**
+- every output file matches the hash in its `validation-tier<N>.json`;
+- the rows are exactly the 550 and 250 validation primaries, once each;
+- decision accuracy, W, the monitored rates and the protocol summary recomputed from the rows match the recorded ones;
+- no call was non-finite, empty, discarded or at the token limit (longest reply 41 tokens, longest prompt 2,380), and no action was invalid;
+- both fp16 smoke tests passed;
+- the 300 selection-subset cases inside the full splits reproduced the selection run's episodes exactly (200/200 and 100/100), so greedy decoding was deterministic across the two sessions.
+
+**Results** (Wilson 95% intervals; they do not change the choice):
+
+| | tier 1 (550) | tier 2 (250) |
+|---|---|---|
+| decision accuracy | 73.6% (405/550) [69.8, 77.2] | 76.0% (190/250) [70.3, 80.9] |
+| wrong interventions on healthy runs | 0.0% (0/171) [0.0, 2.2] | 1.9% (1/54) [0.3, 9.8] |
+| invalid actions | 0/550 | 0/250 |
+| `insufficient_evidence` precision (monitored) | 100.0% (93/93) [96.0, 100.0] | 100.0% (31/31) [88.97, 100.0] |
+| `abstain` recall (monitored) | 15.6% (5/32) [6.9, 31.8] | 96.2% (25/26) [81.1, 99.3] |
+| calls | 743 (1.35 per case, 3.9 s each) | 703 (2.81 per case, 4.6 s each) |
+
+**Comparison on the same full validation splits** (EVAL_PROTOCOL.md, "Untrained validation run"):
+
+| decision accuracy | rules v1 | `gpt-4.1` v2 | Qwen3-4B untrained | **fine-tuned Qwen3-4B, `checkpoint-0792`** |
+|---|---|---|---|---|
+| tier 1 | 99.6% | 32.2% | 28.2% | 73.6% |
+| tier 2 | 86.0% | 17.6% | 15.2% | 76.0% |
+
+Tier 1 `abstain` recall stays low (5/32), consistent with the risk recorded above for held-out F6.
+
+| tier | `validation-tier<N>.json` | rows | calls | summary |
+|---|---|---|---|---|
+| 1 | `0ee592847c621a333617ad0542ee0253429a1138c80a9e834c65574e5a053726` | `acee959428a94ad35ad3af4d6acd518195e79ee369f3e37abb7a30ae93f5a680` | `c5fd3c2e70e671f8379b4395afc5d87411db41bed9746cc34543de4c37b21a7b` | `a366c45872a8da3f51d03aa3982b2c93699b5d0d337e5227c4bedcc64b9499f5` |
+| 2 | `8f8b5850502e9c2e0f6d67b36de13d23ace32bbd64b18d6081a37f483ef034cd` | `51e1f821b9e649dd791bf59552d9912ea8f402e9b836c087b33192b3a236b34b` | `971c2f8f1b76a71dd865abd400a28c7db31ce4b5798f3892bd41c157fbfbce35` | `dbbc28076135ca51b6c84116fd6d3c2ac645bd80fd20ab06f4211808cf347d2f` |
+
+Validation is complete. `checkpoint-0792` goes to the test splits (test run #5) under "Test-split evaluation".
