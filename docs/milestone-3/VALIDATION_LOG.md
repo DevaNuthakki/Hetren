@@ -77,6 +77,7 @@ Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `not
 | # | date (UTC) | platform and GPUs | bundle | settings | steps | outcome | resumed from |
 |---|---|---|---|---|---|---|---|
 | 1 | 2026-11-03 19:19:54 – 2026-11-04 02:34:42 (session 1) | Kaggle, Tesla T4 ×2 (two processes) | `7e9089e` (bundle sha256 `efa9e303140a279eebf338f04a8b799ce87fce00e569c6303168f2471f5ba943`) | Amendment 1's, as recorded in each run file; data `train-budget.jsonl` `2652513a…`, 16,869 examples, 1,055 steps; LR scale 1.0 | GPU smoke check 0 → 2 and 1 → 2; training 0 → 528 | completed: no non-finite loss; candidate `checkpoint-0264` and `checkpoint-0528` written | none (fresh start) |
+| 2 | 2026-11-04, about 02:59 – 03:04:40 (session 2, first attempt) | Kaggle, Tesla T4 ×2 (two processes) | `7e9089e` (same bundle) | as run 1; LR scale 1.0 | resume at 528; no step completed | **failed** in the first optimiser step after the resume (step 529), on both processes: `Error invalid argument at line 578 in file /src/csrc/pythonInterface.cpp`, exit code 1; no checkpoint written, no output kept by Kaggle | `checkpoint-0528` (`613ac6d5…8315`), session boundary |
 
 **Run 1 (session 1), as verified on 2026-11-03:**
 
@@ -100,7 +101,32 @@ Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `not
 | `checkpoint-0264` | 264 | `ae7e31e7c23181e4cf30ff55da71210212a0dc63477b7627ce2f9efd24361273` | `40e3a030000d07d8da9187a1007007cf07b96f7ca66d9671132b1950da5f1d89` |
 | `checkpoint-0528` | 528 | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | `8976b6528b89fe22db3a7295dd55048300b2284a81ee30b0587005300e2bf4bf` |
 
-**Resumes:** none yet. Session 2 resumes from `checkpoint-0528` (`state.json` `613ac6d5…`) at a session boundary, LR scale 1.0, steps 529–1,055.
+**Run 2 (session 2, first attempt), as reported by the operator on 2026-11-04.** Notebook `hetren-qlora-training-session-2`, a Copy & Edit of session 1, with session 1's output attached, `SESSION = 2`, `RESUME_SHA256` `613ac6d5…8315`, `LR_SCALE = 1.0`.
+
+- **What worked, from the notebook log:**
+  - bundle commit `7e9089e6f26db7e412f755908f83af247d5196ef`;
+  - training data rebuilt and checked (17,082 examples; budget 16,869, 213 probe examples dropped);
+  - `checkpoint-0528` found under `/kaggle/input/…/qlora-train-session-1/`, with the expected `state.json` sha256, and loaded on both processes.
+- **The failure,** at about 322 s (03:04:40 UTC), during the first optimiser step after the resume. No step completed and nothing was written. `checkpoint-0528` is a read-only input and is untouched. Kaggle kept no output files.
+- **Cause, verified on 2026-11-04 from the code and the session 1 checkpoints:**
+  - **What failed:** line 578 of bitsandbytes 0.50.2's `csrc/pythonInterface.cpp` is the `cudaMemPrefetchAsync` call in `cprefetch` (the CUDA 13 branch). It prefetches a paged optimiser state tensor before each step, and CUDA rejects it with "invalid argument" when the memory is not managed memory.
+  - **How the checkpoint caused it:** the paged 8-bit AdamW keeps its large state tensors in managed memory flagged `is_paged`. `torch.save` stores that flag with the tensor; `torch.load` restores the flag but puts the values in ordinary memory. Loading `checkpoint-0528/optimizer.pt` with `weights_only=True` gives 216 tensors (`state1` and `state2` of the 108 LoRA matrices with at least 10⁵ elements) that still carry `is_paged=True, page_deviceid=0` (the same in `checkpoint-0264`). bitsandbytes' `load_state_dict` does not put them back into managed memory, so the first `prefetch_state` after the resume fails.
+  - **Why session 1's smoke check missed it:** the fp16 loss scaler skipped step 1, so the optimiser had no state yet in `checkpoint-0001`. The CPU tests use `torch.optim.AdamW`, which has no paged memory.
+  - **Not the cause:** the data, the settings, the checkpoint files and their hashes.
+- **Fix,** with no setting changed (same paged 8-bit AdamW, learning rate, schedule, data and order):
+  - after loading, `load_checkpoint` copies each tensor still flagged as paged, value for value, into a paged buffer allocated by the optimiser itself, as in session 1 (`restore_paged_state`), and prefetches it once straight away;
+  - a CPU test reproduces the failure without the fix and shows that a resumed run with it matches the straight run exactly;
+  - the notebook runs a one-step resume check in a fresh process before the long run;
+  - the notebook now takes its code only from the attached bundle. Session 1's attached output contains that session's copy of the code, `hetren/BUNDLE.json` (`7e9089e`), which the first match could otherwise pick. The notebook stops unless exactly one bundle is found, and stops if the bundle's commit is not the `BUNDLE_COMMIT` set. In run 2 both copies were `7e9089e`;
+  - also, `float(loss.detach())` in `train_step` removes a warning without changing the logged value.
+
+**Resumes:**
+
+| attempt | from | `state.json` sha256 | reason | LR scale | steps run | outcome |
+|---|---|---|---|---|---|---|
+| run 2 | `checkpoint-0528` | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | session boundary | 1.0 | none | failed: paged optimiser state not restored (see above) |
+
+Next: session 2 again from `checkpoint-0528`, the latest saved checkpoint. This resume follows a crash, so the learning rate stays the same: scale 1.0, steps 529–1,055.
 
 ## Selection subset
 

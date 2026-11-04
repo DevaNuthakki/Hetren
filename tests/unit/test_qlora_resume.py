@@ -27,11 +27,45 @@ STEPS = total_steps(len(EXAMPLES))
 CHECKPOINTS = checkpoint_steps(STEPS)
 
 
-def _setup():
+class PagedAdamWOnCPU(torch.optim.AdamW):
+    """bitsandbytes' paged optimiser on CPU: its state lives in buffers it allocated itself ("managed memory"),
+    flagged ``is_paged``, and every step prefetches them, which fails, as ``cudaMemPrefetchAsync`` does, for a
+    tensor flagged paged that it did not allocate."""
+
+    def __init__(self, params, **kwargs):
+        super().__init__(params, **kwargs)
+        self.managed = []
+
+    def get_state_buffer(self, p, dtype=torch.float32):
+        buffer = torch.zeros_like(p, dtype=dtype)
+        buffer.is_paged, buffer.page_deviceid = True, 0
+        self.managed.append(buffer)
+        return buffer
+
+    def prefetch_state(self, p):
+        for value in self.state[p].values():
+            if getattr(value, "is_paged", False) and not any(value is m for m in self.managed):
+                raise RuntimeError("Error invalid argument: prefetch of memory that is not managed")
+
+    def step(self, closure=None):
+        for p in (p for group in self.param_groups for p in group["params"] if p in self.state):
+            self.prefetch_state(p)
+
+        loss = super().step(closure)
+
+        for p in (p for group in self.param_groups for p in group["params"] if p in self.state):
+            for key in ("exp_avg", "exp_avg_sq"):
+                if not getattr(self.state[p][key], "is_paged", False):
+                    self.state[p][key] = self.get_state_buffer(p).copy_(self.state[p][key])
+
+        return loss
+
+
+def _setup(optimizer_class=torch.optim.AdamW):
     torch.manual_seed(2029)
     accelerator = accelerate.Accelerator(cpu=True)
     model = TinyLM(dropout=0.2)  # dropout makes the result depend on the restored RNG state
-    optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=1e-2, weight_decay=0.0)
+    optimizer = optimizer_class([p for p in model.parameters() if p.requires_grad], lr=1e-2, weight_decay=0.0)
     scheduler = cosine_schedule(optimizer, warmup=1, steps=STEPS)
     model, optimizer = accelerator.prepare(model, optimizer)
     return accelerator, model, optimizer, scheduler
@@ -84,6 +118,40 @@ def test_training_straight_and_training_with_a_resume_end_identically(tmp_path, 
     files = json.loads((tmp_path / "straight" / "checkpoint-0005" / "state.json").read_text())["files"]
     assert files["trainable.pt"] == json.loads((tmp_path / "resumed" / "checkpoint-0005" / "state.json").read_text())[
         "files"]["trainable.pt"]
+
+
+def test_a_paged_optimiser_state_survives_a_resume_in_a_fresh_process(tmp_path, monkeypatch):
+    """Session 2's failure: the saved state keeps its ``is_paged`` flag through ``torch.save`` and ``torch.load``
+    but not its managed memory, so the first step after the resume failed. Restored, the resumed run matches."""
+    straight = _setup(PagedAdamWOnCPU)
+    _train(tmp_path / "straight", 0, STEPS, straight)
+    written = _train(tmp_path / "resumed", 0, 2, _setup(PagedAdamWOnCPU))
+    checkpoint = tmp_path / "resumed" / "checkpoint-0002"
+
+    saved = torch.load(checkpoint / "optimizer.pt", weights_only=True)["state"]
+    assert all(s["exp_avg"].is_paged and s["exp_avg_sq"].is_paged for s in saved.values())
+
+    import packages.hetren_baselines.qlora as qlora
+
+    with monkeypatch.context() as patch:  # as in session 2: the flag comes back, the managed memory does not
+        patch.setattr(qlora, "restore_paged_state", lambda optimizer: 0)
+        broken = _setup(PagedAdamWOnCPU)
+        load_checkpoint(checkpoint, *broken, written["checkpoint-0002"])
+
+        with pytest.raises(RuntimeError, match="invalid argument"):
+            _train(tmp_path / "broken", 2, STEPS, broken)
+
+    resumed = _setup(PagedAdamWOnCPU)
+    state = load_checkpoint(checkpoint, *resumed, written["checkpoint-0002"])
+    assert state["paged_tensors_restored"] == 2 * len(saved)
+    _train(tmp_path / "resumed", 2, STEPS, resumed)
+
+    weights, optimizer, scheduler, rng = _state(straight)
+    weights_r, optimizer_r, scheduler_r, rng_r = _state(resumed)
+    assert all(torch.equal(a, b) for a, b in zip(weights, weights_r))
+    assert scheduler == scheduler_r and torch.equal(rng, rng_r)
+    assert all(torch.equal(optimizer["state"][k][name], optimizer_r["state"][k][name])
+               for k in optimizer["state"] for name in ("exp_avg", "exp_avg_sq"))
 
 
 def test_a_checkpoint_that_does_not_match_its_hashes_is_refused(tmp_path):

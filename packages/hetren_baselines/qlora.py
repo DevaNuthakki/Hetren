@@ -36,7 +36,10 @@ order); ``state.json`` lists every file's sha256 and is checked, file by
 file, on resume. A resumed run continues exactly where the saved one stopped:
 after a crash at the same learning rate, after a non-finite loss at half of it
 (``--lr-scale 0.5``, Amendment 1). ``train-log.jsonl`` records every step,
-every checkpoint with its ``state.json`` sha256, and every (re)start.
+every checkpoint with its ``state.json`` sha256, and every (re)start. The
+paged 8-bit optimiser's state is put back into paged memory on resume
+(``restore_paged_state``); ``--resume-check`` runs one step from a checkpoint
+in a fresh process and saves nothing, so a resume that fails costs minutes.
 
 Commands (``torchrun --nproc_per_node 2 -m packages.hetren_baselines.qlora ...`` on two GPUs):
 
@@ -44,7 +47,8 @@ Commands (``torchrun --nproc_per_node 2 -m packages.hetren_baselines.qlora ...``
   pilot; its weights are never saved.
 - ``tokens`` and ``budget``: tokens per epoch, and the epoch-budget rule.
 - ``train --data <train-budget.jsonl> --out <dir> --until-checkpoint K
-  [--resume <checkpoint> --resume-sha256 <state.json sha256>] [--lr-scale 0.5]``.
+  [--resume <checkpoint> --resume-sha256 <state.json sha256>] [--lr-scale 0.5]``;
+  ``--resume-check`` in place of ``--until-checkpoint`` for the one-step check.
 
 ``torch``, ``transformers``, ``peft``, ``bitsandbytes`` and ``accelerate``
 are imported only when needed, so the rest (and its tests) runs without them.
@@ -265,7 +269,7 @@ def train_step(accelerator, model, optimizer, batch: list[tuple[list[int], int, 
             finite = finite and bool(torch.isfinite(loss))
             accelerator.backward(loss / divisor)
 
-        losses.append(float(loss))
+        losses.append(float(loss.detach()))
 
     accelerator.clip_grad_norm_(trainable, max_grad_norm)
     optimizer.step()
@@ -361,6 +365,43 @@ def verify_checkpoint(directory: Path, expected_state_sha256: str | None = None)
     return state
 
 
+def restore_paged_state(optimizer) -> int:
+    """Put a loaded optimiser state that was paged back into paged (CUDA managed) memory; returns how many tensors.
+
+    bitsandbytes' paged optimiser keeps its large state tensors in managed memory, flagged ``is_paged``, and
+    prefetches them before every step. ``torch.save`` keeps that flag, but ``torch.load`` gives the values back in
+    ordinary memory, so the first step after a resume asks CUDA to prefetch memory that is not managed and fails
+    ("invalid argument", bitsandbytes 0.50.2 ``cprefetch``). Each such tensor is copied, value for value, into a
+    buffer the optimiser allocates itself, exactly as it allocated the original, and prefetched once at once, so
+    a resume that would fail fails here, before any training step.
+    """
+    inner = getattr(optimizer, "optimizer", optimizer)  # accelerate wraps the optimiser
+    restored, touched = 0, []
+
+    for group in inner.param_groups:
+        for p in group["params"]:
+            state = inner.state.get(p, {})
+            paged = [key for key, value in state.items() if getattr(value, "is_paged", False)]
+
+            for key in paged:
+                buffer = inner.get_state_buffer(p, dtype=state[key].dtype)
+
+                if not getattr(buffer, "is_paged", False):
+                    raise ValueError(f"the optimiser did not allocate a paged buffer for the saved paged {key}")
+
+                buffer.copy_(state[key])
+                state[key] = buffer
+                restored += 1
+
+            if paged:
+                touched.append(p)
+
+    for p in touched:
+        inner.prefetch_state(p)
+
+    return restored
+
+
 def load_checkpoint(directory: Path, accelerator, model, optimizer, scheduler,
                     expected_state_sha256: str | None = None) -> dict[str, object]:
     """Restore a verified checkpoint into the model, optimiser, scheduler, loss scaler and this process's RNGs."""
@@ -381,6 +422,11 @@ def load_checkpoint(directory: Path, accelerator, model, optimizer, scheduler,
 
     unwrapped.load_state_dict(trainable, strict=False)
     optimizer.load_state_dict(torch.load(directory / "optimizer.pt", map_location=accelerator.device, weights_only=True))
+    state["paged_tensors_restored"] = restore_paged_state(optimizer)
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()  # bitsandbytes prefetches asynchronously
+
     scheduler.load_state_dict(torch.load(directory / "scheduler.pt", weights_only=True))
 
     if accelerator.scaler is not None:
@@ -576,6 +622,11 @@ def train(args: argparse.Namespace) -> int:
 
         start_step = state["step"]
         meta["lr_scale"] = state["lr_scale"]
+        print(f"resumed at step {start_step}: {state['paged_tensors_restored']} paged optimiser tensors restored",
+              flush=True)
+
+        if args.resume_check:  # one step from the checkpoint in a fresh process; nothing is saved
+            checkpoints, stop_step = [], start_step + 1
 
     if args.lr_scale != 1.0:  # Amendment 1: after a non-finite loss, continue at half the learning rate
         meta["lr_scale"] *= args.lr_scale
@@ -586,7 +637,8 @@ def train(args: argparse.Namespace) -> int:
 
     run = {"started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "start_step": start_step,
            "stop_step": stop_step, "resumed_from": str(args.resume) if args.resume else None,
-           "resume_sha256": args.resume_sha256, "lr_scale_applied": args.lr_scale, "checkpoints_written": {}, **meta}
+           "resume_sha256": args.resume_sha256, "lr_scale_applied": args.lr_scale, "checkpoints_written": {},
+           "resume_check": bool(args.resume_check), **meta}
     log_path = args.out / "train-log.jsonl"
     args.out.mkdir(parents=True, exist_ok=True)
 
@@ -616,7 +668,7 @@ def train(args: argparse.Namespace) -> int:
     try:
         last = run_training(accelerator, model, optimizer, scheduler, example, training_order(len(rows)),
                             start_step=start_step, stop_step=stop_step, checkpoints=checkpoints, save=save,
-                            resume_every=None if args.smoke_steps else RESUME_EVERY, log=log)
+                            resume_every=None if args.smoke_steps or args.resume_check else RESUME_EVERY, log=log)
         run.update(outcome="completed", steps_reached=last)
         code = 0
     except NonFiniteLoss as error:
@@ -653,6 +705,8 @@ def main(argv: list[str] | None = None) -> int:
     fit.add_argument("--resume-sha256", help="expected sha256 of the checkpoint's state.json")
     fit.add_argument("--lr-scale", type=float, default=1.0)
     fit.add_argument("--smoke-steps", type=int, help="GPU smoke check: this many steps, a checkpoint after each")
+    fit.add_argument("--resume-check", action="store_true",
+                     help="with --resume: one step from the checkpoint in this fresh process, saving nothing")
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
     if args.command == "pilot":
@@ -662,8 +716,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.resume is not None and args.resume_sha256 is None:
             parser.error("--resume needs --resume-sha256 (the state.json sha256 the earlier session printed)")
 
-        if (args.until_checkpoint is None) == (args.smoke_steps is None):
-            parser.error("give exactly one of --until-checkpoint and --smoke-steps")
+        if [args.until_checkpoint is not None, args.smoke_steps is not None, args.resume_check].count(True) != 1:
+            parser.error("give exactly one of --until-checkpoint, --smoke-steps and --resume-check")
+
+        if args.resume_check and args.resume is None:
+            parser.error("--resume-check needs --resume")
 
         return train(args)
 
@@ -702,6 +759,7 @@ __all__ = [
     "load_checkpoint",
     "load_rows",
     "prune_resume_checkpoints",
+    "restore_paged_state",
     "run_training",
     "save_checkpoint",
     "token_counts",

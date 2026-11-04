@@ -84,6 +84,15 @@ def test_the_budgeted_epoch_has_1055_steps_and_checkpoints_at_each_quarter():
     assert checkpoint_steps(1_055) == [264, 528, 792, 1_055]
 
 
+@pytest.mark.parametrize("extra", [["--resume-check"], ["--resume-check", "--until-checkpoint", "4", "--resume", "c",
+                                                           "--resume-sha256", "0" * 64]])
+def test_the_one_step_resume_check_needs_a_checkpoint_and_replaces_the_training_target(extra):
+    with pytest.raises(SystemExit) as stopped:  # refused before torch is imported
+        qlora.main(["train", "--data", "train.jsonl", "--out", "out", "--bundle-commit", "abc", *extra])
+
+    assert stopped.value.code == 2
+
+
 def test_only_the_newest_resume_only_checkpoint_is_kept_and_candidates_never_go(tmp_path):
     from packages.hetren_baselines.qlora import RESUME_EVERY, checkpoint_name, checkpoint_steps, prune_resume_checkpoints
 
