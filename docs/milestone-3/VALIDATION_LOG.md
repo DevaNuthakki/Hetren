@@ -202,4 +202,74 @@ Under Amendment 1, if the chosen checkpoint's S does not exceed 0.1947, the resu
   - the notebook's `schedule.jsonl` records each candidate's GPU, start and end times (UTC) and exit code;
   - each evaluation entry below gives its GPU and which candidate ran at the same time.
 
-None yet.
+### Checkpoint selection run 1 (2026-11-04, all four candidates)
+
+**Run:**
+- Kaggle notebook `hetren-qlora-checkpoint-selection`, version `selection-run-1`; status Successful, about 1.8 h.
+- Environment pinned, GPU T4 ×2 with one T4 visible to each evaluation process.
+- Bundle `1225d585137354089eeadb2cc8be5dde9a663ff7` (sha256 `f1635e7731ce7c63ad9934a858a4de110081a61390fb66584094cecc1318a5d9`), read from the evaluation bundle dataset. Base `Qwen/Qwen3-4B-Instruct-2507` snapshot `cdbee75f17c01a7cc42f958dc650907174af0554`.
+- Checkpoints 264 and 528 read from session 1's output, 792 and 1,055 from session 2's retry; each was found by its logged `state.json` sha256.
+
+**Platform and libraries, the same for all four:**
+- Kaggle, Tesla T4, one visible GPU per process, fp16, adapter merged with `peft merge_and_unload`, greedy decoding, 128 new tokens, prompt version 2.
+- Python 3.13.16, `torch` 2.11.0+cu130, `transformers` 4.56.2, `accelerate` 1.10.1, `tokenizers` 0.22.2, `peft` 0.17.1.
+
+**Outputs:**
+- Archive `qlora-selection.tar.gz` sha256 `4644c870f3ca9f6e123925bca5df101d29498ad362ea2cee1bbf245a2f45cbd5` (the notebook printed the same), extracted to `artifacts/milestone-3/selection-run-1/` (gitignored).
+- `choice.json` `d41a7ef595e8882ff0dbb367e62b03b87c8f1006bb60da09811fb19f11992332`, `schedule.jsonl` `62da7ce84c5e71116d0140e1e888913ab5e72b6f1f8b6ab8b47fff4e88a8bf31`.
+
+**Verified on 2026-11-04:**
+- every output file matches the hash in its `selection.json`;
+- each candidate's `state.json` and adapter sha256 match the hashes logged at training;
+- the rows are exactly the 200 + 100 subset cases, once each;
+- S, A₁, A₂, W and the monitored rates recomputed from the rows with the repository's scoring match `selection.json`, and `choose` recomputed matches `choice.json`;
+- no call was non-finite, empty, discarded or at the token limit (longest reply 43 tokens), and no episode had an invalid action;
+- every fp16 smoke test passed (10 cases per tier);
+- the platform, GPU type, libraries and bundle commit are identical across the four;
+- the logs have no errors.
+
+| candidate | adapter sha256 | GPU | ran (UTC) | concurrent with | calls (tier 1 / tier 2) | smoke tests |
+|---|---|---|---|---|---|---|
+| `checkpoint-0264` | `40e3a030…1d89` | 0 | 16:44:23 – 17:42:07 | `checkpoint-0528` (GPU 1), then `checkpoint-1055` (GPU 1) from 17:35:40 | 352 / 358 | passed (16 and 36 calls) |
+| `checkpoint-0528` | `8976b652…bf4bf` | 1 | 16:44:23 – 17:35:40 | `checkpoint-0264` (GPU 0) | 294 / 303 | passed (12 and 31 calls) |
+| `checkpoint-0792` | `5647f93f…4226` | 0 | 17:42:07 – 18:23:35 | `checkpoint-1055` (GPU 1) until 18:23:12 | 261 / 273 | passed (11 and 27 calls) |
+| `checkpoint-1055` | `466c9a6f…6072` | 1 | 17:35:40 – 18:23:12 | `checkpoint-0264` (GPU 0) until 17:42:07, then `checkpoint-0792` (GPU 0) | 274 / 291 | passed (11 and 31 calls) |
+
+**Results** (Wilson 95% intervals):
+
+| candidate | **S** | A₁ (tier 1) | A₂ (tier 2) | W (healthy, pooled) |
+|---|---|---|---|---|
+| `checkpoint-0264` | 0.7206 | 86.5% (173/200) [81.1, 90.6] | 73.0% (73/100) [63.6, 80.7] | 7.7% (6/78) [3.6, 15.8] |
+| `checkpoint-0528` | 0.6049 | 72.5% (145/200) [65.9, 78.2] | 69.0% (69/100) [59.4, 77.2] | 10.3% (8/78) [5.3, 19.0] |
+| `checkpoint-0792` | **0.7322** | 72.0% (144/200) [65.4, 77.8] | 77.0% (77/100) [67.9, 84.2] | 1.3% (1/78) [0.2, 6.9] |
+| `checkpoint-1055` | 0.6331 | 72.0% (144/200) [65.4, 77.8] | 70.0% (70/100) [60.4, 78.1] | 7.7% (6/78) [3.6, 15.8] |
+
+**Monitored rates** (never used for the choice):
+
+| candidate | tier 1 `insufficient_evidence` precision | tier 1 `abstain` recall | tier 2 `insufficient_evidence` precision | tier 2 `abstain` recall |
+|---|---|---|---|---|
+| `checkpoint-0264` | 97.6% (41/42) [87.7, 99.6] | 88.2% (15/17) [65.7, 96.7] | 78.9% (15/19) [56.7, 91.5] | 63.6% (7/11) [35.4, 84.8] |
+| `checkpoint-0528` | 100.0% (41/41) [91.4, 100.0] | 11.8% (2/17) [3.3, 34.3] | 68.2% (15/22) [47.3, 83.6] | 36.4% (4/11) [15.2, 64.6] |
+| `checkpoint-0792` | 100.0% (41/41) [91.4, 100.0] | 11.8% (2/17) [3.3, 34.3] | 100.0% (15/15) [79.6, 100.0] | 100.0% (11/11) [74.1, 100.0] |
+| `checkpoint-1055` | 100.0% (41/41) [91.4, 100.0] | 11.8% (2/17) [3.3, 34.3] | 78.9% (15/19) [56.7, 91.5] | 63.6% (7/11) [35.4, 84.8] |
+
+- **Tier 1 monitored rates of 528, 792 and 1,055:** the three are identical, but the runs differ: their tier 1 trajectories differ on 34–55 of the 200 cases, and the rows files have different hashes. From step 528 on, the model makes the same 41 correct `insufficient_evidence` decisions and only 2 `abstain` decisions on tier 1.
+
+| candidate | `selection.json` | `rows-tier1-tier1.jsonl` | `rows-tier2-tier2.jsonl` | `calls.jsonl` |
+|---|---|---|---|---|
+| `checkpoint-0264` | `dbbf2c29b275e7b3ce8fe3ae0f70396b8987ea89d2ac7baf61d5b17d94ebc7ca` | `9b64bd9ed1ed58058564031e051a4057233ae8f4e1416c7684dfe30f30e2eb8b` | `1dca2d804023ec02bfeb42b5d53531e3946601795dc0cf3588ebc18ddbc4b60a` | `1b9bfe542f4b3fe2cfed4b127abf8e6b418e4c4ccedaa8a9eea77e4e15dd4cb3` |
+| `checkpoint-0528` | `662f457f5617fb9bc5e21b315c4cc5e4261ab0447aa76e70f41b434055b7e712` | `7d491228af9aedfe527cd0b81211ebf2dc29a567dbf112d392429a6533174738` | `95d3264ba6ca8a6baf40d0fa188162e661267c2fbd6261fb8fa517a6549166ac` | `081dbb02a2860a942218830ff41932918b91cd733647adcc909a2a1e62375fd0` |
+| `checkpoint-0792` | `6c43464d2736f0e445c264f48f3490413db8c306c9525255ba9387bd462d18dd` | `3da2c534fe7be5b3af453ce6edabf5f254c47d6b6818d81cf1644be1ecd2ba13` | `efc1b7fcbaaaed517088b93ed661989d24041f0196dc2f007e347fb9e0fcf29f` | `9da99bc8cabbea03e11c2cfcdbb8fb1848d39403263ca9b6bc0d05414d9ffae5` |
+| `checkpoint-1055` | `9e1146f566120a05c4615b3ffbb2dd6b68426fa207b0f97a6958b9f231ca14d7` | `1e5f54a264071c4f98a122168cf56ba1aa1132ba5c3985880f90db4a9e7c3b66` | `93d93358f8507da42a2580de6abdd008eab57a77e24f6c7c88a3da56eff41350` | `b23e7a4b51949a046be4d98e629e2bf2a53adb0a2f6a3000be4075a07a345c7a` |
+
+### Choice
+
+**Chosen: `checkpoint-0792`** (step 792; `state.json` `d6230ff6e1780ac5286f0accc0a45298dd8db49fc11ed6fdb1330d98189276d5`, adapter `5647f93f25c9f79c8e7fca0468d8aa7476afbcc348f3b42f420d1845098f4226`), with the highest S: **0.7322**. There was no tie; the next highest is `checkpoint-0264` at 0.7206.
+
+- It exceeds the untrained reference, S = 0.1947, so the contingency rule does not apply. The label-replay ceiling on this subset is 0.995.
+- The choice is final under Amendment 1. Next, `checkpoint-0792` runs once on the full validation split (550 tier 1, 250 tier 2) for reporting, and that result does not change the choice. Only `checkpoint-0792` will be evaluated on the test splits.
+
+**Identified risk, recorded on 2026-11-04 before any test run of the fine-tuned model: held-out F6 abstention.**
+- **On the selection subset:** `checkpoint-0792`'s tier 1 `abstain` recall is 11.8% (2/17), against 88.2% (15/17) for `checkpoint-0264`.
+- **Why it matters for `test_held_out`:** that split holds only F6 and F7 (EVAL_PROTOCOL.md, "Splits"). F6, queue misconfiguration, is labelled `abstain` whenever its evidence is complete ("F6 label"). Its tier 1 primaries are `abstain` 400 and `insufficient_evidence` 80 (the evidence-withheld cases), from the dataset v2 labelability table in the protocol, not from test data.
+- **F6 was never seen in training or validation**, so tier 1 held-out F6 accuracy may be low. This is a known risk, stated before testing. It does not reopen the choice, which is final under Amendment 1.
