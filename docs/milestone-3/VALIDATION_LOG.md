@@ -78,6 +78,7 @@ Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `not
 |---|---|---|---|---|---|---|---|
 | 1 | 2026-11-03 19:19:54 – 2026-11-04 02:34:42 (session 1) | Kaggle, Tesla T4 ×2 (two processes) | `7e9089e` (bundle sha256 `efa9e303140a279eebf338f04a8b799ce87fce00e569c6303168f2471f5ba943`) | Amendment 1's, as recorded in each run file; data `train-budget.jsonl` `2652513a…`, 16,869 examples, 1,055 steps; LR scale 1.0 | GPU smoke check 0 → 2 and 1 → 2; training 0 → 528 | completed: no non-finite loss; candidate `checkpoint-0264` and `checkpoint-0528` written | none (fresh start) |
 | 2 | 2026-11-04, about 02:59 – 03:04:40 (session 2, first attempt) | Kaggle, Tesla T4 ×2 (two processes) | `7e9089e` (same bundle) | as run 1; LR scale 1.0 | resume at 528; no step completed | **failed** in the first optimiser step after the resume (step 529), on both processes: `Error invalid argument at line 578 in file /src/csrc/pythonInterface.cpp`, exit code 1; no checkpoint written, no output kept by Kaggle | `checkpoint-0528` (`613ac6d5…8315`), session boundary |
+| 3 | 2026-11-04 04:57:33 – 11:27:22 (session 2, retry; Kaggle version `train-session-2-retry`) | Kaggle, Tesla T4 ×2 (two processes) | `846b0be` (bundle sha256 `c41040467ee759f6f54ce71511cc0f46a7a11535b86efa7c554f49bedac9717b`) | as run 1 (identical settings record); LR scale 1.0 | one-step resume check 528 → 529 (nothing saved); training 528 → 1,055 | completed: no non-finite loss; candidate `checkpoint-0792` and `checkpoint-1055` written | `checkpoint-0528` (`613ac6d5…8315`), after run 2's crash |
 
 **Run 1 (session 1), as verified on 2026-11-03:**
 
@@ -125,8 +126,35 @@ Training runs on two T4s in two Kaggle sessions of about 7 hours each, with `not
 | attempt | from | `state.json` sha256 | reason | LR scale | steps run | outcome |
 |---|---|---|---|---|---|---|
 | run 2 | `checkpoint-0528` | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | session boundary | 1.0 | none | failed: paged optimiser state not restored (see above) |
+| run 3 | `checkpoint-0528` (session 1's output) | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | crash (run 2), at the session boundary | 1.0 | one-step check 529; then 529–1,055 | completed |
 
-Next: session 2 again from `checkpoint-0528`, the latest saved checkpoint. This resume follows a crash, so the learning rate stays the same: scale 1.0, steps 529–1,055.
+**Run 3 (session 2, retry), as verified on 2026-11-04:**
+
+- **Archive:** `qlora-train-session-2.tar.gz` sha256 `40999e0d4781f6af1f006734005a24048804fd5a56a4a0b7c05b097905c57d30` (611,160,163 bytes), extracted to `artifacts/milestone-3/training-session-2/` (gitignored).
+- **Resume check** (04:57:33–04:58:19, `qlora-resume-check/`, `resume_check: true`, nothing saved):
+  - bundle `846b0be`; `checkpoint-0528` loaded with the expected `state.json` sha256, LR scale 1.0;
+  - step 529 completed with a finite loss of 0.00708. The real run's step 529 logged the same loss to five decimals, and the same learning rate.
+- **Training** (04:58:52–11:27:22, run file `run-steps-0528-1055.json`, `outcome: completed`, `steps_reached: 1055`):
+  - the settings record is identical to run 1's, with the same data (`2652513a…`, 16,869 examples, 1,055 steps);
+  - `train-log.jsonl` has one start entry at step 528, steps 529–1,055 once each in order, and eight checkpoint entries;
+  - **no non-finite loss** and no step skipped by the loss scaler. The logged learning rates continue session 1's cosine schedule exactly (the scheduler stood at 527 after step 528, because step 1 was skipped). After step 1,055 the scheduler is at 1,054 and the rate is 2.4e-10;
+  - step 1,055 is the 5-example step (17.4 s);
+  - 44.2 s per step on average (6.47 h of steps);
+  - mean loss per 66 steps: 0.028, 0.028, 0.023, 0.025, 0.020, 0.023, 0.021, 0.023.
+- **Checkpoints:**
+  - resume-only checkpoints at 594, 660, 726, 858, 924 and 990, each removed by the next checkpoint as declared;
+  - the two candidates were kept. Every file in each matches its sha256 in `state.json`, and each `state.json` matches the hash logged when it was saved and the one the notebook printed.
+
+**All four candidates.** Each adapter (`adapter/adapter_model.safetensors`, 504 fp32 tensors) is identical, tensor for tensor, to the trained LoRA weights in its `trainable.pt`.
+
+| checkpoint | step | `state.json` sha256 | adapter (`adapter_model.safetensors`) sha256 | archive |
+|---|---|---|---|---|
+| `checkpoint-0264` | 264 | `ae7e31e7c23181e4cf30ff55da71210212a0dc63477b7627ce2f9efd24361273` | `40e3a030000d07d8da9187a1007007cf07b96f7ca66d9671132b1950da5f1d89` | session 1 |
+| `checkpoint-0528` | 528 | `613ac6d5e4595a56752804a93701dadb538b06d9dd30b462feaccfb377988315` | `8976b6528b89fe22db3a7295dd55048300b2284a81ee30b0587005300e2bf4bf` | session 1 |
+| `checkpoint-0792` | 792 | `d6230ff6e1780ac5286f0accc0a45298dd8db49fc11ed6fdb1330d98189276d5` | `5647f93f25c9f79c8e7fca0468d8aa7476afbcc348f3b42f420d1845098f4226` | session 2 |
+| `checkpoint-1055` | 1,055 | `54e0cc8820802e2b2a804616a62cc28c406c1c9e2dbe8e32bf3d4063e08b4b91` | `466c9a6fbcf0ff44e8aa0b7edb46420eeea2cfac8a93f1596d37d94ff0176072` | session 2 |
+
+Training is complete. Checkpoint selection follows below under "Validation evaluations".
 
 ## Selection subset
 
