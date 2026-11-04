@@ -35,6 +35,14 @@ accuracy, wrong interventions on healthy runs, the monitored rates, the
 protocol summary, the metadata and every output file's sha256. The two
 tiers may run as two processes, one T4 each.
 
+``test`` runs the chosen checkpoint (checked the same way) on one declared
+test split, once, under "Test-split evaluation": tier 1 or tier 2
+``test_in_distribution`` or ``test_held_out``, or live test v1. A restart
+only completes the same split. It prints completeness only; the results
+are read after the run is logged in ``docs/milestone-2/TEST_RUN_LOG.md``.
+The fp16 smoke test is not repeated: the same checkpoint passed it on
+validation, on the same platform and libraries.
+
 Commands::
 
     python -m packages.support_evaluator.checkpoint_selection evaluate \\
@@ -63,6 +71,18 @@ from packages.support_evaluator.selection_subset import (
 
 CANDIDATE_STEPS = (264, 528, 792, 1055)
 VALIDATION_SIZES = {1: 550, 2: 250}  # the full validation splits' primary cases
+# The declared test splits (EVAL_PROTOCOL.md, "Test-split evaluation"): (source arguments, cases).
+TEST_SPLITS = {
+    "tier1-test_in_distribution": ({"dataset": "artifacts/milestone-2/dataset-v2",
+                                    "split": "docs/milestone-2/splits-v1/test_in_distribution.txt"}, 560),
+    "tier1-test_held_out": ({"dataset": "artifacts/milestone-2/dataset-v2",
+                             "split": "docs/milestone-2/splits-v1/test_held_out.txt"}, 960),
+    "tier2-test_in_distribution": ({"dataset": "artifacts/milestone-2/dataset-v3",
+                                    "split": "docs/milestone-2/splits-v2/test_in_distribution.txt"}, 256),
+    "tier2-test_held_out": ({"dataset": "artifacts/milestone-2/dataset-v3",
+                             "split": "docs/milestone-2/splits-v2/test_held_out.txt"}, 400),
+    "live": ({"live": "artifacts/milestone-2/live-test-v1"}, 300),
+}
 SMOKE_CASES = 10  # per tier: the protocol's 20-case fp16 smoke test
 REFERENCE_S = 0.1947  # untrained Qwen3-4B on the same subset (VALIDATION_LOG.md)
 ADAPTER_FILES = ("adapter/adapter_config.json", "adapter/adapter_model.safetensors")
@@ -222,6 +242,33 @@ def validate(candidate: dict[str, object], choice: dict[str, object], tier: int,
     return 0
 
 
+def test_split(candidate: dict[str, object], choice: dict[str, object], split: str, out: Path, generate,
+               metadata: dict[str, object], *, root: Path = REPO_ROOT, splits: dict = TEST_SPLITS) -> int:
+    """The chosen checkpoint on one declared test split, once (a restart only completes it). Writes the runner's
+    rows, calls, metadata and summary and prints only completeness: results are read after the run is logged."""
+    if (candidate["state_sha256"], candidate["adapter_sha256"]) != (choice["state_sha256"], choice["adapter_sha256"]):
+        print(f"STOP: {candidate['checkpoint']} is not the chosen checkpoint ({choice['chosen']})", file=sys.stderr)
+        return 2
+
+    sources, size = splits[split]
+    paths = {"dataset": None, "split": None, "live": None, **{k: Path(root) / v for k, v in sources.items()}}
+    args = argparse.Namespace(**paths, out=Path(out), smoke=None, limit=None)
+    code = run_baseline(args, generate, {**metadata, "candidate": candidate, "test_split": split})
+
+    if code != 0:
+        return code
+
+    name = load_source(args.dataset, args.split, args.live).name
+    case_ids = [json.loads(line)["case_id"] for line in (Path(out) / f"rows-{name}.jsonl").open(encoding="utf-8")]
+
+    if len(case_ids) != size or len(set(case_ids)) != size:
+        print(f"STOP: expected {size} cases once each in {split}, found {len(case_ids)}", file=sys.stderr)
+        return 2
+
+    print(f"{split}: complete, {size} cases scored; results are read only after the run is logged")
+    return 0
+
+
 def choose(results: list[dict[str, object]]) -> dict[str, object]:
     """Amendment 1's rule over the four candidates: the highest S; exact ties go to the earlier checkpoint."""
     steps = sorted(r["step"] for r in results)
@@ -264,6 +311,13 @@ def main(argv: list[str] | None = None) -> int:
     full.add_argument("--choice-sha256", required=True, help="choice.json's sha256 as logged")
     full.add_argument("--tier", required=True, type=int, choices=(1, 2))
     full.add_argument("--out", required=True, type=Path)
+    test = commands.add_parser("test", help="the chosen checkpoint on one declared test split, once (one GPU)")
+    test.add_argument("--checkpoint", required=True, type=Path)
+    test.add_argument("--state-sha256", required=True, help="the checkpoint's state.json sha256 logged when it was saved")
+    test.add_argument("--choice", required=True, type=Path, help="choice.json of the selection run")
+    test.add_argument("--choice-sha256", required=True, help="choice.json's sha256 as logged")
+    test.add_argument("--split", required=True, choices=sorted(TEST_SPLITS))
+    test.add_argument("--out", required=True, type=Path)
     args = parser.parse_args(sys.argv[1:] if argv is None else argv)
 
     if args.command == "choose":
@@ -277,7 +331,7 @@ def main(argv: list[str] | None = None) -> int:
     candidate = verify_adapter(args.checkpoint, args.state_sha256)
     choice = None
 
-    if args.command == "validate":
+    if args.command in ("validate", "test"):
         if sha256_file(args.choice) != args.choice_sha256.strip():
             print(f"STOP: {args.choice} does not have the logged sha256 {args.choice_sha256}", file=sys.stderr)
             return 2
@@ -317,6 +371,9 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "validate":
         return validate(candidate, choice, args.tier, args.out, model, metadata)
+
+    if args.command == "test":
+        return test_split(candidate, choice, args.split, args.out, model, metadata)
 
     return evaluate(candidate, args.out, model, metadata)
 

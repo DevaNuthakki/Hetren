@@ -9,6 +9,7 @@ import shutil
 
 import pytest
 
+from packages.support_evaluator import checkpoint_selection as selection
 from packages.support_evaluator.checkpoint_selection import evaluate, validate
 from packages.support_evaluator.dataset import build_dataset
 from packages.support_evaluator.local_model_baseline import EXIT_SMOKE_FAILED
@@ -114,6 +115,29 @@ def test_only_the_chosen_checkpoint_runs_on_full_validation(validation, tmp_path
     assert validate({**CANDIDATE, "adapter_sha256": "b"}, CHOICE, 1, tmp_path / "tier1", model, METADATA, root=root,
                     sizes={1: len(primaries)}) == 2
     assert not model.prompts
+
+
+def test_the_chosen_checkpoint_runs_a_test_split_once_and_prints_no_result(validation, tmp_path, capsys):
+    root, primaries = validation
+    splits = {"tier1-test_held_out": ({"dataset": SOURCES[1][0], "split": SOURCES[1][1]}, len(primaries))}
+    model = LabelReplay(primaries)
+    out = tmp_path / "test"
+
+    assert selection.test_split(CANDIDATE, CHOICE, "tier1-test_held_out", out, model, METADATA, root=root,
+                                splits=splits) == 0
+    assert "complete" in capsys.readouterr().out.splitlines()[-1]
+    assert json.loads((out / "metadata.json").read_text(encoding="utf-8"))["test_split"] == "tier1-test_held_out"
+    assert not (out / "smoke-tier1-validation").exists()  # no smoke test on test splits
+
+    calls = len(model.prompts)
+    assert selection.test_split(CANDIDATE, CHOICE, "tier1-test_held_out", out, model, METADATA, root=root,
+                                splits=splits) == 0
+    assert len(model.prompts) == calls  # a restart only completes the same split
+
+    other = LabelReplay(primaries)
+    assert selection.test_split({**CANDIDATE, "state_sha256": "t"}, CHOICE, "tier1-test_held_out", tmp_path / "other",
+                                other, METADATA, root=root, splits=splits) == 2
+    assert not other.prompts
 
 
 def test_another_adapter_cannot_resume_the_same_output(subset, tmp_path):
