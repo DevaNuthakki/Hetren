@@ -1,7 +1,8 @@
 """Greedy generation with a local Hugging Face model (small model baseline).
 
 The protocol fixes the settings, identical for the untrained baseline and
-the fine-tuned model: fp16 weights on one GPU (Kaggle T4 has no bf16), the
+the fine-tuned model: fp16 weights on one GPU (Kaggle T4 has no bf16), for
+the fine-tuned model its LoRA adapter merged into the fp16 base, the
 model's own chat template, greedy decoding, ``max_new_tokens=128``, no
 repetition penalty. ``TransformersModel(system, user)`` returns the reply
 with what the fp16 smoke test needs: whether every generated step's raw
@@ -34,16 +35,29 @@ class Generation:
 
 
 class TransformersModel:
+    """The model in fp16 on one GPU; with ``adapter`` (a PEFT LoRA directory, the fine-tuned model), the
+    adapter is merged into the fp16 base before evaluation, as the protocol requires."""
+
     def __init__(self, model_id: str = QWEN_MODEL, revision: str = QWEN_REVISION, dtype: str = "float16",
-                 device: str = "cuda"):
+                 device: str = "cuda", adapter: str | None = None):
         import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
         self.torch = torch
         self.tokenizer = AutoTokenizer.from_pretrained(model_id, revision=revision)
-        self.model = AutoModelForCausalLM.from_pretrained(
+        model = AutoModelForCausalLM.from_pretrained(
             model_id, revision=revision, torch_dtype=getattr(torch, dtype),
-        ).to(device).eval()
+        ).to(device)
+
+        if adapter is not None:
+            from peft import PeftModel
+
+            model = PeftModel.from_pretrained(model, adapter).merge_and_unload()
+
+            if any(p.dtype != getattr(torch, dtype) for p in model.parameters()):
+                raise ValueError(f"the merged model is not entirely {dtype}")
+
+        self.model = model.eval()
 
     def __call__(self, system: str, user: str) -> Generation:
         torch = self.torch
@@ -69,11 +83,24 @@ class TransformersModel:
         )
 
 
+def platform_name() -> str:
+    """Where the run executes: ``kaggle``, ``colab`` or ``local`` (Amendment 1 records it with each run)."""
+    import os
+
+    if os.environ.get("KAGGLE_KERNEL_RUN_TYPE") or os.path.isdir("/kaggle/input"):
+        return "kaggle"
+
+    if os.environ.get("COLAB_RELEASE_TAG") or os.environ.get("COLAB_GPU") is not None:
+        return "colab"
+
+    return "local"
+
+
 def library_versions() -> dict[str, str]:
     from importlib.metadata import version
     import platform
 
-    names = ("torch", "transformers", "accelerate", "tokenizers", "jsonschema", "openai-agents", "tiktoken")
+    names = ("torch", "transformers", "accelerate", "tokenizers", "peft", "jsonschema", "openai-agents", "tiktoken")
     versions = {"python": platform.python_version()}
 
     for name in names:
@@ -92,4 +119,5 @@ __all__ = [
     "QWEN_REVISION",
     "TransformersModel",
     "library_versions",
+    "platform_name",
 ]

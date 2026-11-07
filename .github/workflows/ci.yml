@@ -325,6 +325,15 @@ jobs:
 
           python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
+      - name: Install CPU torch and accelerate (QLoRA gradient accumulation test)
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python -m pip install --disable-pip-version-check --index-url https://download.pytorch.org/whl/cpu 'torch==2.11.0+cpu'
+          python -m pip install --disable-pip-version-check 'accelerate==1.10.1'
+          python -c "import torch, accelerate; print('torch', torch.__version__, 'accelerate', accelerate.__version__)"
+
       - name: Run slow tests
         shell: bash
         run: |
