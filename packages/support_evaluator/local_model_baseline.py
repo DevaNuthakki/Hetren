@@ -60,6 +60,12 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
+def smoke_sample(cases: list, tier: int, size: int) -> list:
+    """The seeded smoke-test cases of a tier's source, in case-ID order (also the GGUF pilot's cases)."""
+    return sorted(random.Random(f"{SMOKE_SEED}:{tier}").sample(list(cases), min(size, len(cases))),
+                  key=lambda c: c.case_id)
+
+
 def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]) -> int:
     """Score pending cases; ``generate(system, user)`` returns a ``Generation``."""
     from packages.hetren_baselines.prompt import PROMPT_VERSION, action_text, system_prompt, user_message
@@ -71,8 +77,7 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
     out = Path(args.out)
 
     if args.smoke is not None:
-        cases = sorted(random.Random(f"{SMOKE_SEED}:{tier}").sample(cases, min(args.smoke, len(cases))),
-                       key=lambda c: c.case_id)
+        cases = smoke_sample(cases, tier, args.smoke)
         out = out / f"smoke-{name}"
 
     out.mkdir(parents=True, exist_ok=True)

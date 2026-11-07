@@ -1,6 +1,6 @@
-# Export runbook (Milestone 4, step 1)
+# Export and pilot runbook (Milestone 4, steps 1 and 2)
 
-Operator steps for the GGUF export under `docs/milestone-2/EVAL_PROTOCOL.md`, Amendment 2. Every run, failed ones included, is logged in `docs/milestone-4/EXPORT_LOG.md` before its results are used. Commands are for zsh, from the repository root.
+Operator steps for the GGUF export and the throughput pilot under `docs/milestone-2/EVAL_PROTOCOL.md`, Amendment 2. Every run, failed ones included, is logged in `docs/milestone-4/EXPORT_LOG.md` before its results are used. Commands are for zsh, from the repository root.
 
 ## 1. Build the bundle (local)
 
@@ -63,15 +63,69 @@ Then hand over to Claude Code. It will:
 - write the export and token-parity entries in `EXPORT_LOG.md`;
 - copy `export.manifest.json` to `docs/milestone-4/export.manifest.json` for the commit that has to land before the first pilot.
 
-## 4. GGUF files for the Mac pilot (later)
+## 4. Throughput pilot (step 2)
 
-The Kaggle CPU pilot attaches the export notebook's output directly. Download the two GGUF files and `tokenizer/` to the Mac only when its pilot starts, into `artifacts/milestone-4/export-2/gguf-export/`, and check them:
+Amendment 2's pilot, once per platform, numbered `pilot-<N>` after the last pilot entry in `EXPORT_LOG.md` (the first is `pilot-1`). Both platforms run the same module, `packages.support_evaluator.gguf_pilot`, from the same commit, on export 2's files (checked against the committed `docs/milestone-4/export.manifest.json` before anything runs). Per variant: the 20 fp16 smoke-test cases, each episode twice with prompt caching on and twice with it off, on a fresh `llama-server` per caching setting (`-c 4096 -np 1 -ngl 0 -b 2048 -ub 512`, `-t 6` on the Mac and `-t 4` on Kaggle) under `/usr/bin/time` for peak memory. Episodes are not scored. The two platforms can run at the same time.
 
-```zsh
-cd artifacts/milestone-4/export-2/gguf-export
-shasum -a 256 -c outputs.sha256
-cd -
-```
+**Expected time:** about 2–5 hours per platform. The caching-off blocks are the slow ones, because every call evaluates the whole prompt (about 2,000–2,400 tokens).
+
+### Mac
+
+1. llama.cpp at the pinned commit, built CPU-only with the export's flags (once):
+
+   ```zsh
+   mkdir -p ~/hetren-tools
+   git clone https://github.com/ggml-org/llama.cpp ~/hetren-tools/llama.cpp
+   cd ~/hetren-tools/llama.cpp
+   git checkout --detach 620d2225cc436ab0b001e3200e590e3b286ef9ab
+   git status --short
+   cmake -B build -DCMAKE_BUILD_TYPE=Release -DGGML_CUDA=OFF -DGGML_METAL=OFF -DGGML_BLAS=OFF -DGGML_NATIVE=OFF
+   cmake --build build --config Release -j 6 --target llama-server
+   ./build/bin/llama-server --version
+   cd -
+   ```
+
+   `--version` should name `620d2225`.
+2. The pilot venv (once; the repository's `.venv` is not changed):
+
+   ```zsh
+   /usr/local/bin/python3.13 -m venv ~/.hetren-pilot
+   ~/.hetren-pilot/bin/pip install -r requirements-gguf-pilot.txt
+   ~/.hetren-pilot/bin/pip check
+   ```
+3. The run. Plug in mains power (the pilot stops on battery), close heavy applications and start from the pilot's commit with no tracked changes (untracked files are fine). The pilot holds a `caffeinate -dims` assertion until it ends.
+
+   ```zsh
+   git status --short
+   git rev-parse HEAD
+   mkdir -p artifacts/milestone-4/pilot-1
+   ~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_pilot run --platform mac --gguf-dir artifacts/milestone-4/export-2/gguf-export --tokenizer artifacts/milestone-4/export-2/gguf-export/tokenizer --llama-cpp ~/hetren-tools/llama.cpp --out artifacts/milestone-4/pilot-1/mac 2>&1 | tee artifacts/milestone-4/pilot-1/mac.log
+   echo "pilot exit ${pipestatus[1]}"
+   ```
+
+### Kaggle CPU
+
+1. Build the bundle from the pilot's commit (as in section 1) as `hetren-m4-bundle-3.tar.gz`, and upload it as a new private Kaggle Dataset.
+2. Create a notebook from `notebooks/milestone-4/gguf_pilot.ipynb`. Settings: accelerator **None**, internet **on**, environment **pinned**.
+3. Attach two inputs: the bundle 3 dataset, and the output of notebook `hetren-gguf-export-2` (version `export-2`). The notebook skips the code copy inside that output and finds the export by its manifest's sha256.
+4. In the first code cell, set `BUNDLE_COMMIT` to the full commit. Run all, and save the version as `pilot-1`.
+5. Download the output and check it:
+
+   ```zsh
+   mkdir -p artifacts/milestone-4/pilot-1/kaggle
+   ~/.kaggle-cli/bin/kaggle kernels output nuthakkidevaharsha/<pilot notebook slug> -p artifacts/milestone-4/pilot-1/kaggle
+   cd artifacts/milestone-4/pilot-1/kaggle/gguf-pilot
+   shasum -a 256 -c outputs.sha256
+   cd -
+   ```
+
+### Afterwards
+
+Hand both outputs to Claude Code before reading them. It will:
+- check each report against the committed manifest and the declared settings;
+- write the throughput pilot entries in `EXPORT_LOG.md`, including each platform's `system_info` CPU features;
+- run `python -m packages.support_evaluator.gguf_pilot decide --mac <pilot-mac.json> --kaggle <pilot-kaggle.json> --out <decision.json>`, which applies the caching rule and then the platform rule;
+- log the resulting choices before the validation run.
 
 ## If something fails
 

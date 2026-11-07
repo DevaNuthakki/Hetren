@@ -215,7 +215,8 @@ class FakeServer:
 def _response(tokens, stop_type="eos", logprobs=None):
     logprobs = [-0.01] * len(tokens) if logprobs is None else logprobs
     return {"tokens": tokens, "stop_type": stop_type, "tokens_cached": 90, "tokens_evaluated": 103,
-            "completion_probabilities": [{"id": t, "logprob": p} for t, p in zip(tokens, logprobs)]}
+            "completion_probabilities": [{"id": t, "logprob": p} for t, p in zip(tokens, logprobs)],
+            "timings": {"prompt_n": 13, "prompt_ms": 650.5, "predicted_n": len(tokens), "predicted_ms": 120.25}}
 
 
 def test_model_sends_the_chat_template_ids_and_decodes_the_returned_tokens():
@@ -225,6 +226,8 @@ def test_model_sends_the_chat_template_ids_and_decodes_the_returned_tokens():
     assert (generation.text, generation.prompt_tokens, generation.new_tokens) == ('{"a"}', 3, 5)
     assert generation.finite and not generation.at_limit and generation.stop_type == "eos"
     assert (generation.probabilities, generation.tokens_cached, generation.tokens_evaluated) == (5, 90, 103)
+    assert generation.token_ids == tuple(ord(c) for c in '{"a"}')
+    assert (generation.prompt_n, generation.prompt_ms, generation.predicted_n, generation.predicted_ms) == (13, 650.5, 5, 120.25)
     assert {"text", "prompt_tokens", "new_tokens", "finite", "at_limit", "stop_type"} <= set(generation.payload())
 
 

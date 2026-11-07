@@ -16,7 +16,10 @@
 ``finite`` is the closest check the server allows to the fp16 runs' raw-logit
 check: every generated token's reported log-probability (``n_probs`` 1) is a
 finite number. ``new_tokens`` counts the token IDs the server returns, and
-``stop_type`` records why generation ended (``eos`` or ``limit``).
+``stop_type`` records why generation ended (``eos`` or ``limit``);
+``token_ids`` are the generated IDs and ``prompt_ms``, ``predicted_ms``,
+``prompt_n`` and ``predicted_n`` the server's own timings, for the
+throughput pilot.
 
 Only the standard library is used for HTTP; the tokenizer is passed in.
 """
@@ -66,6 +69,11 @@ class LlamaGeneration(Generation):
     tokens_cached: int = 0
     tokens_evaluated: int = 0
     server_seconds: float = 0.0
+    token_ids: tuple[int, ...] = ()  # the generated IDs as returned (the pilot compares repeats on them)
+    prompt_ms: float = 0.0  # the server's own timings: prompt evaluation and generation
+    predicted_ms: float = 0.0
+    prompt_n: int = 0  # prompt tokens the server evaluated (fewer than prompt_tokens when the cache was used)
+    predicted_n: int = 0
 
 
 class LlamaServer:
@@ -127,6 +135,8 @@ class LlamaServerModel:
         if tokens and not probabilities:
             raise ValueError("llama-server returned no token probabilities (n_probs was 1)")
 
+        timings = response.get("timings") or {}
+
         return LlamaGeneration(
             text=self.tokenizer.decode(tokens, skip_special_tokens=True),
             prompt_tokens=len(ids),
@@ -138,6 +148,11 @@ class LlamaServerModel:
             tokens_cached=int(response.get("tokens_cached", 0)),
             tokens_evaluated=int(response.get("tokens_evaluated", 0)),
             server_seconds=round(seconds, 3),
+            token_ids=tuple(int(t) for t in tokens),
+            prompt_ms=float(timings.get("prompt_ms", 0.0)),
+            predicted_ms=float(timings.get("predicted_ms", 0.0)),
+            prompt_n=int(timings.get("prompt_n", 0)),
+            predicted_n=int(timings.get("predicted_n", 0)),
         )
 
 
