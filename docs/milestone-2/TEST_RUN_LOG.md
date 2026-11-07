@@ -21,3 +21,6 @@ Descriptive notes on logged runs. They change no protocol, system, setting or cl
   - **F6 risk materialized on live:** the risk recorded before testing in `docs/milestone-3/VALIDATION_LOG.md` (held-out F6 abstention) shows on live test v1. Queue-misconfiguration (F6) runs score 1/30, and live `abstain` recall is 0/44.
   - **F7 transferred:** tier-format-drift runs score 29/30 on live.
   - **Held-out splits still to come:** both run in session B (test run #6) as declared.
+- **Correction to the test run #5 note, recorded 2026-11-07 after all test runs were analysed:**
+  - **Live F7 is not evidence of transfer:** the note above says tier format drift (F7) "transferred" (29/30 on live). All 30 live F7 runs are healthy (labelled `no_intervention`; the live agent handled the drift), and both model baselines, `gpt-4.1` prompt version 2 and untrained Qwen3-4B, also score 30/30 there. Live F7 therefore shows correct non-intervention, not transfer to the held-out family.
+  - **The transfer evidence is tier 1 `test_held_out` F7 (test run #6):** the fine-tuned model scores 318/480 on F7, including 126 of 279 recovery-labelled cases verified by execution (`docs/milestone-3/RESULTS.md`, "F6 and F7: held-out findings").
