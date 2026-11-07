@@ -45,6 +45,22 @@ def test_conversion_uses_the_separate_venv_and_parity_the_evaluation_environment
     assert '"--no-deps", f"{LLAMA}/gguf-py"' in source
 
 
+def test_conversion_venv_is_made_by_a_pinned_virtualenv_before_the_merge():
+    # Export 1 failed at `python -m venv` (no working ensurepip on the platform), 16 minutes in.
+    code = _code()
+    source = "\n".join(code)
+    assert 'VIRTUALENV = "21.14.13"' in source
+    assert '"--target", TOOLS, f"virtualenv=={VIRTUALENV}"' in source
+    assert '[sys.executable, "-m", "virtualenv", "--quiet", "--no-periodic-update", VENV]' in source
+    assert '"PYTHONPATH": TOOLS' in source  # the tool stays out of the evaluation environment
+    assert '"-m", "venv"' not in source  # the standard library venv needs ensurepip
+    assert "is not an isolated venv" in source
+    venv = next(i for i, s in enumerate(code) if '"-m", "virtualenv"' in s)
+    requirements = next(i for i, s in enumerate(code) if "requirements-convert_hf_to_gguf.txt" in s)
+    merge = next(i for i, s in enumerate(code) if '"merge"' in s)
+    assert venv == requirements == 1 and merge == 2  # right after the bundle cell, before the merge
+
+
 def test_llama_cpp_is_built_cpu_only_and_the_server_runs_without_gpu_layers():
     source = "\n".join(_code())
     for flag in ("-DGGML_CUDA=OFF", "-DGGML_METAL=OFF", "-DGGML_BLAS=OFF", "-DGGML_NATIVE=OFF"):

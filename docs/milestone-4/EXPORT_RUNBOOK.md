@@ -24,17 +24,19 @@ Upload `hetren-m4-bundle.tar.gz` as a new **private** Kaggle Dataset. Keep the c
    - session 2's training output (`train-session-2-retry`, which holds `checkpoint-0792`);
    - the checkpoint-selection output (`selection-run-1`, which holds `choice.json`).
 4. In the first code cell, set `BUNDLE_COMMIT` to the full commit from step 1. The notebook stops if it is empty or differs.
-5. Run all, then save a version named `export-1`.
+5. Run all, then save a version named `export-<N>`, numbered after the last entry in `EXPORT_LOG.md` (export 1 failed, so the next is `export-2`).
 
 **Expected time:** about 1–1.5 hours.
-- Base model download and merge on one T4: 10–15 minutes.
-- llama.cpp CPU build and the conversion venv: 15–20 minutes.
+- llama.cpp checkout and the conversion venv (first, before the merge): about 5 minutes. The venv itself is created in seconds.
+- Base model download and merge on one T4: 5–15 minutes (2.9 minutes for the merge in export 1).
+- llama.cpp CPU build: about 6 minutes (5.8 in export 1).
 - f16 conversion and the two quantisations: 15–25 minutes.
 - Token parity: 5–10 minutes per variant (6,569 texts each).
 
 **The notebook stops on its own** if:
 - the bundle commit, `state.json`, an adapter file or `choice.json` does not match;
 - the llama.cpp checkout is not `620d2225…` or has local changes;
+- the conversion venv cannot be created or is not isolated (checked in the first minutes, before the merge);
 - there is less than 40 GB of scratch space;
 - `llama-server` does not start;
 - token parity fails for a variant (after writing its report).
@@ -47,11 +49,11 @@ Upload `hetren-m4-bundle.tar.gz` as a new **private** Kaggle Dataset. Keep the c
 
 ## 3. Bring back the small files (local)
 
-Download everything except the two GGUF files into `artifacts/milestone-4/export-1/gguf-export/` (gitignored), then check them against the notebook's listing:
+Download everything except the two GGUF files into `artifacts/milestone-4/export-<N>/gguf-export/` (gitignored; `export-2` for the second attempt, as in the commands below), then check them against the notebook's listing:
 
 ```zsh
-mkdir -p artifacts/milestone-4/export-1
-cd artifacts/milestone-4/export-1/gguf-export
+mkdir -p artifacts/milestone-4/export-2
+cd artifacts/milestone-4/export-2/gguf-export
 grep -v '\.gguf$' outputs.sha256 | shasum -a 256 -c
 cd -
 ```
@@ -63,10 +65,10 @@ Then hand over to Claude Code. It will:
 
 ## 4. GGUF files for the Mac pilot (later)
 
-The Kaggle CPU pilot attaches the export notebook's output directly. Download the two GGUF files and `tokenizer/` to the Mac only when its pilot starts, into `artifacts/milestone-4/export-1/gguf-export/`, and check them:
+The Kaggle CPU pilot attaches the export notebook's output directly. Download the two GGUF files and `tokenizer/` to the Mac only when its pilot starts, into `artifacts/milestone-4/export-2/gguf-export/`, and check them:
 
 ```zsh
-cd artifacts/milestone-4/export-1/gguf-export
+cd artifacts/milestone-4/export-2/gguf-export
 shasum -a 256 -c outputs.sha256
 cd -
 ```
