@@ -90,6 +90,19 @@ def test_scores_logs_and_resumes(tiny, tmp_path):
     assert runner.run_baseline(_args(directory, split, tmp_path), model, {**METADATA, "dtype": "float32"}) == 2
 
 
+def test_results_can_be_hidden_from_the_console_without_changing_the_outputs(tiny, tmp_path, capsys):
+    directory, split, primaries = tiny
+    assert runner.run_baseline(_args(directory, split, tmp_path / "shown"), LabelReplay(primaries), METADATA) == 0
+    shown = capsys.readouterr().out
+    assert runner.run_baseline(_args(directory, split, tmp_path / "hidden"), LabelReplay(primaries), METADATA,
+                               show_results=False) == 0
+    hidden = capsys.readouterr().out
+    assert "correct" in shown and "correct" not in hidden and "wrong" not in hidden
+    assert all(f"{v['case_id']}: " in hidden for v in primaries)
+    for name in ("rows-tier1-split.jsonl", "summary-tier1-split.json"):
+        assert (tmp_path / "shown" / name).read_bytes() == (tmp_path / "hidden" / name).read_bytes()
+
+
 def test_generation_errors_stop_without_scoring(tiny, tmp_path):
     directory, split, _ = tiny
 

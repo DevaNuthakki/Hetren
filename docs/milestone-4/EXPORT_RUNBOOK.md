@@ -1,6 +1,6 @@
-# Export and pilot runbook (Milestone 4, steps 1 and 2)
+# Export, pilot and validation runbook (Milestone 4, steps 1–3)
 
-Operator steps for the GGUF export and the throughput pilot under `docs/milestone-2/EVAL_PROTOCOL.md`, Amendment 2. Every run, failed ones included, is logged in `docs/milestone-4/EXPORT_LOG.md` before its results are used. Commands are for zsh, from the repository root.
+Operator steps for the GGUF export, the throughput pilot and the validation run under `docs/milestone-2/EVAL_PROTOCOL.md`, Amendment 2. Every run, failed ones included, is logged in `docs/milestone-4/EXPORT_LOG.md` before its results are used. Commands are for zsh, from the repository root.
 
 ## 1. Build the bundle (local)
 
@@ -126,6 +126,44 @@ Hand both outputs to Claude Code before reading them. It will:
 - write the throughput pilot entries in `EXPORT_LOG.md`, including each platform's `system_info` CPU features;
 - run `python -m packages.support_evaluator.gguf_pilot decide --mac <pilot-mac.json> --kaggle <pilot-kaggle.json> --out <decision.json>`, which applies the caching rule and then the platform rule;
 - log the resulting choices before the validation run.
+
+## 5. Validation run on the Mac (step 3)
+
+Amendment 2's validation check, with the pilot's choice (`EXPORT_LOG.md`, "Pilot choices", 2026-11-08): the Mac, `-t 6`, prompt caching on, the pilot's llama.cpp build and `~/.hetren-pilot` venv (section 4; nothing new to build). Each variant is one run of the full validation split, tier 1 (550 cases) then tier 2 (250), numbered `validation-<N>` after the last validation entry in `EXPORT_LOG.md` (the first is `validation-1`). Validation splits only.
+
+**Expected time:** Q4_K_M about 5.1 hours, Q8_0 about 7.0 hours (the pilot's projections with caching on; its other estimate is 4.4 and 6.3 hours). Run each variant in its own session (for example, one per night), Q4_K_M first.
+
+**What the run shows:** each case's ID and number of calls only, never whether it was correct; do not open the `rows-*`, `summary-*` or `calls.jsonl` files before the run is logged. It checks the Mac (mains power, the pilot's CPU), the commit (no tracked changes except `EXPORT_LOG.md`), both datasets, the variant's GGUF and the tokenizer files before anything runs, and keeps the Mac awake until it ends.
+
+1. Start from the commit with the validation runner; plug in mains power and close heavy applications:
+
+   ```zsh
+   cd ~/Documents/personal-projects/hetren
+   git status --short
+   git rev-parse HEAD
+   mkdir -p artifacts/milestone-4/validation-1
+   ```
+
+   `git status --short` should list only untracked files (`??`).
+2. Q4_K_M (first session):
+
+   ```zsh
+   ~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_validation run --variant Q4_K_M --gguf-dir artifacts/milestone-4/export-2/gguf-export --tokenizer artifacts/milestone-4/export-2/gguf-export/tokenizer --llama-cpp ~/hetren-tools/llama.cpp --out artifacts/milestone-4/validation-1 2>&1 | tee -a artifacts/milestone-4/validation-1/Q4_K_M.log
+   echo "validation exit ${pipestatus[1]}"
+   ```
+
+   The first lines are the build's `system_info` line (it should match the pilot's: `AVX2 = 1 … ACCELERATE = 1 | OPENMP = 1`) and `Q4_K_M tier 1: session 1, 0 of 550 cases done`. Each tier ends with `complete, <cases> cases, <calls> calls, <restarts> restarts, <n> calls ended on another token`.
+3. Q8_0 (second session): the same command with `--variant Q8_0` and `Q8_0.log`.
+
+**If it stops** (power, sleep, a crash or a `STOP` line): note the time and the last lines and hand them to Claude Code, which logs the stop in `EXPORT_LOG.md` first. Then run the same command again: scored cases are kept, the tier resumes at its first unscored case (recorded, with an empty cache), and a finished tier is skipped. The resume refuses other settings and any commit that changed the run's code or data; an uncommitted or committed log entry is fine.
+
+**Afterwards** hand both variants to Claude Code before reading anything. It will check each tier's completion record (`validation-<variant>-tier<N>.json`), write the validation entries in `EXPORT_LOG.md` (dates, platform, threads, llama.cpp commit, GGUF sha256, settings, sessions and restarts, unexpected stops, output hashes), and only then run:
+
+```zsh
+~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_check check --variant Q4_K_M --runs artifacts/milestone-4/validation-1 --out artifacts/milestone-4/validation-1/check-Q4_K_M.json
+~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_check check --variant Q8_0 --runs artifacts/milestone-4/validation-1 --out artifacts/milestone-4/validation-1/check-Q8_0.json
+~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_check ship --checks artifacts/milestone-4/validation-1/check-Q4_K_M.json artifacts/milestone-4/validation-1/check-Q8_0.json --out artifacts/milestone-4/validation-1/ship.json
+```
 
 ## If something fails
 

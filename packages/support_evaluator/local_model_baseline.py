@@ -66,8 +66,11 @@ def smoke_sample(cases: list, tier: int, size: int) -> list:
                   key=lambda c: c.case_id)
 
 
-def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]) -> int:
-    """Score pending cases; ``generate(system, user)`` returns a ``Generation``."""
+def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object], *, show_results: bool = True) -> int:
+    """Score pending cases; ``generate(system, user)`` returns a ``Generation``.
+
+    ``show_results=False`` prints only each case's ID and call count, never whether it was correct (for runs whose
+    results are read only after they are logged, such as the GGUF validation run)."""
     from packages.hetren_baselines.prompt import PROMPT_VERSION, action_text, system_prompt, user_message
     from packages.hetren_evidence import render_evidence
     from packages.support_evaluator.episodes import run_episode
@@ -138,7 +141,8 @@ def run_baseline(args: argparse.Namespace, generate, metadata: dict[str, object]
             rows.write(json.dumps(row, sort_keys=True) + "\n")
 
         done.add(case_id)
-        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls")
+        print(f"{case_id}: {'correct' if row['correct'] else 'wrong'}, {len(calls)} calls" if show_results
+              else f"{case_id}: {len(calls)} calls", flush=True)
 
     if len(done) == len(cases):
         rows = [json.loads(line) for line in rows_path.open(encoding="utf-8")]
