@@ -553,7 +553,10 @@ def decide(reports: dict[str, dict]) -> dict[str, object]:
     result = {
         "repeats_differ": differs,
         "cpu_features": {name: sorted(values) for name, values in flat.items()},
-        "same_cpu_features": len(set().union(*flat.values())) == 1,
+        # None (unknown) when any block of either platform has no recorded features: never a vacuous match.
+        "same_cpu_features": (None if any(f is None for fs in features.values() for by in fs.values()
+                                          for f in by.values())
+                              else len(set().union(*flat.values())) == 1),
         "bundle_commits": {name: r["bundle_commit"] for name, r in reports.items()},
     }
 

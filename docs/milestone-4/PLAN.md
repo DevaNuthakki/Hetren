@@ -78,6 +78,7 @@ Estimates: **build** is implementation and review time in sessions with Claude C
 - Multi-stage `Dockerfile`: base images pinned by digest; llama.cpp built at the pinned commit (CPU, generic x86_64 with AVX2); Python 3.12 with pinned requirements; non-root user. Weights are **not** in the image: they are mounted (`-v ~/.cache/hetren:/models`) or fetched once with `hetren fetch-model`.
 - Image size target: under 1 GB without weights (Q4_K_M is about 2.5 GB, Q8_0 about 4.3 GB).
 - CI: build the image, then run `hetren diagnose` on the committed fixtures with `docker run --network none` and the stub model, proving the offline path. Publish to GitHub Container Registry on tags only.
+- **Linux agreement check (operator, descriptive, not part of acceptance; added 2026-11-08):** the validation runs on the Mac (Accelerate on), the image runs on Linux, and the pilot showed the platform can change Q4_K_M episodes. Run the 20 pilot cases in the shipped container with the validation run's decoding and caching settings and report each variant's episode agreement with the Mac validation episodes for those cases (`docs/milestone-4/EXPORT_LOG.md`, "Limitation: the validation platform is not the shipped platform").
 
 | build | operator | cost |
 |---|---|---|

@@ -182,9 +182,9 @@ def test_a_generation_error_stops_the_block_instead_of_becoming_an_invalid_actio
     assert path.read_text() == ""
 
 
-def _report(platform, identical=None, hours=2.0, features=None):
+def _report(platform, identical=None, hours=2.0, features=None, missing_features=False):
     identical = identical or {}
-    info = {"features": features or {"AVX2": 1, "FMA": 1}}
+    info = None if missing_features else {"features": features or {"AVX2": 1, "FMA": 1}}
     variants = {v: {c: {"all_identical": identical.get((v, c), True), "projected_hours": {"projected": hours},
                         "system_info": info} for c in ("on", "off")} for v in VARIANTS}
     return {"platform": platform, "gguf_sha256": {"Q8_0": "a", "Q4_K_M": "b"}, "llama_cpp_commit": "620d",
@@ -402,3 +402,10 @@ def test_a_server_serving_another_model_stops_the_block(tmp_path):
             pass
 
     assert server.process.poll() is not None and server.log.closed  # stopped, although __exit__ never ran
+
+
+def test_cpu_features_are_unknown_when_either_platform_did_not_record_them():
+    # Pilot 1: llama-server wrote no system_info line at its default verbosity, so both sides were empty.
+    choice = pilot.decide({"mac": _report("mac", missing_features=True), "kaggle": _report("kaggle", missing_features=True)})
+    assert choice["same_cpu_features"] is None and choice["platform"] == "kaggle"
+    assert pilot.decide({"mac": _report("mac"), "kaggle": _report("kaggle", missing_features=True)})["same_cpu_features"] is None
