@@ -25,8 +25,10 @@ read-only and an empty output directory::
         --runs /repo/artifacts/milestone-4/validation-1 --out /out
 
 Outputs in ``<out>``: ``episodes-<variant>.jsonl`` (one line per case: tier, case, calls, episode),
-``server-<variant>.log`` and ``linux-agreement.json`` (environment, memory, ``system_info``, peak memory and
-the agreement per variant and tier, with every output file's sha256).
+``server-<variant>.log`` and ``linux-agreement.json`` (environment, memory, the build's ``system_info``, peak
+memory and the agreement per variant and tier, with every output file's sha256). ``system_info`` comes from a
+``llama-server -lv 4`` probe with no model, as in the validation run: at the default verbosity the server's own
+log does not contain it.
 """
 
 from __future__ import annotations
@@ -36,6 +38,7 @@ import json
 import os
 from pathlib import Path
 import platform as platform_module
+import subprocess
 import sys
 import time
 
@@ -113,11 +116,23 @@ def run_cases(model, cases, out_path: Path, log) -> list[dict]:
     return every_call
 
 
+def cpu_features(binary: Path = BINARY, threads: int = THREADS, run=subprocess.run) -> dict[str, object]:
+    """The build's ``system_info`` (threads and CPU features), probed without a model; a stop if it is missing."""
+    from packages.support_evaluator.gguf_validation import probe_system_info
+
+    info = probe_system_info(binary, threads, run=run)
+
+    if not info or not info.get("features"):
+        raise ValueError(f"{binary} -lv 4 printed no system_info line")
+
+    return info
+
+
 def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)) -> int:
     from packages.hetren_serving.export import LLAMA_CPP_COMMIT, library_versions
     from packages.support_evaluator.gguf_pilot import (MANIFEST, RunningServer, code_commit, cpu_model,
-                                                       peak_rss_bytes, pilot_cases, server_command, server_settings,
-                                                       server_version, system_info, verify_inputs)
+                                                       peak_rss_bytes, pilot_cases, server_command, server_version,
+                                                       verify_inputs)
 
     out = Path(args.out)
 
@@ -141,6 +156,7 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
         manifest = json.loads((REPO_ROOT / MANIFEST).read_text(encoding="utf-8"))
         ggufs = verify_inputs(manifest, args.gguf_dir, args.tokenizer)
         version = server_version(BINARY)
+        system = cpu_features()
         validation = {(v, t): read_jsonl(Path(args.runs) / v / f"tier{t}" / "calls.jsonl")
                       for v in VARIANTS for t in (1, 2)}
     except (ValueError, OSError) as exc:
@@ -149,7 +165,7 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
 
     if args.preflight:
         log(json.dumps({"preflight": "ok", "commit": commit, "memory": memory, "logical_cpus": os.cpu_count(),
-                        "cpu": cpu_model(), "server_version": version,
+                        "cpu": cpu_model(), "server_version": version, "system_info": system["line"],
                         "image_build": json.loads(BUILD_INFO.read_text(encoding="utf-8")),
                         "validation_calls": {f"{v}/tier{t}": len(c) for (v, t), c in validation.items()}}, indent=2))
         return 0
@@ -192,8 +208,7 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
             "tiers": tiers,
             "same_episode": sum(t["same_episode"] for t in tiers.values()), "cases": len(cases),
             "calls": len(calls), "seconds_per_call": round(sum(c["seconds"] for c in calls) / len(calls), 2),
-            "peak_rss_bytes": peak_rss_bytes(server_log), "system_info": system_info(server_log),
-            "server_settings": server_settings(server_log), "load_seconds": server.load_seconds,
+            "peak_rss_bytes": peak_rss_bytes(server_log), "load_seconds": server.load_seconds,
             "minutes": round((time.perf_counter() - began) / 60, 1),
         }
         log(f"{variant}: {variants[variant]['same_episode']} of {len(cases)} episodes as on the Mac "
@@ -208,6 +223,7 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
         "memory_at_start": memory, "python": platform_module.python_version(),
         "libraries": library_versions(("transformers", "tokenizers", "huggingface_hub", "jinja2")),
         "bundle_commit": commit, "llama_cpp_commit": LLAMA_CPP_COMMIT, "server_version": version,
+        "system_info": system,
         "server_command": server_command(BINARY, "<gguf>", THREADS, args.port),
         "decoding": DecodingSettings(cache_prompt=True).payload([]) | {"prompt": "<token IDs>"},
         "manifest_sha256": sha256_file(REPO_ROOT / MANIFEST),

@@ -199,7 +199,7 @@ On the Mac (Intel, so Docker Desktop runs `linux/amd64` natively), with Docker D
    docker run --rm -v "$PWD":/repo:ro -v "$PWD/artifacts/milestone-4/linux-check-1":/out hetren-cli:check python -m packages.support_evaluator.linux_agreement run --gguf-dir /repo/artifacts/milestone-4/export-2/gguf-export --tokenizer /repo/artifacts/milestone-4/export-2/gguf-export/tokenizer --runs /repo/artifacts/milestone-4/validation-1 --out /out --preflight
    ```
 
-   It prints `"preflight": "ok"`, the commit, the memory and `build 11669, commit 620d2225c`.
+   It prints `"preflight": "ok"`, the commit, the memory, `build 11669, commit 620d2225c` and the build's `system_info` line (`AVX2 = 1 … OPENMP = 1`, no `ACCELERATE`); it stops if `llama-server -lv 4` prints no `system_info`.
 
 3. The agreement check (full episodes on the 20 pilot cases, Q4_K_M then Q8_0; about 30–45 minutes):
 

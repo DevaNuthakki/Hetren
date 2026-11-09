@@ -41,3 +41,28 @@ def test_it_refuses_to_run_outside_the_check_image(tmp_path, monkeypatch):
 
     assert code == 2 and "check image" in err.getvalue()
     assert not (tmp_path / "out").exists()
+
+
+class _Result:
+    def __init__(self, stdout: str):
+        self.stdout, self.stderr = stdout, ""
+
+
+IMAGE_SYSTEM_INFO = ("0.00.014.875 I cmn  common_param: system_info: n_threads = 6 (n_threads_batch = 6) / 12 | "
+                     "CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | "
+                     "LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 | \n")  # the image's probe, 2026-11-09
+
+
+def test_cpu_features_come_from_a_verbose_probe_without_a_model():
+    seen = []
+    info = check.cpu_features(run=lambda command, **kw: seen.append(command) or _Result(IMAGE_SYSTEM_INFO))
+    assert seen[0][:3] == [str(check.BINARY), "-lv", "4"] and "/nonexistent/hetren-probe.gguf" in seen[0]
+    assert info["threads"] == 6 and info["features"]["AVX2"] == 1 and "ACCELERATE" not in info["features"]
+
+
+def test_a_missing_system_info_line_stops_the_check():
+    # linux-check-1 parsed the server's own log, which has no system_info at the default verbosity, and recorded null.
+    import pytest
+
+    with pytest.raises(ValueError, match="no system_info"):
+        check.cpu_features(run=lambda command, **kw: _Result("0.00.006 I srv  llama_server: initializing ...\n"))

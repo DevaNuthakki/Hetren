@@ -83,7 +83,12 @@ Pilot choices (caching setting and platform, under Amendment 2's rules) are reco
   - a stopped run may be resumed only to complete the same declared run, and the log names the case it restarted at (with caching on, that case starts from an empty cache);
   - every call records whether generation ended on a token other than `<|im_end|>` or `<|endoftext|>` (such as llama.cpp's added `</s>`); the count and the case IDs are reported, and the runtime is not changed.
 
-**Limitation: the validation platform is not the shipped platform.** The validation runs on macOS, whose llama.cpp build uses Apple's Accelerate (`ACCELERATE = 1`); the shipped Docker image and the Kubernetes deployment run on Linux x86_64. The pilot showed that the platform can change Q4_K_M episodes (`case-004849`), so the accepted variant's validation result describes the Mac configuration, not the Linux one, exactly. **Planned descriptive check (Docker step, not part of acceptance):** run the 20 pilot cases in the shipped Linux container, with the validation run's decoding and caching settings, and report each variant's episode agreement with the Mac validation run's episodes for the same cases. It is reported, and never changes an acceptance decision.
+**Limitation: the validation platform is not the shipped platform.** The validation runs on macOS, whose llama.cpp build uses Apple's Accelerate (`ACCELERATE = 1`); the shipped Docker image and the Kubernetes deployment run on Linux x86_64. The pilot showed that the platform can change Q4_K_M episodes (`case-004849`), so the accepted variant's validation result describes the Mac configuration, not the Linux one, exactly. **Descriptive check (Docker step, not part of acceptance), measured on 2026-11-09** ("Linux checks in the Docker image" below): the 20 pilot cases in the shipped image's build (Linux x86_64, the fixed AVX2 build without Accelerate), with the validation run's decoding, caching and thread settings, against the Mac validation run's episodes for the same cases:
+- **Q8_0:** 20 of 20 episodes the same (tier 1 10 of 10, tier 2 10 of 10), every generated token the same (37 of 37 calls).
+- **Q4_K_M (the shipped default):** 18 of 20 episodes the same (tier 1 10 of 10, tier 2 8 of 10). The two that differ are `case-002104` and `case-004849`, the two cases the pilot found sensitive to platform and caching: on Linux each first probes `inspect` on `routing_policy`, then decides `no_intervention`, the Mac's only action. The final decision is the same; the episode is one step longer.
+- **The CLI in the image** (Q4_K_M, offline): the same first action as the validation run on 10 of 10 tier 1 cases, as on the Mac.
+
+So on these 20 cases the Linux image reproduces Q8_0's validated behaviour exactly and Q4_K_M's on 18. The Q4_K_M differences are the known near-ties, resolved as on Kaggle's Linux build (an extra probe, the same decision). Twenty cases cannot bound the rate on the full split, so the validation result still describes the Mac configuration exactly and the Linux image approximately. It is reported, and never changes an acceptance decision.
 
 ## Validation runs
 
@@ -137,3 +142,67 @@ Run by the operator on 2026-11-08 on the Mac from `bb79c8a7c9a6ad533876884f8921a
 - **Time:** about 50 s per case, 17.4 minutes in all. Most of a case is the CLI's fixed cost: the GGUF's sha256 (2.5 GB), the tokenizer, and the server's model load, before one generation.
 
 Outputs (in `artifacts/milestone-4/cli-check-1/Q4_K_M/`: `inputs/`, `reports/`): `summary.json` `9f26d0e9e6a1c34f9d6389380ac77a66ddcbb320c16beaf70047608f57bf9209`, `cases.jsonl` `a8d7975591d130ccc6935e39fafcbb9ce6374856b664cee84dbb04060f493483`; console log `cli-check-1.log` `afed11ebec4778b3f399172a28ed32c2fb0370d80e412d2e0bab00d0fb753017`; compared against the validation calls tier 1 `e2840398…`, tier 2 `c67a4dc1…` (as recorded in the summary).
+
+## Linux checks in the Docker image (step 5, descriptive)
+
+Run by the operator on 2026-11-09 on the Mac from `d2e01b4922af85f7d6e1d8c42956caf2ba03a4e4` (`git pull` already up to date; `git status` showed only the untracked amendment draft), with the runbook's section 7 commands, one container at a time. Nothing here gates anything.
+
+**Platform.** Docker Desktop's Linux VM on the Mac's Intel Core i7-8850H: Linux 6.12.72-linuxkit x86_64, 12 logical CPUs, `MemTotal` 16,766,697,472 bytes (15.62 GiB; 14.70 GiB available at the check's start). Docker Desktop's memory setting was raised after the operator first reported 7.654 GiB; the check's guard needs 7 GiB for one server at a time. Python 3.13.18, `transformers` 4.56.2, `tokenizers` 0.22.2.
+
+**Images**, built locally from that commit:
+- `hetren-cli:dev` (`runtime` target, `sha256:28263d1b783970cbf076f7b406adab6b09eb685eb12a97429914163001aa89d5`) and `hetren-cli:check` (`sha256:4715adcc42d7318b6d11b455e8951bb122100ec65c8dad3d7c2f52e3d710f99c`). The check image's 22 layers start with the runtime image's 19, and its `llama-server` is the same file (sha256 `b803d9fcb45e2072c952567e5953f379c293c6bf0f7e6023dfc77ef5ed1ac348` in both).
+- `check-image.sh hetren-cli:dev`: all 29 checks passed (393 MB unpacked, `linux/amd64`, uid 10001, only the CLI's 8 package folders).
+- `build-info.json`: llama.cpp `620d2225cc436ab0b001e3200e590e3b286ef9ab`, build 11669, commit `620d2225c`, version from git (a blobless clone of the whole history), `gcc (Debian 12.2.0-14+deb12u1) 12.2.0`, `cmake` 3.25.1, CPU features AVX AVX2 FMA F16C BMI2, OpenMP on, BLAS off. `llama-server --version`: `version: 0.7.0-dev (build 11669, commit 620d2225c)`, `built with GNU 12.2.0 for Linux x86_64`.
+- `system_info`, from the check image's `llama-server -lv 4 -t 6` with a non-existent model file (Claude Code, 2026-11-09, after the run; nothing was loaded): `n_threads = 6 (n_threads_batch = 6) / 12 | CPU : SSE3 = 1 | SSSE3 = 1 | AVX = 1 | AVX2 = 1 | F16C = 1 | FMA = 1 | BMI2 = 1 | LLAMAFILE = 1 | OPENMP = 1 | REPACK = 1 |`. It has the Mac's features except `ACCELERATE`.
+- **Not recorded by the run:** `linux-agreement.json` has `system_info: null` for both variants. The check read it from the server's log, which at the default verbosity does not contain it (the pilot's finding, which the validation run handled with a probe). The probe above is from the same image and binary. Fixed for later runs: `linux_agreement` now probes `-lv 4` during preflight, and a missing line stops the check.
+
+### Agreement check (`linux_agreement`)
+
+`linux check exit 0`; 2026-11-09 20:09:25–20:37:33 UTC. Full episodes on the 20 pilot cases (10 per tier), Q4_K_M then Q8_0, one `llama-server` per variant (`-c 4096 -np 1 -ngl 0 -t 6 -b 2048 -ub 512`, under `/usr/bin/time -v`), Amendment 2's greedy decoding, caching on. Preflight: `"preflight": "ok"`, the same commit, both validation call files present (Q4_K_M 745/630, Q8_0 731/708 calls).
+
+| variant | same episode as the Mac | tier 1 | tier 2 | differing | calls | seconds per call (the Mac's validation run on these cases) | load | minutes | peak memory |
+|---|---|---|---|---|---|---|---|---|---|
+| Q4_K_M | **18 of 20** | 10 of 10 | 8 of 10 | `case-002104`, `case-004849` | 36 | 19.21 (11.26) | 10.1 s | 11.8 | 5.02 GB (5,015,076,864 bytes) |
+| Q8_0 | **20 of 20** | 10 of 10 | 10 of 10 | none | 37 | 26.04 (17.06) | 8.0 s | 16.3 | 5.05 GB (5,049,307,136 bytes) |
+
+Checked by Claude Code on 2026-11-09:
+- every output file's sha256 equals the hash recorded in `linux-agreement.json`, and the four validation call files equal the recorded hashes;
+- the report names the commit, the manifest (`4a2431a4…`), both GGUF hashes, llama.cpp `620d2225c` and 6 threads;
+- the agreement was recomputed from `episodes-<V>.jsonl` and the validation `calls.jsonl` (parsed actions, call by call): the same counts and the same differing cases;
+- every call was finite, ended on `<|im_end|>` (token 151645), stayed under the token limit and never generated `</s>` (128247); no reply was unparsable.
+
+Findings:
+- **Q8_0 is the same down to the token:** 37 of 37 calls generated the same token IDs as the Mac.
+- **Q4_K_M's two differing episodes** each take one extra step: `inspect` on `routing_policy`, then `no_intervention`. On the Mac the run decided `no_intervention` at once, so the final decision is the same. These are the two cases the throughput pilot found sensitive to platform and caching, and they resolve as Kaggle's Linux build did in the pilot (2 calls each with caching on). The other 18 Q4_K_M episodes match action for action. Among their calls, one (`case-001393`, call 0) produced different token IDs that decode to the same text, the same `inspect` probe; the other 31 compared calls are token-identical.
+- **Speed:** the Linux build was slower per call than the Mac's validation run on the same cases. Prompt evaluation ran at 24.2 tokens/s against 38.9 for Q4_K_M and 18.1 against 24.6 for Q8_0; generation ran at 4.93 against 6.63 and 3.37 against 4.65. Not like for like: the prompt caches differed (the validation server had served earlier cases), the image has no Accelerate, and it runs in Docker Desktop's VM. The causes were not separated.
+- **Memory:** one server peaked at 5.02 GB (Q4_K_M) and 5.05 GB (Q8_0), against the Mac validation's 5.08 and 5.10 GB.
+
+Outputs (in `artifacts/milestone-4/linux-check-1/`):
+- `linux-agreement.json` `00d2320266e11105a1780b1ea51139634c22735801cebacdc82cdba1ed1661a4`;
+- `episodes-Q4_K_M.jsonl` `0d809e0a5ab00ea345560cdc66529705778652cbbfbc0fdf0dd0e375810d64bc`, `episodes-Q8_0.jsonl` `aa8aa4b26ce5b03819bdd64e01f2e9a1ccdbd169f484dcf9d3e34532549879e6`;
+- `server-Q4_K_M.log` `bbfdb7c1e8195b19145b3a6771869d4f29130a7d00a5e0dcab06565d9150950e`, `server-Q8_0.log` `ac8b8b6869152390cfd4ba3f91cfb7b6baa6a5761f87974214a5497601c9f373`;
+- console log `linux-check-1.log` `ba6319c622031962be45e0b9ee83a1ce034f20480641c200f5ad9a30d7f9e357`.
+
+### The CLI in the image (`cli_check --docker-image`)
+
+`cli docker check exit 0`. Run about 20:41–21:10 UTC (from the files' times; the summary records no clock times). Q4_K_M in `hetren-cli:dev` (`sha256:28263d1b…`), one container per case, `--network none --read-only`, the GGUF and tokenizer mounted read-only, `--threads 6`. As in the Mac CLI check, each case's CLI action is compared with the validation run's first call.
+
+| tier | comparison | same first action | differing | outcomes from the CLI | seconds per case (whole container) |
+|---|---|---|---|---|---|
+| 1 | like for like (only the prompt cache differs) | **10 of 10** | none | 5 decisions, 3 proposed recoveries, 2 probe requests | 70.9–96.7 |
+| 2 | not like for like (the CLI always uses the tier 1 prompt) | 7 of 10 | `case-000329`, `case-002391`, `case-008313` | 4 decisions, 3 proposed recoveries, 3 probe requests | 75.0–106.3 |
+
+Checked by Claude Code on 2026-11-09:
+- all 20 reports record the commit `d2e01b49…`, Q4_K_M with the manifest's sha256, the validated build (`620d2225c`, build 11669, `built with GNU 12.2.0 for Linux x86_64`), 6 threads and prompt version 2;
+- every generation was finite and ended on end-of-sequence, with no other stop token; prompts were 1,549–1,744 tokens; every exit status was 0, with no CLI failures and nothing on stderr.
+
+Findings:
+- **Tier 1** reproduces the validated first action on all 10 cases in the offline image, as the Mac CLI did.
+- **Tier 2** gives the same first action as the Mac CLI on 9 of 10 cases. The exception is `case-002287`: the image's CLI rerouted ticket T-2124 to `Q-TRIAGE`, as the validation run did, where the Mac CLI chose `Q-MANUAL`. That case now matches the validation, which is why tier 2 is 7 of 10 rather than 6.
+- **Time:** 29.3 minutes in all against 17.4 on the Mac, or 70.9–106.3 s per case against 46.6–57.7 s. Generation alone took 55.3–87.9 s per case. The causes were not separated (the Linux build is slower per token, as above, and every container starts cold).
+
+Outputs (in `artifacts/milestone-4/cli-check-docker-1/Q4_K_M/`: `inputs/`, `reports/`):
+- `summary.json` `d79286f92048f4260acbc7809c5460c93c38a858e50b863b0a5af16cf7b4a6ba` (it records `docker_image` and `image_id`);
+- `cases.jsonl` `b333a1796805cce4bfd46a15a3b54408b323d9c5c9572cd6f2df5cd51272378c`;
+- console log `cli-check-docker-1.log` `69d499584e16a4fa9eb11f085996875a1fc2169ce432cbf13baaa38c686b705c`;
+- compared against the validation calls tier 1 `e2840398…`, tier 2 `c67a4dc1…`.
