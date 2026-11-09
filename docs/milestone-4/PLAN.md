@@ -160,6 +160,29 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
 - **Technical report** (`docs/TECHNICAL_REPORT.md`, optional PDF): problem, environment and fault families, protocol and claim rule, datasets and labelling, baselines, training and selection, test results, CPU export, deployment and load test, limitations. Every number is taken from the committed results and logs; a test checks that the report's numbers appear in their sources.
 - **Demo video** (about 3 minutes; recorded by the operator from a script and command list in `docs/milestone-4/DEMO_SCRIPT.md`): a healthy run left alone, a mapping swap diagnosed and its recovery verified in the sandbox, an F6 case shown honestly as a failure, the offline Docker run with `--network none`, and the load-test summary.
 
+- **Tags and GitHub releases** (operator, 2026-11-09). The `publish` job pushes an image for every tag that matches its trigger, so the tag names decide which images exist.
+  - **Problem:** the trigger is currently `v*`, so a milestone tag such as `v0.4.0-milestone-4` would also publish an image.
+  - **Naming plan:**
+
+    | tag | pattern | publishes an image | GitHub release | when |
+    |---|---|---|---|---|
+    | release candidate | `vX.Y.Z-rc.N`, e.g. `v0.4.0-rc.1` | yes, `ghcr.io/devanuthakki/hetren-cli:v0.4.0-rc.1` | a pre-release with short notes: the image digest, and that it is the GKE image of step 6b | 6b, on the commit deployed to GKE |
+    | release | `vX.Y.Z`, e.g. `v1.0.0` | yes, `:v1.0.0` (no `latest` tag) | the full release notes, below | after 7 (model and dataset on Hugging Face) and 8 (final docs), on the merge commit in `main` |
+    | milestone | `milestone-N`, e.g. `milestone-4` (no `v` prefix) | **no** | none | after each milestone's merge into `main` |
+
+    The existing tags `v0.1.0-milestone-1` to `v0.3.0-milestone-3` predate the publish job and stay as they are.
+  - **CI change, made with this plan's approval and shown first:**
+    - The push trigger becomes the two release patterns only: `'v[0-9]+.[0-9]+.[0-9]+'` and `'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'` (GitHub's filter syntax). Milestone tags then start no workflow at all; their commit was already tested on `main`.
+    - Defence in depth: `publish` first checks that the tag matches `^v[0-9]+\.[0-9]+\.[0-9]+(-rc\.[0-9]+)?$`, and that the version equals the CLI's `CLI_VERSION` and the chart's `appVersion`. Otherwise it stops before logging in.
+    - Before each release tag: a version-bump commit (`CLI_VERSION`, `Chart.yaml` `version` and `appVersion`), shown and approved like any other.
+  - **Release notes for `v1.0.0`** (`docs/RELEASE_NOTES.md`; drafted in step 8 and shown before tagging):
+    - what Hetren is and its scope (the synthetic support workflow, tier 1 in the CLI and API);
+    - results at a glance, from the committed results;
+    - **links:** the Hugging Face model repository (pinned revision), the dataset repository, the Docker image with its digest (`ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:…`), the technical report, and the demo video;
+    - **checksums:** the export manifest, both GGUFs and the image digest;
+    - known limitations: F6, the platform note and tier 1 only.
+    A test checks that the notes' hashes and links match the manifest and the logs.
+
 | build | operator | cost |
 |---|---|---|
 | 2–3 sessions | 2 h to record and edit | $0 |
@@ -169,11 +192,26 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
 1. Steps 1–3 first: the export must be accepted (or its gap measured) before anything ships a model.
 2. Steps 4–5, then 6 (kind first, cloud last), then 7 and 8.
 3. Every commit is shown to the operator first; boundary tests and the fast suite run locally before every push of a new module; CI (fast and slow) must be green before the PR into `main`.
-4. After merge: annotated tag `v0.4.0-milestone-4`.
+4. After merge: annotated tag `milestone-4` (no `v` prefix, so no image is published: step 8, "Tags and GitHub releases"). The release tag `v1.0.0` follows step 8.
+5. **Last of all (operator):** the "Final checklist" below.
 
 | | build | operator time | cost |
 |---|---|---|---|
 | total | about 15–21 sessions | about 20–30 h, mostly unattended compute | about $3–5 estimated cloud spend, hard cap $25 |
+
+## Final checklist (operator, after everything else)
+
+Recorded on 2026-11-09 so it is not forgotten. The pre-public review found no secrets in the history, and the
+LICENSE and NOTICE are in place (`7244df2`).
+
+- [ ] **GitHub account:**
+  - Settings → Emails → "Keep my email addresses private" and "Block command line pushes that expose my email";
+  - `git config --global user.email <id>+<user>@users.noreply.github.com`.
+  The Gmail address stays in the existing history (no rewrite: commit hashes are cited throughout the logs).
+- [ ] **Make the repository public** (Settings → General → Danger Zone).
+- [ ] **Code security:** secret scanning and push protection on; Dependabot alerts on.
+- [ ] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
+- [ ] **GHCR:** after the first `v*` publish, set the package `hetren-cli` to public (Packages → hetren-cli → Package settings → visibility). Then check an anonymous pull: `docker logout ghcr.io`, then `docker pull ghcr.io/devanuthakki/hetren-cli:<tag>`.
 
 ## Risks
 
