@@ -1,0 +1,8 @@
+Hetren
+Copyright 2026 Deva Harsha Nuthakki
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The Hetren diagnosis model, published separately on Hugging Face, is a fine-tune of
+Qwen3-4B-Instruct-2507 by the Qwen team (Alibaba Cloud), licensed under the Apache License,
+Version 2.0. No model weights are included in this repository.

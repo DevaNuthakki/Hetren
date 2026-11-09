@@ -53,3 +53,8 @@ deploy/terraform/**/*.tfstate.*
 deploy/terraform/**/*.tfvars
 deploy/terraform/**/.build/
 deploy/terraform/bootstrap/backend.tf
+
+# Credentials that must never be committed.
+kaggle.json
+*.pem
+*.key
