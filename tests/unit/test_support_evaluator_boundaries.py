@@ -48,6 +48,7 @@ RESTRICTED_PREFIXES = (
     "packages.hetren_evidence",
     "packages.hetren_baselines",
     "packages.hetren_serving",
+    "packages.hetren_cli",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",

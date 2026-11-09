@@ -165,6 +165,18 @@ Amendment 2's validation check, with the pilot's choice (`EXPORT_LOG.md`, "Pilot
 ~/.hetren-pilot/bin/python -m packages.support_evaluator.gguf_check ship --checks artifacts/milestone-4/validation-1/check-Q4_K_M.json artifacts/milestone-4/validation-1/check-Q8_0.json --out artifacts/milestone-4/validation-1/ship.json
 ```
 
+## 6. CLI check on the real model (step 4, descriptive)
+
+On the Mac, from the repository at the commit that added the CLI (`git status --short` shows only the untracked amendment draft), on mains power. It runs the CLI as a user would, once per pilot case (20 processes, each starting and stopping its own `llama-server` with `-t 6`), and compares each CLI action with the Q4_K_M validation run's first call for that case. Tier 1 compares like for like; tier 2 does not (the validation run used the tier 2 prompt, the CLI always uses the tier 1 prompt). Nothing gates on it. About 10–15 minutes.
+
+```zsh
+cd ~/Documents/personal-projects/hetren
+caffeinate -i ~/.hetren-pilot/bin/python -m packages.support_evaluator.cli_check run --variant Q4_K_M --gguf-dir artifacts/milestone-4/export-2/gguf-export --tokenizer artifacts/milestone-4/export-2/gguf-export/tokenizer --llama-server ~/hetren-tools/llama.cpp/build/bin/llama-server --runs artifacts/milestone-4/validation-1 --out artifacts/milestone-4/cli-check-1 2>&1 | tee artifacts/milestone-4/cli-check-1.log
+echo "cli check exit ${pipestatus[1]}"
+```
+
+Each case prints `tier <N> <case>: exit <status>, same|different first action, <seconds> s`; the end prints both tiers' counts. Hand the exit status and `artifacts/milestone-4/cli-check-1/Q4_K_M/summary.json` to Claude Code, which logs the check in `EXPORT_LOG.md`.
+
 ## If something fails
 
 Do not re-run silently. Note what happened (cell, message, time) and log the run as failed or stopped in `EXPORT_LOG.md` first. A repeat completes the same declared export; it never changes a setting.

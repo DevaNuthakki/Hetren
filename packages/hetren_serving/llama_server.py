@@ -104,6 +104,19 @@ class LlamaServer:
         return self.request("/props")
 
 
+# Amendment 2's server settings, as the pilot and the validation run started the server (``gguf_pilot.SERVER``;
+# a test keeps the two equal). The CLI cannot import the evaluator side, so the values live here too.
+SERVER_SETTINGS = {"context": 4096, "batch": 2048, "ubatch": 512, "parallel": 1, "gpu_layers": 0}
+
+
+def server_arguments(binary: str, gguf: str, threads: int, port: int, host: str = "127.0.0.1") -> list[str]:
+    """``llama-server``'s command line with Amendment 2's settings (``gguf_pilot.server_command`` without ``time``)."""
+    s = SERVER_SETTINGS
+    return [str(binary), "-m", str(gguf), "-c", str(s["context"]), "-np", str(s["parallel"]),
+            "-ngl", str(s["gpu_layers"]), "-t", str(threads), "-b", str(s["batch"]), "-ub", str(s["ubatch"]),
+            "--host", host, "--port", str(port)]
+
+
 def _finite(probabilities: list[dict]) -> bool:
     values = [p.get("logprob") for p in probabilities]
     return all(isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) for v in values)
@@ -156,4 +169,4 @@ class LlamaServerModel:
         )
 
 
-__all__ = ["DecodingSettings", "LlamaGeneration", "LlamaServer", "LlamaServerModel"]
+__all__ = ["DecodingSettings", "LlamaGeneration", "LlamaServer", "LlamaServerModel", "SERVER_SETTINGS", "server_arguments"]

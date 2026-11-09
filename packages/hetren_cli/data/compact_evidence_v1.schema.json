@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren-cli/compact-evidence-v1",
+  "title": "compact-evidence-v1: a first-step model input of the support workflow",
+  "description": "The input compact_evidence builds before any recovery (no recoveries key); steps and probes use the support workflow's tools and the probe verbs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "task", "run", "steps", "discrepancies", "probes"],
+  "properties": {
+    "format": {"const": "compact-evidence-v1"},
+    "task": {"type": "string", "minLength": 1},
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "error_type"],
+      "properties": {
+        "status": {"enum": ["completed", "max_turns_exceeded", "error"]},
+        "error_type": {"type": ["string", "null"]}
+      }
+    },
+    "steps": {"type": "array", "items": {"$ref": "#/$defs/step"}},
+    "discrepancies": {"type": "array", "items": {"type": "string"}},
+    "probes": {"type": "array", "items": {"$ref": "#/$defs/step"}}
+  },
+  "$defs": {
+    "step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tool", "args", "outcome"],
+      "properties": {
+        "tool": {"type": "string", "pattern": "^[a-z][a-z0-9_]{0,63}$"},
+        "args": {"type": "object"},
+        "outcome": {"enum": ["not_authorized", "denied", "not_observed", "succeeded", "failed"]},
+        "reason": {"type": "string"},
+        "observation": {},
+        "changed_state": {"type": "boolean"},
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "message"],
+          "properties": {"type": {"type": "string"}, "message": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "amendment": "EVAL_PROTOCOL.md, Amendment 2",
+  "commands": [
+    [
+      "python",
+      "convert_hf_to_gguf.py",
+      "merged",
+      "--outtype",
+      "f16",
+      "--outfile",
+      "hetren-qwen3-4b-ckpt0792-f16.gguf"
+    ],
+    [
+      "llama-quantize",
+      "hetren-qwen3-4b-ckpt0792-f16.gguf",
+      "hetren-qwen3-4b-ckpt0792-q8_0.gguf",
+      "Q8_0"
+    ],
+    [
+      "llama-quantize",
+      "hetren-qwen3-4b-ckpt0792-f16.gguf",
+      "hetren-qwen3-4b-ckpt0792-q4_k_m.gguf",
+      "Q4_K_M"
+    ]
+  ],
+  "converter_libraries": {
+    "accelerate": "not installed",
+    "gguf": "0.19.0",
+    "numpy": "2.2.6",
+    "peft": "not installed",
+    "python": "3.13.16",
+    "safetensors": "0.8.0",
+    "sentencepiece": "0.2.3",
+    "tokenizers": "0.22.2",
+    "torch": "2.11.0+cpu",
+    "transformers": "4.57.6"
+  },
+  "gguf": {
+    "hetren-qwen3-4b-ckpt0792-f16.gguf": {
+      "bytes": 8051283360,
+      "sha256": "70e69512cfa6e24c97a0abf4a86840835eea7b8bbda8125fde7fdc3f5c10902d"
+    },
+    "hetren-qwen3-4b-ckpt0792-q4_k_m.gguf": {
+      "bytes": 2497278880,
+      "sha256": "e3f50ba98ee7e800554dec7ec1c403e7f1d47d4595300e6a6a3e8bf7ffe8763e"
+    },
+    "hetren-qwen3-4b-ckpt0792-q8_0.gguf": {
+      "bytes": 4280403360,
+      "sha256": "496c74a750ef32d0c52dd9644e51b36547dda762c498ac89eece1a24bab3ba29"
+    }
+  },
+  "importance_matrix": null,
+  "llama_cpp": {
+    "commit": "620d2225cc436ab0b001e3200e590e3b286ef9ab",
+    "release": "v0.7.0"
+  },
+  "merge": {
+    "base": {
+      "dtype": "float16",
+      "model": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554"
+    },
+    "checkpoint": {
+      "adapter_sha256": "5647f93f25c9f79c8e7fca0468d8aa7476afbcc348f3b42f420d1845098f4226",
+      "checkpoint": "checkpoint-0792",
+      "files": {
+        "adapter/adapter_config.json": "2e5474dfb3826b085cca2b10757f21fd6f0bb99f58b1d4f4d5096499522b6fe6",
+        "adapter/adapter_model.safetensors": "5647f93f25c9f79c8e7fca0468d8aa7476afbcc348f3b42f420d1845098f4226"
+      },
+      "state_sha256": "d6230ff6e1780ac5286f0accc0a45298dd8db49fc11ed6fdb1330d98189276d5",
+      "step": 792
+    },
+    "choice_sha256": "d41a7ef595e8882ff0dbb367e62b03b87c8f1006bb60da09811fb19f11992332",
+    "device": "cuda",
+    "device_name": "Tesla T4",
+    "files": {
+      "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+      "chat_template.jinja": "64f85b198065d0fba2a81f37e10ed68161ce2c19a754c7100e67e0ca2ee9c326",
+      "config.json": "fa8f3e3f83c60f855cef06790c088dabd1b952239d8bd18f275614bcb1662636",
+      "generation_config.json": "3cc01c90a05f28e747aa0ab3aaf0cf2ac7a93114d6e9835f902f332b0871ee1b",
+      "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "model-00001-of-00002.safetensors": "88e86b39661dd954894a4468c7b50aeba79c4bf32138f2212f25208fff5a00a3",
+      "model-00002-of-00002.safetensors": "2fb4cf48f7de7b824ab235e1441f93c8b8d6b2529e58b518d4d3a178da443ba8",
+      "model.safetensors.index.json": "06b3d5319b6d76d1a4a2433419180016cfd54ed62d086a5e6567a809f8c82634",
+      "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+      "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "tokenizer_config.json": "4b5f2f80f84faefe8420e1616671adb1dd3d7e632038d34b1f0e3a1363a51059",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+    },
+    "libraries": {
+      "accelerate": "1.10.1",
+      "gguf": "not installed",
+      "numpy": "2.1.3",
+      "peft": "0.17.1",
+      "python": "3.13.16",
+      "safetensors": "0.8.0",
+      "sentencepiece": "0.2.2",
+      "tokenizers": "0.22.2",
+      "torch": "2.11.0+cu130",
+      "transformers": "4.56.2"
+    },
+    "merge": "peft merge_and_unload into the fp16 base"
+  }
+}
