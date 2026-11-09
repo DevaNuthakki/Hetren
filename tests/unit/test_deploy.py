@@ -130,6 +130,11 @@ def test_every_stack_labels_its_resources_and_pins_the_provider():
     assert 'labels = { project = "hetren", milestone = "4" }' in _text("terraform/bootstrap/main.tf")
     assert 'backend "gcs"' in _text("terraform/gke/versions.tf")
     assert 'backend "gcs"' not in _text("terraform/bootstrap/versions.tf")  # it creates the state bucket
+    example = _text("terraform/bootstrap/backend.tf.example")  # migrated into the bucket after the first apply
+    assert 'backend "gcs"' in example and 'prefix = "bootstrap"' in example and "-migrate-state" in example
+    assert "deploy/terraform/bootstrap/backend.tf\n" in (REPO_ROOT / ".gitignore").read_text(encoding="utf-8")
+    readme = _text("README.md")
+    assert "terraform init -migrate-state -backend-config" in readme and "master_authorized_cidr" in readme
 
 
 def test_the_quota_check_needs_room_for_the_capped_pool():

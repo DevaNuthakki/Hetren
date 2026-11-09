@@ -76,10 +76,12 @@ CI's `deploy` job runs both on every push. Nothing is planned or applied in CI.
 
 The full runbook is written for step 6b. In outline:
 
-1. **Bootstrap**, with local state; the operator's `terraform.tfvars` stays out of git:
+1. **Bootstrap**, with local state for the first apply; the operator's `terraform.tfvars` stays out of git:
    - `cd deploy/terraform/bootstrap`
    - `terraform init`
    - `terraform apply -var kill_switch_dry_run=true` with `project_id` and `billing_account` set.
+   - **Right away, move the state into the bucket the apply just created** (see "Bootstrap state" below):
+     `cp backend.tf.example backend.tf`, then `terraform init -migrate-state -backend-config="bucket=<id>-tfstate"`.
 2. **Test the kill switch without stopping anything:**
    - Publish a below-budget message, then an over-budget one, to `hetren-budget`, for example:
      `gcloud pubsub topics publish hetren-budget --project <id> --message '{"costAmount": 30, "budgetAmount": 25}'`
@@ -93,7 +95,32 @@ The full runbook is written for step 6b. In outline:
 5. **Deploy and load-test:** the one-command install above, then the load-test Job (`deploy/loadtest/job.yaml`).
 6. **Tear down:**
    - `terraform destroy` in `gke/`, then `deploy/terraform/verify-teardown.sh <id>`;
+   - in `bootstrap/`, move its state back to a local file first (the destroy deletes the bucket that holds it):
+     `rm backend.tf`, then `terraform init -migrate-state`;
    - then `terraform destroy` in `bootstrap/` (which deletes the project), then `verify-teardown.sh <id> --deleted`.
+
+**The cluster's API accepts only your /32** (`master_authorized_cidr`). If your public IP changes (a new home
+IP, another network), `kubectl` and `helm` time out. Update the variable and re-apply the `gke` stack; this
+changes only the authorised network, not the cluster or its nodes:
+`terraform apply -var project_id=<id> -var master_authorized_cidr=$(curl -s https://checkip.amazonaws.com)/32`.
+
+### Bootstrap state
+
+The bootstrap stack creates the bucket that holds both stacks' remote state, so its first apply has to use a
+local state file. That file alone would be the only record of the project, the budget and the kill switch, so
+it moves into the bucket straight after the first apply:
+
+```zsh
+cd deploy/terraform/bootstrap
+cp backend.tf.example backend.tf                                    # gitignored
+terraform init -migrate-state -backend-config="bucket=<id>-tfstate"  # answer yes to copy the state
+terraform plan                                                      # expect: No changes
+```
+
+Afterwards the local `terraform.tfstate` can be deleted; the bucket is versioned. From another machine: clone,
+`cp backend.tf.example backend.tf`, then `terraform init -backend-config="bucket=<id>-tfstate"`. Before the
+final `destroy`, move the state back (`rm backend.tf`, then `terraform init -migrate-state`), because the
+destroy deletes the bucket the state is in.
 
 The budget's alerts go to the billing account's admins. At 100% the kill switch unlinks the project from its
 billing account. Budget data lags usage by hours, so this is a backstop, not the plan.

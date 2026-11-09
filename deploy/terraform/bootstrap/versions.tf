@@ -12,8 +12,9 @@ terraform {
     }
   }
 
-  # Local state (gitignored): this stack creates the bucket that holds the gke stack's remote state, so its
-  # own state cannot live there. It is small and holds no secrets; destroying this stack deletes the project.
+  # The first apply uses local state (gitignored): this stack creates the state bucket, so its state cannot
+  # start there. Right after that apply, move it into the bucket (backend.tf.example; deploy/README.md,
+  # "Bootstrap state"), so the project, budget and kill switch stay manageable without this machine's copy.
 }
 
 provider "google" {

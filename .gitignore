@@ -52,3 +52,4 @@ deploy/terraform/**/*.tfstate
 deploy/terraform/**/*.tfstate.*
 deploy/terraform/**/*.tfvars
 deploy/terraform/**/.build/
+deploy/terraform/bootstrap/backend.tf
