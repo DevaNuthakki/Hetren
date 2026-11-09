@@ -1,0 +1,15 @@
+# GKE (step 6b): the published image and the GGUF from the Hugging Face model repository.
+#   helm install hetren deploy/helm/hetren -f deploy/gke/values.yaml \
+#     --set image.tag=v0.4.0-rc.1 --set model.repo=<huggingface repository>
+# One pod per e2-standard-8 node (CPU request 6 of about 7.9 allocatable), llama-server on its 4 cores.
+model:
+  variant: Q4_K_M
+threads: 4
+maxQueue: 8
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 60
+nodeSelector:
+  hetren/pool: inference

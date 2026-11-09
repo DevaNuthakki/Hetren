@@ -1,0 +1,26 @@
+# kind in CI (deploy/kind/smoke.sh): the image CI just built, the stub llama-server, and small resources.
+# model.repo is set by smoke.sh only when $HETREN_MODEL_REPO is (after step 7a): the init container then
+# fetches the tokenizer only, and the API serves the stub's recorded reply.
+image:
+  repository: hetren-cli
+  tag: ci
+  pullPolicy: Never
+threads: 1
+maxQueue: 8
+stub:
+  enabled: true
+  seconds: 2
+resources:
+  requests:
+    cpu: 200m
+    memory: 512Mi
+    ephemeral-storage: 256Mi
+  limits:
+    memory: 1Gi
+    ephemeral-storage: 1Gi
+modelCacheSizeLimit: 512Mi
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+terminationGracePeriodSeconds: 60

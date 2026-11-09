@@ -1,0 +1,63 @@
+# The load test as a Kubernetes Job (kind smoke test and GKE). The ConfigMap holds k6.js and the input:
+#   kubectl create configmap hetren-loadtest --from-file=deploy/loadtest/k6.js \
+#     --from-file=input.json=tests/fixtures/hetren_cli/compact_first_step.json
+# STEPS, STEP_SECONDS and MAX_ERROR_RATE are set per run (deploy/kind/smoke.sh, the GKE runbook).
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hetren-loadtest
+  labels:
+    project: hetren
+    milestone: "4"
+spec:
+  backoffLimit: 0
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        project: hetren
+        app.kubernetes.io/name: hetren-loadtest
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 12345
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: k6
+          image: grafana/k6:1.8.2@sha256:00fdcebafbc86cb0137d429529b1caa401a02e09025f02fc74866fa6e2b004d8
+          args: ["run", "--quiet", "/loadtest/k6.js"]
+          env:
+            - name: TARGET
+              value: http://hetren:8000
+            - name: STEPS
+              value: "1,2,4,8,16"
+            - name: STEP_SECONDS
+              value: "300"
+            - name: MAX_ERROR_RATE  # empty: report only; the kind smoke test sets 0
+              value: ""
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: loadtest
+              mountPath: /loadtest
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: loadtest
+          configMap:
+            name: hetren-loadtest
+        - name: tmp
+          emptyDir: {}

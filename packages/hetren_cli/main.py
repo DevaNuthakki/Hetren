@@ -10,6 +10,7 @@ proposed recovery, or a probe the model would need; nothing is ever applied.
   python -m packages.hetren_cli diagnose --record run.json
   python -m packages.hetren_cli diagnose --compact evidence.json --format json
   python -m packages.hetren_cli fetch-model --repo <huggingface repo> [--variant Q8_0]
+  python -m packages.hetren_cli serve --host 0.0.0.0 --port 8000   (POST /diagnose; see packages/hetren_cli/api.py)
 
 Exit status: 0 a diagnosis was made; 2 the input was rejected; 3 the model or llama-server failed;
 4 the model's reply was not a valid action.
@@ -25,12 +26,12 @@ import sys
 from typing import Any, Callable
 
 
+from packages.hetren_cli.diagnosis import CONTEXT_TOKENS, END_OF_GENERATION, TIER1_RECOVERIES  # noqa: F401
+
+
 CLI_VERSION = "0.4.0.dev0"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXIT_OK, EXIT_INPUT, EXIT_RUNTIME, EXIT_REPLY = 0, 2, 3, 4
-CONTEXT_TOKENS = 4096  # Amendment 2's -c
-END_OF_GENERATION = {151645, 151643}  # <|im_end|>, <|endoftext|> (gguf_check.END_OF_GENERATION)
-TIER1_RECOVERIES = 1  # one step on a recorded run: the tier 1 prompt (no recovery is ever applied)
 
 
 def code_commit(root: Path = REPO_ROOT) -> str | None:
@@ -68,13 +69,16 @@ def _parser() -> argparse.ArgumentParser:
     source = diagnose.add_mutually_exclusive_group(required=True)
     source.add_argument("--record", type=Path, help="an AgentRunRecord evidence payload (JSON)")
     source.add_argument("--compact", type=Path, help="compact-evidence-v1 JSON, or one hetren_visible.jsonl line")
-    diagnose.add_argument("--variant", choices=VARIANTS, help="the cached GGUF to use (default Q4_K_M)")
-    diagnose.add_argument("--model", type=Path, help="a local GGUF file (checked against the export manifest)")
-    diagnose.add_argument("--tokenizer", type=Path, help="tokenizer folder (default: tokenizer/ beside the model)")
-    diagnose.add_argument("--llama-server", help="the llama-server binary (default $HETREN_LLAMA_SERVER or PATH)")
-    diagnose.add_argument("--threads", type=int, help="llama-server -t (default: half the logical CPUs)")
-    diagnose.add_argument("--server-url", help="use this running llama-server instead of starting one")
+    _model_options(diagnose)
     diagnose.add_argument("--format", choices=("text", "json"), default="text")
+
+    serve = commands.add_parser("serve", help="an HTTP API for diagnoses (POST /diagnose; nothing is applied)")
+    _model_options(serve)
+    serve.add_argument("--host", default="127.0.0.1", help="listen address (0.0.0.0 in a container)")
+    serve.add_argument("--port", type=int, default=8000)
+    serve.add_argument("--max-queue", type=int, default=8,
+                       help="requests that may wait behind the one being diagnosed; more get 503")
+    serve.add_argument("--max-body-bytes", type=int, default=1 << 20)
 
     fetch = commands.add_parser("fetch-model", help="download a validated GGUF and the tokenizer, checking sha256")
     fetch.add_argument("--repo", default=os.environ.get("HETREN_MODEL_REPO"),
@@ -82,28 +86,54 @@ def _parser() -> argparse.ArgumentParser:
     fetch.add_argument("--variant", choices=VARIANTS, default="Q4_K_M")
     fetch.add_argument("--revision", default="main")
     fetch.add_argument("--cache", type=Path, help="default $HETREN_CACHE or ~/.cache/hetren")
+    fetch.add_argument("--tokenizer-only", action="store_true",
+                       help="only the tokenizer (for serve --server-url, where another process serves the GGUF)")
 
     commands.add_parser("version", help="the CLI's version, commit and validated model files")
     return parser
 
 
-def _input_summary(compact: dict[str, Any]) -> dict[str, object]:
-    return {"format": compact["format"], "task": compact["task"], "status": compact["run"]["status"],
-            "tool_calls": len(compact["steps"]), "probes": len(compact["probes"])}
+def _model_options(command: argparse.ArgumentParser) -> None:
+    from packages.hetren_cli.models import VARIANTS
+
+    command.add_argument("--variant", choices=VARIANTS, help="the cached GGUF to use (default Q4_K_M)")
+    command.add_argument("--model", type=Path, help="a local GGUF file (checked against the export manifest)")
+    command.add_argument("--tokenizer", type=Path, help="tokenizer folder (default: tokenizer/ beside the model)")
+    command.add_argument("--llama-server", help="the llama-server binary (default $HETREN_LLAMA_SERVER or PATH)")
+    command.add_argument("--threads", type=int, help="llama-server -t (default: half the logical CPUs)")
+    command.add_argument("--server-url", help="use this running llama-server instead of starting one")
+
+
+def load_model(args: argparse.Namespace, tokenizer_loader: Callable = load_tokenizer) -> tuple[dict, object]:
+    """(model_info, tokenizer) for ``--model``/``--variant`` or ``--server-url``; raises ``ModelError`` or
+    ``RuntimeFailure``. The CPU check runs first, unless an external server does the work."""
+    from packages.hetren_cli.models import DEFAULT_VARIANT, ModelError, cache_dir, check_tokenizer, gguf_files, resolve
+    from packages.hetren_cli.runtime import check_cpu
+
+    if not args.server_url:
+        check_cpu()  # before the model: the image's llama-server needs AVX2, FMA and F16C
+        model_info = resolve(args.model, args.tokenizer, args.variant)
+    else:
+        if args.model is not None:
+            raise ModelError("give --model or --server-url, not both")
+
+        variant = args.variant or DEFAULT_VARIANT
+        tokenizer_dir = args.tokenizer or cache_dir() / "tokenizer"
+        check_tokenizer(tokenizer_dir)
+        model_info = {"variant": variant, "gguf": gguf_files()[variant]["file"], "gguf_sha256": None,
+                      "tokenizer": str(tokenizer_dir)}
+
+    return model_info, tokenizer_loader(model_info["tokenizer"])
 
 
 def diagnose(args: argparse.Namespace, out=None, err=None, *,
              tokenizer_loader: Callable = load_tokenizer, local_server=None, build=None) -> int:
-    from packages.action_space import parse_action
-    from packages.hetren_baselines.local_model import MAX_NEW_TOKENS
-    from packages.hetren_baselines.prompt import PROMPT_VERSION, action_text, system_prompt, user_message
     from packages.hetren_cli import report as reports
+    from packages.hetren_cli.diagnosis import Diagnoser
     from packages.hetren_cli.inputs import InputRejected, load_input
-    from packages.hetren_cli.models import DEFAULT_VARIANT, ModelError, cache_dir, check_tokenizer, gguf_files, resolve
-    from packages.hetren_cli.runtime import (LocalServer, RuntimeFailure, build_info, check_cpu, check_served,
-                                             default_threads, find_binary)
-    from packages.hetren_evidence import render_evidence
-    from packages.hetren_serving.llama_server import DecodingSettings, LlamaServer, LlamaServerModel
+    from packages.hetren_cli.models import ModelError
+    from packages.hetren_cli.runtime import LocalServer, RuntimeFailure, build_info, check_served, default_threads, find_binary
+    from packages.hetren_serving.llama_server import LlamaServer
 
     out, err = out or sys.stdout, err or sys.stderr
     local_server = local_server or LocalServer
@@ -116,60 +146,23 @@ def diagnose(args: argparse.Namespace, out=None, err=None, *,
         return EXIT_INPUT
 
     try:
-        if not args.server_url:
-            check_cpu()  # before the model: the image's llama-server needs AVX2, FMA and F16C
-
-        if args.server_url:
-            if args.model is not None:
-                raise ModelError("give --model or --server-url, not both")
-
-            variant = args.variant or DEFAULT_VARIANT
-            tokenizer_dir = args.tokenizer or cache_dir() / "tokenizer"
-            check_tokenizer(tokenizer_dir)
-            model_info = {"variant": variant, "gguf": gguf_files()[variant]["file"], "gguf_sha256": None,
-                          "tokenizer": str(tokenizer_dir)}
-        else:
-            model_info = resolve(args.model, args.tokenizer, args.variant)
-
-        tokenizer = tokenizer_loader(model_info["tokenizer"])
+        model_info, tokenizer = load_model(args, tokenizer_loader)
     except (ModelError, RuntimeFailure) as exc:
         print(f"hetren: {exc}", file=err)
         return EXIT_RUNTIME
 
-    settings = DecodingSettings(cache_prompt=True)  # the validation run's setting
-    system = system_prompt(TIER1_RECOVERIES)
-    user = user_message(render_evidence(compact))
-    prompt_tokens = len(LlamaServerModel(tokenizer, None, settings).prompt_ids(system, user))
+    diagnoser = Diagnoser(tokenizer, model_info, CLI_VERSION, code_commit())
 
-    if prompt_tokens + MAX_NEW_TOKENS > CONTEXT_TOKENS:
-        print(f"hetren: input rejected: the prompt is {prompt_tokens} tokens; with {MAX_NEW_TOKENS} reply tokens "
-              f"it exceeds the {CONTEXT_TOKENS}-token context the model was validated with", file=err)
+    try:
+        messages = diagnoser.prompt(compact)
+    except InputRejected as exc:
+        print(f"hetren: input rejected: {exc}", file=err)
         return EXIT_INPUT
 
     def run(server: LlamaServer, server_info: dict[str, object]) -> int:
-        generation = LlamaServerModel(tokenizer, server, settings)(system, user)
-
-        try:
-            result = reports.summary(parse_action(action_text(generation.text)).canonical_payload())
-            code = EXIT_OK
-        except Exception as exc:  # the episode loop's invalid_action
-            result = {"outcome": "invalid_reply", "error": f"{type(exc).__name__}: {exc}", "reply": generation.text}
-            code = EXIT_REPLY
-
-        other_stop = generation.stop_type == "eos" and bool(generation.token_ids) \
-            and generation.token_ids[-1] not in END_OF_GENERATION
-        record = {
-            "cli_version": CLI_VERSION, "code_commit": code_commit(), "prompt_version": PROMPT_VERSION,
-            "input": _input_summary(compact), "result": result,
-            "model": {k: model_info[k] for k in ("variant", "gguf", "gguf_sha256")},
-            "server": server_info,
-            "generation": {"prompt_tokens": generation.prompt_tokens, "new_tokens": generation.new_tokens,
-                           "stop_type": generation.stop_type, "finite": generation.finite,
-                           "seconds": generation.server_seconds, "reply": generation.text},
-            "stopped_on_other_token": other_stop,
-        }
+        code, record = diagnoser.run(compact, server, server_info, messages)
         out.write(reports.as_json(record) if args.format == "json" else reports.text(record))
-        return code
+        return EXIT_OK if code == EXIT_OK else EXIT_REPLY
 
     try:
         if args.server_url:
@@ -201,13 +194,17 @@ def fetch_model(args: argparse.Namespace, out=None, err=None) -> int:
         return EXIT_INPUT
 
     try:
-        result = fetch(args.repo, args.variant, args.revision, args.cache, log=lambda m: print(m, file=out))
+        result = fetch(args.repo, args.variant, args.revision, args.cache, log=lambda m: print(m, file=out),
+                       tokenizer_only=args.tokenizer_only)
     except (ModelError, OSError) as exc:
         print(f"hetren: {exc}", file=err)
         return EXIT_RUNTIME
 
-    print(f"{result['variant']} ready: {result['gguf']} (sha256 {result['gguf_sha256']}), tokenizer "
-          f"{result['tokenizer']}", file=out)
+    if args.tokenizer_only:
+        print(f"tokenizer ready: {result['tokenizer']}", file=out)
+    else:
+        print(f"{result['variant']} ready: {result['gguf']} (sha256 {result['gguf_sha256']}), tokenizer "
+              f"{result['tokenizer']}", file=out)
     return EXIT_OK
 
 
@@ -233,8 +230,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "fetch-model":
         return fetch_model(args)
 
+    if args.command == "serve":
+        from packages.hetren_cli.api import serve
+
+        return serve(args)
+
     return version()
 
 
 __all__ = ["CLI_VERSION", "EXIT_INPUT", "EXIT_OK", "EXIT_REPLY", "EXIT_RUNTIME", "code_commit", "diagnose",
-           "fetch_model", "main", "version"]
+           "fetch_model", "load_model", "main", "version"]

@@ -384,6 +384,105 @@ jobs:
 
           docker/hetren-cli/check-image.sh hetren-cli:ci
 
+  # Deploy checks: every push, read-only, no credentials. The Helm chart (lint, template, schemas, design
+  # properties) and the Terraform code (fmt, validate, tflint). Nothing is planned or applied.
+  deploy:
+    name: Deploy checks (Helm, Terraform)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned tools
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/tools.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Check the Helm chart
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/helm/check-chart.sh
+
+      - name: Check the Terraform code
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # tflint downloads its Google ruleset from GitHub
+        run: |
+          set -euo pipefail
+
+          deploy/terraform/check.sh
+
+  # kind job: every push, read-only. Installs the same Helm chart GKE uses on a kind cluster, with this commit's
+  # image and the stub llama-server, and checks the plumbing (not inference). The /diagnose and k6 part runs
+  # once the repository variable HETREN_MODEL_REPO names the published model repository (step 7a).
+  kind:
+    name: kind (Helm chart, stub model)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    permissions:
+      contents: read
+
+    env:
+      HETREN_MODEL_REPO: ${{ vars.HETREN_MODEL_REPO }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the runtime image (from the docker job's cache)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/hetren-cli/Dockerfile
+          target: runtime
+          platforms: linux/amd64
+          build-args: |
+            HETREN_COMMIT=${{ github.sha }}
+          load: true
+          push: false
+          tags: hetren-cli:ci
+          cache-from: type=gha,scope=hetren-cli
+
+      - name: Build the stub llama-server image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker build -q deploy/kind/stub-llama-server -t hetren-stub-llama-server:ci
+
+      - name: Install the pinned tools
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/tools.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Install the chart on kind and check it
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/kind/smoke.sh
+
   # Publish job: v* tag pushes only, after the docker job passed. Rebuilds from the docker job's cache, checks that
   # build the same way, and pushes exactly the image it checked to GitHub Container Registry.
   publish:

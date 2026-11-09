@@ -157,17 +157,20 @@ def _download(url: str, target: Path, digest: str, log) -> None:
 
 
 def fetch(repo: str, variant: str = DEFAULT_VARIANT, revision: str = "main", cache: Path | None = None,
-          log=print) -> dict[str, object]:
-    """Download ``variant``'s GGUF and the tokenizer into the cache, checking every sha256."""
+          log=print, tokenizer_only: bool = False) -> dict[str, object]:
+    """Download ``variant``'s GGUF and the tokenizer into the cache, checking every sha256 (only the tokenizer
+    with ``tokenizer_only``: for ``serve --server-url``, where another process serves the GGUF)."""
     cache = cache_dir() if cache is None else Path(cache)
     entry = gguf_files()[variant]
 
     for name, digest in tokenizer_files().items():
         _download(_url(repo, revision, f"{TOKENIZER_DIR}/{name}"), cache / TOKENIZER_DIR / name, digest, log)
 
-    _download(_url(repo, revision, entry["file"]), cache / entry["file"], entry["sha256"], log)
-    return {"variant": variant, "gguf": str(cache / entry["file"]), "gguf_sha256": entry["sha256"],
-            "tokenizer": str(cache / TOKENIZER_DIR)}
+    if not tokenizer_only:
+        _download(_url(repo, revision, entry["file"]), cache / entry["file"], entry["sha256"], log)
+
+    return {"variant": variant, "gguf": None if tokenizer_only else str(cache / entry["file"]),
+            "gguf_sha256": entry["sha256"], "tokenizer": str(cache / TOKENIZER_DIR)}
 
 
 __all__ = ["DEFAULT_VARIANT", "ModelError", "VARIANTS", "cache_dir", "check_tokenizer", "fetch", "gguf_files",

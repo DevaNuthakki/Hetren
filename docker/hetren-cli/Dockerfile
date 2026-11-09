@@ -107,6 +107,7 @@ LABEL org.opencontainers.image.title="hetren-cli" \
 
 USER 10001:10001
 VOLUME ["/models"]
+EXPOSE 8000
 ENTRYPOINT ["hetren"]
 CMD ["--help"]
 

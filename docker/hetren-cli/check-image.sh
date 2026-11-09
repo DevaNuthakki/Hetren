@@ -86,6 +86,14 @@ set -e
 expect "missing CPU flag: exit 3 ($code)" "$code" '^3$'
 expect "missing CPU flag: says which" "$out" 'this CPU lacks no_such_flag'
 
+# The API (hetren serve) listens before the model loads, then exits 3 naming the missing model.
+set +e
+out=$("${offline[@]}" "$image" serve --host 127.0.0.1 --port 8000 2>&1); code=$?
+set -e
+expect "serve without a model: exit 3 ($code)" "$code" '^3$'
+expect "serve without a model: listened first" "$out" '"event": "listening"'
+expect "serve without a model: names the missing file" "$out" 'no model file at /models/hetren-qwen3-4b-ckpt0792-q4_k_m.gguf'
+
 if [ "$failures" -gt 0 ]; then
   echo "$failures check(s) failed"
   exit 1

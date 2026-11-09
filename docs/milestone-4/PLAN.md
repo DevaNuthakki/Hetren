@@ -95,23 +95,54 @@ Design revised by the operator on 2026-11-08, before the build (the changes are 
 
 ### Step 6: Kubernetes and Terraform, load test, teardown
 
-- **Service:** `packages/hetren_serving/api.py`, a thin HTTP API (`POST /diagnose`, `/healthz`, `/readyz`, `/metrics`) in front of `llama-server` in the same pod; readiness waits for the model to load; one request at a time per replica (llama.cpp CPU throughput does not improve with concurrent requests on the same cores).
-- **Manifests** (`deploy/k8s/`, Kustomize): Deployment, Service (ClusterIP only, no public load balancer), HorizontalPodAutoscaler on CPU, PodDisruptionBudget, resource requests and limits, model download into an `emptyDir` by an init container with sha256 check.
-- **kind in CI:** the slow job creates a `kind` cluster, deploys the manifests with the stub model, and runs a 2-minute k6 smoke load test. No cloud cost.
-- **Terraform** (`deploy/terraform/gke/`):
-  - a **dedicated GCP project** for Hetren, so nothing else is affected;
-  - a zonal GKE Standard cluster in one region (default `us-central1-a`), one CPU node pool (`e2-standard-8`, 8 vCPU / 32 GB), autoscaling 1–3 nodes, so the maximum burn rate is bounded;
-  - labels `project=hetren, milestone=4` on every resource;
-  - a Cloud Billing **budget** of $25 with alerts at 25%, 50%, 90% and 100% to the operator's email, and a Pub/Sub-triggered function that **disables billing on the dedicated project at 100%** as a hard stop (budget alerts alone do not stop spending). Budget data can lag actual usage by hours, so spend may overshoot the cap before billing is disabled; the stop is a backstop, not the plan. The operator still runs `terraform destroy` and the teardown verification script right after the load test. Disabling billing can stop or delete the project's resources, which is acceptable because the dedicated project holds nothing that needs to be kept;
-  - remote state in a GCS bucket in the same project.
-- **Load test** (`deploy/loadtest/k6.js`, run as a Kubernetes Job inside the cluster, so no load balancer or egress is needed): fixed fixture inputs; stepped concurrency 1, 2, 4, 8, 16, each held for 5 minutes; reports p50/p95/p99 latency, requests per second, error rate, autoscaler events and cost per 1,000 diagnoses. Results committed as `docs/milestone-4/loadtest-gke.json` and summarised.
-- **Teardown:** `terraform destroy`, then `scripts/verify_teardown.sh`, which lists every resource with the Hetren labels (and every compute instance, disk, load balancer, address and cluster in the project) and fails unless none remain. Logged with the time and the billing report's spend in `docs/milestone-4/DEPLOY_LOG.md`.
-- **Before the cloud run:** an exact estimate from current GCP pricing (Cloud Billing Catalog API or the official pricing pages on the day), the budget and its alerts confirmed in place, and the operator's go-ahead.
-- **Planning estimate** (from list prices as known in mid-2026, to be re-checked): the GKE free tier covers one zonal cluster's management fee; `e2-standard-8` on demand is about $0.27 per node-hour in `us-central1`; a 4-hour session averaging 2 nodes is about **$2–3 of compute**, plus a few cents of disk and storage, so **about $3–5 in all**. The hard stop bounds a forgotten cluster to the $25 cap (3 nodes would otherwise cost about $19 per day).
+Design revised by the operator on 2026-11-09, before the build (the changes are marked *revised*). *Revised order:* **6a** (API, Helm chart, kind job, Terraform code with CI checks only; nothing applied), then **7a** (the operator publishes the GGUFs, the tokenizer and the model card on Hugging Face), then **6b** (GKE). GKE's init container and kind's full check both need the published repository.
+
+- **Service.** *Revised:* `packages/hetren_cli/api.py`, as `hetren serve`, in the same image as the CLI and standard library only.
+  - It reuses the CLI's input checks, model and tokenizer checks, report record and `llama-server` runtime. The shared diagnosis is in `packages/hetren_cli/diagnosis.py`.
+  - Endpoints: `POST /diagnose`, `/healthz`, `/readyz`, `/metrics`.
+  - One diagnosis at a time, with up to 8 waiting; beyond that it returns 503 with `Retry-After`.
+  - Readiness waits for the model. A failed load exits with status 3. SIGTERM drains the running and queued diagnoses.
+  - `llama-server` is the API's child process in the same container.
+- **Helm chart.** *Revised: Helm instead of Kustomize*, `deploy/helm/hetren/`.
+  - Objects: the Deployment, a ClusterIP Service (no load balancer, no node port), an HPA (1–3 replicas on CPU), a PDB (`maxUnavailable: 1`) and a ServiceAccount without a token.
+  - The Deployment's init container is `fetch-model`, into an `emptyDir`, with every sha256 checked. Probes are on `/readyz` and `/healthz`. The pod runs as non-root with a read-only root filesystem.
+  - Configurable: the image, model repository, variant, threads, queue and resources.
+  - GKE values: one pod per `e2-standard-8` node (CPU request 6), 4 threads.
+  - `deploy/helm/check-chart.sh` runs `helm lint`, `helm template` and `kubeconform` (Kubernetes 1.36), and checks the design's properties.
+  - One-command install: `deploy/README.md`.
+- **kind in CI.** *Revised:* a separate `kind` job on every push, with read-only permissions. It installs the **same chart** with this commit's image and a stub `llama-server` sidecar (`deploy/kind/stub-llama-server`), which returns a recorded reply. It tests plumbing, not inference.
+  - Until the repository variable `HETREN_MODEL_REPO` is set (after 7a): the chart and objects are checked, and the API must exit with status 3, naming the missing tokenizer, and be restarted.
+  - After 7a: also readiness, `/diagnose`, input rejections, `/metrics`, and a 2-minute k6 Job at concurrency 1 then 2, with no errors.
+  - Checked locally on 2026-11-09, both ways. The full way used the real tokenizer from an in-cluster mirror: 61 requests, no errors. At concurrency 2 latency doubled while throughput stayed at 0.5 per second, so one diagnosis runs at a time.
+- **Terraform.** *Revised: all GCP infrastructure as code.* CI runs `terraform fmt`, `validate` and `tflint` (Google ruleset) in the `deploy` job, with no credentials and no apply.
+  - `deploy/terraform/bootstrap/`, with local state, since it creates the bucket the other stack's state lives in:
+    - the **dedicated GCP project**, its APIs, and the **GCS state bucket**;
+    - the **$25 budget**, with alerts at 25%, 50%, 90% and 100% to the billing account's admins (and an optional email);
+    - the **Pub/Sub kill switch**: a Cloud Run function that unlinks the project from its billing account when cost reaches the budget. It has a dry-run mode for the test message; budget data lags, so it is a backstop.
+  - `deploy/terraform/gke/`, with remote state in that bucket:
+    - a VPC with **private nodes** and **Cloud NAT**;
+    - a zonal GKE Standard cluster in `us-central1-a`, its API reachable only from the operator's /32, the load balancer add-on off;
+    - one `e2-standard-8` node pool, autoscaling **1–3** (a validation rejects more than 3), 50 GB `pd-balanced`.
+  - Labels `project=hetren, milestone=4` on every resource (provider default labels).
+  - `deploy/terraform/check-quota.sh`, before `apply`: 24 vCPUs in `us-central1`, 24 project-wide, and 150 GB SSD.
+- **Load test** (`deploy/loadtest/k6.js`, run as a Kubernetes Job inside the cluster, so no load balancer or egress is needed).
+  - Fixed fixture input; stepped concurrency 1, 2, 4, 8, 16, each held for 5 minutes.
+  - Reports p50/p95/p99 latency, requests per second and the error rate per step; the runbook adds autoscaler events and the cost per 1,000 diagnoses.
+  - Results committed as `docs/milestone-4/loadtest-gke.json` and summarised.
+- **Teardown.** `terraform destroy` of the `gke` stack, then `deploy/terraform/verify-teardown.sh`:
+  - it lists clusters, instances, disks, snapshots, images, addresses, forwarding rules, target pools, backend services, instance groups, routers, non-default networks, and every `project=hetren` resource beyond the bootstrap stack's, and fails unless none remain;
+  - then `destroy` of the bootstrap stack, which deletes the project, and `verify-teardown.sh --deleted`.
+  - Logged with the time and the billing report's spend in `docs/milestone-4/DEPLOY_LOG.md`.
+- **Before the cloud run (6b):** the prices re-checked on the day, the budget and its alerts confirmed in place, the kill switch tested in dry-run mode, the quota check passed, and the operator's go-ahead.
+- **Estimate.** From Google's list prices as found on 2026-11-09, for a 4-hour session; to be re-checked on the day:
+  - Prices: `e2-standard-8` $0.26804568 per node-hour; `pd-balanced` $0.000136986 per GiB-hour; Cloud NAT $0.0014 per VM-hour, $0.005 per IP-hour and $0.045 per GiB; GKE management $0.10 per hour, covered by the free tier's credit for one zonal cluster.
+  - **Expected: about $2.04** ($2.44 without the free-tier credit), at 6 node-hours and 8 GiB through NAT.
+  - **Ceiling: $4.42**, at 3 nodes for all 4 hours and 15 GiB through NAT.
+  - A forgotten cluster costs about $6.80 a day on 1 node or about $20 on 3, bounded by the $25 kill switch.
 
 | build | operator | cost |
 |---|---|---|
-| 3–4 sessions | 1 h GCP project and billing setup; 4 h cloud session (apply, load test, destroy, verify) | about $3–5 estimated; hard cap $25 |
+| 6a: 2 sessions; 6b: 1–2 sessions | 1 h GCP project and billing setup; 4 h cloud session (apply, load test, destroy, verify) | about $2.04 expected, $4.42 ceiling; hard cap $25 |
 
 ### Step 7: Hugging Face model and dataset release (operator uploads)
 

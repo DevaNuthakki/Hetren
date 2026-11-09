@@ -1,0 +1,10 @@
+Hetren diagnosis API ({{ .Values.model.variant }}, image {{ include "hetren.image" . }}).
+
+Scope: single-recovery (tier 1) runs of Hetren's synthetic support workflow only; nothing is ever applied.
+
+The Service is ClusterIP only. To call it from your machine:
+
+  kubectl port-forward service/{{ include "hetren.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+  curl -s localhost:{{ .Values.service.port }}/readyz
+  curl -s -X POST localhost:{{ .Values.service.port }}/diagnose -H 'Content-Type: application/json' \
+       --data '{"compact": '"$(cat tests/fixtures/hetren_cli/compact_first_step.json)"'}'
