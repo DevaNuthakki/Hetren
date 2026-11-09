@@ -95,3 +95,30 @@ Pilot choices (caching setting and platform, under Amendment 2's rules) are reco
 **Validation 1, Q4_K_M.** Run by the operator on 2026-11-08 from `ef801a5` (`git status` showed only the untracked amendment draft); the `system_info` line matched the pilot's. Checked by Claude Code on 2026-11-08 without reading any result (no rows, summaries or replies were inspected; only hashes, metadata, sessions and counts): every file has the hash its completion record lists; the metadata is the declared run (the manifest's Q4_K_M sha256, `mac`, 6 threads, caching on, `620d2225`, the pilot's CPU); each tier holds every validation case once, the same case IDs as the fp16 comparator; times are from `sessions.jsonl`.
 
 **Validation 1, Q8_0.** Run by the operator on 2026-11-08 (UTC: 2026-11-08 to 2026-11-09) from `4c3d1a7`, the commit that logged the Q4_K_M run; `sessions.jsonl` records it as `head` in both tiers and the metadata as `bundle_commit`, and the runner starts only when no tracked file differs from that commit except this log. The `system_info` line matched the pilot's and the Q4_K_M run's. Checked by Claude Code on 2026-11-08 in the same way and without reading any result (only hashes, metadata, sessions and counts): every file has the hash its completion record lists; the metadata is the declared run (the manifest's Q8_0 sha256, `mac`, 6 threads, caching on, `620d2225`, the pilot's CPU, the same server settings, decoding, prompt version, libraries and dataset hashes as Q4_K_M); each tier holds every validation case once, the same case IDs as the fp16 comparator; tier 1 started at `case-000035` and tier 2 at `case-000147`, each with an empty cache.
+
+## Acceptance and shipping (Amendment 2)
+
+Computed by Claude Code on 2026-11-08, after both validation runs were logged (`b95eed8`), with the committed `gguf_check` (`c25401f`, committed before any validation result existed) and the runbook's commands: `gguf_check check` for each variant and `gguf_check ship`, all exit 0. Paired bootstrap from `metrics.paired_bootstrap`, 10,000 resamples, seed 2026; every difference is GGUF − fp16 (fp16: `validation-run-1`, rows `acee9594…` and `51e1f821…`); the pooled comparison pairs the 800 cases by tier and case ID.
+
+| criterion (Amendment 2) | Q4_K_M | Q8_0 |
+|---|---|---|
+| 1. pooled decision-accuracy 95% lower bound ≥ −0.02 (800 cases) | **−0.0150**, holds (difference −0.0013, CI [−0.0150, +0.0125]) | **−0.0138**, holds (difference −0.0075, CI [−0.0138, −0.0025]) |
+| 2. tier 1 decision-accuracy point estimate ≥ −0.02 (550 cases) | **+0.0055**, holds (408 vs 405 correct; CI [−0.0109, +0.0218]) | **−0.0055**, holds (402 vs 405; CI [−0.0127, 0.0000]) |
+| 2. tier 2 decision-accuracy point estimate ≥ −0.02 (250 cases) | **−0.0160**, holds (186 vs 190; CI [−0.0440, +0.0120]) | **−0.0120**, holds (187 vs 190; CI [−0.0280, 0.0000]) |
+| 3. tier 1 wrong interventions on healthy cases: CI not entirely above 0 (171 cases) | CI [0, 0], holds (0 vs 0) | CI [0, 0], holds (0 vs 0) |
+| 3. tier 2 wrong interventions on healthy cases: CI not entirely above 0 (54 cases) | CI [−0.0556, 0], holds (0 vs 1) | CI [0, 0], holds (1 vs 1) |
+| **accepted** | **yes** | **yes** |
+| episode agreement with fp16 (reported, not a criterion) | 637 of 800 (79.6%): tier 1 476 of 550 (86.5%), tier 2 161 of 250 (64.4%) | 741 of 800 (92.6%): tier 1 521 of 550 (94.7%), tier 2 220 of 250 (88.0%) |
+| unexpected stops | 0 | 0 |
+
+**Shipping decision: Q4_K_M.** Both variants are accepted, and Amendment 2's rule ships the smaller accepted one (Q4_K_M before Q8_0), so no differences need to be stated as a failed acceptance (`state_differences: false`).
+
+Outputs (in `artifacts/milestone-4/validation-1/`): `check-Q4_K_M.json` `cc4d34798a894009df0d500ee97bbcb2ed2fb7ff5a68a3ab8a1dff296ea99229`, `check-Q8_0.json` `da9ccd8877b019d78aa2d4e5c2801309fcf9c5414221505c401c5cc168fcf51d`, `ship.json` `40f0a7ac87c4c1e394d16d33462c0ae8f84faeae23281a6a08217e81a2a8956c`. Inputs as recorded in the checks: the fp16 rows above and the completion records `3617e6af…`, `d7da7356…` (Q4_K_M) and `794c1839…`, `ce3173f8…` (Q8_0).
+
+**Descriptive findings** (recorded with the result; none changes the acceptance or the shipping decision):
+
+1. **Q8_0 is significantly less accurate than fp16 overall, within the margin.** Its pooled interval [−0.0138, −0.0025] excludes 0 (the bootstrap's verdict: fp16 better), by −0.75 points, inside the −2-point margin. Q4_K_M shows no significant pooled difference (−0.13 points, CI [−1.50, +1.25]).
+2. **Q4_K_M clears the pooled criterion narrowly and agrees with fp16 less often.** Its pooled lower bound is −0.0150 against the −0.02 threshold, and its episodes agree with fp16's in 79.6% of cases (64.4% in tier 2), against 92.6% (88.0%) for Q8_0. Equal accuracy is reached partly through different episodes.
+3. **In tier 2, Q4_K_M trades missed faults for fewer wrong interventions.** It chose `no_intervention` 84 times against fp16's 68 (precision 0.64 against 0.78), so it left 30 broken cases unfixed against fp16's 15 (cases whose label is not `no_intervention`: a recovery, `abstain` or `insufficient_evidence`; 84 − 54 and 68 − 53, since Q4_K_M gave `no_intervention` to all 54 healthy cases and fp16 to 53), while making 0 of 54 wrong interventions on healthy cases against fp16's 1 of 54. The quantized model is more conservative. Neither acceptance criterion measures missed faults: criterion 3 counts only wrong interventions on healthy cases, and decision accuracy weighs a missed fault like any other wrong decision.
+
+**Release plan** (operator, 2026-11-08; it does not change the shipping decision): Q4_K_M ships as the default under Amendment 2's rule (the CLI's `fetch-model` default, the Docker and Kubernetes configuration). Since Q8_0 also passed, both GGUFs will be published in the Hugging Face model repository, with Q8_0 offered as the higher-fidelity alternative (episode agreement 92.6% against 79.6%), and the model card states these trade-offs: findings 1–3 and the platform limitation above.
