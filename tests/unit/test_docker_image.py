@@ -184,7 +184,9 @@ def _job(workflow: str, name: str) -> str:
 
 def test_ci_checks_the_image_on_every_push_with_read_only_permissions():
     workflow = (REPO_ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-    assert "    tags:\n      - 'v*'\n" in workflow.split("\njobs:", 1)[0]
+    triggers = workflow.split("\njobs:", 1)[0]
+    assert "      - 'v[0-9]+.[0-9]+.[0-9]+'\n      - 'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'\n" in triggers
+    assert "'v*'" not in triggers  # milestone tags must not reach the publish job
     job = _job(workflow, "docker")
     assert not re.search(r"^    if:", job, re.MULTILINE)  # every push
     assert "    permissions:\n      contents: read\n\n" in job and "packages:" not in job
@@ -201,7 +203,8 @@ def test_publishing_is_its_own_job_on_v_tags_and_pushes_only_the_image_it_checke
     assert "    needs: docker\n" in job and "    if: startsWith(github.ref, 'refs/tags/v')\n" in job
     assert "      packages: write\n" in job
     assert "cache-from: type=gha,scope=hetren-cli" in job and "cache-to" not in job
-    assert job.index("check-image.sh hetren-cli:release") < job.index("docker/login-action") < job.index("docker push")
+    assert (job.index('python3 scripts/check_release_tag.py "$GITHUB_REF_NAME"') < job.index("docker/build-push-action")
+            < job.index("check-image.sh hetren-cli:release") < job.index("docker/login-action") < job.index("docker push"))
     assert 'docker tag hetren-cli:release "$target"' in job
     assert 'target="ghcr.io/devanuthakki/hetren-cli:${GITHUB_REF_NAME}"' in job
     others = [_job(workflow, name) for name in ("repository", "slow", "docker")]
