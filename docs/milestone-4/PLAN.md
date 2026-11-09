@@ -78,10 +78,16 @@ Design revised by the operator on 2026-11-08, before the build (the three change
 
 ### Step 5: Docker image
 
-- Multi-stage `Dockerfile`: base images pinned by digest; llama.cpp built at the pinned commit (CPU, generic x86_64 with AVX2); Python 3.12 with pinned requirements; non-root user. Weights are **not** in the image: they are mounted (`-v ~/.cache/hetren:/models`) or fetched once with `hetren fetch-model`.
-- Image size target: under 1 GB without weights (Q4_K_M is about 2.5 GB, Q8_0 about 4.3 GB).
-- CI: build the image, then run `hetren diagnose` on the committed fixtures with `docker run --network none` and the stub model, proving the offline path. Publish to GitHub Container Registry on tags only.
-- **Linux agreement check (operator, descriptive, not part of acceptance; added 2026-11-08):** the validation runs on the Mac (Accelerate on), the image runs on Linux, and the pilot showed the platform can change Q4_K_M episodes. Run the 20 pilot cases in the shipped container with the validation run's decoding and caching settings and report each variant's episode agreement with the Mac validation episodes for those cases (`docs/milestone-4/EXPORT_LOG.md`, "Limitation: the validation platform is not the shipped platform").
+Design revised by the operator on 2026-11-08, before the build (the changes are marked *revised*).
+
+- `docker/hetren-cli/Dockerfile`, multi-stage, `linux/amd64` only, base images pinned by their amd64 manifest digests (`debian:bookworm-slim`, `python:3.13-slim-bookworm`):
+  - `llama-build`: llama.cpp at the pinned commit (checked), only `llama-server`, CPU only, static, OpenMP, no BLAS, no HTTPS client. *Revised:* a **fixed AVX2 build** (`GGML_NATIVE=OFF`; AVX, AVX2, FMA, F16C, BMI2 on; AVX-512 off), so every AVX2 host runs the same kernels; the whole commit history is cloned (blobless), so llama.cpp derives its version string from git (`build 11669, commit 620d2225c`, as the Mac's validated build).
+  - `python-deps`: `requirements-cli.txt` with `--no-deps` (every package pinned). *Revised:* **Python 3.13** (the validated environment's), not 3.12.
+  - `runtime` (published): the venv, `llama-server`, and only the repository folders the CLI's imports reach (a test keeps the list equal to the import graph; no evaluator, verifier, environment, dataset or label); non-root user 10001; `hetren` entry point; `HETREN_CACHE=/models`; `HETREN_REQUIRED_CPU_FLAGS="avx2 fma f16c"`, which the CLI checks against `/proc/cpuinfo` before starting the server.
+  - `check` (never published): `runtime` plus the pilot environment, for the Linux agreement check with the repository mounted read-only.
+- Weights are **not** in the image: they are mounted (`-v ~/.cache/hetren:/models`) or fetched once with `fetch-model`. Image size target: under 1 GB without weights (Q4_K_M is about 2.5 GB, Q8_0 about 4.3 GB).
+- CI (`docker` job, every push): build the image with a build cache, then `docker/hetren-cli/check-image.sh`: size, platform, non-root user, `version` and `--help` offline, `llama-server`'s commit and `system_info` features (AVX2, FMA, F16C, BMI2, OpenMP; no AVX-512, BLAS or Accelerate), only the CLI's packages present, and offline (`--network none --read-only`) rejections of an SDK trace (exit 2), a missing model (exit 3) and a missing CPU flag (exit 3). *Revised:* **no model in CI**: the CLI accepts only the validated GGUF and tokenizer, so a stub model cannot pass by design; inference in the image is checked by the operator (below). The check job has read-only permissions. Publishing is a separate `publish` job, **on `v*` tag pushes only** (`packages: write`): it rebuilds from the check job's cache, runs the same checks on that build, and pushes exactly that image to `ghcr.io/devanuthakki/hetren-cli`.
+- **Linux agreement check (operator, descriptive, not part of acceptance; added 2026-11-08, design revised 2026-11-08):** the validation ran on the Mac (Accelerate on); the image runs Linux. *Revised:* in the `check` image, `packages.support_evaluator.linux_agreement` runs the 20 pilot cases as full episodes for both variants, one `llama-server` at a time, with the validation run's settings (`-t 6`, caching on), and reports episode agreement with the Mac validation episodes for those cases, the VM's memory and each server's peak memory; then `cli_check --docker-image` runs the CLI on the same cases in the published image offline (`--network none --read-only`), as the real-model check of the offline path (`docs/milestone-4/EXPORT_LOG.md`, "Limitation: the validation platform is not the shipped platform"; runbook section 7).
 
 | build | operator | cost |
 |---|---|---|
@@ -119,7 +125,7 @@ Design revised by the operator on 2026-11-08, before the build (the three change
 
 ### Step 8: README, technical report, demo video
 
-- **README:** rewritten around Milestones 1–4: what Hetren is and is not, results at a glance, quick start (CLI, Docker), reproducing, claim limits.
+- **README:** rewritten around Milestones 1–4: what Hetren is and is not, results at a glance, quick start (CLI, Docker), reproducing, claim limits. The Docker quick start states that the image is `linux/amd64` only and needs a CPU with AVX2, FMA and F16C (operator, 2026-11-08).
 - **Technical report** (`docs/TECHNICAL_REPORT.md`, optional PDF): problem, environment and fault families, protocol and claim rule, datasets and labelling, baselines, training and selection, test results, CPU export, deployment and load test, limitations. Every number is taken from the committed results and logs; a test checks that the report's numbers appear in their sources.
 - **Demo video** (about 3 minutes; recorded by the operator from a script and command list in `docs/milestone-4/DEMO_SCRIPT.md`): a healthy run left alone, a mapping swap diagnosed and its recovery verified in the sandbox, an F6 case shown honestly as a failure, the offline Docker run with `--network none`, and the load-test summary.
 

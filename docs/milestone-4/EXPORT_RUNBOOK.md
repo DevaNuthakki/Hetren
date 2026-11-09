@@ -177,6 +177,48 @@ echo "cli check exit ${pipestatus[1]}"
 
 Each case prints `tier <N> <case>: exit <status>, same|different first action, <seconds> s`; the end prints both tiers' counts. Hand the exit status and `artifacts/milestone-4/cli-check-1/Q4_K_M/summary.json` to Claude Code, which logs the check in `EXPORT_LOG.md`.
 
+## 7. Linux checks in the Docker image (step 5, descriptive)
+
+On the Mac (Intel, so Docker Desktop runs `linux/amd64` natively), with Docker Desktop given 12 CPUs; the checks record the memory the VM reports. From the repository at the commit that added the image (`git status --short` shows only the untracked amendment draft), on mains power. One container and one `llama-server` at a time: do not run the two parts together or run other containers meanwhile. Nothing here gates anything.
+
+1. Build both images (about 6 minutes the first time; the llama.cpp stage is cached afterwards):
+
+   ```zsh
+   cd ~/Documents/personal-projects/hetren
+   docker build -f docker/hetren-cli/Dockerfile --target runtime --build-arg HETREN_COMMIT=$(git rev-parse HEAD) -t hetren-cli:dev .
+   docker build -f docker/hetren-cli/Dockerfile --target check --build-arg HETREN_COMMIT=$(git rev-parse HEAD) -t hetren-cli:check .
+   docker/hetren-cli/check-image.sh hetren-cli:dev
+   ```
+
+   The last command ends with `all image checks passed`.
+
+2. Preflight of the agreement check (checks the image, memory, CPUs, commit, GGUFs, tokenizer and server build; starts nothing):
+
+   ```zsh
+   mkdir -p artifacts/milestone-4/linux-check-1
+   docker run --rm -v "$PWD":/repo:ro -v "$PWD/artifacts/milestone-4/linux-check-1":/out hetren-cli:check python -m packages.support_evaluator.linux_agreement run --gguf-dir /repo/artifacts/milestone-4/export-2/gguf-export --tokenizer /repo/artifacts/milestone-4/export-2/gguf-export/tokenizer --runs /repo/artifacts/milestone-4/validation-1 --out /out --preflight
+   ```
+
+   It prints `"preflight": "ok"`, the commit, the memory and `build 11669, commit 620d2225c`.
+
+3. The agreement check (full episodes on the 20 pilot cases, Q4_K_M then Q8_0; about 30–45 minutes):
+
+   ```zsh
+   caffeinate -i docker run --rm -v "$PWD":/repo:ro -v "$PWD/artifacts/milestone-4/linux-check-1":/out hetren-cli:check python -m packages.support_evaluator.linux_agreement run --gguf-dir /repo/artifacts/milestone-4/export-2/gguf-export --tokenizer /repo/artifacts/milestone-4/export-2/gguf-export/tokenizer --runs /repo/artifacts/milestone-4/validation-1 --out /out 2>&1 | tee artifacts/milestone-4/linux-check-1.log
+   echo "linux check exit ${pipestatus[1]}"
+   ```
+
+   The first line names the VM's memory; each case prints `tier <N> <case>: <calls> calls, <seconds> s`; each variant ends with `<n> of 20 episodes as on the Mac … peak memory <GB>`.
+
+4. The CLI offline in the published image (20 containers, `--network none --read-only`, one at a time; about 20 minutes):
+
+   ```zsh
+   caffeinate -i ~/.hetren-pilot/bin/python -m packages.support_evaluator.cli_check run --variant Q4_K_M --gguf-dir artifacts/milestone-4/export-2/gguf-export --tokenizer artifacts/milestone-4/export-2/gguf-export/tokenizer --docker-image hetren-cli:dev --runs artifacts/milestone-4/validation-1 --out artifacts/milestone-4/cli-check-docker-1 2>&1 | tee artifacts/milestone-4/cli-check-docker-1.log
+   echo "cli docker check exit ${pipestatus[1]}"
+   ```
+
+Hand both exit statuses, `artifacts/milestone-4/linux-check-1/linux-agreement.json` and `artifacts/milestone-4/cli-check-docker-1/Q4_K_M/summary.json` to Claude Code, which logs them in `EXPORT_LOG.md`.
+
 ## If something fails
 
 Do not re-run silently. Note what happened (cell, message, time) and log the run as failed or stopped in `EXPORT_LOG.md` first. A repeat completes the same declared export; it never changes a setting.

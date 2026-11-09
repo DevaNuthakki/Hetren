@@ -46,3 +46,19 @@ def test_cli_actions_and_the_summary_keep_the_tiers_apart():
                                          "comparison": "like for like (same input and prompt; prompt cache differs)"}
     assert summary["tiers"]["tier2"]["cli_failures"] == ["c"]
     assert "not like for like" in summary["tiers"]["tier2"]["comparison"]
+
+
+def test_the_docker_mode_runs_the_published_image_offline(tmp_path):
+    (tmp_path / "inputs").mkdir()
+    command = cli_check.docker_command("hetren-cli:dev", tmp_path / "inputs/tier1-case-1.json",
+                                       tmp_path / "gguf/hetren-qwen3-4b-ckpt0792-q4_k_m.gguf", tmp_path / "gguf/tokenizer")
+    assert command[:8] == ["docker", "run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp"]
+    assert f"{(tmp_path / 'inputs').resolve()}:/inputs:ro" in command
+    assert f"{(tmp_path / 'gguf').resolve()}:/models:ro" in command
+    assert f"{(tmp_path / 'gguf/tokenizer').resolve()}:/tokenizer:ro" in command
+    image_args = command[command.index("hetren-cli:dev") + 1:]
+    assert image_args == ["diagnose", "--compact", "/inputs/tier1-case-1.json", "--model",
+                          "/models/hetren-qwen3-4b-ckpt0792-q4_k_m.gguf", "--tokenizer", "/tokenizer", "--threads", "6",
+                          "--format", "json"]
+    args = cli._parser().parse_args(image_args)
+    assert args.server_url is None and args.llama_server is None  # the image's own llama-server

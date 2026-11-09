@@ -498,3 +498,18 @@ def test_cli_requirements_are_the_validation_runs_versions_without_torch_or_agen
         {name: pilot_pins[name] for name in cli_pins if name in pilot_pins}
     assert {"transformers", "tokenizers", "jsonschema", "jinja2"} <= set(cli_pins)
     assert not {"torch", "openai-agents", "openai", "tiktoken"} & set(cli_pins)
+
+
+def test_the_cpu_flag_check_names_what_is_missing(records, model_dir, fake_server, tmp_path, monkeypatch):
+    cpuinfo = "processor\t: 0\nflags\t\t: fpu sse2 avx avx2 fma f16c bmi2\n"
+    assert runtime.missing_cpu_flags("avx2 fma f16c", cpuinfo) == []
+    assert runtime.missing_cpu_flags("avx2 fma f16c avx512f", cpuinfo) == ["avx512f"]
+    assert runtime.missing_cpu_flags("", cpuinfo) == []  # not in the image: no requirement
+    assert runtime.missing_cpu_flags("avx2", "no flags line here") == []  # not Linux
+
+    with pytest.raises(runtime.RuntimeFailure, match="lacks avx2"):
+        runtime.check_cpu("avx2 fma", "flags : sse2 fma\n")
+
+    monkeypatch.setattr(runtime, "missing_cpu_flags", lambda *a, **k: ["avx2"])
+    code, _, err = _diagnose(["--record", str(_write(tmp_path, records[0]))])
+    assert code == cli.EXIT_RUNTIME and "this CPU lacks avx2" in err

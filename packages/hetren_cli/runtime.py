@@ -34,6 +34,40 @@ def default_threads() -> int:
     return max(1, (os.cpu_count() or 2) // 2)
 
 
+def missing_cpu_flags(required: str | None = None, cpuinfo: str | None = None) -> list[str]:
+    """The CPU flags ``$HETREN_REQUIRED_CPU_FLAGS`` names (set in the Docker image, whose llama-server is built for
+    AVX2, FMA and F16C) that ``/proc/cpuinfo`` lacks; none when the variable is unset or there is no
+    ``/proc/cpuinfo`` (not Linux)."""
+    required = os.environ.get("HETREN_REQUIRED_CPU_FLAGS", "") if required is None else required
+    wanted = required.split()
+
+    if not wanted:
+        return []
+
+    if cpuinfo is None:
+        try:
+            cpuinfo = Path("/proc/cpuinfo").read_text(encoding="utf-8")
+        except OSError:
+            return []
+
+    lines = [line for line in cpuinfo.splitlines() if line.startswith("flags")]
+
+    if not lines:
+        return []
+
+    flags = set(lines[0].split(":", 1)[1].split())
+    return [flag for flag in wanted if flag not in flags]
+
+
+def check_cpu(required: str | None = None, cpuinfo: str | None = None) -> None:
+    missing = missing_cpu_flags(required, cpuinfo)
+
+    if missing:
+        raise RuntimeFailure(f"this CPU lacks {', '.join(missing)}; this llama-server build needs "
+                             f"{(required or os.environ.get('HETREN_REQUIRED_CPU_FLAGS', '')).strip()} "
+                             "(the image is built for exactly that feature set)")
+
+
 def find_binary(binary: str | None) -> str:
     candidate = binary or os.environ.get("HETREN_LLAMA_SERVER") or shutil.which("llama-server")
 
@@ -136,5 +170,5 @@ def check_served(server: LlamaServer, file_name: str) -> None:
         raise RuntimeFailure(f"the server on {server.url} serves {served!r}, not {file_name}")
 
 
-__all__ = ["LocalServer", "RuntimeFailure", "VALIDATED_LLAMA_CPP", "build_info", "check_served",
-           "default_threads", "find_binary", "free_port"]
+__all__ = ["LocalServer", "RuntimeFailure", "VALIDATED_LLAMA_CPP", "build_info", "check_cpu", "check_served",
+           "default_threads", "find_binary", "free_port", "missing_cpu_flags"]

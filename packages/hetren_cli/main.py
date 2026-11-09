@@ -100,8 +100,8 @@ def diagnose(args: argparse.Namespace, out=None, err=None, *,
     from packages.hetren_cli import report as reports
     from packages.hetren_cli.inputs import InputRejected, load_input
     from packages.hetren_cli.models import DEFAULT_VARIANT, ModelError, cache_dir, check_tokenizer, gguf_files, resolve
-    from packages.hetren_cli.runtime import (LocalServer, RuntimeFailure, build_info, check_served, default_threads,
-                                             find_binary)
+    from packages.hetren_cli.runtime import (LocalServer, RuntimeFailure, build_info, check_cpu, check_served,
+                                             default_threads, find_binary)
     from packages.hetren_evidence import render_evidence
     from packages.hetren_serving.llama_server import DecodingSettings, LlamaServer, LlamaServerModel
 
@@ -116,6 +116,9 @@ def diagnose(args: argparse.Namespace, out=None, err=None, *,
         return EXIT_INPUT
 
     try:
+        if not args.server_url:
+            check_cpu()  # before the model: the image's llama-server needs AVX2, FMA and F16C
+
         if args.server_url:
             if args.model is not None:
                 raise ModelError("give --model or --server-url, not both")
@@ -129,7 +132,7 @@ def diagnose(args: argparse.Namespace, out=None, err=None, *,
             model_info = resolve(args.model, args.tokenizer, args.variant)
 
         tokenizer = tokenizer_loader(model_info["tokenizer"])
-    except ModelError as exc:
+    except (ModelError, RuntimeFailure) as exc:
         print(f"hetren: {exc}", file=err)
         return EXIT_RUNTIME
 

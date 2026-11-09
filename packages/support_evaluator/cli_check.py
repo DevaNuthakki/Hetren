@@ -20,6 +20,11 @@ Nothing here gates anything. Run on the Mac from the repository::
         --llama-server ~/hetren-tools/llama.cpp/build/bin/llama-server \\
         --runs artifacts/milestone-4/validation-1 --out artifacts/milestone-4/cli-check-1
 
+With ``--docker-image <image>`` instead of ``--llama-server``, each diagnosis runs in the published image as a
+user runs it offline (``docker run --network none --read-only``, the input, GGUF and tokenizer mounted
+read-only, the image's own ``llama-server``): the Docker step's real-model check of the offline path, one
+container at a time.
+
 Outputs in ``<out>/<variant>/``: ``inputs/`` (each case's first-step input), ``reports/`` (each CLI report,
 JSON), ``cases.jsonl`` (one line per case: tier, case, exit status, the CLI's action, the validation run's
 first action, same or not) and ``summary.json``.
@@ -47,6 +52,16 @@ def cli_command(compact_path: Path, gguf: Path, tokenizer: Path, llama_server: P
     return [python, "-m", "packages.hetren_cli", "diagnose", "--compact", str(compact_path), "--model", str(gguf),
             "--tokenizer", str(tokenizer), "--llama-server", str(llama_server), "--threads", str(THREADS),
             "--format", "json"]
+
+
+def docker_command(image: str, compact_path: Path, gguf: Path, tokenizer: Path) -> list[str]:
+    """The same diagnosis in the published image, offline: no network, a read-only root file system, the input,
+    GGUF and tokenizer mounted read-only, and the image's own llama-server."""
+    compact_path, gguf, tokenizer = Path(compact_path).resolve(), Path(gguf).resolve(), Path(tokenizer).resolve()
+    return ["docker", "run", "--rm", "--network", "none", "--read-only", "--tmpfs", "/tmp",
+            "-v", f"{compact_path.parent}:/inputs:ro", "-v", f"{gguf.parent}:/models:ro", "-v", f"{tokenizer}:/tokenizer:ro",
+            image, "diagnose", "--compact", f"/inputs/{compact_path.name}", "--model", f"/models/{gguf.name}",
+            "--tokenizer", "/tokenizer", "--threads", str(THREADS), "--format", "json"]
 
 
 def first_actions(calls_path: Path) -> dict[str, dict]:
@@ -100,14 +115,16 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
 
     validation = {tier: first_actions(Path(args.runs) / args.variant / f"tier{tier}" / "calls.jsonl") for tier in (1, 2)}
     rows = []
-    log(f"{args.variant}: {len(cases)} pilot cases, one CLI process each")
+    where = f"in the image {args.docker_image} (--network none)" if args.docker_image else "on this machine"
+    log(f"{args.variant}: {len(cases)} pilot cases, one CLI process each, {where}")
 
     for tier, case, _ in cases:
         compact_path = out / "inputs" / f"tier{tier}-{case.case_id}.json"
         compact_path.write_text(json.dumps(visible[(tier, case.case_id)], sort_keys=True) + "\n", encoding="utf-8")
         started = time.perf_counter()
-        result = subprocess.run(cli_command(compact_path, gguf, Path(args.tokenizer), Path(args.llama_server)),
-                                cwd=REPO_ROOT, capture_output=True, text=True)
+        command = (docker_command(args.docker_image, compact_path, gguf, Path(args.tokenizer)) if args.docker_image
+                   else cli_command(compact_path, gguf, Path(args.tokenizer), Path(args.llama_server)))
+        result = subprocess.run(command, cwd=REPO_ROOT, capture_output=True, text=True)
         seconds = round(time.perf_counter() - started, 1)
         report = json.loads(result.stdout) if result.stdout.strip().startswith("{") else None
 
@@ -125,7 +142,14 @@ def run(args: argparse.Namespace, log=lambda message: print(message, flush=True)
     with open(out / "cases.jsonl", "w", encoding="utf-8") as handle:
         handle.writelines(json.dumps(r, sort_keys=True) + "\n" for r in rows)
 
+    image = None
+
+    if args.docker_image:
+        image = subprocess.run(["docker", "image", "inspect", "--format", "{{.Id}}", args.docker_image],
+                               capture_output=True, text=True).stdout.strip() or None
+
     summary = {"variant": args.variant, "gguf_sha256": sha256_file(gguf), "threads": THREADS, **summarize(rows),
+               "where": {"docker_image": args.docker_image, "image_id": image} if args.docker_image else "local",
                "validation_calls_sha256": {f"tier{t}": sha256_file(Path(args.runs) / args.variant / f"tier{t}" / "calls.jsonl")
                                            for t in (1, 2)}}
     (out / "summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -140,7 +164,9 @@ def main(argv: list[str] | None = None) -> int:
     one.add_argument("--variant", required=True, choices=tuple(GGUF_NAMES))
     one.add_argument("--gguf-dir", required=True, type=Path)
     one.add_argument("--tokenizer", required=True, type=Path)
-    one.add_argument("--llama-server", required=True, type=Path)
+    where = one.add_mutually_exclusive_group(required=True)
+    where.add_argument("--llama-server", type=Path, help="run the CLI here, with this llama-server")
+    where.add_argument("--docker-image", help="run the CLI in this image, offline (docker run --network none)")
     one.add_argument("--runs", required=True, type=Path, help="the validation runs' root (<root>/<variant>/tier<N>/)")
     one.add_argument("--out", required=True, type=Path)
     return run(parser.parse_args(sys.argv[1:] if argv is None else argv))

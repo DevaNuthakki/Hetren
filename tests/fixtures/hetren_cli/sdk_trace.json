@@ -1,0 +1,25 @@
+[
+  {
+    "object": "trace",
+    "id": "trace_0123456789abcdef0123456789abcdef",
+    "workflow_name": "Agent workflow",
+    "group_id": null,
+    "metadata": null
+  },
+  {
+    "object": "trace.span",
+    "id": "span_0123456789abcdef01234567",
+    "trace_id": "trace_0123456789abcdef0123456789abcdef",
+    "parent_id": null,
+    "started_at": "2026-11-09T00:00:00.000000+00:00",
+    "ended_at": "2026-11-09T00:00:01.000000+00:00",
+    "span_data": {
+      "type": "function",
+      "name": "read_ticket",
+      "input": null,
+      "output": null,
+      "mcp_data": null
+    },
+    "error": null
+  }
+]
