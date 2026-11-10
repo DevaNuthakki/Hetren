@@ -8,10 +8,10 @@ synthetic support workflow, one greedy step with the validated GGUF, and nothing
 |---|---|---|
 | `helm/hetren/` | the Helm chart: Deployment (init container `fetch-model`, probes, non-root, read-only), ClusterIP Service, HPA, PDB, ServiceAccount | kind in CI, GKE |
 | `kind/` | `values.yaml`, the stub `llama-server` image and `smoke.sh` | CI's `kind` job, or locally |
-| `gke/values.yaml` | the GKE values: one pod per `e2-standard-8` node, 4 threads | GKE (step 6b) |
+| `gke/values.yaml` | the GKE values: one pod per `e2-standard-4` node, 2 threads, 1–2 replicas (the Free Trial's 8 vCPUs) | GKE (step 6b) |
 | `loadtest/` | `k6.js` and the in-cluster `job.yaml` (stepped concurrency 1, 2, 4, 8, 16) | kind (2-minute smoke), GKE |
 | `terraform/bootstrap/` | the dedicated project, its APIs, the state bucket, the $25 budget and the billing kill switch | the operator, step 6b |
-| `terraform/gke/` | the VPC, private nodes behind Cloud NAT, the zonal cluster and the node pool (1 to 3 nodes) | the operator, step 6b |
+| `terraform/gke/` | the VPC, private nodes behind Cloud NAT, the zonal cluster and the node pool (1 to 2 `e2-standard-4` nodes) | the operator, step 6b |
 | `terraform/check-quota.sh`, `terraform/verify-teardown.sh` | the quota check before `apply`, and the check after `destroy` | the operator, step 6b |
 | `tools.sh` | the pinned tools with their sha256 (kind, Helm, Terraform, tflint, kubeconform) | CI |
 
@@ -77,7 +77,7 @@ CI's `deploy` job runs both on every push. Nothing is planned or applied in CI.
 
 ## GKE (step 6b, operator)
 
-The full runbook is written for step 6b. In outline:
+The runbook, with every command and its expected output, is `docs/milestone-4/DEPLOY_RUNBOOK.md` (the Free Trial design: up to 2 × `e2-standard-4`, 8 vCPUs). In outline:
 
 1. **Bootstrap**, with local state for the first apply; the operator's `terraform.tfvars` stays out of git:
    - `cd deploy/terraform/bootstrap`

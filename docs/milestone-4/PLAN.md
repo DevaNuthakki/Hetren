@@ -104,10 +104,10 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
   - Readiness waits for the model. A failed load exits with status 3. SIGTERM drains the running and queued diagnoses.
   - `llama-server` is the API's child process in the same container.
 - **Helm chart.** *Revised: Helm instead of Kustomize*, `deploy/helm/hetren/`.
-  - Objects: the Deployment, a ClusterIP Service (no load balancer, no node port), an HPA (1–3 replicas on CPU), a PDB (`maxUnavailable: 1`) and a ServiceAccount without a token.
+  - Objects: the Deployment, a ClusterIP Service (no load balancer, no node port), an HPA (1–2 replicas on CPU; *revised 2026-11-10*, Free Trial), a PDB (`maxUnavailable: 1`) and a ServiceAccount without a token.
   - The Deployment's init container is `fetch-model`, into an `emptyDir`, with every sha256 checked. Probes are on `/readyz` and `/healthz`. The pod runs as non-root with a read-only root filesystem.
   - Configurable: the image, model repository, variant, threads, queue and resources.
-  - GKE values: one pod per `e2-standard-8` node (CPU request 6), 4 threads.
+  - GKE values (*revised 2026-11-10*, Free Trial): one pod per `e2-standard-4` node (CPU request 2.5, leaving room for GKE's system pods), 2 threads.
   - `deploy/helm/check-chart.sh` runs `helm lint`, `helm template` and `kubeconform` (Kubernetes 1.36), and checks the design's properties.
   - One-command install: `deploy/README.md`.
 - **kind in CI.** *Revised:* a separate `kind` job on every push, with read-only permissions. It installs the **same chart** with this commit's image and a stub `llama-server` sidecar (`deploy/kind/stub-llama-server`), which returns a recorded reply. It tests plumbing, not inference.
@@ -122,9 +122,10 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
   - `deploy/terraform/gke/`, with remote state in that bucket:
     - a VPC with **private nodes** and **Cloud NAT**;
     - a zonal GKE Standard cluster in `us-central1-a`, its API reachable only from the operator's /32, the load balancer add-on off;
-    - one `e2-standard-8` node pool, autoscaling **1–3** (a validation rejects more than 3), 50 GB `pd-balanced`.
+    - one `e2-standard-4` node pool, autoscaling **1–2** (*revised 2026-11-10*, Free Trial: a validation rejects more than 2, a precondition rejects more than 8 vCPUs at the maximum, and upgrades add no surge node), 50 GB `pd-balanced`.
   - Labels `project=hetren, milestone=4` on every resource (provider default labels).
-  - `deploy/terraform/check-quota.sh`, before `apply`: 24 vCPUs in `us-central1`, 24 project-wide, and 150 GB SSD.
+  - `deploy/terraform/check-quota.sh`, before `apply`: 8 vCPUs in `us-central1`, 8 project-wide, and 100 GB SSD. A Free Trial account cannot request increases.
+  - *Revised 2026-11-10:* the budget **excludes credits** (`EXCLUDE_ALL_CREDITS`), so its thresholds and the kill switch see gross usage that the Free Trial's credits would otherwise hide. `terraform test`, against a mocked provider in CI, checks that setting and the node pool's limits; `check_budget.py` checks the live budget after the apply. The kill switch builds with its own service account.
 - **Load test** (`deploy/loadtest/k6.js`, run as a Kubernetes Job inside the cluster, so no load balancer or egress is needed).
   - Fixed fixture input; stepped concurrency 1, 2, 4, 8, 16, each held for 5 minutes.
   - Reports p50/p95/p99 latency, requests per second and the error rate per step; the runbook adds autoscaler events and the cost per 1,000 diagnoses.
@@ -134,15 +135,20 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
   - then `destroy` of the bootstrap stack, which deletes the project, and `verify-teardown.sh --deleted`.
   - Logged with the time and the billing report's spend in `docs/milestone-4/DEPLOY_LOG.md`.
 - **Before the cloud run (6b):** the prices re-checked on the day, the budget and its alerts confirmed in place, the kill switch tested in dry-run mode, the quota check passed, and the operator's go-ahead.
-- **Estimate.** From Google's list prices as found on 2026-11-09, for a 4-hour session; to be re-checked on the day:
-  - Prices: `e2-standard-8` $0.26804568 per node-hour; `pd-balanced` $0.000136986 per GiB-hour; Cloud NAT $0.0014 per VM-hour, $0.005 per IP-hour and $0.045 per GiB; GKE management $0.10 per hour, covered by the free tier's credit for one zonal cluster.
-  - **Expected: about $2.04** ($2.44 without the free-tier credit), at 6 node-hours and 8 GiB through NAT.
-  - **Ceiling: $4.42**, at 3 nodes for all 4 hours and 15 GiB through NAT.
-  - A forgotten cluster costs about $6.80 a day on 1 node or about $20 on 3, bounded by the $25 kill switch.
+- **The Free Trial design** (operator, 2026-11-10: the billing account stays on the Free Trial, so nothing can be charged to a card). The trial allows **8 concurrent Compute Engine cores** and no quota increases, so the earlier 3 × `e2-standard-8` pool cannot run.
+  - **Chosen:** up to 2 × `e2-standard-4`, HPA and cluster autoscaler 1–2, `-t 2`. It keeps the autoscaling demonstration (a second node and pod under load, and the scale-up time including the model download).
+    - Each pod has 2 physical cores against 4 on `e2-standard-8`, so a diagnosis is slower and two pods give about one larger pod's throughput.
+    - Neither GKE option runs the validated `-t 6`: GKE results are descriptive performance numbers, not a re-validation.
+  - **Rejected:** one `e2-standard-8` (no scaling to show), and `e2-standard-2` nodes (8 GB each is too tight for a 5 GB server, at 1 thread).
+- **Estimate**, in Free Trial credits, at list prices; `price_check.py` reads the exact SKUs from the Cloud Billing Catalog API before the gke stack is applied:
+  - Prices: `e2-standard-4` $0.134 per node-hour; `pd-balanced` $0.10 per GiB-month; Cloud NAT $0.0014 per VM-hour, $0.005 per IP-hour and $0.045 per GiB; GKE management $0.10 per hour, covered by the free tier (no other cluster on the billing account).
+  - **Expected: $0.65**: a cluster for 2 h, one node throughout and a second for about 45 min, and 5.5 GiB through NAT.
+  - **Ceiling: $1.83**: both nodes for the whole 4-hour session and 15 GiB through NAT ($2.23 if the GKE fee were charged).
+  - A forgotten cluster costs about $3.40 a day on 1 node or $6.70 on 2, in credits, bounded by the $25 kill switch; the teardown and its verification are the main protection.
 
 | build | operator | cost |
 |---|---|---|
-| 6a: 2 sessions; 6b: 1–2 sessions | 1 h GCP project and billing setup; 4 h cloud session (apply, load test, destroy, verify) | about $2.04 expected, $4.42 ceiling; hard cap $25 |
+| 6a: 2 sessions; 6b: 1–2 sessions | 1 h GCP project and billing setup; 4 h cloud session (apply, load test, destroy, verify) | about $0.65 expected, $1.83 ceiling, in Free Trial credits; hard cap $25 |
 
 ### Step 7: Hugging Face model and dataset release (operator uploads)
 

@@ -89,7 +89,7 @@ def test_dry_run_changes_nothing(kill_switch, monkeypatch):
 def test_the_function_is_pinned_and_wired_to_the_budget():
     assert _text("terraform/bootstrap/killswitch/requirements.txt") == "functions-framework==3.10.2\n"
     main = _text("terraform/bootstrap/main.tf")
-    assert 'entry_point = "stop_billing"' in main and 'runtime     = "python313"' in main
+    assert re.search(r'entry_point\s+= "stop_billing"', main) and re.search(r'runtime\s+= "python313"', main)
     assert "pubsub_topic          = google_pubsub_topic.budget.id" in main
     assert "pubsub_topic                     = google_pubsub_topic.budget.id" in main
     assert 'role    = "roles/billing.projectManager"' in main
@@ -101,12 +101,25 @@ def test_the_function_is_pinned_and_wired_to_the_budget():
 
 # --- Terraform -------------------------------------------------------------------------------------------------
 
-def test_the_node_pool_is_capped_at_three_e2_standard_8_nodes():
+def test_the_node_pool_fits_the_free_trials_8_vcpus():
     variables = _text("terraform/gke/variables.tf")
-    assert re.search(r'variable "max_nodes" \{.*?default     = 3\n.*?var.max_nodes <= 3', variables, re.DOTALL)
-    assert 'default     = "e2-standard-8"' in variables and 'default     = "us-central1-a"' in variables
+    assert re.search(r'variable "max_nodes" \{.*?default     = 2\n.*?var.max_nodes <= 2', variables, re.DOTALL)
+    assert re.search(r'variable "max_vcpus" \{.*?default     = 8\n', variables, re.DOTALL)
+    assert 'default     = "e2-standard-4"' in variables and 'default     = "us-central1-a"' in variables
     cluster = _text("terraform/gke/cluster.tf")
     assert "max_node_count = var.max_nodes" in cluster and "location = var.zone" in cluster
+    assert "var.max_nodes * local.node_vcpus <= var.max_vcpus" in cluster and "max_surge       = 0" in cluster
+    tests = _text("terraform/gke/tests/limits.tftest.hcl")
+    assert "expect_failures = [google_container_node_pool.inference]" in tests and "max_nodes = 3" in tests
+
+
+def test_the_budget_measures_gross_usage_and_terraform_test_checks_it():
+    main = _text("terraform/bootstrap/main.tf")
+    assert 'credit_types_treatment = "EXCLUDE_ALL_CREDITS"' in main
+    budget_test = _text("terraform/bootstrap/tests/budget.tftest.hcl")
+    assert 'credit_types_treatment == "EXCLUDE_ALL_CREDITS"' in budget_test and 'mock_provider "google"' in budget_test
+    assert 'terraform -chdir="$here/$stack" test' in _text("terraform/check.sh")
+    assert "service_account = google_service_account.kill_switch_build.id" in main
 
 
 def test_the_cluster_has_private_nodes_behind_nat_and_no_load_balancer_addon():
@@ -139,7 +152,7 @@ def test_every_stack_labels_its_resources_and_pins_the_provider():
 
 def test_the_quota_check_needs_room_for_the_capped_pool():
     script = _text("terraform/check-quota.sh")
-    for need in ('"CPUS", 24', '"SSD_TOTAL_GB", 150', '"CPUS_ALL_REGIONS", 24'):
+    for need in ('"CPUS", 8', '"SSD_TOTAL_GB", 100', '"CPUS_ALL_REGIONS", 8'):
         assert need in script
 
 
@@ -147,7 +160,7 @@ def test_the_quota_check_needs_room_for_the_capped_pool():
 
 def test_chart_defaults_are_the_gke_design():
     values = _text("helm/hetren/values.yaml")
-    for line in ("threads: 4", "maxQueue: 8", 'cpu: "6"', "memory: 7Gi", "maxReplicas: 3", "maxUnavailable: 1",
+    for line in ("threads: 2", "maxQueue: 8", 'cpu: 2500m', "memory: 7Gi", "maxReplicas: 2", "maxUnavailable: 1",
                  "repository: ghcr.io/devanuthakki/hetren-cli", "variant: Q4_K_M", "  enabled: false"):
         assert line in values, line
 

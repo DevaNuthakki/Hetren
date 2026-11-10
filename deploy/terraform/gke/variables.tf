@@ -15,9 +15,14 @@ variable "zone" {
 }
 
 variable "machine_type" {
-  description = "8 vCPUs on 4 physical cores, 32 GB: one diagnosis pod per node."
+  description = "4 vCPUs on 2 physical cores, 16 GB: one diagnosis pod per node (llama-server -t 2)."
   type        = string
-  default     = "e2-standard-8"
+  default     = "e2-standard-4"
+
+  validation {
+    condition     = can(regex("^e2-standard-[0-9]+$", var.machine_type))
+    error_message = "An e2-standard machine type (its vCPU count is the number at the end)."
+  }
 }
 
 variable "min_nodes" {
@@ -26,14 +31,20 @@ variable "min_nodes" {
 }
 
 variable "max_nodes" {
-  description = "Bounds the burn rate: at most 3 nodes (24 vCPUs)."
+  description = "At most 2 nodes: 2 x e2-standard-4 = 8 vCPUs, the Free Trial's concurrent-core limit."
   type        = number
-  default     = 3
+  default     = 2
 
   validation {
-    condition     = var.max_nodes >= 1 && var.max_nodes <= 3
-    error_message = "The approved cap is 3 nodes."
+    condition     = var.max_nodes >= 1 && var.max_nodes <= 2
+    error_message = "The approved cap is 2 nodes."
   }
+}
+
+variable "max_vcpus" {
+  description = "The Free Trial's limit on concurrent Compute Engine cores; the node pool at its maximum must fit."
+  type        = number
+  default     = 8
 }
 
 variable "disk_size_gb" {

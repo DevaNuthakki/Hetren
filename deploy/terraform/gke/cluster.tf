@@ -72,6 +72,10 @@ resource "google_container_cluster" "hetren" {
   }
 }
 
+locals {
+  node_vcpus = tonumber(regex("[0-9]+$", var.machine_type))
+}
+
 resource "google_container_node_pool" "inference" {
   name     = "inference"
   cluster  = google_container_cluster.hetren.id
@@ -82,6 +86,20 @@ resource "google_container_node_pool" "inference" {
   autoscaling {
     min_node_count = var.min_nodes
     max_node_count = var.max_nodes
+  }
+
+  # An upgrade replaces nodes one at a time without a surge node, which would exceed the 8-vCPU limit.
+  upgrade_settings {
+    strategy        = "SURGE"
+    max_surge       = 0
+    max_unavailable = 1
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.max_nodes * local.node_vcpus <= var.max_vcpus
+      error_message = "The node pool at its maximum would exceed the Free Trial's 8 concurrent vCPUs."
+    }
   }
 
   management {

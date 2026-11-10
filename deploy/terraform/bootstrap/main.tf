@@ -86,6 +86,9 @@ resource "google_billing_budget" "hetren" {
   budget_filter {
     projects        = ["projects/${google_project.hetren.number}"]
     calendar_period = "MONTH"
+    # Gross usage: credits (the Free Trial's included) are added back, so they cannot hide the spend and the
+    # thresholds and the kill switch see what the resources cost. The API's default is INCLUDE_ALL_CREDITS.
+    credit_types_treatment = "EXCLUDE_ALL_CREDITS"
   }
 
   amount {
@@ -140,6 +143,22 @@ resource "google_project_iam_member" "kill_switch_events" {
   member  = "serviceAccount:${google_service_account.kill_switch.email}"
 }
 
+# Builds the function's image (Cloud Build). A dedicated account with only what a build needs, instead of the
+# Compute Engine default account, which new projects no longer grant broad roles.
+resource "google_service_account" "kill_switch_build" {
+  project      = google_project.hetren.project_id
+  account_id   = "hetren-kill-switch-build"
+  display_name = "Builds the kill switch function"
+}
+
+resource "google_project_iam_member" "kill_switch_build" {
+  for_each = toset(["roles/logging.logWriter", "roles/artifactregistry.writer", "roles/storage.objectViewer"])
+
+  project = google_project.hetren.project_id
+  role    = each.value
+  member  = "serviceAccount:${google_service_account.kill_switch_build.email}"
+}
+
 data "archive_file" "kill_switch" {
   type        = "zip"
   source_dir  = "${path.module}/killswitch"
@@ -170,8 +189,9 @@ resource "google_cloudfunctions2_function" "kill_switch" {
   name     = "hetren-kill-switch"
 
   build_config {
-    runtime     = "python313"
-    entry_point = "stop_billing"
+    runtime         = "python313"
+    entry_point     = "stop_billing"
+    service_account = google_service_account.kill_switch_build.id
 
     source {
       storage_source {
@@ -202,5 +222,6 @@ resource "google_cloudfunctions2_function" "kill_switch" {
     service_account_email = google_service_account.kill_switch.email
   }
 
-  depends_on = [google_project_service.services, google_project_iam_member.kill_switch_events]
+  depends_on = [google_project_service.services, google_project_iam_member.kill_switch_events,
+  google_project_iam_member.kill_switch_build]
 }

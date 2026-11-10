@@ -29,7 +29,7 @@ from typing import Any, Callable
 from packages.hetren_cli.diagnosis import CONTEXT_TOKENS, END_OF_GENERATION, TIER1_RECOVERIES  # noqa: F401
 
 
-CLI_VERSION = "0.4.0.dev0"
+CLI_VERSION = "0.4.0rc1"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXIT_OK, EXIT_INPUT, EXIT_RUNTIME, EXIT_REPLY = 0, 2, 3, 4
 
