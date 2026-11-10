@@ -1,0 +1,101 @@
+{
+  "diagnoses": 310,
+  "duration_s": 1576.0,
+  "finished_utc": "2026-11-10T05:20:31Z",
+  "job": "succeeded",
+  "k6": {
+    "http_req_failed": 0.944053419960296,
+    "step_seconds": 300,
+    "steps": [
+      1,
+      2,
+      4,
+      8,
+      16
+    ],
+    "steps_summary": {
+      "c01": {
+        "concurrency": 1,
+        "diagnoses": 20,
+        "diagnoses_per_second": 0.06666666666666667,
+        "error_rate": 0,
+        "latency_ms": {
+          "max": 136112.838203,
+          "p50": 8440.43037,
+          "p95": 18123.37322970009,
+          "p99": 112514.94520833984,
+          "requests": 20
+        }
+      },
+      "c02": {
+        "concurrency": 2,
+        "diagnoses": 58,
+        "diagnoses_per_second": 0.19333333333333333,
+        "error_rate": 0,
+        "latency_ms": {
+          "max": 18042.095001,
+          "p50": 8183.0162375,
+          "p95": 16673.51287105,
+          "p99": 17493.99180465,
+          "requests": 58
+        }
+      },
+      "c04": {
+        "concurrency": 4,
+        "diagnoses": 70,
+        "diagnoses_per_second": 0.23333333333333334,
+        "error_rate": 0,
+        "latency_ms": {
+          "max": 34186.326338,
+          "p50": 15882.885681,
+          "p95": 31979.058943699998,
+          "p99": 32717.919429050005,
+          "requests": 70
+        }
+      },
+      "c08": {
+        "concurrency": 8,
+        "diagnoses": 81,
+        "diagnoses_per_second": 0.27,
+        "error_rate": 0,
+        "latency_ms": {
+          "max": 62699.045687,
+          "p50": 31702.790996,
+          "p95": 48224.011708,
+          "p99": 57131.29355980002,
+          "requests": 81
+        }
+      },
+      "c16": {
+        "concurrency": 16,
+        "diagnoses": 81,
+        "diagnoses_per_second": 0.27,
+        "error_rate": 0.9847515060240963,
+        "latency_ms": {
+          "max": 77966.084769,
+          "p50": 13.9858595,
+          "p95": 29.883297749999997,
+          "p99": 61706.38414398007,
+          "requests": 5312
+        }
+      }
+    },
+    "target": "http://hetren:8000"
+  },
+  "node_cost_per_1000_diagnoses_usd": 0.38,
+  "node_cost_usd": 0.1173,
+  "node_hours": 0.8756,
+  "node_usd_per_hour": 0.134023,
+  "samples": 101,
+  "scaling": {
+    "hpa_wanted_2_at_s": 0.0,
+    "max_nodes": 2,
+    "max_ready_replicas": 2,
+    "scale_up_seconds": 0.0,
+    "second_node_ready_at_s": 0.0,
+    "second_pod_ready_at_s": 0.0
+  },
+  "started_utc": "2026-11-10T04:54:08Z",
+  "step_seconds": 300,
+  "steps": "1,2,4,8,16"
+}

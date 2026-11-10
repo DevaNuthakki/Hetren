@@ -76,3 +76,164 @@ Run by the operator with the runbook's phase 4 commands.
 - the tag is annotated and points to that commit;
 - the registry served the tag's manifest anonymously (a pull token without credentials) with digest `sha256:e6dd9cbd…`;
 - the pre-release exists. Its `targetCommitish` reads `main`, GitHub's default for a release from an existing tag; the tag decides the commit.
+
+## Session 1, phases 5–8: the cluster, the first diagnosis, the load test and the teardown (2026-11-10)
+
+Run by the operator with the runbook's phase 5–8 commands. **One deviation: the teardown (phase 8) did not follow
+in the same session.** The cluster stayed up overnight and was destroyed the next morning, 12.3 hours after the load
+test ended. It was idle all that time, mostly on one node. The cost of the gap is estimated below. The runbook now
+warns about this and handles a changed IP (see "Runbook changes" at the end of this section).
+
+### Timeline (UTC)
+
+| time | event |
+|---|---|
+| 04:30:36 | phase 5: `terraform apply` started (`Plan: 11 to add`: `machine_type = "e2-standard-4"`, `max_node_count = 2`, `enable_private_nodes = true`, the operator's /32). **Billable usage starts** |
+| 04:33:38–04:41:34 | GKE's temporary default-pool node (`gke-hetren-default-pool-35dde5b7-wq86`) existed during cluster creation and was then removed (`remove_default_node_pool = true`). That was before the inference pool's node, so the 8-vCPU limit was never exceeded |
+| 04:42:38 | the first inference node `gke-hetren-inference-c4c512cd-lcpv` created (Ready 04:42:42). Internal IP 10.10.0.3, no external IP |
+| 04:42:46 | `Apply complete! Resources: 11 added` |
+| — | `kubectl version`: the server was `v1.36.4-gke.2377000`, too new for kubectl 1.34.1. The operator installed kubectl v1.36.4 into `~/hetren-tools` from dl.k8s.io and checked its sha256 (`kubectl: OK`). After that: client v1.36.4, server v1.36.4-gke.2377000, no skew warning |
+| 04:47:21 | phase 6: `helm install`. First pod `hetren-5d9b89668b-pcgb8` scheduled; image pulled in 7.9 s. `fetch-model` ran 04:47:29–04:48:08 (39 s for 2.5 GB, sha256 checked): `hetren-qwen3-4b-ckpt0792-q4_k_m.gguf: sha256 matches the manifest`, `Q4_K_M ready … (sha256 e3f50ba9…)` |
+| 04:48:35 | first pod Ready (model load 24.6 s). API events `listening` (`max_queue` 8) and `ready` (`cli_version` 0.4.0rc1, `llama_cpp_commit` 620d2225c, `validated_build` true, threads 2, variant Q4_K_M). `helm install` returned `deployed` (about 80 s) |
+| 04:49:51–04:52:34 | phase 6.2: the first diagnosis on GKE, 2 min 42.7 s wall time (details below). The end is the saved file's time; the start is that time minus the wall time |
+| 04:50:37 | **the HPA rescaled to 2** ("cpu resource utilization above target"), driven by the first diagnosis: llama-server's 2 threads at full load are about 80% of the 2.5-CPU request, against a 60% target. The second pod `hetren-5d9b89668b-z9kmn` was created and could not be scheduled (`Insufficient cpu, Insufficient memory`) |
+| 04:50:39 | the cluster autoscaler triggered the scale-up: instance group `gke-hetren-inference-c4c512cd-grp` 1→2 (max 2) |
+| 04:51:18 | second node `gke-hetren-inference-c4c512cd-wb75` created (41 s after the rescale); Ready at 04:51:21 (44 s) |
+| 04:51:22 | second pod scheduled on it (45 s); the image pull took 27.6 s (33.8 s including waiting) on the new node |
+| 04:52:00–04:53:01 | second pod's `fetch-model` (61 s for 2.5 GB) |
+| 04:53:28 | **second pod Ready, 171 s after the rescale**: 2 replicas on 2 nodes |
+| 04:54:08 | phase 7: load test started (the k6 pod on node `lcpv`). First sample: `replicas 2 ready (HPA 2 -> 2, CPU 0%), nodes 2/2`, so the scale-up had already happened |
+| 05:20:13 | load test Job completed; summary written 05:20:31; `loadtest exit 0`. The operator saved `events.txt`, `hpa-describe.txt`, `pods.yaml` and `nodes.yaml` to `artifacts/milestone-4/gke-1/` at 05:23 |
+| 05:20 → morning | **the gap**: phase 8 was not run. The cluster scaled back to 1 node at some point overnight (the time is not recorded). At about 17:2x it showed `NUM_NODES 1`, `RUNNING` |
+| ~17:2x | phase 8.1: `helm uninstall` failed (`Kubernetes cluster unreachable … i/o timeout`): the operator's IP had changed overnight, so the API's authorised /32 no longer matched. The step was skipped. `terraform destroy` with the new IP: `Plan: 0 to add, 0 to change, 11 to destroy`, `Destroy complete! Resources: 11 destroyed.` |
+| 17:39:09 | cluster destroyed. **Billable usage ends**: the cluster existed for 13 h 8.5 min (13.14 h) |
+| after | `verify-teardown.sh`: `none` for every compute and network kind. It also printed `LEFT labelled resources` (the kill switch function, its Cloud Run service and revisions, the budget topic, both buckets, the project) and `teardown NOT complete: 1 kind(s) of resource left`. That was a false alarm: these are the bootstrap stack's resources, which 8.2 removes. Its cause is the script fix listed at the end of this section |
+| after | phase 8.2: the bootstrap state moved back to a local file (`yes`); `terraform destroy`: 32 to destroy, `Destroy complete! Resources: 32 destroyed.`; `verify-teardown.sh --deleted`: `project hetren-m4-dhn12: DELETE_REQUESTED, billing enabled: False`, `teardown verified: the project is deleted and billing is off`. Then `gcloud config configurations activate default` (the operator declined gcloud's offer to enable `cloudresourcemanager` on another project) |
+
+Skipping `helm uninstall` left nothing behind: the chart creates only in-cluster objects (a ClusterIP Service, no
+load balancer, no persistent volume), and they were deleted with the cluster. `verify-teardown.sh` confirmed that
+no disk, address, forwarding rule or load balancer was left.
+
+### The first diagnosis on GKE (phase 6.2)
+
+`artifacts/milestone-4/gke-1/first-diagnosis.json`, HTTP 200:
+- input `compact_first_step.json` (task "Please handle support ticket T-1895.", 3 tool calls);
+- outcome `decision`, action `{"action": "decide", "args": {}, "verb": "no_intervention"}` ("The run needs no
+  change.");
+- 1,744 prompt tokens, 21 new tokens, stop type `eos`, generation 162.4 s;
+- llama-server `version: 0.7.0-dev (build 11669, commit 620d2225c)`, `built with GNU 12.2.0 for Linux x86_64`,
+  validated build, `-t 2 -c 4096 -np 1 -ngl 0`;
+- code commit `96957ca5…`, CLI 0.4.0rc1, GGUF sha256 `e3f50ba9…` (Q4_K_M).
+
+That is the first real inference on GKE: about 160 s for an uncached prompt on 2 cores of an `e2-standard-4`.
+
+### The load test (phase 7)
+
+`artifacts/milestone-4/loadtest-gke-1/summary.json`, committed unchanged as `docs/milestone-4/loadtest-gke.json`
+(k6 1.8.2 in the cluster, steps 1, 2, 4, 8 and 16 virtual users, 300 s each, 2 replicas on 2 nodes throughout).
+The first diagnosis is committed as `docs/milestone-4/first-diagnosis-gke.json`, and the reconstructed scale-up
+timeline as `docs/milestone-4/loadtest-gke-timeline.json`. Job `succeeded`, 310 diagnoses, 0.8756 node-hours over the test,
+node cost $0.1173 at $0.134023 per node-hour.
+
+| VUs | diagnoses | per second | p50 | p95 | p99 | max | requests | error rate (per request) |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 20 | 0.067 | 8.4 s | 18.1 s | 112.5 s | 136.1 s | 20 | 0 |
+| 2 | 58 | 0.193 | 8.2 s | 16.7 s | 17.5 s | 18.0 s | 58 | 0 |
+| 4 | 70 | 0.233 | 15.9 s | 32.0 s | 32.7 s | 34.2 s | 70 | 0 |
+| 8 | 81 | 0.270 | 31.7 s | 48.2 s | 57.1 s | 62.7 s | 81 | 0 |
+| 16 | 81 | 0.270 | 14 ms | 30 ms | 61.7 s | 78.0 s | 5,312 | 0.985 |
+
+HPA CPU during the test: 19–116%, mostly 72–80% in the last steps. All 101 samples showed 2 ready replicas on 2
+ready nodes.
+
+**How to read it.** Three points bear on these figures:
+- **Throughput levels off at 0.27 diagnoses per second** (about 16 per minute) with two replicas, from 8 VUs on.
+  Each replica serves one diagnosis at a time, so latency beyond that point is queueing: at 4 VUs about 2 × 8 s,
+  at 8 VUs about 4 × 8 s.
+- **The latencies are for a cached prompt, not a fresh one.** Every k6 request sends the same fixture, and the
+  diagnoser asks llama-server to reuse its prompt cache (`cache_prompt: true`, the validation run's setting;
+  `packages/hetren_cli/diagnosis.py`). So after a replica's first request, only the 21 new tokens are computed:
+  about 8 s, against about 136–162 s for a fresh 1,744-token prompt. The first diagnosis took 162 s, and the
+  c01 step's single 136 s request is most likely the second replica's first. That explanation is an inference: the
+  per-request timings were not recorded. **The 8 s p50 and the $0.38 node cost per 1,000 diagnoses are therefore a
+  best case for repeated input.** For distinct inputs, roughly 150 s per diagnosis and replica implies about
+  0.013 diagnoses per second with 2 replicas, and about $5.6 per 1,000 in node cost (1,000 × 150 s / 2 replicas =
+  20.8 h on 2 nodes, at $0.134023 per node-hour). That rough figure comes from one timing, not a measurement.
+- **The c16 error rate counts fast rejections, not failures.** Each replica accepts 9 requests at a time (one
+  running, `max_queue` 8 waiting), 18 in all, and refuses more with an immediate 503 and `Retry-After`. kube-proxy
+  picks a replica per connection at random, so 16 connections were most likely split unevenly, putting 10 or more
+  on one replica. The VUs over its limit got 503s in about 14 ms, and k6 retried at once without honouring
+  `Retry-After`. That gave 5,231 rejections in 300 s, while diagnoses stayed at 81, as at 8 VUs. No diagnosis
+  failed, and no request timed out.
+
+### Autoscaling
+
+`loadtest.py`'s sampled scale-up times are all `0.0` in `summary.json`. That is wrong: the scale-up had happened
+before the test, so its first sample was already at 2. The real timeline, from the events, pods and nodes above:
+
+| after the HPA's rescale (04:50:37) | |
+|---|---|
+| 2 s | cluster autoscaler triggers the node pool 1→2 |
+| 41 s | second node created |
+| 44 s | second node Ready |
+| 45 s | second pod scheduled |
+| 83 s | `fetch-model` started (after a 27.6 s image pull) |
+| 144 s | `fetch-model` finished (61 s for 2.5 GB) |
+| **171 s** | **second pod Ready: scale-up from 1 to 2 replicas in under 3 minutes** |
+
+`loadtest.py` now reconstructs this timeline from Kubernetes' events and the pod and node objects. It also reports
+`scaled_before_start`, with null rather than `0.0` sampled times. Run on session 1's saved records, it gives the
+table above (`loadtest-gke-timeline.json`, `scaled_before_start: true`), and its test checks the same values.
+
+### Cost
+
+The billing report is still to come; until then, this estimate uses the list prices above. The per-node-hour figure
+is $0.142272: the node $0.134023, its 50 GB disk $0.006849 and NAT $0.0014. To that come the NAT IP at $0.005 per
+cluster-hour and the NAT data, 5.5 GiB at $0.045 per GiB.
+
+| | node-hours | cluster-hours | estimate |
+|---|---|---|---|
+| teardown right after the load test (about 05:35) | 1.60 | 1.07 | $0.48 |
+| as it happened, second node removed about 20 min after the test | 13.75 | 13.14 | **$2.27** |
+| as it happened, if the second node stayed until the morning | 25.50 | 13.14 | $3.94 |
+
+- **The overnight gap cost an estimated $1.79** (up to $3.46 if the second node stayed), all in Free Trial
+  credits. That puts the session above the planned ceiling of $1.83. The billing report will show which case
+  applied. The default-pool node's 8 minutes add less than $0.01. The GKE management fee is covered by the free
+  tier.
+- **The budget could not have caught it:** even the higher figure is 16% of the $25 budget, below the first
+  alert (25%, $6.25). Only the teardown protects against an idle cluster, as the runbook says.
+
+### Checked by Claude Code on 2026-11-10
+
+From the files the operator saved (`artifacts/milestone-4/gke-1/` and `loadtest-gke-1/`):
+- `first-diagnosis.json` matches the fields above;
+- `summary.json` matches the table;
+- the 101 samples run from 04:54:09 to 05:20:25, all at 2 replicas and 2 nodes;
+- the times in the timeline come from `loadtest-gke-1/events.json` (absolute timestamps) and from `pods.yaml` and
+  `nodes.yaml` (creation times, conditions, init-container start and finish);
+- all pods have restart count 0;
+- both inference nodes are `e2-standard-4`.
+
+The teardown false alarm was reproduced: `verify-teardown.sh` as it was at `17a48c5`, given tab-separated rows by a
+fake `gcloud`, printed the same `LEFT` lines. The operator's eight `LEFT` lines (two Cloud Run revisions, the
+service, the topic, both buckets, the project and `cloudfunctions.googleapis.com/Function`) are the new test's
+input, and the fixed script lists all eight as kept.
+
+The teardown times (the overnight scale-down and 8.1's start), the kubectl install and the 8.2 outputs are the
+operator's report; they were not kept as files.
+
+### Runbook and script changes after this session
+
+- **`verify-teardown.sh`:** `gcloud … --format='value(assetType,name)'` separates the fields with a tab, but the
+  pattern for the bootstrap stack's resources expected a space, so none matched. It now matches any whitespace,
+  and covers Cloud Run revisions and both Cloud Functions types. It lists these resources as `kept … (removed in
+  phase 8.2)`. A test runs it with a fake `gcloud`.
+- **`loadtest.py`:** the events-based timeline and `scaled_before_start`, as above.
+- **The runbook:**
+  - phase 5 compares kubectl with the cluster's version before using it, with the download and checksum steps;
+  - phase 8 must follow in the same session, and the runbook warns about this at the top, in phase 5, and in
+    phase 7;
+  - the destroy commands print their `yes` prompt (no pipes);
+  - if the IP changed, `helm uninstall` can be skipped;
+  - phase 6 notes that the first diagnosis triggers the scale-up.

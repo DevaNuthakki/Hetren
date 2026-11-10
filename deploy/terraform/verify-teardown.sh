@@ -7,7 +7,8 @@
 # After the gke stack: no cluster, instance, disk, snapshot, image, address, forwarding rule, target pool,
 # backend service, instance group, router or non-default network in the project, and no labelled resource
 # (project=hetren) other than the bootstrap stack's (the project, state and function buckets, budget topic,
-# kill switch and its service account). With --deleted: the project is being deleted and billing is off.
+# kill switch with its Cloud Run service and revisions, and its service account), which it lists as kept.
+# With --deleted: the project is being deleted and billing is off.
 set -euo pipefail
 
 project="${1:?usage: verify-teardown.sh <project_id> [--deleted]}"
@@ -44,10 +45,14 @@ check "instance groups" compute instance-groups list
 check "routers (Cloud NAT)" compute routers list
 check "networks other than default" compute networks list --filter='name!=default'
 
-kept='^(cloudresourcemanager.googleapis.com/Project|storage.googleapis.com/Bucket|pubsub.googleapis.com/Topic|cloudfunctions.googleapis.com/Function|run.googleapis.com/Service|iam.googleapis.com/ServiceAccount|artifactregistry.googleapis.com/Repository) '
+# The bootstrap stack's resources stay until its own destroy (phase 8.2): they are listed as kept, not as left.
+# `value(assetType,name)` separates the two fields with a tab, so the type is matched up to any whitespace.
+kept='^(cloudresourcemanager\.googleapis\.com/Project|storage\.googleapis\.com/Bucket|pubsub\.googleapis\.com/Topic|cloudfunctions\.googleapis\.com/(Cloud)?Function|run\.googleapis\.com/(Service|Revision)|iam\.googleapis\.com/ServiceAccount|artifactregistry\.googleapis\.com/Repository)[[:space:]]'
 labelled=$(gcloud asset search-all-resources --scope="projects/$project" --query='labels.project=hetren' \
   --format='value(assetType,name)' 2>&1) || { echo "FAIL  labelled resources: $labelled"; left=$((left + 1)); labelled=""; }
+bootstrap=$(grep -E "$kept" <<<"$labelled" || true)
 other=$(grep -vE "$kept" <<<"$labelled" | sed '/^$/d' || true)
+if [ -n "$bootstrap" ]; then echo "kept  the bootstrap stack's resources (removed in phase 8.2):"; sed 's/^/        /' <<<"$bootstrap"; fi
 if [ -n "$other" ]; then echo "LEFT  labelled resources:"; echo "$other"; left=$((left + 1)); else echo "none  labelled resources beyond the bootstrap stack's"; fi
 
 if [ "$left" -gt 0 ]; then echo "teardown NOT complete: $left kind(s) of resource left"; exit 1; fi

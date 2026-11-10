@@ -12,6 +12,10 @@ Cloud Free Trial (PLAN.md, step 6, "The Free Trial design").
 - **Protection:** the teardown and its verification are the main protection; the kill switch is a backstop.
 - **Order:** phases 3 and 4 create nothing billable. **Phase 5 starts billable usage, and only after the gate at
   the end of phase 3.**
+- **Phases 5 to 8 are one session.** Start phase 5 only when you have about 1.5 hours to run phases 5–8 without a
+  break. Run phase 8 as soon as phase 7 ends. An idle cluster costs about $0.14 an hour per node, and the budget
+  would not alert for days. Overnight, your IP can also change, which locks `kubectl` and `helm` out of the cluster.
+  In session 1, the cluster stayed up 12 hours after the load test (DEPLOY_LOG.md).
 
 Send Claude Code the output each step asks for; it is logged in `DEPLOY_LOG.md`.
 
@@ -146,6 +150,10 @@ final estimate from the catalog's prices. Phase 5 waits for your go-ahead.
 
 ## Phase 5: the cluster (billable usage starts)
 
+From here, phases 5 to 8 run in one session (see the top).
+
+**5.1 and 5.2: the plan and the apply.**
+
 ```zsh
 cd deploy/terraform/gke
 terraform init -backend-config="bucket=hetren-m4-dhn12-tfstate"
@@ -153,18 +161,53 @@ MYIP="$(curl -s https://checkip.amazonaws.com)/32"; echo "$MYIP"
 terraform plan -var project_id=hetren-m4-dhn12 -var master_authorized_cidr="$MYIP" -out gke.plan
 caffeinate -i terraform apply gke.plan
 date -u +%FT%TZ
-gcloud container clusters get-credentials hetren --zone us-central1-a --project hetren-m4-dhn12
-kubectl get nodes -L hetren/pool
-kubectl version
 cd -
 ```
 
 - **Plan:** expect `Plan: 11 to add, 0 to change, 0 to destroy.` (network, subnet, router, NAT, the node
   service account and its 4 role bindings, the cluster and the node pool).
-- **Apply:** about 10 minutes, ending `Apply complete!`. The `date` line records when billing started.
+- **Apply:** about 12 minutes, ending `Apply complete!`. The `date` line records when billing started.
+
+**Before 5.3: is kubectl new enough for the cluster?** kubectl supports a server at most one minor version newer
+than itself. Compare the two versions before using kubectl:
+
+```zsh
+gcloud container clusters describe hetren --zone us-central1-a --project hetren-m4-dhn12 --format='value(currentMasterVersion)'
+which kubectl
+kubectl version --client
+```
+
+If the server's minor version is more than one above the client's, install the server's version into
+`~/hetren-tools`. In session 1, the server was `1.36.4-gke.2377000` and the client 1.34.1. Set `KVER` to the
+server's version without the `-gke…` suffix:
+
+```zsh
+KVER="v1.36.4"
+KARCH="$(uname -m | sed 's/x86_64/amd64/')"; echo "$KARCH"
+curl -fLo ~/hetren-tools/kubectl "https://dl.k8s.io/release/$KVER/bin/darwin/$KARCH/kubectl"
+curl -fLo ~/hetren-tools/kubectl.sha256 "https://dl.k8s.io/release/$KVER/bin/darwin/$KARCH/kubectl.sha256"
+cd ~/hetren-tools && echo "$(cat kubectl.sha256)  kubectl" | shasum -a 256 --check && cd -
+chmod +x ~/hetren-tools/kubectl
+hash -r
+which kubectl
+kubectl version --client
+```
+
+- **Arch:** `arm64` on Apple silicon, `amd64` on Intel.
+- **Checksum:** expect `kubectl: OK`. If the check fails, stop; don't use the file.
+- **Path:** `which kubectl` must now print `~/hetren-tools/kubectl` (expanded). If another kubectl comes first,
+  check the `export PATH` line from "Every new terminal".
+
+**5.3: credentials and the node.**
+
+```zsh
+gcloud container clusters get-credentials hetren --zone us-central1-a --project hetren-m4-dhn12
+kubectl get nodes -L hetren/pool
+kubectl version
+```
+
 - **Nodes:** one `e2-standard-4` node, `Ready`, with `hetren/pool=inference`.
-- **kubectl skew:** if `kubectl version` reports a server two or more minor versions newer than 1.34, upgrade
-  kubectl before going on.
+- **Version:** client and server versions, and no skew warning.
 
 If your IP changes during the session, `kubectl` times out. Re-run the `MYIP=` line and `terraform apply` with the
 same `-var`s; that changes only the authorised network.
@@ -190,7 +233,12 @@ kill %1
 - **The API log:** expect `"event": "ready"` with `llama_cpp_commit` `620d2225c`.
 - **`/readyz`:** `{"reason": "ready", "state": "ready", "status": "ready"}`.
 - **The last line:** the outcome, the action, `build 11669, commit 620d2225c`, and the generation seconds: the
-  first real inference on GKE.
+  first real inference on GKE (162 s in session 1).
+- **The scale-up starts here.** This diagnosis keeps llama-server's 2 threads busy for about 2.5 minutes, about
+  80% of the pod's CPU request against the HPA's 60% target. So the HPA asks for a second replica, and the cluster
+  autoscaler adds the second node, before phase 7 begins. In session 1, the second pod was ready 171 s after the
+  rescale. `loadtest.py` still records this timeline from Kubernetes' events. Its sampled scale-up times are null,
+  with `scaled_before_start: true`. Go straight on to phase 7: the events it reads are kept for about an hour.
 
 ## Phase 7: the load test
 
@@ -202,29 +250,51 @@ echo "loadtest exit ${pipestatus[1]}"
 kubectl get events -A --field-selector involvedObject.kind=Node -o wide | tail -20
 ```
 
+- **At the start:** if phase 6 has already scaled the deployment up, it prints `NOTE: already scaled up before
+  the test`.
 - **While it runs:** a line every 15 s, `replicas <ready> ready (HPA <current> -> <desired>, CPU <n>%), nodes
-  <ready>/<total>`. The HPA should ask for 2 replicas within a few minutes. The cluster autoscaler then adds the
-  second node, and the second pod becomes ready after its 2.5 GB download.
-- **The end:** a JSON block with `job`, `diagnoses`, `node_hours`, `node_cost_per_1000_diagnoses_usd` and
-  `scaling`.
+  <ready>/<total>`. If the deployment was not scaled up yet, the HPA should ask for 2 replicas within a few
+  minutes. The cluster autoscaler then adds the second node, and the second pod becomes ready after its 2.5 GB
+  download.
+- **The end:** a JSON block with `job`, `diagnoses`, `node_hours`, `node_cost_per_1000_diagnoses_usd`, `scaling`
+  and `timeline`. The `timeline` gives the scale-up's moments in UTC and in seconds after the HPA's rescale.
 - **Send:** the exit status, `artifacts/milestone-4/loadtest-gke-1/summary.json` and the log's last 30 lines.
+- **Then go straight to phase 8**, in the same session.
 
 ## Phase 8: teardown, in the same session
+
+Run this right after phase 7, without a break.
+
+**The prompts:** both `terraform destroy` commands ask `Enter a value:` and wait for `yes`. Run them as written
+here. Don't pipe them through `tail`, `tee` or `grep`, which would hide the prompt and leave the command waiting.
+
+**8.1: the cluster.**
 
 ```zsh
 helm uninstall hetren
 cd deploy/terraform/gke
-terraform destroy -var project_id=hetren-m4-dhn12 -var master_authorized_cidr="$(curl -s https://checkip.amazonaws.com)/32"
+MYIP="$(curl -s https://checkip.amazonaws.com)/32"; echo "$MYIP"
+terraform destroy -var project_id=hetren-m4-dhn12 -var master_authorized_cidr="$MYIP"
 date -u +%FT%TZ
 cd -
 deploy/terraform/verify-teardown.sh hetren-m4-dhn12
 ```
 
-- **Destroy:** answer `yes`. Expect `Destroy complete!`. The `date` line records when billable usage ended.
-- **Verify:** expect `none` for every kind, then `teardown verified: no cluster, compute or network resources left
-  in hetren-m4-dhn12`.
+- **`helm uninstall`:** expect `release "hetren" uninstalled`.
+- **If your IP has changed since phase 5:** `helm uninstall` fails with `Kubernetes cluster unreachable … i/o
+  timeout`, because the cluster's API accepts only the /32 from phase 5. Skip it and go on. The destroy uses your
+  current IP, and it deletes the cluster with everything in it. The chart creates nothing outside the cluster: no
+  load balancer, no persistent disk.
+- **Destroy:** the plan shows `Plan: 0 to add, 0 to change, 11 to destroy.` Answer `yes`. Expect `Destroy
+  complete! Resources: 11 destroyed.` The `date` line records when billable usage ended.
+- **Verify:** expect `none` for every kind. Then a `kept  the bootstrap stack's resources (removed in phase 8.2):`
+  list: the project, both buckets, the budget topic, the kill switch function, its Cloud Run service and revisions.
+  Then `none  labelled resources beyond the bootstrap stack's` and `teardown verified: no cluster, compute or
+  network resources left in hetren-m4-dhn12`. Any `LEFT` line is a real leftover: send it before going on.
 
-Then delete the project. Move the bootstrap state back to a local file first, because the destroy deletes the
+**8.2: the project.**
+
+Delete the project. Move the bootstrap state back to a local file first, because the destroy deletes the
 bucket it is in:
 
 ```zsh
@@ -238,7 +308,8 @@ gcloud config configurations activate default
 ```
 
 - **The migration:** answer `yes` to copy the state to a local file.
-- **The destroy:** answer `yes`. It deletes the project; Google keeps it pending deletion for 30 days.
+- **The destroy:** the plan shows `32 to destroy`. Answer `yes`. It deletes the project; Google keeps it pending
+  deletion for 30 days.
 - **Verify:** expect `teardown verified: the project is deleted and billing is off`.
 
 The next day, check Billing → Reports for the project, with credits shown separately. Send the gross cost and the

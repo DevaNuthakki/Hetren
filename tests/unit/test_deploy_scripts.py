@@ -1,10 +1,12 @@
-"""Step 6b's operator scripts, with fake API responses and samples: the price check, the live budget check and the
-load test's autoscaling record. Nothing reaches Google Cloud or a cluster."""
+"""Step 6b's operator scripts, with fake API responses and samples: the price check, the live budget check, the
+load test's autoscaling record and the teardown check. Nothing reaches Google Cloud or a cluster."""
 
 from __future__ import annotations
 
 import importlib.util
+import os
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -148,3 +150,102 @@ def test_the_job_is_rendered_with_the_steps():
     assert 'value: "1,2,4,8,16"' in job and 'value: "300"' in job
     short = loadtest.render_job("1,2", 60)
     assert 'value: "1,2"' in short and 'value: "60"' in short and "1,2,4,8,16" not in short
+
+
+def test_a_scale_up_before_the_test_gives_null_sampled_times_not_zero():
+    # Session 1: the first diagnosis (phase 6) had already scaled the deployment to 2 when the load test began.
+    already = [dict(row, nodes=2, ready_nodes=2, hpa_desired=2, hpa_current=2, ready_replicas=2) for row in _samples()]
+    timeline = loadtest.scaling(already)
+    assert timeline["scaled_before_start"] is True
+    assert [timeline[k] for k in ("hpa_wanted_2_at_s", "second_node_ready_at_s", "second_pod_ready_at_s",
+                                  "scale_up_seconds")] == [None] * 4
+    assert timeline["max_nodes"] == 2 and timeline["max_ready_replicas"] == 2
+    assert loadtest.scaling(_samples())["scaled_before_start"] is False
+
+
+def _event(reason, kind, name, at, message=""):
+    return {"reason": reason, "involvedObject": {"kind": kind, "name": name}, "firstTimestamp": at,
+            "message": message, "metadata": {"creationTimestamp": at}}
+
+
+def test_the_scale_up_timeline_comes_from_the_events_and_objects():
+    # Session 1's real times (artifacts/milestone-4/loadtest-gke-1/events.json, gke-1/pods.yaml, gke-1/nodes.yaml).
+    events = [
+        _event("SuccessfulRescale", "HorizontalPodAutoscaler", "hetren", "2026-11-10T04:50:37Z",
+               "New size: 2; reason: cpu resource utilization (percentage of request) above target"),
+        _event("SuccessfulRescale", "HorizontalPodAutoscaler", "other", "2026-11-10T04:40:00Z", "New size: 2"),
+        _event("TriggeredScaleUp", "Pod", "hetren-b", "2026-11-10T04:50:39Z"),
+        _event("NodeReady", "Node", "node-a", "2026-11-10T04:42:42Z"),
+        _event("NodeReady", "Node", "node-b", "2026-11-10T04:51:21Z"),
+    ]
+    nodes = [{"metadata": {"name": "node-b", "creationTimestamp": "2026-11-10T04:51:18Z"}, "status": {}},
+             {"metadata": {"name": "node-a", "creationTimestamp": "2026-11-10T04:42:38Z"}, "status": {}}]
+    pods = [
+        {"metadata": {"name": "hetren-a", "creationTimestamp": "2026-11-10T04:47:21Z"}, "status": {}},
+        {"metadata": {"name": "hetren-b", "creationTimestamp": "2026-11-10T04:50:37Z"}, "status": {
+            "conditions": [{"type": "PodScheduled", "status": "True", "lastTransitionTime": "2026-11-10T04:51:22Z"},
+                           {"type": "Ready", "status": "True", "lastTransitionTime": "2026-11-10T04:53:28Z"}],
+            "initContainerStatuses": [{"name": "fetch-model", "state": {"terminated": {
+                "startedAt": "2026-11-10T04:52:00Z", "finishedAt": "2026-11-10T04:53:01Z"}}}]}},
+    ]
+    result = loadtest.timeline(events, pods, nodes, "hetren")
+    assert result["second_node"] == "node-b" and result["second_pod"] == "hetren-b"
+    assert result["utc"]["hpa_rescaled_to_2"] == "2026-11-10T04:50:37Z"
+    assert result["seconds_after_rescale"] == {
+        "hpa_rescaled_to_2": 0.0, "second_pod_created": 0.0, "scale_up_triggered": 2.0, "second_node_created": 41.0,
+        "second_node_ready": 44.0, "second_pod_scheduled": 45.0, "fetch_model_started": 83.0,
+        "fetch_model_finished": 144.0, "second_pod_ready": 171.0}
+
+
+def test_the_timeline_without_a_scale_up_is_empty_not_an_error():
+    pods = [{"metadata": {"name": "hetren-a", "creationTimestamp": "2026-11-10T04:47:21Z"}, "status": {}}]
+    result = loadtest.timeline([], pods, [], "hetren")
+    assert result["second_pod"] is None and set(result["seconds_after_rescale"].values()) == {None}
+
+
+def _fake_gcloud(tmp_path, assets: str):
+    """A gcloud that lists nothing, except the labelled assets, which it prints as the real one does: tab-separated."""
+    (tmp_path / "assets.txt").write_text(assets, encoding="utf-8")
+    script = tmp_path / "gcloud"
+    script.write_text('#!/usr/bin/env bash\nif [ "$1" = asset ]; then cat "$(dirname "$0")/assets.txt"; fi\n',
+                      encoding="utf-8")
+    script.chmod(0o755)
+    return {**os.environ, "PATH": f"{tmp_path}{os.pathsep}{os.environ['PATH']}"}
+
+
+# Session 1's phase 8.1 output, line for line. gcloud's value() format separates the fields with a tab (the terminal
+# shows it as spaces).
+BOOTSTRAP_ASSETS = "".join(f"{line}\n" for line in [
+    "run.googleapis.com/Revision\t//run.googleapis.com/projects/hetren-m4-dhn12/locations/us-central1/revisions/hetren-kill-switch-00002-sit",
+    "run.googleapis.com/Revision\t//run.googleapis.com/projects/hetren-m4-dhn12/locations/us-central1/revisions/hetren-kill-switch-00001-tah",
+    "run.googleapis.com/Service\t//run.googleapis.com/projects/hetren-m4-dhn12/locations/us-central1/services/hetren-kill-switch",
+    "pubsub.googleapis.com/Topic\t//pubsub.googleapis.com/projects/hetren-m4-dhn12/topics/hetren-budget",
+    "storage.googleapis.com/Bucket\t//storage.googleapis.com/hetren-m4-dhn12-tfstate",
+    "storage.googleapis.com/Bucket\t//storage.googleapis.com/hetren-m4-dhn12-functions",
+    "cloudresourcemanager.googleapis.com/Project\t//cloudresourcemanager.googleapis.com/projects/hetren-m4-dhn12",
+    "cloudfunctions.googleapis.com/Function\t//cloudfunctions.googleapis.com/projects/hetren-m4-dhn12/locations/us-central1/functions/hetren-kill-switch",
+])
+
+
+def _teardown(env):
+    return subprocess.run(["bash", str(REPO_ROOT / "deploy/terraform/verify-teardown.sh"), "hetren-m4-dhn12"],
+                          capture_output=True, text=True, env=env)
+
+
+def test_after_the_gke_destroy_the_bootstrap_resources_are_kept_not_left(tmp_path):
+    # Session 1, phase 8.1: the bootstrap stack's resources were reported as left, since the type was followed by a
+    # tab, not the space the pattern expected.
+    run = _teardown(_fake_gcloud(tmp_path, BOOTSTRAP_ASSETS))
+    assert run.returncode == 0, run.stdout + run.stderr
+    assert "kept  the bootstrap stack's resources (removed in phase 8.2):" in run.stdout
+    assert run.stdout.count("        run.googleapis.com/Revision\t") == 2 and "functions/hetren-kill-switch" in run.stdout
+    assert "LEFT" not in run.stdout
+    assert "teardown verified: no cluster, compute or network resources left in hetren-m4-dhn12" in run.stdout
+
+
+def test_a_labelled_resource_outside_the_bootstrap_stack_is_still_left(tmp_path):
+    disk = "compute.googleapis.com/Disk\t//compute.googleapis.com/projects/hetren-m4-dhn12/zones/us-central1-a/disks/pvc-1\n"
+    run = _teardown(_fake_gcloud(tmp_path, BOOTSTRAP_ASSETS + disk))
+    assert run.returncode == 1
+    assert "LEFT  labelled resources:" in run.stdout and "disks/pvc-1" in run.stdout
+    assert "teardown NOT complete: 1 kind(s) of resource left" in run.stdout
