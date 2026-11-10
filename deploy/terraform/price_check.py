@@ -24,15 +24,17 @@ import urllib.request
 CATALOG = "https://cloudbilling.googleapis.com/v1"
 MACHINE = {"name": "e2-standard-4", "vcpus": 4, "memory_gib": 16}
 DISK_GIB = 50
-# (key, service, description pattern, unit the estimate needs)
+# (key, the services to search, description pattern (case-insensitive), unit the estimate needs). Cloud NAT's
+# SKUs are in the Networking service ("Networking Cloud NAT gateway uptime", "... data processing", "... IP usage",
+# cloud.google.com/nat/pricing); Private NAT's are excluded, since the cluster uses Public NAT.
 SKUS = [
-    ("e2_core", "Compute Engine", r"^E2 Instance Core running in ", "h"),
-    ("e2_ram", "Compute Engine", r"^E2 Instance Ram running in ", "GiBy.h"),
-    ("balanced_pd", "Compute Engine", r"^Balanced PD Capacity( in |$)", "GiBy.mo"),
-    ("nat_uptime", "Compute Engine", r"^(Networking Cloud )?NAT Gateway: Uptime charge", "h"),
-    ("nat_data", "Compute Engine", r"^(Networking Cloud )?NAT Gateway: Data processing charge", "GiBy"),
-    ("nat_ip", "Compute Engine", r"External IP .*(NAT|Standard VM)", "h"),
-    ("gke_zonal", "Kubernetes Engine", r"^(Zonal Kubernetes Clusters|Cluster Management Fee)", "h"),
+    ("e2_core", ("Compute Engine",), r"^E2 Instance Core running in ", "h"),
+    ("e2_ram", ("Compute Engine",), r"^E2 Instance Ram running in ", "GiBy.h"),
+    ("balanced_pd", ("Compute Engine",), r"^Balanced PD Capacity( in |$)", "GiBy.mo"),
+    ("nat_uptime", ("Networking", "Compute Engine"), r"^(Networking )?Cloud NAT gateway uptime", "h"),
+    ("nat_data", ("Networking", "Compute Engine"), r"^(Networking )?Cloud NAT data processing", "GiBy"),
+    ("nat_ip", ("Networking", "Compute Engine"), r"^(Networking )?Cloud NAT IP usage", "h"),
+    ("gke_zonal", ("Kubernetes Engine",), r"^(Zonal Kubernetes Clusters|Cluster Management Fee)", "h"),
 ]
 SESSIONS = {
     "expected": {"cluster_hours": 2.0, "node_hours": 2.75, "nat_gib": 5.5,
@@ -60,9 +62,10 @@ def find(skus_by_service: dict[str, list[dict]], region: str) -> dict[str, dict]
     """Each needed SKU: its description, id, price and unit, or a 'missing' entry."""
     found = {}
 
-    for key, service, pattern, unit in SKUS:
-        matches = [s for s in skus_by_service.get(service, [])
-                   if re.search(pattern, s.get("description", ""))
+    for key, services, pattern, unit in SKUS:
+        service = " or ".join(services)
+        matches = [s for name in services for s in skus_by_service.get(name, [])
+                   if re.search(pattern, s.get("description", ""), re.IGNORECASE)
                    and (region in s.get("serviceRegions", []) or "global" in s.get("serviceRegions", []))
                    and s.get("category", {}).get("usageType", "OnDemand") == "OnDemand"]
         priced = [(s, *unit_price(s)) for s in matches]
@@ -127,12 +130,12 @@ def catalog(project: str, get=None) -> dict[str, list[dict]]:
         get = lambda url: _get(url, token, project)  # noqa: E731
 
     services = {s["displayName"]: s["name"] for s in _all(f"{CATALOG}/services", "services", get)}
-    wanted = {service for _, service, _, _ in SKUS}
-    missing = wanted - set(services)
+    unavailable = [key for key, names, _, _ in SKUS if not any(name in services for name in names)]
 
-    if missing:
-        raise RuntimeError(f"the catalog lists no service named {sorted(missing)}")
+    if unavailable:
+        raise RuntimeError(f"the catalog lists none of the services for {unavailable}")
 
+    wanted = sorted({name for _, names, _, _ in SKUS for name in names if name in services})
     return {name: _all(f"{CATALOG}/{services[name]}/skus?currencyCode=USD", "skus", get) for name in wanted}
 
 

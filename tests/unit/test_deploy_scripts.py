@@ -39,9 +39,15 @@ CATALOG = {
         _sku("E2 Instance Ram running in Americas", 0.002923, "GiBy.h"),
         _sku("E2 Instance Core running in Paris", 0.03, "h", regions=("europe-west9",)),
         _sku("Balanced PD Capacity", 0.1, "GiBy.mo"),
-        _sku("NAT Gateway: Uptime charge", 0.0014, "h"),
-        _sku("NAT Gateway: Data processing charge", 0.045, "GiBy", regions=("global",)),
-        _sku("External IP Charge on a Standard VM", 0.005, "h", regions=("global",), free_first=True),
+        _sku("External IP Charge on a Standard VM", 0.004, "h", regions=("global",), free_first=True),
+    ],
+    # As the catalog names them on 2026-11-10 (cloud.google.com/nat/pricing): the Networking service.
+    "Networking": [
+        _sku("Networking Cloud NAT gateway uptime", 0.0014, "h"),
+        _sku("Networking Cloud NAT data processing", 0.045, "GiBy", regions=("global",)),
+        _sku("Networking Cloud NAT IP usage", 0.005, "h", free_first=True),
+        _sku("Networking Private NAT data processing", 0.9, "GiBy", regions=("global",)),
+        _sku("Networking Private NAT gateway uptime", 0.9, "h"),
     ],
     "Kubernetes Engine": [_sku("Zonal Kubernetes Clusters", 0.1, "h", regions=("global",))],
 }
@@ -52,6 +58,8 @@ def test_the_price_check_finds_each_sku_in_the_region_and_prices_the_session():
     assert all("missing" not in v for v in found.values()), found
     assert found["e2_core"]["price"] == pytest.approx(0.021811)  # not the Paris SKU
     assert found["nat_ip"]["price"] == pytest.approx(0.005)  # the first paid tier, not the free one
+    assert found["nat_ip"]["description"] == "Networking Cloud NAT IP usage"  # not a VM's external IP
+    assert found["nat_data"]["price"] == pytest.approx(0.045) and found["nat_uptime"]["price"] == pytest.approx(0.0014)
     result = prices.estimate(found)
     assert result["e2_standard_4_per_hour"] == pytest.approx(4 * 0.021811 + 16 * 0.002923)
     expected = result["expected"]
@@ -63,10 +71,13 @@ def test_the_price_check_reports_a_sku_it_cannot_find():
     catalog = {"Compute Engine": CATALOG["Compute Engine"][:2], "Kubernetes Engine": []}
     found = prices.find(catalog, "us-central1")
     assert "missing" in found["gke_zonal"] and "missing" in found["balanced_pd"]
+    assert "missing" in found["nat_data"]  # the Networking service absent: never the Private NAT price
+    assert "Networking or Compute Engine" in found["nat_data"]["missing"]
 
 
 def test_the_catalog_is_read_page_by_page():
-    pages = {"services": [{"services": [{"displayName": "Compute Engine", "name": "services/CE"}], "nextPageToken": "2"},
+    pages = {"services": [{"services": [{"displayName": "Compute Engine", "name": "services/CE"},
+                                        {"displayName": "Networking", "name": "services/NET"}], "nextPageToken": "2"},
                           {"services": [{"displayName": "Kubernetes Engine", "name": "services/GKE"}]}]}
     calls = []
 
@@ -74,10 +85,11 @@ def test_the_catalog_is_read_page_by_page():
         calls.append(url)
         if "/services?" in url:
             return pages["services"].pop(0)
-        return {"skus": CATALOG["Compute Engine" if "/CE/" in url else "Kubernetes Engine"]}
+        return {"skus": CATALOG[{"CE": "Compute Engine", "NET": "Networking", "GKE": "Kubernetes Engine"}[url.split("/")[-2]]]}
 
     catalog = prices.catalog("p", get=get)
-    assert set(catalog) == {"Compute Engine", "Kubernetes Engine"} and len(catalog["Compute Engine"]) == 7
+    assert set(catalog) == {"Compute Engine", "Networking", "Kubernetes Engine"} and len(catalog["Networking"]) == 5
+    assert all("missing" not in v for v in prices.find(catalog, "us-central1").values())
     assert any("pageToken=2" in url for url in calls)
 
 

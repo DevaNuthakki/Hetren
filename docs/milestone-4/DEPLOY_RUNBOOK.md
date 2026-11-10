@@ -20,6 +20,7 @@ Send Claude Code the output each step asks for; it is logged in `DEPLOY_LOG.md`.
 ```zsh
 cd ~/Documents/personal-projects/hetren
 export PATH="$(gcloud info --format='value(installation.sdk_root)')/bin:$HOME/hetren-tools:$PATH"
+export SSL_CERT_FILE="$(~/.hetren-pilot/bin/python -m certifi)"   # python.org's Python has no CA certificates
 gcloud config configurations activate hetren
 gcloud config list 2>/dev/null | grep -E "account|project"
 ```
@@ -72,7 +73,7 @@ It creates the project, its APIs, the state bucket, the budget and the kill swit
 5. **Check the live budget.** It must exclude credits:
    ```zsh
    cd ~/Documents/personal-projects/hetren
-   python3 deploy/terraform/check_budget.py --billing-account 0108BC-5BB242-9529D7 --project hetren-m4-dhn12
+   ~/.hetren-pilot/bin/python deploy/terraform/check_budget.py --billing-account 0108BC-5BB242-9529D7 --project hetren-m4-dhn12
    ```
    Expect `ok    budget hetren-hetren-m4-dhn12: $25 per month on projects/<number> only, alerts at 25/50/90/100%,
    credits excluded (gross usage), updates to the kill switch's topic`.
@@ -82,11 +83,13 @@ It creates the project, its APIs, the state bucket, the budget and the kill swit
    ```zsh
    gcloud pubsub topics publish hetren-budget --message '{"budgetDisplayName":"test","costAmount":1.00,"budgetAmount":25.00,"alertThresholdExceeded":0.04,"currencyCode":"USD"}'
    gcloud pubsub topics publish hetren-budget --message '{"budgetDisplayName":"test","costAmount":26.00,"budgetAmount":25.00,"alertThresholdExceeded":1.04,"currencyCode":"USD"}'
-   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="hetren-kill-switch" AND textPayload:"action"' --freshness 15m --format 'value(textPayload)'
+   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="hetren-kill-switch" AND jsonPayload.action:*' --freshness 15m --format 'table(timestamp, jsonPayload.action, jsonPayload.cost, jsonPayload.threshold)'
    gcloud billing projects describe hetren-m4-dhn12 --format 'value(billingEnabled)'
    ```
-   - Expect two log lines: `"action": "none (below the budget)"` and `"action": "would disable billing
-     (DRY_RUN=1)"`. If they are missing, wait another minute and read again.
+   - The function writes one JSON object per decision, which Cloud Logging stores as `jsonPayload`.
+   - Expect a row `none (below the budget)` with cost 1 and a row `would disable billing (DRY_RUN=1)` with cost
+     26. Real budget notifications (cost 0) may appear too. If the rows are missing, wait another minute and
+     read again.
    - Then expect `True`: billing is still on.
 
 7. **Arm the kill switch:**
@@ -106,9 +109,11 @@ It creates the project, its APIs, the state bucket, the budget and the kill swit
 9. **Check the prices.** The Cloud Billing Catalog API is read-only:
    ```zsh
    mkdir -p artifacts/milestone-4/gke-1
-   python3 deploy/terraform/price_check.py --project hetren-m4-dhn12 --out artifacts/milestone-4/gke-1/prices.json
+   ~/.hetren-pilot/bin/python deploy/terraform/price_check.py --project hetren-m4-dhn12 --out artifacts/milestone-4/gke-1/prices.json
    ```
    - Expect seven `ok` lines, each giving a SKU's description and its price, and the `e2-standard-4` hourly price.
+     The three Cloud NAT prices come from the Networking service (`Networking Cloud NAT gateway uptime`, `… data
+     processing`, `… IP usage`).
    - Then the `expected` and `ceiling` estimates in credits.
    - A `MISSING` line means a SKU's description changed: send the output.
 
