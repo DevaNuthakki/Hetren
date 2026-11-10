@@ -40,14 +40,17 @@ model cannot be loaded, the process exits with status 3.
 
 ## Install with one command
 
-On a cluster with the image published (a `v*` tag) and the model repository on Hugging Face (step 7a):
+On a cluster with the image published (a release tag) and the model on Hugging Face
+([`Harsha1412/hetren-qwen3-4b-diagnosis`](https://huggingface.co/Harsha1412/hetren-qwen3-4b-diagnosis)):
 
 ```zsh
 helm install hetren deploy/helm/hetren -f deploy/gke/values.yaml \
-  --set image.tag=v0.4.0-rc.1 --set model.repo=<huggingface model repository>
+  --set image.tag=v0.4.0-rc.1 --set model.repo=Harsha1412/hetren-qwen3-4b-diagnosis
 ```
 
-`image.tag` and `model.repo` are required, and the chart refuses to render without them. Use `model.variant=Q8_0`
+`image.tag` and `model.repo` are required, and the chart refuses to render without them. `model.revision`
+defaults to the released commit `3e875e4e8719acef839dc18e220a3ae498a1975b`, so a later push to the model
+repository cannot change what the pods download. Use `model.variant=Q8_0`
 for the higher-fidelity variant, and `model.tokenSecret` (a Secret with the key `token`) for a private repository.
 
 ## kind (CI, or locally)

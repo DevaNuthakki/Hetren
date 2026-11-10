@@ -151,6 +151,9 @@ def test_chart_defaults_are_the_gke_design():
                  "repository: ghcr.io/devanuthakki/hetren-cli", "variant: Q4_K_M", "  enabled: false"):
         assert line in values, line
 
+    assert "  revision: 3e875e4e8719acef839dc18e220a3ae498a1975b\n" in values  # the 7a release commit
+    assert "--set model.repo=Harsha1412/hetren-qwen3-4b-diagnosis" in _text("README.md")
+
     templates = "".join(p.read_text(encoding="utf-8") for p in (DEPLOY / "helm/hetren/templates").iterdir())
     assert "type: ClusterIP" in templates and "LoadBalancer" not in templates and "NodePort" not in templates
 

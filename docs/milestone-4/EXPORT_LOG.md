@@ -206,3 +206,34 @@ Outputs (in `artifacts/milestone-4/cli-check-docker-1/Q4_K_M/`: `inputs/`, `repo
 - `cases.jsonl` `b333a1796805cce4bfd46a15a3b54408b323d9c5c9572cd6f2df5cd51272378c`;
 - console log `cli-check-docker-1.log` `69d499584e16a4fa9eb11f085996875a1fc2169ce432cbf13baaa38c686b705c`;
 - compared against the validation calls tier 1 `e2840398…`, tier 2 `c67a4dc1…`.
+
+## Hugging Face release (step 7a)
+
+Run by the operator on 2026-11-09 with the committed staging script (`scripts/hf_release.py`, `04c4a9d`) and model card (`965fa41`); `git status` showed only the untracked amendment draft.
+
+**Repository:** [`Harsha1412/hetren-qwen3-4b-diagnosis`](https://huggingface.co/Harsha1412/hetren-qwen3-4b-diagnosis), licence `apache-2.0`. It was created private, then made public after verification.
+- Commits: `63fce5b5a46cce7e94da775f17486c20dce699e6` ("initial commit", 23:26:15 UTC: only `.gitattributes`), then the release, **`3e875e4e8719acef839dc18e220a3ae498a1975b`** (23:47:03 UTC, "Hetren diagnosis model: checkpoint 0792, Q4_K_M and Q8_0 GGUFs, adapter, tokenizer, manifest").
+- **Token:** fine-grained `hetren-7a-upload`, with repository permissions on this repository only: read contents, write contents and settings, and "view access requests for gated repos", which the form selects with write. No user or organisation permissions. Deleted after the upload, and `HF_TOKEN` unset.
+
+| step | outcome |
+|---|---|
+| stage (`stage-model`) | "staged 16 files for Harsha1412/hetren-qwen3-4b-diagnosis in /Users/deva/hetren-hf-stage (6.93 GB); every file from the export and checkpoint matches the manifest". Then `SHA256SUMS` (`5bc7212e939ce7c8675cfe95b8b09359c81cd3a354d56eeffed499772bc69688`) was written: 17 files |
+| upload (`hf upload`, `huggingface_hub` 0.36.2, `hf_xet` 1.7.0) | commit `3e875e4e…`. `hf upload` printed the tree URL, so the operator read the sha from `HfApi().list_repo_commits` |
+| verify, private (`verify-remote`, with the token) | first attempt: `SSL: CERTIFICATE_VERIFY_FAILED` (python.org Python 3.13 on macOS has no CA certificates until its "Install Certificates" step); passed with `SSL_CERT_FILE` set to certifi's bundle: "17 files, each equal to the staged copy (4 by LFS sha256, the rest by git blob id)" |
+| fetch Q4_K_M (`fetch-model --revision 3e875e4e…`) | all 9 tokenizer files and the GGUF: "sha256 matches the manifest"; "Q4_K_M ready … (sha256 e3f50ba9…)" |
+| fetch Q8_0, first attempt | **failed**: the downloaded file had sha256 `d6c90bf5a5848a0e872267f73a19ee42c3faaba36b94fffe2a2f581470942f5c`, not the manifest's `496c74a7…`. "nothing was kept". Its size was not recorded |
+| fetch Q8_0, retry (same command) | "sha256 matches the manifest"; "Q8_0 ready … (sha256 496c74a7…)" |
+| verify, public (without a token) | first attempt: `HTTP Error 401: Unauthorized`, because the repository was still private; after making it public: "17 files, each equal to the staged copy (4 by LFS sha256, the rest by git blob id)" |
+
+**The failed Q8_0 fetch** is read as a corrupted download. The remote file's LFS sha256 had already been verified equal to the manifest's (`verify-remote`), and the same command then fetched a matching file. The check worked as designed: the corrupted file was discarded, not cached. Its cause (a truncated or damaged transfer) was not established, because the size was not recorded.
+
+**Checked by Claude Code on 2026-11-09, anonymously:**
+- the Hub API reports the repository public, not gated, with `main` at `3e875e4e…`, and card metadata `license: apache-2.0`, `base_model: Qwen/Qwen3-4B-Instruct-2507`, `base_model_relation: finetune`, `library_name: peft`;
+- its files are the 17 staged files plus `.gitattributes`;
+- `verify-remote --revision 3e875e4e…` without a token: the same `ok` line;
+- the staged `README.md` equals the committed card (`965fa41`) with the repository name filled in, and the staged `LICENSE` equals the repository's.
+
+**Changes made after this release** (they do not change the released files):
+- `fetch-model` now checks a download's size against the manifest's (GGUFs) or the server's `Content-Length`, and retries a failed or broken-off download once from the start. A 4xx error is not retried.
+- HTTPS in `fetch-model` and `hf_release.py` falls back to certifi's bundle only when Python has no system certificates.
+- The Helm chart's `model.revision` defaults to `3e875e4e…`.
