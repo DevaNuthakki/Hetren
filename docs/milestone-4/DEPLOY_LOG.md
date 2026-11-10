@@ -14,7 +14,7 @@ the estimate are in PLAN.md, step 6.
 | cluster | zonal `us-central1-a`, private nodes behind Cloud NAT, API reachable only from the operator's /32 |
 | node pool | 1–2 × `e2-standard-4` (8 vCPUs at most), 50 GB `pd-balanced`, no surge on upgrade |
 | deployment | `deploy/helm/hetren` with `deploy/gke/values.yaml`: CPU request 2.5, `-t 2`, HPA 1–2 at 60% CPU, queue 8 |
-| image | `ghcr.io/devanuthakki/hetren-cli:v0.4.0-rc.1` (digest recorded at publish) |
+| image | `ghcr.io/devanuthakki/hetren-cli:v0.4.0-rc.1@sha256:e6dd9cbdb0f7e349df6a3850dc9a63a950d6f2e3b7f0b4d1942fcd907dbe1da1`, public |
 | model | `Harsha1412/hetren-qwen3-4b-diagnosis` at `3e875e4e8719acef839dc18e220a3ae498a1975b`, Q4_K_M |
 | estimate (list prices, credits) | expected $0.65, ceiling $1.83 (PLAN.md); final figure from `price_check.py` at the gate |
 
@@ -48,3 +48,31 @@ committed lock file: google 8.8.1, archive 2.8.1) and the `gcloud` configuration
 - the GKE fee is covered by the free tier (no other cluster on the billing account); it would add $0.20 and $0.40.
 
 The first run's $0.40 and $1.15 lacked the NAT data cost.
+
+## Session 1, phase 3 (continued): the corrected price check (2026-11-10)
+
+Re-run by the operator after `3aa6f6d`, exit 0. All seven SKUs were found:
+- the four from the first run;
+- `Networking Cloud Nat Gateway Uptime` $0.0014 per hour (`32E2-4EFC-EF9F`);
+- `Networking Cloud Nat Data Processing` $0.045 per GiB (`015F-5732-FFF0`);
+- `Networking Cloud NAT IP Usage` $0.005 per hour (`8515-9425-D2CE`).
+
+That gives `e2-standard-4` at $0.134023 per hour, and the **final estimate: $0.65 expected, $1.83 ceiling, in Free Trial credits**. The prices are in `artifacts/milestone-4/gke-1/prices.json`, which the load test reads.
+
+## Session 1, phase 4: the release-candidate image (2026-11-10, nothing billable)
+
+Run by the operator with the runbook's phase 4 commands.
+
+| step | outcome |
+|---|---|
+| tag | annotated `v0.4.0-rc.1` on `96957ca54a995e327c021d4d02a66e1ca541fe83` (the commit with `CLI_VERSION = "0.4.0rc1"`, chart `appVersion` `0.4.0-rc.1`), pushed |
+| CI on the tag (run 42753662860) | all jobs succeeded (Slow tests skipped: it runs on `main` only). Publish image (release tags): `ok    v0.4.0-rc.1: CLI_VERSION 0.4.0rc1, chart appVersion 0.4.0-rc.1`, `all image checks passed`, `v0.4.0-rc.1: digest: sha256:e6dd9cbdb0f7e349df6a3850dc9a63a950d6f2e3b7f0b4d1942fcd907dbe1da1 size: 4288` |
+| visibility | the GHCR package `hetren-cli` set to public |
+| anonymous pull | after `docker logout ghcr.io`: pulled, the same digest; `hetren 0.4.0rc1 (commit 96957ca54a995e327c021d4d02a66e1ca541fe83)`, `llama.cpp validated build: 620d2225cc436ab0b001e3200e590e3b286ef9ab`; `check-image.sh` on the pulled image: `all image checks passed` |
+| pre-release | https://github.com/DevaNuthakki/Hetren/releases/tag/v0.4.0-rc.1 (published 04:20:39 UTC) |
+
+**Checked by Claude Code on 2026-11-10:**
+- run 42753662860 ran on the tag at `96957ca5…` and succeeded;
+- the tag is annotated and points to that commit;
+- the registry served the tag's manifest anonymously (a pull token without credentials) with digest `sha256:e6dd9cbd…`;
+- the pre-release exists. Its `targetCommitish` reads `main`, GitHub's default for a release from an existing tag; the tag decides the commit.

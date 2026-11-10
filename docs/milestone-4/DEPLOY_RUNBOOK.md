@@ -197,7 +197,7 @@ kill %1
 This takes about 25 minutes, plus the scale-up:
 
 ```zsh
-caffeinate -i python3 deploy/gke/loadtest.py --out artifacts/milestone-4/loadtest-gke-1 --prices artifacts/milestone-4/gke-1/prices.json 2>&1 | tee artifacts/milestone-4/loadtest-gke-1.log
+caffeinate -i ~/.hetren-pilot/bin/python deploy/gke/loadtest.py --out artifacts/milestone-4/loadtest-gke-1 --prices artifacts/milestone-4/gke-1/prices.json 2>&1 | tee artifacts/milestone-4/loadtest-gke-1.log
 echo "loadtest exit ${pipestatus[1]}"
 kubectl get events -A --field-selector involvedObject.kind=Node -o wide | tail -20
 ```
