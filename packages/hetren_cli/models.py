@@ -12,15 +12,20 @@ merged model's sha256, as the validation run checked (``gguf_validation.verify_v
 
 into the cache (default ``~/.cache/hetren``, or ``$HETREN_CACHE``), with the standard library only
 (``$HF_ENDPOINT`` and ``$HF_TOKEN`` are honoured). A download is written to a temporary file and kept only if
-its sha256 matches.
+its size (for a GGUF, the manifest's; otherwise the server's ``Content-Length``) and sha256 match; a download
+that fails these checks or breaks off is retried once from the start. HTTPS uses the system's certificates, or
+certifi's bundle when Python has none (python.org's macOS Python before "Install Certificates").
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import http.client
 import os
 from pathlib import Path
+import ssl
+import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -128,32 +133,88 @@ def _url(repo: str, revision: str, path: str) -> str:
     return f"{endpoint}/{repo}/resolve/{urllib.parse.quote(revision, safe='')}/{urllib.parse.quote(path)}"
 
 
-def _download(url: str, target: Path, digest: str, log) -> None:
+def tls_context() -> ssl.SSLContext:
+    """The system's certificates when Python finds any (or ``$SSL_CERT_FILE``/``$SSL_CERT_DIR`` names them);
+    otherwise certifi's bundle, if installed. python.org's macOS Python has no certificates until its "Install
+    Certificates" step, and every HTTPS request then fails with CERTIFICATE_VERIFY_FAILED."""
+    paths = ssl.get_default_verify_paths()
+    has_system = bool(os.environ.get("SSL_CERT_FILE") or os.environ.get("SSL_CERT_DIR")) \
+        or bool(paths.cafile and os.path.isfile(paths.cafile)) \
+        or bool(paths.capath and os.path.isdir(paths.capath) and os.listdir(paths.capath))
+
+    if not has_system:
+        try:
+            import certifi
+        except ImportError:
+            pass
+        else:
+            return ssl.create_default_context(cafile=certifi.where())
+
+    return ssl.create_default_context()
+
+
+def _fetch_once(url: str, partial: Path) -> tuple[str, int, int | None]:
+    """(sha256, bytes received, Content-Length or None), written to ``partial``."""
+    request = urllib.request.Request(url, headers={"User-Agent": "hetren-cli"})
+
+    if os.environ.get("HF_TOKEN"):
+        request.add_header("Authorization", f"Bearer {os.environ['HF_TOKEN']}")
+
+    hasher, received = hashlib.sha256(), 0
+    context = tls_context() if url.startswith("https:") else None
+
+    with urllib.request.urlopen(request, timeout=60, context=context) as response, open(partial, "wb") as out:
+        length = response.headers.get("Content-Length")
+
+        for block in iter(lambda: response.read(CHUNK), b""):
+            hasher.update(block)
+            out.write(block)
+            received += len(block)
+
+    return hasher.hexdigest(), received, int(length) if length and length.isdigit() else None
+
+
+def _download(url: str, target: Path, digest: str, log, size: int | None = None, attempts: int = 2) -> None:
     if target.is_file() and sha256_file(target) == digest:
         log(f"{target.name}: already in the cache, sha256 matches")
         return
 
     target.parent.mkdir(parents=True, exist_ok=True)
     partial = target.with_name(target.name + ".partial")
-    request = urllib.request.Request(url, headers={"User-Agent": "hetren-cli"})
+    problem = ""
 
-    if os.environ.get("HF_TOKEN"):
-        request.add_header("Authorization", f"Bearer {os.environ['HF_TOKEN']}")
+    for attempt in range(1, attempts + 1):
+        log(f"{target.name}: downloading {url}" + (f" (attempt {attempt} of {attempts})" if attempt > 1 else ""))
 
-    log(f"{target.name}: downloading {url}")
-    hasher = hashlib.sha256()
+        try:
+            got, received, length = _fetch_once(url, partial)
+        except urllib.error.HTTPError as exc:
+            partial.unlink(missing_ok=True)
 
-    with urllib.request.urlopen(request, timeout=60) as response, open(partial, "wb") as out:
-        for block in iter(lambda: response.read(CHUNK), b""):
-            hasher.update(block)
-            out.write(block)
+            if exc.code < 500:  # not found, unauthorised: retrying cannot help
+                raise ModelError(f"{url}: HTTP {exc.code} {exc.reason}; nothing was kept") from exc
 
-    if hasher.hexdigest() != digest:
-        partial.unlink()
-        raise ModelError(f"{url} has sha256 {hasher.hexdigest()}, not the manifest's {digest}; nothing was kept")
+            problem = f"HTTP {exc.code} {exc.reason}"
+        except (OSError, http.client.HTTPException) as exc:  # broken connection, timeout, short read
+            problem = f"the download broke off ({type(exc).__name__}: {exc})"
+        else:
+            if size is not None and received != size:
+                problem = f"{received} bytes, not the manifest's {size}"
+            elif length is not None and received != length:
+                problem = f"{received} bytes, not the {length} the server announced"
+            elif got != digest:
+                problem = f"sha256 {got}, not the manifest's {digest}"
+            else:
+                partial.replace(target)
+                log(f"{target.name}: sha256 matches the manifest")
+                return
 
-    partial.replace(target)
-    log(f"{target.name}: sha256 matches the manifest")
+        partial.unlink(missing_ok=True)
+
+        if attempt < attempts:
+            log(f"{target.name}: {problem}; retrying once from the start")
+
+    raise ModelError(f"{url}: {problem} (after {attempts} attempts); nothing was kept")
 
 
 def fetch(repo: str, variant: str = DEFAULT_VARIANT, revision: str = "main", cache: Path | None = None,
@@ -167,11 +228,11 @@ def fetch(repo: str, variant: str = DEFAULT_VARIANT, revision: str = "main", cac
         _download(_url(repo, revision, f"{TOKENIZER_DIR}/{name}"), cache / TOKENIZER_DIR / name, digest, log)
 
     if not tokenizer_only:
-        _download(_url(repo, revision, entry["file"]), cache / entry["file"], entry["sha256"], log)
+        _download(_url(repo, revision, entry["file"]), cache / entry["file"], entry["sha256"], log, size=entry["bytes"])
 
     return {"variant": variant, "gguf": None if tokenizer_only else str(cache / entry["file"]),
             "gguf_sha256": entry["sha256"], "tokenizer": str(cache / TOKENIZER_DIR)}
 
 
 __all__ = ["DEFAULT_VARIANT", "ModelError", "VARIANTS", "cache_dir", "check_tokenizer", "fetch", "gguf_files",
-           "identify", "manifest", "resolve", "sha256_file", "tokenizer_files"]
+           "identify", "manifest", "resolve", "sha256_file", "tls_context", "tokenizer_files"]

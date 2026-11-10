@@ -291,6 +291,8 @@ def test_only_the_accepted_variants_and_the_merged_tokenizer_are_used(model_dir)
 
 class _Files(BaseHTTPRequestHandler):
     files: dict[str, bytes] = {}
+    first: dict[str, bytes] = {}  # served once, before files[path] (a corrupted first download)
+    truncate: set[str] = set()  # announce the full length, then send half and close (once)
     requested: list[str] = []
 
     def log_message(self, *args):
@@ -298,7 +300,7 @@ class _Files(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.requested.append(self.path)
-        data = self.files.get(self.path)
+        data = self.first.pop(self.path, None) or self.files.get(self.path)
 
         if data is None:
             self.send_response(404)
@@ -308,6 +310,13 @@ class _Files(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
+
+        if self.path in self.truncate:
+            self.truncate.discard(self.path)
+            self.wfile.write(data[: len(data) // 2])
+            self.close_connection = True
+            return
+
         self.wfile.write(data)
 
 
@@ -316,7 +325,7 @@ def hub(monkeypatch):
     server = ThreadingHTTPServer(("127.0.0.1", 0), _Files)
     threading.Thread(target=server.serve_forever, daemon=True).start()
     monkeypatch.setenv("HF_ENDPOINT", f"http://127.0.0.1:{server.server_address[1]}")
-    _Files.files, _Files.requested = {}, []
+    _Files.files, _Files.first, _Files.truncate, _Files.requested = {}, {}, set(), []
     yield _Files
     server.shutdown()
 
@@ -343,6 +352,76 @@ def test_fetch_model_downloads_and_checks_every_file(model_dir, hub, tmp_path):
 
     assert not (cache / "hetren-qwen3-4b-ckpt0792-q8_0.gguf").exists()
     assert not list(cache.rglob("*.partial"))
+
+
+def _publish(hub, model_dir):
+    for path in sorted(model_dir.rglob("*")):
+        if path.is_file():
+            hub.files[f"/org/hetren/resolve/main/{path.relative_to(model_dir).as_posix()}"] = path.read_bytes()
+
+
+Q8 = "/org/hetren/resolve/main/hetren-qwen3-4b-ckpt0792-q8_0.gguf"
+
+
+def test_a_corrupted_download_is_retried_once(model_dir, hub, tmp_path):
+    _publish(hub, model_dir)
+    hub.first[Q8] = b"q8 weighXs"  # the right size, the wrong bytes (the 2026-11-09 Q8_0 fetch)
+    lines = []
+    result = models.fetch("org/hetren", "Q8_0", cache=tmp_path / "cache", log=lines.append)
+
+    assert result["gguf_sha256"] == _sha(b"q8 weights") and hub.requested.count(Q8) == 2
+    assert any("sha256" in line and "retrying once from the start" in line for line in lines)
+    assert any("(attempt 2 of 2)" in line for line in lines)
+
+
+def test_a_truncated_download_is_retried_and_a_wrong_size_never_kept(model_dir, hub, tmp_path):
+    _publish(hub, model_dir)
+    hub.truncate.add(Q8)
+    lines = []
+    models.fetch("org/hetren", "Q8_0", cache=tmp_path / "cache", log=lines.append)
+    assert hub.requested.count(Q8) == 2 and any("retrying once" in line for line in lines)
+
+    hub.files[Q8] = b"q8 weights, but longer"  # a different file: wrong size on both attempts
+    with pytest.raises(models.ModelError, match=r"bytes, not the manifest's 10 \(after 2 attempts\); nothing was kept"):
+        models.fetch("org/hetren", "Q8_0", cache=tmp_path / "other", log=lambda m: None)
+    assert not list((tmp_path / "other").rglob("*.gguf*"))
+
+
+def test_a_missing_file_is_not_retried(model_dir, hub, tmp_path):
+    _publish(hub, model_dir)
+    del hub.files[Q8]
+
+    with pytest.raises(models.ModelError, match="HTTP 404"):
+        models.fetch("org/hetren", "Q8_0", cache=tmp_path / "cache", log=lambda m: None)
+
+    assert hub.requested.count(Q8) == 1
+
+
+def test_tls_uses_certifi_only_when_python_has_no_certificates(monkeypatch, tmp_path):
+    import ssl
+    import certifi
+
+    seen = []
+    monkeypatch.setattr(ssl, "create_default_context", lambda cafile=None: seen.append(cafile) or "context")
+    monkeypatch.delenv("SSL_CERT_FILE", raising=False)
+    monkeypatch.delenv("SSL_CERT_DIR", raising=False)
+    paths = type("Paths", (), {})
+    none = paths()
+    none.cafile, none.capath = str(tmp_path / "missing.pem"), str(tmp_path / "missing-dir")
+    monkeypatch.setattr(ssl, "get_default_verify_paths", lambda: none)
+    models.tls_context()
+
+    system = paths()
+    (tmp_path / "cert.pem").write_text("x")
+    system.cafile, system.capath = str(tmp_path / "cert.pem"), None
+    monkeypatch.setattr(ssl, "get_default_verify_paths", lambda: system)
+    models.tls_context()
+
+    monkeypatch.setattr(ssl, "get_default_verify_paths", lambda: none)
+    monkeypatch.setenv("SSL_CERT_FILE", str(tmp_path / "corporate.pem"))
+    models.tls_context()
+
+    assert seen == [certifi.where(), None, None]
 
 
 def test_fetch_model_needs_a_repository(monkeypatch):

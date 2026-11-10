@@ -168,7 +168,9 @@ def remote_files(repo: str, revision: str = "main", fetch=None) -> dict[str, dic
             if os.environ.get("HF_TOKEN"):  # a private repository, before it is made public
                 request.add_header("Authorization", f"Bearer {os.environ['HF_TOKEN']}")
 
-            with urllib.request.urlopen(request, timeout=60) as response:
+            from packages.hetren_cli.models import tls_context  # certifi's bundle when Python has no certificates
+
+            with urllib.request.urlopen(request, timeout=60, context=tls_context()) as response:
                 return json.loads(response.read().decode("utf-8"))
 
     entries = fetch(url)
