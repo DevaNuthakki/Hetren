@@ -91,3 +91,14 @@ def test_the_attached_pdf_names_its_commit_and_run():
     provenance = " ".join(NOTES.split("## Provenance", 1)[1].split())
     assert "CI run #245" in provenance and "`643da6a333124d250e0d615b034c1a9786edafb7`" in provenance
     assert "recorded after the build" not in NOTES
+
+
+def test_the_dependency_advisories_are_listed_with_the_pinned_versions():
+    limitations = " ".join(NOTES.split("## Known limitations", 1)[1].split("\n## ", 1)[0].split())
+    cli = (REPO_ROOT / "requirements-cli.txt").read_text(encoding="utf-8")
+    for package, version in re.findall(r"`(transformers|fsspec)` ([\d.]+)", limitations):
+        assert f"{package}=={version}\n" in cli, package  # the versions named are the image's pins
+    for ghsa in ("GHSA-27vj-qcqg-25rc", "GHSA-x9r9-c232-4q39", "GHSA-xrqw-3rrv-vx5w", "GHSA-fgcw-684q-jj6r",
+                 "GHSA-29pf-2h5f-8g72", "GHSA-69w3-r845-3855"):
+        assert ghsa in limitations, ghsa
+    assert "**Dependency advisories**" in PLAN

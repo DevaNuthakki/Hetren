@@ -235,6 +235,7 @@ LICENSE and NOTICE are in place (`7244df2`).
 - [ ] **Make the repository public** (Settings → General → Danger Zone).
 - [ ] **Code security:** secret scanning and push protection on; Dependabot alerts on.
 - [ ] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
+- [ ] **Dependency advisories** (Dependabot, 2026-11-11: 13 alerts, 7 advisories; none reachable in Hetren's use, and listed under the release notes' known limitations): `fsspec` 2026.6.0 alone; `transformers` 5.x with the token-parity and CLI agreement checks. `pytest` 9.0.3 for the dev and CI environment.
 - [ ] **GHCR:** after the first `v*` publish, set the package `hetren-cli` to public (Packages → hetren-cli → Package settings → visibility). Then check an anonymous pull: `docker logout ghcr.io`, then `docker pull ghcr.io/devanuthakki/hetren-cli:<tag>`.
 
 ## Risks
