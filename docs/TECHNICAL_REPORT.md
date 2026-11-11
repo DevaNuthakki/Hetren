@@ -259,8 +259,11 @@ was reused: about 8 s per diagnosis, against about 136–162 s for a fresh promp
 turned away at once by full queues, and the test retried them without waiting. The load test now sends 16
 distinct training inputs and waits out rejections, for any future run.
 
-**Cost:** the session cost an estimated $2.27 in Free Trial credits. That includes an idle cluster left up
-overnight before its teardown; a prompt teardown would have cost $0.48.
+**Cost:** the billing report shows $3.79 gross for the session, all paid by Free Trial credits ($0.00
+charged); the last day's figure may still settle slightly. That includes an idle cluster left up overnight before
+its teardown. A prompt teardown was estimated at $0.48, and the session as it happened at $2.27. The gap is not
+yet explained: the candidates are the GKE management fee, offset by its free-tier credit, and the second node's
+unrecorded removal time (`DEPLOY_LOG.md`, "Measured cost").
 
 # 10. Limitations
 

@@ -173,8 +173,12 @@ load test against two replicas ([`docs/milestone-4/DEPLOY_LOG.md`](docs/mileston
 prompt cache did most of the work (about 8 s per diagnosis against about 150 s fresh). The load test now sends 16
 distinct inputs, for any future run.
 
-The session cost an estimated $2.27 in Free Trial credits. The cluster stayed up overnight before its teardown,
-against $0.48 had it been torn down at once. The billing report will confirm the figure.
+**Cost:** the billing report shows $3.79 gross for the session, all paid by Free Trial credits, so $0.00 was
+charged. The last day's figure may still settle slightly.
+- **Context:** the cluster stayed up overnight before its teardown. A prompt teardown was estimated at $0.48,
+  and the session as it happened at $2.27.
+- **The gap:** the deploy log reconciles it. The GKE management fee, offset by its free-tier credit, and the
+  second node's unrecorded removal time are the candidates; a per-SKU report will settle which.
 
 ## Reproducing
 

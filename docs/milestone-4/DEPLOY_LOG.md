@@ -204,6 +204,45 @@ cluster-hour and the NAT data, 5.5 GiB at $0.045 per GiB.
 - **The budget could not have caught it:** even the higher figure is 16% of the $25 budget, below the first
   alert (25%, $6.25). Only the teardown protects against an idle cluster, as the runbook says.
 
+### Measured cost (billing report, 2026-11-11)
+
+From the operator, read from Billing → Overview for billing account `0108BC-5BB242-9529D7`, November 1–10, 2026:
+- **Cost $3.79**, Savings $3.79 (Free Trial credits), Total cost **$0.00**.
+- The figure covers the whole billing account, not this project alone. `hetren-m4-dhn12` was the only project
+  with resources; "My First Project" had none.
+- The last day's data may still be settling, so the figure can change slightly.
+
+**The session cost $3.79 gross, all paid by Free Trial credits: nothing was charged.** That is above both the
+planned ceiling ($1.83) and the "as it happened" estimate above ($2.27). It is close to the $3.94 case in which
+the second node stayed until the morning.
+
+**Reconciliation.** Two explanations fit the recorded times and prices. Neither is established yet:
+
+| | what it assumes | gives | what is left |
+|---|---|---|---|
+| A | the GKE management fee, $0.10 per cluster-hour, appears in gross cost, and its free tier as a credit under Savings | $2.27 + $1.31 (13.14 cluster-hours) = $3.58 | $0.21: about 1.4 node-hours more than estimated, or more NAT data, disks or other small items |
+| B | the fee does not appear in gross cost | $2.27 | $1.52: about 10.7 node-hours more, so the second node was removed about 16:20 UTC instead of about 05:40 |
+
+- **Established:**
+  - the measured total, $3.79 gross and $0.00 charged;
+  - the cluster's lifetime (04:30:36 to 17:39:09, 13.14 h);
+  - one node at about 17:2x, when the operator checked;
+  - the list prices above.
+- **Not established:**
+  - **when the second node was removed.** The autoscaler's scale-down was not recorded: the events were
+    gone by the morning, and no samples were taken after 05:20;
+  - **whether the GKE fee and its free-tier credit appear in the billing account's cost and savings.** The
+    estimate assumed the fee did not count at all. That was a mistake in itself: the budget measures gross
+    usage, and a fee offset by a credit would still count towards it;
+  - **the NAT data volume**, and the small bootstrap items (the kill switch's build and storage, Pub/Sub,
+    logging), which were assumed to be negligible.
+- **Both cannot hold at once:** with the fee in gross cost and the second node up until the morning, the total
+  would be about $5.29.
+
+**What would settle it:** Billing → Reports, project `hetren-m4-dhn12`, grouped by SKU, with usage amounts. The
+`Zonal Kubernetes Clusters` row shows whether the fee is in the cost. The `E2 Instance Core` usage, in hours and
+divided by 4, gives the node-hours, and so the second node's lifetime.
+
 ### Checked by Claude Code on 2026-11-10
 
 From the files the operator saved (`artifacts/milestone-4/gke-1/` and `loadtest-gke-1/`):

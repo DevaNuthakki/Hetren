@@ -69,6 +69,7 @@ def test_the_deployment_and_platform_numbers_are_logged():
     assert "about 0.27 diagnoses per second" in README and "0.27 diagnoses per second" in DEPLOY_LOG
     assert "cached best case" in README and "about 8 s per diagnosis against about 150 s fresh" in README
     assert "about 8 s, against about 136–162 s" in DEPLOY_LOG
+    assert "$3.79 gross" in README and "**Cost $3.79**" in DEPLOY_LOG and "Total cost **$0.00**" in DEPLOY_LOG
     assert "$2.27" in README and "**$2.27**" in DEPLOY_LOG and "$0.48" in README and "$0.48" in DEPLOY_LOG
     assert "16\ndistinct inputs" in README or "16 distinct inputs" in README
     assert "18 of 20" in README and "| Q4_K_M | **18 of 20** |" in EXPORT_LOG
