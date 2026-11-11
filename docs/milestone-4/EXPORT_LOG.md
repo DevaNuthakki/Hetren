@@ -237,3 +237,45 @@ Run by the operator on 2026-11-09 with the committed staging script (`scripts/hf
 - `fetch-model` now checks a download's size against the manifest's (GGUFs) or the server's `Content-Length`, and retries a failed or broken-off download once from the start. A 4xx error is not retried.
 - HTTPS in `fetch-model` and `hf_release.py` falls back to certifi's bundle only when Python has no system certificates.
 - The Helm chart's `model.revision` defaults to `3e875e4e…`.
+
+## Hugging Face dataset release (step 7b)
+
+Run by the operator on 2026-11-11 (UTC), with the committed staging script and dataset card (`3a6538e`).
+`git status` showed only the untracked amendment draft.
+
+**Repository:** [`Harsha1412/hetren-support-runs`](https://huggingface.co/datasets/Harsha1412/hetren-support-runs),
+licence `cc-by-4.0`. Created private at 01:19:03 UTC, and made public after verification.
+- **Commits:** `076c33f41e0627e1835cca0695335d03000e6e11` ("initial commit"), then the release,
+  **`10942d316e0c1c9b3c3cb46915f971eed66ad7b4`** (01:21:49 UTC, "Hetren support-agent runs: datasets v2 and v3,
+  splits v1 and v2, live test v1, manifests, protocol").
+- **Token:** fine-grained `hetren-7b-upload`, with permissions on this repository only. Deleted after the upload;
+  `HF_TOKEN` unset, and no token stored (`~/.cache/huggingface/token` absent).
+
+| step | outcome |
+|---|---|
+| stage (`stage-dataset`) | "staged 2016 files for Harsha1412/hetren-support-runs in /Users/deva/hetren-hf-dataset-stage (114.2 MB); every data file matches its manifest, and the manifests match commit 3a6538e5e249deb7193fd0e77c1cf0c4f8758cb0". `SHA256SUMS`: 2,015 lines, sha256 `53d89b3ae82c4893ded0e10357bd1b370b44ab7fa1212997aa5488dc3ce99c64`. The staged `README.md` names commit `3a6538e5…` (line 109) |
+| upload (`hf upload --repo-type dataset`, `huggingface_hub` 0.36.2) | it printed a "large folder" advisory, hashed 2,016 files and uploaded 108 MB of new data (4 large files): commit `10942d31…` |
+| verify, private (`verify-remote --type dataset`, with the token) | the documented command **failed** with `ModuleNotFoundError: No module named 'packages'`. Run as `python scripts/hf_release.py`, the script lacked the repository root on `sys.path` for its HTTPS helper (`packages.hetren_cli.models.tls_context`, added in `eb7688c`, after 7a's verification). With `PYTHONPATH=.`: "2016 files, each equal to the staged copy (4 by LFS sha256, the rest by git blob id)" |
+| visibility | switched to public |
+| verify, public (no token, `PYTHONPATH=.`) | the same `ok` line |
+| dataset viewer | right after going public: "The dataset viewer should be available soon". A few minutes later, all three subsets (`tier1`, `tier2`, `live`) were listed, with rows still processing. **Later: working.** All three subsets show rows (`live` · 300 rows), "Number of rows: 18,737" (10,039 + 8,398 + 300, the three files' record counts), auto-converted to Parquet, with Data Studio |
+
+**Checked by Claude Code on 2026-11-11, anonymously:**
+- **The repository:** the Hub API reports `Harsha1412/hetren-support-runs` public, not gated, with `main` at `10942d31…`.
+  - Its card metadata: `license: cc-by-4.0`, configs `tier1`, `tier2` and `live`, and the card's tags.
+  - Its files: 2,017, the 2,016 staged files plus `.gitattributes`.
+- **`verify-remote` without a token, run exactly as documented** (after the fix below): "ok
+  Harsha1412/hetren-support-runs@10942d316e0c1c9b3c3cb46915f971eed66ad7b4: 2016 files, each equal to the staged
+  copy (4 by LFS sha256, the rest by git blob id)". It ran against a folder staged independently from `3a6538e`,
+  whose `SHA256SUMS` has the same sha256, `53d89b3a…`: staging is reproducible.
+- **The dataset viewer:** its server lists the three configurations with 10,039 (`tier1`), 8,398 (`tier2`) and
+  300 (`live`) rows, the datasets' record counts. Its row previews were still pending at the time of this check
+  ("the response is not ready yet"); the operator later saw them working (the table above).
+
+**Changes made after this release** (they do not change the released files):
+- **`hf_release.py`** puts the repository root on `sys.path`, so it runs as documented without `PYTHONPATH`. A test
+  runs `verify-remote` exactly that way, from the repository root without `PYTHONPATH` or a token, against a local
+  stand-in for the Hub API that serves two pages.
+- **The model card's training section** links the dataset repository. The model repository gets the new README
+  and its matching `SHA256SUMS` in one commit (`refresh-card`). The released files and the pinned revision
+  `3e875e4e…` are unchanged.

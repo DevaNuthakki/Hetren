@@ -43,6 +43,12 @@ missing or extra:
 
     python scripts/hf_release.py verify-remote --repo <user>/<name> --staged <folder> [--revision <sha>]
     python scripts/hf_release.py verify-remote --repo <user>/<name> --staged <folder> --type dataset
+
+``refresh-card`` (after a model card change) rewrites a staged model folder's ``README.md`` from the committed
+card and its ``SHA256SUMS`` to match, after checking that every other staged file is unchanged. The operator
+then uploads those two files as one commit, and ``verify-remote`` checks the whole repository again:
+
+    python scripts/hf_release.py refresh-card --repo <user>/<name> --staged <folder>
 """
 
 from __future__ import annotations
@@ -61,6 +67,9 @@ import urllib.request
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+
+if str(REPO_ROOT) not in sys.path:  # run as `python scripts/hf_release.py`: the HTTPS helper is in packages/
+    sys.path.insert(0, str(REPO_ROOT))
 MANIFEST = REPO_ROOT / "docs/milestone-4/export.manifest.json"
 CARD = REPO_ROOT / "docs/milestone-4/model-card.md"
 LICENSE = REPO_ROOT / "LICENSE"
@@ -360,6 +369,35 @@ def stage_dataset(repo: str, out: Path, *, commit: str = "HEAD", repo_root: Path
     return staged
 
 
+def refresh_model_card(repo: str, staged: Path, *, card: Path = CARD, repo_root: Path = REPO_ROOT, git_show=None,
+                       log=print) -> dict[str, str]:
+    """Rewrite ``staged``'s README.md from the committed model card and SHA256SUMS to match; returns the new sums."""
+    staged, repo_root = Path(staged), Path(repo_root)
+    sums_path = staged / "SHA256SUMS"
+    sums = dict(reversed(line.split("  ", 1)) for line in sums_path.read_text(encoding="utf-8").splitlines())
+    local = {p.relative_to(staged).as_posix(): p for p in sorted(staged.rglob("*")) if p.is_file()}
+    changed = sorted(path for path, digest in sums.items()
+                     if path != "README.md" and (path not in local or sha256_file(local[path]) != digest))
+    unlisted = sorted(set(local) - set(sums) - {"SHA256SUMS"})
+
+    if changed or unlisted:
+        raise ReleaseError(f"{staged} differs from its SHA256SUMS beyond the card: changed {changed}, unlisted {unlisted}")
+
+    relative = Path(card).resolve().relative_to(repo_root.resolve()).as_posix()
+    show = git_show or (lambda commit, path: _git_show(commit, path, repo_root))
+
+    if show("HEAD", relative) != Path(card).read_bytes():
+        raise ReleaseError(f"{relative} has uncommitted changes; commit the card first")
+
+    old = sums.get("README.md")
+    (staged / "README.md").write_text(card_text(Path(card), repo), encoding="utf-8")
+    sums["README.md"] = sha256_file(staged / "README.md")
+    sums_path.write_text("".join(f"{digest}  {path}\n" for path, digest in sorted(sums.items())), encoding="utf-8")
+    log(f"README.md {old} -> {sums['README.md']}; SHA256SUMS rewritten ({len(sums)} files, "
+        f"sha256 {sha256_file(sums_path)}); upload README.md and SHA256SUMS together")
+    return sums
+
+
 def _next_page(link: str | None) -> str | None:
     """The "next" URL of a GitHub-style Link header, as the Hugging Face API paginates."""
     match = re.search(r'<([^>]+)>\s*;\s*rel="next"', link or "")
@@ -464,6 +502,9 @@ def main(argv: list[str] | None = None) -> int:
     dataset.add_argument("--repo", required=True, help="<user or organization>/<name> on Hugging Face")
     dataset.add_argument("--out", required=True, type=Path)
     dataset.add_argument("--commit", default="HEAD", help="the commit the card names (default HEAD)")
+    refresh = commands.add_parser("refresh-card", help="rewrite a staged model folder's README.md and SHA256SUMS")
+    refresh.add_argument("--repo", required=True)
+    refresh.add_argument("--staged", required=True, type=Path)
     verify = commands.add_parser("verify-remote", help="compare the uploaded repository with the staged folder")
     verify.add_argument("--repo", required=True)
     verify.add_argument("--staged", required=True, type=Path)
@@ -478,6 +519,10 @@ def main(argv: list[str] | None = None) -> int:
 
         if args.command == "stage-dataset":
             stage_dataset(args.repo, args.out, commit=args.commit)
+            return 0
+
+        if args.command == "refresh-card":
+            refresh_model_card(args.repo, args.staged)
             return 0
 
         return 1 if verify_remote(args.repo, args.staged, args.revision, repo_type=args.type) else 0

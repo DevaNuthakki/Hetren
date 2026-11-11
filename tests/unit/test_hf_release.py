@@ -337,3 +337,75 @@ def test_dataset_staging_refuses_a_card_that_differs_from_the_commit(dataset_sou
                      else (root / path).read_bytes())
     with pytest.raises(release.ReleaseError, match="docs/milestone-4/dataset-card.md: differs from commit"):
         release.stage_dataset("someone/hetren-runs", tmp_path / "staged", log=lambda m: None, **committed)
+
+
+def test_verify_remote_runs_as_the_runbook_runs_it(dataset_sources, tmp_path):
+    """`python scripts/hf_release.py verify-remote …` from the repository root, without PYTHONPATH, against a local
+    stand-in for the Hub API: the HTTPS path imports packages.hetren_cli.models, which once failed this way."""
+    import os
+    import subprocess
+    import sys
+    import threading
+    from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+    out = tmp_path / "staged"
+    release.stage_dataset("someone/hetren-runs", out, log=lambda m: None, **dataset_sources)
+    entries = _dataset_remote(out, set())
+    requests = []
+
+    class Hub(BaseHTTPRequestHandler):
+        def log_message(self, *args):
+            pass
+
+        def do_GET(self):
+            requests.append((self.path, self.headers.get("Authorization")))
+            body = json.dumps(entries[:5] if "cursor" not in self.path else entries[5:]).encode()
+            self.send_response(200)
+            if "cursor" not in self.path:
+                self.send_header("Link", f'<http://127.0.0.1:{server.server_port}{self.path}&cursor=2>; rel="next"')
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+    server = ThreadingHTTPServer(("127.0.0.1", 0), Hub)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONPATH", "HF_TOKEN")}
+    env["HF_ENDPOINT"] = f"http://127.0.0.1:{server.server_port}"
+    try:
+        run = subprocess.run([sys.executable, "scripts/hf_release.py", "verify-remote", "--repo", "someone/hetren-runs",
+                              "--staged", str(out), "--type", "dataset", "--revision", "abc"],
+                             cwd=REPO_ROOT, env=env, capture_output=True, text=True, timeout=60)
+    finally:
+        server.shutdown()
+    assert run.returncode == 0, run.stdout + run.stderr
+    assert f"ok    someone/hetren-runs@abc: {len(entries)} files, each equal to the staged copy" in run.stdout
+    assert [path for path, _ in requests] == ["/api/datasets/someone/hetren-runs/tree/abc?recursive=true",
+                                              "/api/datasets/someone/hetren-runs/tree/abc?recursive=true&cursor=2"]
+    assert all(auth is None for _, auth in requests)  # no token is sent when HF_TOKEN is unset
+
+
+def test_refresh_card_rewrites_only_the_readme_and_its_sum(sources, tmp_path):
+    out = tmp_path / "staged"
+    release.stage_model("someone/hetren-test", out, log=lambda m: None, **sources)
+    (out / "SHA256SUMS").write_text("".join(f"{_sha((out / p).read_bytes())}  {p}\n" for p in
+                                            sorted(q.relative_to(out).as_posix() for q in out.rglob("*") if q.is_file()
+                                                   and q.name != "SHA256SUMS")), encoding="utf-8")
+    before = {p: (out / p).read_bytes() for p in ("LICENSE", "hetren-qwen3-4b-ckpt0792-q4_k_m.gguf")}
+    card = sources["card"]
+    card.write_text("# card, now with the dataset link\nfetch-model --repo <this repository>\n", encoding="utf-8")
+    committed = lambda commit, path: card.read_bytes()
+    sums = release.refresh_model_card("someone/hetren-test", out, card=card, repo_root=card.parent, git_show=committed,
+                                      log=lambda m: None)
+    assert (out / "README.md").read_text(encoding="utf-8") == "# card, now with the dataset link\nfetch-model --repo someone/hetren-test\n"
+    assert sums["README.md"] == _sha((out / "README.md").read_bytes())
+    assert (out / "SHA256SUMS").read_text(encoding="utf-8") == "".join(f"{d}  {p}\n" for p, d in sorted(sums.items()))
+    assert all((out / p).read_bytes() == data for p, data in before.items())
+
+    with pytest.raises(release.ReleaseError, match="uncommitted changes"):
+        release.refresh_model_card("someone/hetren-test", out, card=card, repo_root=card.parent,
+                                   git_show=lambda commit, path: b"older", log=lambda m: None)
+    (out / "LICENSE").write_text("edited\n", encoding="utf-8")
+    with pytest.raises(release.ReleaseError, match=r"changed \['LICENSE'\]"):
+        release.refresh_model_card("someone/hetren-test", out, card=card, repo_root=card.parent, git_show=committed,
+                                   log=lambda m: None)

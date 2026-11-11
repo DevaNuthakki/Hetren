@@ -75,7 +75,7 @@ are not covered by the numbers below.
 - **Data:** the train splits of Hetren's synthetic datasets v2 (single-fault, tier 1) and v3 (up to two faults, tier 2), contrast partners included.
   - The labels come from executing each run's recoveries in the simulated environment.
   - After deduplication and dropping 58 conflicting inputs, 17,082 examples remained (32.6M tokens). A predeclared 14-hour budget kept every non-probe example and sampled probe examples at rate 0.9707: 16,869 examples in all.
-  - The datasets are published separately (link to follow).
+  - The datasets are published as [`Harsha1412/hetren-support-runs`](https://huggingface.co/datasets/Harsha1412/hetren-support-runs) (CC BY 4.0), with the frozen splits, the live test and the evaluation protocol.
 - **Method:** QLoRA on a 4-bit NF4 base (double quantisation, fp16 compute), rank 16, alpha 32, dropout 0.05, all seven attention and MLP projections.
   - Paged 8-bit AdamW: learning rate 1e-4 with cosine decay, 3% warmup, effective batch 16, sequence length 2,560 (no truncation or packing), seed 2029.
   - The loss covered assistant tokens only, with per-tier rare-verb weights capped at 3.
