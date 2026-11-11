@@ -76,7 +76,7 @@ if [ -n "${HETREN_MODEL_REPO:-}" ]; then
   kubectl -n "$namespace" delete job hetren-loadtest --ignore-not-found >/dev/null
   kubectl -n "$namespace" delete configmap hetren-loadtest --ignore-not-found >/dev/null
   kubectl -n "$namespace" create configmap hetren-loadtest --from-file="$root/deploy/loadtest/k6.js" \
-    --from-file=input.json="$root/tests/fixtures/hetren_cli/compact_first_step.json" >/dev/null
+    --from-file=inputs.json="$root/deploy/loadtest/inputs.json" >/dev/null
   sed -e 's/value: "1,2,4,8,16"/value: "1,2"/' -e 's/value: "300"/value: "60"/' \
       -e '/MAX_ERROR_RATE/{n;s/value: ""/value: "0"/;}' \
       "$root/deploy/loadtest/job.yaml" | kubectl -n "$namespace" apply -f - >/dev/null

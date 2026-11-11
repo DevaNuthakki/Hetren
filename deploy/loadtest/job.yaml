@@ -1,6 +1,6 @@
 # The load test as a Kubernetes Job (kind smoke test and GKE). The ConfigMap holds k6.js and the input:
 #   kubectl create configmap hetren-loadtest --from-file=deploy/loadtest/k6.js \
-#     --from-file=input.json=tests/fixtures/hetren_cli/compact_first_step.json
+#     --from-file=inputs.json=deploy/loadtest/inputs.json
 # STEPS, STEP_SECONDS and MAX_ERROR_RATE are set per run (deploy/kind/smoke.sh, the GKE runbook).
 apiVersion: batch/v1
 kind: Job

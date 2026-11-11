@@ -1,0 +1,1245 @@
+{
+ "cases": [
+  {
+   "case_id": "case-006684",
+   "kind": "probe",
+   "sha256": "00011f2bc5174aff4c8fbac934e2b9c98019b857d538015214b28dfbf0f18149",
+   "step": 0,
+   "tier": 2
+  },
+  {
+   "case_id": "case-002985",
+   "kind": "probe",
+   "sha256": "004fb94b9452717ff6a940b2b94dab2c30cf8fbdd18d9d9818272323f6796fca",
+   "step": 0,
+   "tier": 1
+  },
+  {
+   "case_id": "case-001917",
+   "kind": "probe",
+   "sha256": "008dea9cc65b57c5740be6999b1e7505012d6b6319d115af2bbee8c8aeb1b573",
+   "step": 2,
+   "tier": 2
+  },
+  {
+   "case_id": "case-004003",
+   "kind": "probe",
+   "sha256": "009e9f8636719b183729d69e5469c135e6a6fd396a6689208435b13bbd100644",
+   "step": 0,
+   "tier": 1
+  },
+  {
+   "case_id": "case-002209",
+   "kind": "probe",
+   "sha256": "00a28e326b29d2950d28e609afc5bc2b2df91b122999dd7ff3d59a42431f025f",
+   "step": 1,
+   "tier": 2
+  },
+  {
+   "case_id": "case-001152",
+   "kind": "probe",
+   "sha256": "00a42dfb826674698e33744bc03060c71e440beff20643f1a527b7c288403803",
+   "step": 0,
+   "tier": 2
+  },
+  {
+   "case_id": "case-008332",
+   "kind": "recover",
+   "sha256": "0003b095ea2ca2f832153c4103bc5ee11dcdd54b0a7ddfb4f01506bd952fa369",
+   "step": 1,
+   "tier": 1
+  },
+  {
+   "case_id": "case-006286",
+   "kind": "recover",
+   "sha256": "0006e854afcf59a03d3354f94876b4c01eba8d25a99fec7ba71e8cd3d0894f69",
+   "step": 1,
+   "tier": 1
+  },
+  {
+   "case_id": "case-006101",
+   "kind": "recover",
+   "sha256": "00169f9b0fbd50e57905e2968a7440ebfcb4ab0ca6bdeb2f42f404d0d3c3c942",
+   "step": 3,
+   "tier": 2
+  },
+  {
+   "case_id": "case-005007",
+   "kind": "recover",
+   "sha256": "002a492c4000313daf2593bacdff763b36eb27fe1da5209a9ddd7ecf1da2174e",
+   "step": 3,
+   "tier": 2
+  },
+  {
+   "case_id": "case-003940",
+   "kind": "recover",
+   "sha256": "0063b638fec839adfeb53751ca55d907893cc5dcf0dba3f71d682e1724ff6110",
+   "step": 2,
+   "tier": 1
+  },
+  {
+   "case_id": "case-003244",
+   "kind": "decide",
+   "sha256": "000fd92ae8e174257641e51f74efaa9915c1b824a72e14c60f42e892484de9e4",
+   "step": 0,
+   "tier": 2
+  },
+  {
+   "case_id": "case-006274",
+   "kind": "decide",
+   "sha256": "0055238ec84501d2a4db54266a35bf1abf1c6f492e26a2c08a5ad9c0549e058f",
+   "step": 0,
+   "tier": 1
+  },
+  {
+   "case_id": "case-000151",
+   "kind": "decide",
+   "sha256": "0077c0fa997f2ee35d2567560e6b6927728662828ffa3c53e309328d4c7a470a",
+   "step": 0,
+   "tier": 1
+  },
+  {
+   "case_id": "case-004354",
+   "kind": "decide",
+   "sha256": "00b8733ebb04edca452decd90c13954dcc0938953699a715b40d45999ecabd8f",
+   "step": 2,
+   "tier": 1
+  },
+  {
+   "case_id": "case-000602",
+   "kind": "decide",
+   "sha256": "00c4340f1ab3a0cc9227e2f5e2254d5f8fed4c9405b0adbb9670ef5c703c2296",
+   "step": 1,
+   "tier": 1
+  }
+ ],
+ "format": "hetren-loadtest-inputs-v1",
+ "inputs": [
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-6878"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-2006",
+      "body": "Valid authenticator codes are not accepted.",
+      "customer_ref": "C-5020",
+      "priority": "low",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Two-factor codes rejected",
+      "ticket_id": "T-6878"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-2006"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-2006",
+      "customer_ref": "C-6432",
+      "display_name": "Granite Bakery Fixture Ltd",
+      "region": "latam",
+      "tier": "enterprise"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-VIP",
+      "ticket_id": "T-6878"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-VIP",
+      "status": "routed",
+      "ticket_id": "T-6878"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-6878."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-8858"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6876",
+      "body": "Timestamps display in the wrong timezone.",
+      "customer_ref": "C-9722",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Timezone shown incorrectly",
+      "ticket_id": "T-8858"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-6876"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6876",
+      "customer_ref": "C-6005",
+      "display_name": "Nimbus Bakery Inc",
+      "region": "us",
+      "tier": "enterprise"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    }
+   ],
+   "task": "Please handle support ticket T-8858."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "entity": "ticket",
+      "id": "T-9746"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "ticket",
+      "record": {
+       "body": "Searching by order number finds nothing.",
+       "customer_ref": "C-9935",
+       "priority": "high",
+       "queue_id": null,
+       "status": "open",
+       "subject": "Search returns no results",
+       "ticket_id": "T-9746"
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    },
+    {
+     "args": {
+      "entity": "routing_policy"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "routing_policy",
+      "record": {
+       "enterprise": "Q-PREMIUM",
+       "standard": "Q-BASIC",
+       "unresolved": "Q-TRIAGE"
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-9746"
+     },
+     "changed_state": false,
+     "error": {
+      "message": "unknown customer_ref",
+      "type": "ContractError"
+     },
+     "outcome": "failed",
+     "tool": "read_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-9746."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-4513"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-1035",
+      "body": "Monthly invoice export returns an empty file.",
+      "customer_ref": "C-7902",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Invoice export fails",
+      "ticket_id": "T-4513"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-1035"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-1035",
+      "customer_ref": "C-5593",
+      "display_name": "Pine Studios GmbH",
+      "region": "us",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-STANDARD",
+      "ticket_id": "T-4513"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-STANDARD",
+      "status": "routed",
+      "ticket_id": "T-4513"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-4513."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-8720"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8720",
+      "events": []
+     },
+     "outcome": "succeeded",
+     "tool": "history"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-7220"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8720",
+      "body": "Removing a former employee returns an error.",
+      "customer_ref": "C-9517",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Cannot remove a user",
+      "ticket_id": "T-7220"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-8720"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8720",
+      "customer_ref": "C-8879",
+      "display_name": "Fjord Analytics LLC",
+      "region": "apac",
+      "tier": "enterprise"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-GOLD",
+      "ticket_id": "T-7220"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-GOLD",
+      "status": "routed",
+      "ticket_id": "T-7220"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-7220."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-2181"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-1241",
+      "body": "The CSV import reports an invalid header row.",
+      "customer_ref": "C-5689",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "CSV import rejects file",
+      "ticket_id": "T-2181"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-1241"
+     },
+     "changed_state": false,
+     "error": {
+      "message": "request timed out",
+      "type": "ToolUnavailableError"
+     },
+     "outcome": "failed",
+     "tool": "lookup_account"
+    }
+   ],
+   "task": "Please handle support ticket T-2181."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "target": "A-9249",
+      "tool": "lookup_account"
+     },
+     "changed_state": false,
+     "observation": {
+      "observation": {
+       "account_id": "A-9249",
+       "customer_ref": "C-7475",
+       "display_name": "Quartz Designs LLC",
+       "region": "eu",
+       "tier": "enterprise"
+      },
+      "status": "succeeded",
+      "target": "A-9249",
+      "tool": "lookup_account"
+     },
+     "outcome": "succeeded",
+     "tool": "retry"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-2932"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-9249",
+      "body": "Monthly invoice export returns an empty file.",
+      "customer_ref": "C-7475",
+      "priority": "high",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Invoice export fails",
+      "ticket_id": "T-2932"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-9249"
+     },
+     "changed_state": false,
+     "error": {
+      "message": "request timed out",
+      "type": "ToolUnavailableError"
+     },
+     "outcome": "failed",
+     "tool": "lookup_account"
+    }
+   ],
+   "task": "Please handle support ticket T-2932."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "customer_ref": "C-8319"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_ids": [
+       "A-7345"
+      ],
+      "customer_ref": "C-8319"
+     },
+     "outcome": "succeeded",
+     "tool": "find_owners"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-5123"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8732",
+      "body": "Asking whether the API rate limit can be raised.",
+      "customer_ref": "C-8319",
+      "priority": "low",
+      "queue_id": null,
+      "status": "open",
+      "subject": "API rate limit questions",
+      "ticket_id": "T-5123"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-8732"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8732",
+      "customer_ref": "C-3028",
+      "display_name": "Indigo Robotics Ltd",
+      "region": "apac",
+      "tier": "enterprise"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-PREMIUM",
+      "ticket_id": "T-5123"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-PREMIUM",
+      "status": "routed",
+      "ticket_id": "T-5123"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-5123."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "customer_ref": "C-1969"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_ids": [
+       "A-6160"
+      ],
+      "customer_ref": "C-1969"
+     },
+     "outcome": "succeeded",
+     "tool": "find_owners"
+    },
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-6160"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6160",
+      "source": {
+       "tier": "enterprise",
+       "updated_at": "2025-03-11T03:00:00Z",
+       "version": 2
+      },
+      "working": {
+       "tier": "enterprise",
+       "updated_at": "2025-03-11T03:00:00Z",
+       "version": 2
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "compare_with_source"
+    },
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-4362"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "account",
+      "record": {
+       "account_id": "A-4362",
+       "customer_ref": "C-7394",
+       "display_name": "Granite Analytics Sample Group",
+       "region": "us",
+       "tier": "standard",
+       "updated_at": "2025-04-18T12:00:00Z",
+       "version": 3
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-4236"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-4362",
+      "body": "Reset emails are not arriving for one user.",
+      "customer_ref": "C-1969",
+      "priority": "high",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Password reset email missing",
+      "ticket_id": "T-4236"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-4362"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-4362",
+      "customer_ref": "C-7394",
+      "display_name": "Granite Analytics Sample Group",
+      "region": "us",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    }
+   ],
+   "task": "Please handle support ticket T-4236."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-7649"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7649",
+      "events": []
+     },
+     "outcome": "succeeded",
+     "tool": "history"
+    },
+    {
+     "args": {
+      "entity": "routing_policy"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "routing_policy",
+      "record": {
+       "enterprise": "Q-PREMIUM",
+       "standard": "Q-MAIN",
+       "unresolved": "Q-REVIEW"
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    },
+    {
+     "args": {
+      "customer_ref": "C-4615"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_ids": [
+       "A-5359"
+      ],
+      "customer_ref": "C-4615"
+     },
+     "outcome": "succeeded",
+     "tool": "find_owners"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-6377"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7649",
+      "body": "The admin page shows fewer seats than purchased.",
+      "customer_ref": "C-4615",
+      "priority": "high",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Seat count incorrect",
+      "ticket_id": "T-6377"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-7649"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7649",
+      "customer_ref": "C-1941",
+      "display_name": "Maple Partners Ltd",
+      "region": "us",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-MAIN",
+      "ticket_id": "T-6377"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-MAIN",
+      "status": "routed",
+      "ticket_id": "T-6377"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-6377."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "entity": "routing_policy"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "routing_policy",
+      "record": {
+       "enterprise": "Q-ENTERPRISE",
+       "standard": "Q-COMMON",
+       "unresolved": "Q-REVIEW"
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    },
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-3564"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-3564",
+      "source": {
+       "tier": "enterprise",
+       "updated_at": "2026-05-25T06:00:00Z",
+       "version": 5
+      },
+      "working": {
+       "tier": "standard",
+       "updated_at": "2026-05-23T15:00:00Z",
+       "version": 4
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "compare_with_source"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-1997"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-3564",
+      "body": "Removing a former employee returns an error.",
+      "customer_ref": "C-5453",
+      "priority": "low",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Cannot remove a user",
+      "ticket_id": "T-1997"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-3564"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-3564",
+      "customer_ref": "C-5453",
+      "display_name": "Willow Ventures Ltd",
+      "region": "us",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-COMMON",
+      "ticket_id": "T-1997"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-COMMON",
+      "status": "routed",
+      "ticket_id": "T-1997"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-1997."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-2023"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-3227",
+      "body": "Weekly report totals differ from the dashboard. We are on the enterprise plan, please handle this accordingly.",
+      "customer_ref": "C-1065",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Report totals mismatch",
+      "ticket_id": "T-2023"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-3227"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-3227",
+      "customer_ref": "C-1065",
+      "display_name": "Maple Ventures Co",
+      "region": "us",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-MAIN",
+      "ticket_id": "T-2023"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-MAIN",
+      "status": "routed",
+      "ticket_id": "T-2023"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-2023."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-5205"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-8674",
+      "body": "The admin page shows fewer seats than purchased. Our account is standard; please route this to the right team.",
+      "customer_ref": "C-5932",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Seat count incorrect",
+      "ticket_id": "T-5205"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-8674"
+     },
+     "outcome": "not_observed",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-VIP",
+      "ticket_id": "T-5205"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-VIP",
+      "status": "routed",
+      "ticket_id": "T-5205"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-5205."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-7755"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6070",
+      "body": "The usage dashboard takes over a minute to load.",
+      "customer_ref": "C-8849",
+      "priority": "normal",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Dashboard loads slowly",
+      "ticket_id": "T-7755"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-6070"
+     },
+     "outcome": "not_observed",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-PREMIUM",
+      "ticket_id": "T-7755"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-PREMIUM",
+      "status": "routed",
+      "ticket_id": "T-7755"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-7755."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "entity": "routing_policy"
+     },
+     "changed_state": false,
+     "observation": {
+      "entity": "routing_policy",
+      "record": {
+       "enterprise": "Q-ENTERPRISE",
+       "standard": "Q-MAIN",
+       "unresolved": "Q-HOLD"
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "inspect"
+    },
+    {
+     "args": {
+      "entity": "account",
+      "id": "A-7391"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7391",
+      "source": {
+       "tier": "standard",
+       "updated_at": "2026-05-07T19:00:00Z",
+       "version": 5
+      },
+      "working": {
+       "tier": "standard",
+       "updated_at": "2026-05-07T19:00:00Z",
+       "version": 5
+      }
+     },
+     "outcome": "succeeded",
+     "tool": "compare_with_source"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-2203"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7391",
+      "body": "Reset emails are not arriving for one user.",
+      "customer_ref": "C-9264",
+      "priority": "high",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Password reset email missing",
+      "ticket_id": "T-2203"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-7391"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-7391",
+      "customer_ref": "C-9264",
+      "display_name": "Quartz Media LLC",
+      "region": "apac",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-MAIN",
+      "ticket_id": "T-2203"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-MAIN",
+      "status": "routed",
+      "ticket_id": "T-2203"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-2203."
+  },
+  {
+   "discrepancies": [],
+   "format": "compact-evidence-v1",
+   "probes": [
+    {
+     "args": {
+      "customer_ref": "C-3847"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_ids": [],
+      "customer_ref": "C-3847"
+     },
+     "outcome": "succeeded",
+     "tool": "find_owners"
+    }
+   ],
+   "run": {
+    "error_type": null,
+    "status": "completed"
+   },
+   "steps": [
+    {
+     "args": {
+      "ticket_id": "T-1859"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6381",
+      "body": "Removing a former employee returns an error.",
+      "customer_ref": "C-3847",
+      "priority": "high",
+      "queue_id": null,
+      "status": "open",
+      "subject": "Cannot remove a user",
+      "ticket_id": "T-1859"
+     },
+     "outcome": "succeeded",
+     "tool": "read_ticket"
+    },
+    {
+     "args": {
+      "account_id": "A-6381"
+     },
+     "changed_state": false,
+     "observation": {
+      "account_id": "A-6381",
+      "customer_ref": "C-9611",
+      "display_name": "Willow Media Sample Group",
+      "region": "latam",
+      "tier": "standard"
+     },
+     "outcome": "succeeded",
+     "tool": "lookup_account"
+    },
+    {
+     "args": {
+      "queue_id": "Q-STANDARD",
+      "ticket_id": "T-1859"
+     },
+     "changed_state": true,
+     "observation": {
+      "previous_queue_id": null,
+      "queue_id": "Q-STANDARD",
+      "status": "routed",
+      "ticket_id": "T-1859"
+     },
+     "outcome": "succeeded",
+     "tool": "route_ticket"
+    }
+   ],
+   "task": "Please handle support ticket T-1859."
+  }
+ ],
+ "source": "training examples only (artifacts/milestone-3/train-v1/train.jsonl, built per docs/milestone-3/train-v1.manifest.json) whose case is in the train split of both splits-v1 and splits-v2 and in no validation or test list of either; the first distinct compact-evidence-v1 inputs by sha256 of their JSON text: 6 probe, 5 recover and 5 decide steps",
+ "train_jsonl_sha256": "afea958424a31c23851576853ee536beabf73b7cd3b5e2bb89d26ad8bf1abb8b"
+}

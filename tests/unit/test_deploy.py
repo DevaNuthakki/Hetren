@@ -244,3 +244,30 @@ def test_the_tools_are_pinned_with_checksums():
                     "TFLINT_VERSION=v0.65.0", "KUBECONFORM_VERSION=v0.8.0"):
         assert version in tools
     assert len(re.findall(r"^  [0-9a-f]{64} ", tools, re.MULTILINE)) == 5
+
+
+def test_the_load_test_sends_distinct_training_inputs_and_waits_out_rejections():
+    from packages.hetren_cli.inputs import check_compact
+
+    data = json.loads(_text("loadtest/inputs.json"))
+    texts = [json.dumps(c, sort_keys=True) for c in data["inputs"]]
+    assert len(texts) == 16 and len(set(texts)) == 16 and len(data["cases"]) == 16
+    for compact in data["inputs"]:
+        check_compact(compact)  # each is an input the API accepts
+    assert sorted(c["kind"] for c in data["cases"]) == ["decide"] * 5 + ["probe"] * 6 + ["recover"] * 5
+
+    def split(version: str, name: str) -> set[str]:
+        return set((REPO_ROOT / f"docs/milestone-2/{version}/{name}.txt").read_text(encoding="utf-8").split())
+
+    cases = {c["case_id"] for c in data["cases"]}
+    for version in ("splits-v1", "splits-v2"):  # a training case in both datasets, never a validation or test case
+        assert cases <= split(version, "train")
+        for name in ("validation", "test_in_distribution", "test_held_out"):
+            assert not cases & split(version, name), (version, name)
+
+    script = _text("loadtest/k6.js")
+    assert "open('/loadtest/inputs.json')" in script and "exec.scenario.iterationInTest % bodies.length" in script
+    assert "response.status === 503" in script and "sleep(retrySeconds(response.headers['Retry-After']))" in script
+    assert "rejected:" in script
+    for consumer in ("gke/loadtest.py", "kind/smoke.sh", "loadtest/job.yaml"):
+        assert "inputs.json" in _text(consumer) and "input.json=" not in _text(consumer), consumer

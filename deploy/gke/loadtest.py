@@ -34,7 +34,7 @@ import time
 REPO_ROOT = Path(__file__).resolve().parents[2]
 JOB = REPO_ROOT / "deploy/loadtest/job.yaml"
 SCRIPT = REPO_ROOT / "deploy/loadtest/k6.js"
-INPUT = REPO_ROOT / "tests/fixtures/hetren_cli/compact_first_step.json"
+INPUTS = REPO_ROOT / "deploy/loadtest/inputs.json"
 POOL_LABEL = "hetren/pool=inference"
 SAMPLE_SECONDS = 15
 
@@ -179,7 +179,7 @@ def main(argv: list[str] | None = None) -> int:
     ns = args.namespace
     kubectl("delete", "job", "hetren-loadtest", "--ignore-not-found", namespace=ns)
     kubectl("delete", "configmap", "hetren-loadtest", "--ignore-not-found", namespace=ns)
-    kubectl("create", "configmap", "hetren-loadtest", f"--from-file={SCRIPT}", f"--from-file=input.json={INPUT}",
+    kubectl("create", "configmap", "hetren-loadtest", f"--from-file={SCRIPT}", f"--from-file=inputs.json={INPUTS}",
             namespace=ns)
     samples, done = [], threading.Event()
 

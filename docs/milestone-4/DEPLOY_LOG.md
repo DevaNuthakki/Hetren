@@ -237,3 +237,17 @@ operator's report; they were not kept as files.
   - the destroy commands print their `yes` prompt (no pipes);
   - if the IP changed, `helm uninstall` can be skipped;
   - phase 6 notes that the first diagnosis triggers the scale-up.
+
+### Load test changes for a future run (not re-run on GKE)
+
+Session 1's run stays as recorded: **its latencies and its node cost per 1,000 diagnoses are a cached best case**,
+and they are labelled that way wherever they are quoted. Since then, `deploy/loadtest/k6.js`:
+- **cycles through 16 distinct inputs** (`deploy/loadtest/inputs.json`). They are training examples whose case is
+  in the train split of both split versions and in no validation or test list; a test checks this. So
+  llama-server's prompt cache can reuse only the shared system prompt, as with real traffic;
+- **counts 503 rejections separately** (`rejected` per step), and leaves them out of the latencies and the error
+  rate. After a rejection, the virtual user waits the `Retry-After` the API sends (30 s).
+
+At about 150 s per fresh diagnosis, the default steps (1, 2, 4, 8, 16 × 300 s) no longer fit. From 8 virtual users
+on, each replica has 4 or more requests in line, so requests reach k6's 600 s timeout. A realistic run would use
+fewer steps for longer, for example 1, 2, 4 × 900 s; the steps are chosen when such a run is planned.
