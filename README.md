@@ -26,7 +26,8 @@ Every result is logged with the commit that produced it.
 | Data | [`Harsha1412/hetren-support-runs`](https://huggingface.co/datasets/Harsha1412/hetren-support-runs) (CC BY 4.0): datasets, frozen splits, live test, protocol |
 | Image | `ghcr.io/devanuthakki/hetren-cli:v1.0.0` (`linux/amd64`) |
 | Protocol | [`docs/milestone-2/EVAL_PROTOCOL.md`](docs/milestone-2/EVAL_PROTOCOL.md), frozen 2026-11-02, with dated amendments |
-| Report | `docs/TECHNICAL_REPORT.md` (to follow, with v1.0.0) |
+| Report | [`docs/TECHNICAL_REPORT.md`](docs/TECHNICAL_REPORT.md); the PDF is attached to the v1.0.0 release |
+| Demo video | to follow |
 
 ## Results at a glance
 
@@ -121,11 +122,20 @@ The demo video's script is [`docs/milestone-4/DEMO_SCRIPT.md`](docs/milestone-4/
 
 ## How it works
 
-```text
-agent run (OpenAI Agents SDK)  ->  gateway records: every tool call, allowed or denied, its observation, state change
-        ->  compact evidence (the model's input)  ->  one action per step: decide | probe | recover
-evaluation only:  probes run in a sandboxed fork;  a recovery is applied, the task re-run, and verified
+```mermaid
+flowchart LR
+  A["Agent run<br/>(OpenAI Agents SDK)"] --> B["Evidence capture<br/>gateway records (authoritative),<br/>SDK hooks and spans (reconciled)"]
+  B --> C["Compact evidence"]
+  C --> D["Diagnosis model<br/>(fine-tuned Qwen3-4B)"]
+  D -->|probe| E["Probe, run in a<br/>sandboxed fork"]
+  E -->|result added to the evidence| C
+  D -->|recovery| F["Applied in a sandboxed fork,<br/>task re-run, verified<br/>(outcome and regression checks)"]
+  D -->|decision| G["Checked against<br/>the run's end state"]
 ```
+
+The model takes one action per step. The sandboxed steps (probes, verified recoveries, checked decisions) run
+only on the evaluator's side: in the evaluations and in `sandbox_demo`. The CLI and the API stop at the model's
+action. They report a probe as needed and a recovery as proposed, and apply nothing.
 
 - **The environment** (`environments/support/`): synthetic tickets, accounts and queues, and seven fault families.
   - Five are used in training: mapping swap, stale account record, mishandled tool error, misleading ticket

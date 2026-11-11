@@ -106,3 +106,16 @@ def test_the_moved_sections_are_kept():
     assert "## Live recording facts" in milestone1 and "about $0.005 at list prices" in milestone1
     portfolio = (REPO_ROOT / "docs/portfolio/README.md").read_text(encoding="utf-8")
     assert "## Claim limits" in portfolio and "PASS != VERIFIED" in portfolio
+
+
+def test_the_how_it_works_diagram_and_the_demo_video_line():
+    diagram = README.split("```mermaid\n", 1)[1].split("```", 1)[0]
+    assert diagram.startswith("flowchart LR\n")
+    for node in ("Agent run<br/>(OpenAI Agents SDK)", "gateway records (authoritative)", "SDK hooks and spans (reconciled)",
+                 "Compact evidence", "Diagnosis model", "Probe, run in a<br/>sandboxed fork", "task re-run, verified",
+                 "Checked against<br/>the run's end state"):
+        assert node in diagram, node
+    for edge in ("D -->|probe| E", "E -->|result added to the evidence| C", "D -->|recovery| F", "D -->|decision| G"):
+        assert edge in diagram, edge
+    assert "The CLI and the API stop at the model's\naction" in README
+    assert "| Demo video | to follow |" in README  # replaced with the link in step 8.8
