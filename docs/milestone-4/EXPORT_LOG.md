@@ -300,3 +300,22 @@ its sum changed; the model files did not.
   chart pin are unchanged.
 - **The README at `9fdb94b4…`:** it links `Harsha1412/hetren-support-runs`. Its sha256 equals that of the
   committed card at `5a84dcd` with the repository name filled in (`9ea1ea1e…`).
+
+## Model card update: the v1.0.0 image (2026-11-11)
+
+Run by the operator from `f08c751` (`main`, with the card's image digest from `643da6a`), as step 8.8's B1.
+Again, only the card and its sum changed.
+
+| step | outcome |
+|---|---|
+| `refresh-card` on `~/hetren-hf-stage` | "README.md 9ea1ea1e334b5acb24b99c01223dd910acfabc098714e5267c44f1c2e467137f -> 8f1d7ff50297044fe1b786ceccb2dd8d8115b40432e8cdbfff591f79d7a3e71d; SHA256SUMS rewritten (16 files, sha256 3514004e5fe582d7533008545818136e4b9cd14c815d9ccedb33e134583f50b5)" |
+| `verify-remote` against `9fdb94b4…`, before the upload | the first try stopped on a Hugging Face rate limit ("STOP: HTTP Error 429: Too Many Requests"). The retry failed only on the two refreshed files, as expected: `README.md` (git blob `0aba78d5…` against `09d4e5da…`; 12,619 bytes against 12,713) and `SHA256SUMS` (git blob `3d1d025a…` against `c5a015e9…`) |
+| upload (fine-grained token `hetren-8-card`, this repository only) | whoami `Harsha1412`; "hashed 2 files"; commit **`21338fe3f8d714df26bc27d24bf37913997e7736`** ("Model card: the v1.0.0 image"), on top of `9fdb94b4…` |
+| `verify-remote` at `21338fe3…`, no token | "17 files, each equal to the staged copy (4 by LFS sha256, the rest by git blob id)". No stored token; the token is deleted |
+
+**Checked by Claude Code on 2026-11-11, anonymously:**
+- **The Hub's history:** `21338fe3…`, then `9fdb94b4…`, `3e875e4e…` and `63fce5b5…`.
+- **`verify-remote` at `21338fe3…`:** the same `ok` line.
+- **The README at `21338fe3…`:** its sha256 is `8f1d7ff5…`. It is byte for byte the committed card at `f08c751`
+  with the repository name filled in, and it names
+  `ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907…`.

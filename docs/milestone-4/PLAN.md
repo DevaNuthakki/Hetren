@@ -206,6 +206,23 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
     columns and a justified line with wide gaps). The report's text and numbers are unchanged; its table
     separators changed, and `scripts/report-pdf.typ` sets the layout. The build is reproducible (a fixed
     timestamp, `SOURCE_DATE_EPOCH`), and the PDF's sha256 is `bd2baabcd8d8681027f640fd469a02e8d3c9beca44f84109ffa64a00b2dac77d`.
+- **8.8 done 2026-11-11** (the operator, from `main` at `f08c751`, the merge of pull request #94):
+  - **B1, the model card:** the Hub's `main` is now **`21338fe3f8d714df26bc27d24bf37913997e7736`** ("Model
+    card: the v1.0.0 image"), with the image digest in the card. Only `README.md` and `SHA256SUMS` changed, so
+    the pinned revision `3e875e4e…` still holds every model file (`EXPORT_LOG.md`, "Model card update: the
+    v1.0.0 image").
+  - **B2, the image:** an anonymous pull of `ghcr.io/devanuthakki/hetren-cli:v1.0.0` gave the digest
+    `sha256:efafa907…` and `hetren 1.0.0 (commit 679c131c…)`.
+  - **B3, the PDF:** run #245's artifact gave `TECHNICAL_REPORT.pdf: OK`; 7 pages, with the layout reviewed.
+  - **B4, the release:** `gh release create v1.0.0 --verify-tag --latest --title "Hetren v1.0.0" --notes-file
+    docs/RELEASE_NOTES.md`, attaching `TECHNICAL_REPORT.pdf` (label "Technical report (PDF)") and
+    `TECHNICAL_REPORT.pdf.sha256`, both run #245's artifact. It is at
+    https://github.com/DevaNuthakki/Hetren/releases/tag/v1.0.0: published, not a draft or pre-release, and
+    the latest release (`releases/latest` gives `v1.0.0`).
+  - **Checked by Claude Code, anonymously:**
+    - the release has those two assets;
+    - the downloaded PDF is 141,570 bytes with sha256 `bd2baabc…`, and it passes its `.sha256` check;
+    - the release body is byte for byte `docs/RELEASE_NOTES.md` at `f08c751` (6,414 bytes).
 
 | build | operator | cost |
 |---|---|---|
@@ -232,11 +249,11 @@ LICENSE and NOTICE are in place (`7244df2`).
   - Settings → Emails → "Keep my email addresses private" and "Block command line pushes that expose my email";
   - `git config --global user.email <id>+<user>@users.noreply.github.com`.
   The Gmail address stays in the existing history (no rewrite: commit hashes are cited throughout the logs).
-- [ ] **Make the repository public** (Settings → General → Danger Zone).
-- [ ] **Code security:** secret scanning and push protection on; Dependabot alerts on.
+- [x] **Make the repository public** (Settings → General → Danger Zone). Done: the API, read anonymously on 2026-11-11, gives `visibility: public`.
+- [x] **Code security:** secret scanning and push protection on; Dependabot alerts on. Done: on 2026-11-11, `security_and_analysis` showed secret scanning and push protection `enabled`, and `vulnerability-alerts` returned 204.
 - [ ] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
 - [ ] **Dependency advisories** (Dependabot, 2026-11-11: 13 alerts, 7 advisories; none reachable in Hetren's use, and listed under the release notes' known limitations): `fsspec` 2026.6.0 alone; `transformers` 5.x with the token-parity and CLI agreement checks. `pytest` 9.0.3 for the dev and CI environment.
-- [ ] **GHCR:** after the first `v*` publish, set the package `hetren-cli` to public (Packages → hetren-cli → Package settings → visibility). Then check an anonymous pull: `docker logout ghcr.io`, then `docker pull ghcr.io/devanuthakki/hetren-cli:<tag>`.
+- [x] **GHCR:** after the first `v*` publish, set the package `hetren-cli` to public (Packages → hetren-cli → Package settings → visibility). Then check an anonymous pull: `docker logout ghcr.io`, then `docker pull ghcr.io/devanuthakki/hetren-cli:<tag>`. Done: the operator's anonymous pull of `v1.0.0` gave `sha256:efafa907…` (8.8, B2).
 
 ## Risks
 
