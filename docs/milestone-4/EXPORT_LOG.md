@@ -279,3 +279,24 @@ licence `cc-by-4.0`. Created private at 01:19:03 UTC, and made public after veri
 - **The model card's training section** links the dataset repository. The model repository gets the new README
   and its matching `SHA256SUMS` in one commit (`refresh-card`). The released files and the pinned revision
   `3e875e4e…` are unchanged.
+
+## Model card update: the dataset link (2026-11-11)
+
+Run by the operator from `5a84dcd`, the commit with the card's dataset link and `refresh-card`. Only the card and
+its sum changed; the model files did not.
+
+| step | outcome |
+|---|---|
+| `refresh-card` on the 7a staged folder (`~/hetren-hf-stage`) | "README.md 615f06a2ccde06ed42462451bc1f9f80a63e7dca45a2363a43232fb523569680 -> 9ea1ea1e334b5acb24b99c01223dd910acfabc098714e5267c44f1c2e467137f; SHA256SUMS rewritten (16 files, sha256 f57bd0b3eebe0fc01d366966d85f78994951b57809e3e7d9b6017d848f5f0a03)" |
+| `verify-remote` against `3e875e4e…`, before the upload | failed only on the two refreshed files, as expected: `README.md` (git blob and size, 12,466 bytes against 12,619) and `SHA256SUMS` (git blob) |
+| upload (`hf upload --include README.md SHA256SUMS`, fine-grained token `hetren-7a-card`, this repository only) | "hashed 2 files"; commit **`9fdb94b4081de3a4d297cf42700f60d57c1ad6c6`** ("Model card: link the dataset repository"), on top of `3e875e4e…` and `63fce5b5…` |
+| `verify-remote` at `9fdb94b4…`, no token | "17 files, each equal to the staged copy (4 by LFS sha256, the rest by git blob id)". No stored token; the token is deleted |
+
+**Checked by Claude Code on 2026-11-11, anonymously:**
+- **The Hub:** `main` is `9fdb94b4…`, public and not gated.
+- **`verify-remote` at `9fdb94b4…`:** the same `ok` line.
+- **`verify-remote` at the pinned `3e875e4e…`:** it differs from the refreshed folder only in `README.md` and
+  `SHA256SUMS`. So the GGUFs, adapter, tokenizer and manifest at the revision that `fetch-model` and the Helm
+  chart pin are unchanged.
+- **The README at `9fdb94b4…`:** it links `Harsha1412/hetren-support-runs`. Its sha256 equals that of the
+  committed card at `5a84dcd` with the repository name filled in (`9ea1ea1e…`).
