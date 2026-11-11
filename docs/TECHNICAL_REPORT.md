@@ -58,7 +58,7 @@ changed state. The OpenAI Agents SDK's hooks and spans are reconciled against th
 disagreement becomes evidence.
 
 | ID | family | role |
-|:---------|:---|:---|
+|:--|:----------|:-------|
 | F1 | customer-to-account mapping swap | train / validation / test |
 | F2 | stale account record | train / validation / test |
 | F3 | mishandled tool error | train / validation / test |
@@ -99,7 +99,7 @@ Many cases have **contrast partners**: counterfactual variants on the same base 
 the same opening evidence but with a different label. They stay in the same split as their primary.
 
 | dataset | tier | seed | primary cases | partners | records | steps |
-|:---------|:---|:---|:---|:---|:---|:---|
+|:----|:---|:---|:-----|:----|:----|:----|
 | v2 | 1 | 2026 | 4,800 | 5,239 | 10,039 | 20,500 |
 | v3 | 2 | 2028 | 2,040 | 6,358 | 8,398 | 31,365 |
 
@@ -133,7 +133,7 @@ reported."
 # 5. Systems
 
 | system | what it is | cost |
-|:---------|:---|:---|
+|:----|:-------------|:----|
 | rules v1 | a hand-written policy built for the training families (`RULES_POLICY_VERSION = 1`), single recovery | $0 |
 | GPT-4.1 | `gpt-4.1-2025-04-14`, prompt version 2, temperature 0, 128 output tokens | $15.63 |
 | Qwen untrained | `Qwen/Qwen3-4B-Instruct-2507` at revision `cdbee75f`, prompt version 2, fp16, greedy | $0 (Kaggle) |
@@ -160,7 +160,7 @@ subset (200 tier 1 and 100 tier 2 primaries). The score was **S = ½(A₁ + A₂
 pooled wrong-intervention rate on healthy runs.
 
 | candidate | S |
-|:---------|:---|
+|:-------|:---|
 | Qwen untrained | 0.1947 |
 | checkpoint-0264 | 0.7206 |
 | checkpoint-0528 | 0.6049 |
@@ -175,7 +175,7 @@ checkpoint's tier 1 abstain recall on the subset was 2/17, against 15/17 for che
 Decision accuracy (`docs/milestone-3/RESULTS.md`):
 
 | test set | cases | rules v1 | GPT-4.1 | Qwen untrained | Qwen fine-tuned |
-|:---------|:---|:---|:---|:---|:---|
+|:----------|:----|:-----|:-----|:------|:---------|
 | Tier 1 in-distribution | 560 | 99.5% | 33.8% | 30.4% | 73.8% (413/560) |
 | Tier 1 held-out | 960 | 45.7% | 24.8% | 14.3% | 41.5% (398/960) |
 | Tier 2 in-distribution | 256 | 84.4% | 17.6% | 13.3% | 71.1% (182/256) |
@@ -185,7 +185,7 @@ Decision accuracy (`docs/milestone-3/RESULTS.md`):
 Wrong interventions on healthy runs:
 
 | test set | healthy | rules v1 | GPT-4.1 | Qwen untrained | Qwen fine-tuned |
-|:---------|:---|:---|:---|:---|:---|
+|:----------|:----|:-----|:-----|:------|:---------|
 | Tier 1 in-distribution | 176 | 0.0% | 33.0% | 0.0% | 0.0% (0/176) |
 | Tier 1 held-out | 121 | 100.0% | 0.0% | 0.0% | 7.4% (9/121) |
 | Tier 2 in-distribution | 45 | 2.2% | 51.1% | 0.0% | 4.4% (2/45) |
@@ -223,7 +223,7 @@ Each variant ran the full validation split (550 tier 1 and 250 tier 2 cases) on 
 - **Acceptance rule:** the lower bound of the pooled difference from fp16 must be at least −2 points.
 
 | | fp16 | Q4_K_M | Q8_0 |
-|:---------|:---|:---|:---|
+|:-----------|:-----|:------|:------|
 | decision accuracy, tier 1 (550) | 73.6% (405) | 74.2% (408) | 73.1% (402) |
 | decision accuracy, tier 2 (250) | 76.0% (190) | 74.4% (186) | 74.8% (187) |
 | pooled difference from fp16 [95% CI] | | −0.13 [−1.50, +1.25] | −0.75 [−1.38, −0.25] |

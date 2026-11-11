@@ -24,7 +24,8 @@ Every result is logged with the commit that produced it.
 |---|---|
 | Model | [`Harsha1412/hetren-qwen3-4b-diagnosis`](https://huggingface.co/Harsha1412/hetren-qwen3-4b-diagnosis) (Apache-2.0), revision `3e875e4e8719acef839dc18e220a3ae498a1975b` |
 | Data | [`Harsha1412/hetren-support-runs`](https://huggingface.co/datasets/Harsha1412/hetren-support-runs) (CC BY 4.0): datasets, frozen splits, live test, protocol |
-| Image | `ghcr.io/devanuthakki/hetren-cli:v1.0.0` (`linux/amd64`) |
+| Image | `ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0` (`linux/amd64`) |
+| Release | [v1.0.0](https://github.com/DevaNuthakki/Hetren/releases/tag/v1.0.0): notes in [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md) |
 | Protocol | [`docs/milestone-2/EVAL_PROTOCOL.md`](docs/milestone-2/EVAL_PROTOCOL.md), frozen 2026-11-02, with dated amendments |
 | Report | [`docs/TECHNICAL_REPORT.md`](docs/TECHNICAL_REPORT.md); the PDF is attached to the v1.0.0 release |
 | Demo video | to follow |
@@ -75,10 +76,11 @@ The image is `linux/amd64` only and needs a CPU with **AVX2, FMA and F16C**. Fet
 diagnose with the network off:
 
 ```sh
-docker run --rm -v ~/.cache/hetren:/models ghcr.io/devanuthakki/hetren-cli:v1.0.0 \
+IMAGE=ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0
+docker run --rm -v ~/.cache/hetren:/models "$IMAGE" \
   fetch-model --repo Harsha1412/hetren-qwen3-4b-diagnosis --revision 3e875e4e8719acef839dc18e220a3ae498a1975b
 docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro \
-  ghcr.io/devanuthakki/hetren-cli:v1.0.0 diagnose --compact /work/tests/fixtures/hetren_cli/compact_first_step.json
+  "$IMAGE" diagnose --compact /work/tests/fixtures/hetren_cli/compact_first_step.json
 ```
 
 `fetch-model` checks every file's sha256 against the export manifest. `diagnose` accepts:

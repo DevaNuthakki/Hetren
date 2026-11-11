@@ -190,6 +190,22 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
     - **checksums:** the export manifest, both GGUFs and the image digest;
     - known limitations: F6, the platform note and tier 1 only.
     A test checks that the notes' hashes and links match the manifest and the logs.
+- **8.7 done 2026-11-11:**
+  - pull request #92 merged into `main` with a merge commit, `679c131c143a8583d5ac1bab133f7f3584ac9a45`; CI
+    run #243 passed, slow job included;
+  - annotated tags `milestone-4` (object `5a2c8a39…`, no workflow run) and `v1.0.0` (object `7c1ef183…`), both
+    on that commit;
+  - run #244 on `v1.0.0` passed every job. Publish image (release tags) gave `ok    v1.0.0: CLI_VERSION 1.0.0,
+    chart appVersion 1.0.0` and `all image checks passed`, and pushed
+    `ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0`;
+  - GHCR serves that manifest anonymously, with the same digest;
+  - the run's PDF artifact: `TECHNICAL_REPORT.pdf`, sha256
+    `e3476fc7a9d058fde0f6c41d7263c94376d0eccbfbbee187e7ff16ee53c812d0` (146,633 bytes), verified against its
+    `.sha256`. Release notes: `docs/RELEASE_NOTES.md`.
+  - **The attached PDF is a later, layout-only rebuild** (the operator's review, 2026-11-11: cramped table
+    columns and a justified line with wide gaps). The report's text and numbers are unchanged; its table
+    separators changed, and `scripts/report-pdf.typ` sets the layout. The build is reproducible (a fixed
+    timestamp, `SOURCE_DATE_EPOCH`), and the PDF's sha256 is `bd2baabcd8d8681027f640fd469a02e8d3c9beca44f84109ffa64a00b2dac77d`.
 
 | build | operator | cost |
 |---|---|---|

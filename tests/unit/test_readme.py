@@ -83,7 +83,8 @@ def test_the_scope_and_licences_are_stated():
 
 
 def test_the_release_identifiers_agree():
-    assert set(re.findall(r"ghcr\.io/devanuthakki/hetren-cli:([^\s`]+)", README)) == {"v1.0.0"}
+    digest = "sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0"  # run #244 (PLAN.md, 8.7)
+    assert set(re.findall(r"ghcr\.io/devanuthakki/hetren-cli:([^\s`]+)", README)) == {f"v1.0.0@{digest}"}
     assert set(re.findall(r"--revision ([0-9a-f]{40})", README)) == {REVISION}
     assert REVISION in (REPO_ROOT / "deploy/helm/hetren/values.yaml").read_text(encoding="utf-8")
     assert "Harsha1412/hetren-qwen3-4b-diagnosis" in README and "Harsha1412/hetren-support-runs" in README

@@ -52,12 +52,12 @@ The adapter applies to the base at revision `cdbee75f17c01a7cc42f958dc650907174a
 ## Use
 
 The supported path is the `hetren` CLI or API. They check every file against the manifest and prompt the model
-exactly as it was validated (the image is published with the first release tag):
+exactly as it was validated. The release image is `ghcr.io/devanuthakki/hetren-cli:v1.0.0`, pinned below by its digest:
 
 ```sh
-docker run --rm -v ~/.cache/hetren:/models ghcr.io/devanuthakki/hetren-cli:<tag> fetch-model --repo <this repository>
-docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro \
-  ghcr.io/devanuthakki/hetren-cli:<tag> diagnose --record /work/run.json
+IMAGE=ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0
+docker run --rm -v ~/.cache/hetren:/models "$IMAGE" fetch-model --repo <this repository>
+docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro "$IMAGE" diagnose --record /work/run.json
 ```
 
 The input is a run recorded with Hetren's OpenAI Agents SDK integration (an `AgentRunRecord`), or its compact
