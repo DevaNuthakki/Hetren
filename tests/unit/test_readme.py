@@ -115,7 +115,7 @@ def test_the_how_it_works_diagram_and_the_demo_video_line():
                  "Compact evidence", "Diagnosis model", "Probe, run in a<br/>sandboxed fork", "task re-run, verified",
                  "Checked against<br/>the run's end state"):
         assert node in diagram, node
-    for edge in ("D -->|probe| E", "E -->|result added to the evidence| C", "D -->|recovery| F", "D -->|decision| G"):
+    for edge in ("D -->|probe| E", "E -->|result| C", "D -->|recovery| F", "D -->|decision| G"):
         assert edge in diagram, edge
     assert "The CLI and the API stop at the model's\naction" in README
     assert "| Demo video | to follow |" in README  # replaced with the link in step 8.8

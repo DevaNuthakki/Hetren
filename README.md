@@ -128,7 +128,7 @@ flowchart LR
   B --> C["Compact evidence"]
   C --> D["Diagnosis model<br/>(fine-tuned Qwen3-4B)"]
   D -->|probe| E["Probe, run in a<br/>sandboxed fork"]
-  E -->|result added to the evidence| C
+  E -->|result| C
   D -->|recovery| F["Applied in a sandboxed fork,<br/>task re-run, verified<br/>(outcome and regression checks)"]
   D -->|decision| G["Checked against<br/>the run's end state"]
 ```
