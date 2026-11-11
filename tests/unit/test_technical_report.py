@@ -116,3 +116,8 @@ def test_the_pdf_script_pins_its_image_and_runs_offline():
     assert "TECHNICAL_REPORT.pdf.sha256" in script
     run = subprocess.run(["bash", "-n", str(REPO_ROOT / "scripts/build_report_pdf.sh")], capture_output=True, text=True)
     assert run.returncode == 0, run.stderr
+
+
+def test_no_digit_is_followed_by_an_apostrophe():
+    # Typst typesets "2's" with a prime (2′s); the report words these differently.
+    assert not re.findall(r"\d's", REPORT)

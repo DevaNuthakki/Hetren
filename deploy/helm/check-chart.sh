@@ -6,7 +6,7 @@ set -euo pipefail
 
 root="$(cd "$(dirname "$0")/../.." && pwd)"
 chart="$root/deploy/helm/hetren"
-gke=(-f "$root/deploy/gke/values.yaml" --set image.tag=v0.4.0-rc.1 --set model.repo=example/hetren)
+gke=(-f "$root/deploy/gke/values.yaml" --set image.tag=v1.0.0 --set model.repo=example/hetren)
 kind=(-f "$root/deploy/kind/values.yaml")
 failures=0
 
@@ -37,7 +37,7 @@ expect "GKE objects: Deployment, HPA, PDB, Service, ServiceAccount" "$kinds" \
   '^kind: Deployment kind: HorizontalPodAutoscaler kind: PodDisruptionBudget kind: Service kind: ServiceAccount $'
 expect "Service is ClusterIP" "$gke_out" '^  type: ClusterIP$'
 refuse "no LoadBalancer, NodePort, Ingress or hostNetwork" "$gke_out" 'LoadBalancer|NodePort|kind: Ingress|hostNetwork|hostPort'
-expect "GKE: the published image" "$gke_out" 'image: ghcr.io/devanuthakki/hetren-cli:v0.4.0-rc.1'
+expect "GKE: the published image" "$gke_out" 'image: ghcr.io/devanuthakki/hetren-cli:v1.0.0'
 expect "GKE: fetch-model downloads the GGUF in an init container" "$gke_out" '- fetch-model'
 refuse "GKE: no stub, no tokenizer-only fetch" "$gke_out" 'stub-llama-server|--tokenizer-only|--server-url'
 expect "GKE: one pod per node (CPU request 2.5 of an e2-standard-4's 3.9)" "$gke_out" 'cpu: 2500m'

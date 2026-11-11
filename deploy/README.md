@@ -45,7 +45,7 @@ On a cluster with the image published (a release tag) and the model on Hugging F
 
 ```zsh
 helm install hetren deploy/helm/hetren -f deploy/gke/values.yaml \
-  --set image.tag=v0.4.0-rc.1 --set model.repo=Harsha1412/hetren-qwen3-4b-diagnosis
+  --set image.tag=v1.0.0 --set model.repo=Harsha1412/hetren-qwen3-4b-diagnosis
 ```
 
 `image.tag` and `model.repo` are required, and the chart refuses to render without them. `model.revision`

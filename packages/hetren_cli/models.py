@@ -35,6 +35,9 @@ MANIFEST = DATA / "export.manifest.json"
 VARIANTS = ("Q4_K_M", "Q8_0")
 DEFAULT_VARIANT = "Q4_K_M"  # Amendment 2's shipping rule (docs/milestone-4/EXPORT_LOG.md, "Acceptance and shipping")
 TOKENIZER_DIR = "tokenizer"
+# The released model repository's commit with these files (docs/milestone-4/EXPORT_LOG.md, "Hugging Face release");
+# later commits there change only the model card. The Helm chart pins the same revision.
+DEFAULT_REVISION = "3e875e4e8719acef839dc18e220a3ae498a1975b"
 CHUNK = 1 << 20
 
 
@@ -217,7 +220,7 @@ def _download(url: str, target: Path, digest: str, log, size: int | None = None,
     raise ModelError(f"{url}: {problem} (after {attempts} attempts); nothing was kept")
 
 
-def fetch(repo: str, variant: str = DEFAULT_VARIANT, revision: str = "main", cache: Path | None = None,
+def fetch(repo: str, variant: str = DEFAULT_VARIANT, revision: str = DEFAULT_REVISION, cache: Path | None = None,
           log=print, tokenizer_only: bool = False) -> dict[str, object]:
     """Download ``variant``'s GGUF and the tokenizer into the cache, checking every sha256 (only the tokenizer
     with ``tokenizer_only``: for ``serve --server-url``, where another process serves the GGUF)."""

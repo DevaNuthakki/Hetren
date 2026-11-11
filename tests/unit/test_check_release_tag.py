@@ -30,10 +30,10 @@ def test_a_version_mismatch_names_the_file_to_bump():
 
 
 def test_the_versions_are_read_from_the_cli_and_the_chart():
-    # The version bump for step 6b's release candidate (PLAN.md, step 8, "Tags and GitHub releases").
-    assert check.cli_version() == "0.4.0rc1" and check.chart_app_version() == "0.4.0-rc.1"
-    assert check.main(["v0.4.0-rc.1"]) == 0
-    assert check.main(["v0.4.0-rc.2"]) == 1 and check.main(["v0.4.0"]) == 1
+    # The version bump for the v1.0.0 release (PLAN.md, step 8.5; the release candidate was 0.4.0rc1).
+    assert check.cli_version() == "1.0.0" and check.chart_app_version() == "1.0.0"
+    assert check.main(["v1.0.0"]) == 0
+    assert check.main(["v0.4.0-rc.1"]) == 1 and check.main(["v1.0.1"]) == 1 and check.main(["v1.0.0-rc.1"]) == 1
 
 
 def test_the_workflow_filter_patterns_match_exactly_the_release_tags():

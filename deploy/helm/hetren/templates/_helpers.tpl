@@ -25,7 +25,7 @@ milestone: "4"
 {{- end -}}
 
 {{- define "hetren.image" -}}
-{{- $tag := required "image.tag is required (a published release tag such as v0.4.0-rc.1)" .Values.image.tag -}}
+{{- $tag := required "image.tag is required (a published release tag such as v1.0.0)" .Values.image.tag -}}
 {{- printf "%s:%s" .Values.image.repository $tag -}}
 {{- end -}}
 

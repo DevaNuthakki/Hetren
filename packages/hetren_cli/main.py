@@ -29,7 +29,7 @@ from typing import Any, Callable
 from packages.hetren_cli.diagnosis import CONTEXT_TOKENS, END_OF_GENERATION, TIER1_RECOVERIES  # noqa: F401
 
 
-CLI_VERSION = "0.4.0rc1"
+CLI_VERSION = "1.0.0"
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EXIT_OK, EXIT_INPUT, EXIT_RUNTIME, EXIT_REPLY = 0, 2, 3, 4
 
@@ -60,7 +60,7 @@ def load_tokenizer(directory: str):
 
 
 def _parser() -> argparse.ArgumentParser:
-    from packages.hetren_cli.models import VARIANTS
+    from packages.hetren_cli.models import DEFAULT_REVISION, VARIANTS
 
     parser = argparse.ArgumentParser(prog="hetren", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -84,7 +84,9 @@ def _parser() -> argparse.ArgumentParser:
     fetch.add_argument("--repo", default=os.environ.get("HETREN_MODEL_REPO"),
                        help="Hugging Face model repository (default $HETREN_MODEL_REPO)")
     fetch.add_argument("--variant", choices=VARIANTS, default="Q4_K_M")
-    fetch.add_argument("--revision", default="main")
+    fetch.add_argument("--revision", default=DEFAULT_REVISION,
+                       help="the repository commit to download (default: the released, validated revision "
+                            f"{DEFAULT_REVISION[:12]}…; 'main' takes the latest)")
     fetch.add_argument("--cache", type=Path, help="default $HETREN_CACHE or ~/.cache/hetren")
     fetch.add_argument("--tokenizer-only", action="store_true",
                        help="only the tokenizer (for serve --server-url, where another process serves the GGUF)")

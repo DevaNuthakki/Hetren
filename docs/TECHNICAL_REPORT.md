@@ -218,8 +218,8 @@ The adapter was merged into the fp16 base, converted to GGUF, and quantized to Q
 to the merged model's.
 
 Each variant ran the full validation split (550 tier 1 and 250 tier 2 cases) on `llama-server` on the CPU.
-- **Platform:** the pilot's Mac (Intel i7-8850H, `-t 6`), with prompt caching on and Amendment 2's greedy
-  decoding.
+- **Platform:** the pilot's Mac (Intel i7-8850H, `-t 6`), with prompt caching on and greedy
+  decoding (Amendment 2).
 - **Acceptance rule:** the lower bound of the pooled difference from fp16 must be at least −2 points.
 
 | | fp16 | Q4_K_M | Q8_0 |
@@ -230,7 +230,7 @@ Each variant ran the full validation split (550 tier 1 and 250 tier 2 cases) on 
 | episodes identical to fp16 | | 79.6% | 92.6% |
 
 **Both were accepted.** Q4_K_M ships by default. In tier 2 it is more conservative than fp16: it left 30 broken
-runs unfixed against fp16's 15, and made 0 wrong interventions against fp16's 1.
+runs unfixed against 15 for fp16, and made 0 wrong interventions against 1 for fp16.
 
 **The Linux image** was checked on the 20 pilot cases. Q4_K_M took the same episode as the Mac on 18 of 20; the
 other two took one extra probe and reached the same decision. Q8_0 matched on 20 of 20. These checks are

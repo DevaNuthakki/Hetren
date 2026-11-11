@@ -4,6 +4,6 @@ description: >-
   Hetren's diagnosis API (hetren serve): offline diagnosis of single-recovery support runs recorded with
   Hetren's OpenAI Agents SDK integration, with the validated GGUF on llama-server (CPU). Nothing is applied.
 type: application
-version: 0.4.0-rc.1
-appVersion: "0.4.0-rc.1"
+version: 1.0.0
+appVersion: "1.0.0"
 kubeVersion: ">=1.29.0-0"

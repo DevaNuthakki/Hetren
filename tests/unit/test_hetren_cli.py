@@ -333,7 +333,7 @@ def hub(monkeypatch):
 def test_fetch_model_downloads_and_checks_every_file(model_dir, hub, tmp_path):
     for path in sorted(model_dir.rglob("*")):
         if path.is_file():
-            hub.files[f"/org/hetren/resolve/main/{path.relative_to(model_dir).as_posix()}"] = path.read_bytes()
+            hub.files[f"/org/hetren/resolve/{models.DEFAULT_REVISION}/{path.relative_to(model_dir).as_posix()}"] = path.read_bytes()
 
     cache = tmp_path / "cache"
     result = models.fetch("org/hetren", "Q4_K_M", cache=cache, log=lambda m: None)
@@ -345,7 +345,7 @@ def test_fetch_model_downloads_and_checks_every_file(model_dir, hub, tmp_path):
     models.fetch("org/hetren", "Q4_K_M", cache=cache, log=lambda m: None)
     assert hub.requested == []  # already cached and verified
 
-    hub.files["/org/hetren/resolve/main/hetren-qwen3-4b-ckpt0792-q8_0.gguf"] = b"tampered"
+    hub.files[f"/org/hetren/resolve/{models.DEFAULT_REVISION}/hetren-qwen3-4b-ckpt0792-q8_0.gguf"] = b"tampered"
 
     with pytest.raises(models.ModelError, match="nothing was kept"):
         models.fetch("org/hetren", "Q8_0", cache=cache, log=lambda m: None)
@@ -357,10 +357,10 @@ def test_fetch_model_downloads_and_checks_every_file(model_dir, hub, tmp_path):
 def _publish(hub, model_dir):
     for path in sorted(model_dir.rglob("*")):
         if path.is_file():
-            hub.files[f"/org/hetren/resolve/main/{path.relative_to(model_dir).as_posix()}"] = path.read_bytes()
+            hub.files[f"/org/hetren/resolve/{models.DEFAULT_REVISION}/{path.relative_to(model_dir).as_posix()}"] = path.read_bytes()
 
 
-Q8 = "/org/hetren/resolve/main/hetren-qwen3-4b-ckpt0792-q8_0.gguf"
+Q8 = f"/org/hetren/resolve/{models.DEFAULT_REVISION}/hetren-qwen3-4b-ckpt0792-q8_0.gguf"
 
 
 def test_a_corrupted_download_is_retried_once(model_dir, hub, tmp_path):
@@ -592,3 +592,19 @@ def test_the_cpu_flag_check_names_what_is_missing(records, model_dir, fake_serve
     monkeypatch.setattr(runtime, "missing_cpu_flags", lambda *a, **k: ["avx2"])
     code, _, err = _diagnose(["--record", str(_write(tmp_path, records[0]))])
     assert code == cli.EXIT_RUNTIME and "this CPU lacks avx2" in err
+
+
+def test_fetch_model_defaults_to_the_released_revision_everywhere():
+    """One revision: the CLI's default, the Helm chart's pin, and the README's and runbooks' commands."""
+    import re
+    from packages.hetren_cli.main import _parser
+
+    revision = models.DEFAULT_REVISION
+    assert re.fullmatch(r"[0-9a-f]{40}", revision)
+    assert _parser().parse_args(["fetch-model", "--repo", "org/hetren"]).revision == revision
+    assert _parser().parse_args(["fetch-model", "--repo", "org/hetren", "--revision", "main"]).revision == "main"
+    root = Path(__file__).resolve().parents[2]
+    assert f"revision: {revision}" in (root / "deploy/helm/hetren/values.yaml").read_text(encoding="utf-8")
+    for doc in ("README.md", "docs/milestone-4/DEMO_SCRIPT.md"):
+        assert set(re.findall(r"--revision ([0-9a-f]{40})", (root / doc).read_text(encoding="utf-8"))) == {revision}, doc
+    assert f"**`{revision}`**" in (root / "docs/milestone-4/EXPORT_LOG.md").read_text(encoding="utf-8")
