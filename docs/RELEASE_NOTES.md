@@ -74,6 +74,11 @@ docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro 
   are a cached best case. The session cost $3.79 gross, all paid by Free Trial credits.
 - **Retiring baselines:** `gpt-4.1` and `gpt-4.1-mini` leave the API on 2027-01-14. Their logged results stand,
   but cannot be re-run.
+- **Dependency advisories:** the image pins `transformers` 4.56.2 and `fsspec` 2025.12.0, which have open
+  advisories (GHSA-27vj-qcqg-25rc, GHSA-x9r9-c232-4q39, GHSA-xrqw-3rrv-vx5w, GHSA-fgcw-684q-jj6r,
+  GHSA-29pf-2h5f-8g72, GHSA-69w3-r845-3855). None of the affected code paths runs in Hetren: the image loads only a
+  tokenizer, from files checked against pinned sha256s, with no torch and no remote code. Upgrades follow in a
+  later release, after a tokenizer re-check.
 
 ## Provenance
 
