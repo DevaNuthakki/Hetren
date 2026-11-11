@@ -583,6 +583,48 @@ Dated changes after the freeze, newest last. Each entry states what changes, why
 
 Each run records the platform, the GPU name, the number of visible GPUs, library versions (Python, `torch`, `transformers`, `accelerate`, `tokenizers`, `peft`), the bundle commit and the adapter sha256. Outputs may be stored on Google Drive; the files used are copied into `artifacts/` and their hashes logged.
 
+### Amendment 2 (2026-11-07): CPU export of the fine-tuned model (GGUF), validation-only quality check
+
+**What it covers:** the CPU export of the fine-tuned Qwen3-4B `checkpoint-0792` (Amendment 1's chosen checkpoint) as GGUF files for llama.cpp: how the files are made, how they are run, the throughput pilot, the validation-only quality check and its acceptance rule. **Why:** Milestone 4 ships the model for CPU use; whether the export preserves the fine-tuned model's behaviour must be fixed before any GGUF output exists. **Applies to:** every evaluation of a GGUF variant, all on the validation split. **No test run:** no GGUF variant is ever run on a test split (tier 1 or tier 2 `test_in_distribution` or `test_held_out`, or live test v1); the test results of the fine-tuned model remain those of test runs #5 and #6. Nothing here changes a dataset, split, label, metric, the claim rule, any system or any Milestone 1–3 result.
+
+**Export.**
+
+- **Source:** `checkpoint-0792` (`state.json` `d6230ff6e1780ac5286f0accc0a45298dd8db49fc11ed6fdb1330d98189276d5`, adapter `5647f93f25c9f79c8e7fca0468d8aa7476afbcc348f3b42f420d1845098f4226`), merged into the fp16 base `Qwen/Qwen3-4B-Instruct-2507` (revision `cdbee75f17c01a7cc42f958dc650907174af0554`) with `peft merge_and_unload`, as in every fp16 evaluation. The export stops unless both hashes match `choice.json` (`d41a7ef5…`).
+- **Conversion:** `convert_hf_to_gguf.py` at llama.cpp release `v0.7.0` (commit `620d2225cc436ab0b001e3200e590e3b286ef9ab`, published 2026-10-15) to an f16 GGUF; then `llama-quantize` to **Q8_0** and **Q4_K_M**, with no importance matrix (so no calibration data is used).
+- **Record:** `docs/milestone-4/export.manifest.json`, committed before the first pilot: the sha256 of every input and output file, the llama.cpp commit, and the library versions.
+
+**Runtime and decoding** (identical for both variants, the pilot and the validation run).
+
+- `llama-server` built CPU-only (no GPU or Metal backend) at the pinned commit; one slot; one request at a time; context 4,096 tokens; batch and micro-batch sizes and the thread count fixed per platform and recorded.
+- Each step's prompt is rendered with the Hugging Face chat template and tokenizer at the pinned revision, exactly as in the fp16 runs (prompt version 2, non-thinking), and sent to `/completion` as **token IDs**, so tokenisation equals the fp16 runs by construction. A parity check, run before the pilot, requires every validation input and target to round-trip through the GGUF vocabulary to the same IDs and bytes.
+- Greedy decoding (temperature 0, top-k 1), at most 128 new tokens, no repetition or presence penalty, generation ends at the end-of-turn token. The reply is stripped and parsed with `parse_action` as for every model; anything else is an invalid-action failure.
+- Every call is logged with its prompt and reply token counts, whether it reached the token limit, and its time; a restart with different settings stops.
+
+**Throughput pilot** (not an evaluation; its accuracy is neither reported nor used).
+
+- **Platforms:** the operator's Mac (2018, Intel 6-core i7, 32 GB, macOS, x86_64) and a Kaggle CPU notebook (Linux x86_64).
+- **Cases:** the 20 seeded fp16 smoke-test cases (10 tier 1, 10 tier 2). Per platform and variant, each episode runs twice with prompt caching on and twice with it off.
+- **Measures:** prompt and generation tokens per second, seconds per call, peak memory, projected hours per variant for the full validation split, and whether repeated episodes are byte-identical.
+- **Caching rule:** prompt caching is on for the validation run unless the pilot shows that repeated episodes differ with caching on but not with it off; then it is off. If repeats differ in both settings, the validation run does not start and this is reported.
+- **Platform rule:** a platform qualifies if each variant's projected full-validation time fits in one uninterrupted session (Kaggle: under its 12-hour limit with a 20% margin) and its repeats are byte-identical under the chosen caching setting. If both qualify, Kaggle is used; otherwise the one that qualifies; if neither, this is reported and the decision returns to the operator. Both variants run on the same platform.
+- The pilot's measurements and the resulting choices are logged before the validation run.
+
+**Validation check.**
+
+- **Cases:** the full validation split, 550 tier 1 (splits v1, dataset v2) and 250 tier 2 (splits v2, dataset v3). Each variant runs once (resumed or repeated only to complete the same declared run).
+- **Comparator:** the fp16 rows of the full validation run of `checkpoint-0792` (`docs/milestone-3/VALIDATION_LOG.md`, rows `acee9594…` tier 1 and `51e1f821…` tier 2). No new fp16 run.
+- **Acceptance**, per variant, with `metrics.paired_bootstrap` (10,000 resamples, seed 2026) on the same cases; a variant is accepted only if all three hold:
+  - **pooled over both tiers** (800 cases, each paired by tier and case ID), the 95% interval of the decision-accuracy difference (GGUF − fp16) has a lower bound of at least −2.0 percentage points;
+  - in **each tier**, the point estimate of that difference is at least −2.0 percentage points;
+  - in **each tier**, wrong interventions on healthy runs are not significantly worse: the 95% interval of the difference (GGUF − fp16) does not lie entirely above zero.
+
+  **Why pooled:** with 250 tier 2 cases, a per-tier interval is about ±2–3 percentage points even for an export that behaves like fp16, so a per-tier interval test would often reject an equivalent export. The interval test is therefore pooled over the 800 cases, and the per-tier differences are checked by their point estimates.
+- **Shipped variant:** the smaller accepted variant (Q4_K_M before Q8_0). If neither is accepted, Q8_0 is shipped with its measured differences stated in the model card and in the CLI's output, and no further quantisation is tried without another amendment.
+- **Reported, not used for acceptance:** every protocol metric per tier and variant; the **episode-agreement rate** (the share of cases whose full action sequence, probes included, equals the fp16 episode's); per-decision recall; invalid actions; calls and seconds per call; and the per-tier intervals of the decision-accuracy difference.
+- **Platform difference:** the fp16 comparator ran on a T4 GPU. The check measures the shipped configuration end to end (quantisation and CPU runtime together) and does not separate the two.
+
+**Export log.** Every export, pilot and validation run of a GGUF variant is logged in `docs/milestone-4/EXPORT_LOG.md`, including failed and stopped ones, before its results are read: date, platform, CPU model, threads, llama.cpp commit, GGUF sha256, bundle commit, settings, output hashes and outcome.
+
 ## Items completed before freezing
 
 - dataset, split and generator hashes ("Frozen artifacts")

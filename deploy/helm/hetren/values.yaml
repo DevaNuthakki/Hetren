@@ -1,0 +1,74 @@
+# Hetren diagnosis API. Install (GKE): see deploy/README.md.
+
+image:
+  repository: ghcr.io/devanuthakki/hetren-cli
+  tag: ""  # required: a published release tag such as v1.0.0
+  pullPolicy: IfNotPresent
+
+model:
+  variant: Q4_K_M  # Q4_K_M (the shipped default) or Q8_0
+  repo: ""  # Hugging Face model repository fetch-model downloads from (required): Harsha1412/hetren-qwen3-4b-diagnosis
+  # The released commit (docs/milestone-4/EXPORT_LOG.md, "Hugging Face release"), so a later push to the
+  # repository cannot change what a pod downloads; every file is checked against the manifest either way.
+  revision: 3e875e4e8719acef839dc18e220a3ae498a1975b
+  tokenSecret: ""  # optional: a Secret with key "token" (HF_TOKEN), for a private repository
+  endpoint: ""  # optional: a Hugging Face mirror (HF_ENDPOINT); default https://huggingface.co
+
+# llama-server -t: physical cores. e2-standard-4 has 4 vCPUs on 2 physical cores.
+threads: 2
+maxQueue: 8  # requests that may wait behind the one being diagnosed; the rest get 503
+
+replicaCount: 1  # used only when autoscaling is off
+
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2  # 2 x e2-standard-4 = 8 vCPUs, the Free Trial's concurrent-core limit
+  targetCPUUtilizationPercentage: 60
+
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+
+service:
+  port: 8000
+
+# One pod per e2-standard-4 node (about 3.9 vCPUs allocatable, of which GKE's system pods request up to about
+# 0.9 on a node): a second pod would need 5. With 2 llama-server threads busy, CPU use is about 80% of the
+# request, above the HPA's 60%. Memory: one server peaked at 5.02 GB (Q4_K_M) and 5.05 GB (Q8_0) in the Linux
+# check; the node has 16 GB.
+resources:
+  requests:
+    cpu: 2500m
+    memory: 6Gi
+    ephemeral-storage: 4Gi
+  limits:
+    memory: 7Gi
+    ephemeral-storage: 8Gi
+
+modelCacheSizeLimit: 6Gi  # the emptyDir the init container downloads into (Q8_0 is 4.3 GB)
+
+# Long enough for the running diagnosis and the queue to finish after SIGTERM.
+terminationGracePeriodSeconds: 300
+
+readinessProbe:
+  periodSeconds: 5
+  failureThreshold: 2
+livenessProbe:
+  periodSeconds: 10
+  failureThreshold: 3
+
+# kind only: a stand-in llama-server sidecar (deploy/kind/stub-llama-server) instead of the GGUF; the init
+# container then fetches only the tokenizer. Never on GKE.
+stub:
+  enabled: false
+  image:
+    repository: hetren-stub-llama-server
+    tag: ci
+    pullPolicy: Never
+  seconds: 2
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+podAnnotations: {}

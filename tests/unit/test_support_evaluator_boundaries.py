@@ -47,6 +47,8 @@ RESTRICTED_PREFIXES = (
     "packages.action_space",
     "packages.hetren_evidence",
     "packages.hetren_baselines",
+    "packages.hetren_serving",
+    "packages.hetren_cli",
     "packages.support_recovery",
     "packages.integrations",
     "packages.support_agent",
@@ -563,6 +565,18 @@ def test_adapter_modules_are_covered_by_every_boundary_check():
     }
 
     assert expected <= set(restricted_modules(REPO_ROOT))
+
+
+def test_serving_modules_are_restricted_and_hetren_side():
+    expected = {
+        "packages.hetren_serving",
+        "packages.hetren_serving.export",
+        "packages.hetren_serving.llama_server",
+        "packages.hetren_serving.parity",
+    }
+
+    assert expected <= set(restricted_modules(REPO_ROOT))
+    assert expected <= set(hetren_side_modules(REPO_ROOT))
 
 
 def test_live_recording_script_is_scanned_for_direct_evaluator_imports():

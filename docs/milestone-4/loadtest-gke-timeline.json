@@ -1,0 +1,39 @@
+{
+  "scaling_from_samples": {
+    "hpa_wanted_2_at_s": null,
+    "max_nodes": 2,
+    "max_ready_replicas": 2,
+    "scale_up_seconds": null,
+    "scaled_before_start": true,
+    "second_node_ready_at_s": null,
+    "second_pod_ready_at_s": null
+  },
+  "session": 1,
+  "source": "deploy/gke/loadtest.py timeline() applied after the session to artifacts/milestone-4/loadtest-gke-1/events.json and the operator's gke-1/pods.yaml and gke-1/nodes.yaml (05:23 UTC); loadtest-gke.json is the script's own summary from the run, unchanged",
+  "timeline": {
+    "second_node": "gke-hetren-inference-c4c512cd-wb75",
+    "second_pod": "hetren-5d9b89668b-z9kmn",
+    "seconds_after_rescale": {
+      "fetch_model_finished": 144.0,
+      "fetch_model_started": 83.0,
+      "hpa_rescaled_to_2": 0.0,
+      "scale_up_triggered": 2.0,
+      "second_node_created": 41.0,
+      "second_node_ready": 44.0,
+      "second_pod_created": 0.0,
+      "second_pod_ready": 171.0,
+      "second_pod_scheduled": 45.0
+    },
+    "utc": {
+      "fetch_model_finished": "2026-11-10T04:53:01Z",
+      "fetch_model_started": "2026-11-10T04:52:00Z",
+      "hpa_rescaled_to_2": "2026-11-10T04:50:37Z",
+      "scale_up_triggered": "2026-11-10T04:50:39Z",
+      "second_node_created": "2026-11-10T04:51:18Z",
+      "second_node_ready": "2026-11-10T04:51:21Z",
+      "second_pod_created": "2026-11-10T04:50:37Z",
+      "second_pod_ready": "2026-11-10T04:53:28Z",
+      "second_pod_scheduled": "2026-11-10T04:51:22Z"
+    }
+  }
+}

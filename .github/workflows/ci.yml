@@ -7,6 +7,11 @@ on:
       - 'mvp/**'
       - 'portfolio/**'
       - 'milestone-*/**'
+    # Release tags only (docs/milestone-4/PLAN.md, step 8): vX.Y.Z and vX.Y.Z-rc.N. Milestone tags (milestone-N)
+    # start no workflow, and only these tags reach the publish job.
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+'
   pull_request:
     branches:
       - main
@@ -340,3 +345,243 @@ jobs:
           set -euo pipefail
 
           python -m pytest -q -m slow -n auto --dist loadfile
+
+  # Docker job: every push, read-only. Builds the hetren-cli image and checks its properties (no model in CI;
+  # inference is the operator's Linux check).
+  docker:
+    name: Docker image (hetren-cli)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the runtime image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/hetren-cli/Dockerfile
+          target: runtime
+          platforms: linux/amd64
+          build-args: |
+            HETREN_COMMIT=${{ github.sha }}
+          load: true
+          push: false
+          tags: hetren-cli:ci
+          cache-from: type=gha,scope=hetren-cli
+          cache-to: type=gha,scope=hetren-cli,mode=max
+
+      - name: Check the image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker/hetren-cli/check-image.sh hetren-cli:ci
+
+  # Deploy checks: every push, read-only, no credentials. The Helm chart (lint, template, schemas, design
+  # properties) and the Terraform code (fmt, validate, tflint). Nothing is planned or applied.
+  deploy:
+    name: Deploy checks (Helm, Terraform)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Install the pinned tools
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/tools.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Check the Helm chart
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/helm/check-chart.sh
+
+      - name: Check the Terraform code
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # tflint downloads its Google ruleset from GitHub
+        run: |
+          set -euo pipefail
+
+          deploy/terraform/check.sh
+
+  # Report job: every push, read-only. Builds docs/TECHNICAL_REPORT.md into a PDF (pandoc and Typst, image pinned by
+  # digest, no network in the container) and keeps it with its sha256 as a workflow artifact. On a release tag the
+  # operator attaches that artifact to the GitHub release (docs/milestone-4/PLAN.md, step 8.8), so CI never needs
+  # write access.
+  report:
+    name: Technical report (PDF)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Build the PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          scripts/build_report_pdf.sh "$RUNNER_TEMP/report"
+
+      - name: Keep the PDF and its sha256
+        uses: actions/upload-artifact@v4
+        with:
+          name: technical-report
+          path: ${{ runner.temp }}/report/
+          if-no-files-found: error
+          retention-days: 30
+
+  # kind job: every push, read-only. Installs the same Helm chart GKE uses on a kind cluster, with this commit's
+  # image and the stub llama-server, and checks the plumbing (not inference). The /diagnose and k6 part runs
+  # once the repository variable HETREN_MODEL_REPO names the published model repository (step 7a).
+  kind:
+    name: kind (Helm chart, stub model)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    permissions:
+      contents: read
+
+    env:
+      HETREN_MODEL_REPO: ${{ vars.HETREN_MODEL_REPO }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the runtime image (from the docker job's cache)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/hetren-cli/Dockerfile
+          target: runtime
+          platforms: linux/amd64
+          build-args: |
+            HETREN_COMMIT=${{ github.sha }}
+          load: true
+          push: false
+          tags: hetren-cli:ci
+          cache-from: type=gha,scope=hetren-cli
+
+      - name: Build the stub llama-server image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker build -q deploy/kind/stub-llama-server -t hetren-stub-llama-server:ci
+
+      - name: Install the pinned tools
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/tools.sh "$RUNNER_TEMP/bin"
+          echo "$RUNNER_TEMP/bin" >> "$GITHUB_PATH"
+
+      - name: Install the chart on kind and check it
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          deploy/kind/smoke.sh
+
+  # Publish job: release tags only (vX.Y.Z, vX.Y.Z-rc.N), after the docker job passed. Re-checks the tag and the
+  # versions first, rebuilds from the docker job's cache, checks that build the same way, and pushes exactly the
+  # image it checked to GitHub Container Registry.
+  publish:
+    name: Publish image (release tags)
+    needs: docker
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Check the release tag and the versions
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          python3 scripts/check_release_tag.py "$GITHUB_REF_NAME"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the runtime image (from the cache)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/hetren-cli/Dockerfile
+          target: runtime
+          platforms: linux/amd64
+          build-args: |
+            HETREN_COMMIT=${{ github.sha }}
+          load: true
+          push: false
+          tags: hetren-cli:release
+          cache-from: type=gha,scope=hetren-cli
+
+      - name: Check the image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          docker/hetren-cli/check-image.sh hetren-cli:release
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish the checked image
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          target="ghcr.io/devanuthakki/hetren-cli:${GITHUB_REF_NAME}"
+          docker tag hetren-cli:release "$target"
+          docker push "$target"

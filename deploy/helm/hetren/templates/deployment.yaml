@@ -1,0 +1,174 @@
+{{- if and (not .Values.stub.enabled) (not .Values.model.repo) }}
+{{- fail "model.repo is required: the Hugging Face model repository fetch-model downloads the GGUF from" }}
+{{- end }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hetren.fullname" . }}
+  labels:
+    {{- include "hetren.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "hetren.selectorLabels" . | nindent 6 }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        {{- include "hetren.labels" . | nindent 8 }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "hetren.fullname" . }}
+      automountServiceAccountToken: false
+      enableServiceLinks: false
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      {{- if .Values.model.repo }}
+      initContainers:
+        # Downloads into the pod's emptyDir and checks every file's sha256 against the export manifest
+        # packaged in the image; a mismatch keeps nothing and fails the pod.
+        - name: fetch-model
+          image: {{ include "hetren.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - fetch-model
+            - --repo
+            - {{ .Values.model.repo | quote }}
+            - --variant
+            - {{ .Values.model.variant | quote }}
+            - --revision
+            - {{ .Values.model.revision | quote }}
+            - --cache
+            - /models
+            {{- if .Values.stub.enabled }}
+            - --tokenizer-only
+            {{- end }}
+          {{- if or .Values.model.tokenSecret .Values.model.endpoint }}
+          env:
+            {{- if .Values.model.tokenSecret }}
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.model.tokenSecret | quote }}
+                  key: token
+            {{- end }}
+            {{- if .Values.model.endpoint }}
+            - name: HF_ENDPOINT
+              value: {{ .Values.model.endpoint | quote }}
+            {{- end }}
+          {{- end }}
+          securityContext:
+            {{- include "hetren.securityContext" . | nindent 12 }}
+          resources:
+            requests:
+              cpu: 500m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: models
+              mountPath: /models
+            - name: tmp
+              mountPath: /tmp
+      {{- end }}
+      containers:
+        - name: hetren
+          image: {{ include "hetren.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - serve
+            - --host
+            - 0.0.0.0
+            - --port
+            - "8000"
+            - --variant
+            - {{ .Values.model.variant | quote }}
+            - --threads
+            - {{ .Values.threads | quote }}
+            - --max-queue
+            - {{ .Values.maxQueue | quote }}
+            {{- if .Values.stub.enabled }}
+            - --server-url
+            - http://127.0.0.1:8080
+            {{- end }}
+          env:
+            - name: HF_HOME
+              value: /tmp/huggingface
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: http
+            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            timeoutSeconds: 5
+          securityContext:
+            {{- include "hetren.securityContext" . | nindent 12 }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: models
+              mountPath: /models
+              readOnly: true
+            - name: tmp
+              mountPath: /tmp
+        {{- if .Values.stub.enabled }}
+        - name: stub-llama-server
+          image: "{{ .Values.stub.image.repository }}:{{ .Values.stub.image.tag }}"
+          imagePullPolicy: {{ .Values.stub.image.pullPolicy }}
+          env:
+            - name: STUB_SECONDS
+              value: {{ .Values.stub.seconds | quote }}
+          securityContext:
+            {{- include "hetren.securityContext" . | nindent 12 }}
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+        {{- end }}
+      volumes:
+        - name: models
+          emptyDir:
+            sizeLimit: {{ .Values.modelCacheSizeLimit }}
+        - name: tmp
+          emptyDir:
+            sizeLimit: 1Gi
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

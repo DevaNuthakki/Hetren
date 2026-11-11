@@ -45,3 +45,17 @@ wandb/
 .idea/
 *.swp
 *.swo
+
+# Terraform (deploy/terraform): providers, state and the operator's variables stay local; lock files are committed.
+deploy/terraform/**/.terraform/
+deploy/terraform/**/*.tfstate
+deploy/terraform/**/*.tfstate.*
+deploy/terraform/**/*.tfvars
+deploy/terraform/**/.build/
+deploy/terraform/bootstrap/backend.tf
+deploy/terraform/**/*.plan
+
+# Credentials that must never be committed.
+kaggle.json
+*.pem
+*.key

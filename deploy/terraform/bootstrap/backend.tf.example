@@ -1,0 +1,16 @@
+# Copy to backend.tf (gitignored) right after the first apply, which creates the bucket, then move the local
+# state into it (deploy/README.md, "Bootstrap state"):
+#
+#   cp backend.tf.example backend.tf
+#   terraform init -migrate-state -backend-config="bucket=<project_id>-tfstate"
+#
+# From another machine (a lost laptop copy): clone, copy this file again, then
+#   terraform init -backend-config="bucket=<project_id>-tfstate"
+#
+# Before destroying this stack (which deletes the bucket): delete backend.tf and run terraform init
+# -migrate-state to move the state back to a local file first.
+terraform {
+  backend "gcs" {
+    prefix = "bootstrap"
+  }
+}

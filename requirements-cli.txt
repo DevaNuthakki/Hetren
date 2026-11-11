@@ -1,0 +1,33 @@
+# The hetren CLI's Python environment (Milestone 4, step 4): no torch and no openai-agents. The model runs in
+# llama-server (llama.cpp at 620d2225, CPU only, built separately); Python renders the prompt with the tokenizer
+# and reads the reply. Every version is the GGUF validation run's (the pilot venv, requirements-gguf-pilot.txt),
+# so the CLI tokenizes exactly as the validated run did.
+#   python3 -m venv ~/.hetren-cli && ~/.hetren-cli/bin/pip install -r requirements-cli.txt
+#
+# Input checks and the action catalog:
+jsonschema==4.26.0
+jsonschema-specifications==2025.9.1
+referencing==0.37.0
+rpds-py==2026.9.1
+attrs==26.1.0
+typing_extensions==4.16.0
+# The tokenizer side (chat template and token IDs), as in the validation run's metadata:
+transformers==4.56.2
+tokenizers==0.22.2
+huggingface_hub==0.36.2
+hf-xet==1.7.0
+Jinja2==3.1.6
+MarkupSafe==3.0.4
+safetensors==0.8.0
+numpy==2.1.3
+packaging==26.3
+PyYAML==6.0.3
+regex==2025.11.3
+requests==2.34.2
+certifi==2026.10.23
+charset-normalizer==3.4.9
+idna==3.20
+urllib3==2.8.0
+tqdm==4.67.3
+filelock==4.2.4
+fsspec==2025.12.0

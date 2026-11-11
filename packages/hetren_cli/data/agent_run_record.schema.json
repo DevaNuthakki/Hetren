@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "hetren-cli/agent-run-record-evidence-v1",
+  "title": "AgentRunRecord evidence payload (RunRecord.evidence_payload()) of the support workflow",
+  "description": "The fields compact_evidence reads, and the support workflow's three tools. Other fields of the payload are allowed and ignored.",
+  "type": "object",
+  "required": ["record_type", "schema_version", "task_input", "tool_definitions", "stage_records", "sdk_evidence", "status", "error"],
+  "properties": {
+    "record_type": {"const": "AgentRunRecord"},
+    "schema_version": {"const": 1},
+    "task_input": {"type": "string", "minLength": 1},
+    "tool_definitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {"name": {"$ref": "#/$defs/tool"}}
+      }
+    },
+    "stage_records": {"type": "array", "items": {"$ref": "#/$defs/stage_record"}},
+    "sdk_evidence": {
+      "type": "object",
+      "required": ["discrepancies"],
+      "properties": {
+        "discrepancies": {
+          "type": "array",
+          "items": {"type": "object", "required": ["kind"], "properties": {"kind": {"type": "string"}}}
+        }
+      }
+    },
+    "status": {"enum": ["completed", "max_turns_exceeded", "error"]},
+    "error": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "object", "required": ["type"], "properties": {"type": {"type": "string"}}}
+      ]
+    }
+  },
+  "$defs": {
+    "tool": {"enum": ["read_ticket", "lookup_account", "route_ticket"]},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "stage_record": {
+      "type": "object",
+      "required": ["invocation_id", "tool_name", "stage", "status", "payload", "state_before_sha256", "state_after_sha256"],
+      "properties": {
+        "invocation_id": {"type": "string"},
+        "tool_name": {"$ref": "#/$defs/tool"},
+        "stage": {"enum": ["proposed", "authorized", "attempted", "observed"]},
+        "status": {"enum": ["proposed", "allowed", "denied", "started", "succeeded", "failed"]},
+        "payload": {"type": "object"},
+        "state_before_sha256": {"$ref": "#/$defs/sha256"},
+        "state_after_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "allOf": [
+        {"if": {"properties": {"stage": {"const": "proposed"}}},
+         "then": {"properties": {"payload": {"required": ["arguments"]}}}},
+        {"if": {"properties": {"status": {"const": "denied"}}},
+         "then": {"properties": {"payload": {"required": ["reason"]}}}},
+        {"if": {"properties": {"status": {"const": "succeeded"}}},
+         "then": {"properties": {"payload": {"required": ["observation"]}}}},
+        {"if": {"properties": {"status": {"const": "failed"}}},
+         "then": {"properties": {"payload": {"required": ["error"], "properties": {"error": {"type": "object", "required": ["type", "message"]}}}}}}
+      ]
+    }
+  }
+}
