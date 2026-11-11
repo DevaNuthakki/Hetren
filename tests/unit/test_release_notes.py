@@ -85,3 +85,9 @@ def test_the_scope_and_limitations_are_stated():
     for heading in ("## Results at a glance", "## Get it", "## Checksums", "## Known limitations", "## Provenance"):
         assert heading in NOTES, heading
     assert "AVX2, FMA and F16C" in NOTES and "cached best case" in NOTES
+
+
+def test_the_attached_pdf_names_its_commit_and_run():
+    provenance = " ".join(NOTES.split("## Provenance", 1)[1].split())
+    assert "CI run #245" in provenance and "`643da6a333124d250e0d615b034c1a9786edafb7`" in provenance
+    assert "recorded after the build" not in NOTES

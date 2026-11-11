@@ -84,7 +84,9 @@ docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro 
 - **The PDF:** a layout-only rebuild of the report as tagged. Its table column widths, ragged-right text and
   headings kept with the text that follows changed; no word or number did. It was built on `release/v1.0.0-docs`
   with the same pinned pandoc and Typst image, and it is reproducible: `scripts/build_report_pdf.sh` gives these
-  exact bytes (sha256 `bd2baabcd8d8…`) from any commit with the same report and layout files. The commit and CI run
-  it was taken from: recorded after the build. The tag run's own PDF (`e3476fc7a9d0…`) is not attached.
+  exact bytes (sha256 `bd2baabcd8d8…`) from any commit with the same report and layout files. The attached file is
+  the artifact of CI run #245 (a manual dispatch of the workflow on `release/v1.0.0-docs`), on commit
+  `643da6a333124d250e0d615b034c1a9786edafb7`, and its sha256 matched. The tag run's own PDF (`e3476fc7a9d0…`) is
+  not attached.
 - **The protocol:** frozen on 2026-11-02, with dated amendments. The results are in `docs/milestone-3/RESULTS.md`
   and `docs/milestone-4/EXPORT_LOG.md`.
