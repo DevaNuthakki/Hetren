@@ -121,3 +121,22 @@ def test_the_pdf_script_pins_its_image_and_runs_offline():
 def test_no_digit_is_followed_by_an_apostrophe():
     # Typst typesets "2's" with a prime (2′s); the report words these differently.
     assert not re.findall(r"\d's", REPORT)
+
+
+def test_the_pdf_build_is_reproducible_and_laid_out_by_the_style_file():
+    script = (REPO_ROOT / "scripts/build_report_pdf.sh").read_text(encoding="utf-8")
+    assert re.search(r"^REPORT_DATE_EPOCH=1794355200 ", script, re.MULTILINE)  # 2026-11-11T00:00:00Z
+    assert '-e SOURCE_DATE_EPOCH="$REPORT_DATE_EPOCH"' in script
+    assert '"$root/scripts/report-pdf.typ":/style/report-pdf.typ:ro' in script
+    assert "--include-before-body=/style/report-pdf.typ" in script
+    style = (REPO_ROOT / "scripts/report-pdf.typ").read_text(encoding="utf-8")
+    for rule in ("#set par(justify: false)", "#show heading: set block(sticky: true)", "#show table: set text(size: 9pt)"):
+        assert rule in style, rule
+
+
+def test_every_table_sets_its_column_widths():
+    # Each separator line gives its columns' relative widths (pandoc reads the dash counts); none is left at the
+    # equal widths that cramped the tag-run PDF.
+    separators = re.findall(r"^\|(?::?-+\|)+$", REPORT, re.MULTILINE)
+    assert len(separators) == 7
+    assert "|:---------|:---|:---|" not in REPORT and "|:---------|:---|:---|:---|:---|:---|" not in REPORT
