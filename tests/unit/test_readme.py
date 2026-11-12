@@ -97,7 +97,7 @@ def test_links_files_and_modules_exist():
     for module in re.findall(r"python -m (packages(?:\.\w+)+)", README):
         assert (REPO_ROOT / (module.replace(".", "/") + ".py")).is_file() or \
             (REPO_ROOT / module.replace(".", "/") / "__main__.py").is_file(), module
-    for path in ("requirements-cli.txt", "requirements-dev.txt", "tests/fixtures/hetren_cli/compact_first_step.json",
+    for path in ("requirements-cli.txt", "requirements-dev.txt", "examples/v2-case-001478.jsonl",
                  "docs/milestone-2/TEST_RUN_LOG.md", "docs/milestone-3/VALIDATION_LOG.md", "notebooks/milestone-3",
                  "docs/milestone-4/EXPORT_RUNBOOK.md", "docs/milestone-4/DEPLOY_RUNBOOK.md", "tests/qualification"):
         assert path in README and (REPO_ROOT / path).exists(), path

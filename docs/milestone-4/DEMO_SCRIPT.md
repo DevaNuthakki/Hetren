@@ -21,16 +21,14 @@ The video shows:
    characters, so set the terminal to wrap long lines. Use a short prompt (`PS1='%# '`) and a dark theme.
 3. **Nothing private on screen:** no tokens, `HF_TOKEN` unset, and no browser tabs with accounts open. The GKE
    screenshots should have the project ID and account email blurred.
-4. **Fetch the model into the image's cache** (network on, once), and get the mapping swap's dataset line for the
-   Docker segment:
+4. **Fetch the model into the image's cache** (network on, once). The Docker segment uses the mapping swap's
+   dataset line, which the repository ships as `examples/v2-case-001478.jsonl`:
 
    ```zsh
    cd ~/Documents/personal-projects/hetren
    unset HF_TOKEN
    docker pull ghcr.io/devanuthakki/hetren-cli:v1.0.0
    docker run --rm -v ~/.cache/hetren:/models ghcr.io/devanuthakki/hetren-cli:v1.0.0 fetch-model --repo Harsha1412/hetren-qwen3-4b-diagnosis --revision 3e875e4e8719acef839dc18e220a3ae498a1975b
-   mkdir -p artifacts/milestone-4/demo/case-001478
-   grep -m1 '"case_id":"case-001478"' artifacts/milestone-2/dataset-v2/hetren_visible.jsonl > artifacts/milestone-4/demo/case-001478/visible.jsonl
    ```
 
 5. **The demo command, used three times below.** `DEMO` is a shell function, so each segment's line stays short
@@ -127,7 +125,7 @@ never repeated. Don't rely on this model to escalate."
 ### 5. Offline, in Docker (1:55–2:25)
 
 ```zsh
-docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD/artifacts/milestone-4/demo/case-001478":/work:ro ghcr.io/devanuthakki/hetren-cli:v1.0.0 diagnose --compact /work/visible.jsonl
+docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD/examples":/work:ro ghcr.io/devanuthakki/hetren-cli:v1.0.0 diagnose --compact /work/v2-case-001478.jsonl
 ```
 
 **On screen:** "No network. The CLI proposes; it never applies anything."
