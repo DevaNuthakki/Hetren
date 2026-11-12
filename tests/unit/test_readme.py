@@ -78,7 +78,7 @@ def test_the_deployment_and_platform_numbers_are_logged():
 
 def test_the_scope_and_licences_are_stated():
     assert "not a general\n> agent-trace diagnoser" in README and "single-recovery (tier 1) runs only" in README
-    assert "Code and model: Apache-2.0" in README and "Data: CC BY 4.0" in README
+    assert "**Code and model:** Apache-2.0" in README and "**Data:** [CC BY 4.0]" in README
     assert "AVX2, FMA and F16C" in README and "`linux/amd64`" in README
 
 

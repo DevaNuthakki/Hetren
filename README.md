@@ -5,6 +5,14 @@ to leave the run alone, ask for one more piece of evidence, propose a repair, or
 label it was trained and tested on comes from **executing** repairs in a sandboxed copy of the agent's world,
 never from a model.
 
+**The problem it targets.** An agent run can finish cleanly and still do the wrong thing. In the shipped example
+([`examples/v2-case-001478.jsonl`](examples/v2-case-001478.jsonl)), every tool call succeeds and the run
+completes, but the ticket's customer reference points at the wrong account, so the ticket goes to the wrong
+queue. Hetren reads such a run's evidence. It asks for a probe when the evidence is not enough, and proposes a
+recovery, or escalates when no recovery would work. In the evaluations and in `sandbox_demo`, each probe runs and
+each recovery is verified in a sandboxed copy of the world, with the task re-run. The CLI and API only propose:
+applying a recovery is left to a human.
+
 > **Scope.** Everything here is built on one synthetic customer-support workflow (three tools: `read_ticket`,
 > `lookup_account`, `route_ticket`) and its seven fault families. The released model is not a general
 > agent-trace diagnoser, and outside that workflow its outputs are not meaningful. It proposes; it never applies
@@ -18,7 +26,7 @@ never from a model.
 - a command-line tool, an HTTP API and a Docker image;
 - a Helm chart and Terraform for GKE, with a load test.
 
-Every result is logged with the commit that produced it.
+Each run log records the commit it ran from.
 
 | | |
 |---|---|
@@ -29,6 +37,7 @@ Every result is logged with the commit that produced it.
 | Protocol | [`docs/milestone-2/EVAL_PROTOCOL.md`](docs/milestone-2/EVAL_PROTOCOL.md), frozen 2026-11-02, with dated amendments |
 | Report | [`docs/TECHNICAL_REPORT.md`](docs/TECHNICAL_REPORT.md); the PDF is attached to the v1.0.0 release |
 | Demo video | to follow |
+| Roadmap | [`docs/ROADMAP.md`](docs/ROADMAP.md): planned, not done |
 
 ## Results at a glance
 
@@ -171,7 +180,9 @@ action. They report a probe as needed and a recovery as proposed, and apply noth
 - **Isolation:** only the evaluator knows the answers. Tests enforce import boundaries, leakage scans and
   scoped permissions, so the agent, the environment's tools and the diagnoser cannot reach them.
 - **The protocol:** splits by world seed, fault family and agent source. Test splits were used once per system,
-  and every change after the freeze is a dated amendment.
+  and every change after the freeze is a dated amendment. There are two, in the protocol's "Amendments" section:
+  - Amendment 1 (2026-11-03): the fine-tuned Qwen3-4B's training, checkpoint selection and evaluation platforms;
+  - Amendment 2 (2026-11-07): the CPU export (GGUF) and its validation-only quality check.
 
 ## Milestones
 
@@ -230,10 +241,16 @@ Tests: `python -m pytest -q -m "not slow"` (Python 3.12, `pip install -r require
   "Linux checks"). Other CPUs are untested.
 - **Performance is descriptive:** the GKE numbers describe one session on small nodes, at 2 threads rather
   than the validated 6.
+- **Dependency advisories:** the image pins `transformers` 4.56.2 and `fsspec` 2025.12.0, which have open
+  advisories. None of the affected code paths runs in Hetren: the image loads only a tokenizer, from files checked
+  against pinned sha256s, with no torch and no remote code. The advisories are listed in
+  [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md), "Known limitations"; the upgrades are on the roadmap.
 
 ## Licence and citation
 
-Code and model: Apache-2.0 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)). Data: CC BY 4.0.
+- **Code and model:** Apache-2.0 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)). The base model,
+  Qwen3-4B-Instruct-2507, is also Apache-2.0. No model weights are in this repository.
+- **Data:** [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), on the Hugging Face dataset repository.
 
 ```bibtex
 @misc{hetren2026,
@@ -243,6 +260,27 @@ Code and model: Apache-2.0 ([`LICENSE`](LICENSE), [`NOTICE`](NOTICE)). Data: CC 
   url    = {https://github.com/DevaNuthakki/Hetren}
 }
 ```
+
+## Acknowledgements
+
+- **[Qwen3-4B-Instruct-2507](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507)** by the Qwen team (Alibaba
+  Cloud): the base model.
+- **[llama.cpp](https://github.com/ggml-org/llama.cpp):** the GGUF conversion, the quantisation and
+  `llama-server`.
+- **The OpenAI Agents SDK** (`openai-agents` 0.24.0, in `requirements-dev.txt`): the support agent and its
+  evidence capture.
+- **[Hugging Face](https://huggingface.co):** hosting for the model and the dataset. Training and the fp16
+  evaluations used its `transformers` and `peft` libraries.
+- **[Kaggle](https://www.kaggle.com):** the free T4 GPUs used for the baselines, training and the export.
+- **[Google Cloud](https://cloud.google.com)'s Free Trial:** the credits that paid for the GKE session.
+
+## Reporting issues
+
+- **Bugs, wrong results and questions:** open a
+  [GitHub issue](https://github.com/DevaNuthakki/Hetren/issues). For a wrong diagnosis, include the input and
+  the output of `diagnose --format json`.
+- **Security problems:** please don't open a public issue. Use GitHub's private vulnerability reporting
+  (the repository's Security tab → "Report a vulnerability").
 
 ## Earlier work in this repository
 
