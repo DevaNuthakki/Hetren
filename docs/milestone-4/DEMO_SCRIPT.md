@@ -204,6 +204,58 @@ below."
 - **Captions:** the narration as subtitles.
 - **Credits:** none needed beyond the links; the data is CC BY 4.0, and the model and code are Apache-2.0.
 
+## Silent cut (about 42 s, square or 4:5)
+
+A short version with no voice, for LinkedIn, decided by the operator on 2026-11-11. It uses the recordings of
+segments 3–6 above, so nothing new is run, and the 3-minute script above is unchanged. All the information is in
+the on-screen text, because LinkedIn plays videos muted.
+
+**Format:** 1080 × 1080 (square) or 1080 × 1350 (4:5). For the terminal clips, record a window about 100 columns
+wide with an 18–20 pt font, so that the text stays readable in the small frame.
+
+**Speed-up:** 20× for the model calls, the same in every clip. The calls are the wait before each `model, call N
+(… s)` line, plus llama-server's start-up. At 20×, segment 3's 4.1 s start-up and its two calls (37.3 s and
+13.4 s, from the rehearsal log) take about 2.7 s. If you change the factor, keep it between 16× and 20× and
+change every note to match.
+
+| clip | length | from | on-screen text | required note (corner, for the whole clip) |
+|---|---|---|---|---|
+| 1. Title card | 3 s | a card | "Hetren: diagnosing a support agent's failed runs" / "Synthetic workflow; labels come from sandboxed execution, never from a model" | none |
+| 2. `DEMO case-001478`, sped up | 12 s | segment 3 | "Wrong account, so the ticket went to the wrong queue" / "The model probes and proposes a remap; the sandbox re-run verifies it" | "Validation case · model calls sped up 20×" |
+| 3. `DEMO case-002332`, sped up | 7 s | segment 4 | "Tool down: the right call is to escalate. The model retries: WRONG" / "Held-out F6: abstained 0 of 400. Logged test results, not run here" | "Validation case · model calls sped up 20×" |
+| 4. Offline Docker | 4 s | segment 5 | "Offline, with --network none" / "The CLI proposes; it never applies anything" | "Validation case · model calls sped up 20×" |
+| 5. GKE screenshot | 4 s | segment 6 | "On GKE: 2 replicas, about 0.27 diagnoses/s" / "Cached best case: the prompt cache was reused" | none |
+| 6. Results card | 9 s | below | the card's lines | none |
+| 7. Links card | 3 s | below | the card's lines | none |
+
+The silent results card (clip 6). Like segment 7's card, every number on it is from the model card:
+
+```text
+Frozen test sets, each system ran once     fine-tuned   GPT-4.1
+Tier 1 in-distribution accuracy               73.8%       33.8%
+Tier 1 held-out families accuracy             41.5%       24.8%
+Live gpt-4.1-mini runs accuracy               66.3%       28.0%
+Hand-written rules beat it on familiar faults: 99.5% vs 73.8% (tier 1)
+Known failure: never abstained on held-out F6 (0/400)
+```
+
+The links card (clip 7):
+
+```text
+github.com/DevaNuthakki/Hetren
+huggingface.co/Harsha1412/hetren-qwen3-4b-diagnosis
+```
+
+**Rules for the silent cut:**
+- **Never cut the verdict line or the validation-match line.** These are `verdict (episodes.score): …` and `the
+  logged Q4_K_M validation run: the same probes, recoveries, final action and verdict`. Clips 2 and 3 end on a
+  frame that shows both lines in full, held for at least the last 2 s. Never edit either line.
+- **Speed up only the model calls,** and never cut one out. Printed output plays at normal speed. When a clip is
+  too long, trim the pauses between outputs, never the printed lines or the final 2 s.
+- **Clip 3's F6 number is a logged test result, not run here,** and its text says so. No test case is run.
+- **If the Docker output differs from segment 5's description** (another platform or thread count), show what it
+  printed, and change clip 4's text to match.
+
 ## Rehearsal log
 
 | date (UTC) | case | outcome |
