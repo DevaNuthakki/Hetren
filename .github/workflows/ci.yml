@@ -61,7 +61,7 @@ jobs:
 
           python -m pip install --disable-pip-version-check -r requirements-dev.txt
 
-          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '7.4.4'; assert version('pytest-xdist') == '3.8.0'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; assert version('tiktoken') == '0.14.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'pytest-xdist', 'openai', 'openai-agents', 'tiktoken')]"
+          python -c "from importlib.metadata import version; assert version('jsonschema') == '4.26.0'; assert version('pytest') == '9.0.3'; assert version('pytest-xdist') == '3.8.0'; assert version('openai') == '3.42.0'; assert version('openai-agents') == '0.24.0'; assert version('tiktoken') == '0.14.0'; [print(name, version(name)) for name in ('jsonschema', 'pytest', 'pytest-xdist', 'openai', 'openai-agents', 'tiktoken')]"
 
       - name: Verify required repository boundaries
         shell: bash

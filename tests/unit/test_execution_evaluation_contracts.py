@@ -132,12 +132,12 @@ class ExecutionEvaluationContractTests(unittest.TestCase):
         for status in ExecutionStatus:
             if status is ExecutionStatus.COMPLETED:
                 continue
-            with self.subTest(status=status), self.assertRaises(ContractError):
+            with self.subTest(status=str(status)), self.assertRaises(ContractError):
                 execution(status=status, exit_code=None)
 
     def test_all_terminal_statuses_can_be_preserved(self):
         for status in ExecutionStatus:
-            with self.subTest(status=status):
+            with self.subTest(status=str(status)):
                 record = execution(status=status, exit_code=None,
                                    termination_reason="Recorded terminal condition")
                 self.assertIs(record.status, status)
@@ -159,10 +159,10 @@ class ExecutionEvaluationContractTests(unittest.TestCase):
 
     def test_enum_strings_are_not_accepted_as_typed_states(self):
         for status in ("completed", EvaluationOutcome.PASS):
-            with self.subTest(status=status), self.assertRaises(ContractError):
+            with self.subTest(status=str(status)), self.assertRaises(ContractError):
                 execution(status=status)
         for outcome in ("PASS", ExecutionStatus.COMPLETED):
-            with self.subTest(outcome=outcome), self.assertRaises(ContractError):
+            with self.subTest(outcome=str(outcome)), self.assertRaises(ContractError):
                 evaluation(outcome=outcome)
 
     def test_all_five_evaluation_outcomes_remain_distinct(self):
@@ -176,12 +176,12 @@ class ExecutionEvaluationContractTests(unittest.TestCase):
     def test_measured_outcomes_require_evidence_references(self):
         for outcome in (EvaluationOutcome.PASS, EvaluationOutcome.FAIL,
                         EvaluationOutcome.INCONCLUSIVE):
-            with self.subTest(outcome=outcome), self.assertRaises(ContractError):
+            with self.subTest(outcome=str(outcome)), self.assertRaises(ContractError):
                 evaluation(outcome=outcome, evidence_references=())
 
     def test_unavailable_or_invalid_evidence_is_recordable(self):
         for outcome in (EvaluationOutcome.BLOCKED, EvaluationOutcome.INVALID):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 record = evaluation(outcome=outcome, evidence_references=(),
                                     measurement_references=())
                 self.assertIs(record.outcome, outcome)

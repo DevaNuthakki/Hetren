@@ -355,7 +355,7 @@ class VerificationContractTests(unittest.TestCase):
         digests = set()
 
         for outcome, evaluation_outcome in mapping.items():
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 values = verification_context(
                     verification_evaluation_outcome=evaluation_outcome
                 )
@@ -387,7 +387,7 @@ class VerificationContractTests(unittest.TestCase):
             VerificationOutcome.REJECTED,
             VerificationOutcome.INCONCLUSIVE,
         ):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 with self.assertRaises(ContractError):
                     report(
                         outcome=outcome,
@@ -400,7 +400,7 @@ class VerificationContractTests(unittest.TestCase):
             VerificationOutcome.REJECTED,
             VerificationOutcome.INCONCLUSIVE,
         ):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 with self.assertRaises(ContractError):
                     report(
                         outcome=outcome,
@@ -412,7 +412,7 @@ class VerificationContractTests(unittest.TestCase):
             VerificationOutcome.BLOCKED,
             VerificationOutcome.INVALID,
         ):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 record = report(
                     outcome=outcome,
                     evidence_references=(),
