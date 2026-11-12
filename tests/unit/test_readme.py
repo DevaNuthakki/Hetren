@@ -120,4 +120,31 @@ def test_the_how_it_works_diagram_and_the_demo_video_line():
     for edge in ("D -->|probe| E", "E -->|result| C", "D -->|recovery| F", "D -->|decision| G"):
         assert edge in diagram, edge
     assert "The CLI and the API stop at the model's\naction" in README
-    assert "| Demo video | to follow |" in README  # replaced with the link in step 8.8
+    assert "Demo video" not in README.split("## Results at a glance", 1)[0]  # no video for now (operator, 2026-11-12)
+
+
+def test_the_gpt41_baseline_rationale_traces_to_its_sources():
+    paragraph = README.split("**Why GPT-4.1 as the baseline.**", 1)[1].split("\n\n", 1)[0]
+    text = " ".join(paragraph.split())
+    protocol = (REPO_ROOT / "docs/milestone-2/EVAL_PROTOCOL.md").read_text(encoding="utf-8")
+    results = (REPO_ROOT / "docs/milestone-3/RESULTS.md").read_text(encoding="utf-8")
+    baselines = protocol.split("\n## Baselines\n", 1)[1].split("\n## ", 1)[0]
+    # three baselines, fixed in the protocol; the quoted words are its own
+    assert "- extended rules (built on training families only)\n- an untrained small model\n" \
+           "- a strong general model: `gpt-4.1`\n" in baselines
+    assert '"a strong general model: `gpt-4.1`"' in text and "fixed three baselines before any test run" in text
+    assert "**Systems** (declared before any test run): rules v1" in protocol
+    # the pinned snapshot, its settings and the shared prompt
+    gpt = baselines.split("### `gpt-4.1` baseline", 1)[1].split("\n### ", 1)[0]
+    assert "model `gpt-4.1-2025-04-14`" in gpt and "temperature 0" in gpt
+    assert "`gpt-4.1-2025-04-14`, at temperature 0, with the same prompt (version 2) as the small model" in text
+    assert "version 2 is the `gpt-4.1` baseline prompt for the test splits (and for the untrained and fine-tuned " \
+           "small model)" in protocol
+    assert "both are removed from the API on 2027-01-14" in protocol and "leaves the API on 2027-01-14" in text
+    # the limit
+    assert "GPT-4.1 and untrained Qwen use the shared zero-shot prompt; no few-shot strong-model baseline" in results
+    assert "zero-shot prompted GPT-4.1 only" in text
+    assert "better than prompted GPT-4.1 on this benchmark" in text
+    # no reason the repository does not record
+    for unrecorded in ("same family", "reproducib", "cost", "cheap", "price", "$"):
+        assert unrecorded not in text.lower(), unrecorded

@@ -36,7 +36,6 @@ Each run log records the commit it ran from.
 | Release | [v1.0.0](https://github.com/DevaNuthakki/Hetren/releases/tag/v1.0.0): notes in [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md) |
 | Protocol | [`docs/milestone-2/EVAL_PROTOCOL.md`](docs/milestone-2/EVAL_PROTOCOL.md), frozen 2026-11-02, with dated amendments |
 | Report | [`docs/TECHNICAL_REPORT.md`](docs/TECHNICAL_REPORT.md); the PDF is attached to the v1.0.0 release |
-| Demo video | to follow |
 | Roadmap | [`docs/ROADMAP.md`](docs/ROADMAP.md): planned, not done |
 
 ## Results at a glance
@@ -77,6 +76,16 @@ system ran once per test set under the frozen protocol. Rates are k / n, with Wi
 - **The CPU export holds:** Q4_K_M (2.5 GB, the default) matches fp16 within the predeclared 2-point margin.
   The pooled difference is −0.13 points [−1.50, +1.25] on the full validation split.
 
+**Why GPT-4.1 as the baseline.** The protocol fixed three baselines before any test run: hand-written rules, an
+untrained small model, and "a strong general model: `gpt-4.1`" ([`EVAL_PROTOCOL.md`](docs/milestone-2/EVAL_PROTOCOL.md),
+"Baselines"). It stands for the other way to solve the task: prompting a strong general model instead of
+fine-tuning a small one. It is pinned to the dated snapshot `gpt-4.1-2025-04-14`, at temperature 0, with the same
+prompt (version 2) as the small model ("`gpt-4.1` baseline" and "Test-split baseline prompt" in the protocol), so
+each logged result names the exact model behind it. That snapshot leaves the API on 2027-01-14, after which it
+cannot be re-run. **The limit:** the comparison is with zero-shot prompted GPT-4.1 only. No few-shot, newer or
+reasoning model was tested ([`RESULTS.md`](docs/milestone-3/RESULTS.md), "Baseline scope"), so the claim is only
+that the fine-tuned model is better than prompted GPT-4.1 on this benchmark.
+
 ## Try it
 
 ### Docker (offline diagnosis)
@@ -109,8 +118,12 @@ Hetren diagnosis (proposed only; nothing was applied)
   Needs probe: find_owners {"customer_ref": "C-3983"}
 ```
 
-That was this case's first action in the logged Q4_K_M validation run, on the validation Mac. The Linux image
-took the same episode on 18 of 20 pilot cases, so another CPU or thread count can give a different answer.
+That was this case's first action in the logged Q4_K_M validation run, on the validation Mac. The v1.0.0 image
+gives the same line: the operator's offline run of this command on a Mac (Docker Desktop, 6 threads, 2026-11-12),
+by the `:v1.0.0` tag, which resolved to `sha256:efafa907…`, printed it. It was the first run of this case in the
+image ([`EXPORT_LOG.md`](docs/milestone-4/EXPORT_LOG.md), "The README example in the v1.0.0 image"). Across the
+20 pilot cases, the Linux image took the same episode as the Mac on 18 of 20, so another CPU or thread count can
+give a different answer.
 
 `fetch-model` checks every file's sha256 against the export manifest. `diagnose` accepts:
 - a run recorded with Hetren's OpenAI Agents SDK integration (`--record`, an `AgentRunRecord`);
@@ -149,7 +162,7 @@ It accepts validation cases only, and refuses every test case:
 python -m packages.support_evaluator.sandbox_demo --case case-001478 --gguf-dir <dir> --tokenizer <dir> --llama-cpp <checkout>
 ```
 
-The demo video's script is [`docs/milestone-4/DEMO_SCRIPT.md`](docs/milestone-4/DEMO_SCRIPT.md).
+A script for a demo video, not recorded yet, is in [`docs/milestone-4/DEMO_SCRIPT.md`](docs/milestone-4/DEMO_SCRIPT.md).
 
 ## How it works
 

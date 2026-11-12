@@ -42,7 +42,6 @@ The fine-tuned Qwen3-4B (checkpoint 792), in fp16, on the frozen test sets. Each
 | Model | [`Harsha1412/hetren-qwen3-4b-diagnosis`](https://huggingface.co/Harsha1412/hetren-qwen3-4b-diagnosis), revision `3e875e4e8719acef839dc18e220a3ae498a1975b` (Apache-2.0) |
 | Data | [`Harsha1412/hetren-support-runs`](https://huggingface.co/datasets/Harsha1412/hetren-support-runs), revision `10942d316e0c1c9b3c3cb46915f971eed66ad7b4` (CC BY 4.0) |
 | Technical report | [`docs/TECHNICAL_REPORT.md`](https://github.com/DevaNuthakki/Hetren/blob/v1.0.0/docs/TECHNICAL_REPORT.md), and the PDF attached to this release |
-| Demo video | to follow |
 
 ```sh
 IMAGE=ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0
