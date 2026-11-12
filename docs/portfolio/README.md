@@ -36,7 +36,7 @@ ELIGIBLE != deployment approval
 
 ## Quick start
 
-Use Python 3.12 (the version CI uses) in a virtual environment and install the pinned development dependencies (`jsonschema==4.26.0`, `openai==3.42.0`, `openai-agents==0.24.0`, `pytest==7.4.4`):
+Use Python 3.12 (the version CI uses) in a virtual environment and install the pinned development dependencies (`jsonschema==4.26.0`, `openai==3.42.0`, `openai-agents==0.24.0`, `pytest==9.0.3`):
 
 ```bash
 python3.12 -m venv .venv

@@ -342,7 +342,7 @@ class CandidateEligibilityContractTests(unittest.TestCase):
         digests = set()
 
         for outcome in CandidateEligibilityOutcome:
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 decision = make_decision(outcome=outcome)
 
                 self.assertEqual(
@@ -360,7 +360,7 @@ class CandidateEligibilityContractTests(unittest.TestCase):
             CandidateEligibilityOutcome.INELIGIBLE,
             CandidateEligibilityOutcome.INCONCLUSIVE,
         ):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 with self.assertRaises(ContractError):
                     make_decision(
                         outcome=outcome,
@@ -372,7 +372,7 @@ class CandidateEligibilityContractTests(unittest.TestCase):
             CandidateEligibilityOutcome.BLOCKED,
             CandidateEligibilityOutcome.INVALID,
         ):
-            with self.subTest(outcome=outcome):
+            with self.subTest(outcome=str(outcome)):
                 decision = make_decision(
                     outcome=outcome,
                     evidence_references=(),
@@ -387,7 +387,7 @@ class CandidateEligibilityContractTests(unittest.TestCase):
             VerificationOutcome.INVALID,
         ):
             with self.subTest(
-                verification_outcome=verification_outcome
+                verification_outcome=str(verification_outcome)
             ):
                 goal, snapshot, verification = (
                     make_verification_context(
