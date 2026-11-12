@@ -73,7 +73,14 @@ def test_the_readme_commands_use_the_example():
     for statement in ("`linux/amd64` only", "**AVX2, FMA and F16C**", "Apple Silicon (`arm64`)",
                       "synthetic support workflow"):
         assert statement in docker, statement
-    assert "18 of 20 pilot cases" in docker
+    assert "Mac on 18 of 20" in docker
+    log = (REPO_ROOT / "docs/milestone-4/EXPORT_LOG.md").read_text(encoding="utf-8")
+    entry = " ".join(log.split("### The README example in the v1.0.0 image", 1)[1].split("\n## ", 1)[0].split())
+    assert "Docker Desktop, 6 threads" in entry and "first run of this case in the image" in entry
+    assert f"`{_expected_line().strip()}`" in entry and "Docker Desktop, 6 threads, 2026-11-12" in docker
+    digest = "sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0"  # the v1.0.0 image (PLAN.md, 8.7)
+    assert f"run by the tag `ghcr.io/devanuthakki/hetren-cli:v1.0.0`, which resolved to `{digest}`" in entry
+    assert "`efafa907ab9c`" in entry and digest[:15] + "…" in docker and "by the `:v1.0.0` tag, which resolved to" in docker
 
 
 @pytest.mark.skipif(not ROWS.is_file(), reason="the validation run's rows are gitignored")

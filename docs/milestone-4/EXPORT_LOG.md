@@ -207,6 +207,16 @@ Outputs (in `artifacts/milestone-4/cli-check-docker-1/Q4_K_M/`: `inputs/`, `repo
 - console log `cli-check-docker-1.log` `69d499584e16a4fa9eb11f085996875a1fc2169ce432cbf13baaa38c686b705c`;
 - compared against the validation calls tier 1 `e2840398…`, tier 2 `c67a4dc1…`.
 
+### The README example in the v1.0.0 image (2026-11-12, descriptive)
+
+Run by the operator on a Mac with Docker Desktop, 6 threads: the README's offline command, `diagnose --compact
+/work/v2-case-001478.jsonl` with `--network none`, run by the tag `ghcr.io/devanuthakki/hetren-cli:v1.0.0`, which
+resolved to `sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0` (the operator's `docker pull`
+showed that digest, and `docker images` listed the image as `efafa907ab9c`). It was the first run of this case in
+the image. It
+printed `Needs probe: find_owners {"customer_ref": "C-3983"}`, the README's expected line and the case's first
+action in the logged Q4_K_M validation run.
+
 ## Hugging Face release (step 7a)
 
 Run by the operator on 2026-11-09 with the committed staging script (`scripts/hf_release.py`, `04c4a9d`) and model card (`965fa41`); `git status` showed only the untracked amendment draft.

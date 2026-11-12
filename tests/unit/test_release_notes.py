@@ -54,7 +54,7 @@ def test_the_revisions_and_links_are_the_released_ones():
     assert "679c131c143a8583d5ac1bab133f7f3584ac9a45" in NOTES and "`679c131c143a8583d5ac1bab133f7f3584ac9a45`" in PLAN
     assert "https://github.com/DevaNuthakki/Hetren/blob/v1.0.0/docs/TECHNICAL_REPORT.md" in NOTES
     assert (REPO_ROOT / "docs/TECHNICAL_REPORT.md").is_file()
-    assert "| Demo video | to follow |" in NOTES  # replaced with the link once it is recorded
+    assert "Demo video" not in NOTES and "demo video" not in NOTES  # no video for now (operator, 2026-11-12)
 
 
 ROWS = {"Tier 1 in-distribution, accuracy": "Tier 1 in-distribution: accuracy",
