@@ -258,7 +258,15 @@ LICENSE and NOTICE are in place (`7244df2`).
     accepted.
 - [x] **Make the repository public** (Settings → General → Danger Zone). Done: the API, read anonymously on 2026-11-11, gives `visibility: public`.
 - [x] **Code security:** secret scanning and push protection on; Dependabot alerts on. Done: on 2026-11-11, `security_and_analysis` showed secret scanning and push protection `enabled`, and `vulnerability-alerts` returned 204.
-- [ ] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
+- [x] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
+  Done on 2026-11-12 by the operator, as the active ruleset "Protect main" (ID 27090773, on the default branch, no
+  bypass list), checked read-only with `gh api`:
+  - deletions restricted; force pushes blocked;
+  - a pull request required, with 0 approvals; the merge, squash and rebase methods are allowed;
+  - six required checks, all from GitHub Actions: Repository foundation, Slow tests (dataset and labelling),
+    Docker image (hetren-cli), Deploy checks (Helm, Terraform), kind (Helm chart, stub model) and Technical report
+    (PDF). That is the plan's five, plus the report PDF. Branches need not be up to date.
+  - Each required name matches a check run on pull request #98's head (`bbb2dd0`).
 - [ ] **Dependency advisories** (Dependabot, 2026-11-11: 13 alerts, 7 advisories; none reachable in Hetren's use, and listed under the release notes' known limitations): `fsspec` 2026.6.0 alone; `transformers` 5.x with the token-parity and CLI agreement checks. `pytest` 9.0.3 for the dev and CI environment.
 - [x] **GHCR:** after the first `v*` publish, set the package `hetren-cli` to public (Packages → hetren-cli → Package settings → visibility). Then check an anonymous pull: `docker logout ghcr.io`, then `docker pull ghcr.io/devanuthakki/hetren-cli:<tag>`. Done: the operator's anonymous pull of `v1.0.0` gave `sha256:efafa907…` (8.8, B2).
 
