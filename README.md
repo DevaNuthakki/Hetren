@@ -72,16 +72,36 @@ system ran once per test set under the frozen protocol. Rates are k / n, with Wi
 
 ### Docker (offline diagnosis)
 
-The image is `linux/amd64` only and needs a CPU with **AVX2, FMA and F16C**. Fetch the model once, then
-diagnose with the network off:
+> **Before you start:**
+> - **Platform:** the image is `linux/amd64` only, and the CPU needs **AVX2, FMA and F16C**. It is not built for
+>   Apple Silicon (`arm64`) and is untested there, including under emulation.
+> - **Inputs:** they must be runs of Hetren's synthetic support workflow (`read_ticket`, `lookup_account`,
+>   `route_ticket`). The tool rejects other tools' runs, and on runs from any other workflow its output means
+>   nothing.
+
+Clone the repository for the example input, fetch the model once (about 2.5 GB), then diagnose with the network
+off:
 
 ```sh
+git clone https://github.com/DevaNuthakki/Hetren.git && cd Hetren
 IMAGE=ghcr.io/devanuthakki/hetren-cli:v1.0.0@sha256:efafa907ab9cd6c87965fc8c00d8818c70e49faa869ee3e15f6f9d21f60e2bc0
 docker run --rm -v ~/.cache/hetren:/models "$IMAGE" \
   fetch-model --repo Harsha1412/hetren-qwen3-4b-diagnosis --revision 3e875e4e8719acef839dc18e220a3ae498a1975b
-docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD":/work:ro \
-  "$IMAGE" diagnose --compact /work/tests/fixtures/hetren_cli/compact_first_step.json
+docker run --rm --network none -v ~/.cache/hetren:/models:ro -v "$PWD/examples":/work:ro \
+  "$IMAGE" diagnose --compact /work/v2-case-001478.jsonl
 ```
+
+[`examples/v2-case-001478.jsonl`](examples/v2-case-001478.jsonl) is one line of dataset v2's `hetren_visible.jsonl`:
+a tier 1 validation case, and the mapping swap of the demo. The output should start with:
+
+```text
+Hetren diagnosis (proposed only; nothing was applied)
+
+  Needs probe: find_owners {"customer_ref": "C-3983"}
+```
+
+That was this case's first action in the logged Q4_K_M validation run, on the validation Mac. The Linux image
+took the same episode on 18 of 20 pilot cases, so another CPU or thread count can give a different answer.
 
 `fetch-model` checks every file's sha256 against the export manifest. `diagnose` accepts:
 - a run recorded with Hetren's OpenAI Agents SDK integration (`--record`, an `AgentRunRecord`);
@@ -95,7 +115,7 @@ a **proposed** recovery, or the probe the model would need; `--format json` adds
 ```sh
 python3 -m venv ~/.hetren-cli && ~/.hetren-cli/bin/pip install -r requirements-cli.txt
 ~/.hetren-cli/bin/python -m packages.hetren_cli fetch-model --repo Harsha1412/hetren-qwen3-4b-diagnosis --revision 3e875e4e8719acef839dc18e220a3ae498a1975b
-~/.hetren-cli/bin/python -m packages.hetren_cli diagnose --compact tests/fixtures/hetren_cli/compact_first_step.json --llama-server <path to llama-server>
+~/.hetren-cli/bin/python -m packages.hetren_cli diagnose --compact examples/v2-case-001478.jsonl --llama-server <path to llama-server>
 ```
 
 `llama-server` must be llama.cpp at commit `620d2225c` (build 11669), the validated build. The report says

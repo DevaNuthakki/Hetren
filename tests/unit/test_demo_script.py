@@ -44,7 +44,8 @@ def test_the_image_and_model_are_the_release_ones():
     chart = (REPO_ROOT / "deploy/helm/hetren/values.yaml").read_text(encoding="utf-8")
     revision = re.search(r"--revision ([0-9a-f]{40})", SCRIPT).group(1)
     assert revision in chart and "Harsha1412/hetren-qwen3-4b-diagnosis" in SCRIPT
-    assert "docker run --rm --network none" in SCRIPT and "diagnose --compact /work/visible.jsonl" in SCRIPT
+    assert "docker run --rm --network none" in SCRIPT and "diagnose --compact /work/v2-case-001478.jsonl" in SCRIPT
+    assert '-v "$PWD/examples":/work:ro' in SCRIPT and (REPO_ROOT / "examples/v2-case-001478.jsonl").is_file()
 
 
 def test_the_f6_numbers_are_the_logged_test_results():
