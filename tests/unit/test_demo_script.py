@@ -124,3 +124,60 @@ def test_the_results_card_other_lines_are_the_model_cards():
     assert "**0.0% (0/400)**" in text and "abstain recall 0.0% (0/400)" in card
     assert "| −0.13 [−1.50, +1.25] |" in text and "(criterion: lower bound ≥ −2 points)" in text
     assert "within the 2-point margin of fp16: -0.13 points pooled [-1.50, +1.25]" in card
+
+
+def _silent() -> str:
+    return SCRIPT.split("## Silent cut", 1)[1].split("\n## ", 1)[0]
+
+
+def _silent_block(after: str) -> list[str]:
+    return _silent().split(after, 1)[1].split("```text\n", 1)[1].split("```", 1)[0].splitlines()
+
+
+def test_the_silent_cut_has_the_operators_clips_and_lengths():
+    rows = [line for line in _silent().splitlines() if re.match(r"\| \d\. ", line)]
+    lengths = [int(re.search(r"\| (\d+) s \|", row).group(1)) for row in rows]
+    assert lengths == [3, 12, 7, 4, 4, 9, 3] and sum(lengths) == 42  # operator, 2026-11-11 (results card 9 s)
+    assert "`DEMO case-001478`" in rows[1] and "`DEMO case-002332`" in rows[2]
+    assert "## 1. What Hetren is" not in _silent() and "### 1. What Hetren is" in SCRIPT  # the 3-minute script stays
+
+
+def test_the_silent_cut_states_its_speed_up_and_its_notes():
+    silent = _silent()
+    factors = {int(f) for f in re.findall(r"sped up (\d+)×", silent)}
+    assert len(factors) == 1 and 16 <= next(iter(factors)) <= 20, factors
+    factor = next(iter(factors))
+    # segment 3's start-up and calls in the rehearsal log, at that factor, fit in clip 2's 12 s
+    log = SCRIPT.split("## Rehearsal log", 1)[1]
+    waits = [float(start or call) for start, call in re.findall(r"ready in ([\d.]+) s|[Cc]all \d \(([\d.]+) s\)", log)]
+    assert waits == [4.1, 37.3, 13.4] and f"about {sum(waits) / factor:.1f} s" in silent
+    for note in ("Validation case", "Logged test results, not run here", "The CLI proposes; it never applies anything",
+                 "Cached best case"):
+        assert note in silent, note
+    assert "**Never cut the verdict line or the validation-match line.**" in silent
+    assert "`verdict (episodes.score): …`" in silent
+    assert "the same probes, recoveries, final action and verdict" in silent
+
+
+def test_the_silent_cut_numbers_are_the_logged_results():
+    silent = _silent()
+    card = (REPO_ROOT / "docs/milestone-4/model-card.md").read_text(encoding="utf-8")
+    assert "**0.0% (0/400)**" in card and "0 of 400" in silent and "(0/400)" in silent
+    log = (REPO_ROOT / "docs/milestone-4/DEPLOY_LOG.md").read_text(encoding="utf-8")
+    assert "0.27 diagnoses per second" in log and "about 0.27 diagnoses/s" in silent
+    lines = _silent_block("The silent results card")
+    for label, row in (("Tier 1 in-distribution accuracy", "Tier 1 in-distribution: accuracy"),
+                       ("Tier 1 held-out families accuracy", "Tier 1 held-out families: accuracy"),
+                       ("Live gpt-4.1-mini runs accuracy", "Live (runs of a `gpt-4.1-mini` agent): accuracy")):
+        line = next(line for line in lines if line.startswith(label))
+        rules, gpt, _, tuned = _card_row(row)
+        assert [float(x) for x in re.findall(r"(\d+\.\d)%", line)] == [tuned, gpt], label
+    rules, _, _, tuned = _card_row("Tier 1 in-distribution: accuracy")
+    assert any(f"{rules:.1f}% vs {tuned:.1f}% (tier 1)" in line for line in lines) and rules > tuned
+    assert any("never abstained on held-out F6 (0/400)" in line for line in lines)
+
+
+def test_the_silent_cut_links_are_the_readmes():
+    readme = (REPO_ROOT / "README.md").read_text(encoding="utf-8")
+    for link in _silent_block("The links card"):
+        assert f"https://{link}" in readme, link

@@ -245,10 +245,17 @@ Design revised by the operator on 2026-11-09, before the build (the changes are 
 Recorded on 2026-11-09 so it is not forgotten. The pre-public review found no secrets in the history, and the
 LICENSE and NOTICE are in place (`7244df2`).
 
-- [ ] **GitHub account:**
+- [x] **GitHub account:**
   - Settings → Emails → "Keep my email addresses private" and "Block command line pushes that expose my email";
   - `git config --global user.email <id>+<user>@users.noreply.github.com`.
   The Gmail address stays in the existing history (no rewrite: commit hashes are cited throughout the logs).
+  Done on 2026-11-11:
+  - the operator set both GitHub settings, and the global `user.email` to
+    `191642530+DevaNuthakki@users.noreply.github.com`;
+  - the repository-level `user.email`, which had overridden it, was removed with the operator's approval, so
+    `git config user.email` gives the noreply address;
+  - `596f0f0` (pull request #95) is the first commit with that address as author and committer, and its push was
+    accepted.
 - [x] **Make the repository public** (Settings → General → Danger Zone). Done: the API, read anonymously on 2026-11-11, gives `visibility: public`.
 - [x] **Code security:** secret scanning and push protection on; Dependabot alerts on. Done: on 2026-11-11, `security_and_analysis` showed secret scanning and push protection `enabled`, and `vulnerability-alerts` returned 204.
 - [ ] **Branch protection for `main`:** require a pull request and the CI checks (Repository foundation, Slow tests, Docker image, Deploy checks, kind); no force pushes or deletions.
